@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,14 +61,14 @@ void * SAL_CALL comp_Layout_component_getFactory( const char * pImplName, void *
 // Component registration
 ::rtl::OUString SAL_CALL LayoutFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.awt.Layout" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.awt.Layout"));
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL LayoutFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.awt.Layout");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.awt.Layout");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout"));
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.awt.Layout"));
     return aRet;
 }
 
@@ -121,3 +122,5 @@ uno::Reference< uno::XInterface > SAL_CALL LayoutFactory::createInstanceWithArgu
     xInit->initialize( aArguments );
     return layout;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

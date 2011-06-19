@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include <sal/macros.h>
 
 #include <cstddef>
 #include <cstdlib>
@@ -288,11 +290,7 @@ bool test_removeSegment(
 
 }
 
-int
-#if defined WNT
-__cdecl
-#endif // WNT
-main()
+int SAL_CALL main()
 {
     bool bSuccess = true;
 
@@ -496,7 +494,7 @@ main()
                 { "vnd.sun.star.help://swriter?foo",
                   "vnd.sun.star.help://swriter/?foo" },
                 { "vnd.sun.star.help://swriter/?foo", 0 } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl(aTest[i].in);
             if (aUrl.HasError())
@@ -530,7 +528,7 @@ main()
                 /*TODO "wfs:///c|/xyz/",*/
                 /*TODO "wfs://xxx/yyy?zzz",*/
                 /*TODO "wfs:///x/y/z"*/ };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -565,7 +563,7 @@ main()
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx",
                 /*TODO "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx;yy",*/
                 "vnd.sun.star.pkg://file:%2F%2F%2Fa:%2Fb%20c/xx//yy" };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS(aTest); ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -590,7 +588,7 @@ main()
                 "vnd.sun.star.cmd:log/out",
                 /*TODO "vnd.sun.star.cmd:[logout]",*/
                 "vnd.sun.star.cmd:log[out]" };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
@@ -609,7 +607,7 @@ main()
     if (true)
     {
         rtl::OUString
-            aParameters(rtl::OUString::createFromAscii("; CharSet=UTF-8  ; Blubber=Blob"));
+            aParameters(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "; CharSet=UTF-8  ; Blubber=Blob" )));
         sal_Unicode const * pBegin = aParameters.getStr();
         sal_Unicode const * pEnd = pBegin + aParameters.getLength();
         INetContentTypeParameterList aList;
@@ -1219,7 +1217,7 @@ main()
                 { "smb://foo", "smb://foo/" },
                 { "smb://x;foo:bar@baz.xyz:12345/ab?cd",
                   "smb://x;foo:bar@baz.xyz:12345/ab?cd" } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl(aTest[i].m_pInput);
             if (aTest[i].m_pOutput == 0
@@ -1249,7 +1247,7 @@ main()
         static Test const aTest[]
             = { { "file://d:\\dir1\\file1", "file:///d:/dir1/file1" },
                 { "http://as@alaska:8000/test/test.sxw", 0 } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUrl = INetURLObject(
                 String(aTest[i].m_pInput, RTL_TEXTENCODING_UTF8),
@@ -1378,7 +1376,7 @@ main()
                 { INET_PROT_NEWS, "abc@def.ghi@", 0 },
                 { INET_PROT_NEWS, "!\"#@def", "news:!%22%23@def" },
                 { INET_PROT_NEWS, " @def", "news:%20@def" } };
-        for (std::size_t i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        for (std::size_t i = 0; i < SAL_N_ELEMENTS( aTest ); ++i)
         {
             INetURLObject aUri;
             bool bOk = aUri.ConcatData(aTest[i].eScheme, String(), String(),
@@ -1449,7 +1447,7 @@ main()
     }
 
     if (true) { // #112130#
-        INetURLObject url1(rtl::OUString::createFromAscii(".uno:abc%3Fdef"));
+        INetURLObject url1(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:abc%3Fdef" )));
         if (url1.GetProtocol() != INET_PROT_UNO) {
             printf("BAD .uno:abc%%3Fdef\n");
             bSuccess = false;
@@ -1467,7 +1465,7 @@ main()
             printf("BAD HasParam(.uno:abc%%3Fdef)\n");
             bSuccess = false;
         }
-        INetURLObject url2(rtl::OUString::createFromAscii(".uno:abc?def?ghi"));
+        INetURLObject url2(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:abc?def?ghi" )));
         if (url2.GetProtocol() != INET_PROT_UNO) {
             printf("BAD .uno:abc?def?ghi\n");
             bSuccess = false;
@@ -1904,3 +1902,5 @@ main()
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

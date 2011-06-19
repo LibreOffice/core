@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,9 +60,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/edit.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
@@ -80,7 +79,7 @@ using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
 
 #define IMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) \
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
@@ -188,13 +187,13 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoEditControl, UnoControlBase, UnoEditControl
 ::rtl::OUString UnoEditControl::GetComponentServiceName()
 {
     // by default, we want a simple edit field
-    ::rtl::OUString sName( ::rtl::OUString::createFromAscii( "Edit" ) );
+    ::rtl::OUString sName( RTL_CONSTASCII_USTRINGPARAM("Edit") );
 
     // but maybe we are to display multi-line text?
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
     sal_Bool b = sal_Bool();
     if ( ( aVal >>= b ) && b )
-        sName= ::rtl::OUString::createFromAscii( "MultiLineEdit" );
+        sName= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MultiLineEdit"));
 
     return sName;
 }
@@ -528,7 +527,7 @@ UnoFileControl::UnoFileControl( const Reference< XMultiServiceFactory >& i_facto
 
 ::rtl::OUString UnoFileControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "filecontrol" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("filecontrol"));
 }
 
 //  ----------------------------------------------------
@@ -541,6 +540,7 @@ uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
+
     uno::Reference< graphic::XGraphic > GraphicControlModel::getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
     {
         uno::Reference< graphic::XGraphic > xGraphic;
@@ -631,7 +631,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
+        OSL_FAIL( "GraphicControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
         mbAdjustingImagePosition = sal_False;
     }
 }
@@ -707,7 +707,7 @@ UnoButtonControl::UnoButtonControl( const uno::Reference< lang::XMultiServiceFac
 
 ::rtl::OUString UnoButtonControl::GetComponentServiceName()
 {
-    ::rtl::OUString aName( ::rtl::OUString::createFromAscii( "pushbutton" ) );
+    ::rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM("pushbutton") );
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
     sal_Int16 n = sal_Int16();
     if ( ( aVal >>= n ) && n )
@@ -715,15 +715,15 @@ UnoButtonControl::UnoButtonControl( const uno::Reference< lang::XMultiServiceFac
         // Use PushButtonType later when available...
         switch ( n )
         {
-            case 1 /*PushButtonType::OK*/:      aName= ::rtl::OUString::createFromAscii( "okbutton" );
+            case 1 /*PushButtonType::OK*/:      aName= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("okbutton"));
                                                 break;
-            case 2 /*PushButtonType::CANCEL*/:  aName= ::rtl::OUString::createFromAscii( "cancelbutton" );
+            case 2 /*PushButtonType::CANCEL*/:  aName= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cancelbutton"));
                                                 break;
-            case 3 /*PushButtonType::HELP*/:    aName= ::rtl::OUString::createFromAscii( "helpbutton" );
+            case 3 /*PushButtonType::HELP*/:    aName= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("helpbutton"));
                                                 break;
             default:
             {
-                DBG_ERROR( "Unknown Button Type!" );
+                OSL_FAIL( "Unknown Button Type!" );
             }
         }
     }
@@ -929,7 +929,7 @@ UnoImageControlControl::UnoImageControlControl( const Reference< XMultiServiceFa
 
 ::rtl::OUString UnoImageControlControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "fixedimage" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fixedimage"));
 }
 
 void UnoImageControlControl::dispose() throw(uno::RuntimeException)
@@ -1022,7 +1022,7 @@ UnoRadioButtonControl::UnoRadioButtonControl( const Reference< XMultiServiceFact
 
 ::rtl::OUString UnoRadioButtonControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "radiobutton" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("radiobutton"));
 }
 
 void UnoRadioButtonControl::dispose() throw(uno::RuntimeException)
@@ -1139,7 +1139,7 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) thr
     // Thus, we suppress all events with a new state other than "1". This is unlogical, and weird, when looking
     // from a pure API perspective, but it's _compatible_ with older product versions, and this is
     // all which matters here.
-    // #i14703# - 2003-05-23 - fs@openoffice.org
+    // #i14703#
     if ( 1 == rEvent.Selected )
     {
         if ( maItemListeners.getLength() )
@@ -1231,7 +1231,7 @@ UnoCheckBoxControl::UnoCheckBoxControl( const uno::Reference< lang::XMultiServic
 
 ::rtl::OUString UnoCheckBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "checkbox" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("checkbox"));
 }
 
 void UnoCheckBoxControl::dispose() throw(uno::RuntimeException)
@@ -1424,7 +1424,7 @@ UnoFixedHyperlinkControl::UnoFixedHyperlinkControl( const Reference< XMultiServi
 
 ::rtl::OUString UnoFixedHyperlinkControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "fixedhyperlink" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fixedhyperlink"));
 }
 
 // uno::XInterface
@@ -1605,7 +1605,7 @@ UnoFixedTextControl::UnoFixedTextControl( const Reference< XMultiServiceFactory 
 
 ::rtl::OUString UnoFixedTextControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "fixedtext" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fixedtext"));
 }
 
 // uno::XInterface
@@ -1738,7 +1738,7 @@ UnoGroupBoxControl::UnoGroupBoxControl( const Reference< XMultiServiceFactory >&
 
 ::rtl::OUString UnoGroupBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "groupbox" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("groupbox"));
 }
 
 sal_Bool UnoGroupBoxControl::isTransparent() throw(uno::RuntimeException)
@@ -2306,7 +2306,7 @@ UnoListBoxControl::UnoListBoxControl( const Reference< XMultiServiceFactory >& i
 
 ::rtl::OUString UnoListBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "listbox" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("listbox"));
 }
 IMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, szServiceName2_UnoControlListBox )
 
@@ -2625,7 +2625,7 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(u
 #else
             ::rtl::OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
             sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( sal_False, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
 #endif
         }
     }
@@ -2814,7 +2814,7 @@ IMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, szServiceName2_Uno
 
 ::rtl::OUString UnoComboBoxControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "combobox" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("combobox"));
 }
 
 void UnoComboBoxControl::dispose() throw(uno::RuntimeException)
@@ -2934,7 +2934,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(
 #else
             ::rtl::OString sMessage( "UnoComboBoxControl::itemStateChanged: caught an exception:\n" );
             sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( sal_False, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
 #endif
         }
     }
@@ -3271,7 +3271,7 @@ UnoDateFieldControl::UnoDateFieldControl( const Reference< XMultiServiceFactory 
 
 ::rtl::OUString UnoDateFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "datefield" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("datefield"));
 }
 
 // uno::XInterface
@@ -3512,7 +3512,7 @@ UnoTimeFieldControl::UnoTimeFieldControl( const Reference< XMultiServiceFactory 
 
 ::rtl::OUString UnoTimeFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "timefield" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("timefield"));
 }
 
 // uno::XInterface
@@ -3713,7 +3713,7 @@ UnoNumericFieldControl::UnoNumericFieldControl( const Reference< XMultiServiceFa
 
 ::rtl::OUString UnoNumericFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "numericfield" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("numericfield"));
 }
 
 // uno::XInterface
@@ -3915,7 +3915,7 @@ UnoCurrencyFieldControl::UnoCurrencyFieldControl( const Reference< XMultiService
 
 ::rtl::OUString UnoCurrencyFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "longcurrencyfield" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("longcurrencyfield"));
 }
 
 // uno::XInterface
@@ -4108,7 +4108,7 @@ UnoPatternFieldControl::UnoPatternFieldControl( const Reference< XMultiServiceFa
 
 ::rtl::OUString UnoPatternFieldControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "patternfield" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("patternfield"));
 }
 
 void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
@@ -4255,7 +4255,7 @@ UnoProgressBarControl::UnoProgressBarControl( const Reference< XMultiServiceFact
 
 ::rtl::OUString UnoProgressBarControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "ProgressBar" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressBar"));
 }
 
 // uno::XInterface
@@ -4386,7 +4386,7 @@ UnoFixedLineControl::UnoFixedLineControl( const Reference< XMultiServiceFactory 
 
 ::rtl::OUString UnoFixedLineControl::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "FixedLine" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FixedLine"));
 }
 
 sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException)
@@ -4394,3 +4394,4 @@ sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException)
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

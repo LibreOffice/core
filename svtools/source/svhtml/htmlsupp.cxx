@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,19 +41,13 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
-/*  */
-
-// Tabellen zum Umwandeln von Options-Werten in Strings
-
-static HTMLOptionEnum __READONLY_DATA aScriptLangOptEnums[] =
+// Table for converting option values into strings
+static HTMLOptionEnum const aScriptLangOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_LG_starbasic, HTML_SL_STARBASIC   },
     { OOO_STRING_SVTOOLS_HTML_LG_javascript,    HTML_SL_JAVASCRIPT  },
     { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT    },
     { OOO_STRING_SVTOOLS_HTML_LG_livescript,    HTML_SL_JAVASCRIPT  },
-//  { OOO_STRING_SVTOOLS_HTML_LG_unused_javascript, HTML_SL_UNUSEDJS },
-//  { OOO_STRING_SVTOOLS_HTML_LG_vbscript,  HTML_SL_VBSCRIPT    },
-//  { OOO_STRING_SVTOOLS_HTML_LG_starone,       HTML_SL_STARONE     },
     { 0,                    0                   }
 };
 
@@ -115,14 +110,14 @@ void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
         rString.Erase( rString.Len()-1 );
 
 
-    // SGML-Kommentare entfernen
+    // remove SGML comments
     if( rString.Len() >= 4 &&
         rString.CompareToAscii( "<!--", 4 ) == COMPARE_EQUAL )
     {
         xub_StrLen nPos = 3;
         if( bFull )
         {
-            // die gesamte Zeile !
+            // the whole line
             nPos = 4;
             while( nPos < rString.Len() &&
                 ( ( c = rString.GetChar( nPos )) != '\r' && c != '\n' ) )
@@ -143,7 +138,7 @@ void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
         rString.Erase( rString.Len()-3 );
         if( bFull )
         {
-            // auch noch ein "//" oder "'" und ggf CR/LF davor
+            // "//" or "'", maybe preceding CR/LF
             rString.EraseTrailingChars();
             xub_StrLen nDel = 0, nLen = rString.Len();
             if( nLen >= 2 &&
@@ -171,3 +166,4 @@ void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

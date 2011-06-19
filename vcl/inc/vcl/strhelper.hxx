@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ int VCL_DLLPUBLIC GetCommandLineTokenCount( const ByteString& );
 
 String VCL_DLLPUBLIC WhitespaceToSpace( const String&, sal_Bool bProtect = sal_True );
 ByteString VCL_DLLPUBLIC WhitespaceToSpace( const ByteString&, sal_Bool bProtect = sal_True );
-// returns a string with multiple adjacent occurences of whitespace
+// returns a string with multiple adjacent occurrences of whitespace
 // converted to a single space. if bProtect is sal_True (nonzero), then
 // doublequote, singlequote and singleleftquote protect their respective
 // contents
@@ -81,3 +82,5 @@ inline int VCL_DLLPUBLIC getValueOfDouble( char* pBuffer, double f, int nPrecisi
 } // namespace
 
 #endif // _PSPRINT_STRHELPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

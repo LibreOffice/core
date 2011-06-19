@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -348,15 +349,6 @@ void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColo
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::ColorTransform( BmpColorMode eColorMode )
-{
-    maBmpEx = maBmpEx.GetColorTransformedBitmapEx( eColorMode );
-    delete mpDisplayBmp;
-    mpDisplayBmp = NULL;
-}
-
-// -----------------------------------------------------------------------
-
 BitmapEx ImplImageBmp::GetBitmapEx( sal_uInt16 nPosCount, sal_uInt16* pPosAry ) const
 {
     const Bitmap    aNewBmp( Size( nPosCount * maSize.Width(), maSize.Height() ),  maBmpEx.GetBitmap().GetBitCount() );
@@ -406,7 +398,6 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
         else
         {
             if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM |
-                           IMAGE_DRAW_MONOCHROME_BLACK | IMAGE_DRAW_MONOCHROME_WHITE |
                            IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE | IMAGE_DRAW_SEMITRANSPARENT ) )
             {
                 BitmapEx        aTmpBmpEx;
@@ -418,14 +409,6 @@ void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
                     aTmpBmpEx = maBmpEx.GetBitmap();
 
                 aTmpBmpEx.Crop( aCropRect );
-
-                if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM | IMAGE_DRAW_MONOCHROME_BLACK | IMAGE_DRAW_MONOCHROME_WHITE ) )
-                {
-                    const BmpColorMode eMode = ( nStyle & IMAGE_DRAW_COLORTRANSFORM ) ? BMP_COLOR_HIGHCONTRAST :
-                                                ( ( nStyle & IMAGE_DRAW_MONOCHROME_BLACK ) ? BMP_COLOR_MONOCHROME_BLACK : BMP_COLOR_MONOCHROME_WHITE );
-
-                    aTmpBmpEx = aTmpBmpEx.GetColorTransformedBitmapEx( eMode );
-                }
 
                 Bitmap aTmpBmp( aTmpBmpEx.GetBitmap() );
 
@@ -634,3 +617,5 @@ void ImplImageBmp::ImplUpdateDisabledBmpEx( int nPos )
 
     maDisabledBmpEx = BitmapEx( aGrey, aGreyAlphaMask );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

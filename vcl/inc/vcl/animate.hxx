@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,7 +162,6 @@ class VCL_DLLPUBLIC Animation
     sal_Bool                    mbLoopTerminated;
     sal_Bool                    mbIsWaiting;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE void     ImplRestartTimer( sal_uLong nTimeout );
     DECL_DLLPRIVATE_LINK(   ImplTimeoutHdl, Timer* );
@@ -172,7 +172,6 @@ public:
     SAL_DLLPRIVATE static void  ImplDecAnimCount() { mnAnimCount--; }
     SAL_DLLPRIVATE sal_uLong        ImplGetCurPos() const { return mnPos; }
 
-//#endif
 
 public:
                             Animation();
@@ -252,3 +251,5 @@ public:
 };
 
 #endif // _SV_ANIMATE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

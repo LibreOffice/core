@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -133,7 +134,7 @@ namespace svt { namespace uno
         default:
             break;
         }
-        OSL_ENSURE( false, "WizardShell::convertCommitReasonToTravelType: unsupported CommitPageReason!" );
+        OSL_FAIL( "WizardShell::convertCommitReasonToTravelType: unsupported CommitPageReason!" );
         return WizardTravelType::FINISH;
     }
 
@@ -277,3 +278,5 @@ namespace svt { namespace uno
 //......................................................................................................................
 } } // namespace svt::uno
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

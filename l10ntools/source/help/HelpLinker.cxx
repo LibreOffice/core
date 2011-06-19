@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,6 +25,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#ifdef AIX
+#    undef _THREAD_SAFE
+#endif
 
 #include "HelpCompiler.hxx"
 
@@ -205,7 +210,7 @@ void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::s
 class HelpKeyword
 {
 private:
-    typedef std::hash_map<std::string, Data, pref_hash> DataHashtable;
+    typedef boost::unordered_map<std::string, Data, pref_hash> DataHashtable;
     DataHashtable _hash;
 
 public:
@@ -298,18 +303,6 @@ private:
     void addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB );
-#if 0
-    /**
-     * @param outputFile
-     * @param module
-     * @param lang
-     * @param hid
-     * @param helpFiles
-     * @param additionalFiles
-     */
-
-    private HelpURLStreamHandlerFactory urlHandler = null;
-#endif
 };
 
 namespace URLEncoder
@@ -407,7 +400,6 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( bExtensionMode )
     {
-        //indexDirParentName = sourceRoot;
         indexDirParentName = extensionDestination;
     }
     else
@@ -494,10 +486,8 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( !bExtensionMode )
     {
-#ifndef OS2 // YD @TODO@ crashes libc runtime :-(
         std::cout << "Making " << outputFile.native_file_string() <<
             " from " << helpFiles.size() << " input files" << std::endl;
-#endif
     }
 
     // here we start our loop over the hzip files.
@@ -571,13 +561,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         std::string documentTitle = streamTable.document_title;
         if (documentTitle.empty())
             documentTitle = "<notitle>";
-
-#if 0
-        std::cout << "for " << xhpFileName << " documentBaseId is " << documentBaseId << "\n";
-        std::cout << "for " << xhpFileName << " documentPath is " << documentPath << "\n";
-        std::cout << "for " << xhpFileName << " documentJarfile is " << documentJarfile << "\n";
-        std::cout << "for " << xhpFileName << " documentPath is " << documentTitle << "\n";
-#endif
 
         const std::string& fileB = documentPath;
         const std::string& jarfileB = documentJarfile;
@@ -741,16 +724,6 @@ void HelpLinker::link() throw( HelpProcessingException )
             fs::copy( fsAdditionalFileName, fsTargetName );
         }
     }
-
-/*
-    /////////////////////////////////////////////////////////////////////////
-    /// remove temprary directory for index creation
-    /////////////////////////////////////////////////////////////////////////
-#ifndef CMC_DEBUG
-    if( !bExtensionMode )
-        fs::remove_all( indexDirParentName );
-#endif
-*/
 }
 
 
@@ -986,8 +959,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
 
-    if (!bExtensionMode && idxCaptionStylesheet.empty()
-        || !extsource.empty() && idxCaptionStylesheet.empty())
+    if ( (!bExtensionMode && idxCaptionStylesheet.empty())
+        || (!extsource.empty() && idxCaptionStylesheet.empty()) )
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
@@ -1001,7 +974,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //This part is used when compileExtensionHelp is called from the extensions manager.
         //If extension help is compiled using helplinker in the build process
         rtl::OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
-        aIdxCaptionPathFileURL += rtl::OUString::createFromAscii( "/idxcaption.xsl" );
+        aIdxCaptionPathFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/idxcaption.xsl"));
 
         rtl::OString aOStr_IdxCaptionPathFileURL( rtl::OUStringToOString
             ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
@@ -1010,8 +983,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         idxCaptionStylesheet = fs::path( aStdStr_IdxCaptionPathFileURL );
     }
 
-    if (!bExtensionMode && idxContentStylesheet.empty()
-        || !extsource.empty() && idxContentStylesheet.empty())
+    if ( (!bExtensionMode && idxContentStylesheet.empty())
+        || (!extsource.empty() && idxContentStylesheet.empty()) )
     {
         //No extension mode and extension mode using commandline
         //!extsource.empty indicates extension mode using commandline
@@ -1026,7 +999,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //then  -idxcontent must be supplied
         //This part is used when compileExtensionHelp is called from the extensions manager.
         rtl::OUString aIdxContentPathFileURL( *pOfficeHelpPath );
-        aIdxContentPathFileURL += rtl::OUString::createFromAscii( "/idxcontent.xsl" );
+        aIdxContentPathFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/idxcontent.xsl"));
 
         rtl::OString aOStr_IdxContentPathFileURL( rtl::OUStringToOString
             ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );
@@ -1085,9 +1058,7 @@ int main(int argc, char**argv)
         exit(1);
     }
     sal_uInt32 endtime = osl_getGlobalTimer();
-#ifndef OS2 // YD @TODO@ crashes libc runtime :-(
     std::cout << "time taken was " << (endtime-starttime)/1000.0 << " seconds" << std::endl;
-#endif
     return 0;
 }
 
@@ -1184,18 +1155,18 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 
     // i83624: Tree files
     ::rtl::OUString aTreeFileURL = aExtensionLanguageRoot;
-    aTreeFileURL += rtl::OUString::createFromAscii( "/help.tree" );
+    aTreeFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/help.tree"));
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
-    osl::FileStatus aFileStatus( FileStatusMask_FileSize );
+    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
     if( rcGet == osl::FileBase::E_None &&
         aTreeFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
-        aFileStatus.isValid( FileStatusMask_FileSize ) )
+        aFileStatus.isValid( osl_FileStatus_Mask_FileSize ) )
     {
         sal_uInt64 ret, len = aFileStatus.getFileSize();
         char* s = new char[ int(len) ];  // the buffer to hold the installed files
         osl::File aFile( aTreeFileURL );
-        aFile.open( OpenFlag_Read );
+        aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s, len, ret );
         aFile.close();
 
@@ -1219,3 +1190,4 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     return bSuccess;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,3 +77,5 @@ inline void SAL_CALL x_rtl_uString_release( rtl_uString * value )
 
 
 #endif // #ifndef _I18N_X_RTL_USTRING_H_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,12 @@
 #define CACHE_MAGIC "PspFontCacheFile format 4"
 
 using namespace std;
-using namespace rtl;
 using namespace psp;
 using namespace utl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 /*
  *  static helpers
@@ -404,10 +408,10 @@ void FontCache::read()
                 }
                 int nCollEntry      = atoi( pLine );
                 pFont->m_nPSName    = pAtoms->getAtom( ATOM_PSNAME, OUString( pLine + nTokenPos[1], nTokenPos[2]-nTokenPos[1]-1, RTL_TEXTENCODING_UTF8 ), sal_True );
-                pFont->m_eItalic    = (italic::type)atoi( pLine+nTokenPos[2] );
-                pFont->m_eWeight    = (weight::type)atoi( pLine+nTokenPos[3] );
-                pFont->m_eWidth     = (width::type)atoi( pLine+nTokenPos[4] );
-                pFont->m_ePitch     = (pitch::type)atoi( pLine+nTokenPos[5] );
+                pFont->m_eItalic    = (FontItalic)atoi( pLine+nTokenPos[2] );
+                pFont->m_eWeight    = (FontWeight)atoi( pLine+nTokenPos[3] );
+                pFont->m_eWidth     = (FontWidth)atoi( pLine+nTokenPos[4] );
+                pFont->m_ePitch     = (FontPitch)atoi( pLine+nTokenPos[5] );
                 pFont->m_aEncoding  = (rtl_TextEncoding)atoi( pLine+nTokenPos[6] );
                 pFont->m_nAscend    = atoi( pLine + nTokenPos[7] );
                 pFont->m_nDescend   = atoi( pLine + nTokenPos[8] );
@@ -809,3 +813,5 @@ void FontCache::markEmptyDir( int nDirID, bool bNoFiles )
     m_aCache[nDirID].m_bNoFiles = bNoFiles;
     m_bDoFlush = true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -428,10 +429,13 @@ private:
     sal_uInt16                          mnAutoMnemonic;
     sal_uInt16                          mnUseImagesInMenus;
     sal_uLong                           mnUseFlatBorders;
+    sal_Bool                            mbPreferredUseImagesInMenus;
     long                            mnMinThumbSize;
     sal_uLong                           mnSymbolsStyle;
     sal_uLong                           mnPreferredSymbolsStyle;
     sal_uInt16                          mnSkipDisabledInMenus;
+    sal_Bool                            mbHideDisabledMenuItems;
+    sal_Bool                            mnAcceleratorsInContextMenus;
     Wallpaper                       maWorkspaceGradient;
     const void*                     mpFontOptions;
 };
@@ -453,7 +457,6 @@ private:
 #define STYLE_OPTION_SPINARROW      ((sal_uLong)0x00000080)
 #define STYLE_OPTION_SPINUPDOWN     ((sal_uLong)0x00000100)
 #define STYLE_OPTION_NOMNEMONICS    ((sal_uLong)0x00000200)
-#define STYLE_OPTION_HIDEDISABLED   ((sal_uLong)0x00100000)
 
 #define DRAGFULL_OPTION_WINDOWMOVE  ((sal_uLong)0x00000001)
 #define DRAGFULL_OPTION_WINDOWSIZE  ((sal_uLong)0x00000002)
@@ -494,7 +497,12 @@ private:
 #define STYLE_SYMBOLS_TANGO         ((sal_uLong)5)
 #define STYLE_SYMBOLS_OXYGEN        ((sal_uLong)6)
 #define STYLE_SYMBOLS_CLASSIC       ((sal_uLong)7)
-#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)8)
+#define STYLE_SYMBOLS_HUMAN     ((sal_uLong)8)
+#define STYLE_SYMBOLS_THEMES_MAX    ((sal_uLong)9)
+
+#define STYLE_MENUIMAGES_OFF  ((sal_uInt16)0)
+#define STYLE_MENUIMAGES_ON   ((sal_uInt16)1)
+#define STYLE_MENUIMAGES_AUTO ((sal_uInt16)2)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((sal_uLong)0xFFFFFFFF)
 
@@ -519,6 +527,7 @@ public:
     Color                           GetSeparatorColor() const;
     void                            SetCheckedColor( const Color& rColor )
                                         { CopyData(); mpData->maCheckedColor = rColor; }
+    void                            SetCheckedColorSpecialCase( );
     const Color&                    GetCheckedColor() const
                                         { return mpData->maCheckedColor; }
     void                            SetLightColor( const Color& rColor )
@@ -719,12 +728,23 @@ public:
                                         { return (sal_Bool) mpData->mnUseFlatMenues; }
     void                            SetUseImagesInMenus( sal_Bool bUseImagesInMenus )
                                         { CopyData(); mpData->mnUseImagesInMenus = bUseImagesInMenus; }
-    sal_Bool                            GetUseImagesInMenus() const
-                                        { return (sal_Bool) mpData->mnUseImagesInMenus; }
-    void                            SetSkipDisabledInMenus( sal_Bool bSkipDisabledInMenus )
+    sal_Bool                            GetUseImagesInMenus() const;
+    void                                                       SetPreferredUseImagesInMenus( sal_Bool bPreferredUseImagesInMenus )
+                                        { CopyData(); mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus; }
+    sal_Bool                                                   GetPreferredUseImagesInMenus() const
+                                        { return mpData->mbPreferredUseImagesInMenus; }
+    void                                                       SetSkipDisabledInMenus( sal_Bool bSkipDisabledInMenus )
                                         { CopyData(); mpData->mnSkipDisabledInMenus = bSkipDisabledInMenus; }
     sal_Bool                            GetSkipDisabledInMenus() const
                                         { return (sal_Bool) mpData->mnSkipDisabledInMenus; }
+    void                                                       SetHideDisabledMenuItems( sal_Bool bHideDisabledMenuItems )
+                                        { CopyData(); mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems; }
+    sal_Bool                            GetHideDisabledMenuItems() const
+                                        { return mpData->mbHideDisabledMenuItems; }
+    void                                                       SetAcceleratorsInContextMenus( sal_Bool bAcceleratorsInContextMenus )
+                                        { CopyData(); mpData->mnAcceleratorsInContextMenus = bAcceleratorsInContextMenus; }
+    sal_Bool                            GetAcceleratorsInContextMenus() const
+                                        { return mpData->mnAcceleratorsInContextMenus; }
 
     void                            SetCairoFontOptions( const void *pOptions )
                                         { CopyData(); mpData->mpFontOptions = pOptions;  }
@@ -837,7 +857,7 @@ public:
     void                            SetCursorBlinkTime( long nBlinkTime )
                                         { CopyData(); mpData->mnCursorBlinkTime = nBlinkTime; }
     long                            GetCursorBlinkTime() const
-                                        { return mpData->mnCursorBlinkTime; }
+                                        { return (long) mpData->mnCursorBlinkTime; }
 
     void                            SetScreenZoom( sal_uInt16 nPercent )
                                         { CopyData(); mpData->mnScreenZoom = nPercent; }
@@ -1119,8 +1139,6 @@ private:
     LanguageType                            meUILanguage;
     LocaleDataWrapper*                      mpLocaleDataWrapper;
     LocaleDataWrapper*                      mpUILocaleDataWrapper;
-    CollatorWrapper*                        mpCollatorWrapper;
-    CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
     LocaleConfigurationListener*            mpLocaleCfgListener;
@@ -1246,3 +1264,5 @@ public:
 };
 
 #endif // _SV_SETTINGS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

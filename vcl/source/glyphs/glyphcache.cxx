@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
+#include <vcl/salbtype.hxx>
 #include <gcach_ftyp.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/salbtype.hxx>
-
 #include <outfont.hxx>
 
 #ifdef ENABLE_GRAPHITE
@@ -72,6 +71,12 @@ GlyphCache::GlyphCache( GlyphCachePeer& rPeer )
 GlyphCache::~GlyphCache()
 {
     InvalidateAllGlyphs();
+    for( FontList::iterator it = maFontList.begin(), end = maFontList.end(); it != end; ++it )
+    {
+        ServerFont* pServerFont = it->second;
+        mrPeer.RemovingFont(*pServerFont);
+        delete pServerFont;
+    }
     if( mpFtManager )
         delete mpFtManager;
 }
@@ -344,7 +349,7 @@ void GlyphCache::GarbageCollect()
         pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
         if( pServerFont == mpCurrentGCFont )
             mpCurrentGCFont = NULL;
-    const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
+        const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
         maFontList.erase( rIFSD );
         mrPeer.RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
@@ -530,7 +535,6 @@ ImplServerFontEntry::ImplServerFontEntry( ImplFontSelectData& rFSD )
 :   ImplFontEntry( rFSD )
 ,   mpServerFont( NULL )
 ,   mbGotFontOptions( false )
-,   mbValidFontOptions( false )
 {}
 
 // -----------------------------------------------------------------------
@@ -602,3 +606,4 @@ int ExtraKernInfo::GetUnscaledKernValue( sal_Unicode cLeft, sal_Unicode cRight )
 
 // =======================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

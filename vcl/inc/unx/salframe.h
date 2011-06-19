@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     sal_uInt16          nKeyCode_;          // last key code
     sal_uInt16          nKeyState_;         // last key state
     int             nCompose_;          // compose state
-    bool            mbKeyMenu;
     bool            mbSendExtKeyModChange;
     sal_uInt16          mnExtKeyMod;
 
@@ -130,6 +130,8 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     String          m_aTitle;
 
+    rtl::OUString   m_sWMClass;
+
     SystemChildData maSystemChildData;
 
     SalI18N_InputContext *mpInputContext;
@@ -139,6 +141,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     int             m_nCurClipRect;
     int             m_nMaxClipRect;
 
+    bool mPendingSizeEvent;
 
     void            GetPosSize( Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
@@ -172,6 +175,8 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     void            setXEmbedInfo();
     void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
+
+    void            updateWMClass();
 public:
     X11SalFrame( SalFrame* pParent, sal_uIntPtr nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
@@ -259,11 +264,14 @@ public:
     virtual void                Beep( SoundType eSoundType );
     virtual const SystemEnvData*    GetSystemData() const;
     virtual SalPointerState     GetPointerState();
+    virtual SalIndicatorState   GetIndicatorState();
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
 
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
@@ -277,6 +285,9 @@ public:
 
     static void SaveYourselfDone( SalFrame* );
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
+
+    /// @internal
+    void setPendingSizeEvent();
 };
 
 #ifdef _SV_SALDISP_HXX
@@ -291,3 +302,4 @@ inline XLIB_Window X11SalFrame::GetDrawable() const
 
 #endif // _SV_SALFRAME_H
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

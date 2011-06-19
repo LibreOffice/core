@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define LAYOUT_CORE_ROOT_HXX
 
 #define _BACKWARD_BACKWARD_WARNING_H 1
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/awt/XLayoutRoot.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -72,7 +73,7 @@ class TOOLKIT_DLLPUBLIC LayoutRoot : public ::cppu::WeakImplHelper3<
 protected:
     ::osl::Mutex maMutex;
 
-    typedef std::hash_map< rtl::OUString,
+    typedef boost::unordered_map< rtl::OUString,
                            css::uno::Reference< css::awt::XLayoutConstrains >,
                            ::rtl::OUStringHash > ItemHash;
     ItemHash maItems;
@@ -154,3 +155,5 @@ protected:
 } // namespace layoutimpl
 
 #endif /* LAYOUT_CORE_ROOT_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

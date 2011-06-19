@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,8 +57,6 @@ static const short SinTab[16]=
 |*    ImpMultBig2()
 |*
 |*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -75,8 +74,6 @@ Fix ImpMultBig2( const Fix& a, const Fix& b )
 |*    ImpMultBig2()
 |*
 |*    Beschreibung       Multiplikation fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -94,8 +91,6 @@ FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb )
 |*    ImpSqrt()
 |*
 |*    Beschreibung       Wurzelfunktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -126,8 +121,6 @@ sal_uInt16 ImpSqrt( sal_uLong nRadi )
 |*    ImpExPI()
 |*
 |*    Beschreibung       EXPI-Funktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -158,8 +151,6 @@ FixCpx ImpExPI( sal_uInt16 nPhi )
 |*    ImpATanx2()
 |*
 |*    Beschreibung       ATANX2-Funktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -238,8 +229,6 @@ static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
 |*    ImpATan2()
 |*
 |*    Beschreibung       ATAN-Funktion fuer FixPoint-Berechnungen
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -262,8 +251,6 @@ sal_uInt16 ImpATan2( const short x, const short y )
 |*    ImpCartToPolar()
 |*
 |*    Beschreibung       Koordinaaten-Wandlung
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -289,8 +276,6 @@ void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi )
 |*    ImpPolarToCart()
 |*
 |*    Beschreibung       Koordinaaten-Wandlung
-|*    Ersterstellung     SH 01.07.93
-|*    Letzte Aenderung   SH 01.07.93
 |*
 **************************************************************************/
 
@@ -303,3 +288,4 @@ void ImpPolarToCart( const Fix& rR, const sal_uInt16 Phi, short& rX, short& rY )
     rY = sal::static_int_cast< short >(long( fc.GetImag() ));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

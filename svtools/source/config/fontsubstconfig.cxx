@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,10 +40,11 @@
 #include <rtl/logfile.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -63,11 +65,9 @@ struct SvtFontSubstConfig_Impl
 {
     SubstitutionStructArr   aSubstArr;
 };
-/* -----------------------------18.01.01 12:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtFontSubstConfig::SvtFontSubstConfig() :
-    ConfigItem(C2U("Office.Common/Font/Substitution")),
+    ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Font/Substitution"))),
     bIsEnabled(sal_False),
     pImpl(new SvtFontSubstConfig_Impl)
 {
@@ -86,13 +86,13 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
     OUString* pNames = aPropNames.getArray();
     sal_Int32 nName = 0;
-    sPropPrefix += C2U("/");
+    sPropPrefix += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     sal_Int32 nNode;
     for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
         OUString sStart(sPropPrefix);
         sStart += pNodeNames[nNode];
-        sStart += C2U("/");
+        sStart += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         pNames[nName] = sStart;     pNames[nName++] += C2U(cReplaceFont);
         pNames[nName] = sStart;     pNames[nName++] += C2U(cSubstituteFont);
         pNames[nName] = sStart;     pNames[nName++] += C2U(cAlways);
@@ -111,16 +111,12 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         pImpl->aSubstArr.Insert(pInsert, pImpl->aSubstArr.Count());
     }
 }
-/* -----------------------------18.01.01 12:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtFontSubstConfig::~SvtFontSubstConfig()
 {
     delete pImpl;
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
 {
 }
@@ -168,23 +164,17 @@ void SvtFontSubstConfig::Commit()
         ReplaceSetProperties(sNode, aSetValues);
     }
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SvtFontSubstConfig::SubstitutionCount() const
 {
     return pImpl->aSubstArr.Count();
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFontSubstConfig::ClearSubstitutions()
 {
     pImpl->aSubstArr.DeleteAndDestroy(0, pImpl->aSubstArr.Count());
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
 {
     DBG_ASSERT(nPos >= 0 && nPos < pImpl->aSubstArr.Count(), "illegal array index");
@@ -192,9 +182,7 @@ const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
         return pImpl->aSubstArr[(sal_uInt16)nPos];
     return 0;
 }
-/*-- 18.01.01 12:08:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)
 {
     SubstitutionStructPtr pInsert = new SubstitutionStruct(rToAdd);
@@ -227,3 +215,5 @@ void SvtFontSubstConfig::Apply()
 
     OutputDevice::EndFontSubstitution();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

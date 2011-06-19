@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 
 #include <math.h>
 #include <stdio.h>
@@ -161,7 +160,7 @@ void BmpApp::Message( const String& rText, sal_uInt8 cExit )
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
-    fprintf( stderr, aText.GetBuffer() );
+    fprintf( stderr, "%s", aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------
@@ -171,7 +170,7 @@ void BmpApp::ShowUsage()
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile output_dir lang_dir lang_num -i input_dir [-i input_dir ][-f err_file]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ), EXIT_NOERROR );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -i ...        name of directory to be searched for input files [multiple occurence is possible]" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -i ...        name of directory to be searched for input files [multiple occurrence is possible]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -f            name of file, output should be written to" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Examples:" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp /home/test.srs /home/out enus 01 -i /home/res -f /home/out/bmp.err" ) ), EXIT_NOERROR );
@@ -246,3 +245,5 @@ int main( int nArgCount, char* ppArgs[] )
 
     return aBmpApp.Start( aArgs );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

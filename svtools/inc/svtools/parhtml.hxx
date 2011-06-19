@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -256,7 +257,7 @@ public:
     // Mit Ausnahme des Falls, dass SwitchToUCS2==sal_False und
     // SVPAR_CS_DONTKNOW uebergeben wird muss der String mit zwei(!)
     // 0-Bytes an einer geraden(!) Position terminiert sein.
-    static FASTBOOL IsHTMLFormat( const sal_Char* pHeader,
+    static bool IsHTMLFormat( const sal_Char* pHeader,
                       sal_Bool bSwitchToUCS2 = sal_False,
                       rtl_TextEncoding eEnc=RTL_TEXTENCODING_DONTKNOW );
 
@@ -295,3 +296,5 @@ inline void HTMLParser::StartXMP( sal_Bool bRestart )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

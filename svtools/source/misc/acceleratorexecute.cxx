@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,51 +32,21 @@
 
 //===============================================
 // includes
-
-#ifndef __COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
 #include <com/sun/star/awt/KeyModifier.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-
-#ifndef __COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //===============================================
 // namespace
@@ -92,7 +63,6 @@ namespace svt
 class SVT_DLLPRIVATE AsyncAccelExec
 {
     public:
-
         //---------------------------------------
         /** creates a new instance of this class, which can be used
             one times only!
@@ -106,7 +76,6 @@ class SVT_DLLPRIVATE AsyncAccelExec
         void execAsync();
 
     private:
-
         //---------------------------------------
         /** @short  allow creation of instances of this class
                     by using our factory only!
@@ -117,7 +86,6 @@ class SVT_DLLPRIVATE AsyncAccelExec
         DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
 
     private:
-
         ::vcl::EventPoster m_aAsyncCallback;
         css::uno::Reference< css::frame::XDispatch > m_xDispatch;
         css::util::URL m_aURL;
@@ -172,7 +140,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::lang::XMultiServic
         // <- SAFE ------------------------------
 
         css::uno::Reference< css::frame::XDispatchProvider > xDispatcher(
-                            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")),
+                            xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))),
                             css::uno::UNO_QUERY_THROW);
 
         // SAFE -> ------------------------------
@@ -347,91 +315,62 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
         {
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfLine" ) );
-
         case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfLine" ) );
-
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfPara" ) );
-
         case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfPara" ) );
-
         case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfWord" ) );
-
         case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfWord" ) );
-
         case com::sun::star::awt::Key::INSERT_LINEBREAK:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertLinebreak" ) );
-
         case com::sun::star::awt::Key::INSERT_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPara" ) );
-
         case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToPrevWord" ) );
-
         case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToNextWord" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfLine" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfLine" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfPara" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfPara" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfDoc" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfDoc" ) );
-
         case com::sun::star::awt::Key::SELECT_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharLeftSel" ) );
-
         case com::sun::star::awt::Key::SELECT_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharRightSel" ) );
-
         case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordLeftSel" ) );
-
         case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordRightSel" ) );
-
         case com::sun::star::awt::Key::SELECT_WORD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectWord" ) );
-
         case com::sun::star::awt::Key::SELECT_LINE:
-            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) );
-
+            return rtl::OUString();
         case com::sun::star::awt::Key::SELECT_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectText" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfLineSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfLineSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfParaSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfParaSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfDocumentSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfDocumentSel" ) );
-
         case com::sun::star::awt::Key::SELECT_ALL:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectAll" ) );
         default:
@@ -446,7 +385,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration")),
+        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.GlobalAcceleratorConfiguration" ))),
         css::uno::UNO_QUERY_THROW);
     return xAccCfg;
 }
@@ -456,7 +395,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")),
+        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
         css::uno::UNO_QUERY_THROW);
 
     ::rtl::OUString sModule;
@@ -470,7 +409,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
     css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUISupplier(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
+        xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
         css::uno::UNO_QUERY_THROW);
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xAccCfg;
@@ -511,7 +450,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XURLTransformer > xParser(
-                xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
+                xSMGR->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))),
                 css::uno::UNO_QUERY_THROW);
 
     // SAFE -> ----------------------------------
@@ -576,3 +515,5 @@ IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
 }
 
 } // namespace svt
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

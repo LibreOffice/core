@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -443,14 +444,14 @@ namespace svt
             {
                 if ( i_rImpl.m_rPanelDeck.GetPanelCount() != i_rImpl.m_aItems.size() )
                 {
-                    OSL_ENSURE( false, "lcl_checkConsistency: inconsistent array sizes!" );
+                    OSL_FAIL( "lcl_checkConsistency: inconsistent array sizes!" );
                     return;
                 }
                 for ( size_t i = 0; i < i_rImpl.m_rPanelDeck.GetPanelCount(); ++i )
                 {
                     if ( i_rImpl.m_rPanelDeck.GetPanel( i ).get() != i_rImpl.m_aItems[i].pPanel.get() )
                     {
-                        OSL_ENSURE( false, "lcl_checkConsistency: array elements are inconsistent!" );
+                        OSL_FAIL( "lcl_checkConsistency: array elements are inconsistent!" );
                         return;
                     }
                 }
@@ -1097,16 +1098,21 @@ namespace svt
         ::boost::optional< size_t > aNewItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
 
         if  ( i_rMouseEvent.IsLeaveWindow() )
-            aNewItem.reset();
+            aNewItem = ::boost::optional< size_t >();
 
-        if ( aOldItem != aNewItem )
+        bool const bChanged(
+                ( !aOldItem && aNewItem )
+                || ( aOldItem && !aNewItem )
+                || ( aOldItem && aNewItem && aOldItem != aNewItem ) )
+            ;
+        if ( bChanged )
         {
-            if ( !!aOldItem )
+            if ( aOldItem )
                 m_pImpl->InvalidateItem( *aOldItem );
 
             m_pImpl->m_aHoveredItem = aNewItem;
 
-            if ( !!aNewItem )
+            if ( aNewItem )
                 m_pImpl->InvalidateItem( *aNewItem );
         }
     }
@@ -1352,3 +1358,5 @@ namespace svt
 //........................................................................
 } // namespace svt
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

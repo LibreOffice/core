@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <utility>
 #include <vector>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -57,7 +58,11 @@ public:
 
     bool loadImage(
         rtl::OUString const & name, rtl::OUString const & style,
-        BitmapEx & bitmap, bool localized = false );
+        BitmapEx & bitmap, bool localized = false, bool loadMissing = false );
+
+    bool loadDefaultImage(
+        rtl::OUString const & style,
+        BitmapEx& bitmap);
 
     void shutDown();
         // a crude form of life cycle control (called from DeInitVCL; otherwise,
@@ -65,15 +70,19 @@ public:
         // be too late for the destructors of the bitmaps in m_iconCache)
 
 private:
+    bool doLoadImage(
+        rtl::OUString const & name, rtl::OUString const & style,
+        BitmapEx & bitmap, bool localized);
+
     typedef std::list<
         std::pair<
             rtl::OUString,
             com::sun::star::uno::Reference<
                 com::sun::star::container::XNameAccess > > > Zips;
 
-    typedef std::hash_map<
+    typedef boost::unordered_map<
         rtl::OUString, bool, rtl::OUStringHash > CheckStyleCache;
-    typedef std::hash_map<
+    typedef boost::unordered_map<
         rtl::OUString, std::pair< bool, BitmapEx >, rtl::OUStringHash > IconCache;
 
     rtl::OUString m_style;
@@ -94,3 +103,5 @@ private:
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

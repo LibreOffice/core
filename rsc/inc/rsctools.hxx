@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@ class  RscPtrPtr;
 #endif
 #include <stdio.h>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
+#include <vector>
 
 /******************* T y p e s *******************************************/
 // Zeichensatz
@@ -62,7 +63,9 @@ int rsc_stricmp( const char *string1, const char *string2 );
 char* rsc_strdup( const char* );
 
 /****************** C L A S S E S ****************************************/
-DECLARE_LIST( RscStrList, ByteString * )
+
+typedef ::std::vector< ByteString* > RscStrList;
+
 /*********** R s c C h a r ***********************************************/
 class RscChar
 {
@@ -218,3 +221,5 @@ public:
 };
 
 #endif // _RSCTOOLS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

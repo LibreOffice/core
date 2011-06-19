@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -77,7 +78,7 @@ namespace svt
         {
             if ( !i_rData.pTabBar.get() )
             {
-                OSL_ENSURE( false, "lcl_checkDisposed: already disposed!" );
+                OSL_FAIL( "lcl_checkDisposed: already disposed!" );
                 return true;
             }
             return false;
@@ -260,3 +261,5 @@ namespace svt
 //........................................................................
 } // namespace svt
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

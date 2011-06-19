@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,12 +128,7 @@ static AtkRelationType mapRelationType( sal_Int16 nRelation )
         default:
             break;
     }
-#if 0
-  ATK_RELATION_NODE_CHILD_OF,
-  ATK_RELATION_EMBEDS,
-  ATK_RELATION_EMBEDDED_BY,
-  ATK_RELATION_POPUP_FOR,
-#endif
+
     return type;
 }
 
@@ -317,7 +313,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         initialized = true;
     }
 
-    static const sal_Int32 nMapSize = sizeof(roleMap)/sizeof(sal_Int16);
+    static const sal_Int32 nMapSize = SAL_N_ELEMENTS(roleMap);
     if( 0 <= nRole &&  nMapSize > nRole )
         role = roleMap[nRole];
 
@@ -401,7 +397,7 @@ wrapper_get_n_children( AtkObject *atk_obj )
             n = obj->mpContext->getAccessibleChildCount();
         }
         catch(const uno::Exception& e) {
-            OSL_ENSURE(0, "Exception in getAccessibleChildCount()" );
+            OSL_FAIL("Exception in getAccessibleChildCount()" );
         }
     }
 
@@ -433,7 +429,7 @@ wrapper_ref_child( AtkObject *atk_obj,
             child = atk_object_wrapper_ref( xAccessible );
         }
         catch(const uno::Exception& e) {
-            OSL_ENSURE(0, "Exception in getAccessibleChild");
+            OSL_FAIL("Exception in getAccessibleChild");
         }
     }
 
@@ -511,62 +507,6 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
 
     return pSet;
 }
-
-/*****************************************************************************/
-
-#if 0
-struct {
-    sal_Int16       value;
-    const sal_Char* name;
-} aStateTypeTable[] = {
-    { accessibility::AccessibleStateType::INVALID, "INVALID" },
-    { accessibility::AccessibleStateType::ACTIVE, "ACTIVE" },
-    { accessibility::AccessibleStateType::ARMED, "ARMED" },
-    { accessibility::AccessibleStateType::BUSY, "BUSY" },
-    { accessibility::AccessibleStateType::CHECKED, "CHECKED" },
-    { accessibility::AccessibleStateType::DEFUNC, "DEFUNC" },
-    { accessibility::AccessibleStateType::EDITABLE, "EDITABLE" },
-    { accessibility::AccessibleStateType::ENABLED, "ENABLED" },
-    { accessibility::AccessibleStateType::EXPANDABLE, "EXPANDABLE" },
-    { accessibility::AccessibleStateType::EXPANDED, "EXPANDED" },
-    { accessibility::AccessibleStateType::FOCUSABLE, "FOCUSABLE" },
-    { accessibility::AccessibleStateType::FOCUSED, "FOCUSED" },
-    { accessibility::AccessibleStateType::HORIZONTAL, "HORIZONTAL" },
-    { accessibility::AccessibleStateType::ICONIFIED, "ICONIFIED" },
-    { accessibility::AccessibleStateType::INDETERMINATE, "INDETERMINATE" },
-    { accessibility::AccessibleStateType::MANAGES_DESCENDANTS, "MANAGES_DESCENDANTS" },
-    { accessibility::AccessibleStateType::MODAL, "MODAL" },
-    { accessibility::AccessibleStateType::MULTI_LINE, "MULTI_LINE" },
-    { accessibility::AccessibleStateType::MULTI_SELECTABLE, "MULTI_SELECTABLE" },
-    { accessibility::AccessibleStateType::OPAQUE, "OPAQUE" },
-    { accessibility::AccessibleStateType::PRESSED, "PRESSED" },
-    { accessibility::AccessibleStateType::RESIZABLE, "RESIZABLE" },
-    { accessibility::AccessibleStateType::SELECTABLE, "SELECTABLE" },
-    { accessibility::AccessibleStateType::SELECTED, "SELECTED" },
-    { accessibility::AccessibleStateType::SENSITIVE, "SENSITIVE" },
-    { accessibility::AccessibleStateType::SHOWING, "SHOWING" },
-    { accessibility::AccessibleStateType::SINGLE_LINE, "SINGLE_LINE" },
-    { accessibility::AccessibleStateType::STALE, "STALE" },
-    { accessibility::AccessibleStateType::TRANSIENT, "TRANSIENT" },
-    { accessibility::AccessibleStateType::VERTICAL, "VERTICAL" },
-    { accessibility::AccessibleStateType::VISIBLE, "VISIBLE" }
-};
-
-static void printStates(const uno::Sequence<sal_Int16>& rStates)
-{
-    sal_Int32 n = rStates.getLength();
-    size_t nTypes = sizeof(aStateTypeTable)/sizeof(aStateTypeTable[0]);
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        for (size_t j = 0; j < nTypes; ++j)
-        {
-            if (aStateTypeTable[j].value == rStates[i])
-                printf("%s ", aStateTypeTable[j].name);
-        }
-    }
-    printf("\n");
-}
-#endif
 
 static AtkStateSet *
 wrapper_ref_state_set( AtkObject *atk_obj )
@@ -784,8 +724,6 @@ ensureTypeFor( uno::XInterface *pAccessible )
             aTypeName += aTypeTable[i].name;
             bTypes[i] = TRUE;
         }
-//      g_message( "Accessible %p has type '%s' (%d)",
-//                 pAccessible, aTypeTable[i].name, bTypes[i] );
     }
 
     GType nType = g_type_from_name( aTypeName );
@@ -951,3 +889,5 @@ void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)
     RELEASE( wrapper->mpTextAttributes )
     RELEASE( wrapper->mpValue )
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

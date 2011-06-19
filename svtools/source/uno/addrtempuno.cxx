@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,7 @@ namespace svt
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
+        registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_ALIASES)), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
             &m_aAliases, getCppuType(&m_aAliases));
     }
 
@@ -138,7 +139,7 @@ namespace svt
     //-------------------------------------------------------------------------
     ::rtl::OUString OAddressBookSourceDialogUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.OAddressBookSourceDialogUno");
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" ));
     }
 
     //-------------------------------------------------------------------------
@@ -151,7 +152,7 @@ namespace svt
     ::comphelper::StringSequence OAddressBookSourceDialogUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.ui.AddressBookSourceDialog");
+        aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
         return aSupported;
     }
 
@@ -239,3 +240,4 @@ namespace svt
 }   // namespace svt
 // .......................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

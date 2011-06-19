@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,3 +73,5 @@ sal_uInt16 DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPri
 #endif
 
 #endif  // _SV_DBGGUI_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

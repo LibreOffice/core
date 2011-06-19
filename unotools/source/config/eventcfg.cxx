@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weakref.hxx>
 
-#ifndef __SGI_STL_HASH_MAP
-#include <hash_map>
-#endif
+#include <boost/unordered_map.hpp>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -188,8 +187,8 @@ void GlobalEventConfig_Impl::Commit()
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
-    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString::createFromAscii("BindingType['"));
-    static const OUString sPostfix(OUString::createFromAscii("']") + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
+    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + OUString(RTL_CONSTASCII_USTRINGPARAM("BindingType['")));
+    static const OUString sPostfix(OUString(RTL_CONSTASCII_USTRINGPARAM("']")) + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
     //step through the list of events
     for(int i=0;it!=it_end;++it,++i)
     {
@@ -291,9 +290,9 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 {
     Any aRet;
     Sequence< beans::PropertyValue > props(2);
-    props[0].Name = OUString::createFromAscii("EventType");
-    props[0].Value <<= OUString::createFromAscii("Script");
-    props[1].Name = OUString::createFromAscii("Script");
+    props[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("EventType"));
+    props[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
+    props[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
     EventBindingHash::const_iterator it = m_eventBindingHash.find( aName );
     if( it != m_eventBindingHash.end() )
     {
@@ -424,28 +423,14 @@ sal_Bool SAL_CALL GlobalEventConfig::hasElements(  ) throw (RuntimeException)
     return m_pImpl->hasElements( );
 }
 
+namespace
+{
+    class theGlobalEventConfigMutex : public rtl::Static<osl::Mutex, theGlobalEventConfigMutex>{};
+}
+
 Mutex& GlobalEventConfig::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect following code with
-        // the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that
-        // another instance of our class will be faster then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theGlobalEventConfigMutex::get();
 }
 
 ::rtl::OUString GlobalEventConfig::GetEventName( sal_Int32 nIndex )
@@ -453,3 +438,4 @@ Mutex& GlobalEventConfig::GetOwnStaticMutex()
     return GlobalEventConfig().m_pImpl->GetEventName( nIndex );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

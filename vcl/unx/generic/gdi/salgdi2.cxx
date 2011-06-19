@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,26 +46,12 @@
 #include "printergfx.hxx"
 
 #include "vcl/bmpacc.hxx"
+#include <outdata.hxx>
 
 #undef SALGDI2_TESTTRANS
 
 // -=-= debugging =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if 0
-
-static void sal_PrintImage( char *s, XImage*p )
-{
-    fprintf( stderr, "%s %d %d %d\n", s, p->depth, p->width, p->height );
-    int nW = Min( 64, p->width*p->bits_per_pixel >> 3 );
-    for( int i = 0; i < Min( 16, p->height ); i++ )
-    {
-        for( int j = 0; j < nW; j++ )
-            fprintf( stderr, "%02X", (UINT8)p->data[i*p->bytes_per_line+j] );
-        fprintf( stderr, "\n" );
-    }
-}
-
-#endif // DBG_UTIL
 
 // -----------------------------------------------------------------------------
 
@@ -643,7 +630,22 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
     {
         // set foreground/background values for 1Bit bitmaps
         XGetGCValues( pXDisp, aGC, nValues, &aOldVal );
-        aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
+
+        aNewVal.foreground = rColMap.GetWhitePixel();
+        aNewVal.background = rColMap.GetBlackPixel();
+
+        //fdo#33455 handle 1 bit depth pngs with palette entries
+        //to set fore/back colors
+        if (const BitmapBuffer* pBitmapBuffer = const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(true))
+        {
+            const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
+            if (rPalette.GetEntryCount() == 2)
+            {
+                aNewVal.foreground = rColMap.GetPixel(ImplColorToSal(rPalette[0]));
+                aNewVal.background = rColMap.GetPixel(ImplColorToSal(rPalette[1]));
+            }
+        }
+
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
     }
 
@@ -943,7 +945,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect*,
                                  const SalBitmap&,
                                  SalColor )
 {
-    DBG_ERROR( "::DrawBitmap with transparent color not supported" );
+    OSL_FAIL( "::DrawBitmap with transparent color not supported" );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1149,3 +1151,4 @@ bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

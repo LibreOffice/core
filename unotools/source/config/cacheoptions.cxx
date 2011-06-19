@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,16 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/cacheoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -334,13 +330,10 @@ void SvtCacheOptions_Impl::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgr
     SetModified();
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
 Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_WRITEROLE,
         PROPERTYNAME_DRAWINGOLE,
@@ -349,7 +342,7 @@ Sequence< OUString > SvtCacheOptions_Impl::impl_GetPropertyNames()
         PROPERTYNAME_GRFMGR_OBJECTRELEASE
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -486,27 +479,17 @@ void SvtCacheOptions::SetGraphicManagerObjectReleaseTime( sal_Int32 nGrfMgrObjec
     m_pDataContainer->SetGraphicManagerObjectReleaseTime( nGrfMgrObjectReleaseTime );
 }
 
+namespace
+{
+    class theCacheOptionsMutex : public rtl::Static<osl::Mutex, theCacheOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtCacheOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theCacheOptionsMutex::get();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

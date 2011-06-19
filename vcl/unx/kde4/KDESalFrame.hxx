@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,3 +57,5 @@ class KDESalFrame : public X11SalFrame
         virtual void UpdateSettings( AllSettings& rSettings );
         virtual void Show( sal_Bool bVisible, sal_Bool bNoActivate );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

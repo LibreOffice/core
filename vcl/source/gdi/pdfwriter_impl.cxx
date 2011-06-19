@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,14 @@
 #include "cppuhelper/implbase1.hxx"
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
+using ::rtl::OUStringHash;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringBuffer;
 
 #if (OSL_DEBUG_LEVEL < 2)
 #define COMPRESS_PAGES
@@ -712,7 +720,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
             // find or create a hierarchical field
             // first find the fully qualified name up to this field
             aDomain = aFullName.copy( 0, nTokenIndex-1 );
-            std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+            boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
             if( it == m_aFieldNameMap.end() )
             {
                  // create new hierarchy field
@@ -773,7 +781,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
     // insert widget into its hierarchy field
     if( aDomain.getLength() )
     {
-        std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+        boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
         if( it != m_aFieldNameMap.end() )
         {
             OSL_ENSURE( it->second >= 0 && it->second < sal_Int32( m_aWidgets.size() ), "invalid field index" );
@@ -800,11 +808,11 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
 
     if( ! m_aContext.AllowDuplicateFieldNames )
     {
-        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aFullName );
+        boost::unordered_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aFullName );
 
         if( it != m_aFieldNameMap.end() ) // not unique
         {
-            std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
+            boost::unordered_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
             OString aTry;
             sal_Int32 nTry = 2;
             do
@@ -1251,11 +1259,6 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         }
         aLine.append( "]\n" );
     }
-    #if 0
-    // FIXME: implement tab order as Structure Tree
-    if( m_bHasWidgets && m_pWriter->getVersion() >= PDFWriter::PDF_1_5 )
-        aLine.append( "   /Tabs /S\n" );
-    #endif
     if( m_aMCIDParents.size() > 0 )
     {
         OStringBuffer aStructParents( 1024 );
@@ -2277,7 +2280,7 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 
     // append the PDF builtin fonts
     if( !m_bIsPDF_A1 && !m_bEmbedStandardFonts)
-        for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aBuiltinFonts); i++ )
         {
             ImplFontData* pNewData = new ImplPdfBuiltinFontData( m_aBuiltinFonts[i] );
             pFiltered->Add( pNewData );
@@ -2473,7 +2476,7 @@ void PDFWriterImpl::endPage()
         // sanity check
         if( m_aOutputStreams.begin() != m_aOutputStreams.end() )
         {
-            DBG_ERROR( "redirection across pages !!!" );
+            OSL_FAIL( "redirection across pages !!!" );
             m_aOutputStreams.clear(); // leak !
             m_aMapMode.SetOrigin( Point() );
         }
@@ -2724,7 +2727,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
             }
             else
             {
-                DBG_ERROR( "unresolved link id for Link structure" );
+                OSL_FAIL( "unresolved link id for Link structure" );
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "unresolved link id %" SAL_PRIdINT32 " for Link structure\n", nLink );
                 {
@@ -2825,7 +2828,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                     emitStructure( rChild );
                 else
                 {
-                    DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure element" );
+                    OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -2834,7 +2837,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         }
         else
         {
-            DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
+            OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "PDFWriterImpl::emitStructure: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -2857,7 +2860,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if( ! m_aRoleMap.empty() )
         {
             aLine.append( "/RoleMap<<" );
-            for( std::hash_map<OString,OString,OStringHash>::const_iterator
+            for( boost::unordered_map<OString,OString,OStringHash>::const_iterator
                  it = m_aRoleMap.begin(); it != m_aRoleMap.end(); ++it )
             {
                 aLine.append( '/' );
@@ -3101,7 +3104,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
         return aRet;
     }
 
-    sal_Int32 nFontObject = 0;
     sal_Int32 nFontDescriptor = 0;
     rtl::OString aSubType( "/Type1" );
     FontSubsetInfo aInfo;
@@ -3164,7 +3166,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
     }
     else
     {
-        DBG_ERROR( "system font neither embeddable nor subsettable" );
+        OSL_FAIL( "system font neither embeddable nor subsettable" );
     }
 
     // write font descriptor
@@ -3199,7 +3201,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
                           "endobj\n\n" );
             writeBuffer( aLine.getStr(), aLine.getLength() );
 
-            nFontObject = nObject;
             aRet[ rEmbed.m_nNormalFontID ] = nObject;
         }
     }
@@ -3252,7 +3253,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
         return aRet;
     }
 
-    sal_Int32 nFontObject = 0;
     sal_Int32 nStreamObject = 0;
     sal_Int32 nFontDescriptor = 0;
 
@@ -3370,9 +3370,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
                 throw FontException();
 
             // nLength3 is the rest of the file - excluding any section headers
-            // nIndex now points to the first of the 512 '0' characters marking the
+            // nIndex now points before the first of the 512 '0' characters marking the
             // fixed content portion
-            sal_Int32 nLength3 = nFontLen - nIndex;
+            sal_Int32 nLength3 = nFontLen - nIndex - 1;
             for( it = aSections.begin(); it != aSections.end(); ++it )
             {
                 if( *it >= nIndex  )
@@ -3668,7 +3668,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
         if( nFontDescriptor )
         {
             if( pEncoding )
-                nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, sizeof(nEncoding)/sizeof(nEncoding[0]) );
+                nToUnicodeStream = createToUnicodeCMap( nEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, SAL_N_ELEMENTS(nEncoding) );
 
             // write font object
             sal_Int32 nObject = createObject();
@@ -3703,8 +3703,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
                 "endobj\n\n" );
             if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
                 throw FontException();
-
-            nFontObject = nObject;
 
             aRet[ rEmbed.m_nNormalFontID ] = nObject;
 
@@ -3998,7 +3996,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const ImplFontData* pFont, FontSubs
             case FontSubsetInfo::ANY_TYPE1:
                 break;
             default:
-                DBG_ERROR( "unknown fonttype in PDF font descriptor" );
+                OSL_FAIL( "unknown fonttype in PDF font descriptor" );
                 return 0;
         }
         aLine.append( ' ' );
@@ -4073,7 +4071,7 @@ bool PDFWriterImpl::emitFonts()
                     nGlyphs++;
                 else
                 {
-                    DBG_ERROR( "too many glyphs for subset" );
+                    OSL_FAIL( "too many glyphs for subset" );
                 }
             }
             FontSubsetInfo aSubsetInfo;
@@ -4131,7 +4129,7 @@ bool PDFWriterImpl::emitFonts()
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
                 {
                     // TODO: implement
-                    DBG_ERROR( "PDFWriterImpl does not support CFF-font subsets yet!" );
+                    OSL_FAIL( "PDFWriterImpl does not support CFF-font subsets yet!" );
                 }
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
                 {
@@ -4594,7 +4592,6 @@ we check in the following sequence:
 // extract target file type
             INetURLObject aDocumentURL( m_aContext.BaseURL );
             INetURLObject aTargetURL( rLink.m_aURL );
-            sal_Int32   nChangeFileExtensionToPDF = 0;
             sal_Int32   nSetGoToRMode = 0;
             sal_Bool    bTargetHasPDFExtension = sal_False;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
@@ -4633,18 +4630,19 @@ we check in the following sequence:
             {
                 if( m_aContext.ConvertOOoTargetToPDFTarget )
                 {
-//examine the file type (.odm .odt. .odp, odg, ods)
+                    sal_Int32 bChangeFileExtensionToPDF = false;
+                    //examine the file type (.odm .odt. .odp, odg, ods)
                     if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odm" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odt" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odp" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odg" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ods" ) ) ) )
-                        nChangeFileExtensionToPDF++;
-                    if( nChangeFileExtensionToPDF )
+                        bChangeFileExtensionToPDF = true;
+                    if( bChangeFileExtensionToPDF )
                         aTargetURL.setExtension(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ) );
                 }
 //check if extension is pdf, see if GoToR should be forced
@@ -4691,7 +4689,9 @@ we check in the following sequence:
 // and will force the use of URI when the protocol is not file://
                         if( (aFragment.getLength() > 0 && !bTargetHasPDFExtension) ||
                                         eTargetProtocol != INET_PROT_FILE )
+                        {
                             aLine.append( "/URI/URI" );
+                        }
                         else
                         {
                             aLine.append( "/Launch/F" );
@@ -4702,7 +4702,8 @@ we check in the following sequence:
                 }
 //fragment are encoded in the same way as in the named destination processing
                 if( nSetGoToRMode )
-                {//add the fragment
+                {
+                    //add the fragment
                     rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                     aLine.append("/GoToR");
                     aLine.append("/F");
@@ -4730,15 +4731,11 @@ we check in the following sequence:
                         aTargetURL.SetMark( aLineLoc.getStr() );
                     }
                     rtl::OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
-// check if we have a URL available, if the string is empty, set it as the original one
-//                 if( aURL.getLength() == 0 )
-//                     appendLiteralStringEncrypt( rLink.m_aURL , rLink.m_nObject, aLine );
-//                 else
-                        appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
-                                                                                            INetURLObject::WAS_ENCODED,
+                    appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
+                                                                                        INetURLObject::WAS_ENCODED,
                                                                                             bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE
                                                                                             ) :
-                                                                   aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
+                                                                               aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 }
 //<--- i56629
             }
@@ -5042,22 +5039,6 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     beginRedirect( pListBoxStream, rBox.m_aRect );
     OStringBuffer aAppearance( 64 );
 
-#if 0
-    if( ! rWidget.DropDown )
-    {
-        // prepare linewidth for DA string hack, see below
-        Size aFontSize = lcl_convert( m_aGraphicsStack.front().m_aMapMode,
-                                      m_aMapMode,
-                                      getReferenceDevice(),
-                                      Size( 0, aFont.GetHeight() ) );
-        sal_Int32 nLW = aFontSize.Height() / 40;
-        appendFixedInt( nLW > 0 ? nLW : 1, aAppearance );
-        aAppearance.append( " w\n" );
-        writeBuffer( aAppearance.getStr(), aAppearance.getLength() );
-        aAppearance.setLength( 0 );
-    }
-#endif
-
     setLineColor( Color( COL_TRANSPARENT ) );
     setFillColor( replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ) );
     drawRectangle( rBox.m_aRect );
@@ -5073,18 +5054,6 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
 
     // prepare DA string
     OStringBuffer aDA( 256 );
-#if 0
-    if( !rWidget.DropDown )
-    {
-        /* another of AR5's peculiarities: the selected item of a choice
-           field is highlighted using the non stroking color - same as the
-           text color. so workaround that by using text rendering mode 2
-           (fill, then stroke) and set the stroking color
-         */
-        appendStrokingColor( replaceColor( rWidget.BackgroundColor, rSettings.GetFieldColor() ), aDA );
-        aDA.append( " 2 Tr " );
-    }
-#endif
     // prepare DA string
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetFieldTextColor() ), aDA );
     aDA.append( ' ' );
@@ -6660,7 +6629,7 @@ void PDFWriterImpl::sortWidgets()
 {
     // sort widget annotations on each page as per their
     // TabOrder attribute
-    std::hash_map< sal_Int32, AnnotSortContainer > sorted;
+    boost::unordered_map< sal_Int32, AnnotSortContainer > sorted;
     int nWidgets = m_aWidgets.size();
     for( int nW = 0; nW < nWidgets; nW++ )
     {
@@ -6680,7 +6649,7 @@ void PDFWriterImpl::sortWidgets()
             }
         }
     }
-    for( std::hash_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
+    for( boost::unordered_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
     {
         // append entries for non widget annotations
         PDFPage& rPage = m_aPages[ it->first ];
@@ -7808,7 +7777,6 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
         XubString               aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
-        long                    nMaxTextWidth;
         xub_StrLen              i;
         xub_StrLen              nLines;
         xub_StrLen              nFormatLines;
@@ -7816,7 +7784,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
         if ( nTextHeight )
         {
             ::vcl::DefaultTextLayout aLayout( *m_pReferenceDevice );
-            nMaxTextWidth = OutputDevice::ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
+            OutputDevice::ImplGetTextLines( aMultiLineInfo, nWidth, aStr, nStyle, aLayout );
             nLines = (xub_StrLen)(nHeight/nTextHeight);
             nFormatLines = aMultiLineInfo.Count();
             if ( !nLines )
@@ -8307,6 +8275,9 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontSt
 
 void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrikeout eStrikeout )
 {
+    //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
+    //to tweak this
+
     String aStrikeoutChar = String::CreateFromAscii( eStrikeout == STRIKEOUT_SLASH ? "/" : "X" );
     String aStrikeout = aStrikeoutChar;
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
@@ -8328,7 +8299,27 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     // strikeout string is left aligned non-CTL text
     sal_uLong nOrigTLM = m_pReferenceDevice->GetLayoutMode();
     m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
+
+    push( PUSH_CLIPREGION );
+    FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
+    Rectangle aRect;
+    aRect.nLeft = rPos.X();
+    aRect.nRight = aRect.nLeft+nWidth;
+    aRect.nBottom = rPos.Y()+aRefDevFontMetric.GetDescent();
+    aRect.nTop = rPos.Y()-aRefDevFontMetric.GetAscent();
+
+    ImplFontEntry* pFontEntry = m_pReferenceDevice->mpFontEntry;
+    if (pFontEntry->mnOrientation)
+    {
+        Polygon aPoly( aRect );
+        aPoly.Rotate( rPos, pFontEntry->mnOrientation);
+        aRect = aPoly.GetBoundRect();
+    }
+
+    intersectClipRegion( aRect );
     drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
+    pop();
+
     m_pReferenceDevice->SetLayoutMode( nOrigTLM );
 
     if ( bShadow )
@@ -9316,11 +9307,6 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     *  resource dict anyway, let's use the one from the page by NOT
     *  emitting a Resources entry.
     */
-    #if 0
-    aLine.append( "   /Resources " );
-    aLine.append( getResourceDictObj() );
-    aLine.append( " 0 R\n" );
-    #endif
 
     aLine.append( "/Length " );
     aLine.append( (sal_Int32)(nSize) );
@@ -9395,12 +9381,6 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
             aMask.append( "]\n" );
 
             /* #i42884# see above */
-#if 0
-            aLine.append( "/Resources " );
-            aMask.append( getResourceDictObj() );
-            aMask.append( " 0 R\n" );
-#endif
-
             aMask.append( "/Group<</S/Transparency/CS/DeviceRGB>>\n" );
             aMask.append( "/Length " );
             aMask.append( nMaskSize );
@@ -11130,11 +11110,11 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
                 DBG_ASSERT( 0, "Structure element inserted to StructTreeRoot that is not a document" );
             }
             else {
-                DBG_ERROR( "document structure in disorder !" );
+                OSL_FAIL( "document structure in disorder !" );
             }
         }
         else {
-            DBG_ERROR( "PDF document structure MUST be contained in a Document element" );
+            OSL_FAIL( "PDF document structure MUST be contained in a Document element" );
         }
     }
 
@@ -11252,7 +11232,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                     addInternalStructureContainer( rChild );//examine the child
                 else
                 {
-                    DBG_ERROR( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
+                    OSL_FAIL( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -11261,7 +11241,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         }
         else
         {
-            DBG_ERROR( "PDFWriterImpl::emitStructure: invalid child structure id" );
+            OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure id" );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "PDFWriterImpl::addInternalStructureContainer: invalid child structure id %" SAL_PRIdINT32 "\n", *it );
 #endif
@@ -11764,7 +11744,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
     {
         PDFWidget& rGroupWidget = m_aWidgets[ group->second ];
         // check whether all kids have a unique OnValue
-        std::hash_map< OUString, sal_Int32, OUStringHash > aOnValues;
+        boost::unordered_map< OUString, sal_Int32, OUStringHash > aOnValues;
         int nChildren = rGroupWidget.m_aKidsIndex.size();
         bool bIsUnique = true;
         for( int nKid = 0; nKid < nChildren && bIsUnique; nKid++ )
@@ -11794,7 +11774,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                 int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
                 PDFWidget& rKid = m_aWidgets[nKidIndex];
                 rKid.m_aOnValue = OUString::valueOf( sal_Int32(nKid+1) );
-                if( ! rKid.m_aValue.equalsAscii( "Off" ) )
+                if( ! rKid.m_aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Off" ) ) )
                     rKid.m_aValue = rKid.m_aOnValue;
             }
         }
@@ -11821,7 +11801,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                 #endif
             }
             // update selected radio button
-            if( ! rKid.m_aValue.equalsAscii( "Off" ) )
+            if( ! rKid.m_aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Off" ) ) )
             {
                 rGroupWidget.m_aValue = rKid.m_aValue;
             }
@@ -11955,7 +11935,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
             rNewWidget.m_nTextStyle =
                 TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
 
-        rNewWidget.m_aValue = OUString::createFromAscii( rBox.Checked ? "Yes" : "Off" );
+        rNewWidget.m_aValue = rBox.Checked ? OUString(RTL_CONSTASCII_USTRINGPARAM("Yes")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Off" ));
         // create default appearance before m_aRect gets transformed
         createDefaultCheckBoxAppearance( rNewWidget, rBox );
     }
@@ -12154,3 +12134,4 @@ void PDFWriterImpl::addStream( const String& rMimeType, PDFOutputStream* pStream
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

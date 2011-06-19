@@ -1,3 +1,4 @@
 cx	cppcanvas	:	comphelper cppuhelper offuh tools vcl basegfx canvas NULL
 cx	cppcanvas\prj						nmake	-	all	cx_prj NULL
 
+cx	cppcanvas\source\uno				nmake	-	all	cx_uno cx_tools cx_wrapper cx_mtfrenderer cx_util NULL

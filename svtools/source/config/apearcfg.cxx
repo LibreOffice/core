@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
+#include <sal/macros.h>
 
 #define DEFAULT_LOOKNFEEL   0
 #define DEFAULT_DRAGMODE    2
@@ -47,20 +49,17 @@ using namespace ::com::sun::star::uno;
 
 sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
-    :ConfigItem(OUString::createFromAscii("Office.Common/View"))
+    :ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View")))
     ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
     ,nSnapMode          ( DEFAULT_SNAPMODE )
     ,nMiddleMouse       ( MOUSE_MIDDLE_AUTOSCROLL )
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
 #endif
     ,bMenuMouseFollow(sal_False)
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     ,bFontAntialiasing  ( sal_True )
 #endif
 {
@@ -84,7 +83,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                     case  2: bMenuMouseFollow = *(sal_Bool*)pValues->getValue(); break; //"Menu/FollowMouse",
                     case  3: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
                     case  4: *pValues >>= nMiddleMouse; break; //"Dialog/MiddleMouseButton",
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
                     case  5: bFontAntialiasing = *(sal_Bool*)pValues->getValue(); break;    // "FontAntialising/Enabled",
                     case  6: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
 #endif
@@ -93,15 +92,11 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
         }
     }
 }
-/* -----------------------------22.05.01 11:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtTabAppearanceCfg::~SvtTabAppearanceCfg( )
 {
 }
-/* -----------------------------22.05.01 11:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -114,12 +109,12 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
             ,"Menu/FollowMouse"                  //  2
             ,"Dialog/MousePositioning"           //  3
             ,"Dialog/MiddleMouseButton"          //  4
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
             ,"FontAntiAliasing/Enabled"         //  5
             ,"FontAntiAliasing/MinPixelHeight"  //  6
 #endif
         };
-        const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
+        const int nCount = SAL_N_ELEMENTS( aPropNames );
         aNames.realloc(nCount);
 
         const sal_Char** pAsciiNames = aPropNames;
@@ -129,9 +124,7 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------22.05.01 11:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvtTabAppearanceCfg::Commit()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
@@ -148,7 +141,7 @@ void  SvtTabAppearanceCfg::Commit()
             case  2: pValues[nProp].setValue(&bMenuMouseFollow, rType); break; //"Menu/FollowMouse",
             case  3: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
             case  4: pValues[nProp] <<= nMiddleMouse; break;               //"Dialog/MiddleMouseButton",
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
             case  5: pValues[nProp].setValue(&bFontAntialiasing, rType); break; // "FontAntialising/Enabled",
             case  6: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
 #endif
@@ -161,19 +154,11 @@ void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUSt
 {
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvtTabAppearanceCfg::SetDragMode  ( sal_uInt16 nSet )
 {
     nDragMode = nSet;
     SetModified();
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvtTabAppearanceCfg::SetScaleFactor ( sal_uInt16 nSet )
 {
@@ -181,26 +166,17 @@ void SvtTabAppearanceCfg::SetScaleFactor ( sal_uInt16 nSet )
     SetModified();
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvtTabAppearanceCfg::SetSnapMode ( sal_uInt16 nSet )
 {
     nSnapMode = nSet;
     SetModified();
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
+
 void SvtTabAppearanceCfg::SetMiddleMouseButton ( sal_uInt16 nSet )
 {
     nMiddleMouse = nSet;
     SetModified();
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 {
@@ -221,7 +197,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     hAppStyle.SetScreenZoom( nScaleFactor );
     hAppStyle.SetScreenFontZoom( nScaleFactor );
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     // font anti aliasing
     hAppStyle.SetAntialiasingMinPixelHeight( nAAMinPixelHeight );
     hAppStyle.SetDisplayOptions( bFontAntialiasing ? 0 : DISPLAY_OPTION_AA_DISABLE );
@@ -270,3 +246,4 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,6 +113,11 @@ bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
 
 bool SvpSalBitmap::Create( const SalBitmap& /*rSalBmp*/,
                            sal_uInt16 /*nNewBitCount*/ )
+{
+    return false;
+}
+
+bool SvpSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
 {
     return false;
 }
@@ -321,3 +327,4 @@ bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

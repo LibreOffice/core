@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,17 +48,8 @@ const sal_Unicode Locale::SEPERATOR_CV_LINUX = (sal_Unicode)'.';
 const Locale Locale::X_DEFAULT()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("default"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::EN()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("en"),
-                    ::rtl::OUString());
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default")));
     return aLocale;
 }
 
@@ -65,269 +57,8 @@ const Locale Locale::EN()
 const Locale Locale::EN_US()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("en"),
-                    ::rtl::OUString::createFromAscii("US"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::DE_DE()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("de"),
-                    ::rtl::OUString::createFromAscii("DE"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::DE_CH()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("de"),
-                    ::rtl::OUString::createFromAscii("CH"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::DE_AT()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("de"),
-                    ::rtl::OUString::createFromAscii("AT"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::AR()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ar"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::CA()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ca"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::CS()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("cs"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::DA()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("da"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::EL()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("el"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::ES()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("es"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::FI()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("fi"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::FR()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("fr"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::HE()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("he"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::HI_IN()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("hi"),
-                    ::rtl::OUString::createFromAscii("IN"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::HU()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("hu"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::IT()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("it"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::JA()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ja"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::KO()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ko"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::NL()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("nl"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::PL()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("pl"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::PT()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("pt"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::PT_BR()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("pt"),
-                    ::rtl::OUString::createFromAscii("BR"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::RU()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("ru"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::SK()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("sk"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::SL()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("sl"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::SV()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("sv"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::TH()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("th"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::TR()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("tr"),
-                    ::rtl::OUString());
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::X_COMMENT()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("comment"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::X_TRANSLATE()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("translate"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")));
     return aLocale;
 }
 
@@ -335,26 +66,8 @@ const Locale Locale::X_TRANSLATE()
 const Locale Locale::X_NOTRANSLATE()
 {
     static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("x"),
-                    ::rtl::OUString::createFromAscii("notranslate"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::ZH_CN()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("zh"),
-                    ::rtl::OUString::createFromAscii("CN"));
-    return aLocale;
-}
-
-//-----------------------------------------------
-const Locale Locale::ZH_TW()
-{
-    static Locale aLocale(
-                    ::rtl::OUString::createFromAscii("zh"),
-                    ::rtl::OUString::createFromAscii("TW"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("x")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("notranslate")));
     return aLocale;
 }
 
@@ -611,52 +324,6 @@ sal_Bool Locale::similar(const Locale& aComparable) const
 }
 
 //-----------------------------------------------
-sal_Bool Locale::getFallback(Locale& aLocale)
-{
-    // a)
-    // this was our last fallback!
-    // break any further calls to this method ...
-    if (aLocale.equals(X_NOTRANSLATE()))
-        return sal_False;
-
-    // b)
-    // switch from X_DEFAULT to X_NOTRANSLATE
-    // next time we will go to a)
-    if (aLocale.equals(X_DEFAULT()))
-    {
-        aLocale = X_NOTRANSLATE();
-        return sal_True;
-    }
-
-    // c)
-    // switch from EN to X_DEFAULT
-    // next time we will go to b)
-    if (aLocale.equals(EN()))
-    {
-        aLocale = X_DEFAULT();
-        return sal_True;
-    }
-
-    // d) remove country from incoming locale
-    //    e.g. "de-DE" => "de" or "en-US" => "en"!
-    if (aLocale.getCountry().getLength())
-    {
-        aLocale.setCountry(::rtl::OUString());
-        return sal_True;
-    }
-
-    // e) "en-US" possible?
-    if (!aLocale.equals(EN_US()))
-    {
-        aLocale = EN_US();
-        return sal_True;
-    }
-
-    // f) no more fallbacks
-    return sal_False;
-}
-
-//-----------------------------------------------
 void  Locale::operator=(const Locale& rCopy)
 {
     // Take over these values without checking ...
@@ -681,3 +348,4 @@ sal_Bool Locale::operator!=(const Locale& aComparable) const
 
 } // namespace comphelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

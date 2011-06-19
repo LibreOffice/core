@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 
 #include "..\DTransHelper.hxx"
 
-#ifndef _TWRAPPERDATAOBJECT_HXX_
 #include "XTDo.hxx"
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -429,3 +428,5 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
 
     return hr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

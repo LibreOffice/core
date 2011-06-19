@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,6 +58,8 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/strbuf.hxx"
 
+#include <sal/macros.h>
+
 #include "i18npool/mslangid.hxx"
 
 
@@ -71,7 +74,7 @@
 #include "sal/alloca.h"
 
 #include <set>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <algorithm>
 
 #include "adobeenc.tab" // get encoding table for AFM metrics
@@ -96,10 +99,18 @@ using namespace vcl;
 using namespace utl;
 using namespace psp;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringHash;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 /*
  *  static helpers
@@ -123,83 +134,83 @@ inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
     return nRet;
 }
 
-static italic::type parseItalic( const ByteString& rItalic )
+static FontItalic parseItalic( const ByteString& rItalic )
 {
-    italic::type eItalic = italic::Unknown;
+    FontItalic eItalic = ITALIC_DONTKNOW;
     if( rItalic.EqualsIgnoreCaseAscii( "i" ) )
-        eItalic = italic::Italic;
+        eItalic = ITALIC_NORMAL;
     else if( rItalic.EqualsIgnoreCaseAscii( "o" ) )
-        eItalic = italic::Oblique;
+        eItalic = ITALIC_OBLIQUE;
     else
-        eItalic = italic::Upright;
+        eItalic = ITALIC_NONE;
     return eItalic;
 }
 
 // -------------------------------------------------------------------------
 
-static weight::type parseWeight( const ByteString& rWeight )
+static FontWeight parseWeight( const ByteString& rWeight )
 {
-    weight::type eWeight = weight::Unknown;
+    FontWeight eWeight = WEIGHT_DONTKNOW;
     if( rWeight.Search( "bold" ) != STRING_NOTFOUND )
     {
         if( rWeight.Search( "emi" ) != STRING_NOTFOUND ) // semi, demi
-            eWeight = weight::SemiBold;
+            eWeight = WEIGHT_SEMIBOLD;
         else if( rWeight.Search( "ultra" ) != STRING_NOTFOUND )
-            eWeight = weight::UltraBold;
+            eWeight = WEIGHT_ULTRABOLD;
         else
-            eWeight = weight::Bold;
+            eWeight = WEIGHT_BOLD;
     }
     else if( rWeight.Search( "heavy" ) != STRING_NOTFOUND )
-        eWeight = weight::Bold;
+        eWeight = WEIGHT_BOLD;
     else if( rWeight.Search( "light" ) != STRING_NOTFOUND )
     {
         if( rWeight.Search( "emi" ) != STRING_NOTFOUND ) // semi, demi
-            eWeight = weight::SemiLight;
+            eWeight = WEIGHT_SEMILIGHT;
         else if( rWeight.Search( "ultra" ) != STRING_NOTFOUND )
-            eWeight = weight::UltraLight;
+            eWeight = WEIGHT_ULTRALIGHT;
         else
-            eWeight = weight::Light;
+            eWeight = WEIGHT_LIGHT;
     }
     else if( rWeight.Search( "black" ) != STRING_NOTFOUND )
-        eWeight = weight::Black;
+        eWeight = WEIGHT_BLACK;
     else if( rWeight.Equals( "demi" ) )
-        eWeight = weight::SemiBold;
+        eWeight = WEIGHT_SEMIBOLD;
     else if( rWeight.Equals( "book" ) ||
              rWeight.Equals( "semicondensed" ) )
-        eWeight = weight::Light;
+        eWeight = WEIGHT_LIGHT;
     else if( rWeight.Equals( "medium" ) || rWeight.Equals( "roman" ) )
-        eWeight = weight::Medium;
+        eWeight = WEIGHT_MEDIUM;
     else
-        eWeight = weight::Normal;
+        eWeight = WEIGHT_NORMAL;
     return eWeight;
 }
 
 // -------------------------------------------------------------------------
 
-static width::type parseWidth( const ByteString& rWidth )
+static FontWidth parseWidth( const ByteString& rWidth )
 {
-    width::type eWidth = width::Unknown;
+    FontWidth eWidth = WIDTH_DONTKNOW;
     if( rWidth.Equals( "bold" ) ||
         rWidth.Equals( "semiexpanded" ) )
-        eWidth = width::SemiExpanded;
+        eWidth = WIDTH_SEMI_EXPANDED;
     else if( rWidth.Equals( "condensed" ) ||
              rWidth.Equals( "narrow" ) )
-        eWidth = width::Condensed;
+        eWidth = WIDTH_CONDENSED;
     else if( rWidth.Equals( "double wide" ) ||
              rWidth.Equals( "extraexpanded" ) ||
              rWidth.Equals( "ultraexpanded" ) )
-        eWidth = width::UltraExpanded;
+        eWidth = WIDTH_ULTRA_EXPANDED;
     else if( rWidth.Equals( "expanded" ) ||
              rWidth.Equals( "wide" ) )
-        eWidth = width::Expanded;
+        eWidth = WIDTH_EXPANDED;
     else if( rWidth.Equals( "extracondensed" ) )
-        eWidth = width::ExtraCondensed;
+        eWidth = WIDTH_EXTRA_CONDENSED;
     else if( rWidth.Equals( "semicondensed" ) )
-        eWidth = width::SemiCondensed;
+        eWidth = WIDTH_SEMI_CONDENSED;
     else if( rWidth.Equals( "ultracondensed" ) )
-        eWidth = width::UltraCondensed;
+        eWidth = WIDTH_ULTRA_CONDENSED;
     else
-        eWidth = width::Normal;
+        eWidth = WIDTH_NORMAL;
 
     return eWidth;
 }
@@ -344,10 +355,10 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_eType( eType ),
         m_nFamilyName( 0 ),
         m_nPSName( 0 ),
-        m_eItalic( italic::Unknown ),
-        m_eWidth( width::Unknown ),
-        m_eWeight( weight::Unknown ),
-        m_ePitch( pitch::Unknown ),
+        m_eItalic( ITALIC_DONTKNOW ),
+        m_eWidth( WIDTH_DONTKNOW ),
+        m_eWeight( WEIGHT_DONTKNOW ),
+        m_ePitch( PITCH_DONTKNOW ),
         m_aEncoding( RTL_TEXTENCODING_DONTKNOW ),
         m_bFontEncodingOnly( false ),
         m_pMetrics( NULL ),
@@ -489,8 +500,8 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
             if( pImplTTFont->nkern && pImplTTFont->kerntype == KT_MICROSOFT )
             {
                 // create a glyph -> character mapping
-                ::std::hash_map< sal_uInt16, sal_Unicode > aGlyphMap;
-                ::std::hash_map< sal_uInt16, sal_Unicode >::iterator left, right;
+                ::boost::unordered_map< sal_uInt16, sal_Unicode > aGlyphMap;
+                ::boost::unordered_map< sal_uInt16, sal_Unicode >::iterator left, right;
                 for( i = 21; i < 0xfffd; i++ )
                 {
                     sal_uInt16 nGlyph = MapChar( pTTFont, (sal_Unicode)i, 0 ); // kerning for horz only
@@ -589,8 +600,8 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
             if( pImplTTFont->nkern && pImplTTFont->kerntype == KT_APPLE_NEW )
             {
                 // create a glyph -> character mapping
-                ::std::hash_map< sal_uInt16, sal_Unicode > aGlyphMap;
-                ::std::hash_map< sal_uInt16, sal_Unicode >::iterator left, right;
+                ::boost::unordered_map< sal_uInt16, sal_Unicode > aGlyphMap;
+                ::boost::unordered_map< sal_uInt16, sal_Unicode >::iterator left, right;
                 for( i = 21; i < 0xfffd; i++ )
                 {
                     sal_uInt16 nGlyph = MapChar( pTTFont, (sal_Unicode)i, 0 ); // kerning for horz only
@@ -707,7 +718,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
             }
 
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found %d/%d kern pairs for %s\n",
+            fprintf( stderr, "found %" SAL_PRI_SIZET "u/%" SAL_PRI_SIZET "u kern pairs for %s\n",
                      m_pMetrics->m_aXKernPairs.size(),
                      m_pMetrics->m_aYKernPairs.size(),
                      OUStringToOString( pProvider->getString( ATOM_FAMILYNAME, m_nFamilyName ), RTL_TEXTENCODING_MS_1252 ).getStr() );
@@ -733,7 +744,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 */
 static bool familyNameOverride( const OUString& i_rPSname, OUString& o_rFamilyName )
 {
-    static std::hash_map< OUString, OUString, OUStringHash > aPSNameToFamily( 16 );
+    static boost::unordered_map< OUString, OUString, OUStringHash > aPSNameToFamily( 16 );
     if( aPSNameToFamily.empty() ) // initialization
     {
         aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow" ) ) ] =
@@ -745,7 +756,7 @@ static bool familyNameOverride( const OUString& i_rPSname, OUString& o_rFamilyNa
         aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow-Oblique" ) ) ] =
                          OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
     }
-    std::hash_map<OUString,OUString,OUStringHash>::const_iterator it =
+    boost::unordered_map<OUString,OUString,OUStringHash>::const_iterator it =
        aPSNameToFamily.find( i_rPSname );
     bool bReplaced = (it != aPSNameToFamily.end() );
     if( bReplaced )
@@ -757,7 +768,6 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 {
     PrintFontManager& rManager( PrintFontManager::get() );
 
-    int i;
     FontInfo* pInfo = NULL;
     parseFile( rFileName.getStr(), &pInfo, P_ALL );
     if( ! pInfo || ! pInfo->numOfChars )
@@ -802,11 +812,11 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 
     // italic
     if( pInfo->gfi->italicAngle > 0 )
-        m_eItalic = italic::Oblique;
+        m_eItalic = ITALIC_OBLIQUE;
     else if( pInfo->gfi->italicAngle < 0 )
-        m_eItalic = italic::Italic;
+        m_eItalic = ITALIC_NORMAL;
     else
-        m_eItalic = italic::Upright;
+        m_eItalic = ITALIC_NONE;
 
     // weight
     ByteString aLowerWeight( pInfo->gfi->weight );
@@ -814,7 +824,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     m_eWeight = parseWeight( aLowerWeight );
 
     // pitch
-    m_ePitch = pInfo->gfi->isFixedPitch ? pitch::Fixed : pitch::Variable;
+    m_ePitch = pInfo->gfi->isFixedPitch ? PITCH_FIXED : PITCH_VARIABLE;
 
     // encoding - only set if unknown
     int nAdobeEncoding = 0;
@@ -858,7 +868,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                 RTL_TEXTENCODING_JIS_X_0208
             };
 
-        for( unsigned int enc = 0; enc < sizeof( aEncs )/sizeof(aEncs[0]) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
+        for( unsigned int enc = 0; enc < SAL_N_ELEMENTS( aEncs ) && m_aEncoding == RTL_TEXTENCODING_DONTKNOW; enc++ )
         {
             sal_Int32 nIndex = 0, nOffset = 1;
             do
@@ -971,6 +981,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         // note: this only works with single byte encodings
         sal_Unicode* pUnicodes = (sal_Unicode*)alloca( pInfo->numOfChars * sizeof(sal_Unicode));
         CharMetricInfo* pChar = pInfo->cmi;
+        int i;
 
         for( i = 0; i < pInfo->numOfChars; i++, pChar++ )
         {
@@ -1085,8 +1096,8 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
                 }
                 else if( pChar->code != -1 )
                 {
-                    ::std::pair< ::std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator,
-                          ::std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator >
+                    ::std::pair< ::boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
+                          ::boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
                           aCodes = rManager.getUnicodeFromAdobeCode( pChar->code );
                     while( aCodes.first != aCodes.second )
                     {
@@ -1169,13 +1180,14 @@ OString PrintFontManager::s_aEmptyOString;
  */
 PrintFontManager& PrintFontManager::get()
 {
-    static PrintFontManager* theManager = NULL;
-    if( ! theManager )
+    static PrintFontManager* pManager = NULL;
+    if( ! pManager )
     {
-        theManager = new PrintFontManager();
-        theManager->initialize();
+        static PrintFontManager theManager;
+        pManager = &theManager;
+        pManager->initialize();
     }
-    return *theManager;
+    return *pManager;
 }
 
 // -------------------------------------------------------------------------
@@ -1191,24 +1203,15 @@ PrintFontManager::PrintFontManager() :
         m_pFontCache( NULL ),
         m_bFontconfigSuccess( false )
 {
-    for( unsigned int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAdobeCodes ); i++ )
     {
-        m_aUnicodeToAdobename.insert( ::std::hash_multimap< sal_Unicode, ::rtl::OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
-        m_aAdobenameToUnicode.insert( ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
+        m_aUnicodeToAdobename.insert( ::boost::unordered_multimap< sal_Unicode, ::rtl::OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
+        m_aAdobenameToUnicode.insert( ::boost::unordered_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
         if( aAdobeCodes[i].aAdobeStandardCode )
         {
-            m_aUnicodeToAdobecode.insert( ::std::hash_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].aAdobeStandardCode ) );
-            m_aAdobecodeToUnicode.insert( ::std::hash_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
+            m_aUnicodeToAdobecode.insert( ::boost::unordered_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].aAdobeStandardCode ) );
+            m_aAdobecodeToUnicode.insert( ::boost::unordered_multimap< sal_uInt8, sal_Unicode >::value_type( aAdobeCodes[i].aAdobeStandardCode, aAdobeCodes[i].aUnicode ) );
         }
-#if 0
-        m_aUnicodeToAdobename[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].pAdobename;
-        m_aAdobenameToUnicode[ aAdobeCodes[i].pAdobename ] = aAdobeCodes[i].aUnicode;
-        if( aAdobeCodes[i].aAdobeStandardCode )
-        {
-            m_aUnicodeToAdobecode[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].aAdobeStandardCode;
-            m_aAdobecodeToUnicode[ aAdobeCodes[i].aAdobeStandardCode ] = aAdobeCodes[i].aUnicode;
-        }
-#endif
     }
 }
 
@@ -1217,7 +1220,7 @@ PrintFontManager::PrintFontManager() :
 PrintFontManager::~PrintFontManager()
 {
     deinitFontconfig();
-    for( ::std::hash_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
+    for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
         delete (*it).second;
     delete m_pAtoms;
     if( m_pFontCache )
@@ -1228,7 +1231,7 @@ PrintFontManager::~PrintFontManager()
 
 const OString& PrintFontManager::getDirectory( int nAtom ) const
 {
-    ::std::hash_map< int, OString >::const_iterator it( m_aAtomToDir.find( nAtom ) );
+    ::boost::unordered_map< int, OString >::const_iterator it( m_aAtomToDir.find( nAtom ) );
     return it != m_aAtomToDir.end() ? it->second : s_aEmptyOString;
 }
 
@@ -1237,7 +1240,7 @@ const OString& PrintFontManager::getDirectory( int nAtom ) const
 int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate )
 {
     int nAtom = 0;
-    ::std::hash_map< OString, int, OStringHash >::const_iterator it
+    ::boost::unordered_map< OString, int, OStringHash >::const_iterator it
           ( m_aDirToAtom.find( rDirectory ) );
     if( it != m_aDirToAtom.end() )
         nAtom = it->second;
@@ -1301,7 +1304,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
         // first look for an adjacent file
         static const char* pSuffix[] = { ".afm", ".AFM" };
 
-        for( unsigned int i = 0; i < sizeof(pSuffix)/sizeof(pSuffix[0]); i++ )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS(pSuffix); i++ )
         {
             ByteString aName( rFontFile );
             aName.Erase( aName.Len()-4 );
@@ -1421,7 +1424,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, co
 fontID PrintFontManager::findFontBuiltinID( int nPSNameAtom ) const
 {
     fontID nID = 0;
-    ::std::hash_map< fontID, PrintFont* >::const_iterator it;
+    ::boost::unordered_map< fontID, PrintFont* >::const_iterator it;
     for( it = m_aFonts.begin(); nID == 0 && it != m_aFonts.end(); ++it )
     {
         if( it->second->m_eType == fonttype::Builtin &&
@@ -1437,12 +1440,12 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile ) 
 {
     fontID nID = 0;
 
-    ::std::hash_map< OString, ::std::set< fontID >, OStringHash >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
+    ::boost::unordered_map< OString, ::std::set< fontID >, OStringHash >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
     if( set_it != m_aFontFileToFontID.end() )
     {
         for( ::std::set< fontID >::const_iterator font_it = set_it->second.begin(); font_it != set_it->second.end() && ! nID; ++font_it )
         {
-            ::std::hash_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
+            ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
             if( it != m_aFonts.end() )
             {
                 switch( it->second->m_eType )
@@ -1529,9 +1532,9 @@ bool PrintFontManager::parseXLFD( const OString& rXLFD, XLFDEntry& rEntry )
 
     // evaluate pitch
     if( aPitch.toChar() == 'c' || aPitch.toChar() == 'm' )
-        rEntry.ePitch = pitch::Fixed;
+        rEntry.ePitch = PITCH_FIXED;
     else
-        rEntry.ePitch = pitch::Variable;
+        rEntry.ePitch = PITCH_VARIABLE;
 
     OString aToken = aEnc.toAsciiLowerCase();
     // get encoding
@@ -1691,42 +1694,42 @@ OString PrintFontManager::getXLFD( PrintFont* pFont ) const
     aXLFD.append( '-' );
     switch( pFont->m_eWeight )
     {
-        case weight::Thin:          aXLFD.append("thin");break;
-        case weight::UltraLight:    aXLFD.append("ultralight");break;
-        case weight::Light:         aXLFD.append("light");break;
-        case weight::SemiLight:     aXLFD.append("semilight");break;
-        case weight::Normal:        aXLFD.append("normal");break;
-        case weight::Medium:        aXLFD.append("medium");break;
-        case weight::SemiBold:      aXLFD.append("semibold");break;
-        case weight::Bold:          aXLFD.append("bold");break;
-        case weight::UltraBold:     aXLFD.append("ultrabold");break;
-        case weight::Black:         aXLFD.append("black");break;
+        case WEIGHT_THIN:          aXLFD.append("thin");break;
+        case WEIGHT_ULTRALIGHT:    aXLFD.append("ultralight");break;
+        case WEIGHT_LIGHT:         aXLFD.append("light");break;
+        case WEIGHT_SEMILIGHT:     aXLFD.append("semilight");break;
+        case WEIGHT_NORMAL:        aXLFD.append("normal");break;
+        case WEIGHT_MEDIUM:        aXLFD.append("medium");break;
+        case WEIGHT_SEMIBOLD:      aXLFD.append("semibold");break;
+        case WEIGHT_BOLD:          aXLFD.append("bold");break;
+        case WEIGHT_ULTRABOLD:     aXLFD.append("ultrabold");break;
+        case WEIGHT_BLACK:         aXLFD.append("black");break;
         default: break;
     }
     aXLFD.append('-');
     switch( pFont->m_eItalic )
     {
-        case italic::Upright:       aXLFD.append('r');break;
-        case italic::Oblique:       aXLFD.append('o');break;
-        case italic::Italic:        aXLFD.append('i');break;
+        case ITALIC_NONE:       aXLFD.append('r');break;
+        case ITALIC_OBLIQUE:       aXLFD.append('o');break;
+        case ITALIC_NORMAL:        aXLFD.append('i');break;
         default: break;
     }
     aXLFD.append('-');
     switch( pFont->m_eWidth )
     {
-        case width::UltraCondensed: aXLFD.append("ultracondensed");break;
-        case width::ExtraCondensed: aXLFD.append("extracondensed");break;
-        case width::Condensed:      aXLFD.append("condensed");break;
-        case width::SemiCondensed:  aXLFD.append("semicondensed");break;
-        case width::Normal:         aXLFD.append("normal");break;
-        case width::SemiExpanded:   aXLFD.append("semiexpanded");break;
-        case width::Expanded:       aXLFD.append("expanded");break;
-        case width::ExtraExpanded:  aXLFD.append("extraexpanded");break;
-        case width::UltraExpanded:  aXLFD.append("ultraexpanded");break;
+        case WIDTH_ULTRA_CONDENSED: aXLFD.append("ultracondensed");break;
+        case WIDTH_EXTRA_CONDENSED: aXLFD.append("extracondensed");break;
+        case WIDTH_CONDENSED:       aXLFD.append("condensed");break;
+        case WIDTH_SEMI_CONDENSED:  aXLFD.append("semicondensed");break;
+        case WIDTH_NORMAL:          aXLFD.append("normal");break;
+        case WIDTH_SEMI_EXPANDED:   aXLFD.append("semiexpanded");break;
+        case WIDTH_EXPANDED:        aXLFD.append("expanded");break;
+        case WIDTH_EXTRA_EXPANDED:  aXLFD.append("extraexpanded");break;
+        case WIDTH_ULTRA_EXPANDED:  aXLFD.append("ultraexpanded");break;
         default: break;
     }
     aXLFD.append("-utf8-0-0-0-0-");
-    aXLFD.append( pFont->m_ePitch == pitch::Fixed ? "m" : "p" );
+    aXLFD.append( pFont->m_ePitch == PITCH_FIXED ? "m" : "p" );
     aXLFD.append("-0-");
     const char* pEnc = rtl_getBestUnixCharsetFromTextEncoding( pFont->m_aEncoding );
     if( ! pEnc )
@@ -1804,6 +1807,29 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
     return aValue;
 }
 
+//fdo#33349.There exists an archaic Berling Antiqua font which has a "Times New
+//Roman" name field in it. We don't want the "Times New Roman" name to take
+//precedence in this case. We take Berling Antiqua as a higher priority name,
+//and erase the "Times New Roman" name
+namespace
+{
+    bool isBadTNR(const OUString &rName, ::std::set< OUString >& rSet)
+    {
+        bool bRet = false;
+        if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Berling Antiqua")))
+        {
+            ::std::set< OUString >::iterator aEnd = rSet.end();
+            ::std::set< OUString >::iterator aI = rSet.find(OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")));
+            if (aI != aEnd)
+            {
+                bRet = true;
+                rSet.erase(aI);
+            }
+        }
+        return bRet;
+    }
+}
+
 // -------------------------------------------------------------------------
 
 void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OUString >& rNames ) const
@@ -1841,7 +1867,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
             }
             OUString aName = convertTrueTypeName( pNameRecords + i );
             aSet.insert( aName );
-            if( nMatch > nLastMatch )
+            if( nMatch > nLastMatch || isBadTNR(aName, aSet) )
             {
                 nLastMatch = nMatch;
                 aFamily = aName;
@@ -1920,40 +1946,40 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, String( ByteString( aInfo.psname ), aEncoding ), sal_True );
         switch( aInfo.weight )
         {
-            case FW_THIN:           pFont->m_eWeight = weight::Thin; break;
-            case FW_EXTRALIGHT: pFont->m_eWeight = weight::UltraLight; break;
-            case FW_LIGHT:          pFont->m_eWeight = weight::Light; break;
-            case FW_MEDIUM:     pFont->m_eWeight = weight::Medium; break;
-            case FW_SEMIBOLD:       pFont->m_eWeight = weight::SemiBold; break;
-            case FW_BOLD:           pFont->m_eWeight = weight::Bold; break;
-            case FW_EXTRABOLD:      pFont->m_eWeight = weight::UltraBold; break;
-            case FW_BLACK:          pFont->m_eWeight = weight::Black; break;
+            case FW_THIN:           pFont->m_eWeight = WEIGHT_THIN; break;
+            case FW_EXTRALIGHT: pFont->m_eWeight = WEIGHT_ULTRALIGHT; break;
+            case FW_LIGHT:          pFont->m_eWeight = WEIGHT_LIGHT; break;
+            case FW_MEDIUM:     pFont->m_eWeight = WEIGHT_MEDIUM; break;
+            case FW_SEMIBOLD:       pFont->m_eWeight = WEIGHT_SEMIBOLD; break;
+            case FW_BOLD:           pFont->m_eWeight = WEIGHT_BOLD; break;
+            case FW_EXTRABOLD:      pFont->m_eWeight = WEIGHT_ULTRABOLD; break;
+            case FW_BLACK:          pFont->m_eWeight = WEIGHT_BLACK; break;
 
             case FW_NORMAL:
-            default:        pFont->m_eWeight = weight::Normal; break;
+            default:        pFont->m_eWeight = WEIGHT_NORMAL; break;
         }
 
         switch( aInfo.width )
         {
-            case FWIDTH_ULTRA_CONDENSED:    pFont->m_eWidth = width::UltraCondensed; break;
-            case FWIDTH_EXTRA_CONDENSED:    pFont->m_eWidth = width::ExtraCondensed; break;
-            case FWIDTH_CONDENSED:          pFont->m_eWidth = width::Condensed; break;
-            case FWIDTH_SEMI_CONDENSED: pFont->m_eWidth = width::SemiCondensed; break;
-            case FWIDTH_SEMI_EXPANDED:      pFont->m_eWidth = width::SemiExpanded; break;
-            case FWIDTH_EXPANDED:           pFont->m_eWidth = width::Expanded; break;
-            case FWIDTH_EXTRA_EXPANDED: pFont->m_eWidth = width::ExtraExpanded; break;
-            case FWIDTH_ULTRA_EXPANDED: pFont->m_eWidth = width::UltraExpanded; break;
+            case FWIDTH_ULTRA_CONDENSED:    pFont->m_eWidth = WIDTH_ULTRA_CONDENSED; break;
+            case FWIDTH_EXTRA_CONDENSED:    pFont->m_eWidth = WIDTH_EXTRA_CONDENSED; break;
+            case FWIDTH_CONDENSED:          pFont->m_eWidth = WIDTH_CONDENSED; break;
+            case FWIDTH_SEMI_CONDENSED: pFont->m_eWidth = WIDTH_SEMI_CONDENSED; break;
+            case FWIDTH_SEMI_EXPANDED:      pFont->m_eWidth = WIDTH_SEMI_EXPANDED; break;
+            case FWIDTH_EXPANDED:           pFont->m_eWidth = WIDTH_EXPANDED; break;
+            case FWIDTH_EXTRA_EXPANDED: pFont->m_eWidth = WIDTH_EXTRA_EXPANDED; break;
+            case FWIDTH_ULTRA_EXPANDED: pFont->m_eWidth = WIDTH_ULTRA_EXPANDED; break;
 
             case FWIDTH_NORMAL:
-            default:                        pFont->m_eWidth = width::Normal; break;
+            default:                        pFont->m_eWidth = WIDTH_NORMAL; break;
         }
 
-        pFont->m_ePitch = aInfo.pitch ? pitch::Fixed : pitch::Variable;
-        pFont->m_eItalic = aInfo.italicAngle == 0 ? italic::Upright : ( aInfo.italicAngle < 0 ? italic::Italic : italic::Oblique );
+        pFont->m_ePitch = aInfo.pitch ? PITCH_FIXED : PITCH_VARIABLE;
+        pFont->m_eItalic = aInfo.italicAngle == 0 ? ITALIC_NONE : ( aInfo.italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE );
         // #104264# there are fonts that set italic angle 0 although they are
         // italic; use macstyle bit here
         if( aInfo.italicAngle == 0 && (aInfo.macStyle & 2) )
-            pFont->m_eItalic = italic::Italic;
+            pFont->m_eItalic = ITALIC_NORMAL;
 
         pFont->m_aEncoding = aInfo.symbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
 
@@ -2104,7 +2130,7 @@ void PrintFontManager::initialize()
 
     // initialize may be called twice in the future
     {
-        for( ::std::hash_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
+        for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
             delete (*it).second;
         m_nNextFontID = 1;
         m_aFonts.clear();
@@ -2156,7 +2182,7 @@ void PrintFontManager::initialize()
     }
 
     // protect against duplicate paths
-    std::hash_map< OString, int, OStringHash > visited_dirs;
+    boost::unordered_map< OString, int, OStringHash > visited_dirs;
 
     // now that all global and local font dirs are known to fontconfig
     // check that there are fonts actually managed by fontconfig
@@ -2222,7 +2248,7 @@ void PrintFontManager::initialize()
         if( pDIR )
         {
             // read fonts.dir if possible
-            ::std::hash_map< OString, ::std::list<OString>, OStringHash > aFontsDir;
+            ::boost::unordered_map< OString, ::std::list<OString>, OStringHash > aFontsDir;
             int nDirID = getDirectoryAtom( aPath, true );
             // #i38367# no fonts.dir in our own directories anymore
             std::list< int >::const_iterator priv_dir;
@@ -2270,7 +2296,7 @@ void PrintFontManager::initialize()
                     if( findFontFileID( nDirID, aFileName ) == 0 )
                     {
                         ::std::list<OString> aXLFDs;
-                        ::std::hash_map< OString, ::std::list<OString>, OStringHash >::const_iterator it =
+                        ::boost::unordered_map< OString, ::std::list<OString>, OStringHash >::const_iterator it =
                               aFontsDir.find( aFileName );
                         if( it != aFontsDir.end() )
                             aXLFDs = (*it).second;
@@ -2401,22 +2427,22 @@ void PrintFontManager::initialize()
 #endif
 
     // part three - fill in family styles
-    ::std::hash_map< fontID, PrintFont* >::iterator font_it;
+    ::boost::unordered_map< fontID, PrintFont* >::iterator font_it;
     for (font_it = m_aFonts.begin(); font_it != m_aFonts.end(); ++font_it)
     {
-        ::std::hash_map< int, family::type >::const_iterator it =
+        ::boost::unordered_map< int, FontFamily >::const_iterator it =
               m_aFamilyTypes.find( font_it->second->m_nFamilyName );
         if (it != m_aFamilyTypes.end())
             continue;
         const ::rtl::OUString& rFamily =
             m_pAtoms->getString( ATOM_FAMILYNAME, font_it->second->m_nFamilyName);
-        family::type eType = matchFamilyName( rFamily );
+        FontFamily eType = matchFamilyName( rFamily );
         m_aFamilyTypes[ font_it->second->m_nFamilyName ] = eType;
     }
 
 #if OSL_DEBUG_LEVEL > 1
     aStep3 = times( &tms );
-    fprintf( stderr, "PrintFontManager::initialize: collected %d fonts (%d builtin, %d cached)\n", m_aFonts.size(), nBuiltinFonts, nCached );
+    fprintf( stderr, "PrintFontManager::initialize: collected %" SAL_PRI_SIZET "u fonts (%d builtin, %d cached)\n", m_aFonts.size(), nBuiltinFonts, nCached );
     double fTick = (double)sysconf( _SC_CLK_TCK );
     fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/fTick );
     fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/fTick );
@@ -2433,22 +2459,22 @@ void PrintFontManager::initialize()
 
 // -------------------------------------------------------------------------
 inline bool
-equalPitch (psp::pitch::type from, psp::pitch::type to)
+equalPitch (FontPitch from, FontPitch to)
 {
     return from == to;
 }
 
 inline bool
-equalWeight (psp::weight::type from, psp::weight::type to)
+equalWeight (FontWeight from, FontWeight to)
 {
     return from > to ? (from - to) <= 3 : (to - from) <= 3;
 }
 
 inline bool
-equalItalic (psp::italic::type from, psp::italic::type to)
+equalItalic (FontItalic from, FontItalic to)
 {
-    if ( (from == psp::italic::Italic) || (from == psp::italic::Oblique) )
-        return (to == psp::italic::Italic) || (to == psp::italic::Oblique);
+    if ( (from == ITALIC_NORMAL) || (from == ITALIC_OBLIQUE) )
+        return (to == ITALIC_NORMAL) || (to == ITALIC_OBLIQUE);
     return to == from;
 }
 inline bool
@@ -2463,15 +2489,15 @@ namespace {
     struct BuiltinFontIdentifier
     {
         OUString            aFamily;
-        italic::type        eItalic;
-        weight::type        eWeight;
-        pitch::type         ePitch;
+        FontItalic          eItalic;
+        FontWeight          eWeight;
+        FontPitch           ePitch;
         rtl_TextEncoding    aEncoding;
 
         BuiltinFontIdentifier( const OUString& rFam,
-                               italic::type eIt,
-                               weight::type eWg,
-                               pitch::type ePt,
+                               FontItalic eIt,
+                               FontWeight eWg,
+                               FontPitch ePt,
                                rtl_TextEncoding enc ) :
             aFamily( rFam ),
             eItalic( eIt ),
@@ -2502,7 +2528,7 @@ namespace {
 void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDParser* pParser, bool bUseOverrideMetrics )
 {
     rFontIDs.clear();
-    std::hash_map< fontID, PrintFont* >::const_iterator it;
+    boost::unordered_map< fontID, PrintFont* >::const_iterator it;
 
     /*
     * Note: there are two easy steps making this faster:
@@ -2524,7 +2550,7 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
     if( pParser )
     {
         std::set<int> aBuiltinPSNames;
-        std::hash_set< BuiltinFontIdentifier,
+        boost::unordered_set< BuiltinFontIdentifier,
                        BuiltinFontIdentifierHash
                        > aBuiltinFonts;
 
@@ -2535,7 +2561,7 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
             for( std::vector<fontID>::const_iterator over = m_aOverrideFonts.begin();
                  over != m_aOverrideFonts.end(); ++over )
             {
-                std::hash_map<fontID,PrintFont*>::const_iterator font_it = m_aFonts.find( *over );
+                boost::unordered_map<fontID,PrintFont*>::const_iterator font_it = m_aFonts.find( *over );
                 DBG_ASSERT( font_it != m_aFonts.end(), "override to nonexistant font" );
                 if( font_it != m_aFonts.end() )
                     aOverridePSNames[ font_it->second->m_nPSName ] = *over;
@@ -2625,12 +2651,12 @@ void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDPa
 
 void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const
 {
-    ::std::hash_map< int, family::type >::const_iterator style_it =
+    ::boost::unordered_map< int, FontFamily >::const_iterator style_it =
           m_aFamilyTypes.find( pFont->m_nFamilyName );
     rInfo.m_eType           = pFont->m_eType;
     rInfo.m_aFamilyName     = m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName );
     rInfo.m_aStyleName      = pFont->m_aStyleName;
-    rInfo.m_eFamilyStyle    = style_it != m_aFamilyTypes.end() ? style_it->second : family::Unknown;
+    rInfo.m_eFamilyStyle    = style_it != m_aFamilyTypes.end() ? style_it->second : FAMILY_DONTKNOW;
     rInfo.m_eItalic         = pFont->m_eItalic;
     rInfo.m_eWidth          = pFont->m_eWidth;
     rInfo.m_eWeight         = pFont->m_eWeight;
@@ -2769,47 +2795,47 @@ int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
 // -------------------------------------------------------------------------
 
 
-family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) const
+FontFamily PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) const
 {
     typedef struct {
         const char*  mpName;
         sal_uInt16   mnLength;
-        family::type meType;
+        FontFamily   meType;
     } family_t;
 
 #define InitializeClass( p, a ) p, sizeof(p) - 1, a
     const family_t pFamilyMatch[] =  {
-        { InitializeClass( "arial",                  family::Swiss )  },
-        { InitializeClass( "arioso",                 family::Script ) },
-        { InitializeClass( "avant garde",            family::Swiss )  },
-        { InitializeClass( "avantgarde",             family::Swiss )  },
-        { InitializeClass( "bembo",                  family::Roman )  },
-        { InitializeClass( "bookman",                family::Roman )  },
-        { InitializeClass( "conga",                  family::Roman )  },
-        { InitializeClass( "courier",                family::Modern ) },
-        { InitializeClass( "curl",                   family::Script ) },
-        { InitializeClass( "fixed",                  family::Modern ) },
-        { InitializeClass( "gill",                   family::Swiss )  },
-        { InitializeClass( "helmet",                 family::Modern ) },
-        { InitializeClass( "helvetica",              family::Swiss )  },
-        { InitializeClass( "international",          family::Modern ) },
-        { InitializeClass( "lucida",                 family::Swiss )  },
-        { InitializeClass( "new century schoolbook", family::Roman )  },
-        { InitializeClass( "palatino",               family::Roman )  },
-        { InitializeClass( "roman",                  family::Roman )  },
-        { InitializeClass( "sans serif",             family::Swiss )  },
-        { InitializeClass( "sansserif",              family::Swiss )  },
-        { InitializeClass( "serf",                   family::Roman )  },
-        { InitializeClass( "serif",                  family::Roman )  },
-        { InitializeClass( "times",                  family::Roman )  },
-        { InitializeClass( "utopia",                 family::Roman )  },
-        { InitializeClass( "zapf chancery",          family::Script ) },
-        { InitializeClass( "zapfchancery",           family::Script ) }
+        { InitializeClass( "arial",                  FAMILY_SWISS )  },
+        { InitializeClass( "arioso",                 FAMILY_SCRIPT ) },
+        { InitializeClass( "avant garde",            FAMILY_SWISS )  },
+        { InitializeClass( "avantgarde",             FAMILY_SWISS )  },
+        { InitializeClass( "bembo",                  FAMILY_ROMAN )  },
+        { InitializeClass( "bookman",                FAMILY_ROMAN )  },
+        { InitializeClass( "conga",                  FAMILY_ROMAN )  },
+        { InitializeClass( "courier",                FAMILY_MODERN ) },
+        { InitializeClass( "curl",                   FAMILY_SCRIPT ) },
+        { InitializeClass( "fixed",                  FAMILY_MODERN ) },
+        { InitializeClass( "gill",                   FAMILY_SWISS )  },
+        { InitializeClass( "helmet",                 FAMILY_MODERN ) },
+        { InitializeClass( "helvetica",              FAMILY_SWISS )  },
+        { InitializeClass( "international",          FAMILY_MODERN ) },
+        { InitializeClass( "lucida",                 FAMILY_SWISS )  },
+        { InitializeClass( "new century schoolbook", FAMILY_ROMAN )  },
+        { InitializeClass( "palatino",               FAMILY_ROMAN )  },
+        { InitializeClass( "roman",                  FAMILY_ROMAN )  },
+        { InitializeClass( "sans serif",             FAMILY_SWISS )  },
+        { InitializeClass( "sansserif",              FAMILY_SWISS )  },
+        { InitializeClass( "serf",                   FAMILY_ROMAN )  },
+        { InitializeClass( "serif",                  FAMILY_ROMAN )  },
+        { InitializeClass( "times",                  FAMILY_ROMAN )  },
+        { InitializeClass( "utopia",                 FAMILY_ROMAN )  },
+        { InitializeClass( "zapf chancery",          FAMILY_SCRIPT ) },
+        { InitializeClass( "zapfchancery",           FAMILY_SCRIPT ) }
     };
 
     rtl::OString aFamily = rtl::OUStringToOString( rFamily, RTL_TEXTENCODING_ASCII_US );
     sal_uInt32 nLower = 0;
-    sal_uInt32 nUpper = sizeof(pFamilyMatch) / sizeof(pFamilyMatch[0]);
+    sal_uInt32 nUpper = SAL_N_ELEMENTS(pFamilyMatch);
 
     while( nLower < nUpper )
     {
@@ -2831,20 +2857,20 @@ family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily )
                 return pHaystack->meType;
     }
 
-    return family::Unknown;
+    return FAMILY_DONTKNOW;
 }
 
 // -------------------------------------------------------------------------
 
-family::type PrintFontManager::getFontFamilyType( fontID nFontID ) const
+FontFamily PrintFontManager::getFontFamilyType( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
     if( !pFont )
-        return family::Unknown;
+        return FAMILY_DONTKNOW;
 
-    ::std::hash_map< int, family::type >::const_iterator it =
+    ::boost::unordered_map< int, FontFamily >::const_iterator it =
           m_aFamilyTypes.find( pFont->m_nFamilyName );
-    return (it != m_aFamilyTypes.end()) ? it->second : family::Unknown;
+    return (it != m_aFamilyTypes.end()) ? it->second : FAMILY_DONTKNOW;
 }
 
 
@@ -2896,7 +2922,7 @@ OString PrintFontManager::getFontFile( PrintFont* pFont ) const
     if( pFont && pFont->m_eType == fonttype::Type1 )
     {
         Type1FontFile* pPSFont = static_cast< Type1FontFile* >(pFont);
-        ::std::hash_map< int, OString >::const_iterator it = m_aAtomToDir.find( pPSFont->m_nDirectory );
+        ::boost::unordered_map< int, OString >::const_iterator it = m_aAtomToDir.find( pPSFont->m_nDirectory );
         aPath = it->second;
         aPath += "/";
         aPath += pPSFont->m_aFontFile;
@@ -2904,7 +2930,7 @@ OString PrintFontManager::getFontFile( PrintFont* pFont ) const
     else if( pFont && pFont->m_eType == fonttype::TrueType )
     {
         TrueTypeFontFile* pTTFont = static_cast< TrueTypeFontFile* >(pFont);
-        ::std::hash_map< int, OString >::const_iterator it = m_aAtomToDir.find( pTTFont->m_nDirectory );
+        ::boost::unordered_map< int, OString >::const_iterator it = m_aAtomToDir.find( pTTFont->m_nDirectory );
         aPath = it->second;
         aPath += "/";
         aPath += pTTFont->m_aFontFile;
@@ -3018,7 +3044,7 @@ void PrintFontManager::hasVerticalSubstitutions( fontID nFontID,
             if( ! pFont->m_pMetrics ||
                 ! ( pFont->m_pMetrics->m_aPages[ code >> 11 ] & ( 1 << ( ( code >> 8 ) & 7 ) ) ) )
                 pFont->queryMetricPage( code >> 8, m_pAtoms );
-            ::std::hash_map< sal_Unicode, bool >::const_iterator it = pFont->m_pMetrics->m_bVerticalSubstitutions.find( code );
+            ::boost::unordered_map< sal_Unicode, bool >::const_iterator it = pFont->m_pMetrics->m_bVerticalSubstitutions.find( code );
             pHasSubst[i] = it != pFont->m_pMetrics->m_bVerticalSubstitutions.end();
         }
     }
@@ -3123,7 +3149,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
         {
             int effectiveCode = pString[i];
             effectiveCode |= bVertical ? 1 << 16 : 0;
-            ::std::hash_map< int, CharacterMetric >::const_iterator it =
+            ::boost::unordered_map< int, CharacterMetric >::const_iterator it =
                   pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
         // if no vertical metrics are available assume rotated horizontal metrics
         if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
@@ -3141,6 +3167,10 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
 
 bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal_Unicode maxCharacter, CharacterMetric* pArray, bool bVertical ) const
 {
+    OSL_PRECOND(minCharacter <= maxCharacter, "invalid char. range");
+    if (minCharacter > maxCharacter)
+        return false;
+
     PrintFont* pFont = getFont( nFontID );
     if( ! pFont )
         return false;
@@ -3168,7 +3198,7 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
         {
             int effectiveCode = code;
             effectiveCode |= bVertical ? 1 << 16 : 0;
-            ::std::hash_map< int, CharacterMetric >::const_iterator it =
+            ::boost::unordered_map< int, CharacterMetric >::const_iterator it =
                   pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
             // if no vertical metrics are available assume rotated horizontal metrics
             if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
@@ -3327,7 +3357,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
             {
                 // remove all fonts for the same file
                 // discarding their font ids
-                ::std::hash_map< fontID, PrintFont* >::iterator current, next;
+                ::boost::unordered_map< fontID, PrintFont* >::iterator current, next;
                 current = m_aFonts.begin();
                 OString aFileName( OUStringToOString( aTo.GetName(), aEncoding ) );
                 while( current != m_aFonts.end() )
@@ -3483,7 +3513,7 @@ bool PrintFontManager::getFileDuplicates( fontID nFont, ::std::list< fontID >& r
     if( ! aFile.getLength() )
         return false;
 
-    for( ::std::hash_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
+    for( ::boost::unordered_map< fontID, PrintFont* >::const_iterator it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
     {
         if( nFont != it->first )
         {
@@ -3506,7 +3536,7 @@ bool PrintFontManager::removeFonts( const ::std::list< fontID >& rFonts )
     ::std::list< fontID > aDuplicates;
     for( ::std::list< fontID >::const_iterator it = rFonts.begin(); it != rFonts.end(); ++it )
     {
-        ::std::hash_map< fontID, PrintFont* >::const_iterator haveFont = m_aFonts.find( *it );
+        ::boost::unordered_map< fontID, PrintFont* >::const_iterator haveFont = m_aFonts.find( *it );
         if( haveFont == m_aFonts.end() )
             continue;
 
@@ -3842,7 +3872,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
             rUnicodeEnc.clear();
             rWidths.clear();
             rWidths.reserve( pFont->m_pMetrics->m_aMetrics.size() );
-            for( std::hash_map< int, CharacterMetric >::const_iterator it =
+            for( boost::unordered_map< int, CharacterMetric >::const_iterator it =
                  pFont->m_pMetrics->m_aMetrics.begin();
                  it != pFont->m_pMetrics->m_aMetrics.end(); ++it )
             {
@@ -3879,8 +3909,8 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
 
 std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aChar ) const
 {
-    std::pair< std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator,
-        std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator > range
+    std::pair< boost::unordered_multimap< sal_Unicode, rtl::OString >::const_iterator,
+        boost::unordered_multimap< sal_Unicode, rtl::OString >::const_iterator > range
         =  m_aUnicodeToAdobename.equal_range( aChar );
 
     std::list< OString > aRet;
@@ -3900,8 +3930,8 @@ std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aCha
 // -------------------------------------------------------------------------
 std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const rtl::OString& rName ) const
 {
-    std::pair< std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
-        std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator > range
+    std::pair< boost::unordered_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
+        boost::unordered_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator > range
         =  m_aAdobenameToUnicode.equal_range( rName );
 
     std::list< sal_Unicode > aRet;
@@ -3976,53 +4006,53 @@ bool PrintFontManager::readOverrideMetrics()
         const NamedValue* pProps = aMetrics.getConstArray();
         for( sal_Int32 n = 0; n < nProps; n++ )
         {
-            if( pProps[n].Name.equalsAscii( "FamilyName" ) )
+            if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FamilyName" ) ) )
                 pFont->m_nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME,
                                                           getString(pProps[n].Value),
                                                           sal_True );
-            else if( pProps[n].Name.equalsAscii( "PSName" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PSName" ) ) )
                 pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME,
                                                       getString(pProps[n].Value),
                                                       sal_True );
-            else if( pProps[n].Name.equalsAscii( "StyleName" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StyleName" ) ) )
                 pFont->m_aStyleName = getString(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "Italic" ) )
-                pFont->m_eItalic = static_cast<italic::type>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAscii( "Width" ) )
-                pFont->m_eWidth = static_cast<width::type>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAscii( "Weight" ) )
-                pFont->m_eWeight = static_cast<weight::type>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAscii( "Pitch" ) )
-                pFont->m_ePitch = static_cast<pitch::type>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAscii( "Encoding" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Italic" ) ) )
+                pFont->m_eItalic = static_cast<FontItalic>(getInt(pProps[n].Value));
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
+                pFont->m_eWidth = static_cast<FontWidth>(getInt(pProps[n].Value));
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Weight" ) ) )
+                pFont->m_eWeight = static_cast<FontWeight>(getInt(pProps[n].Value));
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Pitch" ) ) )
+                pFont->m_ePitch = static_cast<FontPitch>(getInt(pProps[n].Value));
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encoding" ) ) )
                 pFont->m_aEncoding = static_cast<rtl_TextEncoding>(getInt(pProps[n].Value));
-            else if( pProps[n].Name.equalsAscii( "FontEncodingOnly" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FontEncodingOnly" ) ) )
                 pFont->m_bFontEncodingOnly = getBool(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "GlobalMetricXWidth" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricXWidth" ) ) )
                 pFont->m_aGlobalMetricX.width = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "GlobalMetricXHeight" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricXHeight" ) ) )
                 pFont->m_aGlobalMetricX.height = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "GlobalMetricYWidth" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricYWidth" ) ) )
                 pFont->m_aGlobalMetricY.width = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "GlobalMetricYHeight" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GlobalMetricYHeight" ) ) )
                 pFont->m_aGlobalMetricY.height = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "Ascend" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Ascend" ) ) )
                 pFont->m_nAscend = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "Descend" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Descend" ) ) )
                 pFont->m_nDescend = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "Leading" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Leading" ) ) )
                 pFont->m_nLeading = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "XMin" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XMin" ) ) )
                 pFont->m_nXMin = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "YMin" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "YMin" ) ) )
                 pFont->m_nYMin = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "XMax" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XMax" ) ) )
                 pFont->m_nXMax = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "YMax" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "YMax" ) ) )
                 pFont->m_nYMax = getInt(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "VerticalSubstitutes" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VerticalSubstitutes" ) ) )
                 pFont->m_bHaveVerticalSubstitutedGlyphs = getBool(pProps[n].Value);
-            else if( pProps[n].Name.equalsAscii( "EncodingVector" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EncodingVector" ) ) )
             {
                 Sequence< NamedValue > aEncoding;
                 pProps[n].Value >>= aEncoding;
@@ -4035,7 +4065,7 @@ bool PrintFontManager::readOverrideMetrics()
                     pFont->m_aEncodingVector[ cCode ] = nGlyph;
                 }
             }
-            else if( pProps[n].Name.equalsAscii( "NonEncoded" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NonEncoded" ) ) )
             {
                 Sequence< NamedValue > aEncoding;
                 pProps[n].Value >>= aEncoding;
@@ -4048,7 +4078,7 @@ bool PrintFontManager::readOverrideMetrics()
                     pFont->m_aNonEncoded[ cCode ] = OUStringToOString(aGlyphName,RTL_TEXTENCODING_ASCII_US);
                 }
             }
-            else if( pProps[n].Name.equalsAscii( "CharacterMetrics" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CharacterMetrics" ) ) )
             {
                 // fill pFont->m_pMetrics->m_aMetrics
                 // expect triples of int: int -> CharacterMetric.{ width, height }
@@ -4062,7 +4092,7 @@ bool PrintFontManager::readOverrideMetrics()
                     pFont->m_pMetrics->m_aMetrics[ pInts[m] ].height = static_cast<short int>(pInts[m+2]);
                 }
             }
-            else if( pProps[n].Name.equalsAscii( "XKernPairs" ) )
+            else if( pProps[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XKernPairs" ) ) )
             {
                 // fill pFont->m_pMetrics->m_aXKernPairs
                 // expection name: <unicode1><unicode2> value: ((height << 16)| width)
@@ -4102,3 +4132,5 @@ bool PrintFontManager::readOverrideMetrics()
 
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

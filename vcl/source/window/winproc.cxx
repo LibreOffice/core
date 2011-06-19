@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1796,7 +1797,7 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
                 pSVData->maWinData.mpFocusWin = NULL;
 
                 if ( pFocusWin->ImplGetWindowImpl()->mpCursor )
-                    pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
+                    pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
 
                 // Deaktivate rufen
                 Window* pOldFocusWindow = pFocusWin;
@@ -1903,7 +1904,7 @@ static void ImplHandleLoseFocus( Window* pWindow )
 
     Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
-        pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
+        pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
     if( bCallDirect )
         pWindow->ImplAsyncFocusHdl( NULL );
 }
@@ -2611,10 +2612,12 @@ long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             break;
 #ifdef DBG_UTIL
         default:
-            DBG_ERROR1( "ImplWindowFrameProc(): unknown event (%lu)", (sal_uLong)nEvent );
+            OSL_TRACE( "ImplWindowFrameProc(): unknown event (%lu)", (sal_uLong)nEvent );
             break;
 #endif
     }
 
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

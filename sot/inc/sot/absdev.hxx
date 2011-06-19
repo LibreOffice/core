@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SOT_ABSDEV_HXX
 #define _SOT_ABSDEV_HXX
 
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 
 class JobSetup;
 class AbstractDeviceData
@@ -46,3 +45,5 @@ public:
 };
 
 #endif // _SOT_ABSDEV_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

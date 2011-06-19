@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ static sal_uInt8* ImplSysReadConfig( const XubString& rFileName,
 
     if( aFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None )
     {
-        sal_uInt64 nPos = 0, nRead = 0;
+        sal_uInt64 nPos = 0;
         if( aFile.getSize( nPos ) == ::osl::FileBase::E_None )
         {
             if (nPos > std::numeric_limits< std::size_t >::max()) {
@@ -137,6 +138,7 @@ static sal_uInt8* ImplSysReadConfig( const XubString& rFileName,
                 return 0;
             }
             pBuf = new sal_uInt8[static_cast< std::size_t >(nPos)];
+            sal_uInt64 nRead = 0;
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
                 //skip the byte-order-mark 0xEF 0xBB 0xBF, if it was UTF8 files
@@ -216,20 +218,20 @@ static String ImplMakeConfigName( const XubString* pFileName,
     if ( pFileName )
     {
 #ifdef UNX
-        aFileName = ::rtl::OUString::createFromAscii( "." );
+        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ));
         aFileName += *pFileName;
-        aFileName += ::rtl::OUString::createFromAscii( "rc" );
+        aFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
 #else
         aFileName = *pFileName;
-        aFileName += ::rtl::OUString::createFromAscii( ".ini" );
+        aFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
 #endif
     }
     else
     {
 #ifdef UNX
-        aFileName = ::rtl::OUString::createFromAscii( ".sversionrc" );
+        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".sversionrc" ));
 #else
-        aFileName = ::rtl::OUString::createFromAscii( "sversion.ini" );
+        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sversion.ini" ));
 #endif
     }
 
@@ -248,7 +250,7 @@ static String ImplMakeConfigName( const XubString* pFileName,
     }
 
     ::rtl::OUString aName( aPathName );
-    aName += ::rtl::OUString::createFromAscii( "/" );
+    aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
     aName += aFileName;
 
     return aName;
@@ -633,7 +635,7 @@ static void ImplWriteConfig( ImplConfigData* pData )
     {
         if ( pData->mnTimeStamp != ImplSysGetConfigTimeStamp( pData->maFileName ) )
         {
-            DBG_ERROR1( "Config overwrites modified configfile:\n %s", ByteString( pData->maFileName, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+            OSL_TRACE( "Config overwrites modified configfile:\n %s", ByteString( pData->maFileName, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
         }
     }
 #endif
@@ -777,7 +779,7 @@ Config::Config()
     mbPersistence   = sal_True;
 
 #ifdef DBG_UTIL
-    DBG_TRACE( "Config::Config()" );
+    OSL_TRACE( "Config::Config()" );
 #endif
 }
 
@@ -797,7 +799,7 @@ Config::Config( const XubString& rFileName )
     ByteString aTraceStr( "Config::Config( " );
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
     aTraceStr += " )";
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 }
 
@@ -806,7 +808,7 @@ Config::Config( const XubString& rFileName )
 Config::~Config()
 {
 #ifdef DBG_UTIL
-    DBG_TRACE( "Config::~Config()" );
+    OSL_TRACE( "Config::~Config()" );
 #endif
 
     Flush();
@@ -998,7 +1000,7 @@ ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault )
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Config-Daten evt. updaten
@@ -1035,7 +1037,7 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
     DBG_ASSERTWARNING( rStr != ReadKey( rKey ), "Config::WriteKey() with the same Value" );
 #endif
 
@@ -1156,7 +1158,7 @@ sal_uInt16 Config::GetKeyCount() const
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Config-Daten evt. updaten
@@ -1192,7 +1194,7 @@ ByteString Config::GetKeyName( sal_uInt16 nKey ) const
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Key suchen und Name zurueckgeben
@@ -1227,7 +1229,7 @@ ByteString Config::ReadKey( sal_uInt16 nKey ) const
     aTraceStr += GetGroup();
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     // Key suchen und Value zurueckgeben
@@ -1302,3 +1304,4 @@ LineEnd Config::GetLineEnd() const
     return mpData->meLineEnd;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

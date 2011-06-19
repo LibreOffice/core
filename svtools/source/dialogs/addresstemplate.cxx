@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -197,7 +198,7 @@ public:
             }
             else
             {
-                DBG_ERROR   (   (   ::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
+                OSL_FAIL(   (   ::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
                                 +=  ::rtl::OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
                                 +=  ::rtl::OString(")!")
                                 ).getStr()
@@ -260,13 +261,13 @@ public:
     // -------------------------------------------------------------------
     void AssigmentTransientData::setDatasourceName(const ::rtl::OUString&)
     {
-        DBG_ERROR( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
+        OSL_FAIL( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
     }
 
     // -------------------------------------------------------------------
     void AssigmentTransientData::setCommand(const ::rtl::OUString&)
     {
-        DBG_ERROR( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
+        OSL_FAIL( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
 
     // ===================================================================
@@ -814,7 +815,7 @@ void AssignmentPersistentData::Commit()
         }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
+            OSL_FAIL("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
         }
         const ::rtl::OUString* pDatasourceNames = aDatasourceNames.getConstArray();
         const ::rtl::OUString* pEnd = pDatasourceNames + aDatasourceNames.getLength();
@@ -900,7 +901,7 @@ void AssignmentPersistentData::Commit()
         catch(SQLException& e) { aException <<= e; }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::resetTables: could not retrieve the table!");
+            OSL_FAIL("AddressBookSourceDialog::resetTables: could not retrieve the table!");
         }
 
         if (aException.hasValue())
@@ -960,7 +961,7 @@ void AssignmentPersistentData::Commit()
         }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::resetFields: could not retrieve the table columns!");
+            OSL_FAIL("AddressBookSourceDialog::resetFields: could not retrieve the table columns!");
         }
 
 
@@ -1259,7 +1260,7 @@ void AssignmentPersistentData::Commit()
         }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::OnAdministrateDatasources: an error occured while executing the administration dialog!");
+            OSL_FAIL("AddressBookSourceDialog::OnAdministrateDatasources: an error occurred while executing the administration dialog!");
         }
 
         // re-fill the data source list
@@ -1325,3 +1326,4 @@ void AssignmentPersistentData::Commit()
 }   // namespace svt
 // .......................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

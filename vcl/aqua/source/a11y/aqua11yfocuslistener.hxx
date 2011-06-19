@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,6 @@
 #include "aqua/keyboardfocuslistener.hxx"
 #include "aqua/aquavcltypes.h"
 
-// #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-
 class AquaA11yFocusListener :
     public KeyboardFocusListener,
     public salhelper::ReferenceObject
@@ -60,3 +59,5 @@ public:
 };
 
 #endif // _AQUA11YFOCUSLISTENER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

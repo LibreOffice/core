@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <svsys.h>
 #include <rtl/strbuf.hxx>
 
-#include <tools/svwin.h>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 
@@ -47,8 +48,7 @@
 
 #include <region.h>
 
-using namespace rtl;
-
+using ::rtl::OStringBuffer;
 // =======================================================================
 
 // comment out to prevent use of beziers on GDI functions
@@ -486,11 +486,8 @@ void ImplUpdateSysColorEntries()
     // create new sys color list
     ImplInsertSysColorEntry( COLOR_ACTIVEBORDER );
     ImplInsertSysColorEntry( COLOR_INACTIVEBORDER );
-    if( aSalShlData.mnVersion >= 410 )
-    {
-        ImplInsertSysColorEntry( COLOR_GRADIENTACTIVECAPTION );
-        ImplInsertSysColorEntry( COLOR_GRADIENTINACTIVECAPTION );
-    }
+    ImplInsertSysColorEntry( COLOR_GRADIENTACTIVECAPTION );
+    ImplInsertSysColorEntry( COLOR_GRADIENTINACTIVECAPTION );
     ImplInsertSysColorEntry( COLOR_3DFACE );
     ImplInsertSysColorEntry( COLOR_3DHILIGHT );
     ImplInsertSysColorEntry( COLOR_3DLIGHT );
@@ -630,7 +627,7 @@ void ImplClearHDCCache( SalData* pData )
 // Make sure pWinPointAry and pWinFlagAry are big enough
 void ImplPreparePolyDraw( bool                      bCloseFigures,
                           sal_uLong                     nPoly,
-                          const sal_uLong*              pPoints,
+                          const sal_uInt32*         pPoints,
                           const SalPoint* const*    pPtAry,
                           const BYTE* const*        pFlgAry,
                           POINT*                    pWinPointAry,
@@ -641,7 +638,7 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
     {
         const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
         const BYTE* pCurrFlag = *pFlgAry++;
-        const sal_uLong nCurrPoints = *pPoints++;
+        const sal_uInt32 nCurrPoints = *pPoints++;
         const bool bHaveFlagArray( pCurrFlag );
         sal_uLong nCurrPoint;
 
@@ -735,9 +732,10 @@ WinSalGraphics::WinSalGraphics()
         mhFonts[ i ] = 0;
         mpWinFontData[ i ]  = NULL;
         mpWinFontEntry[ i ] = NULL;
+        mfFontScale[ i ] = 1.0;
     }
 
-    mfFontScale = 1.0;
+    mfCurrentFontScale = 1.0;
 
     mhDC                = 0;
     mhPen               = 0;
@@ -813,7 +811,7 @@ void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 WinSalGraphics::GetBitCount()
+sal_uInt16 WinSalGraphics::GetBitCount() const
 {
     return (sal_uInt16)GetDeviceCaps( mhDC, BITSPIXEL );
 }
@@ -896,9 +894,9 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
     }
     else
     {
-        ULONG nRectCount = i_rClip.GetRectCount();
+        sal_uLong nRectCount = i_rClip.GetRectCount();
 
-        ULONG nRectBufSize = sizeof(RECT)*nRectCount;
+        sal_uLong nRectBufSize = sizeof(RECT)*nRectCount;
         if ( nRectCount < SAL_CLIPRECT_COUNT )
         {
             if ( !mpStdClipRgnData )
@@ -971,7 +969,7 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         }
         else if( mpClipRgnData->rdh.nCount > 1 )
         {
-            ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+            sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
             mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
 
             // if ExtCreateRegion(...) is not supported
@@ -985,7 +983,7 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
                     mhRegion = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
                     pRect++;
 
-                    for( ULONG n = 1; n < pHeader->nCount; n++, pRect++ )
+                    for( sal_uLong n = 1; n < pHeader->nCount; n++, pRect++ )
                     {
                         HRGN hRgn = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
                         CombineRgn( mhRegion, mhRegion, hRgn, RGN_OR );
@@ -1488,7 +1486,8 @@ sal_Bool WinSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* p
         pWinFlagAry = aStackAry2;
     }
 
-    ImplPreparePolyDraw(true, 1, &nPoints, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
+    sal_uInt32 nPoints_i32(nPoints);
+    ImplPreparePolyDraw(true, 1, &nPoints_i32, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
 
     sal_Bool bRet( sal_False );
 
@@ -1526,7 +1525,7 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
                 "WinSalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
 
     sal_uLong nCurrPoly, nTotalPoints;
-    const sal_uLong* pCurrPoints = pPoints;
+    const sal_uInt32* pCurrPoints = pPoints;
     for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
         nTotalPoints += *pCurrPoints++;
 
@@ -1824,3 +1823,5 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

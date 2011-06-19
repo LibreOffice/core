@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,15 +32,9 @@
 #include <impltext.hxx>
 #include <canvas/canvastools.hxx>
 
-#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP__
 #include <com/sun/star/rendering/TextDirection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
 #include <com/sun/star/rendering/StringContext.hpp>
-#endif
 #include <rtl/ustring.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -99,3 +94,5 @@ namespace cppcanvas
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

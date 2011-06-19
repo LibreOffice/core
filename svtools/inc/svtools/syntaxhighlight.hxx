@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,7 @@
 
 #include <list>
 
-#include <vos/macros.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -45,7 +45,7 @@
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #define CDECL
 #endif
 #ifdef UNX
@@ -186,3 +186,5 @@ public:
     HighlighterLanguage GetLanguage() { return eLanguage;}
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

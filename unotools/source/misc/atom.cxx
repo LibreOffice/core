@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ AtomProvider::~AtomProvider()
 
 int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
 {
-    ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >::iterator it = m_aAtomMap.find( rString );
+    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::iterator it = m_aAtomMap.find( rString );
     if( it != m_aAtomMap.end() )
         return it->second;
     if( ! bCreate )
@@ -60,7 +61,7 @@ int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
 void AtomProvider::getAll( ::std::list< ::utl::AtomDescription >& atoms )
 {
     atoms.clear();
-    ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
+    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
 
     ::utl::AtomDescription aDesc;
     while( it != m_aAtomMap.end() )
@@ -76,7 +77,7 @@ void AtomProvider::getRecent( int atom, ::std::list< ::utl::AtomDescription >& a
 {
     atoms.clear();
 
-    ::std::hash_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
+    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::const_iterator it = m_aAtomMap.begin();
 
     ::utl::AtomDescription aDesc;
     while( it != m_aAtomMap.end() )
@@ -94,7 +95,7 @@ void AtomProvider::getRecent( int atom, ::std::list< ::utl::AtomDescription >& a
 const ::rtl::OUString& AtomProvider::getString( int nAtom ) const
 {
     static ::rtl::OUString aEmpty;
-    ::std::hash_map< int, ::rtl::OUString, ::std::hash< int > >::const_iterator it = m_aStringMap.find( nAtom );
+    ::boost::unordered_map< int, ::rtl::OUString, ::boost::hash< int > >::const_iterator it = m_aStringMap.find( nAtom );
 
     return it == m_aStringMap.end() ? aEmpty : it->second;
 }
@@ -120,14 +121,14 @@ MultiAtomProvider::MultiAtomProvider()
 
 MultiAtomProvider::~MultiAtomProvider()
 {
-    for( ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::iterator it = m_aAtomLists.begin(); it != m_aAtomLists.end(); ++it )
+    for( ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it = m_aAtomLists.begin(); it != m_aAtomLists.end(); ++it )
         delete it->second;
 }
 
 
 sal_Bool MultiAtomProvider::insertAtomClass( int atomClass )
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::iterator it =
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         return sal_False;
@@ -137,7 +138,7 @@ sal_Bool MultiAtomProvider::insertAtomClass( int atomClass )
 
 int MultiAtomProvider::getAtom( int atomClass, const ::rtl::OUString& rString, sal_Bool bCreate )
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::iterator it =
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         return it->second->getAtom( rString, bCreate );
@@ -153,7 +154,7 @@ int MultiAtomProvider::getAtom( int atomClass, const ::rtl::OUString& rString, s
 
 int MultiAtomProvider::getLastAtom( int atomClass ) const
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::const_iterator it =
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
           m_aAtomLists.find( atomClass );
 
     return it != m_aAtomLists.end() ? it->second->getLastAtom() : INVALID_ATOM;
@@ -161,7 +162,7 @@ int MultiAtomProvider::getLastAtom( int atomClass ) const
 
 void MultiAtomProvider::getRecent( int atomClass, int atom, ::std::list< ::utl::AtomDescription >& atoms )
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::const_iterator it =
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         it->second->getRecent( atom, atoms );
@@ -171,7 +172,7 @@ void MultiAtomProvider::getRecent( int atomClass, int atom, ::std::list< ::utl::
 
 const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::const_iterator it =
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         return it->second->getString( atom );
@@ -182,13 +183,13 @@ const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) c
 
 sal_Bool MultiAtomProvider::hasAtom( int atomClass, int atom ) const
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
     return it != m_aAtomLists.end() ? it->second->hasAtom( atom ) : sal_False;
 }
 
 void MultiAtomProvider::getClass( int atomClass, ::std::list< ::utl::AtomDescription >& atoms) const
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
 
     if( it != m_aAtomLists.end() )
         it->second->getAll( atoms );
@@ -198,7 +199,7 @@ void MultiAtomProvider::getClass( int atomClass, ::std::list< ::utl::AtomDescrip
 
 void MultiAtomProvider::overrideAtom( int atomClass, int atom, const ::rtl::OUString& description )
 {
-    ::std::hash_map< int, AtomProvider*, ::std::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
+    ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it = m_aAtomLists.find( atomClass );
     if( it == m_aAtomLists.end() )
         m_aAtomLists[ atomClass ] = new AtomProvider();
     m_aAtomLists[ atomClass ]->overrideAtom( atom, description );
@@ -381,3 +382,5 @@ void AtomClient::updateAtomClasses( const Sequence< sal_Int32 >& atomClasses )
             m_aProvider.overrideAtom( nClass, pDesc->atom, pDesc->description );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

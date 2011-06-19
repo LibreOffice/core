@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -217,11 +218,11 @@ private:
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const ImplFontSelectData&, const ImplFontSelectData& ) const; };
     struct IFSD_Hash { size_t operator()( const ImplFontSelectData& ) const; };
-    typedef ::std::hash_map<ImplFontSelectData,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
+    typedef ::boost::unordered_map<ImplFontSelectData,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
     // cache of recently requested font names vs. selected font names
-    typedef ::std::hash_map<String,String,FontNameHash> FontNameList;
+    typedef ::boost::unordered_map<String,String,FontNameHash> FontNameList;
     FontNameList        maFontNameList;
 
 public:
@@ -262,3 +263,5 @@ struct ImplOutDevData
 void ImplFreeOutDevFontData();
 
 #endif // _SV_OUTDEV_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <tools/gen.hxx>
 
 #include <rtl/ustring.hxx>
-
 #include <salimestatus.hxx>
 
 #include <vector>
@@ -122,3 +122,5 @@ public:
 } // namespace
 
 #endif // _SAL_I18N_STATUS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

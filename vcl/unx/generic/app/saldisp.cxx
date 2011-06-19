@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#if defined(SOLARIS)
+#if defined(SOLARIS) || defined(AIX)
 #include <sal/alloca.h>
 #include <osl/module.h>
 #endif
@@ -54,7 +55,7 @@
 #define XK_KOREAN
 #endif
 #include <X11/keysym.h>
-
+#include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 
 #ifdef USE_XINERAMA
@@ -87,9 +88,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <vcl/keycodes.hxx>
 #include <vcl/salbtype.hxx>
 #include <unx/salbmp.h>
-#ifndef _OSL_THREADMUTEX_H_
 #include <osl/mutex.h>
-#endif
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
@@ -98,8 +97,9 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <osl/socket.h>
 #include <poll.h>
 
-using namespace rtl;
 using namespace vcl_sal;
+
+using ::rtl::OUString;
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -607,10 +607,12 @@ fd
   if( ! pDisplay->IsDisplay() )
       return 0;
 
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
-  return pDisplay->IsEvent();
+  int result;
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  result = pDisplay->IsEvent();
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
+  return result;
 }
 static int DisplayQueue( int
 #ifdef DBG_UTIL
@@ -620,11 +622,14 @@ fd
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
-  return XEventsQueued( pDisplay->GetDisplay(),
+  int result;
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
+  result =  XEventsQueued( pDisplay->GetDisplay(),
                         QueuedAfterReading );
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
+
+  return result;
 }
 static int DisplayYield( int
 #ifdef DBG_UTIL
@@ -634,10 +639,10 @@ fd
 {
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
-  vos::IMutex* pSalInstYieldMutex   =
-      GetSalData()->m_pInstance->GetYieldMutex();
-  ::vos::OGuard aGuard( *pSalInstYieldMutex );
+
+  GetSalData()->m_pInstance->GetYieldMutex()->acquire();
   pDisplay->Yield();
+  GetSalData()->m_pInstance->GetYieldMutex()->release();
   return sal_True;
 }
 
@@ -724,10 +729,10 @@ void SalDisplay::initScreen( int nScreen ) const
                          1
                          );
 
-        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
         const char* argv[2];
         argv[0] = "/bin/sh";
-        argv[1] = aExec.GetBuffer();
+        argv[1] = aExec.getStr();
         XSetCommand( pDisp_, rSD.m_aRefWindow, const_cast<char**>(argv), 2 );
         XSelectInput( pDisp_, rSD.m_aRefWindow, PropertyChangeMask );
 
@@ -772,8 +777,7 @@ void SalDisplay::initScreen( int nScreen ) const
 
         XSetFunction( pDisp_, rSD.m_aAndInvertedGC,  GXandInverted );
         XSetFunction( pDisp_, rSD.m_aAndGC,          GXand );
-        // #44556# PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
-        //XSetFunction( pDisp_, pOrGC_,         GXor );
+        // PowerPC Solaris 2.5 (XSun 3500) Bug: GXor = GXnop
         XSetFunction( pDisp_, rSD.m_aOrGC,           GXxor );
 
         if( 1 == rSD.m_aVisual.GetDepth() )
@@ -792,7 +796,7 @@ void SalDisplay::initScreen( int nScreen ) const
         }
         rSD.m_hInvert50 = XCreateBitmapFromData( pDisp_,
                                                  rSD.m_aRefWindow,
-                                                 invert50_bits,
+                                                 reinterpret_cast<const char*>(invert50_bits),
                                                  invert50_width,
                                                  invert50_height );
     }
@@ -881,7 +885,8 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || \
+    defined NETBSD || defined OPENBSD || defined DRAGONFLY
         nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
         // Server Bugs & Properties
@@ -907,7 +912,8 @@ void SalDisplay::Init()
         if( GetServerVendor() == vendor_xfree )
         {
             nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || \
+    defined DRAGONFLY
             // otherwm and olwm are a kind of default, which are not detected
             // carefully. if we are running linux (i.e. not netbsd) on an xfree
             // display, fvwm is most probable the wm to choose, confusing with mwm
@@ -1028,6 +1034,77 @@ void SalDisplay::Beep() const
 
 // Keyboard
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+namespace {
+
+bool InitXkb(Display* dpy)
+{
+    int nOpcode, nEvent, nError;
+    int nXkbMajor = XkbMajorVersion;
+    int nXkbMinor = XkbMinorVersion;
+
+    if (!XkbLibraryVersion(&nXkbMajor, &nXkbMinor))
+        return false;
+
+    return XkbQueryExtension(
+        dpy, &nOpcode, &nEvent, &nError, &nXkbMajor, &nXkbMinor);
+}
+
+unsigned int GetKeySymMask(Display* dpy, KeySym nKeySym)
+{
+    int nMask = 0;
+    XModifierKeymap* pXmkMap = XGetModifierMapping(dpy);
+    KeyCode nKeyCode = XKeysymToKeycode(dpy, nKeySym);
+    if (nKeyCode == NoSymbol)
+        return 0;
+
+    for (int i = 0; i < 8; ++i)
+    {
+        KeyCode nThisKeyCode = pXmkMap->modifiermap[pXmkMap->max_keypermod*i];
+        if (nThisKeyCode == nKeyCode)
+            nMask = 1 << i;
+    }
+    XFreeModifiermap(pXmkMap);
+    return nMask;
+}
+
+}
+
+void SalDisplay::SimulateKeyPress( sal_uInt16 nKeyCode )
+{
+    if (nKeyCode == KEY_CAPSLOCK)
+    {
+        Display* dpy = GetDisplay();
+        if (!InitXkb(dpy))
+            return;
+
+        unsigned int nMask = GetKeySymMask(dpy, XK_Caps_Lock);
+        XkbStateRec xkbState;
+        XkbGetState(dpy, XkbUseCoreKbd, &xkbState);
+        unsigned int nCapsLockState = xkbState.locked_mods & nMask;
+        if (nCapsLockState)
+            XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, 0);
+        else
+            XkbLockModifiers (dpy, XkbUseCoreKbd, nMask, nMask);
+    }
+}
+
+sal_uInt16 SalDisplay::GetIndicatorState() const
+{
+    unsigned int _state = 0;
+    sal_uInt16 nState = 0;
+    XkbGetIndicatorState(pDisp_, XkbUseCoreKbd, &_state);
+
+    if ((_state & 0x00000001))
+        nState |= INDICATOR_CAPSLOCK;
+    if ((_state & 0x00000002))
+        nState |= INDICATOR_NUMLOCK;
+    if ((_state & 0x00000004))
+        nState |= INDICATOR_SCROLLLOCK;
+
+    return nState;
+}
+
 String SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
     String aRet;
@@ -1099,6 +1176,7 @@ void SalDisplay::ModifierMapping()
 XubString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
 {
     String aStrMap;
+    String aCustomKeyName;
 
     if( nKeyCode & KEY_MOD1 )
         aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
@@ -1212,10 +1290,10 @@ XubString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
             nKeySym = GetServerVendor() == vendor_sun ? SunXK_Cut   : XK_L10;
             break;
         case KEY_ADD:
-            nKeySym = XK_plus;
+            aCustomKeyName = '+';
             break;
         case KEY_SUBTRACT:
-            nKeySym = XK_minus;
+            aCustomKeyName = '-';
             break;
         case KEY_MULTIPLY:
             nKeySym = XK_asterisk;
@@ -1250,6 +1328,15 @@ XubString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         case KEY_QUOTELEFT:
             nKeySym = XK_grave;
             break;
+        case KEY_BRACKETLEFT:
+            aCustomKeyName = '[';
+            break;
+        case KEY_BRACKETRIGHT:
+            aCustomKeyName = ']';
+            break;
+        case KEY_SEMICOLON:
+            aCustomKeyName = ';';
+            break;
 
         default:
             nKeySym = 0;
@@ -1267,6 +1354,14 @@ XubString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         }
         else
             aStrMap.Erase();
+    }
+    else if (aCustomKeyName.Len())
+    {
+        // For semicolumn, bracket left and bracket right, it's better to use
+        // their keys than their names. (fdo#32891)
+        if (aStrMap.Len())
+            aStrMap += '+';
+        aStrMap += aCustomKeyName;
     }
     else
         aStrMap.Erase();
@@ -1504,13 +1599,6 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             case XK_Menu:
                 nKey = KEY_CONTEXTMENU;
                 break;
-/*
-            case XK_Break:
-            case XK_Select:
-            case XK_Execute:
-            case XK_Print:
-            case XK_Cancel:
-*/
         }
     }
     else if( IsISOKey( keysym ) )  // XK_ISO_
@@ -1580,9 +1668,18 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
             nKey = KEY_QUOTELEFT;
             *pcPrintable = '`';
             break;
-//      case XK_Linefeed:
-//          *pcPrintable = '\n';
-//          break;
+        case XK_bracketleft:
+            nKey = KEY_BRACKETLEFT;
+            *pcPrintable = '[';
+            break;
+         case XK_bracketright:
+             nKey = KEY_BRACKETRIGHT;
+             *pcPrintable = ']';
+             break;
+        case XK_semicolon:
+            nKey = KEY_SEMICOLON;
+            *pcPrintable = ';';
+            break;
         // - - - - - - - - - - - - -  Apollo - - - - - - - - - - - - - 0x1000
         case 0x1000FF02: // apXK_Copy
             nKey = KEY_COPY;
@@ -1704,7 +1801,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                 /* unhandled error */
                 break;
             case XLookupKeySym:
-                /* #72223# this is a strange one: on exceed sometimes
+                /* this is a strange one: on exceed sometimes
                  * no printable is returned for the first char entered,
                  * just to retry lookup solves the problem. The problem
                  * is not yet fully understood, so restrict 2nd lookup
@@ -1751,7 +1848,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 #define MAKE_BITMAP( name ) \
     XCreateBitmapFromData( pDisp_, \
                            DefaultRootWindow( pDisp_ ), \
-                           name##_bits, \
+                           reinterpret_cast<const char*>(name##_bits), \
                            name##_width, \
                            name##_height )
 
@@ -2061,7 +2158,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             MAKE_CURSOR( vertcurs_ );
             break;
 
-        // --> FME 2004-07-30 #i32329# Enhanced table selection
+        // #i32329# Enhanced table selection
         case POINTER_TAB_SELECT_S:
             MAKE_CURSOR( tblsels_ );
             break;
@@ -2077,16 +2174,14 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
         case POINTER_TAB_SELECT_SW:
             MAKE_CURSOR( tblselsw_ );
             break;
-        // <--
 
-        // --> FME 2004-08-16 #i20119# Paintbrush tool
+        // #i20119# Paintbrush tool
         case POINTER_PAINTBRUSH :
             MAKE_CURSOR( paintbrush_ );
             break;
-        // <--
 
         default:
-            DBG_ERROR("pointer not implemented");
+            OSL_FAIL("pointer not implemented");
             aCur = XCreateFontCursor( pDisp_, XC_arrow );
             break;
     }
@@ -2113,10 +2208,13 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
 
 int SalDisplay::CaptureMouse( SalFrame *pCapture )
 {
+    static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
+
     if( !pCapture )
     {
         m_pCapture = NULL;
-        XUngrabPointer( GetDisplay(), CurrentTime );
+        if( !pEnv || !*pEnv )
+            XUngrabPointer( GetDisplay(), CurrentTime );
         XFlush( GetDisplay() );
         return 0;
     }
@@ -2125,20 +2223,23 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 
     // FIXME: get rid of X11SalFrame
     const SystemEnvData* pEnvData = pCapture->GetSystemData();
-    int ret = XGrabPointer( GetDisplay(),
-                            (XLIB_Window)pEnvData->aWindow,
-                            False,
-                            PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
-                            GrabModeAsync,
-                            GrabModeAsync,
-                            None,
-                            static_cast<X11SalFrame*>(pCapture)->GetCursor(),
-                            CurrentTime );
-
-    if( ret != GrabSuccess )
+    if( !pEnv || !*pEnv )
     {
-        DBG_ASSERT( 1, "SalDisplay::CaptureMouse could not grab pointer\n");
-        return -1;
+        int ret = XGrabPointer( GetDisplay(),
+                                (XLIB_Window)pEnvData->aWindow,
+                                False,
+                                PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
+                                GrabModeAsync,
+                                GrabModeAsync,
+                                None,
+                                static_cast<X11SalFrame*>(pCapture)->GetCursor(),
+                                CurrentTime );
+
+        if( ret != GrabSuccess )
+        {
+            DBG_ASSERT( 1, "SalDisplay::CaptureMouse could not grab pointer\n");
+            return -1;
+        }
     }
 
     m_pCapture = pCapture;
@@ -2246,7 +2347,7 @@ void SalX11Display::Yield()
 
     XEvent aEvent;
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
-                vos::OThread::getCurrentIdentifier(),
+                osl::Thread::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
     XNextEvent( pDisp_, &aEvent );
@@ -2254,13 +2355,13 @@ void SalX11Display::Yield()
     Dispatch( &aEvent );
 
 #ifdef DBG_UTIL
-    if( pXLib_->HasXErrorOccured() )
+    if( pXLib_->HasXErrorOccurred() )
     {
         XFlush( pDisp_ );
         PrintEvent( "SalDisplay::Yield (WasXError)", &aEvent );
     }
 #endif
-    pXLib_->ResetXErrorOccured();
+    pXLib_->ResetXErrorOccurred();
 }
 
 long SalX11Display::Dispatch( XEvent *pEvent )
@@ -2325,7 +2426,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                 if( MappingModifier == pEvent->xmapping.request )
                     ModifierMapping();
                 if( MappingKeyboard == pEvent->xmapping.request ) // refresh mapping
-                    GetKeyboardName( sal_True );
+                    GetKeyboardName( true );
             }
             break;
         case ButtonPress:
@@ -2584,7 +2685,7 @@ void SalDisplay::PrintInfo() const
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
-int SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
+void SalDisplay::addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight )
 {
     // see if any frame buffers are at the same coordinates
     // this can happen with weird configuration e.g. on
@@ -2598,13 +2699,14 @@ int SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, lo
             if( m_aXineramaScreens[n].GetWidth() < i_nWidth ||
                 m_aXineramaScreens[n].GetHeight() < i_nHeight )
             {
+                m_aXineramaScreenIndexMap[i] = n;
                 m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
             }
-            return (int)n;
+            return;
         }
     }
+    m_aXineramaScreenIndexMap[i] = m_aXineramaScreens.size();
     m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
-    return (int)m_aXineramaScreens.size()-1;
 }
 
 void SalDisplay::InitXinerama()
@@ -2630,8 +2732,9 @@ void SalDisplay::InitXinerama()
         {
             m_bXinerama = true;
             m_aXineramaScreens = std::vector<Rectangle>();
+            m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
             for( int i = 0; i < nFramebuffers; i++ )
-                addXineramaScreenUnique( pFramebuffers[i].x,
+                addXineramaScreenUnique( i, pFramebuffers[i].x,
                                          pFramebuffers[i].y,
                                          pFramebuffers[i].width,
                                          pFramebuffers[i].height );
@@ -2647,9 +2750,10 @@ if( XineramaIsActive( pDisp_ ) )
         if( nFramebuffers > 1 )
         {
             m_aXineramaScreens = std::vector<Rectangle>();
+            m_aXineramaScreenIndexMap = std::vector<int>(nFramebuffers);
             for( int i = 0; i < nFramebuffers; i++ )
             {
-                addXineramaScreenUnique( pScreens[i].x_org,
+                addXineramaScreenUnique( i, pScreens[i].x_org,
                                          pScreens[i].y_org,
                                          pScreens[i].width,
                                          pScreens[i].height );
@@ -2690,7 +2794,7 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
         osl_releaseMutex( hEventGuard_ );
     }
     else {
-        DBG_ERROR( "SalDisplay::deregisterFrame !acquireMutex\n" );
+        OSL_FAIL( "SalDisplay::deregisterFrame !acquireMutex\n" );
     }
 
     m_aFrames.remove( pFrame );
@@ -3007,17 +3111,12 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nS
         GetXPixels( aColor, 0xC0, 0xC0, 0xC0 );
 
         // light colors: 3 * 2 = 6
-//      GetXPixels( aColor, 0x00, 0x00, 0x00 );
+
         GetXPixels( aColor, 0x00, 0x00, 0xFF );
         GetXPixels( aColor, 0x00, 0xFF, 0x00 );
         GetXPixels( aColor, 0x00, 0xFF, 0xFF );
-//      GetXPixels( aColor, 0xFF, 0x00, 0x00 );
-//      GetXPixels( aColor, 0xFF, 0x00, 0xFF );
-//      GetXPixels( aColor, 0xFF, 0xFF, 0x00 );
-//      GetXPixels( aColor, 0xFF, 0xFF, 0xFF );
 
         // standard colors: 7 * 2 = 14
-//      GetXPixels( aColor, 0x00, 0x00, 0x00 );
         GetXPixels( aColor, 0x00, 0x00, 0x80 );
         GetXPixels( aColor, 0x00, 0x80, 0x00 );
         GetXPixels( aColor, 0x00, 0x80, 0x80 );
@@ -3025,7 +3124,7 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap, int nS
         GetXPixels( aColor, 0x80, 0x00, 0x80 );
         GetXPixels( aColor, 0x80, 0x80, 0x00 );
         GetXPixels( aColor, 0x80, 0x80, 0x80 );
-        GetXPixels( aColor, 0x00, 0xB8, 0xFF ); // Blau 7
+        GetXPixels( aColor, 0x00, 0xB8, 0xFF ); // Blue 7
 
         // cube: 6*6*6 - 8 = 208
         for( r = 0; r < 0x100; r += 0x33 ) // 0x33, 0x66, 0x99, 0xCC, 0xFF
@@ -3433,3 +3532,4 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
                          +  ((b+8)/17) ];
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

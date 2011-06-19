@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 #if OSL_DEBUG_LEVEL > 1
-#define RETURN_DEBUG_STRING (rtl::OUString::createFromAscii("return from transliterationImpl"));
+#define RETURN_DEBUG_STRING (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("return from transliterationImpl")));
 #define RETURN_DEBUG_NUMBER 'TRAN'
 #else
 #define RETURN_DEBUG_STRING
@@ -153,3 +154,5 @@ private:
 } } } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

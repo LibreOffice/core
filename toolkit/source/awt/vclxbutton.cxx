@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,11 +45,11 @@ VCLXIconButton::VCLXIconButton( Window *p, rtl::OUString aDefaultLabel, char con
     p->SetComponentInterface( this );
 
     setLabel( aDefaultLabel );
-    setProperty( rtl::OUString::createFromAscii( "Graphic" ),
+    setProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Graphic")),
                  css::uno::Any( layoutimpl::loadGraphic( pGraphName ) ) );
-    setProperty( rtl::OUString::createFromAscii( "ImagePosition" ),
+    setProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImagePosition")),
                  css::uno::Any( css::awt::ImagePosition::LeftCenter ) );
-    setProperty( rtl::OUString::createFromAscii( "Align" ),
+    setProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Align")),
                  css::uno::Any( (sal_Int16) 1 /* magic - center */ ) );
 }
 
@@ -56,71 +57,73 @@ VCLXIconButton::VCLXIconButton( Window *p, rtl::OUString aDefaultLabel, char con
 
 VCLXOKButton::VCLXOKButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_OK ),
-                         "res/commandimagelist/sc_ok.png" )
+                         "cmd/sc_ok.png" )
 {
 }
 
 VCLXCancelButton::VCLXCancelButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_CANCEL ),
-//    : VCLXIconButton( xButton, rtl::OUString::createFromAscii( "~Cancel " ),
-                         "res/commandimagelist/sc_cancel.png" )
+//    : VCLXIconButton( xButton, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Cancel ")),
+                         "cmd/sc_cancel.png" )
 {
 }
 
 VCLXYesButton::VCLXYesButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_YES ),
-                  "res/commandimagelist/sc_yes.png" )
+                  "cmd/sc_yes.png" )
 {
 }
 
 VCLXNoButton::VCLXNoButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_NO ),
-                  "res/commandimagelist/sc_no.png" )
+                  "cmd/sc_no.png" )
 {
 }
 
 VCLXRetryButton::VCLXRetryButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_RETRY ),
-                  "res/commandimagelist/sc_retry.png" )
+                  "cmd/sc_retry.png" )
 {
 }
 
 VCLXIgnoreButton::VCLXIgnoreButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_IGNORE ),
-                  "res/commandimagelist/sc_ignore.png" )
+                  "cmd/sc_ignore.png" )
 {
 }
 
 VCLXResetButton::VCLXResetButton( Window *p )
-    : VCLXIconButton( p, rtl::OUString::createFromAscii( "~Reset " ),
-                  "res/commandimagelist/sc_reset.png" )
+    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("~Reset ")),
+                  "cmd/sc_reset.png" )
 {
 }
 
 VCLXApplyButton::VCLXApplyButton( Window *p )
-    : VCLXIconButton( p, rtl::OUString::createFromAscii( "Apply" ),
-                  "res/commandimagelist/sc_apply.png" )
+    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Apply")),
+                  "cmd/sc_apply.png" )
 {
 }
 
 VCLXHelpButton::VCLXHelpButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_HELP ),
-                  "res/commandimagelist/sc_help.png" )
+                  "cmd/sc_help.png" )
 {
 }
 
 VCLXMoreButton::VCLXMoreButton( Window *p )
     : VCLXIconButton( p, Button::GetStandardText( BUTTON_MORE ),
-//    : VCLXIconButton( p, rtl::OUString::createFromAscii( "More " ),
-                  "res/commandimagelist/sc_more.png" )
+//    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("More ")),
+                  "cmd/sc_more.png" )
 {
 }
 
 VCLXAdvancedButton::VCLXAdvancedButton( Window *p )
 //    : VCLXIconButton( p, Button::GetStandardText( BUTTON_ADVANCED ),
-    : VCLXIconButton( p, rtl::OUString::createFromAscii( "Advanced " ),
-                  "res/commandimagelist/sc_advanced.png" )
+    : VCLXIconButton( p, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Advanced ")),
+                  "cmd/sc_advanced.png" )
 {
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

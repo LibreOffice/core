@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <sal/types.h>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/canvas.hxx>
 
@@ -47,6 +46,11 @@ class Gradient;
 class BitmapEx;
 class MapMode;
 class Size;
+class Rectangle;
+class Font;
+class PolyPolygon;
+class Point;
+class MetaCommentAction;
 
 namespace basegfx {
     class B2DPolyPolygon;
@@ -60,10 +64,109 @@ namespace cppcanvas
     {
         struct OutDevState;
         struct ActionFactoryParameters;
+        struct EMFPObject;
+        struct XForm;
 
         // state stack of OutputDevice, to correctly handle
         // push/pop actions
         typedef ::std::vector< OutDevState >    VectorOfOutDevStates;
+
+        // EMF+
+        // TODO: replace?
+        struct XForm
+        {
+            float   eM11;
+            float   eM12;
+            float   eM21;
+            float   eM22;
+            float   eDx;
+            float   eDy;
+            XForm()
+            {
+                SetIdentity ();
+            };
+
+            void SetIdentity ()
+            {
+                eM11 =  eM22 = 1.0f;
+                eDx = eDy = eM12 = eM21 = 0.0f;
+            }
+
+            void Set (float m11, float m12, float dx, float m21, float m22, float dy)
+            {
+                eM11 = m11;
+                eM12 = m12;
+                eDx  = dx;
+                eM21 = m21;
+                eM22 = m22;
+                eDy  = dy;
+            }
+
+            void Set (XForm f)
+            {
+                eM11 = f.eM11;
+                eM12 = f.eM12;
+                eM21 = f.eM21;
+                eM22 = f.eM22;
+                eDx  = f.eDx;
+                eDy  = f.eDy;
+            }
+
+            void Multiply (float m11, float m12, float dx, float m21, float m22, float dy)
+            {
+                eM11 = eM11*m11 + eM12*m21;
+                eM12 = eM11*m12 + eM12*m22;
+                eM21 = eM21*m11 + eM22*m21;
+                eM22 = eM21*m12 + eM22*m22;
+                eDx *= eDx*m11  + eDy*m21 + dx;
+                eDy *= eDx*m12  + eDy*m22 + dy;
+            }
+
+            void Multiply (XForm f)
+            {
+                eM11 = eM11*f.eM11 + eM12*f.eM21;
+                eM12 = eM11*f.eM12 + eM12*f.eM22;
+                eM21 = eM21*f.eM11 + eM22*f.eM21;
+                eM22 = eM21*f.eM12 + eM22*f.eM22;
+                eDx *= eDx*f.eM11  + eDy*f.eM21 + f.eDx;
+                eDy *= eDx*f.eM12  + eDy*f.eM22 + f.eDy;
+            }
+
+#ifdef OSL_BIGENDIAN
+// currently unused
+static float GetSwapFloat( SvStream& rSt )
+{
+        float   fTmp;
+        sal_Int8* pPtr = (sal_Int8*)&fTmp;
+        rSt >> pPtr[3] >> pPtr[2] >> pPtr[1] >> pPtr[0];        // Little Endian <-> Big Endian switch
+        return fTmp;
+}
+#endif
+
+            friend SvStream& operator>>( SvStream& rIn, XForm& rXForm )
+            {
+                if ( sizeof( float ) != 4 )
+                {
+                    OSL_FAIL( "EnhWMFReader::sizeof( float ) != 4" );
+                    rXForm = XForm();
+                }
+                else
+                {
+#ifdef OSL_BIGENDIAN
+                    rXForm.eM11 = GetSwapFloat( rIn );
+                    rXForm.eM12 = GetSwapFloat( rIn );
+                    rXForm.eM21 = GetSwapFloat( rIn );
+                    rXForm.eM22 = GetSwapFloat( rIn );
+                    rXForm.eDx = GetSwapFloat( rIn );
+                    rXForm.eDy = GetSwapFloat( rIn );
+#else
+                    rIn >> rXForm.eM11 >> rXForm.eM12 >> rXForm.eM21 >> rXForm.eM22
+                        >> rXForm.eDx >> rXForm.eDy;
+#endif
+                }
+                return rIn;
+            }
+        };
 
         class ImplRenderer : public virtual Renderer, protected CanvasGraphicHelper
         {
@@ -103,6 +206,14 @@ namespace cppcanvas
             // (externally not visible)
             typedef ::std::vector< MtfAction >      ActionVector;
 
+            /* EMF+ */
+            void ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, sal_uInt32 flags = 0);
+            void ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags = 0);
+            void MapToDevice (double &x, double &y);
+            ::basegfx::B2DPoint Map (::basegfx::B2DPoint& p);
+            ::basegfx::B2DPoint Map (double ix, double iy);
+            ::basegfx::B2DSize MapSize (double iwidth, double iheight);
+            ::basegfx::B2DRange MapRectangle (double ix, double iy, double iwidth, double iheight);
 
         private:
             // default: disabled copy/assignment
@@ -155,8 +266,35 @@ namespace cppcanvas
                                    ActionVector::const_iterator& o_rRangeBegin,
                                    ActionVector::const_iterator& o_rRangeEnd ) const;
 
+            void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags);
+            void processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
+            void EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor);
 
             ActionVector maActions;
+
+            /* EMF+ */
+            XForm           aBaseTransform;
+            XForm           aWorldTransform;
+            EMFPObject*     aObjects [256];
+            float           fPageScale;
+            sal_Int32       nOriginX;
+            sal_Int32       nOriginY;
+            sal_Int32       nHDPI;
+            sal_Int32       nVDPI;
+            ::PolyPolygon   aClippingPolygon;
+            /* EMF+ emf header info */
+            sal_Int32       nFrameLeft;
+            sal_Int32       nFrameTop;
+            sal_Int32       nFrameRight;
+            sal_Int32       nFrameBottom;
+            sal_Int32       nPixX;
+            sal_Int32       nPixY;
+            sal_Int32       nMmX;
+            sal_Int32       nMmY;
+            /* multipart object data */
+            bool            mbMultipart;
+            sal_uInt16      mMFlags;
+            SvMemoryStream  mMStream;
         };
 
 
@@ -185,3 +323,5 @@ namespace cppcanvas
 }
 
 #endif /* _CPPCANVAS_IMPLRENDERER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

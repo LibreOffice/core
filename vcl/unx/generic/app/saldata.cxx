@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,8 +58,8 @@
 #include <unistd.h>
 #endif
 
-#include <vos/process.hxx>
-#include <vos/mutex.hxx>
+#include <osl/process.h>
+#include <osl/mutex.hxx>
 
 #include "unx/Xproto.h"
 #include "unx/saldisp.hxx"
@@ -71,7 +72,6 @@
 
 #include <osl/signal.h>
 #include <osl/thread.h>
-#include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
 
@@ -274,7 +274,13 @@ X11SalData::X11SalData()
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
-    osl_getLocalHostname( &maLocalHostName.pData );
+}
+
+const rtl::OUString& X11SalData::GetLocalHostName()
+{
+    if (!maLocalHostName.getLength())
+            osl_getLocalHostname( &maLocalHostName.pData );
+    return maLocalHostName;
 }
 
 X11SalData::~X11SalData()
@@ -402,16 +408,16 @@ void SalXLib::Init()
     Display *pDisp = NULL;
 
     // is there a -display command line parameter?
-    vos::OExtCommandLine aCommandLine;
-    sal_uInt32 nParams = aCommandLine.getCommandArgCount();
+
+    sal_uInt32 nParams = osl_getCommandArgCount();
     rtl::OUString aParam;
     rtl::OString aDisplay;
     for (sal_uInt16 i=0; i<nParams; i++)
     {
-        aCommandLine.getCommandArg(i, aParam);
-        if (aParam.equalsAscii("-display"))
+        osl_getCommandArg(i, &aParam.pData);
+        if (aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-display")))
         {
-            aCommandLine.getCommandArg(i+1, aParam);
+            osl_getCommandArg(i+1, &aParam.pData);
             aDisplay = rtl::OUStringToOString(
                    aParam, osl_getThreadTextEncoding());
 
@@ -467,7 +473,7 @@ void SalXLib::Init()
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
     PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
@@ -537,7 +543,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             static Bool bOnce = False;
             if ( !bOnce )
             {
-                std::fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
+                std::fprintf(stderr, "X-Error occurred in a request for X_OpenFont\n");
                 EmitFontpathWarning();
 
                 bOnce = True ;
@@ -795,7 +801,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 void SalXLib::Wakeup()
 {
-    write (m_pTimeoutFDS[1], "", 1);
+    OSL_VERIFY(write (m_pTimeoutFDS[1], "", 1) == 1);
 }
 
 void SalXLib::PostUserEvent()
@@ -865,3 +871,5 @@ rtl::OString X11SalData::getFrameResName( SalExtStyle nStyle )
 
     return aBuf.makeStringAndClear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

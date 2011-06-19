@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,6 @@
 |*                      ist Speicher fÅr die Koeffizientenarrays
 |*                      allokiert, der dann spÑter vom Aufrufer mittels
 |*                      delete freizugeben ist.
-|*    Ersterstellung    JOE 17-08.93
-|*    Letzte Aenderung  JOE 17-08.93
 |*
 *************************************************************************/
 
@@ -64,10 +63,10 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
 |*                      Um KoordinatenÅberlÑufe zu vermeiden werden diese
 |*                      auf +/-32000 begrenzt.
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly);
 
 #endif //_SGVSPLN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

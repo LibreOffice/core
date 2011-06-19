@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/securityoptions.hxx>
 #include <unotools/configmgr.hxx>
@@ -1029,7 +1024,7 @@ sal_Bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption e
 Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
 {
     // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    const OUString pProperties[] =
     {
         PROPERTYNAME_SECUREURL,
         PROPERTYNAME_STAROFFICEBASIC,
@@ -1048,7 +1043,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
         PROPERTYNAME_MACRO_DISABLE
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -1171,26 +1166,14 @@ bool SvtSecurityOptions::IsOptionEnabled( EOption eOption ) const
     return m_pDataContainer->IsOptionEnabled( eOption );
 }
 
+namespace
+{
+    class theSecurityOptionsMutex : public rtl::Static<osl::Mutex, theSecurityOptionsMutex>{};
+}
+
 Mutex& SvtSecurityOptions::GetInitMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be faster then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theSecurityOptionsMutex::get();
 }
 
 
@@ -1307,3 +1290,4 @@ EBasicSecurityMode SvtSecurityOptions::GetBasicMode() const
     return m_pDataContainer->GetBasicMode();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

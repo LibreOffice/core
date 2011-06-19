@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ public:
     ATSUFontFallbacks maFontFallbacks;
 
 private:
-    typedef std::hash_map<ATSUFontID,ImplMacFontData*> MacFontContainer;
+    typedef boost::unordered_map<ATSUFontID,ImplMacFontData*> MacFontContainer;
     MacFontContainer maFontContainer;
 
     void InitGlyphFallbacks();
@@ -61,3 +62,4 @@ private:
 
 #endif  // _SV_SALATSUIFONTUTILS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

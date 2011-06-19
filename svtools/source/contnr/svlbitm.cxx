@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <svtools/svlbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/decoview.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/salnativewidgets.hxx>
@@ -420,6 +419,7 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags 
     sal_Bool bNativeOK = sal_False;
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
     if ( nIndex != SV_BMP_STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
+
     {
         Size aSize(pData->Width(), pData->Height());
         ImplAdjustBoxSize( aSize, eCtrlType, &rDev );
@@ -517,9 +517,6 @@ struct SvLBoxContextBmp_Impl
     Image       m_aImage1;
     Image       m_aImage2;
 
-    Image       m_aImage1_hc;
-    Image       m_aImage2_hc;
-
     sal_uInt16      m_nB2IndicatorFlags;
 };
 
@@ -557,46 +554,19 @@ sal_uInt16 SvLBoxContextBmp::IsA()
     return SV_ITEM_ID_LBOXCONTEXTBMP;
 }
 
-sal_Bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2, BmpColorMode _eMode )
+sal_Bool SvLBoxContextBmp::SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
     sal_Bool bSuccess = sal_True;
-    switch ( _eMode )
-    {
-        case BMP_COLOR_NORMAL:
-            m_pImpl->m_aImage1 = _rBitmap1;
-            m_pImpl->m_aImage2 = _rBitmap2;
-            break;
-
-        case BMP_COLOR_HIGHCONTRAST:
-            m_pImpl->m_aImage1_hc = _rBitmap1;
-            m_pImpl->m_aImage2_hc = _rBitmap2;
-            break;
-
-        default:
-            DBG_ERROR( "SvLBoxContextBmp::SetModeImages: unexpected mode!");
-            bSuccess = sal_False;
-            break;
-    }
+    m_pImpl->m_aImage1 = _rBitmap1;
+    m_pImpl->m_aImage2 = _rBitmap2;
     return bSuccess;
 }
 
-Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst, BmpColorMode _eMode )
+Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
-
-    switch ( _eMode )
-    {
-        case BMP_COLOR_NORMAL:
-            return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
-
-        case BMP_COLOR_HIGHCONTRAST:
-            return _bFirst ? m_pImpl->m_aImage1_hc : m_pImpl->m_aImage2_hc;
-
-        default:
-            DBG_ERROR( "SvLBoxContextBmp::implGetImageStore: unexpected mode!");
-    }
 
     // OJ: #i27071# wrong mode so we just return the normal images
     return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
@@ -616,16 +586,8 @@ void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
-    // determine the image set
-    BmpColorMode eMode( BMP_COLOR_NORMAL );
-    if ( !!m_pImpl->m_aImage1_hc )
-    {   // we really have HC images
-        if ( _rDev.GetSettings().GetStyleSettings().GetHighContrastMode() )
-            eMode = BMP_COLOR_HIGHCONTRAST;
-    }
-
     // get the image
-    const Image& rImage = implGetImageStore( 0 == ( _nViewDataEntryFlags & m_pImpl->m_nB2IndicatorFlags ), eMode );
+    const Image& rImage = implGetImageStore( 0 == ( _nViewDataEntryFlags & m_pImpl->m_nB2IndicatorFlags ) );
 
     sal_Bool _bSemiTransparent = _pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & _pEntry->GetFlags( ) ) );
     // draw
@@ -649,3 +611,4 @@ void SvLBoxContextBmp::Clone( SvLBoxItem* pSource )
     m_pImpl->m_nB2IndicatorFlags = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_nB2IndicatorFlags;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

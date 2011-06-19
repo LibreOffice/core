@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <unotools/inetoptions.hxx>
 #include "rtl/instance.hxx"
 #include <tools/urlobj.hxx>
-#ifndef _WILDCARD_HXX
 #include <tools/wldcrd.hxx>
-#endif
 
 #include <algorithm>
 #include <map>
@@ -248,7 +247,7 @@ SvtInetOptions::Impl::notifyListeners(
             {
                 aEvents.realloc(nCount);
                 aNotifications.
-                    push_back(std::make_pair< List::value_type::first_type,
+                    push_back(std::pair< List::value_type::first_type,
                                               List::value_type::second_type >(
                                   aIt->first, aEvents));
             }
@@ -281,8 +280,7 @@ SvtInetOptions::Impl::Impl():
     for (sal_Int32 i = 0; i < ENTRY_COUNT; ++i)
         aKeys[i] = m_aEntries[i].m_aName;
     if (!EnableNotification(aKeys))
-        OSL_ENSURE(false,
-                   "SvtInetOptions::Impl::Impl(): Bad EnableNotifications()");
+        OSL_FAIL("SvtInetOptions::Impl::Impl(): Bad EnableNotifications()");
 }
 
 //============================================================================
@@ -331,8 +329,7 @@ star::uno::Any SvtInetOptions::Impl::getProperty(Index nPropIndex)
             }
         }
     }
-    OSL_ENSURE(false,
-               "SvtInetOptions::Impl::getProperty(): Possible life lock");
+    OSL_FAIL("SvtInetOptions::Impl::getProperty(): Possible life lock");
     {
         osl::MutexGuard aGuard(m_aMutex);
         return m_aEntries[nPropIndex].m_aValue;
@@ -552,3 +549,5 @@ SvtInetOptions::removePropertiesChangeListener(
 {
     m_pImpl->removePropertiesChangeListener(rPropertyNames, rListener);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

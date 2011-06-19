@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,6 +74,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
     sal_uInt16      nAppFlag;           // Fuer welche Applikation ist der Dialog ueberhaupt
     sal_Bool        bRowDirection;      // Suchrichtung Zeilenweise/Spaltenweise
     sal_Bool        bAllTables;         // in alle Tabellen suchen
+    sal_Bool        bSearchFiltered;      // search filtered cells.
 
     // Writer-spezifisch
     sal_Bool        bNotes;
@@ -89,8 +91,8 @@ public:
     SvxSearchItem( const SvxSearchItem& rItem );
     virtual ~SvxSearchItem();
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     virtual int              operator == ( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -141,6 +143,9 @@ public:
 
             sal_Bool        IsAllTables() const { return bAllTables; }
             void            SetAllTables(sal_Bool bNew) { bAllTables = bNew; }
+
+            sal_Bool        IsSearchFiltered() const { return bSearchFiltered; }
+            void            SetSearchFiltered(sal_Bool b) { bSearchFiltered = b; }
 
             sal_uInt16      GetCellType() const { return nCellType; }
             void            SetCellType(sal_uInt16 nNewCellType) { nCellType = nNewCellType; }
@@ -291,3 +296,4 @@ sal_Bool SvxSearchItem::IsMatchFullHalfWidthForms() const
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

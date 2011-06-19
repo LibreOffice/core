@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,8 @@
 // no include "precompiled_i18npool.hxx" because this file is included in insys.cxx
 
 #include <sal/config.h>
+
+#define WINVER 0x0500
 
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
@@ -105,3 +108,5 @@ LanguageType MsLangId::getPlatformSystemUILanguage()
             &GetUserDefaultUILanguage, &GetSystemDefaultUILanguage);
     return nImplSystemUILanguage;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

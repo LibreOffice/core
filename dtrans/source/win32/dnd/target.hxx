@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,9 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase3.hxx>
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
-#ifndef _OSL_MUTEX_H_
 #include <osl/mutex.hxx>
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -55,9 +52,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
+
+using ::rtl::OUString;
 
 
 // The client
@@ -211,3 +209,5 @@ protected:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

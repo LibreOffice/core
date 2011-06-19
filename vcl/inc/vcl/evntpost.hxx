@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,7 @@ namespace vcl
         sal_uLong           m_nId;
         Link            m_aLink;
 
-//#if 0 // _SOLAR__PRIVATE
         DECL_DLLPRIVATE_LINK( DoEvent_Impl, UserEvent* );
-//#endif
 
     public:
                         EventPoster( const Link& rLink );
@@ -57,3 +56,5 @@ namespace vcl
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

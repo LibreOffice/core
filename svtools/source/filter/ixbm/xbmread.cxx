@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -286,7 +287,6 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
         ByteString  aLine;
-        int         nValue;
 
         rIStm.Seek( nLastPos );
         bStatus = sal_False;
@@ -294,6 +294,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
         if ( bStatus )
         {
+            int nValue;
             if ( ( nValue = (int) ParseDefine( aLine.GetBuffer() ) ) > 0 )
             {
                 nWidth = nValue;
@@ -396,3 +397,5 @@ sal_Bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

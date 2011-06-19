@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ namespace vclcanvas
 
     void SpriteCanvas::initialize()
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // #i64742# Only call initialize when not in probe mode
         if( maArguments.getLength() == 0 )
@@ -128,14 +129,14 @@ namespace vclcanvas
     }
 
 
-    void SAL_CALL SpriteCanvas::disposing()
+    void SpriteCanvas::disposeThis()
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         mxComponentContext.clear();
 
         // forward to parent
-        SpriteCanvasBaseT::disposing();
+        SpriteCanvasBaseT::disposeThis();
     }
 
     ::sal_Bool SAL_CALL SpriteCanvas::showBuffer( ::sal_Bool bUpdateAll ) throw (uno::RuntimeException)
@@ -150,7 +151,7 @@ namespace vclcanvas
 
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
@@ -171,8 +172,10 @@ namespace vclcanvas
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

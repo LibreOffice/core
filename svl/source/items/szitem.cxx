@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,7 +136,7 @@ SvStream& SfxSizeItem::Store(SvStream &rStream, sal_uInt16 ) const
 }
 
 // -----------------------------------------------------------------------
-sal_Bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -159,20 +160,20 @@ sal_Bool  SfxSizeItem::QueryValue( com::sun::star::uno::Any& rVal,
             rVal <<= aTmp.getWidth(); break;
         case MID_HEIGHT:
             rVal <<= aTmp.getHeight(); break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
                             sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     com::sun::star::awt::Size aValue;
     sal_Int32 nVal = 0;
     if ( !nMemberId )
@@ -209,3 +210,4 @@ sal_Bool SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

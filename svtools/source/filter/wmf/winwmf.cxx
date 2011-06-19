@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include "winmtf.hxx"
 #include <vcl/gdimtf.hxx>
+#include <svtools/wmf.hxx>
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <osl/endian.h>
@@ -569,7 +571,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         aBmp.Crop( aCropRect );
                     }
                     Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
+                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ), LIST_APPEND );
                 }
             }
         }
@@ -619,7 +621,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                         aBmp.Crop( aCropRect );
                     }
-                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
+                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ), LIST_APPEND );
                 }
             }
         }
@@ -996,7 +998,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
 // ------------------------------------------------------------------------
 
-sal_Bool WMFReader::ReadHeader()
+sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
 {
     Rectangle   aPlaceableBound;
     sal_uInt32  nl, nStrmPos = pWMF->Tell();
@@ -1029,12 +1031,20 @@ sal_Bool WMFReader::ReadHeader()
     }
     else
     {
-        nUnitsPerInch = 96;
-        pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
-        GetPlaceableBound( aPlaceableBound, pWMF );
-        pWMF->Seek( nStrmPos );
+      nUnitsPerInch = (pAPMHeader!=NULL?pAPMHeader->inch:96);
+      pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
+      GetPlaceableBound( aPlaceableBound, pWMF );
+      pWMF->Seek( nStrmPos );
+      if (pAPMHeader!=NULL) {
+        // #n417818#: If we have an external header then overwrite the bounds!
+        aPlaceableBound=Rectangle(pAPMHeader->left*567*nUnitsPerInch/1440/1000,
+                      pAPMHeader->top*567*nUnitsPerInch/1440/1000,
+                      pAPMHeader->right*567*nUnitsPerInch/1440/1000,
+                      pAPMHeader->bottom*567*nUnitsPerInch/1440/1000);
+      }
     }
 
+    pOut->SetUnitsPerInch( nUnitsPerInch );
     pOut->SetWinOrg( aPlaceableBound.TopLeft() );
     aWMFSize = Size( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
     pOut->SetWinExt( aWMFSize );
@@ -1067,7 +1077,7 @@ sal_Bool WMFReader::ReadHeader()
     return sal_True;
 }
 
-void WMFReader::ReadWMF()
+void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
 {
     sal_uInt16  nFunction;
     sal_uLong   nPos, nPercent, nLastPercent;
@@ -1092,7 +1102,7 @@ void WMFReader::ReadWMF()
     pWMF->Seek( nStartPos );
     Callback( (sal_uInt16) ( nLastPercent = 0 ) );
 
-    if ( ReadHeader() )
+    if ( ReadHeader( pAPMHeader ) )
     {
 
         nPos = pWMF->Tell();
@@ -1210,10 +1220,6 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
     rPlaceableBound.Right()  = (sal_Int32)0x80000000;
     rPlaceableBound.Bottom() = (sal_Int32)0x80000000;
 
-    sal_Int16 nMapMode = MM_ANISOTROPIC;
-
-    sal_uInt16 nFunction;
-    sal_uInt32 nRSize;
     sal_uInt32 nPos = pStm->Tell();
     sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
 
@@ -1221,6 +1227,10 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
     if( nEnd - nPos )
     {
+        sal_Int16 nMapMode = MM_ANISOTROPIC;
+        sal_uInt16 nFunction;
+        sal_uInt32 nRSize;
+
         while( bRet )
         {
             *pStm >> nRSize >> nFunction;
@@ -1321,7 +1331,7 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_SETPIXEL:
                 {
-                    const Color aColor = ReadColor();
+                    ReadColor();
                     GetWinExtMax( ReadYX(), rPlaceableBound, nMapMode );
                 }
                 break;
@@ -1342,12 +1352,11 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 case W_META_EXTTEXTOUT:
                 {
                     sal_uInt16  nLen, nOptions;
-                    sal_Int32   nRecordPos, nRecordSize;
+                    sal_Int32   nRecordSize;
                     Point       aPosition;
                     Rectangle   aRect;
 
                     pStm->SeekRel(-6);
-                    nRecordPos = pStm->Tell();
                     *pStm >> nRecordSize;
                     pStm->SeekRel(2);
                     aPosition = ReadYX();
@@ -1428,3 +1437,5 @@ WMFReader::~WMFReader()
     if( pEMFStream )
         delete pEMFStream;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

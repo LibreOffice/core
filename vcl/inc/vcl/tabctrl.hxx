@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,6 +93,7 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE WinBits      ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
 
     virtual void                FillLayoutData() const;
@@ -204,3 +206,5 @@ public:
 };
 
 #endif  // _SV_TABCTRL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

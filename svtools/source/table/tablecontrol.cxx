@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -43,7 +44,6 @@ using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace utl;
-
 //......................................................................................................................
 namespace svt { namespace table
 {
@@ -312,7 +312,7 @@ namespace svt { namespace table
                 aRetText = GetColumnName(_nCol);
                 break;
             default:
-                OSL_ENSURE(0,"GridControl::GetAccessibleName: invalid enum!");
+                OSL_FAIL("GridControl::GetAccessibleName: invalid enum!");
         }
         return aRetText;
     }
@@ -594,6 +594,7 @@ namespace svt { namespace table
     {
         ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, m_pImpl->getSelectHandler(), this );
     }
+//........................................................................
 
     //------------------------------------------------------------------------------------------------------------------
     void TableControl::SetSelectHdl( const Link& i_selectHandler )
@@ -606,7 +607,7 @@ namespace svt { namespace table
     {
         return m_pImpl->getSelectHandler();
     }
+}} // namespace svt::table
 
 //......................................................................................................................
-}} // namespace svt::table
-//......................................................................................................................
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XSprite.hpp>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 #include <cppcanvas/sprite.hxx>
 
 #include <implspritecanvas.hxx>
@@ -93,3 +92,5 @@ namespace cppcanvas
 }
 
 #endif /* _CPPCANVAS_IMPLSPRITE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include "sal/config.h"
 #include "unotools/unotoolsdllapi.h"
+#include <vector>
 
 /*
     The class utl::detail::Options provides a kind of multiplexer. It implements a ConfigurationListener
@@ -43,7 +45,6 @@
 namespace utl {
 
     class ConfigurationBroadcaster;
-    class IMPL_ConfigurationListenerList;
 
     // interface for configuration listener
     class UNOTOOLS_DLLPUBLIC ConfigurationListener
@@ -51,6 +52,7 @@ namespace utl {
     public:
         virtual void ConfigurationChanged( ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) = 0;
     };
+    typedef ::std::vector< ConfigurationListener* > IMPL_ConfigurationListenerList;
 
     // complete broadcasting implementation
     class UNOTOOLS_DLLPUBLIC ConfigurationBroadcaster
@@ -95,3 +97,5 @@ protected:
 } }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 
 #include <vcl/vclenum.hxx>
 
@@ -118,6 +120,8 @@ public:
     void            SetSteps( sal_uInt16 nSteps );
     sal_uInt16          GetSteps() const { return mpImplGradient->mnStepCount; }
 
+    void            GetBoundRect( const Rectangle& rRect, Rectangle &rBoundRect, Point& rCenter ) const;
+
     Gradient&       operator=( const Gradient& rGradient );
     sal_Bool            operator==( const Gradient& rGradient ) const;
     sal_Bool            operator!=( const Gradient& rGradient ) const
@@ -130,3 +134,5 @@ public:
 };
 
 #endif  // _SV_GRADIENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

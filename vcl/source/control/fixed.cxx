@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -507,17 +508,14 @@ void FixedLine::ImplDraw( bool bLayout )
     {
         if( !pVector )
         {
-            long nX = 0;
-            long nY = 0;
-
             if ( nWinStyle & WB_VERT )
             {
-                nX = (aOutSize.Width()-1)/2;
+                long nX = (aOutSize.Width()-1)/2;
                 aDecoView.DrawSeparator( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
             }
             else
             {
-                nY = (aOutSize.Height()-1)/2;
+                long nY = (aOutSize.Height()-1)/2;
                 aDecoView.DrawSeparator( Point( 0, nY ), Point( aOutSize.Width()-1, nY ), false );
             }
         }
@@ -784,11 +782,6 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, sal_uLong /* nDrawFlags */,
     sal_uInt16 nStyle = 0;
     Bitmap* pBitmap = &maBitmap;
     Color aCol;
-    if( !!maBitmapHC )
-    {
-        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-            pBitmap = &maBitmapHC;
-    }
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
     {
@@ -910,28 +903,17 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FixedBitmap::SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode )
+sal_Bool FixedBitmap::SetModeBitmap( const Bitmap& rBitmap )
 {
-    if( eMode == BMP_COLOR_NORMAL )
-        SetBitmap( rBitmap );
-    else if( eMode == BMP_COLOR_HIGHCONTRAST )
-    {
-        maBitmapHC = rBitmap;
-        StateChanged( STATE_CHANGE_DATA );
-    }
-    else
-        return sal_False;
+    SetBitmap( rBitmap );
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-const Bitmap& FixedBitmap::GetModeBitmap( BmpColorMode eMode) const
+const Bitmap& FixedBitmap::GetModeBitmap( ) const
 {
-    if( eMode == BMP_COLOR_HIGHCONTRAST )
-        return maBitmapHC;
-    else
-        return maBitmap;
+    return maBitmap;
 }
 
 // =======================================================================
@@ -1035,11 +1017,6 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 
     Image *pImage = &maImage;
     Color aCol;
-    if( !!maImageHC )
-    {
-        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-            pImage = &maImageHC;
-    }
 
     // Haben wir ueberhaupt ein Image
     if ( !(!(*pImage)) )
@@ -1070,7 +1047,7 @@ void FixedImage::Paint( const Rectangle& )
 
 Size FixedImage::GetOptimalSize( WindowSizeType ) const
 {
-    const Image* pImage = GetSettings().GetStyleSettings().GetHighContrastMode() ? &maImageHC : &maImage;
+    const Image* pImage = &maImage;
     return pImage->GetSizePixel();
 }
 
@@ -1165,31 +1142,17 @@ void FixedImage::SetImage( const Image& rImage )
 
 // -----------------------------------------------------------------------
 
-sal_Bool FixedImage::SetModeImage( const Image& rImage, BmpColorMode eMode )
+sal_Bool FixedImage::SetModeImage( const Image& rImage )
 {
-    if( eMode == BMP_COLOR_NORMAL )
-        SetImage( rImage );
-    else if( eMode == BMP_COLOR_HIGHCONTRAST )
-    {
-        if( maImageHC != rImage )
-        {
-            maImageHC = rImage;
-            StateChanged( STATE_CHANGE_DATA );
-        }
-    }
-    else
-        return sal_False;
+    SetImage( rImage );
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& FixedImage::GetModeImage( BmpColorMode eMode ) const
+const Image& FixedImage::GetModeImage( ) const
 {
-    if( eMode == BMP_COLOR_HIGHCONTRAST )
-        return maImageHC;
-    else
-        return maImage;
+    return maImage;
 }
 
 // -----------------------------------------------------------------------
@@ -1199,3 +1162,5 @@ Point FixedImage::CalcImagePos( const Point& rPos,
 {
     return ImplCalcPos( GetStyle(), rPos, rObjSize, rWinSize );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

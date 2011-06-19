@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
 
 #include <deque>
 
@@ -267,14 +262,14 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     // Init baseclasses first
     :   ConfigItem          ( ROOTNODE_INTERNAL, CONFIG_MODE_IMMEDIATE_UPDATE )
     // Init member then.
-    , m_bRemoveMenuEntryClose ( sal_False )
-    , m_bRemoveMenuEntryBackToWebtop ( sal_False )
-    , m_bRemoveMenuEntryNewWebtop ( sal_False )
-    , m_bRemoveMenuEntryLogout ( sal_False )
-    ,   m_bSlotCFG          ( DEFAULT_SLOTCFG           )
-    ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL     )
-    ,   m_bUseMailUI        ( DEFAULT_USEMAILUI         )
-    ,   m_aCurrentTempURL   ( DEFAULT_CURRENTTEMPURL    )
+    , m_bRemoveMenuEntryClose(sal_False)
+    , m_bRemoveMenuEntryBackToWebtop(sal_False)
+    , m_bRemoveMenuEntryNewWebtop(sal_False)
+    , m_bRemoveMenuEntryLogout(sal_False)
+    , m_bSlotCFG(DEFAULT_SLOTCFG)
+    , m_bSendCrashMail(DEFAULT_SENDCRASHMAIL)
+    , m_bUseMailUI(DEFAULT_USEMAILUI)
+    , m_aCurrentTempURL(DEFAULT_CURRENTTEMPURL)
 {
     // Use our list of configuration keys to get his values.
     // structure of internal section: (first 2 entries are fixed - all other are member of a set!)
@@ -296,38 +291,12 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Read fixed values first!
-    DBG_ASSERT(!(seqValues[FIXPROPERTYHANDLE_SLOTCFG].getValueTypeClass()!=TypeClass_BOOLEAN)       , "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\Slot\"?"            );
-    DBG_ASSERT(!(seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].getValueTypeClass()!=TypeClass_BOOLEAN) , "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\SendCrashMail\"?"   );
-    seqValues[FIXPROPERTYHANDLE_SLOTCFG         ] >>= m_bSlotCFG        ;
-    seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL   ] >>= m_bSendCrashMail  ;
-    seqValues[FIXPROPERTYHANDLE_USEMAILUI       ] >>= m_bUseMailUI  ;
-    seqValues[FIXPROPERTYHANDLE_CURRENTTEMPURL  ] >>= m_aCurrentTempURL ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYCLOSE ] >>= m_bRemoveMenuEntryClose  ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYBACKTOWEBTOP ] >>= m_bRemoveMenuEntryBackToWebtop  ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYNEWWEBTOP ] >>= m_bRemoveMenuEntryNewWebtop  ;
-//    seqValues[FIXPROPERTYHANDLE_REMOVEMENUENTRYLOGOUT ] >>= m_bRemoveMenuEntryLogout  ;
-/*
-    // Read dynamical set "RecoveryList" then.
-    // 3 subkeys for every item!
-    // Attention: Start at next element after last fixed entry! We must ignore "Slot" and "SendCrashMail" ...
-    tIMPL_RecoveryEntry aEntry;
-    sal_uInt32 nCount       = seqValues.getLength() ;
-    sal_uInt32 nPosition    = FIXPROPERTYCOUNT      ;
-
-    while( nPosition<nCount )
-    {
-        seqValues[nPosition] >>= aEntry.sURL        ;
-        ++nPosition;
-        seqValues[nPosition] >>= aEntry.sFilter     ;
-        ++nPosition;
-        seqValues[nPosition] >>= aEntry.sTempName   ;
-        ++nPosition;
-        m_aRecoveryList.push_front( aEntry );
-    }
-*/
-    // We don't need any notifications here.
-    // "Slot" and "SendCrashMail" are readonly(!) and our recovery list should not modified during runtime - it's used
-    // by our crash guard only ... otherwise we have a big problem.
+    DBG_ASSERT(!seqValues[FIXPROPERTYHANDLE_SLOTCFG].hasValue() || (seqValues[FIXPROPERTYHANDLE_SLOTCFG].getValueTypeClass() == TypeClass_BOOLEAN), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\Slot\"?");
+    DBG_ASSERT(!seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].hasValue() || !(seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\SendCrashMail\"?");
+    seqValues[FIXPROPERTYHANDLE_SLOTCFG] >>= m_bSlotCFG;
+    seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL] >>= m_bSendCrashMail;
+    seqValues[FIXPROPERTYHANDLE_USEMAILUI] >>= m_bUseMailUI;
+    seqValues[FIXPROPERTYHANDLE_CURRENTTEMPURL] >>= m_aCurrentTempURL;
 }
 
 //*****************************************************************************************************************
@@ -410,43 +379,6 @@ void SvtInternalOptions_Impl::SetCurrentTempURL( const OUString& aNewCurrentTemp
     SetModified();
     Commit();
 }
-
-#if 0
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
-                                                const   OUString&   sFilter     ,
-                                                const   OUString&   sTempName   )
-{
-    tIMPL_RecoveryEntry aEntry( sURL, sFilter, sTempName );
-    m_aRecoveryList.push_front( aEntry );
-    SetModified();
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtInternalOptions_Impl::PopRecoveryItem(  OUString&   sURL        ,
-                                                OUString&   sFilter     ,
-                                                OUString&   sTempName   )
-{
-    tIMPL_RecoveryEntry aEntry = m_aRecoveryList.front();
-    m_aRecoveryList.pop_front();
-    SetModified();  // Don't forget it - we delete an entry here!
-    sURL        = aEntry.sURL       ;
-    sFilter     = aEntry.sFilter    ;
-    sTempName   = aEntry.sTempName  ;
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-sal_Bool SvtInternalOptions_Impl::IsRecoveryListEmpty() const
-{
-    return ( m_aRecoveryList.empty() );
-}
-#endif
 
 //*****************************************************************************************************************
 //  private method
@@ -602,27 +534,17 @@ void SvtInternalOptions::SetCurrentTempURL( const OUString& aNewCurrentTempURL )
     m_pDataContainer->SetCurrentTempURL( aNewCurrentTempURL );
 }
 
+namespace
+{
+    class theInternalOptionsMutex : public rtl::Static<osl::Mutex, theInternalOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtInternalOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theInternalOptionsMutex::get();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,10 +48,6 @@
 |*
 |*    RscRange::RscRange()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
                         : RscTop( nId, nTypeId )
@@ -63,10 +60,6 @@ RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    RscRange::GetClassType()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 RSCCLASS_TYPE RscRange::GetClassType() const
 {
@@ -76,10 +69,6 @@ RSCCLASS_TYPE RscRange::GetClassType() const
 /*************************************************************************
 |*
 |*    RscRange::SetRange()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
@@ -102,10 +91,6 @@ ERRTYPE RscRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 |*
 |*    RscRange::IsValueDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.02.92
-|*    Letzte Aenderung  MM 15.02.92
-|*
 *************************************************************************/
 sal_Bool RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
@@ -125,10 +110,6 @@ sal_Bool RscRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 |*
 |*    RscRange::SetNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 ERRTYPE RscRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 {
@@ -143,10 +124,6 @@ ERRTYPE RscRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 |*
 |*    RscRange::GetNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.04.91
-|*    Letzte Aenderung  MM 22.04.91
-|*
 *************************************************************************/
 ERRTYPE RscRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 {
@@ -157,10 +134,6 @@ ERRTYPE RscRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 /*************************************************************************
 |*
 |*    RscRange::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
@@ -197,10 +170,6 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 |*
 |*    RscRange::WriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
-|*
 *************************************************************************/
 void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, sal_uInt32, const char * )
@@ -211,10 +180,6 @@ void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscRange::WriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
@@ -257,10 +222,6 @@ void RscRange::WriteRcAccess
 |*
 |*    RscLongRange::RscLongRange()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.07.94
-|*
 *************************************************************************/
 RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
                         : RscTop( nId, nTypeId )
@@ -273,10 +234,6 @@ RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    RscLongRange::GetClassType()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.07.94
-|*
 *************************************************************************/
 RSCCLASS_TYPE RscLongRange::GetClassType() const
 {
@@ -286,10 +243,6 @@ RSCCLASS_TYPE RscLongRange::GetClassType() const
 /*************************************************************************
 |*
 |*    RscLongRange::SetRange()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.07.94
 |*
 *************************************************************************/
 ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
@@ -312,10 +265,6 @@ ERRTYPE RscLongRange::SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
 |*
 |*    RscLongRange::IsValueDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.02.92
-|*    Letzte Aenderung  MM 15.02.92
-|*
 *************************************************************************/
 sal_Bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
@@ -330,10 +279,6 @@ sal_Bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 /*************************************************************************
 |*
 |*    RscLongRange::SetNumber()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.07.94
 |*
 *************************************************************************/
 ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
@@ -350,10 +295,6 @@ ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 |*
 |*    RscLongRange::GetNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.04.91
-|*    Letzte Aenderung  MM 22.04.91
-|*
 *************************************************************************/
 ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 {
@@ -365,10 +306,6 @@ ERRTYPE RscLongRange::GetNumber( const RSCINST & rInst, sal_Int32 * pN )
 /*************************************************************************
 |*
 |*    RscLongRange::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.07.94
 |*
 *************************************************************************/
 RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
@@ -408,10 +345,6 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 |*
 |*    RscLongRange::WriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.07.94
-|*
 *************************************************************************/
 void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                          RscTypCont *, sal_uInt32, const char * )
@@ -424,10 +357,6 @@ void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscLongRange::WriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.07.94
-|*    Letzte Aenderung  MM 18.04.94
 |*
 *************************************************************************/
 ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
@@ -481,10 +410,6 @@ ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom /*nConst*/,
 |*
 |*    RscIdRange::RscIdRange()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
             : RscTop( nId, nTypeId )
@@ -497,10 +422,6 @@ RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    RscIdRange::RscIdRange()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 RSCCLASS_TYPE RscIdRange::GetClassType() const
 {
@@ -510,10 +431,6 @@ RSCCLASS_TYPE RscIdRange::GetClassType() const
 /*************************************************************************
 |*
 |*    RscIdRange::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass ){
@@ -553,10 +470,6 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOw
 |*
 |*    RscIdRange::Destroy()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.11.91
-|*    Letzte Aenderung  MM 22.11.91
-|*
 *************************************************************************/
 void RscIdRange :: Destroy( const RSCINST & rInst ){
     ((RscId *)rInst.pData)->Destroy();
@@ -565,10 +478,6 @@ void RscIdRange :: Destroy( const RSCINST & rInst ){
 /*************************************************************************
 |*
 |*    RscIdRange::IsValueDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.01.92
-|*    Letzte Aenderung  MM 15.01.92
 |*
 *************************************************************************/
 sal_Bool RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
@@ -591,10 +500,6 @@ sal_Bool RscIdRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*
 |*    RscIdRange::SetNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.11.91
-|*    Letzte Aenderung  MM 25.11.91
-|*
 *************************************************************************/
 ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 {
@@ -610,10 +515,6 @@ ERRTYPE RscIdRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 |*
 |*    RscIdRange::GetNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.11.91
-|*    Letzte Aenderung  MM 25.11.91
-|*
 *************************************************************************/
 ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, sal_Int32 * plValue ){
     *plValue = ((RscId *)rInst.pData)->GetNumber();
@@ -623,10 +524,6 @@ ERRTYPE RscIdRange::GetNumber( const RSCINST & rInst, sal_Int32 * plValue ){
 /*************************************************************************
 |*
 |*    RscIdRange::SetRef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.11.91
-|*    Letzte Aenderung  MM 22.11.91
 |*
 *************************************************************************/
 ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId ){
@@ -648,10 +545,6 @@ ERRTYPE RscIdRange::SetRef( const RSCINST & rInst, const RscId & rRscId ){
 |*
 |*    RscIdRange::GetRef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.11.91
-|*    Letzte Aenderung  MM 22.11.91
-|*
 *************************************************************************/
 ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId ){
     *pRscId = *(RscId *)rInst.pData;
@@ -663,10 +556,6 @@ ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId ){
 |*
 |*    RscIdRange::WriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.11.91
-|*    Letzte Aenderung  MM 25.11.91
-|*
 *************************************************************************/
 void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                            RscTypCont *, sal_uInt32, const char * )
@@ -677,10 +566,6 @@ void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscIdRange::WriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.11.91
-|*    Letzte Aenderung  MM 25.11.91
 |*
 *************************************************************************/
 ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
@@ -710,20 +595,13 @@ void RscIdRange::WriteRcAccess
 |*
 |*    RscIdRange::IsConsistent()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.11.91
-|*    Letzte Aenderung  MM 22.11.91
-|*
 *************************************************************************/
-sal_Bool RscIdRange::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
+sal_Bool RscIdRange::IsConsistent( const RSCINST & rInst )
 {
     long nValue = ((RscId *)rInst.pData)->GetNumber();
     if( (nMax >= nValue) && (nMin <= nValue) )
         return sal_True;
     else {
-        if( pList )
-            pList->Insert( new RscInconsistent(
-                *(RscId *)rInst.pData, *(RscId *)rInst.pData ) );
         return sal_False;
     }
 }
@@ -732,10 +610,6 @@ sal_Bool RscIdRange::IsConsistent( const RSCINST & rInst, RscInconsList * pList 
 /*************************************************************************
 |*
 |*    RscBool::RscBool()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.04.91
-|*    Letzte Aenderung  MM 29.04.91
 |*
 *************************************************************************/
 RscBool::RscBool( Atom nId, sal_uInt32 nTypeId )
@@ -748,10 +622,6 @@ RscBool::RscBool( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    RscBool::GetClassType()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.04.91
-|*    Letzte Aenderung  MM 29.04.91
-|*
 *************************************************************************/
 RSCCLASS_TYPE  RscBool::GetClassType() const
 {
@@ -761,10 +631,6 @@ RSCCLASS_TYPE  RscBool::GetClassType() const
 /*************************************************************************
 |*
 |*    RscBool::WriteSrc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.04.91
-|*    Letzte Aenderung  MM 29.04.91
 |*
 *************************************************************************/
 void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -797,10 +663,6 @@ void RscBool::WriteRcAccess
 |*
 |*    RscBreakRange::SetNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.06.91
-|*    Letzte Aenderung  MM 24.06.91
-|*
 *************************************************************************/
 RscBreakRange :: RscBreakRange( Atom nId, sal_uInt32 nTypeId )
                         : RscRange( nId, nTypeId )
@@ -811,10 +673,6 @@ RscBreakRange :: RscBreakRange( Atom nId, sal_uInt32 nTypeId )
 /*************************************************************************
 |*
 |*    RscBreakRange::SetNumber()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.06.91
-|*    Letzte Aenderung  MM 24.06.91
 |*
 *************************************************************************/
 ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue ){
@@ -827,10 +685,6 @@ ERRTYPE RscBreakRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue ){
 /*************************************************************************
 |*
 |*    RscBreakRange::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 24.06.91
-|*    Letzte Aenderung  MM 24.06.91
 |*
 *************************************************************************/
 RSCINST RscBreakRange::Create( RSCINST * pInst, const RSCINST & rDflt,
@@ -848,3 +702,4 @@ RSCINST RscBreakRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     return( aInst );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

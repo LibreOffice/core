@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,6 @@
 
 #include "cairo_cairo.hxx"
 
-#ifdef WNT
-# include <tools/prewin.h>
-# include <windows.h>
-# include <tools/postwin.h>
-#endif
-
 #include <vcl/sysdata.hxx>
 #include <vcl/syschild.hxx>
 
@@ -62,3 +57,5 @@ namespace cairo
         return pSysData;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <comphelper/attributelist.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 namespace comphelper {
 
@@ -91,7 +93,7 @@ OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName ) throw( :
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             return (*ii).sType;
         }
@@ -103,7 +105,7 @@ OUString SAL_CALL AttributeList::getValueByName(const OUString& sName) throw( ::
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             return (*ii).sValue;
         }
@@ -135,14 +137,14 @@ void AttributeList::Clear()
 {
     m_pImpl->vecAttribute.clear();
 
-    VOS_ENSURE( ! getLength(), "Length > 0 after AttributeList::Clear!");
+    OSL_ENSURE( ! getLength(), "Length > 0 after AttributeList::Clear!");
 }
 
 void AttributeList::RemoveAttribute( const OUString sName )
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             m_pImpl->vecAttribute.erase( ii );
             break;
@@ -159,7 +161,7 @@ void AttributeList::SetAttributeList( const uno::Reference< ::com::sun::star::xm
 
 void AttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
 {
-    VOS_ENSURE( r.is(), "r isn't!" );
+    OSL_ENSURE( r.is(), "r isn't!" );
 
     sal_Int32 nMax = r->getLength();
     sal_Int32 nTotalSize = m_pImpl->vecAttribute.size() + nMax;
@@ -172,8 +174,9 @@ void AttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star:
             r->getValueByIndex( i )));
     }
 
-    VOS_ENSURE( nTotalSize == getLength(), "nTotalSize != getLength()");
+    OSL_ENSURE( nTotalSize == getLength(), "nTotalSize != getLength()");
 }
 
 } // namespace comphelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

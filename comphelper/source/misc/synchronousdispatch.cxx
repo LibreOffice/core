@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,7 +90,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         catch ( uno::Exception& )
         {
             rtl::OUString aMsg = UNISTRING( "SynchronousDispatch::dispatch() Error while dispatching! ");
-            OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
         }
     }
 
@@ -100,3 +101,4 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
 }   // namespace comphelper
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

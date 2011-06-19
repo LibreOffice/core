@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,6 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 
-//#if 0 // _SOLAR__PRIVATE
-
 // --------------------
 // - Access defines -
 // --------------------
@@ -69,7 +68,6 @@ case( BMP_FORMAT##Format ):            \
 }                                       \
 break;
 
-//#endif // __PRIVATE
 
 // --------------------
 // - Access functions -
@@ -101,7 +99,6 @@ protected:
     FncSetPixel                 mFncSetPixel;
     sal_Bool                        mbModify;
 
-//#if 0 // _SOLAR__PRIVATE
 
 SAL_DLLPRIVATE  void            ImplCreate( Bitmap& rBitmap );
 SAL_DLLPRIVATE  void            ImplDestroy();
@@ -128,8 +125,6 @@ SAL_DLLPRIVATE  BitmapBuffer*   ImplGetBitmapBuffer() const { return mpBuffer; }
                                 DECL_FORMAT( _32BIT_TC_BGRA )
                                 DECL_FORMAT( _32BIT_TC_RGBA )
                                 DECL_FORMAT( _32BIT_TC_MASK )
-//#endif // __PRIVATE
-
 protected:
                                 BitmapReadAccess( Bitmap& rBitmap, sal_Bool bModify );
 
@@ -229,72 +224,6 @@ private:
                                 BitmapWriteAccess( const BitmapWriteAccess& ) : BitmapReadAccess() {}
     BitmapWriteAccess&          operator=( const BitmapWriteAccess& ) { return *this; }
 };
-
-// -------------------
-// - Accessor Helper -
-// -------------------
-
-/** This template handles BitmapAccess the RAII way.
-
-    Please don't use directly, but the ready-made typedefs for
-    BitmapReadAccess and BitmapWriteAccess below.
- */
-template < class Access > class ScopedBitmapAccess
-{
-public:
-    ScopedBitmapAccess( Access* pAccess,
-                        Bitmap& rBitmap ) :
-        mpAccess( pAccess ),
-        mrBitmap( rBitmap )
-    {
-    }
-
-    ~ScopedBitmapAccess()
-    {
-        mrBitmap.ReleaseAccess( mpAccess );
-    }
-
-    Access*         get() { return mpAccess; }
-    const Access*   get() const { return mpAccess; }
-
-    Access*         operator->() { return mpAccess; }
-    const Access*   operator->() const { return mpAccess; }
-
-    Access&         operator*() { return *mpAccess; }
-    const Access&   operator*() const { return *mpAccess; }
-
-private:
-    Access*     mpAccess;
-    Bitmap&     mrBitmap;
-};
-
-/** This wrapper handles BitmapReadAccess the RAII way.
-
-    Use as follows:
-    Bitmap aBitmap
-    ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(), aBitmap );
-    pReadAccess->SetPixel()...
-
-    @attention for practical reasons, ScopedBitmapReadAccess stores a
-    reference to the provided bitmap, thus, make sure that the bitmap
-    specified at construction time lives at least as long as the
-    ScopedBitmapReadAccess.
-*/
-typedef ScopedBitmapAccess< BitmapReadAccess > ScopedBitmapReadAccess;
-
-/** This wrapper handles BitmapWriteAccess the RAII way.
-
-    Use as follows:
-    Bitmap aBitmap
-    ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(), aBitmap );
-    pWriteAccess->SetPixel()...
-
-    @attention for practical reasons, ScopedBitmapWriteAccess stores a
-    reference to the provided bitmap, thus, make sure that the bitmap
-    specified at construction time lives at least as long as the
-    ScopedBitmapWriteAccess.
-*/
-typedef ScopedBitmapAccess< BitmapWriteAccess > ScopedBitmapWriteAccess;
 
 // -----------
 // - Inlines -
@@ -543,3 +472,5 @@ inline void BitmapWriteAccess::SetPixel( long nY, long nX, const BitmapColor& rB
 }
 
 #endif // _SV_BMPACC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

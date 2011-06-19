@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -197,6 +198,10 @@ protected:
     // returns native check and option menu symbol height;
     // return value is Max( rCheckHeight, rRadioHeight )
     SAL_DLLPRIVATE long             ImplGetNativeCheckAndRadioSize( Window*, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth ) const;
+
+    // returns native submenu arrow size and spacing from right border
+    // return value is whether it's supported natively
+    SAL_DLLPRIVATE sal_Bool         ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const;
 
     SAL_DLLPRIVATE void                ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
@@ -400,7 +405,6 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     sal_Bool                mbHideBtnVisible;
     sal_Bool                mbDisplayable;
 
-//#if 0 // _SOLAR__PRIVATE
     friend class Application;
     friend class Menu;
     friend class MenuBarWindow;
@@ -410,7 +414,6 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     SAL_DLLPRIVATE static Window*   ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu );
     SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, sal_Bool bDelete );
     SAL_DLLPRIVATE sal_Bool             ImplHandleKeyEvent( const KeyEvent& rKEvent, sal_Bool bFromMenu = sal_True );
-//#endif
 
 public:
                         MenuBar();
@@ -532,3 +535,4 @@ inline PopupMenu& PopupMenu::operator =( const PopupMenu& rMenu )
 
 #endif // _SV_MENU_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

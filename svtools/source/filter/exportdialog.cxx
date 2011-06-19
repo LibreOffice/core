@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -521,7 +522,7 @@ Bitmap ExportDialog::GetGraphicBitmap( SvStream& rInputStream )
     Bitmap aRet;
     Graphic aGraphic;
     GraphicFilter aFilter( sal_False );
-    if ( aFilter.ImportGraphic( aGraphic, String(), rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, NULL ) == GRFILTER_OK )
+    if ( aFilter.ImportGraphic( aGraphic, String(), rInputStream, GRFILTER_FORMAT_NOTFOUND, NULL, 0, static_cast<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >*>(NULL), NULL ) == GRFILTER_OK )
     {
         aRet = aGraphic.GetBitmap();
     }
@@ -1510,3 +1511,5 @@ IMPL_LINK( ExportDialog, OK, void *, EMPTYARG )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

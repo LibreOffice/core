@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <tools/svwin.h>
+#include <svsys.h>
 #include <tools/debug.hxx>
 
 #include <win/wincomp.hxx>
@@ -40,6 +41,10 @@
 #include <win/salids.hrc>
 #include <win/salgdi.h>
 #include <win/salframe.h>
+
+#include "vcl/salbtype.hxx"
+#include "vcl/bmpacc.hxx"
+#include "outdata.hxx"
 
 bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
 {
@@ -392,8 +397,24 @@ void ImplDrawBitmap( HDC hDC,
 
             if( bMono )
             {
-                nOldBkColor = SetBkColor( hDC, RGB( 0xFF, 0xFF, 0xFF ) );
-                nOldTextColor = ::SetTextColor( hDC, RGB( 0x00, 0x00, 0x00 ) );
+                COLORREF nBkColor = RGB( 0xFF, 0xFF, 0xFF );
+                COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
+                //fdo#33455 handle 1 bit depth pngs with palette entries
+                //to set fore/back colors
+                if (const BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(true))
+                {
+                    const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
+                    if (rPalette.GetEntryCount() == 2)
+                    {
+                        SalColor nCol;
+                        nCol = ImplColorToSal(rPalette[0]);
+                        nTextColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
+                        nCol = ImplColorToSal(rPalette[1]);
+                        nBkColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
+                    }
+                }
+                nOldBkColor = SetBkColor( hDC, nBkColor );
+                nOldTextColor = ::SetTextColor( hDC, nTextColor );
             }
 
             if ( (pPosAry->mnSrcWidth  == pPosAry->mnDestWidth) &&
@@ -822,3 +843,5 @@ void WinSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInver
         SelectBrush( mhDC, hOldBrush );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

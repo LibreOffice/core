@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/salbtype.hxx>
@@ -57,3 +57,5 @@ void Sound::Beep( SoundType eType, Window* pWindow )
     else
         pWindow->ImplGetFrame()->Beep( eType );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

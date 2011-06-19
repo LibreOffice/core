@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,10 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _CTRL_HXX
 #include <vcl/ctrl.hxx>
-#endif
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 #include <vcl/timer.hxx>
+#include <vector>
 
 class MouseEvent;
 class TrackingEvent;
@@ -44,9 +42,11 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
-class ValueItemList;
-struct ValueSetItem;
 struct ValueSet_Impl;
+
+struct ValueSetItem;
+typedef ::std::vector< ValueSetItem* > ValueItemList;
+
 #ifdef _SV_VALUESET_CXX
 class ValueSetAcc;
 class ValueItemAcc;
@@ -237,8 +237,8 @@ gewuenschten WinBits (vor Show) mit SetStyle() gesetzt werden.
 // - ValueSet -
 // ------------
 
-#define VALUESET_APPEND         ((sal_uInt16)0xFFFF)
-#define VALUESET_ITEM_NOTFOUND  ((sal_uInt16)0xFFFF)
+#define VALUESET_APPEND         ((sal_uInt16)-1)
+#define VALUESET_ITEM_NOTFOUND  ((sal_uInt16)-1)
 
 class SVT_DLLPUBLIC ValueSet : public Control
 {
@@ -257,7 +257,7 @@ private:
     sal_uInt16          mnOldItemId;
     sal_uInt16          mnSelItemId;
     sal_uInt16          mnHighItemId;
-    sal_uInt16          mnDropPos;
+    size_t          mnDropPos;
     sal_uInt16          mnCols;
     sal_uInt16          mnCurCol;
     sal_uInt16          mnUserCols;
@@ -287,7 +287,7 @@ private:
     SVT_DLLPRIVATE void         ImplInit();
     SVT_DLLPRIVATE void         ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();
-    SVT_DLLPRIVATE void            ImplDeleteItems();
+    SVT_DLLPRIVATE void         ImplDeleteItems();
     SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem );
     SVT_DLLPRIVATE void         ImplDrawItemText( const XubString& rStr );
     SVT_DLLPRIVATE void         ImplDrawSelect();
@@ -297,8 +297,8 @@ private:
     SVT_DLLPRIVATE void         ImplDraw();
     using Window::ImplScroll;
     SVT_DLLPRIVATE sal_Bool         ImplScroll( const Point& rPos );
-    SVT_DLLPRIVATE sal_uInt16           ImplGetItem( const Point& rPoint, sal_Bool bMove = sal_False ) const;
-    SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( sal_uInt16 nPos );
+    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, sal_Bool bMove = sal_False ) const;
+    SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
@@ -306,8 +306,8 @@ private:
     SVT_DLLPRIVATE sal_Bool            ImplHasAccessibleListeners();
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, sal_Bool bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, sal_Bool bCancel );
-                    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
-                    DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
+    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
+    DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
 #endif
 
     // Forbidden and not implemented.
@@ -348,27 +348,27 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     void            InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                                sal_uInt16 nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId, const Color& rColor,
-                                sal_uInt16 nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 const Image& rImage, const XubString& rStr,
-                                sal_uInt16 nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 const Color& rColor, const XubString& rStr,
-                                sal_uInt16 nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
-                                sal_uInt16 nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertSpace( sal_uInt16 nItemId,
-                                 sal_uInt16 nPos = VALUESET_APPEND );
+                                 size_t nPos = VALUESET_APPEND );
     void            RemoveItem( sal_uInt16 nItemId );
 
     void            CopyItems( const ValueSet& rValueSet );
     void            Clear();
 
-    sal_uInt16          GetItemCount() const;
-    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
-    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
+    size_t          GetItemCount() const;
+    size_t          GetItemPos( sal_uInt16 nItemId ) const;
+    sal_uInt16          GetItemId( size_t nPos ) const;
     sal_uInt16          GetItemId( const Point& rPos ) const;
     Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
 
@@ -443,3 +443,5 @@ private:
 };
 
 #endif  // _VALUESET_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

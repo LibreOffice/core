@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#ifndef GCC
-#endif
 #include <tools/debug.hxx>
 
 #include "numhead.hxx"
@@ -70,7 +69,7 @@ sal_uLong SvNumReadHeader::BytesLeft() const
     if (nReadEnd <= nDataEnd)
         return nDataEnd-nReadEnd;
 
-    DBG_ERROR("Fehler bei SvNumReadHeader::BytesLeft");
+    OSL_FAIL("Fehler bei SvNumReadHeader::BytesLeft");
     return 0;
 }
 
@@ -120,7 +119,7 @@ ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
     rStream >> nID;
     if (nID != SV_NUMID_SIZES)
     {
-        DBG_ERROR("SV_NUMID_SIZES nicht gefunden");
+        OSL_FAIL("SV_NUMID_SIZES nicht gefunden");
     }
     sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
@@ -155,7 +154,7 @@ void ImpSvNumMultipleReadHeader::Skip( SvStream& rStream )
     rStream >> nID;
     if ( nID != SV_NUMID_SIZES )
     {
-        DBG_ERROR("SV_NUMID_SIZES nicht gefunden");
+        OSL_FAIL("SV_NUMID_SIZES nicht gefunden");
     }
     sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
@@ -191,7 +190,7 @@ sal_uLong ImpSvNumMultipleReadHeader::BytesLeft() const
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
-    DBG_ERROR("Fehler bei ImpSvNumMultipleReadHeader::BytesLeft");
+    OSL_FAIL("Fehler bei ImpSvNumMultipleReadHeader::BytesLeft");
     return 0;
 }
 
@@ -247,3 +246,4 @@ void ImpSvNumMultipleWriteHeader::StartEntry()
     nEntryStart = nPos;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

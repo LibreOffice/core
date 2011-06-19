@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _GIFREAD_HXX
 #define _GIFREAD_HXX
 
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 
 #ifdef _GIFPRIVATE
 
@@ -142,3 +139,5 @@ public:
  sal_Bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _GIFREAD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

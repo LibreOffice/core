@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ void GtkHookedYieldMutex::ThreadsLeave()
 
 #if OSL_DEBUG_LEVEL > 1
     if( mnThreadId &&
-        mnThreadId != vos::OThread::getCurrentIdentifier())
+        mnThreadId != osl::Thread::getCurrentIdentifier())
         fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
 #endif
 
@@ -132,6 +133,11 @@ extern "C"
 
     VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
+#if OSL_DEBUG_LEVEL > 0
+        fprintf( stderr, "create vcl plugin instance with gtk version %d %d %d\n",
+                 (int) gtk_major_version, (int) gtk_minor_version,
+                 (int) gtk_micro_version );
+#endif
         /* #i92121# workaround deadlocks in the X11 implementation
         */
         static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
@@ -142,7 +148,11 @@ extern "C"
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
 
+#if GTK_CHECK_VERSION(3,0,0)
+        const gchar* pVersion = gtk_check_version( 3, 0, 0 );
+#else
         const gchar* pVersion = gtk_check_version( 2, 2, 0 );
+#endif
         if( pVersion )
         {
 #if OSL_DEBUG_LEVEL > 1
@@ -160,7 +170,11 @@ extern "C"
         if ( hookLocks( pModule ) )
             pYieldMutex = new GtkHookedYieldMutex();
         else
+#if GTK_CHECK_VERSION(3,0,0)
+            g_error ("impossible case for gtk3");
+#else
             pYieldMutex = new GtkYieldMutex();
+#endif
 
         gdk_threads_init();
 
@@ -225,7 +239,7 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
     {
         //Non-utf8 locales are a bad idea if trying to work with non-ascii filenames
         //Decode %XX components
-        rtl::OUString sDecodedUri = Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+        rtl::OUString sDecodedUri = rtl::Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
         //Convert back to system locale encoding
         rtl::OString sSystemUrl = rtl::OUStringToOString(sDecodedUri, aSystemEnc);
         //Encode to an escaped ASCII-encoded URI
@@ -250,38 +264,53 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
 #endif
 }
 
+
+/*
+ * Obsolete, non-working, and crufty code from the
+ * beginning of time. When we update our base platform
+ * we should kill this with extreme prejudice.
+ */
+#if !GTK_CHECK_VERSION(3,0,0)
+#  define HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
+#endif
+
 GtkYieldMutex::GtkYieldMutex()
 {
 }
 
 void GtkYieldMutex::acquire()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     if( mnCount > 0 && mnThreadId == aCurrentThread )
     {
         mnCount++;
-        OMutex::release();
+        SolarMutexObject::release();
         return;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 
     // obtain gdk mutex
     gdk_threads_enter();
 
     // obtained gdk mutex, now lock count is one by definition
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount = 1;
     mnThreadId = aCurrentThread;
-    OMutex::release();
+    SolarMutexObject::release();
+#else
+    g_error ("never called");
+#endif
 }
 
 void GtkYieldMutex::release()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     // strange things happen, do nothing if we don't own the mutex
     if( mnThreadId == aCurrentThread )
     {
@@ -292,29 +321,33 @@ void GtkYieldMutex::release()
             mnThreadId = 0;
         }
     }
-    OMutex::release();
+    SolarMutexObject::release();
+#else
+    g_error ("never called");
+#endif
 }
 
 sal_Bool GtkYieldMutex::tryToAcquire()
 {
-    vos::OThread::TThreadIdentifier aCurrentThread = vos::OThread::getCurrentIdentifier();
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
+    oslThreadIdentifier aCurrentThread = osl::Thread::getCurrentIdentifier();
     // protect member manipulation
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     if( mnCount > 0 )
     {
         if( mnThreadId == aCurrentThread )
         {
             mnCount++;
-            OMutex::release();
+            SolarMutexObject::release();
             return sal_True;
         }
         else
         {
-            OMutex::release();
+            SolarMutexObject::release();
             return sal_False;
         }
     }
-    OMutex::release();
+    SolarMutexObject::release();
 
     // HACK: gdk_threads_mutex is private, we shouldn't use it.
     // how to we do a try_lock without having a gdk_threads_try_enter ?
@@ -322,45 +355,60 @@ sal_Bool GtkYieldMutex::tryToAcquire()
         return sal_False;
 
     // obtained gdk mutex, now lock count is one by definition
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount = 1;
     mnThreadId = aCurrentThread;
-    OMutex::release();
+    SolarMutexObject::release();
 
+#else
+    g_error ("never called");
+#endif
     return sal_True;
 }
 
 int GtkYieldMutex::Grab()
 {
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
     // this MUST only be called by gdk/gtk callbacks:
     // they are entered with gdk mutex locked; the mutex
     // was unlocked by GtkYieldMutex befor yielding which
     // is now locked again by gtk implicitly
 
     // obtained gdk mutex, now lock count is one by definition
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     int nRet = mnCount;
     if( mnCount == 0 ) // recursive else
-        mnThreadId = vos::OThread::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
 #if OSL_DEBUG_LEVEL > 1
-    else if( mnThreadId != vos::OThread::getCurrentIdentifier() )
+    else if( mnThreadId != osl::Thread::getCurrentIdentifier() )
     {
         fprintf( stderr, "Yield mutex grabbed in different thread !\n" );
         abort();
     }
 #endif
     mnCount = 1;
-    OMutex::release();
+    SolarMutexObject::release();
     return nRet;
+#else
+    g_error ("never called");
+    return sal_True;
+#endif
 }
 
 void GtkYieldMutex::Ungrab( int nGrabs )
 {
+#ifdef HORRIBLE_OBSOLETE_YIELDMUTEX_IMPL
     // this MUST only be called when leaving the callback
     // that locked the mutex with Grab()
-    OMutex::acquire();
+    SolarMutexObject::acquire();
     mnCount = nGrabs;
     if( mnCount == 0 )
         mnThreadId = 0;
-    OMutex::release();
+    SolarMutexObject::release();
+#else
+    (void)nGrabs;
+    g_error ("never called");
+#endif
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

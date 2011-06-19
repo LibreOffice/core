@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -561,7 +562,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
         rMtf.SetPrefSize( aPrefSz );
         rMtf.SetPrefMapMode( aMapMode );
-        sal_uInt32 nLastPolygonAction(0);
+        size_t nLastPolygonAction(0);
 
         for( sal_Int32 i = 0L; i < nActions; i++ )
         {
@@ -630,7 +631,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ImplReadExtendedPolyPolygonAction(rIStm, aInputPolyPolygon);
 
                     // now check if it can be set somewhere
-                    if(nLastPolygonAction < rMtf.GetActionCount())
+                    if(nLastPolygonAction < rMtf.GetActionSize())
                     {
                         MetaPolyLineAction* pPolyLineAction = dynamic_cast< MetaPolyLineAction* >(rMtf.GetAction(nLastPolygonAction));
 
@@ -778,7 +779,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_POLYLINE_ACTION ):
                 {
                     ImplReadPoly( rIStm, aActionPoly );
-                    nLastPolygonAction = rMtf.GetActionCount();
+                    nLastPolygonAction = rMtf.GetActionSize();
 
                     if( bFatLine )
                         rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
@@ -801,7 +802,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     }
                     else
                     {
-                        nLastPolygonAction = rMtf.GetActionCount();
+                        nLastPolygonAction = rMtf.GetActionSize();
                         rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
                     }
                 }
@@ -825,7 +826,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     }
                     else
                     {
-                        nLastPolygonAction = rMtf.GetActionCount();
+                        nLastPolygonAction = rMtf.GetActionSize();
                         rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
                     }
                 }
@@ -942,7 +943,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 }
     #ifdef DBG_UTIL
                                 else
-                                    DBG_ERROR("More than one DX array element missing on SVM import");
+                                    OSL_FAIL("More than one DX array element missing on SVM import");
     #endif
                             }
                         }
@@ -1379,7 +1380,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
 void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 {
-    sal_uLong               nPos;
     sal_uLong               nCountPos;
     Font                aSaveFont;
     const sal_uInt16        nOldFormat = rOStm.GetNumberFormatInt();
@@ -1394,7 +1394,6 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 
     //MagicCode schreiben
     rOStm << "SVGDI";                                   // Kennung
-    nPos = rOStm.Tell();
     rOStm << (sal_Int16) 42;                                // HeaderSize
     rOStm << (sal_Int16) 200;                               // VERSION
     rOStm << (sal_Int32) aPrefSize.Width();
@@ -1426,7 +1425,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                                       rtl_TextEncoding& rActualCharSet )
 {
     sal_uLong nCount = 0;
-    for( sal_uLong i = 0, nActionCount = rMtf.GetActionCount(); i < nActionCount; i++ )
+    for( size_t i = 0, nActionCount = rMtf.GetActionSize(); i < nActionCount; i++ )
     {
         const MetaAction* pAction = rMtf.GetAction( i );
 
@@ -2363,11 +2362,6 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             }
             break;
 
-#if 0
-            case( META_OVERLINECOLOR_ACTION ):
-            break;
-#endif
-
             case( META_TEXTLINE_ACTION ):
             {
                 const MetaTextLineAction*   pA = (MetaTextLineAction*) pAction;
@@ -2440,7 +2434,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 ByteString aStr( "Missing implementation for Action#: " );
                 aStr += ByteString::CreateFromInt32( pAction->GetType() );
                 aStr += '!';
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
             break;
 #endif
@@ -2514,3 +2508,5 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
     return nCount;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

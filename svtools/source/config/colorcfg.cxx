@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx> //Any2Bool
 #include <svl/smplhint.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <itemholder2.hxx>
 
@@ -53,8 +54,9 @@
 
 //-----------------------------------------------------------------------------
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 namespace svtools
 {
@@ -71,8 +73,6 @@ namespace
 
 ColorConfig_Impl*    ColorConfig::m_pImpl = NULL;
 
-/* -----------------------------16.01.01 15:36--------------------------------
- ---------------------------------------------------------------------------*/
 class ColorConfig_Impl : public utl::ConfigItem
 {
     ColorConfigValue    m_aConfigValues[ColorConfigEntryCount];
@@ -113,9 +113,6 @@ public:
     void ImplUpdateApplicationSettings();
 };
 
-/* -----------------------------16.01.01 15:36--------------------------------
-
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString& rScheme)
 {
     uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
@@ -140,6 +137,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/SmartTags")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/Shadow")        , sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,sal_True },
@@ -198,9 +196,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
     aNames.realloc(nIndex);
     return aNames;
 }
-/* -----------------------------22.03.2002 14:37------------------------------
 
- ---------------------------------------------------------------------------*/
 ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
     ConfigItem(C2U("Office.UI/ColorScheme")),
     m_bEditMode(bEditMode),
@@ -220,17 +216,13 @@ ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
     ::Application::AddEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 
 }
-/* -----------------------------25.03.2002 12:28------------------------------
 
- ---------------------------------------------------------------------------*/
 ColorConfig_Impl::~ColorConfig_Impl()
 {
     // #100822#
     ::Application::RemoveEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 }
-/* -----------------------------22.03.2002 14:38------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColorConfig_Impl::Load(const rtl::OUString& rScheme)
 {
     rtl::OUString sScheme(rScheme);
@@ -263,18 +255,14 @@ void ColorConfig_Impl::Load(const rtl::OUString& rScheme)
              m_aConfigValues[i / 2].bIsVisible = Any2Bool(pColors[nIndex++]);
     }
 }
-/* -----------------------------22.03.2002 14:38------------------------------
 
- ---------------------------------------------------------------------------*/
 void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
 {
     //loading via notification always uses the default setting
     Load(::rtl::OUString());
     NotifyListeners(0);
 }
-/* -----------------------------22.03.2002 14:38------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColorConfig_Impl::Commit()
 {
     uno::Sequence < ::rtl::OUString > aColorNames = GetPropertyNames(m_sLoadedScheme);
@@ -306,9 +294,7 @@ void ColorConfig_Impl::Commit()
 
     CommitCurrentSchemeName();
 }
-/* -----------------11.12.2002 10:42-----------------
- *
- * --------------------------------------------------*/
+
 void ColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
@@ -318,9 +304,7 @@ void ColorConfig_Impl::CommitCurrentSchemeName()
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
 }
-/* -----------------------------25.03.2002 12:19------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColorConfig_Impl::SetColorConfigValue(ColorConfigEntry eValue, const ColorConfigValue& rValue )
 {
     if(rValue != m_aConfigValues[eValue])
@@ -329,16 +313,12 @@ void ColorConfig_Impl::SetColorConfigValue(ColorConfigEntry eValue, const ColorC
         SetModified();
     }
 }
-/* -----------------------------25.03.2002 15:22------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString> ColorConfig_Impl::GetSchemeNames()
 {
     return GetNodeNames(C2U("ColorSchemes"));
 }
-/* -----------------------------09.04.2002 17:19------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool ColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
 {
     if(ConfigItem::AddNode(C2U("ColorSchemes"), rScheme))
@@ -349,29 +329,23 @@ sal_Bool ColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
     }
     return sal_False;
 }
-/* -----------------------------09.04.2002 17:19------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool ColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
 {
     uno::Sequence< rtl::OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
     return ClearNodeElements(C2U("ColorSchemes"), aElements);
 }
-/* -----------------------------2002/06/20 13:03------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColorConfig_Impl::SettingsChanged()
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     ImplUpdateApplicationSettings();
 
     NotifyListeners(0);
 }
-/* -----------------------------2002/08/16 12:07 -----------------------------
-   #100822#
- --------------------------------------------------------------------------- */
+
 IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )
 {
     if ( pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
@@ -428,9 +402,7 @@ ColorConfig::ColorConfig()
     ++nColorRefCount_Impl;
     m_pImpl->AddListener(this);
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 ColorConfig::~ColorConfig()
 {
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
@@ -441,9 +413,7 @@ ColorConfig::~ColorConfig()
         m_pImpl = 0;
     }
 }
-/* -----------------------------11.04.2002 11:49------------------------------
 
- ---------------------------------------------------------------------------*/
 Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 {
     static const sal_Int32 aAutoColors[] =
@@ -459,6 +429,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0, // ANCHOR
         0xff0000, // SPELL
         COL_LIGHTMAGENTA,// SMARTTAGS
+        COL_GRAY, // SHADOWCOLOR
         0xc0c0c0, // WRITERTEXTGRID
         0xc0c0c0, // WRITERFIELDSHADIN
         0xc0c0c0, // WRITERIDXSHADINGS
@@ -510,17 +481,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         case SPELL :
         case DRAWDRAWING :
         case SMARTTAGS :
-        {
-            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                aRet = rStyleSettings.GetHighContrastMode() ?
-                    rStyleSettings.GetDialogTextColor().GetColor() : aAutoColors[eEntry];
-        }
-        break;
+            aRet = aAutoColors[eEntry];
+            break;
 
         case DRAWFILL            :
-                aRet = /*rStyleSettings.GetHighContrastMode() ?
-                    rStyleSettings.OutlineMode??? : */  aAutoColors[eEntry];
-        break;
+            aRet = aAutoColors[eEntry];
+            break;
 
         case FONTCOLOR :
             aRet = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
@@ -539,9 +505,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
     }
     return aRet;
 }
-/* -----------------------------11.04.2002 11:49------------------------------
 
- ---------------------------------------------------------------------------*/
 ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bSmart)const
 {
     ColorConfigValue aRet = m_pImpl->GetColorConfigValue(eEntry);
@@ -562,18 +526,14 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bS
 
     return aRet;
 }
-/* -----------------------------25.03.2002 12:01------------------------------
 
- ---------------------------------------------------------------------------*/
 EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(sal_False)
 {
     m_pImpl->BlockBroadcasts(sal_True);
 }
-/*-- 25.03.2002 12:03:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 EditableColorConfig::~EditableColorConfig()
 {
     m_pImpl->BlockBroadcasts(sal_False);
@@ -584,30 +544,21 @@ EditableColorConfig::~EditableColorConfig()
     delete m_pImpl;
 }
 
-/*-- 25.03.2002 12:03:15---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString >  EditableColorConfig::GetSchemeNames() const
 {
     return m_pImpl->GetSchemeNames();
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditableColorConfig::DeleteScheme(const ::rtl::OUString& rScheme )
 {
     m_pImpl->RemoveScheme(rScheme);
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditableColorConfig::AddScheme(const ::rtl::OUString& rScheme )
 {
     m_pImpl->AddScheme(rScheme);
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool EditableColorConfig::LoadScheme(const ::rtl::OUString& rScheme )
 {
     if(m_bModified)
@@ -620,32 +571,25 @@ sal_Bool EditableColorConfig::LoadScheme(const ::rtl::OUString& rScheme )
     m_pImpl->CommitCurrentSchemeName();
     return sal_True;
 }
-/*-- 25.03.2002 12:03:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const ::rtl::OUString& EditableColorConfig::GetCurrentSchemeName()const
 {
     return m_pImpl->GetLoadedScheme();
 }
-/* -----------------11.12.2002 10:56-----------------
- *  changes the name of the current scheme but doesn't load it!
- * --------------------------------------------------*/
+
+// Changes the name of the current scheme but doesn't load it!
 void EditableColorConfig::SetCurrentSchemeName(const ::rtl::OUString& rScheme)
 {
     m_pImpl->SetCurrentSchemeName(rScheme);
     m_pImpl->CommitCurrentSchemeName();
 }
-/*-- 25.03.2002 12:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const ColorConfigValue& EditableColorConfig::GetColorValue(
     ColorConfigEntry eEntry)const
 {
     return m_pImpl->GetColorConfigValue(eEntry);
 }
-/*-- 25.03.2002 12:03:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void EditableColorConfig::SetColorValue(
     ColorConfigEntry eEntry, const ColorConfigValue& rValue)
 {
@@ -653,16 +597,12 @@ void EditableColorConfig::SetColorValue(
     m_pImpl->ClearModified();
     m_bModified = sal_True;
 }
-/* -----------------------------10.04.2002 13:22------------------------------
 
- ---------------------------------------------------------------------------*/
 void EditableColorConfig::SetModified()
 {
     m_bModified = sal_True;
 }
-/* -----------------15.10.2002 14:51-----------------
- *
- * --------------------------------------------------*/
+
 void EditableColorConfig::Commit()
 {
     if(m_bModified)
@@ -684,3 +624,5 @@ void EditableColorConfig::EnableBroadcast()
 // -----------------------------------------------------------------------------
 
 }//namespace svtools
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

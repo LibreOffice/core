@@ -28,7 +28,6 @@
 //
 //  Internet Media Type Presentations
 //
-// $Author: rt $ $Date: 2008-04-10 21:44:39 $ $Revision: 1.7 $
 //============================================================================
 
 #ifndef _SVTOOLS_HRC
@@ -110,7 +109,17 @@ String STR_SVT_MIMETYPE_AUDIO_MIDI
     Text [ en-US ] = "Audio file" ;
 };
 
+String STR_SVT_MIMETYPE_AUDIO_VORBIS
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
 String STR_SVT_MIMETYPE_AUDIO_WAV
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
+String STR_SVT_MIMETYPE_AUDIO_WEBM
 {
     Text [ en-US ] = "Audio file" ;
 };
@@ -155,12 +164,22 @@ String STR_SVT_MIMETYPE_TEXT_VCARD
     Text [ en-US ] = "vCard file" ;
 };
 
+String STR_SVT_MIMETYPE_VIDEO_MSVIDEO
+{
+    Text [ en-US ] = "Video file" ;
+};
+
+String STR_SVT_MIMETYPE_VIDEO_THEORA
+{
+    Text [ en-US ] = "Video file" ;
+};
+
 String STR_SVT_MIMETYPE_VIDEO_VDO
 {
     Text [ en-US ] = "Video file" ;
 };
 
-String STR_SVT_MIMETYPE_VIDEO_MSVIDEO
+String STR_SVT_MIMETYPE_VIDEO_WEBM
 {
     Text [ en-US ] = "Video file" ;
 };
@@ -580,28 +599,3 @@ String STR_SVT_MIMETYPE_APP_SXIPACKED
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation (packed)" ;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

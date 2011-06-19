@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@ ItemHolder2::ItemHolder2()
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
         css::uno::Reference< css::lang::XComponent > xCfg(
-            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
             css::uno::UNO_QUERY);
         if (xCfg.is())
             xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
@@ -79,7 +80,7 @@ ItemHolder2::ItemHolder2()
             sMsg += ::rtl::OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
-            DBG_ERROR(sMsg.getStr());
+            OSL_FAIL(sMsg.getStr());
         }
     }
 #else
@@ -177,3 +178,5 @@ void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
         rItem.pItem = 0;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

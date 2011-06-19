@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#ifndef SVTOOLS_ROADMAP_HXX
 #include <svtools/hyperlabel.hxx>
-#endif
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
 
-#ifndef _VCL_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
 
 
 //.........................................................................
@@ -268,3 +265,4 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

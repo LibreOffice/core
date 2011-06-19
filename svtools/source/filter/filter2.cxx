@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -433,7 +434,6 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
                                     sal_uInt8   nNumberOfImageComponents;
                                     sal_uInt8   nComponentsIdentifier;
                                     sal_uInt8   nHorizontalSamplingFactor;
-                                    sal_uInt8   nVerticalSamplingFactor;
                                     sal_uInt8   nQuantizationTableDestinationSelector;
                                     rStm >> nSamplePrecision
                                          >> nNumberOfLines
@@ -442,7 +442,6 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
                                          >> nComponentsIdentifier
                                          >> nHorizontalSamplingFactor
                                          >> nQuantizationTableDestinationSelector;
-                                    nVerticalSamplingFactor = nHorizontalSamplingFactor & 0xf;
                                     nHorizontalSamplingFactor >>= 4;
 
                                     aPixSize.Height() = nNumberOfLines;
@@ -1352,3 +1351,5 @@ String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 
     return String( aKeyName, RTL_TEXTENCODING_ASCII_US );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

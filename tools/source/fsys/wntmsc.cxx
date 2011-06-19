@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,14 +42,9 @@
 #include "wntmsc.hxx"
 #include <tools/errinf.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/fsys.hxx>
 #include <tools/bigint.hxx>
-
-DECLARE_LIST( DirEntryList, DirEntry* );
-DECLARE_LIST( FSysSortList, FSysSort* );
-DECLARE_LIST( FileStatList, FileStat* );
 
 int Sys2SolarError_Impl( int nSysErr );
 
@@ -116,161 +112,16 @@ int closedir( DIR *pDir )
 |*
 |*    DirEntry::GetPathStyle() const
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI 11.05.95
-|*    Letzte Aenderung  MI 11.05.95
-|*
 *************************************************************************/
 
-ErrCode GetPathStyle_Impl( const String &rDevice, FSysPathStyle &rStyle )
+FSysPathStyle DirEntry::GetPathStyle( const String & )
 {
-    ByteString aRootDir(rDevice, osl_getThreadTextEncoding());
-    if ( aRootDir.Len() && aRootDir.GetBuffer()[aRootDir.Len()-1] != '\\' )
-        aRootDir += '\\';
-
-    char sVolumeName[256];
-    char sFileSysName[16];
-    DWORD nSerial[2];
-    DWORD nMaxCompLen[2];
-    DWORD nFlags[2];
-
-    // Windows95 hat VFAT, WindowsNT nicht
-    DWORD nVer = GetVersion();
-    sal_Bool bW95 = ( nVer & 0xFF ) >= 4;
-
-    FSysFailOnErrorImpl();
-    rStyle = FSYS_STYLE_UNKNOWN;
-    if ( GetVolumeInformation(
-            (char*) aRootDir.GetBuffer(),
-            sVolumeName, 256, (LPDWORD) &nSerial, (LPDWORD) &nMaxCompLen,
-            (LPDWORD) &nFlags, sFileSysName, 16 ) )
-    {
-        // FAT/VFAT?
-        if ( 0 == strcmp( "FAT", sFileSysName ) )
-            rStyle = bW95 ? FSYS_STYLE_VFAT : FSYS_STYLE_FAT;
-
-        // NTFS?
-        else if ( 0 == strcmp( "NTFS", sFileSysName ) )
-            rStyle = FSYS_STYLE_NTFS;
-
-        // HPFS?
-        else if ( 0 == strcmp( "HPFS", sFileSysName ) )
-            rStyle = FSYS_STYLE_HPFS;
-
-        // NWCOMPA/NWFS?
-        else if ( 0 == strncmp( "NW", sFileSysName, 2 ) )
-            rStyle = FSYS_STYLE_NWFS;
-
-        return ERRCODE_NONE;
-    }
-
-    return ERRCODE_IO_INVALIDDEVICE;
-}
-
-FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
-{
-
-    FSysPathStyle eStyle;
-    GetPathStyle_Impl( rDevice, eStyle );
-    return eStyle;
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::IsCaseSensitive()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI  10.06.93
-|*    Letzte Aenderung  TPF 26.02.1999
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
-{
-
-    if (eFormatter==FSYS_STYLE_HOST)
-    {
-/*
-        DirEntry            aRoot(*this);
-        aRoot.ToAbs();
-        aRoot =             aRoot[Level()-1];
-        String aRootDir =   aRoot.GetFull(FSYS_STYLE_HOST, sal_True);
-
-        char sVolumeName[256];
-        DWORD nVolumeSerial;
-        DWORD nMaxCompLen;
-        DWORD nFlags;
-        char sFileSysName[16];
-
-        if ( GetVolumeInformation(  (char*) aRootDir.GetStr(),
-                                    sVolumeName,
-                                    256,
-                                    (LPDWORD) &nVolumeSerial,
-                                    (LPDWORD) &nMaxCompLen,
-                                    (LPDWORD) &nFlags,
-                                    sFileSysName,
-                                    16 ))
-        {
-            return (nFlags & FS_CASE_SENSITIVE) ? sal_True : sal_False;
-        }
-        else
-        {
-            return sal_False;
-        }
-*/
-        //
-        // guter versuch, aber FS_CASE_SENSITIVE ist D?nnsinn in T?ten:
-        //
-        // sFileSysName     FS_CASE_SENSITIVE
-        // FAT              sal_False
-        // NTFS             sal_True !!!
-        // NWCompat         sal_False
-        // Samba            sal_False
-        //
-        // NT spricht auch NTFS lediglich case preserving an, also ist unter NT alles case insensitiv
-        //
-
-        return sal_False;
-    }
-    else
-    {
-        sal_Bool isCaseSensitive = sal_False;   // ich bin unter win32, also ist der default case insensitiv
-        switch ( eFormatter )
-        {
-            case FSYS_STYLE_MAC:
-            case FSYS_STYLE_FAT:
-            case FSYS_STYLE_VFAT:
-            case FSYS_STYLE_NTFS:
-            case FSYS_STYLE_NWFS:
-            case FSYS_STYLE_HPFS:
-            case FSYS_STYLE_DETECT:
-                {
-                    isCaseSensitive = sal_False;
-                    break;
-                }
-            case FSYS_STYLE_SYSV:
-            case FSYS_STYLE_BSD:
-                {
-                    isCaseSensitive = sal_True;
-                    break;
-                }
-            default:
-                {
-                    isCaseSensitive = sal_False;    // ich bin unter win32, also ist der default case insensitiv
-                    break;
-                }
-        }
-        return isCaseSensitive;
-    }
+    return FSYS_STYLE_NTFS;
 }
 
 /*************************************************************************
 |*
 |*    DirEntry::ToAbs()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -305,10 +156,6 @@ sal_Bool DirEntry::ToAbs()
 /*************************************************************************
 |*
 |*    DirEntry::GetVolume()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.08.92
-|*    Letzte Aenderung  MI 28.08.92
 |*
 *************************************************************************/
 
@@ -357,10 +204,6 @@ String DirEntry::GetVolume() const
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
@@ -511,8 +354,6 @@ USHORT DirReader_Impl::Read()
 |*    InitFileStat()
 |*
 |*    Beschreibung      gemeinsamer Teil der Ctoren fuer FileStat
-|*    Ersterstellung    MI 28.08.92
-|*    Letzte Aenderung  MI 28.08.92
 |*
 *************************************************************************/
 
@@ -569,10 +410,6 @@ void FileStat::ImpInit( void* p )
 |*
 |*    FileStat::FileStat()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.08.92
-|*    Letzte Aenderung  MI 28.08.92
-|*
 *************************************************************************/
 
 FileStat::FileStat( const void *pInfo,      // struct dirent
@@ -590,10 +427,6 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 /*************************************************************************
 |*
 |*    FileStat::Update()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.08.92
-|*    Letzte Aenderung  MI 28.08.92
 |*
 *************************************************************************/
 
@@ -640,8 +473,8 @@ HRESULT SHGetIDListFromPath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppid
     if ( FAILED(hResult) )
         return hResult;
 
-    ULONG   chEaten = lstrlen( pszPath );
-    DWORD   dwAttributes = FILE_ATTRIBUTE_DIRECTORY;
+    ULONG chEaten = lstrlen( pszPath );
+    DWORD dwAttributes = FILE_ATTRIBUTE_DIRECTORY;
 
 #ifdef UNICODE
     LPOLESTR    wszPath = pszPath;
@@ -859,7 +692,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
             if ( aName == "a:" || aName == "b:" )
                 bAccess = sal_False;
             else
-                DBG_TRACE( "FSys: will access removable device!" );
+                OSL_TRACE( "FSys: will access removable device!" );
         if ( bAccess && ( aName == "a:" || aName == "b:" ) ) {
             DBG_WARNING( "floppy will clatter" );
         }
@@ -919,7 +752,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
             // MI: dann gehen Umlaute auf Novell-Servern nicht / wozu ueberhaupt
             // CharUpperBuff( (char*) aFilePath.GetStr(), aFilePath.Len() );
-            DBG_TRACE1( "FileStat: %s", aFilePath.GetBuffer() );
+            OSL_TRACE( "FileStat: %s", aFilePath.GetBuffer() );
             h = aFilePath.Len() < 230
                     // die Win32-API ist hier sehr schwammig
                     ? FindFirstFile( (char *) aFilePath.GetBuffer(), &aEntry )//TPF: 2i
@@ -1026,8 +859,6 @@ sal_Bool IsRedirectable_Impl( const ByteString &rPath )
 |*
 |*    Beschreibung      liefert den Namens des Directories fuer temporaere
 |*                      Dateien
-|*    Ersterstellung    MI 16.03.94
-|*    Letzte Aenderung  MI 16.03.94
 |*
 *************************************************************************/
 
@@ -1079,3 +910,4 @@ void FSysEnableSysErrorBox( sal_Bool bEnable )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

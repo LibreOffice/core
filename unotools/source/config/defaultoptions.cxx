@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
 
-#include <vos/process.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <rtl/instance.hxx>
 
@@ -47,8 +47,9 @@
 
 using namespace osl;
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // define ----------------------------------------------------------------
 
@@ -125,7 +126,7 @@ struct PathToDefaultMapping_Impl
     PathStrPtr              _pDefaultPath;
 };
 
-static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
+static PathToDefaultMapping_Impl const PathMap_Impl[] =
 {
     { SvtPathOptions::PATH_ADDIN,           &SvtDefaultOptions_Impl::m_aAddinPath },
     { SvtPathOptions::PATH_AUTOCORRECT,     &SvtDefaultOptions_Impl::m_aAutoCorrectPath },
@@ -361,3 +362,4 @@ String SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
     return pImp->GetDefaultPath( nId );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

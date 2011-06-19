@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,6 +109,7 @@ namespace vcl
     class PDFWriterImpl;
     class ExtOutDevData;
     class ITextLayout;
+    struct FontCapabilities;
     class RenderGraphic;
 }
 
@@ -201,8 +203,6 @@ struct KerningPair
 #define IMAGE_DRAW_DEACTIVE             ((sal_uInt16)0x0004)
 #define IMAGE_DRAW_COLORTRANSFORM       ((sal_uInt16)0x0008)
 #define IMAGE_DRAW_SEMITRANSPARENT      ((sal_uInt16)0x0010)
-#define IMAGE_DRAW_MONOCHROME_BLACK     ((sal_uInt16)0x0020)
-#define IMAGE_DRAW_MONOCHROME_WHITE     ((sal_uInt16)0x0040)
 #define IMAGE_DRAW_3DLOOK               0
 #define IMAGE_DRAW_BTNLOOK              0
 
@@ -280,6 +280,8 @@ enum OutDevViewType { OUTDEV_VIEWTYPE_DONTKNOW, OUTDEV_VIEWTYPE_PRINTPREVIEW, OU
 
 class VirtualDevice;
 class Printer;
+class ImplFontSelectData;
+class ImplFontMetricData;
 
 const char* ImplDbgCheckOutputDevice( const void* pObj );
 
@@ -566,6 +568,9 @@ public:
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
     void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
 
+    SAL_DLLPRIVATE void forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &rFallbackFont,
+        ImplFontSelectData &rFontSelData, int nFallbackLevel,
+        ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const;
 protected:
                         OutputDevice();
 
@@ -1087,6 +1092,7 @@ public:
     FontMetric          GetFontMetric() const;
     FontMetric          GetFontMetric( const Font& rFont ) const;
     sal_Bool                GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     xub_StrLen          HasGlyphs( const Font& rFont, const String& rStr,
                             xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN ) const;
@@ -1234,3 +1240,5 @@ public:
 };
 
 #endif // _SV_OUTDEV_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

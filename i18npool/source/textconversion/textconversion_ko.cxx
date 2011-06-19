@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -54,13 +57,13 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
     Reference < XInterface > xI;
 
     xI = xMSF->createInstance(
-        OUString::createFromAscii("com.sun.star.i18n.ConversionDictionary_ko"));
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.ConversionDictionary_ko")));
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionary>*)0) ) >>= xCD;
 
     xI = xMSF->createInstance(
-        OUString::createFromAscii( "com.sun.star.linguistic2.ConversionDictionaryList" ));
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList")));
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
@@ -69,8 +72,8 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
 
     // get maximum length of word in dictionary
     if (xCDL.is()) {
-        Locale loc(OUString::createFromAscii("ko"),
-                    OUString::createFromAscii("KR"),
+        Locale loc(OUString(RTL_CONSTASCII_USTRINGPARAM("ko")),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("KR")),
                     OUString());
         maxLeftLength = xCDL->queryMaxCharCount(loc,
                         ConversionDictionaryType::HANGUL_HANJA,
@@ -341,3 +344,5 @@ TextConversion_ko::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

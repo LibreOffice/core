@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
-#ifndef _COM_SUN_STAR_AWT_XView_HPP_
 #include <com/sun/star/awt/XView.hpp>
-#endif
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -248,3 +247,4 @@ private:
 
 #endif // _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

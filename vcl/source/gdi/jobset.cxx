@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-
 #include <rtl/alloc.h>
-
 #include <vcl/jobset.hxx>
 
 #include <jobset.h>
@@ -215,7 +214,7 @@ String JobSetup::GetValue( const String& rKey ) const
 {
     if( mpData )
     {
-        ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
+        ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
         it = mpData->maValueMap.find( rKey );
         return it != mpData->maValueMap.end() ? String( it->second ) : String();
     }
@@ -298,8 +297,6 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
 
-    // Zur Zeit haben wir noch kein neues FileFormat
-//    if ( rIStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
         sal_Size nFirstPos = rIStream.Tell();
 
@@ -383,11 +380,6 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
         }
         delete[] pTempBuf;
     }
-/*
-    else
-    {
-    }
-*/
 
     return rIStream;
 }
@@ -433,7 +425,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
             rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
             rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
-            ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
+            ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
                 rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
@@ -461,3 +453,5 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
 
     return rOStream;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

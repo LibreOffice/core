@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,7 @@
 #ifndef _SVARRAY_HXX
 #define _SVARRAY_HXX
 
-#if 0
-***********************************************************************
+/***********************************************************************
 *
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
@@ -81,12 +81,11 @@
 *           Sortierung mit Hilfe der Object-operatoren "<" und "=="
 *
 * JP 09.10.96:  vordefinierte Arrays:
-*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
+*   VarArr:     SvULongs, SvUShorts
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor
-***********************************************************************
-#endif
+***********************************************************************/
 
 #include "svl/svldllapi.h"
 
@@ -141,12 +140,12 @@ void Insert( const nm *pI, sal_uInt16 nP,\
 #define _SVVARARR_IMPL_GET_OP_INLINE( nm, ArrElem )\
 ArrElem& nm::operator[](sal_uInt16 nP) const\
 {\
-    DBG_ASSERT( pData && nP < nA,"Op[]");\
+    OSL_ENSURE( pData && nP < nA,"Op[]");\
     return *(pData+nP);\
 }\
 void nm::Insert( const nm *pI, sal_uInt16 nP, sal_uInt16 nStt, sal_uInt16 nE)\
 {\
-    DBG_ASSERT(nP<=nA,"Ins,Ar[Start.End]");\
+    OSL_ENSURE(nP<=nA,"Ins,Ar[Start.End]");\
     if( USHRT_MAX == nE ) \
         nE = pI->nA; \
     if( nStt < nE ) \
@@ -220,7 +219,7 @@ nm::nm( sal_uInt16 nInit, sal_uInt8 )\
     if( nInit )\
     {\
         pData = (AE*)(rtl_allocateMemory(sizeof(AE) * nInit));\
-        DBG_ASSERT( pData, "CTOR, allocate");\
+        OSL_ENSURE( pData, "CTOR, allocate");\
     }\
 }\
 \
@@ -237,7 +236,7 @@ void nm::_resize (size_t n)\
 \
 void nm::Insert( const AERef aE, sal_uInt16 nP )\
 {\
-    DBG_ASSERT(nP <= nA && nA < USHRT_MAX, "Ins 1");\
+    OSL_ENSURE(nP <= nA && nA < USHRT_MAX, "Ins 1");\
     if (nFree < 1)\
         _resize (nA + ((nA > 1) ? nA : 1));\
     if( pData && nP < nA )\
@@ -248,7 +247,7 @@ void nm::Insert( const AERef aE, sal_uInt16 nP )\
 \
 void nm::Insert( const AE* pE, sal_uInt16 nL, sal_uInt16 nP )\
 {\
-    DBG_ASSERT(nP<=nA && ((long)nA+nL)<USHRT_MAX,"Ins n");\
+    OSL_ENSURE(nP<=nA && ((long)nA+nL)<USHRT_MAX,"Ins n");\
     if (nFree < nL)\
         _resize (nA + ((nA > nL) ? nA : nL));\
     if( pData && nP < nA )\
@@ -291,7 +290,7 @@ void nm::Remove( sal_uInt16 nP, sal_uInt16 nL )\
 {\
     if( !nL )\
         return;\
-    DBG_ASSERT( nP < nA && nP + nL <= nA,"Del");\
+    OSL_ENSURE( nP < nA && nP + nL <= nA,"Del");\
     if( pData && nP+1 < nA )\
         memmove( pData+nP, pData+nP+nL, (nA-nP-nL) * sizeof( AE ));\
     nA = nA - nL; nFree = nFree + nL;\
@@ -442,7 +441,7 @@ SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, GS, SvPtrarr, AE &, VoidPtr &, vis)
 void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 { \
     if( nL ) {\
-        DBG_ASSERT( nP < nA && nP + nL <= nA,"Del");\
+        OSL_ENSURE( nP < nA && nP + nL <= nA,"Del");\
         for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
             delete *((AE*)pData+n); \
         Base::Remove( nP, nL ); \
@@ -457,15 +456,9 @@ _SV_DECL_PTRARR_DEF( SvPtrarr, VoidPtr, 0, 1, SVL_DLLPUBLIC )
 
 // SORTARR - Begin
 
-#ifdef __MWERKS__
-#define __MWERKS__PRIVATE public
-#else
-#define __MWERKS__PRIVATE private
-#endif
-
 #define _SORT_CLASS_DEF(nm, AE, IS, GS, vis)\
 typedef sal_Bool (*FnForEach_##nm)( const AE&, void* );\
-class vis nm : __MWERKS__PRIVATE nm##_SAR \
+class vis nm : private nm##_SAR \
 {\
 public:\
     nm(sal_uInt16 nSize = IS, sal_uInt8 nG = GS)\
@@ -634,27 +627,10 @@ void nm::Remove( const AE &aE, sal_uInt16 nL )\
         nm##_SAR::Remove( nP, nL);\
 }\
 
-#if defined(TCPP)
-
-#define _SORTARR_BLC_CASTS(nm, AE )\
-    sal_Bool Insert(  AE &aE ) {\
-        return Insert( (const AE&)aE );\
-    }\
-    sal_uInt16 GetPos( AE& aE ) const { \
-        return SvPtrarr::GetPos((const VoidPtr&)aE);\
-    }\
-    void Remove( AE& aE, sal_uInt16 nL = 1 ) { \
-        Remove( (const AE&) aE, nL  );\
-    }
-
-#else
-
 #define _SORTARR_BLC_CASTS(nm, AE )\
     sal_uInt16 GetPos( const AE& aE ) const { \
         return SvPtrarr::GetPos((const VoidPtr&)aE);\
     }
-
-#endif
 
 #define _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, GS, vis)\
 SV_DECL_PTRARR_VISIBILITY(nm##_SAR, AE, IS, GS, vis)\
@@ -742,7 +718,7 @@ _SV_DECL_VARARR_SORT(nm, AE, IS, GS, vis)
 _SV_IMPL_SORTAR_ALG( nm,AE )\
     void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
         if( nL ) {\
-            DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
+            OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
             for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
                 delete *((AE*)pData+n); \
             SvPtrarr::Remove( nP, nL ); \
@@ -754,7 +730,7 @@ _SV_SEEK_PTR( nm, AE )
 _SV_IMPL_SORTAR_ALG( nm,AE )\
     void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
         if( nL ) {\
-            DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
+            OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
             for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
                 delete *((AE*)pData+n); \
             SvPtrarr::Remove( nP, nL ); \
@@ -767,13 +743,13 @@ SV_IMPL_VARARR(nm##_SAR, AE)\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
 _SV_SEEK_OBJECT( nm,AE )
 
-#if defined (C40) || defined (C41) || defined (C42) || defined(C50) || defined(C52)
+#if defined (C40) || defined (C41) || defined (C42) || defined(C50)
 #define C40_INSERT( c, p, n) Insert( (c const *) p, n )
 #define C40_PTR_INSERT( c, p) Insert( (c const *) p )
 #define C40_REPLACE( c, p, n) Replace( (c const *) p, n )
 #define C40_GETPOS( c, r) GetPos( (c const *)r )
 #else
-#if defined WTC || defined ICC || defined HPUX || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
+#if defined ICC || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
 #define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )
 #define C40_REPLACE( c, p, n ) Replace( (c const *&) p, n )
@@ -787,3 +763,5 @@ _SV_SEEK_OBJECT( nm,AE )
 #endif
 
 #endif  //_SVARRAY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

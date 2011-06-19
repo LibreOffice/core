@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _STRING_H
 #include <string.h>
-#endif
 
-#ifndef _SV_CMDEVT_HXX
 #include <vcl/cmdevt.hxx>
-#endif
 
 // =======================================================================
 
@@ -99,3 +96,5 @@ CommandExtTextInputData::~CommandExtTextInputData()
     if ( mpTextAttr )
         delete [] mpTextAttr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

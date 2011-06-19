@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,6 +63,7 @@ OldStylePrintAdaptor::OldStylePrintAdaptor( const boost::shared_ptr< Printer >& 
 
 OldStylePrintAdaptor::~OldStylePrintAdaptor()
 {
+    delete mpData;
 }
 
 void OldStylePrintAdaptor::StartPage()
@@ -115,3 +117,4 @@ void OldStylePrintAdaptor::printPage( int i_nPage ) const
    }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

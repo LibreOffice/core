@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #define _PSPRINT_PRINTERINFOMANAGER_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 #include "vcl/dllapi.h"
@@ -69,9 +70,9 @@ struct PrinterInfo : JobData
     // this vector is currently implicitly given by the adobe
     // standard encoding
     bool                        m_bPerformFontSubstitution;
-    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >
+    boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >
     m_aFontSubstitutes;
-    std::hash_map< fontID, fontID >
+    boost::unordered_map< fontID, fontID >
     m_aFontSubstitutions;
 
     PrinterInfo() :
@@ -121,7 +122,7 @@ protected:
         PrinterInfo             m_aInfo;
     };
 
-    std::hash_map< rtl::OUString, Printer, rtl::OUStringHash > m_aPrinters;
+    boost::unordered_map< rtl::OUString, Printer, rtl::OUStringHash > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
     std::list< WatchFile >            m_aWatchFiles;
     rtl::OUString                     m_aDefaultPrinter;
@@ -139,12 +140,11 @@ protected:
     bool                              m_bDisableCUPS;
 
     PrinterInfoManager( Type eType = Default );
-    virtual ~PrinterInfoManager();
 
     virtual void initialize();
 
     // fill in font substitutions
-    // the resulting hash_map maps from source to target font ids
+    // the resulting boost::unordered_map maps from source to target font ids
     void fillFontSubstitutions( PrinterInfo& rInfo ) const;
 
     // fill default paper if not configured in config file
@@ -238,8 +238,12 @@ public:
 
     // gets m_bDisableCUPS, initialized from printer config
     bool isCUPSDisabled() const;
+
+    virtual ~PrinterInfoManager();
 };
 
 } // namespace
 
 #endif // _PSPRINT_PRINTERINFOMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

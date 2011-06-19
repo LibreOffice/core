@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,13 +105,8 @@ void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Poi
             nStyle |= IMAGE_DRAW_DISABLE;
     }
 
-    const Image& rImage( GetModeImage( BMP_COLOR_NORMAL ) );
-    const Image& rImageHC( GetModeImage( BMP_COLOR_HIGHCONTRAST ) );
-
+    const Image& rImage( GetModeImage() );
     const Image* pImage = &rImage;
-    if ( !!rImageHC && GetSettings().GetStyleSettings().GetHighContrastMode() )
-        pImage = &rImageHC;
-
     const Rectangle aDrawRect( rPos, rSize );
     if ( !*pImage )
     {
@@ -229,3 +225,4 @@ void ImageControl::LoseFocus()
     GetWindow( WINDOW_BORDER )->Invalidate();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

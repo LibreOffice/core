@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,10 +117,10 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
-                               rtl::OUString::createFromAscii(
-                                   "ResultSetImplHelper" ),
-                               rtl::OUString::createFromAscii(
-                                   DYNAMICRESULTSET_SERVICE_NAME ) );
+                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   "ResultSetImplHelper" )),
+                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   DYNAMICRESULTSET_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -272,8 +273,8 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
                 = uno::Reference<
                     com::sun::star::ucb::XCachedDynamicResultSetStubFactory >(
                         m_xSMgr->createInstance(
-                            rtl::OUString::createFromAscii(
-                                "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
                 uno::UNO_QUERY );
         }
         catch ( uno::Exception const & )
@@ -327,3 +328,5 @@ void ResultSetImplHelper::init( sal_Bool bStatic )
 }
 
 } // namespace ucbhelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

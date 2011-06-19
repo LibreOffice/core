@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <string.h>
 
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
 
@@ -45,7 +45,6 @@
 
 #include <svdata.hxx>
 #include <svids.hrc>
-
 
 // =======================================================================
 
@@ -100,7 +99,7 @@ struct ImplSplitSet
     size has not lower or upper bound.
 */
 namespace {
-    long ValidateSize (const long nSize, const ImplSplitItem rItem)
+    long ValidateSize (const long nSize, const ImplSplitItem &rItem)
     {
         if (rItem.mnMinSize>=0 && nSize<rItem.mnMinSize)
             return rItem.mnMinSize;
@@ -122,10 +121,6 @@ namespace {
 #define SPLIT_VERT              ((sal_uInt16)0x0002)
 #define SPLIT_WINDOW            ((sal_uInt16)0x0004)
 #define SPLIT_NOSPLIT           ((sal_uInt16)0x8000)
-
-// -----------------------------------------------------------------------
-
-DECLARE_LIST( ImplSplitList, SplitWindow* )
 
 // =======================================================================
 
@@ -189,42 +184,7 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
         aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
     }
     else
-    {/*
-        if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
-        {
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-        }
-        else
-        {
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
-            if ( (pWin->meAlign == WINDOWALIGN_LEFT) || (pWin->meAlign == WINDOWALIGN_RIGHT) )
-            {
-                if ( pWin->meAlign == WINDOWALIGN_LEFT )
-                {
-                    pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
-                    pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-                    pWin->SetLineColor( rStyleSettings.GetLightColor() );
-                    pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
-                    pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-                }
-                else
-                {
-                    pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
-                    pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
-                    pWin->SetLineColor( rStyleSettings.GetLightColor() );
-                    pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
-                    pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-                }
-            }
-        }*/
+    {
         if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
         {
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
@@ -3938,3 +3898,5 @@ Rectangle SplitWindow::GetFadeOutRect() const
     ImplGetFadeOutRect( aRect, sal_True );
     return aRect;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

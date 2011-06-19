@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -231,7 +232,7 @@ void OTruncatedTransactedFileStream::CloseAll_Impl()
                 xFileAccess->kill( aURL );
             } catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "Could not remove the file!" );
+                OSL_FAIL( "Could not remove the file!" );
             }
         }
     }
@@ -303,16 +304,16 @@ void OTruncatedTransactedFileStream::Commit_Impl()
             ::rtl::OUString aTempURL;
             try {
                 uno::Reference< beans::XPropertySet > xTempFile( m_pStreamData->m_xTempStream, uno::UNO_QUERY_THROW );
-                uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+                uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")) );
                 aUrl >>= aTempURL;
-                xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ),
+                xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile")),
                                              uno::makeAny( sal_False ) );
 
                 m_pStreamData->m_xTempSeekable->seek( nPos );
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "These calls are pretty simple, they should not fail!\n" );
+                OSL_FAIL( "These calls are pretty simple, they should not fail!\n" );
             }
 
             m_pStreamData->FreeOriginal();
@@ -536,7 +537,7 @@ void SAL_CALL OTruncatedTransactedFileStream::flush(  )
 
     if ( !m_pStreamData )
     {
-        OSL_ENSURE( sal_False, "flush() call on closed stream!\n" );
+        OSL_FAIL( "flush() call on closed stream!\n" );
         return;
         // in future throw exception, for now some code might call flush() on closed stream
         // since file ucp implementation allows it
@@ -822,3 +823,4 @@ void SAL_CALL OTruncatedTransactedFileStream::removeVetoableChangeListener( cons
 
 } // namespace comphelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

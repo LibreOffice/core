@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -180,3 +181,4 @@ template <class TYPE> inline
 #endif // _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

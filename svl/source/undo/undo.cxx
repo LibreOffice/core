@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -132,7 +133,7 @@ XubString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 void SfxUndoAction::Undo()
 {
     // die sind nur konzeptuell pure virtual
-    DBG_ERROR( "pure virtual function called: SfxUndoAction::Undo()" );
+    OSL_FAIL( "pure virtual function called: SfxUndoAction::Undo()" );
 }
 
 //------------------------------------------------------------------------
@@ -148,7 +149,7 @@ void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
 void SfxUndoAction::Redo()
 {
     // die sind nur konzeptuell pure virtual
-    DBG_ERROR( "pure virtual function called: SfxUndoAction::Redo()" );
+    OSL_FAIL( "pure virtual function called: SfxUndoAction::Redo()" );
 }
 
 //------------------------------------------------------------------------
@@ -164,7 +165,7 @@ void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
 void SfxUndoAction::Repeat(SfxRepeatTarget&)
 {
     // die sind nur konzeptuell pure virtual
-    DBG_ERROR( "pure virtual function called: SfxUndoAction::Repeat()" );
+    OSL_FAIL( "pure virtual function called: SfxUndoAction::Repeat()" );
 }
 
 //------------------------------------------------------------------------
@@ -1108,7 +1109,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
 
     if( !ImplIsInListAction_Lock() )
     {
-        DBG_ERROR( "svl::SfxUndoManager::ImplLeaveListAction, called without calling EnterListAction()!" );
+        OSL_TRACE( "svl::SfxUndoManager::ImplLeaveListAction, called without calling EnterListAction()!" );
         return 0;
     }
 
@@ -1497,3 +1498,5 @@ sal_uInt16 SfxLinkUndoAction::GetId() const
 {
       return pAction ? pAction->GetId() : 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

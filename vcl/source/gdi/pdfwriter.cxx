@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -429,7 +430,6 @@ sal_Int32 PDFWriter::CreateNamedDest( const rtl::OUString& sDestName, const Rect
 {
     return ((PDFWriterImpl*)pImplementation)->createNamedDest( sDestName, rRect, nPageNr, eType );
 }
-//<---
 sal_Int32 PDFWriter::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     return ((PDFWriterImpl*)pImplementation)->createDest( rRect, nPageNr, eType );
@@ -578,3 +578,4 @@ void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::P
     ((PDFWriterImpl*)pImplementation)->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

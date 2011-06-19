@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,8 @@
 
 #ifndef _SV_ILSTBOX_HXX
 #define _SV_ILSTBOX_HXX
+
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <vcl/sv.h>
 #include <vcl/image.hxx>
@@ -60,7 +63,7 @@ enum LB_EVENT_TYPE
 // -----------------
 // - ImplEntryType -
 // -----------------
-
+
 struct ImplEntryType
 {
     XubString   maStr;
@@ -102,8 +105,8 @@ struct ImplEntryType
 // -----------------
 // - ImplEntryList -
 // -----------------
-
-class ImplEntryList : private List
+
+class ImplEntryList
 {
 private:
     Window*         mpWindow;   // For getting the current locale when matching strings
@@ -116,8 +119,14 @@ private:
 
     Link            maSelectionChangedHdl;
     sal_Bool            mbCallSelectionChangedHdl;
+    boost::ptr_vector<ImplEntryType> maEntries;
 
-    ImplEntryType*  GetEntry( sal_uInt16 nPos ) const { return (ImplEntryType*)List::GetObject( nPos ); }
+    ImplEntryType*  GetEntry( sal_uInt16 nPos ) const
+    {
+        if (nPos >= maEntries.size())
+            return NULL;
+        return const_cast<ImplEntryType*>(&maEntries[nPos]);
+    }
 
 public:
                     ImplEntryList( Window* pWindow );
@@ -125,8 +134,8 @@ public:
 
     sal_uInt16                  InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry, sal_Bool bSort );
     void                    RemoveEntry( sal_uInt16 nPos );
-    const ImplEntryType*    GetEntryPtr( sal_uInt16 nPos ) const { return (const ImplEntryType*) GetObject( nPos ); }
-    ImplEntryType*          GetMutableEntryPtr( sal_uInt16 nPos ) const { return (ImplEntryType*) GetObject( nPos ); }
+    const ImplEntryType*    GetEntryPtr( sal_uInt16 nPos ) const { return (const ImplEntryType*) GetEntry( nPos ); }
+    ImplEntryType*          GetMutableEntryPtr( sal_uInt16 nPos ) const { return GetEntry( nPos ); }
     void                    Clear();
 
     sal_uInt16          FindMatchingEntry( const XubString& rStr, sal_uInt16 nStart = 0, sal_Bool bForward = sal_True, sal_Bool bLazy = sal_True ) const;
@@ -140,7 +149,7 @@ public:
     long            GetAddedHeight( sal_uInt16 nEndIndex, sal_uInt16 nBeginIndex = 0, long nBeginHeight = 0 ) const;
     long            GetEntryHeight( sal_uInt16 nPos ) const;
 
-    sal_uInt16          GetEntryCount() const { return (sal_uInt16)List::Count(); }
+    sal_uInt16          GetEntryCount() const { return (sal_uInt16)maEntries.size(); }
     sal_Bool            HasImages() const { return mnImages ? sal_True : sal_False; }
 
     XubString       GetEntryText( sal_uInt16 nPos ) const;
@@ -390,7 +399,7 @@ protected:
 // ---------------
 // - ImplListBox -
 // ---------------
-
+
 class ImplListBox : public Control
 {
 private:
@@ -513,7 +522,7 @@ public:
 // -----------------------------
 // - ImplListBoxFloatingWindow -
 // -----------------------------
-
+
 class ImplListBoxFloatingWindow : public FloatingWindow
 {
 private:
@@ -556,7 +565,7 @@ public:
 // -----------
 // - ImplWin -
 // -----------
-
+
 class ImplWin : public Control
 {
 private:
@@ -564,7 +573,6 @@ private:
     sal_uInt16          mnItemPos;  // wegen UserDraw muss ich wissen, welches Item ich darstelle.
     XubString       maString;
     Image           maImage;
-    Image           maImageHC;
 
     Rectangle       maFocusRect;
     Size            maUserItemSize;
@@ -600,8 +608,8 @@ public:
     const Image&    GetImage() const { return maImage; }
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
-    sal_Bool            SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Image&    GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    sal_Bool        SetModeImage( const Image& rImage );
+    const Image&    GetModeImage( ) const;
 
 
     virtual void    MBDown();
@@ -647,3 +655,5 @@ void ImplInitFieldSettings( Window* pWin, sal_Bool bFont, sal_Bool bForeground, 
 void ImplInitDropDownButton( PushButton* pButton );
 
 #endif  // _SV_ILSTBOX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

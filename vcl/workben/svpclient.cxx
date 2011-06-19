@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,11 +59,17 @@
 #include <netinet/in.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OStringBuffer;
 // -----------------------------------------------------------------------
 
 // Forward declaration
@@ -99,8 +106,8 @@ SAL_IMPLEMENT_MAIN()
      *  Create UCB.
      */
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
@@ -344,3 +351,5 @@ void MyWin::Resize()
 {
     WorkWindow::Resize();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

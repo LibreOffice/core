@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ namespace toolkit
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAccessibleControlContext::create: caught an exception from the late ctor!" );
+            OSL_FAIL( "OAccessibleControlContext::create: caught an exception from the late ctor!" );
         }
         return pNew;
     }
@@ -228,7 +229,7 @@ namespace toolkit
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
+            OSL_FAIL( "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
         }
         return sReturn;
     }
@@ -251,11 +252,11 @@ namespace toolkit
     //--------------------------------------------------------------------
     awt::Rectangle SAL_CALL OAccessibleControlContext::implGetBounds(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
-        OSL_ENSURE( sal_False, "OAccessibleControlContext::implGetBounds: performance issue: forced to calc the size myself!" );
+        OSL_FAIL( "OAccessibleControlContext::implGetBounds: performance issue: forced to calc the size myself!" );
         // In design mode (and this is what this class is for), the surrounding shape (if any) should handle this call
         // The problem is that in design mode, our size may not be correct (in the drawing layer, controls are
         // positioned/sized for painting only), and that calculation of our position is expensive
@@ -318,7 +319,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleControlContext::grabFocus(  ) throw (RuntimeException)
     {
-        OSL_ENSURE( sal_False, "OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!" );
+        OSL_FAIL( "OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!" );
     }
 
     //--------------------------------------------------------------------
@@ -331,7 +332,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
@@ -357,7 +358,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
         OContextEntryGuard aGuard( this );
 
@@ -378,3 +379,4 @@ namespace toolkit
 }   //namespace toolkit
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

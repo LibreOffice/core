@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,8 +51,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 
-#include <vos/dynload.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::rtl;
 using namespace ::std;
@@ -357,7 +357,7 @@ OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw  (Runti
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             return (*ii).sType;
         }
@@ -369,7 +369,7 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw  (Runtim
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
+    for( ; ii != m_pImpl->vecAttribute.end() ; ++ii ) {
         if( (*ii).sName == sName ) {
             return (*ii).sValue;
         }
@@ -509,7 +509,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -521,10 +521,9 @@ int main (int argc, char **argv)
     try
     {
         // Load dll for the tested component
-        OUString aDllName =
-            OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
+        OUString aDllName(RTL_CONSTASCII_USTRINGPARAM( "sax.uno" SAL_DLLEXTENSION ));
         xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
             aDllName,
             Reference< XSimpleRegistry > ()  );
     }
@@ -541,7 +540,7 @@ int main (int argc, char **argv)
     // read xml from a file and count elements
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
-        OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
     if( x.is() )
     {
         Reference< XParser > rParser( x , UNO_QUERY );
@@ -581,7 +580,7 @@ int main (int argc, char **argv)
     //----------------------
     // The SAX-Writer demo
     //----------------------
-    x= xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) );
+    x= xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) );
     if( x.is() )
     {
         printf( "start writing to %s\n" , argv[2] );
@@ -649,3 +648,5 @@ int main (int argc, char **argv)
         printf( "couln't create sax-writer component\n" );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

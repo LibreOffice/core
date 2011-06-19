@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 
 typedef TextCharAttrib* TextCharAttribPtr;
 SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 )
@@ -146,3 +146,5 @@ public:
 };
 
 #endif // _TEXTDOC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

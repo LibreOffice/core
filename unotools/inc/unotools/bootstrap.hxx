@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +54,9 @@ namespace utl
 
         /// retrieve the product key; uses the given default, if not found
         static rtl::OUString getProductKey(rtl::OUString const& _sDefault);
+
+        /// retrieve the product version
+        static rtl::OUString getProductVersion();
 
         /// retrieve the product source (MWS name)
         static ::rtl::OUString getProductSource(rtl::OUString const& _sDefault);
@@ -130,9 +134,11 @@ namespace utl
     public:
         // singleton impl-class
         class Impl;
-        static Impl const& data(); // the data related to the bootstrap.ini file
+        static const Impl& data(); // the data related to the bootstrap.ini file
     };
 //-----------------------------------------------------------------------------
 } // namespace utl
 
 #endif // _UTL_BOOTSTRAP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,6 +19,7 @@ global:
     get_hu_charset;
     get_ln_charset;
     get_my_dictionary;
+    get_ca_charset;
 
 local:
     *;

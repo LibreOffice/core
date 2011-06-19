@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,26 +111,8 @@ TaskPaneList::~TaskPaneList()
 
 void TaskPaneList::AddWindow( Window *pWindow )
 {
-#if OSL_DEBUG_LEVEL > 0
-    bool bDockingWindow=false;
-    bool bToolbox=false;
-    bool bDialog=false;
-    bool bUnknown=false;
-#endif
-
     if( pWindow )
     {
-#if OSL_DEBUG_LEVEL > 0
-        if( pWindow->GetType() == RSC_DOCKINGWINDOW )
-            bDockingWindow = true;
-        else if( pWindow->GetType() == RSC_TOOLBOX )
-            bToolbox = true;
-        else if( pWindow->IsDialog() )
-            bDialog = true;
-        else
-            bUnknown = true;
-#endif
-
         ::std::vector< Window* >::iterator insertionPos = mTaskPanes.end();
         for ( ::std::vector< Window* >::iterator p = mTaskPanes.begin();
               p != mTaskPanes.end();
@@ -147,8 +130,6 @@ void TaskPaneList::AddWindow( Window *pWindow )
             // beginning, until the first window is found which has the ChildPathFocus. Now
             // if this would be the ancestor window of another pane window, this would fudge
             // the result
-            // 2004-09-27 - fs@openoffice.org, while fixing #i33573#, which included replacing
-            // the original fix for #98916# with this one here.
             if ( pWindow->IsWindowOrChild( *p ) )
             {
                 insertionPos = p + 1;
@@ -257,7 +238,7 @@ sal_Bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 return sal_True;
             }
             else
-                p++;
+                ++p;
         }
 
         // the focus is not in the list: activate first float if F6 was pressed
@@ -399,3 +380,4 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, sal_Bool bForward )
 
 // --------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

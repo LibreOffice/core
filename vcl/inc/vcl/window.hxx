@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,19 +33,13 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 #include <tools/resid.hxx>
-#ifndef _SV_POINTR_HXX
 #include <vcl/pointr.hxx>
-#endif
 #include <tools/wintypes.hxx>
-#ifndef _SV_APPTYPES_HXX
 #include <vcl/apptypes.hxx>
-#endif
 #include <vcl/inputctx.hxx>
 #include <vcl/vclevent.hxx>
 // Only for compatibility - because many people outside haven't included event.hxx
-#ifndef _VCL_EVENT_HXX
 #include <vcl/event.hxx>
-#endif
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <rtl/ustring.hxx>
@@ -190,9 +185,7 @@ namespace svt { class PopupWindowControllerImpl; }
 #define TOTOP_RESTOREWHENMIN            ((sal_uInt16)0x0001)
 #define TOTOP_FOREGROUNDTASK            ((sal_uInt16)0x0002)
 #define TOTOP_NOGRABFOCUS               ((sal_uInt16)0x0004)
-//#if 0 // _SOLAR__PRIVATE // vcl internal only
 #define TOTOP_GRABFOCUSONLY             ((sal_uInt16)0x0008)
-//#endif
 
 // Flags for Invalidate
 #define INVALIDATE_CHILDREN             ((sal_uInt16)0x0001)
@@ -317,7 +310,6 @@ typedef sal_uInt16 StateChangedType;
 #define EXTTEXTINPUT_END_COMPLETE       ((sal_uInt16)0x0001)
 #define EXTTEXTINPUT_END_CANCEL         ((sal_uInt16)0x0002)
 
-//#if 0 // _SOLAR__PRIVATE
 #define IMPL_MINSIZE_BUTTON_WIDTH       70
 #define IMPL_MINSIZE_BUTTON_HEIGHT      22
 #define IMPL_EXTRA_BUTTON_WIDTH         18
@@ -335,7 +327,6 @@ typedef sal_uInt16 StateChangedType;
 #define DLGWINDOW_PREV                  0
 #define DLGWINDOW_NEXT                  1
 #define DLGWINDOW_FIRST                 2
-//#endif
 
 enum WindowSizeType {
     WINDOWSIZE_MINIMUM,
@@ -727,7 +718,6 @@ public:
     void                SetZoomedPointFont( const Font& rFont );
     long                GetDrawPixel( OutputDevice* pDev, long nPixels ) const;
     Font                GetDrawPixelFont( OutputDevice* pDev ) const;
-    void                GetFontResolution( sal_Int32& nDPIX, sal_Int32& nDPIY ) const;
 
     void                SetControlFont();
     void                SetControlFont( const Font& rFont );
@@ -989,9 +979,7 @@ public:
     void                SetData( void* pNewData );
     void*               GetData() const;
 
-    // Should be merged in the next top level build !!!
-    Bitmap              SnapShot( sal_Bool bBorder ) const;
-    Bitmap              SnapShot() const;
+    Bitmap              SnapShot( sal_Bool bBorder = sal_True ) const;
 
     void                ShowFocus( const Rectangle& rRect );
     void                HideFocus();
@@ -1125,6 +1113,22 @@ public:
     */
     void doLazyDelete();
 
+    //-------------------------------------
+    //  Keyboard access functions
+    //-------------------------------------
+
+    /** Query the states of keyboard indicators - Caps Lock, Num Lock and
+        Scroll Lock.  Use the following mask to retrieve the state of each
+        indicator:
+
+            INDICATOR_CAPS_LOCK
+            INDICATOR_NUM_LOCK
+            INDICATOR_SCROLL_LOCK
+      */
+    sal_uInt16 GetIndicatorState() const;
+
+    void SimulateKeyPress( sal_uInt16 nKeyCode ) const;
+
     // let the window intercept the KeyDown messages of the system children
     void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 
@@ -1179,8 +1183,9 @@ public:
     /*
     */
     virtual void setProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
-
 };
 
 
 #endif // _SV_WINDOW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

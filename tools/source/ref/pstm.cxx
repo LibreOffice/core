@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -132,7 +133,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
     if( (nVer & ~PERSIST_LIST_DBGUTIL) != PERSIST_LIST_VER )
     {
         rStm.SetError( SVSTREAM_GENERALERROR );
-        DBG_ERROR( "persist list, false version" );
+        OSL_FAIL( "persist list, false version" );
     }
 
     sal_uInt32 nObjLen(0), nObjPos(0);
@@ -155,8 +156,10 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
                 aStr += ByteString::CreateFromInt32( (long)(rStm.Tell() - nObjPos) );
                 aStr += ", should = ";
                 aStr += ByteString::CreateFromInt64(nObjLen);
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
+#else
+            (void)nObjLen;
 #endif
     return rStm;
 }
@@ -439,14 +442,14 @@ sal_uInt32 SvPersistStream::ReadCompressed
         if( nMask & 0x0F )
         {
             rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            DBG_ERROR( "format error" );
+            OSL_FAIL( "format error" );
         }
         rStm >> nRet;
     }
     else
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "format error" );
+        OSL_FAIL( "format error" );
     }
     return nRet;
 }
@@ -740,7 +743,7 @@ sal_uInt32 SvPersistStream::ReadObj
     if( P_VER < (nHdr & P_VER_MASK) )
     {
         SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "false version" );
+        OSL_FAIL( "false version" );
     }
 
     if( !(nHdr & P_ID_0) && GetError() == SVSTREAM_OK )
@@ -761,6 +764,8 @@ sal_uInt32 SvPersistStream::ReadObj
                 aStr += ByteString::CreateFromInt32( nClassId );
                 aStr += " registered";
                 DBG_WARNING( aStr.GetBuffer() );
+#else
+                (void)nObjLen;
 #endif
                 SetError( ERRCODE_IO_NOFACTORY );
                 return 0;
@@ -787,7 +792,7 @@ sal_uInt32 SvPersistStream::ReadObj
                 aStr += ByteString::CreateFromInt32( (long)(Tell() - nObjPos) );
                 aStr += ", should = ";
                 aStr += ByteString::CreateFromInt32( nObjLen );
-                DBG_ERROR( aStr.GetBuffer() );
+                OSL_FAIL( aStr.GetBuffer() );
             }
 #endif
             rpObj->RestoreNoDelete();
@@ -880,7 +885,7 @@ SvStream& operator >>
         {
             SvPersistBase * pEle;
             // Lesen, ohne in die Tabellen einzutragen
-            sal_uInt32 nId = rThis.ReadObj( pEle, sal_False );
+            sal_uIntPtr nId = rThis.ReadObj( pEle, sal_False );
             if( rThis.GetError() )
                 break;
 
@@ -913,3 +918,4 @@ sal_uIntPtr SvPersistStream::RemoveObj( SvPersistBase * pObj )
     return nIdx;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

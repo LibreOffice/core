@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,7 +168,7 @@ private:
 
 CTransferable::CTransferable( ) :
     m_FlavorList( 1 ),
-    m_Data( OUString::createFromAscii( "Ich habe mir ein neues Fahrrad gekauft!" ) )
+    m_Data( OUString(RTL_CONSTASCII_USTRINGPARAM("Ich habe mir ein neues Fahrrad gekauft!")) )
 {
     DataFlavor df;
 
@@ -276,10 +277,10 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( !g_xFactory.is( ) )
     {
-        OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
+        OSL_FAIL("Can't create RegistryServiceFactory");
         return(-1);
     }
 
@@ -293,7 +294,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
         xClipboard( g_xFactory->createInstance( OUString( WINCLIPBOARD_SERVICE_NAME ) ), UNO_QUERY );
     if ( !xClipboard.is( ) )
     {
-        OSL_ENSURE( sal_False, "Error creating Clipboard Service" );
+        OSL_FAIL( "Error creating Clipboard Service" );
         return(-1);
     }
 
@@ -333,7 +334,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
     if ( !xComponent.is() )
-        OSL_ENSURE(sal_False, "Error shuting down");
+        OSL_FAIL("Error shuting down");
 
     // Dispose and clear factory
     xComponent->dispose();
@@ -346,3 +347,5 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

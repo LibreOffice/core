@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,7 +99,7 @@ Box::calculateSize( long nWidth )
     mbHasFlowChildren = false;
 
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++ )
+              = maChildren.begin(); it != maChildren.end(); ++it )
     {
         ChildData *child = static_cast<Box::ChildData*> ( *it );
         if ( !child->isVisible() )
@@ -140,7 +141,7 @@ Box::calculateSize( long nWidth )
         if ( nWidth == 0 )
             nWidth = nSecSize ? nSecSize : nFlowMinWidth;
         for ( std::list<Box_Base::ChildData *>::const_iterator it
-                  = maChildren.begin(); it != maChildren.end(); it++ )
+                  = maChildren.begin(); it != maChildren.end(); ++it )
         {
             ChildData *child = static_cast<Box::ChildData*> ( *it );
             if ( !child->isVisible() )
@@ -191,7 +192,7 @@ Box::allocateArea( const awt::Rectangle &newArea )
     int nVisibleChildren = 0, nExpandChildren = 0;
 
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++ )
+              = maChildren.begin(); it != maChildren.end(); ++it )
     {
         ChildData *child = static_cast<Box::ChildData*> ( *it );
         if ( child->isVisible() )
@@ -228,7 +229,7 @@ Box::allocateArea( const awt::Rectangle &newArea )
     int nBoxSecSize = SAL_MAX( 1, secDim( newSize ) - mnBorderWidth * 2 );
 
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++ )
+              = maChildren.begin(); it != maChildren.end(); ++it )
     {
         ChildData *child = static_cast<Box::ChildData*> ( *it );
         if ( !child->isVisible() )
@@ -279,3 +280,5 @@ Box::allocateArea( const awt::Rectangle &newArea )
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

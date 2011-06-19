@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
+#include "vcl/solarmutex.hxx"
 
 #include "aqua/saldata.hxx"
 #include "aqua/salinst.h"
@@ -77,7 +79,7 @@ using namespace ::com::sun::star;
 
 extern sal_Bool ImplSVMain();
 
-static sal_Bool* gpbInit = 0;
+static int* gpnInit = 0;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
@@ -114,7 +116,7 @@ class AquaDelayedSettingsChanged : public Timer
 
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
-    vos::OGuard aGuard( *mpSalYieldMutex );
+    osl::SolarGuard aGuard( *mpSalYieldMutex );
     AquaDelayedSettingsChanged* pTimer = new AquaDelayedSettingsChanged( bInvalidate );
     pTimer->SetTimeout( 50 );
     pTimer->Start();
@@ -211,9 +213,9 @@ static void initNSApp()
         [NSApp activateIgnoringOtherApps: YES];
 }
 
-sal_Bool ImplSVMainHook( sal_Bool * pbInit )
+sal_Bool ImplSVMainHook( int * pnInit )
 {
-    gpbInit = pbInit;
+    gpnInit = pnInit;
 
     bNoSVMain = false;
     initNSApp();
@@ -248,7 +250,7 @@ sal_Bool ImplSVMainHook( sal_Bool * pbInit )
     }
     else
     {
-        DBG_ERROR( "NSApplication initialization could not be done" );
+        OSL_FAIL( "NSApplication initialization could not be done" );
     }
 
     return TRUE;   // indicate that ImplSVMainHook is implemented
@@ -308,7 +310,7 @@ void InitSalMain()
 {
     rtl::OUString urlWorkDir;
     rtl_uString *sysWorkDir = NULL;
-    if (tools::getProcessWorkingDir(&urlWorkDir))
+    if (tools::getProcessWorkingDir(urlWorkDir))
     {
         oslFileError err2 = osl_getSystemPathFromFileURL(urlWorkDir.pData, &sysWorkDir);
         if (err2 == osl_File_E_None)
@@ -374,27 +376,27 @@ SalYieldMutex::SalYieldMutex()
 
 void SalYieldMutex::acquire()
 {
-    OMutex::acquire();
-    mnThreadId = vos::OThread::getCurrentIdentifier();
+    SolarMutexObject::acquire();
+    mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SalYieldMutex::release()
 {
-    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
+    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
-        mnThreadId = vos::OThread::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }
@@ -474,7 +476,7 @@ AquaSalInstance::AquaSalInstance()
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
     ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
-    maMainThread = vos::OThread::getCurrentIdentifier();
+    maMainThread = osl::Thread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
     mnActivePrintJobs = 0;
@@ -529,7 +531,7 @@ void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, voi
 
 // -----------------------------------------------------------------------
 
-vos::IMutex* AquaSalInstance::GetYieldMutex()
+osl::SolarMutex* AquaSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
@@ -540,7 +542,7 @@ sal_uLong AquaSalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
-         vos::OThread::getCurrentIdentifier() )
+         osl::Thread::getCurrentIdentifier() )
     {
         sal_uLong nCount = pYieldMutex->GetAcquireCount();
         sal_uLong n = nCount;
@@ -575,8 +577,7 @@ bool AquaSalInstance::CheckYieldMutex()
     bool bRet = true;
 
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
-    if ( pYieldMutex->GetThreadId() !=
-         vos::OThread::getCurrentIdentifier() )
+    if ( pYieldMutex->GetThreadId() != osl::Thread::getCurrentIdentifier())
     {
         bRet = false;
     }
@@ -588,7 +589,7 @@ bool AquaSalInstance::CheckYieldMutex()
 
 bool AquaSalInstance::isNSAppThread() const
 {
-    return vos::OThread::getCurrentIdentifier() == maMainThread;
+    return osl::Thread::getCurrentIdentifier() == maMainThread;
 }
 
 // -----------------------------------------------------------------------
@@ -605,9 +606,9 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         break;
     case AppExecuteSVMain:
     {
-        sal_Bool bResult = ImplSVMain();
-        if( gpbInit )
-            *gpbInit = bResult;
+        int nResult = ImplSVMain();
+        if( gpnInit )
+            *gpnInit = nResult;
         [NSApp stop: NSApp];
         bLeftMain = true;
         if( pDockMenu )
@@ -628,7 +629,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         {
             if ( ((*it)->mbFullScreen == true) )
                 bIsFullScreenMode = true;
-            it++;
+            ++it;
         }
 
         switch ([pEvent data1])
@@ -685,7 +686,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     break;
 
     default:
-        DBG_ERROR( "unhandled NSApplicationDefined event" );
+        OSL_FAIL( "unhandled NSApplicationDefined event" );
         break;
     };
 }
@@ -1340,3 +1341,5 @@ NSImage* CreateNSImage( const Image& rImage )
 
     return pImage;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

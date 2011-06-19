@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,12 +47,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
-
-#ifdef WNT
-# include <tools/prewin.h>
-# include <windows.h>
-# include <tools/postwin.h>
-#endif
 
 #include <vcl/sysdata.hxx>
 
@@ -136,14 +131,14 @@ namespace cairocanvas
         OSL_TRACE( "CairoCanvas destroyed" );
     }
 
-    void SAL_CALL Canvas::disposing()
+    void Canvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mxComponentContext.clear();
 
         // forward to parent
-        CanvasBaseT::disposing();
+        CanvasBaseT::disposeThis();
     }
 
     ::rtl::OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)
@@ -193,3 +188,5 @@ namespace cairocanvas
         return maDeviceHelper.getOutputDevice();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

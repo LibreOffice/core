@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -326,7 +327,7 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
     PDFExtOutDevDataSync aSync;
     aSync.eAct = eAct;
     if ( pMtf )
-        aSync.nIdx = pMtf->GetActionCount();
+        aSync.nIdx = pMtf->GetActionSize();
     else
         aSync.nIdx = 0x7fffffff;    // sync not possible
     mActions.push_back( aSync );
@@ -426,7 +427,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                         }
                         break;
                     }
-                    aBeg++;
+                    ++aBeg;
                 }
             }
             break;
@@ -437,13 +438,11 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
             break;
             case PDFExtOutDevDataSync::EndGroupGfxLink :
             {
-                sal_Int32 nTransparency;
                 Rectangle aOutputRect, aVisibleOutputRect;
                 Graphic   aGraphic( mGraphics.front() );
 
                 mGraphics.pop_front();
-                nTransparency = mParaInts.front();
-                mParaInts.pop_front();
+                mParaInts.pop_front(); //Transparency
                 aOutputRect = mParaRects.front();
                 mParaRects.pop_front();
                 aVisibleOutputRect = mParaRects.front();
@@ -843,3 +842,5 @@ void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

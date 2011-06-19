@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 #include <tools/wintypes.hxx>
 #include <svtools/svtools.hrc>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
@@ -50,8 +52,6 @@
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
 Image*  SvImpLBox::s_pDefCollapsed      = NULL;
 Image*  SvImpLBox::s_pDefExpanded       = NULL;
-Image*  SvImpLBox::s_pDefCollapsedHC    = NULL;
-Image*  SvImpLBox::s_pDefExpandedHC     = NULL;
 sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
@@ -65,7 +65,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     aFctSet( this, &aSelEng, pLBView ),
     nExtendedWinBits( 0 ),
     bAreChildrenTransient( sal_True ),
-    pIntlWrapper( NULL ) // #102891# -----------------------
+    m_pStringSorter(NULL)
 {
     osl_incrementInterlockedCount(&s_nImageRefCount);
     pView = pLBView;
@@ -127,34 +127,36 @@ SvImpLBox::~SvImpLBox()
     aEditTimer.Stop();
     StopUserEvent();
 
-    // #102891# ---------------------
-    if( pIntlWrapper )
-        delete pIntlWrapper;
+    delete m_pStringSorter;
     if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
-        DELETEZ(s_pDefCollapsedHC);
-        DELETEZ(s_pDefExpandedHC);
     }
 }
 
-// #102891# --------------------
-void SvImpLBox::UpdateIntlWrapper()
+void SvImpLBox::UpdateStringSorter()
 {
-    const ::com::sun::star::lang::Locale & aNewLocale = Application::GetSettings().GetLocale();
-    if( !pIntlWrapper )
-        pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), aNewLocale );
-    else
+    const ::com::sun::star::lang::Locale& rNewLocale = Application::GetSettings().GetLocale();
+
+    if( m_pStringSorter )
     {
-        const ::com::sun::star::lang::Locale &aLocale = pIntlWrapper->getLocale();
-        if( aLocale.Language != aNewLocale.Language || // different Locale from the older one
-            aLocale.Country != aNewLocale.Country ||
-            aLocale.Variant != aNewLocale.Variant )
+        // different Locale from the older one, drop it and force recreate
+        const ::com::sun::star::lang::Locale &aLocale = m_pStringSorter->getLocale();
+        if( aLocale.Language != rNewLocale.Language ||
+            aLocale.Country != rNewLocale.Country ||
+            aLocale.Variant != rNewLocale.Variant )
         {
-            delete pIntlWrapper;
-            pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), aNewLocale );
+            delete m_pStringSorter;
+            m_pStringSorter = NULL;
         }
+    }
+
+    if( !m_pStringSorter )
+    {
+        m_pStringSorter = new comphelper::string::NaturalStringSorter(
+                              ::comphelper::getProcessComponentContext(),
+                              rNewLocale);
     }
 }
 
@@ -911,14 +913,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
     {
         pStartEntry = pView->First();
     }
-
-#ifdef XX_OV
-    sal_uLong nXAbsPos = (sal_uInt16)pTree->GetAbsPos( pStartEntry );
-    sal_uLong nXVisPos = pView->GetVisiblePos( pStartEntry );
-    SvLBoxString* pXStr = (SvLBoxString*)pStartEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING);
-#endif
-
-
 
     if( nNodeBmpTabDistance == NODE_BMP_TABDIST_NOTVALID )
         SetNodeBmpTabDistance();
@@ -1724,7 +1718,7 @@ void SvImpLBox::RemovingEntry( SvLBoxEntry* pEntry )
 
     SvLBoxEntry* pParent = (SvLBoxEntry*)(pView->GetModel()->GetParent(pEntry));
 
-    if( pParent && pView->GetModel()->GetChildList(pParent)->Count() == 1 )
+    if( pParent && pView->GetModel()->GetChildList(pParent)->size() == 1 )
     {
         DBG_ASSERT( pView->IsExpanded( pParent ), "Parent not expanded");
         pParent->SetFlags( pParent->GetFlags() | SV_ENTRYFLAG_NO_NODEBMP);
@@ -1892,7 +1886,7 @@ void SvImpLBox::EntryInserted( SvLBoxEntry* pEntry )
     if( GetUpdateMode() )
     {
         SvLBoxEntry* pParent = (SvLBoxEntry*)pTree->GetParent(pEntry);
-        if( pParent && pTree->GetChildList(pParent)->Count() == 1 )
+        if( pParent && pTree->GetChildList(pParent)->size() == 1 )
             // Pluszeichen zeichnen
             pTree->InvalidateEntry( pParent );
 
@@ -2105,11 +2099,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if ( !rMEvt.IsLeft() && !rMEvt.IsRight())
         return;
 
-#ifdef OS2
-    // unter OS/2 kommt zwischen MouseButtonDown und
-    // MouseButtonUp ein MouseMove
-    nFlags |= F_IGNORE_NEXT_MOUSEMOVE;
-#endif
     aEditTimer.Stop();
     Point aPos( rMEvt.GetPosPixel());
 
@@ -2185,15 +2174,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
         if( ButtonDownCheckCtrl(rMEvt, pEntry, nY) == sal_True)
             return;
         // Inplace-Editing?
-#if 0
-        if( rMEvt.IsMod2() && pView->IsInplaceEditingEnabled() )
-        {
-            SvLBoxItem* pItem = pView->GetItem( pEntry, aPos.X() );
-            if( pItem )
-                pView->EditingRequest( pEntry, pItem, aPos );
-            return;
-        }
-#endif
     }
     if ( aSelEng.GetSelectionMode() != NO_SELECTION )
         aSelEng.SelMouseButtonDown( rMEvt );
@@ -2201,9 +2181,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
 {
-#ifdef OS2
-    nFlags &= (~F_IGNORE_NEXT_MOUSEMOVE);
-#endif
     if ( !ButtonUpCheckCtrl( rMEvt ) && ( aSelEng.GetSelectionMode() != NO_SELECTION ) )
         aSelEng.SelMouseButtonUp( rMEvt );
     EndScroll();
@@ -2219,13 +2196,6 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
 
 void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 {
-#ifdef OS2
-    if( nFlags & F_IGNORE_NEXT_MOUSEMOVE )
-    {
-        nFlags &= (~F_IGNORE_NEXT_MOUSEMOVE);
-        return;
-    }
-#endif
     SvLBoxEntry* pEntry = GetClickedEntry( rMEvt.GetPosPixel() );
     if ( !MouseMoveCheckCtrl( rMEvt, pEntry ) && ( aSelEng.GetSelectionMode() != NO_SELECTION ) )
         aSelEng.SelMouseMove( rMEvt );
@@ -2276,7 +2246,6 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            // 06.09.20001 - 83416 - fs@openoffice.org
             if ( !pNewCursor && pCursor )
                 pNewCursor = pCursor;
 
@@ -2528,19 +2497,6 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 bKeyUsed = sal_False;
             break;
 
-
-#ifdef OV_DEBUG
-        case KEY_F9:
-            MakeVisible( pCursor );
-            break;
-        case KEY_F10:
-            pView->RemoveSelection();
-            break;
-        case KEY_DELETE:
-            pView->RemoveEntry( pCursor );
-            break;
-#endif
-
         case KEY_ADD:
             if( pCursor )
             {
@@ -2584,7 +2540,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                         // Sonderbehandlung Explorer: Befindet sich auf der
                         // Root nur ein Eintrag,dann den Root-Entry nicht
                         // einklappen
-                        if( pTree->GetChildList(0)->Count() < 2 )
+                        if( pTree->GetChildList(0)->size() < 2 )
                         {
                             nRefDepth = 1;
                             pParentToCollapse = pCursor;
@@ -2690,7 +2646,7 @@ sal_Bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
     return bKeyUsed;
 }
 
-void __EXPORT SvImpLBox::GetFocus()
+void SvImpLBox::GetFocus()
 {
     if( pCursor )
     {
@@ -2726,7 +2682,7 @@ void __EXPORT SvImpLBox::GetFocus()
     }
 }
 
-void __EXPORT SvImpLBox::LoseFocus()
+void SvImpLBox::LoseFocus()
 {
     aEditTimer.Stop();
     if( pCursor )
@@ -2756,7 +2712,7 @@ inline void SvImpLBox::SelectEntry( SvLBoxEntry* pEntry, sal_Bool bSelect )
     pView->Select( pEntry, bSelect );
 }
 
-__EXPORT ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SelectionEngine* pSEng,
+ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SelectionEngine* pSEng,
     SvTreeListBox* pV )
 {
     pImp = pImpl;
@@ -2764,40 +2720,40 @@ __EXPORT ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SelectionEngine* pSEng,
     pView = pV;
 }
 
-__EXPORT ImpLBSelEng::~ImpLBSelEng()
+ImpLBSelEng::~ImpLBSelEng()
 {
 }
 
-void __EXPORT ImpLBSelEng::BeginDrag()
+void ImpLBSelEng::BeginDrag()
 {
     pImp->BeginDrag();
 }
 
 /*
-void __EXPORT ImpLBSelEng::EndDrag( const Point& )
+void ImpLBSelEng::EndDrag( const Point& )
 {
 }
 */
 
-void __EXPORT ImpLBSelEng::CreateAnchor()
+void ImpLBSelEng::CreateAnchor()
 {
     pImp->pAnchor = pImp->pCursor;
 }
 
-void __EXPORT ImpLBSelEng::DestroyAnchor()
+void ImpLBSelEng::DestroyAnchor()
 {
     pImp->pAnchor = 0;
 }
 
 /*
-void __EXPORT ImpLBSelEng::CreateCursor()
+void ImpLBSelEng::CreateCursor()
 {
     pImp->pAnchor = 0;
 }
 */
 
 
-sal_Bool __EXPORT ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor)
+sal_Bool ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor)
 {
     SvLBoxEntry* pNewCursor = pImp->MakePointVisible( rPoint );
     if( pNewCursor != pImp->pCursor  )
@@ -2815,7 +2771,7 @@ sal_Bool __EXPORT ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, sal_Bool bD
     return sal_False;
 }
 
-sal_Bool __EXPORT ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
+sal_Bool ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
 {
     SvLBoxEntry* pEntry = pImp->MakePointVisible( rPoint );
     if( pEntry )
@@ -2823,7 +2779,7 @@ sal_Bool __EXPORT ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
     return sal_False;
 }
 
-void __EXPORT ImpLBSelEng::DeselectAtPoint( const Point& rPoint )
+void ImpLBSelEng::DeselectAtPoint( const Point& rPoint )
 {
     SvLBoxEntry* pEntry = pImp->MakePointVisible( rPoint );
     if( !pEntry )
@@ -2832,7 +2788,7 @@ void __EXPORT ImpLBSelEng::DeselectAtPoint( const Point& rPoint )
 }
 
 /*
-void __EXPORT ImpLBSelEng::SelectAtPoint( const Point& rPoint )
+void ImpLBSelEng::SelectAtPoint( const Point& rPoint )
 {
     SvLBoxEntry* pEntry = pImp->MakePointVisible( rPoint );
     if( !pEntry )
@@ -2841,7 +2797,7 @@ void __EXPORT ImpLBSelEng::SelectAtPoint( const Point& rPoint )
 }
 */
 
-void __EXPORT ImpLBSelEng::DeselectAll()
+void ImpLBSelEng::DeselectAll()
 {
     pImp->SelAllDestrAnch( sal_False, sal_False ); // SelectionEngine nicht resetten!
     pImp->nFlags &= (~F_DESEL_ALL);
@@ -3093,9 +3049,8 @@ void SvImpLBox::PaintDDCursor( SvLBoxEntry* pInsertionPos )
     pView->SetLineColor( aOldLineColor );
     pView->SetRasterOp( eOldOp );
 }
-/* -----------------26.08.2003 12:52-----------------
-    Delete all sub menues of a PopupMenu, recursively
- --------------------------------------------------*/
+
+// Delete all submenus of a PopupMenu, recursively
 void lcl_DeleteSubPopups(PopupMenu* pPopup)
 {
     for(sal_uInt16 i = 0; i < pPopup->GetItemCount(); i++)
@@ -3483,10 +3438,10 @@ void SvImpLBox::FindMostRight_Impl( SvLBoxEntry* pParent, SvLBoxEntry* pEntryToI
     if( !pList )
         return;
 
-    sal_uLong nCount = pList->Count();
-    for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
+    size_t nCount = pList->size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvLBoxEntry* pChild = (SvLBoxEntry*)pList->GetObject( nCur );
+        SvLBoxEntry* pChild = (SvLBoxEntry*)(*pList)[ nCur ];
         if( pChild != pEntryToIgnore )
         {
             SetMostRight( pChild );
@@ -3570,24 +3525,22 @@ void SvImpLBox::implInitDefaultNodeImages()
         // assume that all or nothing is initialized
         return;
 
-    s_pDefCollapsed = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED ) );
-    s_pDefCollapsedHC = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED_HC ) );
-    s_pDefExpanded = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
-    s_pDefExpandedHC = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED_HC ) );
+    s_pDefCollapsed  = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED ) );
+    s_pDefExpanded   = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
 }
 
 // -----------------------------------------------------------------------
-const Image& SvImpLBox::GetDefaultExpandedNodeImage( BmpColorMode _eMode )
+const Image& SvImpLBox::GetDefaultExpandedNodeImage( )
 {
     implInitDefaultNodeImages();
-    return ( BMP_COLOR_NORMAL == _eMode ) ? *s_pDefExpanded : *s_pDefExpandedHC;
+    return *s_pDefExpanded;
 }
 
 // -----------------------------------------------------------------------
-const Image& SvImpLBox::GetDefaultCollapsedNodeImage( BmpColorMode _eMode )
+const Image& SvImpLBox::GetDefaultCollapsedNodeImage( )
 {
     implInitDefaultNodeImages();
-    return ( BMP_COLOR_NORMAL == _eMode ) ? *s_pDefCollapsed : *s_pDefCollapsedHC;
+    return *s_pDefCollapsed;
 }
 
 // -----------------------------------------------------------------------
@@ -3628,3 +3581,4 @@ bool SvImpLBox::IsSelectable( const SvLBoxEntry* pEntry )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

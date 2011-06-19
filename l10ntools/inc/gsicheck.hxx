@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define _GSICHECK_HXX_
 
 #include "tagtest.hxx"
+#include <vector>
 
 //
 // class GSILine
@@ -74,7 +76,7 @@ public:
           void        SetTitle( ByteString &aNew ) { aTitle = aNew; ReassembleLine(); }
 
     ParserMessageList* GetMessageList() { return &aMessages; };
-    sal_Bool HasMessages(){ return ( aMessages.Count() > 0 ); };
+    sal_Bool HasMessages(){ return ( aMessages.size() > 0 ); };
 
     sal_Bool IsOK() const { return bOK; }
     void NotOK();
@@ -87,13 +89,14 @@ public:
 // class GSIBlock
 //
 
-DECLARE_LIST( GSIBlock_Impl, GSILine * )
+typedef ::std::vector< GSILine* > GSIBlock_Impl;
 
 class LazySvFileStream;
 
-class GSIBlock : public GSIBlock_Impl
+class GSIBlock
 {
 private:
+    GSIBlock_Impl maList;
     GSILine *pSourceLine;
     GSILine *pReferenceLine;
     void PrintList( ParserMessageList *pList, ByteString aPrefix, GSILine *pLine );
@@ -126,3 +129,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

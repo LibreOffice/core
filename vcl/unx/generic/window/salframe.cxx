@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@
 #include <X11/keysym.h>
 #include "FWS.hxx"
 #include <X11/extensions/shape.h>
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
 #include <X11/extensions/dpms.h>
 #endif
 #include <tools/postx.h>
@@ -71,6 +72,7 @@
 #include "salinst.hxx"
 #include "sallayout.hxx"
 
+#include <sal/macros.h>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <algorithm>
@@ -181,7 +183,7 @@ void X11SalFrame::setXEmbedInfo()
                          32,
                          PropModeReplace,
                          reinterpret_cast<unsigned char*>(aInfo),
-                         sizeof(aInfo)/sizeof(aInfo[0]) );
+                         SAL_N_ELEMENTS(aInfo) );
     }
 }
 
@@ -498,7 +500,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, int nScreen, SystemParentData*
                               nAttrMask,
                               &Attributes );
     // FIXME: see above: fake shell window for now to own window
-    if( /*! IsSysChildWindow() &&*/ pParentData == NULL )
+    if( pParentData == NULL )
     {
         mhShellWindow = mhWindow;
     }
@@ -542,11 +544,11 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, int nScreen, SystemParentData*
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_TAKE_FOCUS );
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
-        XClassHint* pClass = XAllocClassHint();
-        pClass->res_name  = const_cast<char*>(X11SalData::getFrameResName());
-        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
-        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
-        XFree( pClass );
+        // force wm class hint
+        mnExtStyle = ~0;
+        if (mpParent)
+            m_sWMClass = mpParent->m_sWMClass;
+        SetExtendedFrameStyle( 0 );
 
         XSizeHints* pHints = XAllocSizeHints();
         pHints->flags       = PWinGravity | PPosition;
@@ -679,7 +681,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle, SystemPar
     nKeyCode_                   = 0;
     nKeyState_                  = 0;
     nCompose_                   = -1;
-    mbKeyMenu                   = false;
     mbSendExtKeyModChange       = false;
     mnExtKeyMod                 = 0;
 
@@ -849,13 +850,7 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     if( nStyle != mnExtStyle && ! IsChildWindow() )
     {
         mnExtStyle = nStyle;
-
-        XClassHint* pClass = XAllocClassHint();
-        rtl::OString aResHint = X11SalData::getFrameResName( mnExtStyle );
-        pClass->res_name  = const_cast<char*>(aResHint.getStr());
-        pClass->res_class = const_cast<char*>(X11SalData::getFrameClassName());
-        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
-        XFree( pClass );
+        updateWMClass();
     }
 }
 
@@ -1158,8 +1153,6 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     setXEmbedInfo();
     if( bVisible )
     {
-        SessionManagerClient::open(); // will simply return after the first time
-
         mbInShow = sal_True;
         if( ! (nStyle_ & SAL_FRAME_STYLE_INTRO) )
         {
@@ -1182,7 +1175,6 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
             GetDisplay()->getWMAdaptor()->frameIsMapping( this );
 
         /*
-         *  #95097#
          *  Actually this is rather exotic and currently happens only in conjunction
          *  with the basic dialogue editor,
          *  which shows a frame and instantly hides it again. After that the
@@ -1267,7 +1259,6 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
         if( IsFloatGrabWindow() )
         {
             /*
-             *  #95453#
              *  Sawfish and twm can be switched to enter-exit focus behaviour. In this case
              *  we must grab the pointer else the dumb WM will put the focus to the
              *  override-redirect float window. The application window will be deactivated
@@ -1318,7 +1309,7 @@ void X11SalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
             nShowState_ = SHOWSTATE_NORMAL;
 
         /*
-         *  #98107# plugged windows don't necessarily get the
+         *  plugged windows don't necessarily get the
          *  focus on show because the parent may already be mapped
          *  and have the focus. So try to set the focus
          *  to the child on Show(sal_True)
@@ -2192,6 +2183,33 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
+void X11SalFrame::SetApplicationID( const rtl::OUString &rWMClass )
+{
+    if( rWMClass != m_sWMClass && ! IsChildWindow() )
+    {
+        m_sWMClass = rWMClass;
+        updateWMClass();
+        std::list< X11SalFrame* >::const_iterator it;
+        for( it = maChildren.begin(); it != maChildren.end(); ++it )
+            (*it)->SetApplicationID(rWMClass);
+    }
+}
+
+void X11SalFrame::updateWMClass()
+{
+    XClassHint* pClass = XAllocClassHint();
+    rtl::OString aResName = X11SalData::getFrameResName( mnExtStyle );
+    pClass->res_name  = const_cast<char*>(aResName.getStr());
+
+    rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
+    const char *pResClass = aResClass.getLength() ? aResClass.getStr() : X11SalData::getFrameClassName();
+
+    pClass->res_class = const_cast<char*>(pResClass);
+    XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
+    XFree( pClass );
+}
+
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
@@ -2362,7 +2380,7 @@ void X11SalFrame::StartPresentation( sal_Bool bStart )
     // needs static here to save DPMS settings
     int dummy;
     static bool DPMSExtensionAvailable =
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
         (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
     static sal_Bool DPMSEnabled = false;
 #else
@@ -2397,7 +2415,7 @@ void X11SalFrame::StartPresentation( sal_Bool bStart )
         // get the DPMS state right before the start
         if (DPMSExtensionAvailable)
         {
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             CARD16 state; // card16 is defined in Xdm.h
             DPMSInfo(   GetXDisplay(),
                         &state,
@@ -2416,7 +2434,7 @@ void X11SalFrame::StartPresentation( sal_Bool bStart )
                                  prefer_blanking,
                                  allow_exposures );
             }
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             if( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
@@ -2430,7 +2448,7 @@ void X11SalFrame::StartPresentation( sal_Bool bStart )
             }
 #endif
         }
-        else // if( !bStart ) // end of show
+        else
         {
             if( nScreenSaversTimeout_ )
             {
@@ -2441,7 +2459,7 @@ void X11SalFrame::StartPresentation( sal_Bool bStart )
                              allow_exposures );
                 nScreenSaversTimeout_ = 0;
             }
-#ifndef SOLARIS
+#if !defined(SOLARIS) && !defined(AIX)
             if ( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
@@ -2472,7 +2490,7 @@ void X11SalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void X11SalFrame::SetPointerPos(long nX, long nY)
 {
-    /* #87921# when the application tries to center the mouse in the dialog the
+    /* when the application tries to center the mouse in the dialog the
      * window isn't mapped already. So use coordinates relative to the root window.
      */
     unsigned int nWindowLeft = maGeometry.nX + nX;
@@ -2851,6 +2869,18 @@ SalFrame::SalPointerState X11SalFrame::GetPointerState()
     return aState;
 }
 
+SalFrame::SalIndicatorState X11SalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = GetX11SalData()->GetDisplay()->GetIndicatorState();
+    return aState;
+}
+
+void X11SalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
+{
+    GetX11SalData()->GetDisplay()->SimulateKeyPress(nKeyCode);
+}
+
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
     SalMouseEvent       aMouseEvt;
@@ -2898,8 +2928,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
     if( LeaveNotify == pEvent->type || EnterNotify == pEvent->type )
     {
         /*
-         *  #89075# #89335#
-         *
          *  some WMs (and/or) applications  have a passive grab on
          *  mouse buttons (XGrabButton). This leads to enter/leave notifies
          *  with mouse buttons pressed in the state mask before the actual
@@ -2908,7 +2936,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
          *  decides that a pressed button in a MouseMove belongs to
          *  a drag operation which leads to doing things differently.
          *
-         *  #95901#
          *  ignore Enter/LeaveNotify resulting from grabs so that
          *  help windows do not disappear just after appearing
          *
@@ -3365,29 +3392,10 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
         int nRet = CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
 
-        // emulate KEY_MENU
-        if ( ( (nKeySym == XK_Alt_L) || (nKeySym == XK_Alt_R) ) &&
-             ( (nModCode & ~(KEY_MOD3|KEY_MOD2)) == 0 ) )
-        {
-            if( pEvent->type == XLIB_KeyPress )
-                mbKeyMenu = true;
-            else if( mbKeyMenu )
-            {
-                // simulate KEY_MENU
-                aKeyEvt.mnCode     = KEY_MENU | nModCode;
-                aKeyEvt.mnRepeat   = 0;
-                aKeyEvt.mnTime     = pEvent->time;
-                aKeyEvt.mnCharCode = 0;
-                nRet = CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-                nRet = CallCallback( SALEVENT_KEYUP, &aKeyEvt );
-            }
-        }
-        else
-            mbKeyMenu = false;
         return nRet;
     }
 
-    mbSendExtKeyModChange = mbKeyMenu = false;
+    mbSendExtKeyModChange = false;
 
     // try to figure out the vcl code for the keysym
     // #i52338# use the unmodified KeySym if there is none for the real KeySym
@@ -3551,17 +3559,17 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 {
-    // #107739# ReflectionX in Windows mode changes focus while mouse is grabbed
+    // ReflectionX in Windows mode changes focus while mouse is grabbed
     if( nVisibleFloats > 0 && GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "ReflectionX Windows" ) )
         return 1;
 
-    /*  #55691# ignore focusout resulting from keyboard grabs
+    /*  ignore focusout resulting from keyboard grabs
      *  we do not grab it and are not interested when
      *  someone else does CDE e.g. does a XGrabKey on arrow keys
-     *  #73179# handle focus events with mode NotifyWhileGrabbed
+     *  handle focus events with mode NotifyWhileGrabbed
      *  because with CDE alt-tab focus changing we do not get
      *  normal focus events
-     *  #71791# cast focus event to the input context, otherwise the
+     *  cast focus event to the input context, otherwise the
      *  status window does not follow the application frame
      */
 
@@ -3590,7 +3598,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 
         if( FocusIn == pEvent->type )
         {
-            vcl_sal::PrinterUpdate::update();
+            GetSalData()->m_pInstance->updatePrinterUpdate();
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
 
@@ -3609,7 +3617,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
         else
         {
             mbInputFocus = False;
-            mbSendExtKeyModChange = mbKeyMenu = false;
+            mbSendExtKeyModChange = false;
             mnExtKeyMod = 0;
             return CallCallback( SALEVENT_LOSEFOCUS, 0 );
         }
@@ -3725,9 +3733,37 @@ void X11SalFrame::RestackChildren()
     }
 }
 
+static Bool size_event_predicate( Display*, XEvent* event, XPointer arg )
+{
+    if( event->type != ConfigureNotify )
+        return False;
+    X11SalFrame* frame = reinterpret_cast< X11SalFrame* >( arg );
+    XConfigureEvent* pEvent = &event->xconfigure;
+    if( pEvent->window != frame->GetShellWindow()
+        && pEvent->window != frame->GetWindow()
+        && pEvent->window != frame->GetForeignParent()
+        && pEvent->window != frame->GetStackingWindow())
+    { // ignored at top of HandleSizeEvent()
+        return False;
+    }
+    if( pEvent->window == frame->GetStackingWindow())
+        return False; // filtered later in HandleSizeEvent()
+    // at this point we know that there is another similar event in the queue
+    frame->setPendingSizeEvent();
+    return False; // but do not process the new event out of order
+}
+
+void X11SalFrame::setPendingSizeEvent()
+{
+    mPendingSizeEvent = true;
+}
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
 {
+    // NOTE: if you add more tests in this function, make sure to update size_event_predicate()
+    // so that it finds exactly the same events
+
     if (   pEvent->window != GetShellWindow()
            && pEvent->window != GetWindow()
            && pEvent->window != GetForeignParent()
@@ -3774,6 +3810,16 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     // check size hints in first time SalFrame::Show
     if( SHOWSTATE_UNKNOWN == nShowState_ && bMapped_ )
         nShowState_ = SHOWSTATE_NORMAL;
+
+    // Avoid a race condition where resizing this window to one size and shortly after that
+    // to another size generates first size event with the old size and only after that
+    // with the new size, temporarily making us think the old size is valid (bnc#674806).
+    // So if there is another size event for this window pending, ignore this one.
+    mPendingSizeEvent = false;
+    XEvent dummy;
+    XCheckIfEvent( GetXDisplay(), &dummy, size_event_predicate, reinterpret_cast< XPointer >( this ));
+    if( mPendingSizeEvent )
+        return 1;
 
     nWidth_     = pEvent->width;
     nHeight_    = pEvent->height;
@@ -3824,7 +3870,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
     GetDisplay()->GetXLib()->PushXErrorLevel( true );
 
     /*
-     *  #89186# don't rely on the new parent from the event.
+     *  don't rely on the new parent from the event.
      *  the event may be "out of date", that is the window manager
      *  window may not exist anymore. This can happen if someone
      *  shows a frame and hides it again quickly (not that that would
@@ -3840,12 +3886,12 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                     &hDummy,
                     &Children,
                     &nChildren );
-        if( GetDisplay()->GetXLib()->HasXErrorOccured() )
+        if( GetDisplay()->GetXLib()->HasXErrorOccurred() )
         {
             hWM_Parent = GetShellWindow();
             break;
         }
-         /* #107048# this sometimes happens if a Show(sal_True) is
+         /* this sometimes happens if a Show(sal_True) is
          *  immediately followed by Show(sal_False) (which is braindead anyway)
          */
         if(  hDummy == hWM_Parent )
@@ -3930,7 +3976,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
      *  so need real geometries here
      *  (this will fail with virtual roots ?)
      */
-    GetDisplay()->GetXLib()->ResetXErrorOccured();
+    GetDisplay()->GetXLib()->ResetXErrorOccurred();
     int xp, yp, x, y;
     unsigned int wp, w, hp, h, bw, d;
     XGetGeometry( GetXDisplay(),
@@ -3942,7 +3988,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                   &hRoot,
                   &xp, &yp, &wp, &hp, &bw, &d );
     bool bResized = false;
-    if( ! GetDisplay()->GetXLib()->HasXErrorOccured() )
+    if( ! GetDisplay()->GetXLib()->HasXErrorOccurred() )
     {
         maGeometry.nRightDecoration     = wp - w - maGeometry.nLeftDecoration;
         maGeometry.nBottomDecoration    = hp - h - maGeometry.nTopDecoration;
@@ -4083,10 +4129,10 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
                 {
                     if( this == s_pSaveYourselfFrame )
                     {
-                        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+                        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
                         const char* argv[2];
                         argv[0] = "/bin/sh";
-                        argv[1] = const_cast<char*>(aExec.GetBuffer());
+                        argv[1] = const_cast<char*>(aExec.getStr());
     #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
     #endif
@@ -4131,10 +4177,10 @@ void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
     // session save was done, inform dtwm
     if( s_pSaveYourselfFrame && pSaveFrame )
     {
-        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
         const char* argv[2];
         argv[0] = "/bin/sh";
-        argv[1] = const_cast<char*>(aExec.GetBuffer());
+        argv[1] = const_cast<char*>(aExec.getStr());
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
 #endif
@@ -4222,7 +4268,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
             break;
 
             case ButtonPress:
-                // #74406# if we loose the focus in presentation mode
+                // if we loose the focus in presentation mode
                 // there are good chances that we never get it back
                 // since the WM ignores us
                  if( IsOverrideRedirect() )
@@ -4254,7 +4300,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     if( nShowState_ == SHOWSTATE_HIDDEN )
                     {
                         /*
-                         *  #95097# workaround for (at least) KWin 2.2.2
+                         *  workaround for (at least) KWin 2.2.2
                          *  which will map windows that were once transient
                          *  even if they are withdrawn when the respective
                          *  document is mapped.
@@ -4293,12 +4339,12 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     }
 
                     bool bSetFocus = m_bSetFocusOnMap;
-                    /*  #99570# another workaround for sawfish: if a transient window for the same parent is shown
+                    /*  another workaround for sawfish: if a transient window for the same parent is shown
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
                     if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) && mbInShow && GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "Sawfish" ) )
                     {
-                        // #101775# don't set the focus into the IME status window
+                        // don't set the focus into the IME status window
                         // since this will lead to a parent loose-focus, close status,
                         // reget focus, open status, .... flicker loop
                         if ( (I18NStatus::get().getStatusFrame() != this) )
@@ -4518,3 +4564,4 @@ void X11SalFrame::EndSetClipRegion()
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

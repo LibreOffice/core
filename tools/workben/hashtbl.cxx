@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,7 +138,7 @@ void* HashTable::GetObjectAt(ULONG lPos) const
 
 void HashTable::OnDeleteObject(void*)
 {
-    DBG_ERROR("HashTable::OnDeleteObject(void*) nicht überladen");
+    OSL_FAIL("HashTable::OnDeleteObject(void*) nicht überladen");
 }
 
 ULONG HashTable::Hash(String const& Key) const
@@ -221,7 +222,7 @@ BOOL HashTable::Insert(String const& Key, void* pObject)
 
     if (IsFull())
     {
-        DBG_ERROR("HashTable::Insert() is full");
+        OSL_FAIL("HashTable::Insert() is full");
         return FALSE;
     }
 
@@ -513,3 +514,5 @@ void* HashTableIterator::FindValidObject(BOOL bForward)
 
     return pObject;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

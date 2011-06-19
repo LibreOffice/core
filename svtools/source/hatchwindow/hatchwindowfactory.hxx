@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 
 class OHatchWindowFactory : public ::cppu::WeakImplHelper2<
@@ -72,3 +71,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

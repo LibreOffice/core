@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -49,14 +49,14 @@ using namespace ::com::sun::star::uno;
             for ( sal_Int32 i=0 ; i < n ; ++i ) {
                 [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
             }
-            
+
             return children;
-            
+
         } catch ( Exception& e)
         {
         }
     }
-    
+
     return nil;
 }
 
@@ -84,13 +84,13 @@ using namespace ::com::sun::star::uno;
     Reference< XAccessibleSelection > xAccessibleSelection = [ wrapper accessibleSelection ];
     try {
         xAccessibleSelection -> clearAccessibleSelection();
-        
+
         unsigned c = [ value count ];
         for ( unsigned i = 0 ; i < c ; ++i ) {
             xAccessibleSelection -> selectAccessibleChild( [ [ value objectAtIndex: i ] accessibleContext ] -> getAccessibleIndexInParent() );
         }
     } catch ( Exception& e) {
-    }            
+    }
 }
 
 @end

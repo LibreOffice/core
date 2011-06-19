@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,20 +31,16 @@
 #define _SV_SALINST_H
 
 #include <vcl/sv.h>
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
-#endif
+#include <osl/thread.hxx>
 #include <vclpluginapi.h>
 #include <salinst.hxx>
+#include <vcl/solarmutex.hxx>
 
-class VCLPLUG_GEN_PUBLIC SalYieldMutex : public vos::OMutex
+class VCLPLUG_GEN_PUBLIC SalYieldMutex : public vcl::SolarMutexObject
 {
 protected:
     sal_uIntPtr                                     mnCount;
-    vos::OThread::TThreadIdentifier mnThreadId;
+    oslThreadIdentifier mnThreadId;
 
 public:
                                                 SalYieldMutex();
@@ -53,7 +50,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     sal_uIntPtr                                     GetAcquireCount() const { return mnCount; }
-    vos::OThread::TThreadIdentifier GetThreadId() const { return mnThreadId; }
+    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -99,7 +96,7 @@ public:
     virtual SalBitmap*          CreateSalBitmap();
     virtual SalSession*         CreateSalSession();
 
-    virtual vos::IMutex*        GetYieldMutex();
+    virtual osl::SolarMutex*    GetYieldMutex();
     virtual sal_uIntPtr             ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( sal_uIntPtr nCount );
     virtual bool                CheckYieldMutex();
@@ -117,6 +114,9 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 
+    virtual void updatePrinterUpdate();
+    virtual void jobStartedPrinterUpdate();
+    virtual void jobEndedPrinterUpdate();
 
     bool isPrinterInit() const
     {
@@ -126,3 +126,4 @@ public:
 
 #endif // _SV_SALINST_H
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

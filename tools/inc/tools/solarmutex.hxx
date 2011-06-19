@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,20 @@
 #define _TOOLS_SOLARMUTEX_HXX
 
 #include "tools/toolsdllapi.h"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace tools
 {
     class TOOLS_DLLPUBLIC SolarMutex
     {
     public:
-        static ::vos::IMutex* GetSolarMutex();
-        static void SetSolarMutex( ::vos::IMutex* pMutex );
+        static ::osl::SolarMutex* GetSolarMutex();
+        static void SetSolarMutex( ::osl::SolarMutex* pMutex );
         static bool Acquire();
         static void Release();
     };
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

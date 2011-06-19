@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ public:
     virtual OUString SAL_CALL getImplementationName()
         throw(css::uno::RuntimeException)
         {
-            return OUString::createFromAscii("com.sun.star.comp.svl.PathService");
+            return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svl.PathService"));
         }
 
     virtual sal_Bool SAL_CALL supportsService (
@@ -65,7 +66,7 @@ public:
         throw(css::uno::RuntimeException)
         {
             css::uno::Sequence< OUString > aRet(1);
-            aRet.getArray()[0] = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
+            aRet.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.SpecialConfigManager"));
             return aRet;
         }
 
@@ -101,3 +102,5 @@ css::uno::Reference< css::uno::XInterface > PathService_CreateInstance (
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,14 +36,14 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+using ::rtl::OUString;
 
 static SvtUndoOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
@@ -68,7 +69,7 @@ public:
 // -----------------------------------------------------------------------
 
 SvtUndoOptions_Impl::SvtUndoOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Office.Common/Undo") )
+    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Undo")) )
     , nUndoCount( 20 )
 {
     Load();
@@ -119,7 +120,6 @@ void SvtUndoOptions_Impl::Load()
     {
         for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
         {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
             if ( pValues[nProp].hasValue() )
             {
                 switch ( nProp )
@@ -131,13 +131,13 @@ void SvtUndoOptions_Impl::Load()
                             nUndoCount = nTemp;
                         else
                         {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         }
                         break;
                     }
 
                     default:
-                        DBG_ERROR( "Wrong Type!" );
+                        OSL_FAIL( "Wrong Type!" );
                         break;
                 }
             }
@@ -199,3 +199,5 @@ sal_Int32 SvtUndoOptions::GetUndoCount() const
 {
     return pImp->GetUndoCount();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

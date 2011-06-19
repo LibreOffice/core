@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkgdi.hxx>
 
 GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
         : m_pSocket( NULL ),
@@ -58,7 +66,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
         SalDisplay* pDisp = GetX11SalData()->GetDisplay();
         m_aSystemData.nSize         = sizeof( SystemChildData );
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
-        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(m_pSocket->window);
+        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));
         m_aSystemData.pSalFrame     = NULL;
         m_aSystemData.pWidget       = m_pSocket;
         m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getScreenNumber()).GetVisual();
@@ -66,7 +74,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
         m_aSystemData.nDepth        = pDisp->GetVisual(pParent->getScreenNumber()).GetDepth();
         m_aSystemData.aColormap     = pDisp->GetColormap(pParent->getScreenNumber()).GetXColormap();
         m_aSystemData.pAppContext   = NULL;
-        m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(GTK_WIDGET(pParent->getWindow())->window);
+        m_aSystemData.aShellWindow  = GDK_WINDOW_XWINDOW(widget_get_window(GTK_WIDGET(pParent->getWindow())));
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );
@@ -83,7 +91,13 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
 GtkSalObject::~GtkSalObject()
 {
     if( m_pRegion )
+    {
+#if GTK_CHECK_VERSION(3,0,0)
+        cairo_region_destroy( m_pRegion );
+#else
         gdk_region_destroy( m_pRegion );
+#endif
+    }
     if( m_pSocket )
     {
         // remove socket from parent frame's fixed container
@@ -101,7 +115,7 @@ GtkSalObject::~GtkSalObject()
 void GtkSalObject::ResetClipRegion()
 {
     if( m_pSocket )
-        gdk_window_shape_combine_region( m_pSocket->window, NULL, 0, 0 );
+        gdk_window_shape_combine_region( widget_get_window(m_pSocket), NULL, 0, 0 );
 }
 
 sal_uInt16 GtkSalObject::GetClipRegionType()
@@ -111,9 +125,15 @@ sal_uInt16 GtkSalObject::GetClipRegionType()
 
 void GtkSalObject::BeginSetClipRegion( sal_uLong )
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    if( m_pRegion )
+        cairo_region_destroy( m_pRegion );
+    m_pRegion = cairo_region_create();
+#else
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );
     m_pRegion = gdk_region_new();
+#endif
 }
 
 void GtkSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
@@ -124,13 +144,17 @@ void GtkSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
     aRect.width     = nWidth;
     aRect.height    = nHeight;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    cairo_region_union_rectangle( m_pRegion, &aRect );
+#else
     gdk_region_union_with_rect( m_pRegion, &aRect );
+#endif
 }
 
 void GtkSalObject::EndSetClipRegion()
 {
     if( m_pSocket )
-        gdk_window_shape_combine_region( m_pSocket->window, m_pRegion, 0, 0 );
+        gdk_window_shape_combine_region( widget_get_window(m_pSocket), m_pRegion, 0, 0 );
 }
 
 void GtkSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
@@ -201,16 +225,25 @@ gboolean GtkSalObject::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer 
     return FALSE;
 }
 
-void GtkSalObject::signalDestroy( GtkObject* pObj, gpointer object )
+void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
 {
     GtkSalObject* pThis = (GtkSalObject*)object;
-    if( GTK_WIDGET(pObj) == pThis->m_pSocket )
+    if( pObj == pThis->m_pSocket )
     {
         pThis->m_pSocket = NULL;
     }
+}
+
+void GtkSalObject::SetForwardKey( sal_Bool bEnable )
+{
+    if( bEnable )
+        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE );
+    else
+        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
 }
 
 void GtkSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

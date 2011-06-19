@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -212,7 +213,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
     if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_24BIT_TC_BGR )
     {
         BitmapColor aCol;
-        sal_uInt8*      pPixel;
+        sal_uInt8* pPixel = NULL;
 
         for( long nActY = 0, nMapY; nActY < nHeight; nActY++ )
         {
@@ -325,7 +326,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
             // initialize pFncGetPixel to something valid that is
             // least likely to crash
             pFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL;
-            DBG_ERROR( "unknown read format" );
+            OSL_FAIL( "unknown read format" );
         break;
     }
 
@@ -356,7 +357,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
             // least likely to crash
             pFncSetPixel = BitmapReadAccess::SetPixelFor_1BIT_MSB_PAL;
             pDstBuffer->mnBitCount = 1;
-            DBG_ERROR( "unknown write format" );
+            OSL_FAIL( "unknown write format" );
         break;
     }
 
@@ -514,3 +515,5 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
 
     return pDstBuffer;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

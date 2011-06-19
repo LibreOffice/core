@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,17 @@
 #ifndef _PSPRINT_FONTMANAGER_HXX_
 #define _PSPRINT_FONTMANAGER_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 #include <list>
 #include <set>
 
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
-
+#include "vcl/vclenum.hxx"
 #include "com/sun/star/lang/Locale.hpp"
+
+#include <vector>
 
 #define ATOM_FAMILYNAME                     2
 #define ATOM_PSNAME                         3
@@ -54,71 +57,6 @@ class ImplFontOptions;
 namespace psp {
 class PPDParser; // see ppdparser.hxx
 
-namespace italic
-{
-enum type {
-    Upright = 0,
-    Oblique = 1,
-    Italic = 2,
-    Unknown = 3
-};
-}
-
-namespace width
-{
-enum type {
-    Unknown = 0,
-    UltraCondensed = 1,
-    ExtraCondensed = 2,
-    Condensed = 3,
-    SemiCondensed = 4,
-    Normal = 5,
-    SemiExpanded = 6,
-    Expanded = 7,
-    ExtraExpanded = 8,
-    UltraExpanded = 9
-};
-}
-
-namespace pitch
-{
-enum type {
-    Unknown = 0,
-    Fixed = 1,
-    Variable = 2
-};
-}
-
-namespace weight
-{
-enum type {
-    Unknown = 0,
-    Thin = 1,
-    UltraLight = 2,
-    Light = 3,
-    SemiLight = 4,
-    Normal = 5,
-    Medium = 6,
-    SemiBold = 7,
-    Bold = 8,
-    UltraBold = 9,
-    Black = 10
-};
-}
-
-namespace family
-{
-enum type {
-    Unknown = 0,
-    Decorative = 1,
-    Modern = 2,
-    Roman = 3,
-    Script = 4,
-    Swiss = 5,
-    System = 6
-};
-}
-
 namespace fonttype
 {
 enum type {
@@ -126,15 +64,6 @@ enum type {
     Type1 = 1,
     TrueType = 2,
     Builtin = 3
-};
-}
-
-namespace fcstatus
-{
-enum type {
-    istrue,
-    isunset,
-    isfalse
 };
 }
 
@@ -157,11 +86,11 @@ struct FastPrintFontInfo
     rtl::OUString                       m_aFamilyName;
     rtl::OUString                       m_aStyleName;
     std::list< rtl::OUString >          m_aAliases;
-    family::type                        m_eFamilyStyle;
-    italic::type                        m_eItalic;
-    width::type                         m_eWidth;
-    weight::type                        m_eWeight;
-    pitch::type                         m_ePitch;
+    FontFamily                          m_eFamilyStyle;
+    FontItalic                          m_eItalic;
+    FontWidth                           m_eWidth;
+    FontWeight                          m_eWeight;
+    FontPitch                           m_ePitch;
     rtl_TextEncoding                    m_aEncoding;
     bool                                m_bSubsettable;
     bool                                m_bEmbeddable;
@@ -169,11 +98,11 @@ struct FastPrintFontInfo
     FastPrintFontInfo() :
             m_nID( 0 ),
             m_eType( fonttype::Unknown ),
-            m_eFamilyStyle( family::Unknown ),
-            m_eItalic( italic::Unknown ),
-            m_eWidth( width::Unknown ),
-            m_eWeight( weight::Unknown ),
-            m_ePitch( pitch::Unknown ),
+            m_eFamilyStyle( FAMILY_DONTKNOW ),
+            m_eItalic( ITALIC_DONTKNOW ),
+            m_eWidth( WIDTH_DONTKNOW ),
+            m_eWeight( WEIGHT_DONTKNOW ),
+            m_ePitch( PITCH_DONTKNOW ),
             m_aEncoding( RTL_TEXTENCODING_DONTKNOW )
     {}
 };
@@ -241,7 +170,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         // upper byte contains: 0 for horizontal metric
         //                      1 for vertical metric
         // highest byte: 0 for now
-        std::hash_map< int, CharacterMetric >     m_aMetrics;
+        boost::unordered_map< int, CharacterMetric >     m_aMetrics;
         // contains the unicode blocks for which metrics were queried
         // this implies that metrics should be queried in terms of
         // unicode blocks. here a unicode block is identified
@@ -256,7 +185,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         bool                                        m_bKernPairsQueried;
         std::list< KernPair >                     m_aXKernPairs;
         std::list< KernPair >                     m_aYKernPairs;
-        std::hash_map< sal_Unicode, bool >      m_bVerticalSubstitutions;
+        boost::unordered_map< sal_Unicode, bool >       m_bVerticalSubstitutions;
 
         PrintFontMetrics() : m_bKernPairsQueried( false ) {}
 
@@ -272,10 +201,10 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         std::list< int >                            m_aAliases;
         int                                         m_nPSName;      // atom
         rtl::OUString                               m_aStyleName;
-        italic::type                                m_eItalic;
-        width::type                                 m_eWidth;
-        weight::type                                m_eWeight;
-        pitch::type                                 m_ePitch;
+        FontItalic                                  m_eItalic;
+        FontWidth                                   m_eWidth;
+        FontWeight                                  m_eWeight;
+        FontPitch                                   m_ePitch;
         rtl_TextEncoding                            m_aEncoding;
         bool                                        m_bFontEncodingOnly; // set if font should be only accessed by builtin encoding
         CharacterMetric                             m_aGlobalMetricX;
@@ -355,10 +284,10 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         rtl::OString        aFoundry;
         rtl::OString        aFamily;
         rtl::OString        aAddStyle;
-        italic::type        eItalic;
-        weight::type        eWeight;
-        width::type         eWidth;
-        pitch::type         ePitch;
+        FontItalic          eItalic;
+        FontWeight          eWeight;
+        FontWidth           eWidth;
+        FontPitch           ePitch;
         rtl_TextEncoding    aEncoding;
 
         XLFDEntry() { nMask = 0; }
@@ -370,8 +299,8 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     static rtl::OString s_aEmptyOString;
 
     fontID                                      m_nNextFontID;
-    std::hash_map< fontID, PrintFont* >       m_aFonts;
-    std::hash_map< int, family::type >        m_aFamilyTypes;
+    boost::unordered_map< fontID, PrintFont* >       m_aFonts;
+    boost::unordered_map< int, FontFamily >        m_aFamilyTypes;
     std::list< rtl::OUString >              m_aPrinterDrivers;
     std::list< rtl::OString >               m_aFontDirectories;
     std::list< int >                            m_aPrivateFontDirectories;
@@ -379,20 +308,20 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     m_aXLFD_Aliases;
     utl::MultiAtomProvider*                   m_pAtoms;
     // for speeding up findFontFileID
-    std::hash_map< rtl::OString, std::set< fontID >, rtl::OStringHash >
+    boost::unordered_map< rtl::OString, std::set< fontID >, rtl::OStringHash >
                                                 m_aFontFileToFontID;
 
-    std::hash_map< rtl::OString, int, rtl::OStringHash >
+    boost::unordered_map< rtl::OString, int, rtl::OStringHash >
     m_aDirToAtom;
-    std::hash_map< int, rtl::OString >     m_aAtomToDir;
+    boost::unordered_map< int, rtl::OString >     m_aAtomToDir;
     int                                        m_nNextDirAtom;
 
-    std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >
+    boost::unordered_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >
         m_aAdobenameToUnicode;
-    std::hash_multimap< sal_Unicode, rtl::OString >
+    boost::unordered_multimap< sal_Unicode, rtl::OString >
         m_aUnicodeToAdobename;
-    std::hash_multimap< sal_Unicode, sal_uInt8 >    m_aUnicodeToAdobecode;
-    std::hash_multimap< sal_uInt8, sal_Unicode >    m_aAdobecodeToUnicode;
+    boost::unordered_multimap< sal_Unicode, sal_uInt8 > m_aUnicodeToAdobecode;
+    boost::unordered_multimap< sal_uInt8, sal_Unicode > m_aAdobecodeToUnicode;
 
     mutable FontCache*                                                        m_pFontCache;
     bool m_bFontconfigSuccess;
@@ -413,11 +342,11 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     fontID findFontFileID( int nDirID, const rtl::OString& rFile ) const;
     fontID findFontBuiltinID( int nPSNameAtom ) const;
 
-    family::type matchFamilyName( const rtl::OUString& rFamily ) const;
+    FontFamily matchFamilyName( const rtl::OUString& rFamily ) const;
 
     PrintFont* getFont( fontID nID ) const
     {
-        std::hash_map< fontID, PrintFont* >::const_iterator it;
+        boost::unordered_map< fontID, PrintFont* >::const_iterator it;
         it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? NULL : it->second;
     }
@@ -437,7 +366,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     false else (e.g. no libfontconfig found)
     */
     bool initFontconfig();
-    int  countFontconfigFonts( std::hash_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths );
+    int  countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths );
     /* deinitialize fontconfig
      */
     void deinitFontconfig();
@@ -498,7 +427,7 @@ public:
     const rtl::OUString& getPSName( fontID nFontID ) const;
 
     // get a specific fonts style family
-    family::type getFontFamilyType( fontID nFontID ) const;
+    FontFamily getFontFamilyType( fontID nFontID ) const;
 
     // get a specific fonts family name aliases
     void getFontFamilyAliases( fontID nFontID ) const;
@@ -511,31 +440,31 @@ public:
     }
 
     // get a specific fonts italic type
-    italic::type getFontItalic( fontID nFontID ) const
+    FontItalic getFontItalic( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eItalic : italic::Unknown;
+        return pFont ? pFont->m_eItalic : ITALIC_DONTKNOW;
     }
 
     // get a specific fonts width type
-    width::type getFontWidth( fontID nFontID ) const
+    FontWidth getFontWidth( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eWidth : width::Unknown;
+        return pFont ? pFont->m_eWidth : WIDTH_DONTKNOW;
     }
 
     // get a specific fonts weight type
-    weight::type getFontWeight( fontID nFontID ) const
+    FontWeight getFontWeight( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_eWeight : weight::Unknown;
+        return pFont ? pFont->m_eWeight : WEIGHT_DONTKNOW;
     }
 
     // get a specific fonts pitch type
-    pitch::type getFontPitch( fontID nFontID ) const
+    FontPitch getFontPitch( fontID nFontID ) const
     {
         PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_ePitch : pitch::Unknown;
+        return pFont ? pFont->m_ePitch : PITCH_DONTKNOW;
     }
 
     // get a specific fonts encoding
@@ -617,15 +546,15 @@ public:
     // helper for type 1 fonts
     std::list< rtl::OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
 
-    std::pair< std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
-               std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
+    std::pair< boost::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
+               boost::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
     getAdobeCodeFromUnicode( sal_Unicode aChar ) const
     {
         return m_aUnicodeToAdobecode.equal_range( aChar );
     }
     std::list< sal_Unicode >  getUnicodeFromAdobeName( const rtl::OString& rName ) const;
-    std::pair< std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator,
-                 std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator >
+    std::pair< boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
+                 boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
     getUnicodeFromAdobeCode( sal_uInt8 aChar ) const
     {
         return m_aAdobecodeToUnicode.equal_range( aChar );
@@ -730,11 +659,11 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
-    bool getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*), ImplFontOptions& rResult ) const;
+    ImplFontOptions* getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*)) const;
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
-        const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
-        width::type& rWidth, pitch::type& rPitch) const;
+        const rtl::OString& rLangAttrib, FontItalic& rItalic, FontWeight& rWeight,
+        FontWidth& rWidth, FontPitch& rPitch) const;
     bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
@@ -743,3 +672,5 @@ public:
 } // namespace
 
 #endif // _PSPRINT_FONTMANAGER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

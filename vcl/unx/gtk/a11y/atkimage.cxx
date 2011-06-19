@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -136,3 +137,5 @@ imageIfaceInit (AtkImageIface *iface)
   iface->get_image_position = image_get_image_position;
   iface->get_image_size = image_get_image_size;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

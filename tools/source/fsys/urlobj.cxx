@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -426,7 +427,10 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "smb", "smb://", 139, true, true, false, true, true, true, true,
           true },
         { "hid", "hid:", 0, false, false, false, false, false, false,
-        false, true } };
+          false, true },
+        { "sftp", "sftp://", 22, true, true, false, true, true, true, true,
+          true } };
+
 
 // static
 inline INetURLObject::SchemeInfo const &
@@ -1169,7 +1173,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                                 break;
 
                             default:
-                                DBG_ERROR(
+                                OSL_FAIL(
                                     "INetURLObject::setAbsURIRef():"
                                         " Bad guessFSysStyleByCounting");
                                 break;
@@ -1445,7 +1449,45 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
 
     m_aAbsURIRef = aSynAbsURIRef;
 
+    // At this point references of type "\\server\paths" have
+    // been converted to file:://server/path".
+#ifdef LINUX
+    if (m_eScheme==INET_PROT_FILE && !m_aHost.isEmpty()) {
+        // Change "file:://server/path" URIs to "smb:://server/path" on
+        // Linux
+        // Leave "file::path" URIs unchanged.
+        changeScheme(INET_PROT_SMB);
+    }
+#endif
+
+#ifdef WIN
+    if (m_eScheme==INET_PROT_SMB) {
+        // Change "smb://server/path" URIs to "file://server/path"
+        // URIs on Windows, since Windows doesn't understand the
+        // SMB scheme.
+        changeScheme(INET_PROT_FILE);
+    }
+#endif
+
     return true;
+}
+
+//============================================================================
+void INetURLObject::changeScheme(INetProtocol eTargetScheme) {
+    ::rtl::OUString aTmpStr=m_aAbsURIRef.makeStringAndClear();
+    int oldSchemeLen=strlen(getSchemeInfo().m_pScheme);
+    m_eScheme=eTargetScheme;
+    int newSchemeLen=strlen(getSchemeInfo().m_pScheme);
+    m_aAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    m_aAbsURIRef.append(aTmpStr.getStr()+oldSchemeLen);
+    int delta=newSchemeLen-oldSchemeLen;
+    m_aUser+=delta;
+    m_aAuth+=delta;
+    m_aHost+=delta;
+    m_aPort+=delta;
+    m_aPath+=delta;
+    m_aQuery+=delta;
+    m_aFragment+=delta;
 }
 
 //============================================================================
@@ -1556,7 +1598,7 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                     break;
 
                 default:
-                    DBG_ERROR("INetURLObject::convertRelToAbs():"
+                    OSL_FAIL("INetURLObject::convertRelToAbs():"
                                   " Bad guessFSysStyleByCounting");
                     break;
             }
@@ -2123,6 +2165,7 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               INET_PROT_PRIV_SOFFICE, PrefixInfo::INTERNAL },
             { "private:trashcan:", "staroffice.trashcan:",
               INET_PROT_PRIV_SOFFICE, PrefixInfo::INTERNAL },
+            { "sftp:", 0, INET_PROT_SFTP, PrefixInfo::OFFICIAL },
             { "slot:", "staroffice.slot:", INET_PROT_SLOT,
               PrefixInfo::INTERNAL },
             { "smb:", 0, INET_PROT_SMB, PrefixInfo::OFFICIAL },
@@ -2176,6 +2219,8 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
               PrefixInfo::OFFICIAL } };
+    /* This list needs to be sorted, or you'll introduce serious bugs */
+
     PrefixInfo const * pFirst = aMap + 1;
     PrefixInfo const * pLast = aMap + sizeof aMap / sizeof (PrefixInfo) - 1;
     PrefixInfo const * pMatch = 0;
@@ -2341,7 +2386,7 @@ bool INetURLObject::setPassword(rtl::OUString const & rThePassword,
     else if (m_aHost.isPresent())
     {
         m_aAbsURIRef.insert(m_aHost.getBegin(),
-            rtl::OUString::createFromAscii(":@"));
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":@" )));
         m_aUser.set(m_aAbsURIRef, rtl::OUString(), m_aHost.getBegin());
         nDelta
             = m_aAuth.set(m_aAbsURIRef, aNewAuth, m_aHost.getBegin() + 1) + 2;
@@ -2396,7 +2441,7 @@ bool INetURLObject::parseHost(
                     aTheCanonic.append(sal_Unicode('['));
                     eState = STATE_IP6;
                 }
-                else if (INetMIME::isAlpha(*p))
+                else if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                 {
@@ -2414,19 +2459,19 @@ bool INetURLObject::parseHost(
                     eState = STATE_LABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_LABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p))
+                else if (!INetMIME::isAlphanumeric(*p) && *p != '_')
                     goto done;
                 break;
 
             case STATE_LABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p))
+                if (INetMIME::isAlphanumeric(*p) || *p == '_')
                     eState = STATE_LABEL;
                 else if (*p != '-')
                     goto done;
                 break;
 
             case STATE_LABEL_DOT:
-                if (INetMIME::isAlpha(*p))
+                if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                     eState = STATE_LABEL;
@@ -2439,19 +2484,19 @@ bool INetURLObject::parseHost(
                     eState = STATE_TOPLABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_TOPLABEL_HYPHEN;
-                else if (!INetMIME::isAlphanumeric(*p))
+                else if (!INetMIME::isAlphanumeric(*p) && *p != '_')
                     goto done;
                 break;
 
             case STATE_TOPLABEL_HYPHEN:
-                if (INetMIME::isAlphanumeric(*p))
+                if (INetMIME::isAlphanumeric(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (*p != '-')
                     goto done;
                 break;
 
             case STATE_TOPLABEL_DOT:
-                if (INetMIME::isAlpha(*p))
+                if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                     eState = STATE_LABEL;
@@ -2473,7 +2518,7 @@ bool INetURLObject::parseHost(
                         eState = STATE_LABEL_DOT;
                 else if (*p == '-')
                     eState = STATE_LABEL_HYPHEN;
-                else if (INetMIME::isAlpha(*p))
+                else if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_LABEL;
                 else if (INetMIME::isDigit(*p))
                     if (nDigits < 3)
@@ -2488,7 +2533,7 @@ bool INetURLObject::parseHost(
                 break;
 
             case STATE_IP4_DOT:
-                if (INetMIME::isAlpha(*p))
+                if (INetMIME::isAlpha(*p) || *p == '_')
                     eState = STATE_TOPLABEL;
                 else if (INetMIME::isDigit(*p))
                 {
@@ -3249,9 +3294,9 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             }
             bool bInbox;
             rtl::OUString sCompare(aTheSynPath);
-            if (sCompare.equalsAscii("/inbox"))
+            if (sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/inbox")))
                 bInbox = true;
-            else if (sCompare.equalsAscii("/newsgroups"))
+            else if (sCompare.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("/newsgroups")))
                 bInbox = false;
             else
                 return false;
@@ -3394,6 +3439,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
             break;
 
         case INET_PROT_GENERIC:
+        case INET_PROT_SFTP:
             while (pPos < pEnd && *pPos != nFragmentDelimiter)
             {
                 EscapeType eEscapeType;
@@ -3437,8 +3483,8 @@ bool INetURLObject::setPath(rtl::OUString const & rThePath, bool bOctets,
 //============================================================================
 bool INetURLObject::checkHierarchical() const {
     if (m_eScheme == INET_PROT_VND_SUN_STAR_EXPAND) {
-        OSL_ENSURE(
-            false, "INetURLObject::checkHierarchical vnd.sun.star.expand");
+        OSL_FAIL(
+            "INetURLObject::checkHierarchical vnd.sun.star.expand");
         return true;
     } else {
         return getSchemeInfo().m_bHierarchical;
@@ -5214,7 +5260,7 @@ void INetURLObject::appendUCS4(rtl::OUStringBuffer& rTheText, sal_uInt32 nUCS4,
         switch (eTargetCharset)
         {
             default:
-                DBG_ERROR("INetURLObject::appendUCS4(): Unsupported charset");
+                OSL_FAIL("INetURLObject::appendUCS4(): Unsupported charset");
             case RTL_TEXTENCODING_ASCII_US:
             case RTL_TEXTENCODING_ISO_8859_1:
                 appendEscape(rTheText, cEscapePrefix, nUCS4);
@@ -5260,7 +5306,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                 switch (eCharset)
                 {
                     default:
-                        DBG_ERROR(
+                        OSL_FAIL(
                             "INetURLObject::getUTF32(): Unsupported charset");
                     case RTL_TEXTENCODING_ASCII_US:
                         rEscapeType = INetMIME::isUSASCII(nUTF32) ?
@@ -5379,7 +5425,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
         switch (eState)
         {
             case STATE_DOT:
-                if (p != pEnd && INetMIME::isAlphanumeric(*p))
+                if (p != pEnd && (INetMIME::isAlphanumeric(*p) || *p == '_'))
                 {
                     ++nLabels;
                     eState = STATE_LABEL;
@@ -5393,7 +5439,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
             case STATE_LABEL:
                 if (p != pEnd)
                 {
-                    if (INetMIME::isAlphanumeric(*p))
+                    if (INetMIME::isAlphanumeric(*p) || *p == '_')
                         break;
                     else if (*p == '.')
                     {
@@ -5413,7 +5459,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
             case STATE_HYPHEN:
                 if (p != pEnd)
                 {
-                    if (INetMIME::isAlphanumeric(*p))
+                    if (INetMIME::isAlphanumeric(*p) || *p == '_')
                     {
                         eState = STATE_LABEL;
                         break;
@@ -5577,3 +5623,5 @@ bool INetURLObject::IsCaseSensitive() const
 {
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

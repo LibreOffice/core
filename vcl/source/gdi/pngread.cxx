@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,7 +158,6 @@ private:
 
     bool                ReadNextChunk();
     void                ReadRemainingChunks();
-    void                SkipRemainingChunks();
 
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor & );
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, sal_uInt8 nPalIndex );
@@ -200,7 +200,9 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpInflateInBuf  ( NULL ),
     mpScanPrior     ( NULL ),
     mpTransTab      ( NULL ),
+    mpScanCurrent   ( NULL ),
     mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
+    mnPass ( 0 ),
     mbzCodecInUse   ( sal_False ),
     mbStatus( sal_True),
     mbIDAT( sal_False ),
@@ -333,30 +335,6 @@ void PNGReaderImpl::ReadRemainingChunks()
 
 // ------------------------------------------------------------------------
 
-// move position of mrPNGStream to the end of the file
-void PNGReaderImpl::SkipRemainingChunks()
-{
-    // nothing to skip if the last chunk was read
-    if( !maChunkSeq.empty() && (maChunkSeq.back().nType == PNGCHUNK_IEND) )
-        return;
-
-    // read from the stream until the IEND chunk is found
-    const sal_Size nStreamPos = mrPNGStream.Tell();
-    while( !mrPNGStream.IsEof() && (mrPNGStream.GetError() == ERRCODE_NONE) )
-    {
-        mrPNGStream >> mnChunkLen >> mnChunkType;
-        if( mnChunkLen < 0 )
-            break;
-        if( nStreamPos + mnChunkLen >= mnStreamSize )
-            break;
-        mrPNGStream.SeekRel( mnChunkLen + 4 );  // skip data + CRC
-        if( mnChunkType == PNGCHUNK_IEND )
-            break;
-    }
-}
-
-// ------------------------------------------------------------------------
-
 const std::vector< vcl::PNGReader::ChunkData >& PNGReaderImpl::GetAllChunks()
 {
     ReadRemainingChunks();
@@ -426,7 +404,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
                     sal_uInt32 nYPixelPerMeter = ImplReadsal_uInt32();
 
                     sal_uInt8 nUnitSpecifier = *maDataIter++;
-                    if( (nUnitSpecifier == 1) && nXPixelPerMeter && nXPixelPerMeter )
+                    if( (nUnitSpecifier == 1) && nXPixelPerMeter && nYPixelPerMeter )
                     {
                         mbpHYs = sal_True;
 
@@ -478,11 +456,6 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             aRet.SetPrefSize( maPhysSize );
         }
 
-#if 0
-        // TODO: make sure nobody depends on the stream being after the IEND chunks
-        // => let them do ReadChunks before
-        ReadRemainingChunks();
-#endif
     }
 
     return aRet;
@@ -1587,3 +1560,5 @@ void PNGReader::SetIgnoreGammaChunk( sal_Bool b )
 
 
 } // namespace vcl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

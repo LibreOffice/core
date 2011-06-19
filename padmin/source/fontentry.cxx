@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,94 +40,13 @@
 
 using namespace padmin;
 using namespace osl;
-using namespace rtl;
 using namespace psp;
 
-#if 0
-static void CreateAfmFile( const INetURLObject& rFontFile )
-{
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
-
-    INetURLObject aFontMap( rFontFile.GetPath(), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-    aFontMap.Append( String( RTL_CONSTASCII_USTRINGPARAM( "Fontmap" ) ) );
-    INetURLObject aAfmFile( rFontFile );
-    aAfmFile.setExtension( String::CreateFromAscii( "afm", 3 ) );
-
-
-    SvFileStream aMap( aFontMap.PathToFileName(), STREAM_WRITE | STREAM_TRUNC );
-    if( aMap.IsOpen() )
-    {
-        SvFileStream aRead( rFontFile.GetFull(), STREAM_READ );
-        ByteString aLine;
-        ByteString aFullName;
-        int nPos;
-        while( ! aRead.IsEof() &&
-               ( nPos = aLine.Search( "/FullName" ) ) == STRING_NOTFOUND )
-            aRead.ReadLine( aLine );
-        aRead.Close();
-        if( nPos != STRING_NOTFOUND )
-        {
-            aLine.Erase( 0, nPos );
-            aFullName = aLine.GetToken( 1, '(' ).GetToken( 0, ')' );
-
-            aLine = '/';
-            aLine += aFullName;
-            aLine += ' ';
-            aLine += '(';
-            aLine += ByteString( rFontFile.GetName(), aEncoding );
-            aLine += ')';
-            aLine += ';';
-
-            aMap.WriteLine( aLine );
-        }
-        aMap.Close();
-        pid_t nPID = fork();
-        if( ! nPID )
-        {
-            INetURLObject aTmp( rFontFile );
-            aTmp.CutName();
-            ByteString aEnv( "GS_LIB=" );
-            aEnv += ByteString( aTmp.PathToFileName(), aEncoding );
-            putenv( const_cast<char*>(aEnv.GetBuffer()) );
-
-            int nDescr = open( ByteString( aAfmFile.PathToFileName(), aEncoding ).GetBuffer(),
-                               O_CREAT | O_TRUNC| O_WRONLY,
-                               00755 );
-#if OSL_DEBUG_LEVEL > 1
-            if( nDescr < 0 )
-                fprintf( stderr, "open( %s ) failed because of %d\n", ByteString( aAfmFile.GetFull(), aEncoding ).GetBuffer(), errno );
-#endif
-            if( dup2( nDescr, STDOUT_FILENO ) > 0 )
-            {
-                execlp( "gs",
-                        "-q",
-                        "-dNODISPLAY",
-                        "--", "printafm.ps",
-                        aFullName.GetBuffer(),
-                        NULL );
-            }
-#if OSL_DEBUG_LEVEL > 1
-            else
-                fprintf( stderr, "dup2( %d, %d ) failed because of %d\n", nDescr, STDOUT_FILENO, errno );
-#endif
-            _exit( 0 );
-        }
-        if( nPID > 0 )
-            waitpid( nPID, NULL, 0 );
-        MetricConverter::ConvertAFM( aAfmFile );
-    }
-
-    struct stat aStat;
-    ByteString aSysFile( aAfmFile.PathToFileName(), aEncoding );
-    if( stat( aSysFile.GetBuffer(), &aStat ) || ! aStat.st_size )
-        unlink( aSysFile.GetBuffer() );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, " %s\n", ! access( aSysFile.GetBuffer(), F_OK ) ? "success" : "failed" );
-#endif
-    unlink( ByteString( aFontMap.PathToFileName(), aEncoding ).GetBuffer() );
-}
-
-#endif
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
 
 FontNameDlg::FontNameDlg( Window *pParent ) :
         ModalDialog( pParent, PaResId( RID_FONTNAMEDIALOG ) ),
@@ -187,35 +107,35 @@ String FontNameDlg::fillFontEntry( FastPrintFontInfo& rInfo, const String& rFile
     bool bWeight = true, bItalic = true, bWidth = true;
     switch( rInfo.m_eWeight )
     {
-        case weight::Thin:          aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
-        case weight::UltraLight:    aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
-        case weight::Light:         aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
-        case weight::SemiLight:     aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
-        case weight::SemiBold:      aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
-        case weight::Bold:          aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
-        case weight::UltraBold:     aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
+        case WEIGHT_THIN:           aEntry.AppendAscii( ", " ); aEntry.Append( aThinTxt ); break;
+        case WEIGHT_ULTRALIGHT: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraLightTxt ); break;
+        case WEIGHT_LIGHT:          aEntry.AppendAscii( ", " ); aEntry.Append( aLightTxt ); break;
+        case WEIGHT_SEMILIGHT:      aEntry.AppendAscii( ", " ); aEntry.Append( aSemiLightTxt ); break;
+        case WEIGHT_SEMIBOLD:       aEntry.AppendAscii( ", " ); aEntry.Append( aSemiBoldTxt ); break;
+        case WEIGHT_BOLD:           aEntry.AppendAscii( ", " ); aEntry.Append( aBoldTxt ); break;
+        case WEIGHT_ULTRABOLD:      aEntry.AppendAscii( ", " ); aEntry.Append( aUltraBoldTxt ); break;
         default:
             bWeight = false;
             break;
     }
     switch( rInfo.m_eItalic )
     {
-        case italic::Oblique:       aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
-        case italic::Italic:        aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
+        case ITALIC_OBLIQUE:        aEntry.AppendAscii( ", " ); aEntry.Append( aObliqueTxt ); break;
+        case ITALIC_NORMAL:     aEntry.AppendAscii( ", " ); aEntry.Append( aItalicTxt ); break;
         default:
             bItalic = false;
             break;
     }
     switch( rInfo.m_eWidth )
     {
-        case width::UltraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
-        case width::ExtraCondensed: aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
-        case width::Condensed:      aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
-        case width::SemiCondensed:  aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
-        case width::SemiExpanded:   aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
-        case width::Expanded:       aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
-        case width::ExtraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
-        case width::UltraExpanded:  aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
+        case WIDTH_ULTRA_CONDENSED: aEntry.AppendAscii( ", " ); aEntry.Append( aUltraCondensedTxt ); break;
+        case WIDTH_EXTRA_CONDENSED: aEntry.AppendAscii( ", " ); aEntry.Append( aExtraCondensedTxt ); break;
+        case WIDTH_CONDENSED:       aEntry.AppendAscii( ", " ); aEntry.Append( aCondensedTxt ); break;
+        case WIDTH_SEMI_CONDENSED:  aEntry.AppendAscii( ", " ); aEntry.Append( aSemiCondensedTxt ); break;
+        case WIDTH_SEMI_EXPANDED:   aEntry.AppendAscii( ", " ); aEntry.Append( aSemiExpandedTxt ); break;
+        case WIDTH_EXPANDED:        aEntry.AppendAscii( ", " ); aEntry.Append( aExpandedTxt ); break;
+        case WIDTH_EXTRA_EXPANDED:  aEntry.AppendAscii( ", " ); aEntry.Append( aExtraExpandedTxt ); break;
+        case WIDTH_ULTRA_EXPANDED:  aEntry.AppendAscii( ", " ); aEntry.Append( aUltraExpandedTxt ); break;
         default:
             bWidth = false;
             break;
@@ -259,7 +179,7 @@ void FontNameDlg::init()
     m_aRemoveButton.Enable( sal_False );
     m_aRenameButton.Enable( sal_False );
 
-    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
+    ::boost::unordered_map< OUString, int, OUStringHash > aFamilies;
     ::std::list< fontID >::iterator font_it;
     for( font_it = aFonts.begin(); font_it != aFonts.end(); ++font_it )
     {
@@ -301,7 +221,7 @@ void FontNameDlg::init()
             else
                 aEntry = fillFontEntry( aInfo, String( ByteString( aFile ), osl_getThreadTextEncoding() ), aFamilies[ aInfo.m_aFamilyName ] > 1  );
             sal_uInt16 nEntry = m_aFontBox.InsertEntry( aEntry );
-            m_aFontBox.SetEntryData( nEntry, (void*)(*font_it) );
+            m_aFontBox.SetEntryData( nEntry, (void*)(sal_IntPtr)(*font_it) );
         }
     }
 }
@@ -576,8 +496,8 @@ void FontImportDialog::fillFontBox()
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     m_aNewFontsBox.Clear();
 
-    ::std::hash_map< OUString, int, OUStringHash > aFamilies;
-    ::std::hash_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it;
+    ::boost::unordered_map< OUString, int, OUStringHash > aFamilies;
+    ::boost::unordered_map< OString, ::std::list< FastPrintFontInfo >, OStringHash >::iterator it;
     for( it = m_aNewFonts.begin(); it != m_aNewFonts.end(); ++it )
     {
         const OUString& rFamily( it->second.front().m_aFamilyName );
@@ -666,3 +586,5 @@ IMPL_LINK( FontImportDialog, ToggleHdl, CheckBox*, pBox )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

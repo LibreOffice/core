@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,6 +72,8 @@ public:
     virtual void                    SetBackground() = 0;
     virtual void                    SetBackground( SalColor nSalColor ) = 0;
 
+    virtual void                    SetForwardKey( sal_Bool /*bEnable*/ ) {}
+
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
     virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept ) = 0;
@@ -90,3 +93,5 @@ public:
 };
 
 #endif // _SV_SALOBJ_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

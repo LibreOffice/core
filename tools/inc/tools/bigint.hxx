@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,8 +83,7 @@ public:
                     BigInt( sal_uInt16 nVal );
                     BigInt( sal_uInt32 nVal );
                     BigInt( const BigInt& rBigInt );
-                    BigInt( const ByteString& rString );
-                    BigInt( const UniString& rString );
+                    BigInt( const String& rString );
 #ifdef _TLBIGINT_INT64
                     BigInt( const SbxINT64  &r );
                     BigInt( const SbxUINT64 &r );
@@ -97,8 +97,7 @@ public:
     operator        sal_uIntPtr() const;
 
     void            Set( sal_Bool bSet ) { bIsSet = bSet; }
-    ByteString      GetByteString() const;
-    UniString       GetString() const;
+    String          GetString() const;
 
     sal_Bool            IsSet() const { return bIsSet; }
     sal_Bool            IsNeg() const;
@@ -326,3 +325,5 @@ inline sal_Bool operator>=( const BigInt& rVal1, const BigInt& rVal2 )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

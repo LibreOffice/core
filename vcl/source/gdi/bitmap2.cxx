@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/zcodec.hxx>
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
@@ -46,6 +45,8 @@
 
 #define DIBCOREHEADERSIZE           ( 12UL )
 #define DIBINFOHEADERSIZE           ( sizeof( DIBInfoHeader ) )
+#define BITMAPINFOHEADER                        0x28
+
 #define SETPIXEL4( pBuf, nX, cChar )( (pBuf)[ (nX) >> 1 ] |= ( (nX) & 1 ) ? ( cChar ): (cChar) << 4 );
 
 // ----------------------
@@ -129,7 +130,7 @@ SvStream& operator<<( SvStream& rOStm, const Bitmap& rBitmap )
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader )
+sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader, sal_Bool bIsMSOFormat )
 {
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
     const sal_uLong     nOldPos = rIStm.Tell();
@@ -144,7 +145,7 @@ sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader )
             bRet = ImplReadDIB( rIStm, *this, nOffset );
     }
     else
-        bRet = ImplReadDIB( rIStm, *this, nOffset );
+        bRet = ImplReadDIB( rIStm, *this, nOffset, bIsMSOFormat );
 
     if( !bRet )
     {
@@ -161,18 +162,18 @@ sal_Bool Bitmap::Read( SvStream& rIStm, sal_Bool bFileHeader )
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset )
+sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset, sal_Bool bIsMSOFormat )
 {
     DIBInfoHeader   aHeader;
     const sal_uLong     nStmPos = rIStm.Tell();
     sal_Bool            bRet = sal_False;
     sal_Bool        bTopDown = sal_False;
 
-    if( ImplReadDIBInfoHeader( rIStm, aHeader, bTopDown ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
+    if( ImplReadDIBInfoHeader( rIStm, aHeader, bTopDown, bIsMSOFormat ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
     {
         const sal_uInt16 nBitCount( discretizeBitcount(aHeader.nBitCount) );
 
-        const Size          aSizePixel( aHeader.nWidth, aHeader.nHeight );
+        const Size          aSizePixel( aHeader.nWidth, abs(aHeader.nHeight) );
         BitmapPalette       aDummyPal;
         Bitmap              aNewBmp( aSizePixel, nBitCount, &aDummyPal );
         BitmapWriteAccess*  pAcc = aNewBmp.AcquireWriteAccess();
@@ -215,7 +216,8 @@ sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset )
 
                 // set decoded bytes to memory stream,
                 // from which we will read the bitmap data
-                pIStm = pMemStm = new SvMemoryStream;
+                pMemStm = new SvMemoryStream;
+                pIStm = pMemStm;
                 pMemStm->SetBuffer( (char*) pData, nUncodedSize, sal_False, nUncodedSize );
                 nOffset = 0;
             }
@@ -244,7 +246,7 @@ sal_Bool Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset )
                                       Fraction( 1000, aHeader.nYPelsPerMeter ) );
 
                     aNewBmp.SetPrefMapMode( aMapMode );
-                    aNewBmp.SetPrefSize( Size( aHeader.nWidth, aHeader.nHeight ) );
+                    aNewBmp.SetPrefSize( Size( aHeader.nWidth, abs(aHeader.nHeight) ) );
                 }
             }
 
@@ -299,20 +301,36 @@ sal_Bool Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
 
 // ------------------------------------------------------------------
 
-sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown )
+sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, sal_Bool bIsMSOFormat )
 {
     // BITMAPINFOHEADER or BITMAPCOREHEADER
     rIStm >> rHeader.nSize;
 
     // BITMAPCOREHEADER
+    sal_Int16 nTmp16 = 0;
     if ( rHeader.nSize == DIBCOREHEADERSIZE )
     {
-        sal_Int16 nTmp16;
 
         rIStm >> nTmp16; rHeader.nWidth = nTmp16;
         rIStm >> nTmp16; rHeader.nHeight = nTmp16;
         rIStm >> rHeader.nPlanes;
         rIStm >> rHeader.nBitCount;
+    }
+    else if ( bIsMSOFormat && ( rHeader.nSize == BITMAPINFOHEADER ) )
+    {
+        sal_uInt8 nTmp8 = 0;
+        rIStm >> nTmp16; rHeader.nWidth = nTmp16;
+        rIStm >> nTmp16; rHeader.nHeight = nTmp16;
+        rIStm >> nTmp8; rHeader.nPlanes = nTmp8;
+        rIStm >> nTmp8; rHeader.nBitCount = nTmp8;
+        rIStm >> nTmp16; rHeader.nSizeImage = nTmp16;
+        rIStm >> nTmp16; rHeader.nCompression = nTmp16;
+        if ( !rHeader.nSizeImage ) // uncompressed?
+            rHeader.nSizeImage = ((rHeader.nWidth * rHeader.nBitCount + 31) & ~31) / 8 * rHeader.nHeight;
+        rIStm >> rHeader.nXPelsPerMeter;
+        rIStm >> rHeader.nYPelsPerMeter;
+        rIStm >> rHeader.nColsUsed;
+        rIStm >> rHeader.nColsImportant;
     }
     else
     {
@@ -365,7 +383,7 @@ sal_Bool Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader,
         else
         {
             rIStm >> rHeader.nWidth;
-            rIStm >> rHeader.nHeight;
+            rIStm >> rHeader.nHeight; //rHeader.nHeight=abs(rHeader.nHeight);
             rIStm >> rHeader.nPlanes;
             rIStm >> rHeader.nBitCount;
             rIStm >> rHeader.nCompression;
@@ -461,7 +479,13 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
         if( rHeader.nColsUsed && rHeader.nBitCount > 8 )
             rIStm.SeekRel( rHeader.nColsUsed * ( ( rHeader.nSize != DIBCOREHEADERSIZE ) ? 4 : 3 ) );
 
-        rIStm.Read( rAcc.GetBuffer(), rHeader.nHeight * nAlignedWidth );
+        if ( rHeader.nHeight > 0 )
+            rIStm.Read( rAcc.GetBuffer(), rHeader.nHeight * nAlignedWidth );
+        else
+        {
+            for( int i = abs(rHeader.nHeight)-1; i >= 0; i-- )
+                rIStm.Read( ((char*)rAcc.GetBuffer()) + (nAlignedWidth*i), nAlignedWidth );
+        }
     }
     else
     {
@@ -504,7 +528,7 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
         else
         {
             const long  nWidth = rHeader.nWidth;
-            const long  nHeight = rHeader.nHeight;
+            const long  nHeight = abs(rHeader.nHeight);
             sal_uInt8*      pBuf = new sal_uInt8[ nAlignedWidth ];
 
             // true color DIB's can have a (optimization) palette
@@ -1061,7 +1085,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                             BitmapWriteAccess& rAcc, sal_Bool bRLE4 )
 {
     Scanline    pRLE = pBuffer;
-    long        nY = rHeader.nHeight - 1L;
+    long        nY = abs(rHeader.nHeight) - 1L;
     const sal_uLong nWidth = rAcc.Width();
     sal_uLong       nCountByte;
     sal_uLong       nRunByte;
@@ -1275,3 +1299,5 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
 
     return( rOStm.GetError() == 0UL );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

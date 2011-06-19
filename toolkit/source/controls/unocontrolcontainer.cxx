@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -73,8 +73,6 @@ public:
     inline const ::rtl::OUString&                   getName() const { return msName; }
     inline const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
-
-//DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
 
 class UnoControlHolderList
 {
@@ -811,9 +809,8 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
                 aCtrls.getArray()[n]->createPeer( rxToolkit, getPeer() );
 
             uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
-            OSL_ENSURE(xC.is(),"Peer isn't valid. Please check!");
-
-            xC->enableDialogControl( sal_True );
+            if ( xC.is() )
+                xC->enableDialogControl( sal_True );
             ImplActivateTabControllers();
         }
 
@@ -836,3 +833,4 @@ void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(uno::RuntimeExce
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

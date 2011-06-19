@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -211,3 +212,5 @@ Polygon2D convexHull( const Polygon2D& rPoly )
     // copy range [1,M] to output
     return Polygon2D( result.begin()+1, result.begin()+M+1 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

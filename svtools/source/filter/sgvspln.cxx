@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,6 @@
 
 
 #include <tools/poly.hxx>
-
-#if defined( PM2 ) && defined( __BORLANDC__ )
-#pragma option -Od
-#endif
 
 extern "C" {
 
@@ -449,8 +446,6 @@ sal_uInt16 ZyklTriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower, double* diag
 |*
 |*    Beschreibung      Berechnet die Koeffizienten eines natuerlichen
 |*                      kubischen Polynomsplines mit n Stuetzstellen.
-|*    Ersterstellung    JOE 17-08.93
-|*    Letzte Aenderung  JOE 17-08.93
 |*
 *************************************************************************/
 
@@ -557,8 +552,6 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
 |*
 |*    Beschreibung      Berechnet die Koeffizienten eines periodischen
 |*                      kubischen Polynomsplines mit n Stuetzstellen.
-|*    Ersterstellung    JOE 17-08.93
-|*    Letzte Aenderung  JOE 17-08.93
 |*
 *************************************************************************/
 
@@ -636,8 +629,6 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
 |*    Beschreibung      Berechnet die Koeffizienten eines parametrischen
 |*                      natuerlichen oder periodischen kubischen
 |*                      Polynomsplines mit n Stuetzstellen.
-|*    Ersterstellung    JOE 17-08.93
-|*    Letzte Aenderung  JOE 17-08.93
 |*
 *************************************************************************/
 
@@ -648,7 +639,7 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
                   double* bx, double* cx, double* dx,
                   double* by, double* cy, double* dy)
 {
-    sal_uInt16 Error,Marg;
+    sal_uInt16 Error;
     sal_uInt16 i;
     double deltX,deltY,delt,
            alphX = 0,alphY = 0,
@@ -666,9 +657,8 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
         }
     }
     switch (MargCond) {
-        case 0: Marg=0; break;
+        case 0: break;
         case 1: case 2: {
-            Marg=MargCond;
             alphX=Marg01; betX=MargN1;
             alphY=Marg02; betY=MargN2;
         } break;
@@ -677,7 +667,6 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
             if (y[n]!=y[0]) return 4;
         } break;
         case 4: {
-            Marg=1;
             if (abs(Marg01)>=MAXROOT) {
                 alphX=0.0;
                 alphY=sign(1.0,y[1]-y[0]);
@@ -724,8 +713,6 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
 |*                      ist Speicher fuer die Koeffizientenarrays
 |*                      allokiert, der dann spaeter vom Aufrufer mittels
 |*                      delete freizugeben ist.
-|*    Ersterstellung    JOE 17-08.93
-|*    Letzte Aenderung  JOE 17-08.93
 |*
 *************************************************************************/
 
@@ -734,7 +721,7 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T)
 {
     sal_uInt8   Marg;
-    double Marg01,Marg02;
+    double Marg01;
     double MargN1,MargN2;
     sal_uInt16 i;
     Point  P0(-32768,-32768);
@@ -773,7 +760,6 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
     T =new double[n+1];
 
     Marg01=0.0;
-    Marg02=0.0;
     MargN1=0.0;
     MargN2=0.0;
     if (n>0) n--; // n Korregieren (Anzahl der Teilpolynome)
@@ -813,15 +799,10 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
 |*                      Um Koordinatenueberlaeufe zu vermeiden werden diese
 |*                      auf +/-32000 begrenzt.
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
 {
-    short  MinKoord=-32000; // zur Vermeidung
-    short  MaxKoord=32000;  // von Ueberlaeufen
-
     double* ax;          // Koeffizienten der Polynome
     double* ay;
     double* bx;
@@ -832,19 +813,20 @@ sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
     double* dy;
     double* tv;
 
-    double  Step;        // Schrittweite fuer t
-    double  dt1,dt2,dt3; // Delta t, y, ^3
-    double  t;
     sal_Bool    bEnde;       // Teilpolynom zu Ende?
     sal_uInt16  n;           // Anzahl der zu zeichnenden Teilpolynome
     sal_uInt16  i;           // aktuelles Teilpolynom
     sal_Bool    bOk;         // noch alles ok?
-    sal_uInt16  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
-    long    x,y;
 
     bOk=CalcSpline(rSpln,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
     if (bOk) {
-        Step =10;
+        short  MinKoord=-32000; // zur Vermeidung
+        short  MaxKoord=32000;  // von Ueberlaeufen
+        double Step =10;
+        double  dt1,dt2,dt3; // Delta t, y, ^3
+        double  t;
+        sal_uInt16  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
+        long    x,y;
 
         rPoly.SetSize(1);
         rPoly.SetPoint(Point(short(ax[0]),short(ay[0])),0); // erster Punkt
@@ -884,3 +866,5 @@ sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
     rPoly.SetSize(0);
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/time.hxx>
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 #include <brdwin.hxx>
 #include <svdata.hxx>
@@ -370,7 +369,7 @@ ImplDockingWindowWrapper* DockingManager::GetDockingWindowWrapper( const Window 
         if( (*p)->mpDockingWindow == pWindow )
             return (*p);
         else
-            p++;
+            ++p;
     }
     return NULL;
 }
@@ -484,7 +483,7 @@ void DockingManager::RemoveWindow( const Window *pWindow )
             break;
         }
         else
-            p++;
+            ++p;
     }
 }
 
@@ -1686,3 +1685,5 @@ sal_Bool ImplDockingWindowWrapper::IsLocked() const
 {
     return mbLocked;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

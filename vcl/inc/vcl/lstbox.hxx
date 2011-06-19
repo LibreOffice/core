@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,6 @@ private:
     Link                        maDoubleClickHdl;
     sal_uInt16 mnLineCount;
 
-//#if 0 // _SOLAR__PRIVATE
 private:
     SAL_DLLPRIVATE void    ImplInitListBoxData();
 
@@ -74,7 +74,6 @@ protected:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
-//#endif
     sal_Bool                IsDropDownBox() const { return mpFloatWin ? sal_True : sal_False; }
 
 protected:
@@ -264,3 +263,5 @@ public:
 };
 
 #endif  // _SV_LSTBOX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

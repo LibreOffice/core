@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,8 +114,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.i18n.Transliteration"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.Transliteration")));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -135,8 +136,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit2.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.i18n.Transliteration"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.Transliteration")));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -152,7 +153,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     if ( !xBreak.is() )
     {
         Reference < XInterface > xI = xMSF->createInstance(
-                OUString::createFromAscii( "com.sun.star.i18n.BreakIterator"));
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")));
         if( xI.is() )
             xI->queryInterface( ::getCppuType(
                         (const Reference< XBreakIterator >*)0))
@@ -412,7 +413,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
         if ( !xCharClass.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")));
             if( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XCharacterClassification >*)0))
@@ -981,13 +982,13 @@ SAL_CALL TextSearch_CreateInstance(
 extern "C"
 {
 
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName, uno_Environment** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
         void* _pServiceManager, void* /*_pRegistryKey*/ )
 {
     void* pRet = NULL;
@@ -1017,3 +1018,5 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName,
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

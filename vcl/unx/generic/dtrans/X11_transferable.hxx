@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <X11_selection.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HDL_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 
 namespace x11 {
@@ -44,10 +43,9 @@ namespace x11 {
         ::osl::Mutex m_aMutex;
 
         SelectionManager&               m_rManager;
-        com::sun::star::uno::Reference< XInterface >            m_xCreator;
         Atom                m_aSelection;
     public:
-        X11Transferable( SelectionManager& rManager, const com::sun::star::uno::Reference< XInterface >& xCreator, Atom selection = None );
+        X11Transferable( SelectionManager& rManager, Atom selection = None );
         virtual ~X11Transferable();
 
         /*
@@ -70,3 +68,5 @@ namespace x11 {
 } // namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

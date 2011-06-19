@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
-#endif
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/simpleioerrorrequest.hxx>
 
@@ -85,7 +84,7 @@ void cancelCommandExecution( const uno::Any & rException,
 
     cppu::throwException( rException );
 
-    OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
+    OSL_FAIL( "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
 
@@ -123,8 +122,10 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
 
     cppu::throwException( xRequest->getRequest() );
 
-    OSL_ENSURE( sal_False, "Return from cppu::throwException call!!!" );
+    OSL_FAIL( "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

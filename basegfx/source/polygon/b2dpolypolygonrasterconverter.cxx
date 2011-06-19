@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -349,12 +350,12 @@ namespace basegfx
                 return 0.0f;
             }
 
-            bool isEnded()
+            bool isEnded() const
             {
                 return mnYCounter<=0;
             }
 
-            bool isDownwards()
+            bool isDownwards() const
             {
                 return mbDownwards;
             }
@@ -590,8 +591,7 @@ namespace basegfx
                 switch( eFillRule )
                 {
                     default:
-                        OSL_ENSURE(false,
-                                   "B2DPolyPolygonRasterConverter::rasterConvert(): Unexpected fill rule");
+                        OSL_FAIL("B2DPolyPolygonRasterConverter::rasterConvert(): Unexpected fill rule");
                         return;
 
                     case FillRule_EVEN_ODD:
@@ -700,3 +700,5 @@ namespace basegfx
     }
 }
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

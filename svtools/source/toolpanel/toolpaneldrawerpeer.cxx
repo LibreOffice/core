@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -38,6 +39,7 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/svapp.hxx>
 
 //......................................................................................................................
 namespace svt
@@ -133,10 +135,12 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > ToolPanelDrawerPeer::CreateAccessibleContext()
     {
-        ::vos::OGuard aSolarGuard( GetMutex() );
+        SolarMutexGuard aSolarGuard;
         return new ToolPanelDrawerContext( *this );
     }
 
 //......................................................................................................................
 } // namespace svt
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

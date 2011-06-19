@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ namespace
 class GrindApp : public Application
 {
 public:
-    virtual void   Main();
+    virtual int Main();
     virtual sal_uInt16 Exception( sal_uInt16 nError );
 };
 
@@ -82,7 +83,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString::createFromAscii( "OutDev grinding" ) );
+            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutDev grinding")) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -914,7 +915,7 @@ sal_uInt16 GrindApp::Exception( sal_uInt16 nError )
     return 0;
 }
 
-void GrindApp::Main()
+int GrindApp::Main()
 {
     bool bHelp = false;
 
@@ -922,15 +923,15 @@ void GrindApp::Main()
     {
         ::rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAscii( "--help" ) ||
-            aParam.equalsAscii( "-h" ) )
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
+            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
                 bHelp = true;
     }
 
     if( bHelp )
     {
         printf( "outdevgrind - Profile OutputDevice\n" );
-        return;
+        return EXIT_SUCCESS;
     }
 
     //-------------------------------------------------
@@ -958,8 +959,8 @@ void GrindApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
@@ -967,8 +968,11 @@ void GrindApp::Main()
 
     // clean up UCB
     ::ucbhelper::ContentBroker::deinitialize();
+    return EXIT_SUCCESS;
 }
 
 } // namespace
 
 GrindApp aGrindApp;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

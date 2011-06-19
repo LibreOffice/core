@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,12 +39,13 @@
 #include "targetdropcontext.hxx"
 #include "targetdragcontext.hxx"
 #include <rtl/ustring.h>
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
+
+using ::rtl::OUString;
 
 #define WM_REGISTERDRAGDROP WM_USER + 1
 #define WM_REVOKEDRAGDROP WM_USER + 2
@@ -659,3 +661,4 @@ inline sal_Int8 DropTarget::getFilteredActions( DWORD grfKeyState, DWORD dwEffec
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

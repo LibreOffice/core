@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,7 @@ public:
             - DocPasswordVerifierResult_WRONG_PASSWORD, if the password is
               wrong. The user may be asked again for a new password.
             - DocPasswordVerifierResult_ABORT, if an unrecoverable error
-              occured while password verification. The password request loop
+              occurred while password verification. The password request loop
               will be aborted.
      */
     virtual DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) = 0;
@@ -373,3 +374,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

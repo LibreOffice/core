@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,9 @@ typedef struct CGLayer   *CGLayerRef;
 class NSView;
 #endif
 #endif
+#if defined( WNT )
+#include <windef.h>
+#endif
 
 // -----------------
 // - SystemEnvData -
@@ -48,7 +52,7 @@ class NSView;
 struct SystemEnvData
 {
     unsigned long       nSize;          // size in bytes of this structure
-#if defined( WNT ) || defined( OS2 )
+#if defined( WNT )
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
     NSView*               pView;          // the cocoa (NSView *) implementing this object
@@ -76,7 +80,7 @@ struct SystemEnvData
 struct SystemParentData
 {
     unsigned long   nSize;            // size in bytes of this structure
-#if defined( WNT ) || defined( OS2 )
+#if defined( WNT )
     HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
     NSView*         pView;            // the cocoa (NSView *) implementing this object
@@ -121,7 +125,7 @@ struct SystemGraphicsData
     int         nScreen;        // the current screen of the drawable
     int             nDepth;         // depth of said visual
     long            aColormap;      // the colormap being used
-    void*           pRenderFormat;  // render format for drawable
+    void*           pXRenderFormat;  // render format for drawable
 #endif
 };
 
@@ -183,10 +187,11 @@ typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
 
 struct SystemTextLayoutData
 {
-    unsigned long   nSize;                      // size in bytes of this structure
-    std::vector<SystemGlyphData> rGlyphData;    // glyph data
-    int             orientation;                // Text orientation
+    unsigned long         nSize;         // size in bytes of this structure
+    SystemGlyphDataVector rGlyphData;    // glyph data
+    int                   orientation;   // Text orientation
 };
 
 #endif // _SV_SYSDATA_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

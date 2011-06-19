@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef INCLUDED_unotools_XMLACCELCFG_HXX
 #define INCLUDED_unotools_XMLACCELCFG_HXX
 
-#ifndef __COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
 
 #include <unotools/accelcfg.hxx>
@@ -107,3 +106,5 @@ class OWriteAccelatorDocumentHandler
 };
 
 #endif // INCLUDED_unotools_XMLACCELCFG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

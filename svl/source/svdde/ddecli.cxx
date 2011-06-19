@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,18 +31,14 @@
 
 #define UNICODE
 #include <string.h> // memset
+#include <algorithm>
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
 
 #include <osl/thread.h>
 #include <tools/debug.hxx>
 #include <tools/solarmutex.hxx>
-#include <vos/mutex.hxx>
-
-// static DWORD        hDdeInst  = NULL;
-// static short        nInstance = 0;
-
-// DdeConnections*     DdeConnection::pConnections = NULL;
+#include <osl/mutex.hxx>
 
 DdeInstData* ImpInitInstData()
 {
@@ -73,30 +70,34 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
             HDDEDATA hData, DWORD nInfo1, DWORD )
 {
     HDDEDATA nRet = DDE_FNOTPROCESSED;
-    DdeConnections&     rAll = (DdeConnections&)DdeConnection::GetConnections();
+    const std::vector<DdeConnection*> &rAll = DdeConnection::GetConnections();
     DdeConnection*      self = 0;
 
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
-    for ( self = rAll.First(); self; self = rAll.Next() )
+    for ( size_t i = 0; i < rAll.size(); ++i)
+    {
+        self = rAll[i];
+
         if ( self->pImp->hConv == hConv )
             break;
+    }
 
     if( self )
     {
-        DdeTransaction* t;
         sal_Bool bFound = sal_False;
-        for( t = self->aTransactions.First(); t; t = self->aTransactions.Next() )
+        std::vector<DdeTransaction*>::iterator iter;
+        for( iter = self->aTransactions.begin(); iter != self->aTransactions.end(); ++iter )
         {
             switch( nCode )
             {
                 case XTYP_XACT_COMPLETE:
-                    if( (DWORD)t->nId == nInfo1 )
+                    if( (DWORD)(*iter)->nId == nInfo1 )
                     {
-                        nCode = t->nType & (XCLASS_MASK | XTYP_MASK);
-                        t->bBusy = sal_False;
-                        t->Done( 0 != hData );
+                        nCode = (*iter)->nType & (XCLASS_MASK | XTYP_MASK);
+                        (*iter)->bBusy = sal_False;
+                        (*iter)->Done( 0 != hData );
                         bFound = sal_True;
                     }
                     break;
@@ -106,27 +107,27 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                     self->pImp->nStatus = self->pImp->hConv
                                     ? DMLERR_NO_ERROR
                                     : DdeGetLastError( pInst->hDdeInstCli );
-                    t = 0;
+                    iter = self->aTransactions.end();
                     nRet = 0;
                     bFound = sal_True;
                     break;
 
                 case XTYP_ADVDATA:
-                    bFound = sal_Bool( *t->pName == hText2 );
+                    bFound = sal_Bool( *(*iter)->pName == hText2 );
                     break;
             }
             if( bFound )
                 break;
         }
 
-        if( t )
+        if( iter != self->aTransactions.end() )
         {
             switch( nCode )
             {
             case XTYP_ADVDATA:
                 if( !hData )
                 {
-                    ((DdeLink*) t)->Notify();
+                    static_cast<DdeLink*>(*iter)->Notify();
                     nRet = (HDDEDATA)DDE_FACK;
                     break;
                 }
@@ -142,7 +143,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                 d.pImp->hData = hData;
                 d.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 d.Lock();
-                t->Data( &d );
+                (*iter)->Data( &d );
                 nRet = (HDDEDATA)DDE_FACK;
                 break;
             }
@@ -172,7 +173,6 @@ DdeConnection::DdeConnection( const String& rService, const String& rTopic )
                                        CBF_FAIL_ALLSVRXACTIONS |
                                        CBF_SKIP_REGISTRATIONS  |
                                        CBF_SKIP_UNREGISTRATIONS, 0L );
-        pInst->pConnections = new DdeConnections;
     }
 
     pService = new DdeString( pInst->hDdeInstCli, rService );
@@ -185,8 +185,7 @@ DdeConnection::DdeConnection( const String& rService, const String& rTopic )
             pImp->nStatus = DdeGetLastError( pInst->hDdeInstCli );
     }
 
-    if ( pInst->pConnections )
-        pInst->pConnections->Insert( this );
+    pInst->aConnections.push_back( this );
 }
 
 // --- DdeConnection::~DdeConnection() -----------------------------
@@ -201,8 +200,12 @@ DdeConnection::~DdeConnection()
 
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    if ( pInst->pConnections )
-        pInst->pConnections->Remove( this );
+
+    std::vector<DdeConnection*>::iterator it(std::find(pInst->aConnections.begin(),
+                                                        pInst->aConnections.end(),
+                                                        this));
+    if (it != pInst->aConnections.end())
+        pInst->aConnections.erase(it);
 
     pInst->nInstanceCli--;
     pInst->nRefCount--;
@@ -211,8 +214,6 @@ DdeConnection::~DdeConnection()
         if( DdeUninitialize( pInst->hDdeInstCli ) )
         {
             pInst->hDdeInstCli = NULL;
-            delete pInst->pConnections;
-            pInst->pConnections = NULL;
             if( pInst->nRefCount == 0 )
                 ImpDeinitInstData();
         }
@@ -225,11 +226,7 @@ DdeConnection::~DdeConnection()
 sal_Bool DdeConnection::IsConnected()
 {
     CONVINFO c;
-#ifdef OS2
-    c.nSize = sizeof( c );
-#else
     c.cb = sizeof( c );
-#endif
     if ( DdeQueryConvInfo( pImp->hConv, QID_SYNC, &c ) )
         return sal_True;
     else
@@ -262,11 +259,11 @@ long DdeConnection::GetConvId()
     return (long)pImp->hConv;
 }
 
-const DdeConnections& DdeConnection::GetConnections()
+const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 {
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    return *(pInst->pConnections);
+    return pInst->aConnections;
 }
 
 // --- DdeTransaction::DdeTransaction() ----------------------------
@@ -282,7 +279,7 @@ DdeTransaction::DdeTransaction( DdeConnection& d, const String& rItemName,
     nType = 0;
     bBusy = sal_False;
 
-    rDde.aTransactions.Insert( this );
+    rDde.aTransactions.push_back( this );
 }
 
 // --- DdeTransaction::~DdeTransaction() ---------------------------
@@ -296,7 +293,8 @@ DdeTransaction::~DdeTransaction()
     }
 
     delete pName;
-    rDde.aTransactions.Remove( this );
+    rDde.aTransactions.erase(std::remove(rDde.aTransactions.begin(),
+                                         rDde.aTransactions.end(),this));
 }
 
 // --- DdeTransaction::Execute() -----------------------------------
@@ -362,7 +360,7 @@ const String& DdeTransaction::GetName() const
 // --- DdeTransaction::Data() --------------------------------------
 
 
-void __EXPORT DdeTransaction::Data( const DdeData* p )
+void DdeTransaction::Data( const DdeData* p )
 {
     if ( ::tools::SolarMutex::Acquire() )
     {
@@ -373,7 +371,7 @@ void __EXPORT DdeTransaction::Data( const DdeData* p )
 
 // --- DdeTransaction::Done() --------------------------------------
 
-void __EXPORT DdeTransaction::Done( sal_Bool bDataValid )
+void DdeTransaction::Done( sal_Bool bDataValid )
 {
     aDone.Call( (void*)bDataValid );
 }
@@ -395,7 +393,7 @@ DdeLink::~DdeLink()
 
 // --- DdeLink::Notify() -----------------------------------------
 
-void __EXPORT DdeLink::Notify()
+void DdeLink::Notify()
 {
     aNotify.Call( NULL );
 }
@@ -471,3 +469,5 @@ long DdeConnection::GetError()
 {
     return pImp->nStatus;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

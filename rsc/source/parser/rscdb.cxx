@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <tools/rc.h>
 #include <tools/isofallback.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/macros.h>
 
 // Programmabhaengige Includes.
 #include <rsctree.hxx>
@@ -46,15 +48,12 @@
 #include <rscdb.hxx>
 #include <rscrsc.hxx>
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 /*************************************************************************
 |*
 |*    RscTypCont :: RscTypCont
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
 RscTypCont :: RscTypCont( RscError * pErrHdl,
@@ -184,10 +183,6 @@ Atom RscTypCont::AddLanguage( const char* pLang )
 |*
 |*    RscTypCont :: ~RscTypCont
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
-|*
 *************************************************************************/
 void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode ){
     if( pObjNode ){
@@ -231,9 +226,6 @@ void Pre_dtorTree( RscTop * pRscTop ){
 }
 
 RscTypCont :: ~RscTypCont(){
-    RscTop  *       pRscTmp;
-    RscSysEntry   * pSysEntry;
-
     // Alle Unterbaeume loeschen
     aVersion.pClass->Destroy( aVersion );
     rtl_freeMemory( aVersion.pData );
@@ -241,11 +233,8 @@ RscTypCont :: ~RscTypCont(){
 
     // Alle Klassen noch gueltig, jeweilige Instanzen freigeben
     // BasisTypen
-    pRscTmp = aBaseLst.First();
-    while( pRscTmp ){
-        pRscTmp->Pre_dtor();
-        pRscTmp = aBaseLst.Next();
-    };
+    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
+        aBaseLst[ i ]->Pre_dtor();
     aBool.Pre_dtor();
     aShort.Pre_dtor();
     aUShort.Pre_dtor();
@@ -263,21 +252,20 @@ RscTypCont :: ~RscTypCont(){
     delete aVersion.pClass;
     DestroyTree( pRoot );
 
-    while( NULL != (pRscTmp = aBaseLst.Remove()) ){
-        delete pRscTmp;
-    };
+    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
+        delete aBaseLst[ i ];
+    aBaseLst.clear();
 
-    while( NULL != (pSysEntry = aSysLst.Remove()) ){
-        delete pSysEntry;
-    };
+    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
+        delete aSysLst[ i ];
+    aSysLst.clear();
 }
 
 void RscTypCont::ClearSysNames()
 {
-    RscSysEntry   * pSysEntry;
-    while( NULL != (pSysEntry = aSysLst.Remove()) ){
-        delete pSysEntry;
-    };
+    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
+        delete aSysLst[ i ];
+    aSysLst.clear();
 }
 
 //=======================================================================
@@ -316,12 +304,11 @@ RscTop * RscTypCont::SearchType( Atom nId )
     ELSE_IF( aLangString )
     ELSE_IF( aLangShort )
 
-    RscTop * pEle = aBaseLst.First();
-    while( pEle )
+    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
     {
+        RscTop* pEle = aBaseLst[ i ];
         if( pEle->GetId() == nId )
             return pEle;
-        pEle = aBaseLst.Next();
     }
     return NULL;
 }
@@ -329,10 +316,6 @@ RscTop * RscTypCont::SearchType( Atom nId )
 /*************************************************************************
 |*
 |*    RscTypCont :: Search
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
 RscTop * RscTypCont :: Search( Atom nRT ){
@@ -354,10 +337,6 @@ CLASS_DATA RscTypCont :: Search( Atom nRT, const RscId & rId ){
 /*************************************************************************
 |*
 |*    RscTypCont :: Delete()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 10.07.91
-|*    Letzte Aenderung  MM 10.07.91
 |*
 *************************************************************************/
 void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
@@ -388,29 +367,29 @@ void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
 |*
 |*    RscTypCont :: PutSysName()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
-|*
 *************************************************************************/
 sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
                                  sal_uInt32 nConst, sal_uInt32 nId, sal_Bool bFirst )
 {
-    RscSysEntry *   pSysEntry;
+    RscSysEntry *pSysEntry;
+    RscSysEntry *pFoundEntry = NULL;
     sal_Bool            bId1 = sal_False;
 
-    pSysEntry = aSysLst.First();
-    while( pSysEntry )
+    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
     {
+        pSysEntry = aSysLst[ i ];
         if( pSysEntry->nKey == 1 )
             bId1 = sal_True;
         if( !strcmp( pSysEntry->aFileName.GetBuffer(), pFileName ) )
-            if( pSysEntry->nRscTyp == nRscTyp
-              && pSysEntry->nTyp == nConst
-              && pSysEntry->nRefId == nId )
+            if(  pSysEntry->nRscTyp == nRscTyp
+              && pSysEntry->nTyp    == nConst
+              && pSysEntry->nRefId  == nId
+                 ) {
+                pFoundEntry = pSysEntry;
                 break;
-        pSysEntry = aSysLst.Next();
+            }
     }
+    pSysEntry = pFoundEntry;
 
     if ( !pSysEntry || (bFirst && !bId1) )
     {
@@ -423,10 +402,10 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
         if( bFirst && !bId1 )
         {
             pSysEntry->nKey = 1;
-            aSysLst.Insert( pSysEntry, (sal_uLong)0 );
+            aSysLst.insert( aSysLst.begin(), pSysEntry );
         }
         else
-            aSysLst.Insert( pSysEntry, LIST_APPEND );
+            aSysLst.push_back( pSysEntry );
     }
 
     return pSysEntry->nKey;
@@ -435,10 +414,6 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
 /*************************************************************************
 |*
 |*    RscTypCont :: WriteInc
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 21.06.90
-|*    Letzte Aenderung  MM 21.06.90
 |*
 *************************************************************************/
 void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
@@ -467,9 +442,9 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
         pFName = aFileTab.Get( lFileKey );
         if( pFName )
         {
-            pDep = pFName->First();
-            while( pDep )
+            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
+                pDep = pFName->aDepLst[ i ];
                 if( pDep->GetFileKey() != lFileKey )
                 {
                     pFile = aFileTab.GetFile( pDep->GetFileKey() );
@@ -480,7 +455,6 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
                                  pFile->aFileName.GetBuffer() );
                     }
                 }
-                pDep = pFName->Next();
             };
         };
     };
@@ -489,10 +463,6 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
 /*************************************************************************
 |*
 |*    RscTypCont :: Methoden die ueber all Knoten laufen
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
 
@@ -544,10 +514,6 @@ public:
 |*
 |*    RscEnumerateObj :: CallBackWriteRc
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 {
@@ -567,10 +533,6 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
 |*
 |*    RscEnumerateObj :: CallBackWriteSrc
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 {
@@ -588,10 +550,6 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 |*
 |*    RscEnumerateObj :: CallBackWriteCxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
 {
@@ -607,10 +565,6 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteCxx, ObjNode *, pObjNode )
 |*
 |*    RscEnumerateObj :: CallBackWriteHxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
 {
@@ -625,10 +579,6 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteHxx, ObjNode *, pObjNode )
 /*************************************************************************
 |*
 |*    RscEnumerateObj :: WriteRcFile
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut ){
@@ -747,10 +697,6 @@ public:
 |*
 |*    RscRscEnumerateRef :: CallBack...
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
-|*
 *************************************************************************/
 IMPL_LINK_INLINE_START( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
 {
@@ -795,10 +741,6 @@ IMPL_LINK_INLINE_END( RscEnumerateRef, CallBackWriteRcCtor, RscTop *, pRef )
 |*
 |*    RscTypCont :: WriteRc
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 22.07.91
-|*
 *************************************************************************/
 
 ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
@@ -824,10 +766,6 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 |*
 |*    RscTypCont :: WriteSrc
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 22.03.90
-|*    Letzte Aenderung  MM 27.06.90
-|*
 *************************************************************************/
 void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
                              CharSet /*nCharSet*/, sal_Bool bName )
@@ -836,7 +774,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
     unsigned char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
-    fwrite( aUTF8BOM, sizeof(unsigned char), sizeof(aUTF8BOM)/sizeof(aUTF8BOM[0]), fOutput );
+    fwrite( aUTF8BOM, sizeof(unsigned char), SAL_N_ELEMENTS(aUTF8BOM), fOutput );
     if( bName )
     {
         WriteInc( fOutput, nFileKey );
@@ -881,10 +819,6 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
 /*************************************************************************
 |*
 |*    RscTypCont :: WriteHxx
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
 |*
 *************************************************************************/
 ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
@@ -948,10 +882,6 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
 |*
 |*    RscTypCont :: WriteCxx
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
-|*
 *************************************************************************/
 ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
                               const ByteString & rHxxName )
@@ -985,15 +915,11 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
 |*
 |*    RscTypCont :: WriteSyntax
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.05.91
-|*    Letzte Aenderung  MM 30.05.91
-|*
 *************************************************************************/
 void RscTypCont::WriteSyntax( FILE * fOutput )
 {
-    for( sal_uInt32 i = 0; i < aBaseLst.Count(); i++ )
-        aBaseLst.GetObject( i )->WriteSyntaxHeader( fOutput, this );
+    for( size_t i = 0; i < aBaseLst.size(); i++ )
+        aBaseLst[ i ]->WriteSyntaxHeader( fOutput, this );
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
     aEnumRef.WriteSyntax();
 }
@@ -1011,10 +937,6 @@ void RscTypCont::WriteRcCtor
 /*************************************************************************
 |*
 |*    RscTypCont :: Delete()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 09.12.91
-|*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
 class RscDel
@@ -1051,61 +973,56 @@ void RscTypCont :: Delete( sal_uLong lFileKey ){
 |*
 |*    RscTypCont :: MakeConsistent()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.09.91
-|*    Letzte Aenderung  MM 23.09.91
-|*
 *************************************************************************/
-sal_Bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop,
-                       RscInconsList * pList )
+sal_Bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
 {
     sal_Bool bRet = sal_True;
 
     if( pObjNode ){
         RSCINST aTmpI;
 
-        if( ! IsInstConsistent( (ObjNode*)pObjNode->Left(), pRscTop, pList ) )
+        if( ! IsInstConsistent( (ObjNode*)pObjNode->Left(), pRscTop ) )
             bRet = sal_False;
 
         aTmpI.pClass = pRscTop;
         aTmpI.pData = pObjNode->GetRscObj();
-        if( ! aTmpI.pClass->IsConsistent( aTmpI, pList ) )
+        if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
             bRet = sal_False;
 
-        if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop, pList ) )
+        if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop ) )
             bRet = sal_False;
     };
 
     return( bRet );
 }
 
-sal_Bool MakeConsistent( RscTop * pRscTop, RscInconsList * pList )
+sal_Bool MakeConsistent( RscTop * pRscTop )
 {
     sal_Bool bRet = sal_True;
 
     if( pRscTop ){
-        if( ! ::MakeConsistent( (RscTop*)pRscTop->Left(), pList ) )
+        if( ! ::MakeConsistent( (RscTop*)pRscTop->Left() ) )
             bRet = sal_False;
 
         if( pRscTop->GetObjNode() ){
             if( ! pRscTop->GetObjNode()->IsConsistent() ){
                 pRscTop->GetObjNode()->OrderTree();
-                if( ! pRscTop->GetObjNode()->IsConsistent( pList ) )
+                if( ! pRscTop->GetObjNode()->IsConsistent() )
                     bRet = sal_False;
             }
-            if( ! IsInstConsistent( pRscTop->GetObjNode(), pRscTop, pList ) )
+            if( ! IsInstConsistent( pRscTop->GetObjNode(), pRscTop ) )
                 bRet = sal_False;
         }
 
-        if( ! ::MakeConsistent( (RscTop*)pRscTop->Right(), pList ) )
+        if( ! ::MakeConsistent( (RscTop*)pRscTop->Right() ) )
             bRet = sal_False;
     };
 
     return bRet;
 }
 
-sal_Bool RscTypCont :: MakeConsistent( RscInconsList * pList ){
-    return( ::MakeConsistent( pRoot, pList ) );
+sal_Bool RscTypCont :: MakeConsistent(){
+    return( ::MakeConsistent( pRoot ) );
 }
 
 sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
@@ -1114,3 +1031,4 @@ sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
     return nPMId++;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

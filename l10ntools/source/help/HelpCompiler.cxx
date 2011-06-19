@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,6 @@
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
-#ifdef __MINGW32__
-#include <tools/prewin.h>
-#include <tools/postwin.h>
-#endif
 #include <osl/thread.hxx>
 
 static void impl_sleep( sal_uInt32 nSec )
@@ -467,7 +464,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
             streamTable.default_helptexts = aparser.helptexts;
             streamTable.default_keywords = aparser.keywords;
         }
-        else if (modulename == module)
+        else
         {
             streamTable.dropappl();
             streamTable.appl_doc = docResolvedDoc;
@@ -475,14 +472,6 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
             streamTable.appl_helptexts = aparser.helptexts;
             streamTable.appl_keywords = aparser.keywords;
         }
-        else
-        {
-            std::stringstream aStrStream;
-            aStrStream << "ERROR: Found unexpected module name \"" << modulename
-                       << "\" in file" << src.native_file_string().c_str() << std::endl;
-            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
-        }
-
     } // end iteration over all applications
 
     streamTable.document_id = documentId;
@@ -566,7 +555,7 @@ namespace fs
                         rtl::OUString suFilename = aStatus.getFileName();
                         rtl::OUString suFullFileURL;
                         suFullFileURL += _suDirURL;
-                        suFullFileURL += rtl::OUString::createFromAscii("/");
+                        suFullFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                         suFullFileURL += suFilename;
 
                         if (aStatus.getFileType() == osl::FileStatus::Directory)
@@ -587,4 +576,4 @@ namespace fs
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

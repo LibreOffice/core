@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,7 @@
 #include <toolkit/awt/vclxpointer.hxx>
 #include <toolkit/awt/vclxprinter.hxx>
 #include <toolkit/controls/unocontrols.hxx>
+#include <toolkit/controls/dialogcontrol.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
 #include <toolkit/controls/stdtabcontroller.hxx>
@@ -106,7 +108,6 @@ namespace toolkit
                 _rxServiceFactory, ::rtl::OUString::createFromAscii( _pComponentImplName ),
                 _pInstantiation, aServiceNames
             ) );
-
             if ( xFactory.is() )
             {
                 xFactory->acquire();
@@ -174,6 +175,9 @@ IMPL_CREATEINSTANCE2( UnoControlTimeFieldModel )
 IMPL_CREATEINSTANCE2( UnoControlProgressBarModel )
 IMPL_CREATEINSTANCE2( UnoControlScrollBarModel )
 IMPL_CREATEINSTANCE2( UnoSpinButtonModel )
+IMPL_CREATEINSTANCE2( UnoMultiPageModel )
+IMPL_CREATEINSTANCE2( UnoPageModel )
+IMPL_CREATEINSTANCE2( UnoFrameModel )
 IMPL_CREATEINSTANCE2( UnoControlFixedLineModel )
 IMPL_CREATEINSTANCE2( UnoCurrencyFieldControl )
 IMPL_CREATEINSTANCE2( UnoDateFieldControl )
@@ -194,6 +198,9 @@ IMPL_CREATEINSTANCE2( UnoProgressBarControl )
 IMPL_CREATEINSTANCE2( UnoScrollBarControl )
 IMPL_CREATEINSTANCE2( UnoSpinButtonControl )
 IMPL_CREATEINSTANCE2( UnoFixedLineControl )
+IMPL_CREATEINSTANCE2( UnoMultiPageControl )
+IMPL_CREATEINSTANCE2( UnoPageControl )
+IMPL_CREATEINSTANCE2( UnoFrameControl )
 IMPL_CREATEINSTANCE( VCLXMenuBar )
 IMPL_CREATEINSTANCE( VCLXPointer )
 IMPL_CREATEINSTANCE( VCLXPopupMenu )
@@ -242,7 +249,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory =
             static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
-
         GET_FACTORY( VCLXToolkit, szServiceName_Toolkit, szServiceName2_Toolkit )
         GET_FACTORY( VCLXPopupMenu, szServiceName_PopupMenu, szServiceName2_PopupMenu )
         GET_FACTORY( VCLXMenuBar, szServiceName_MenuBar, szServiceName2_MenuBar )
@@ -296,6 +302,12 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         GET_FACTORY( VCLXPrinterServer, szServiceName_PrinterServer, szServiceName2_PrinterServer )
         GET_FACTORY( UnoRoadmapControl, szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap )
         GET_FACTORY( UnoControlRoadmapModel, szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel )
+        GET_FACTORY( UnoMultiPageModel, szServiceName_UnoMultiPageModel, NULL )
+        GET_FACTORY( UnoMultiPageControl, szServiceName_UnoMultiPageControl, NULL )
+        GET_FACTORY( UnoPageModel, szServiceName_UnoPageModel, NULL )
+        GET_FACTORY( UnoPageControl, szServiceName_UnoPageControl, NULL )
+        GET_FACTORY( UnoFrameModel, szServiceName_UnoFrameModel, NULL )
+        GET_FACTORY( UnoFrameControl, szServiceName_UnoFrameControl, NULL )
         GET_FACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
         GET_FACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
         GET_FACTORY( TreeControl, szServiceName_TreeControl, NULL )
@@ -332,3 +344,4 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

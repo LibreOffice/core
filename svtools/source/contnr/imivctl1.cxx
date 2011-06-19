@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,8 +71,6 @@ struct SvxIconChoiceCtrlEntry_Impl
 
 static sal_Bool bEndScrollInvalidate = sal_True;
 
-// ----------------------------------------------------------------------------------------------
-
 class IcnViewEdit_Impl : public MultiLineEdit
 {
     Link            aCallBackHdl;
@@ -103,10 +102,6 @@ public:
     void            StopEditing( sal_Bool bCancel = sal_False );
     sal_Bool            IsGrabFocus() const { return bGrabFocus; }
 };
-
-// ----------------------------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------------------------
 
 SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pCurView,
     WinBits nWinStyle ) :
@@ -535,15 +530,13 @@ void SvxIconChoiceCtrl_Impl::EntrySelected( SvxIconChoiceCtrlEntry* pEntry, sal_
         }
         if( pEntry == pCursor )
             ShowCursor( sal_True );
-    } // if( bUpdateMode )
+    }
 
-    // --> OD 2009-05-27 #i101012#
-    // emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
+    // #i101012# emit vcl event LISTBOX_SELECT only in case that the given entry is selected.
     if ( bSelect )
     {
         CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
     }
-    // <--
 }
 
 void SvxIconChoiceCtrl_Impl::ResetVirtSize()
@@ -551,7 +544,6 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
     StopEditTimer();
     aVirtOutputSize.Width() = 0;
     aVirtOutputSize.Height() = 0;
-    sal_Bool bLockedEntryFound = sal_False;
     const sal_uLong nCount = aEntries.Count();
     for( sal_uLong nCur = 0; nCur < nCount; nCur++ )
     {
@@ -564,7 +556,6 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
                 FindBoundingRect( pCur );
             else
                 AdjustVirtSize( pCur->aRect );
-            bLockedEntryFound = sal_True;
         }
         else
             InvalidateBoundingRect( pCur->aRect );
@@ -1072,16 +1063,14 @@ sal_Bool SvxIconChoiceCtrl_Impl::MouseButtonUp( const MouseEvent& rMEvt )
         pCurHighlightFrame = 0; // Neues painten des Frames erzwingen
         bHighlightFramePressed = sal_False;
         SetEntryHighlightFrame( pEntry, sal_True );
-#if 0
-        CallSelectHandler( pCurHighlightFrame );
-#else
+
         pHdlEntry = pCurHighlightFrame;
         pView->ClickIcon();
 
         // set focus on Icon
         SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
         SetCursor_Impl( pOldCursor, pHdlEntry, sal_False, sal_False, sal_True );
-#endif
+
         pHdlEntry = 0;
     }
     return bHandled;
@@ -1221,14 +1210,6 @@ sal_Bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 
     if( bMod1 )
         nFlags |= F_ADD_MODE;
-    sal_Bool bDeselectAll = sal_False;
-    if( eSelectionMode != SINGLE_SELECTION )
-    {
-        if( !bMod1 && !bShift )
-            bDeselectAll = sal_True;
-        if( bShift && !bMod1 && !pAnchor )
-            bDeselectAll = sal_True;
-    }
 
     SvxIconChoiceCtrlEntry* pNewCursor;
     SvxIconChoiceCtrlEntry* pOldCursor = pCursor;
@@ -1313,23 +1294,6 @@ sal_Bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
                 }
             }
             break;
-
-// wird vom VCL-Tracking gesteuert
-#if 0
-        case KEY_ESCAPE:
-            if( pView->IsTracking() )
-            {
-                HideSelectionRect();
-                //SelectAll( sal_False );
-                SetNoSelection();
-                ClearSelectedRectList();
-                nFlags &= ~F_TRACKING;
-            }
-            else
-                bKeyUsed = sal_False;
-            break;
-#endif
-
 
         case KEY_F2:
             if( !bMod1 && !bShift )
@@ -2257,7 +2221,7 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcBmpRect( SvxIconChoiceCtrlEntry* pEntry, c
             return Rectangle( aPos, aImageSize );
 
         default:
-            DBG_ERROR("IconView: Viewmode not set");
+            OSL_FAIL("IconView: Viewmode not set");
             return aBound;
     }
 }
@@ -3820,7 +3784,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( sal_uLong
             pEntry = pEntry->pflink;
             if( nCount && pEntry == pHead )
             {
-                DBG_ERROR("SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry > Endlosschleife!");
+                OSL_FAIL("SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry > Endlosschleife!");
                 return 0;
             }
         }
@@ -4671,11 +4635,10 @@ sal_Bool SvxIconChoiceCtrl_Impl::HandleShortCutKey( const KeyEvent& rKEvt )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
 void SvxIconChoiceCtrl_Impl::CallEventListeners( sal_uLong nEvent, void* pData )
 {
     pView->CallImplEventListeners( nEvent, pData );
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

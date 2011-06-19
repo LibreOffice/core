@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,13 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#ifndef GCC
-#endif
 
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/util/Date.hpp>
@@ -406,7 +405,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
 rtl::OUString SAL_CALL SvNumberFormatterServiceObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const rtl::OUString& ServiceName )
@@ -420,7 +419,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedS
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii(SERVICENAME_NUMBERFORMATTER);
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME_NUMBERFORMATTER));
     return aRet;
 }
 
@@ -695,7 +694,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const
 rtl::OUString SAL_CALL SvNumberFormatsObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("SvNumberFormatsObj");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SvNumberFormatsObj"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatsObj::supportsService( const rtl::OUString& ServiceName )
@@ -709,7 +708,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNam
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii(SERVICENAME_NUMBERFORMATS);
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME_NUMBERFORMATS));
     return aRet;
 }
 
@@ -850,7 +849,7 @@ void SAL_CALL SvNumberFormatObj::addPropertyChangeListener( const rtl::OUString&
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatObj::removePropertyChangeListener( const rtl::OUString&,
@@ -858,7 +857,7 @@ void SAL_CALL SvNumberFormatObj::removePropertyChangeListener( const rtl::OUStri
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatObj::addVetoableChangeListener( const rtl::OUString&,
@@ -866,7 +865,7 @@ void SAL_CALL SvNumberFormatObj::addVetoableChangeListener( const rtl::OUString&
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const rtl::OUString&,
@@ -874,7 +873,7 @@ void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const rtl::OUStri
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XPropertyAccess
@@ -910,31 +909,31 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         uno::Sequence<beans::PropertyValue> aSeq(13);
         beans::PropertyValue* pArray = aSeq.getArray();
 
-        pArray[0].Name = rtl::OUString::createFromAscii( PROPERTYNAME_FMTSTR );
+        pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_FMTSTR ));
         pArray[0].Value <<= rtl::OUString( aFmtStr );
-        pArray[1].Name = rtl::OUString::createFromAscii( PROPERTYNAME_LOCALE );
+        pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_LOCALE ));
         pArray[1].Value <<= aLocale;
-        pArray[2].Name = rtl::OUString::createFromAscii( PROPERTYNAME_TYPE );
+        pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_TYPE ));
         pArray[2].Value <<= (sal_Int16)( pFormat->GetType() );
-        pArray[3].Name = rtl::OUString::createFromAscii( PROPERTYNAME_COMMENT );
+        pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_COMMENT ));
         pArray[3].Value <<= rtl::OUString( aComment );
-        pArray[4].Name = rtl::OUString::createFromAscii( PROPERTYNAME_STDFORM );
+        pArray[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_STDFORM ));
         pArray[4].Value.setValue( &bStandard, getBooleanCppuType() );
-        pArray[5].Name = rtl::OUString::createFromAscii( PROPERTYNAME_USERDEF );
+        pArray[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_USERDEF ));
         pArray[5].Value.setValue( &bUserDef, getBooleanCppuType() );
-        pArray[6].Name = rtl::OUString::createFromAscii( PROPERTYNAME_DECIMALS );
+        pArray[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_DECIMALS ));
         pArray[6].Value <<= (sal_Int16)( nDecimals );
-        pArray[7].Name = rtl::OUString::createFromAscii( PROPERTYNAME_LEADING );
+        pArray[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_LEADING ));
         pArray[7].Value <<= (sal_Int16)( nLeading );
-        pArray[8].Name = rtl::OUString::createFromAscii( PROPERTYNAME_NEGRED );
+        pArray[8].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_NEGRED ));
         pArray[8].Value.setValue( &bRed, getBooleanCppuType() );
-        pArray[9].Name = rtl::OUString::createFromAscii( PROPERTYNAME_THOUS );
+        pArray[9].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_THOUS ));
         pArray[9].Value.setValue( &bThousand, getBooleanCppuType() );
-        pArray[10].Name = rtl::OUString::createFromAscii( PROPERTYNAME_CURRSYM );
+        pArray[10].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_CURRSYM ));
         pArray[10].Value <<= rtl::OUString( aSymbol );
-        pArray[11].Name = rtl::OUString::createFromAscii( PROPERTYNAME_CURREXT );
+        pArray[11].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_CURREXT ));
         pArray[11].Value <<= rtl::OUString( aExt );
-        pArray[12].Name = rtl::OUString::createFromAscii( PROPERTYNAME_CURRABB );
+        pArray[12].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROPERTYNAME_CURRABB ));
         pArray[12].Value <<= rtl::OUString( aAbb );
 
         return aSeq;
@@ -956,7 +955,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::P
 rtl::OUString SAL_CALL SvNumberFormatObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("SvNumberFormatObj");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SvNumberFormatObj"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatObj::supportsService( const rtl::OUString& ServiceName )
@@ -970,7 +969,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceName
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii(SERVICENAME_NUMBERFORMAT);
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME_NUMBERFORMAT));
     return aRet;
 }
 
@@ -1087,7 +1086,7 @@ void SAL_CALL SvNumberFormatSettingsObj::addPropertyChangeListener( const rtl::O
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatSettingsObj::removePropertyChangeListener( const rtl::OUString&,
@@ -1095,7 +1094,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removePropertyChangeListener( const rtl
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatSettingsObj::addVetoableChangeListener( const rtl::OUString&,
@@ -1103,7 +1102,7 @@ void SAL_CALL SvNumberFormatSettingsObj::addVetoableChangeListener( const rtl::O
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const rtl::OUString&,
@@ -1111,7 +1110,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const rtl
                         throw(beans::UnknownPropertyException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 // XServiceInfo
@@ -1119,7 +1118,7 @@ void SAL_CALL SvNumberFormatSettingsObj::removeVetoableChangeListener( const rtl
 rtl::OUString SAL_CALL SvNumberFormatSettingsObj::getImplementationName()
                             throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("SvNumberFormatSettingsObj");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SvNumberFormatSettingsObj"));
 }
 
 sal_Bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const rtl::OUString& ServiceName )
@@ -1133,8 +1132,9 @@ uno::Sequence<rtl::OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedSer
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii(SERVICENAME_NUMBERSETTINGS);
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME_NUMBERSETTINGS));
     return aRet;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/localisationoptions.hxx>
 #include <unotools/configmgr.hxx>
@@ -199,13 +194,12 @@ SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to ouer internal member.
+    // Copy values from list in right order to our internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nInvalid property value detected!\n" );
+        if (!seqValues[nProperty].hasValue())
+            continue;
         switch( nProperty )
         {
             case PROPERTYHANDLE_AUTOMNEMONIC    :   {
@@ -334,19 +328,16 @@ void SvtLocalisationOptions_Impl::SetDialogScale( sal_Int32 nScale )
     SetModified();
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
 Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 {
     // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    const OUString aProperties[] =
     {
         PROPERTYNAME_AUTOMNEMONIC   ,
         PROPERTYNAME_DIALOGSCALE    ,
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    Sequence< OUString > seqPropertyNames(aProperties, PROPERTYCOUNT);
     // ... and return it.
     return seqPropertyNames;
 }
@@ -432,27 +423,17 @@ void SvtLocalisationOptions::SetDialogScale( sal_Int32 nScale )
     m_pDataContainer->SetDialogScale( nScale );
 }
 
+namespace
+{
+    class theLocalisationOptionsMutex : public rtl::Static<osl::Mutex, theLocalisationOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtLocalisationOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theLocalisationOptionsMutex::get();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

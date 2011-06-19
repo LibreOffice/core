@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,20 +46,6 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image
 {
     aText = rText;
     aImage = rImage;
-    aImageHC = rImage;
-    pUserData = NULL;
-
-    nFlags = _nFlags;
-    eTextMode = IcnShowTextShort;
-    pblink = 0;
-    pflink = 0;
-}
-
-SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, const Image& rImageHC, sal_uInt16 _nFlags )
-{
-    aText = rText;
-    aImage = rImage;
-    aImageHC = rImageHC;
     pUserData = NULL;
 
     nFlags = _nFlags;
@@ -92,15 +79,6 @@ void SvxIconChoiceCtrlEntry::LockPos( sal_Bool bLock )
     else
         nFlags &= ~ICNVIEW_FLAG_POS_LOCKED;
 }
-
-/*sal_Unicode SvxIconChoiceCtrlEntry::GetMnemonicChar() const
-{
-    sal_Unicode cChar = 0;
-    xub_StrLen nPos = aText.Search( '~' );
-    if ( nPos != STRING_NOTFOUND && nPos < ( aText.Len() ) - 1 )
-        cChar = aText.GetChar( nPos + 1 );
-    return cChar;
-}*/
 
 String SvxIconChoiceCtrlEntry::GetDisplayText() const
 {
@@ -176,43 +154,41 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, con
     return pEntry;
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC, sal_uLong nPos, const Point* pPos, sal_uInt16 nFlags  )
-{
-    SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage, rImageHC, nFlags);
-
-    _pImp->InsertEntry( pEntry, nPos, pPos );
-
-    return pEntry;
-}
-
 sal_Bool SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const XubString&, sal_Bool )
 {
     return sal_True;
 }
+
 sal_Bool SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* )
 {
     return sal_True;
 }
+
 void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rDev )
 {
-    rDev.DrawImage( rPos, GetSettings().GetStyleSettings().GetHighContrastMode() ? pEntry->GetImageHC() : pEntry->GetImage() );
+    rDev.DrawImage( rPos, pEntry->GetImage() );
 }
+
 String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, sal_Bool )
 {
     return pEntry->GetText();
 }
+
 sal_Bool SvtIconChoiceCtrl::HasBackground() const
 {
     return sal_False;
 }
+
 sal_Bool SvtIconChoiceCtrl::HasFont() const
 {
     return sal_False;
 }
+
 sal_Bool SvtIconChoiceCtrl::HasFontTextColor() const
 {
     return sal_True;
 }
+
 sal_Bool SvtIconChoiceCtrl::HasFontFillColor() const
 {
     return sal_True;
@@ -637,3 +613,4 @@ void SvtIconChoiceCtrl::CallImplEventListeners(sal_uLong nEvent, void* pData)
     return xAccessible;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

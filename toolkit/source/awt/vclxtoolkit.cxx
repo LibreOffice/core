@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#ifndef _SVWIN_HXX
-#include <tools/svwin.h>
-#endif
 #include <stdio.h>
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#endif
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
@@ -54,11 +59,7 @@
 #include <rtl/uuid.h>
 #include <rtl/process.h>
 
-#ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
-#elif (defined QUARTZ)
+#ifdef QUARTZ
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
@@ -81,14 +82,11 @@
 #include <toolkit/helper/unowrapper.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
-
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/btndlg.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/combobox.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/dialog.hxx>
@@ -124,6 +122,7 @@
 
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
+#include "awt/vclxtabcontrol.hxx"
 
 namespace css = ::com::sun::star;
 
@@ -132,8 +131,6 @@ namespace css = ::com::sun::star;
 
 #if (defined WNT)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32
-#elif (defined OS2)
-#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_OS2
 #elif (defined QUARTZ)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_MAC
 #elif (defined UNX)
@@ -268,7 +265,7 @@ struct ComponentInfo
     WindowType      nWinType;
 };
 
-static ComponentInfo __FAR_DATA aComponentInfos [] =
+static ComponentInfo aComponentInfos [] =
 {
     { "buttondialog",       WINDOW_BUTTONDIALOG },
     { "cancelbutton",       WINDOW_CANCELBUTTON },
@@ -291,6 +288,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "floatingwindow",     WINDOW_FLOATINGWINDOW },
     { "framewindow",        VCLWINDOW_FRAMEWINDOW },
     { "groupbox",           WINDOW_GROUPBOX },
+    { "frame",          WINDOW_GROUPBOX },
     { "helpbutton",         WINDOW_HELPBUTTON },
     { "imagebutton",        WINDOW_IMAGEBUTTON },
     { "imageradiobutton",   WINDOW_IMAGERADIOBUTTON },
@@ -342,14 +340,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
 
 extern "C"
 {
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-     ComponentInfoCompare( const void* pFirst, const void* pSecond)
+static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecond)
 {
     return( strcmp( ((ComponentInfo*)pFirst)->pName,
                     ((ComponentInfo*)pSecond)->pName ) );
@@ -452,8 +443,8 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
     if( bInitedByVCLToolkit )
     {
         {
-        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-        Application::Execute();
+            SolarMutexGuard aGuard;
+            Application::Execute();
         }
         try
         {
@@ -607,7 +598,7 @@ void SAL_CALL VCLXToolkit::disposing()
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > xRef;
     VCLXVirtualDevice* pVDev = new VCLXVirtualDevice;
 
-    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     VirtualDevice* pV = new VirtualDevice;
     pV->SetOutputSizePixel( Size( Width, Height ) );
@@ -634,7 +625,14 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
     Window* pNewWindow = NULL;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
-
+    bool bFrameControl = false;
+    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("frame") ) )
+        bFrameControl = true;
+    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("tabcontrolnotabs") ) )
+    {
+        nWinBits |= WB_NOBORDER;
+        nType = ImplGetComponentType( String( RTL_CONSTASCII_USTRINGPARAM("tabcontrol") ) );
+    }
     if ( !pParent )
     {
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
@@ -667,7 +665,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
     if ( nType )
     {
-        vos::OGuard aVclGuard( Application::GetSolarMutex()  );
+        SolarMutexGuard aVclGuard;
         switch ( (WindowType)nType )
         {
             case WINDOW_CANCELBUTTON:
@@ -731,7 +729,17 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new FloatingWindow( pParent, nWinBits );
             break;
             case WINDOW_GROUPBOX:
+                        {
                 pNewWindow = new GroupBox( pParent, nWinBits );
+                                if ( bFrameControl )
+                                {
+                                    GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
+                                    *ppNewComp = new VCLXFrame;
+                                    // Frame control needs to recieve
+                                    // Mouse events
+                                    pGroupBox->SetMouseTransparent( sal_False );
+                                }
+                        }
             break;
             case WINDOW_HELPBUTTON:
                 pNewWindow = new HelpButton( pParent, nWinBits );
@@ -878,15 +886,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABCONTROL:
                 pNewWindow = new TabControl( pParent, nWinBits );
-                *ppNewComp = new VCLXTabPageContainer;
+                *ppNewComp = new VCLXMultiPage;
             break;
             case WINDOW_TABDIALOG:
                 pNewWindow = new TabDialog( pParent, nWinBits );
             break;
             case WINDOW_TABPAGE:
                 /*
-                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("tabpagemodel") ) )
+                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("tabpagemodel") ) )
                 {
                     pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;
@@ -958,9 +966,9 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                         const css::beans::NamedValue* pProps = aProps.getConstArray();
                                         for( int i = 0; i < nProps; i++ )
                                         {
-                                            if( pProps[i].Name.equalsAscii( "WINDOW" ) )
+                                            if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WINDOW" ) ) )
                                                 pProps[i].Value >>= nWindowHandle;
-                                            else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
+                                            else if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XEMBED" ) ) )
                                                 pProps[i].Value >>= bXEmbed;
                                         }
                                     }
@@ -979,8 +987,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     aParentData.bXEmbedSupport = bXEmbed;
                                     #elif defined WNT
                                     aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
-                                    #elif defined OS2
-                                    aParentData.hWnd = (HWND)nWindowHandle;
                                     #endif
                                     pNewWindow = new WorkWindow( &aParentData );
                                 }
@@ -1025,8 +1031,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                         // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
-                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("tabpagecontainer") ) )
+                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCaseAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("tabpagecontainer") ) )
                 {
                     pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;
@@ -1054,7 +1060,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xRef;
 
@@ -1184,9 +1190,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
                 const css::beans::NamedValue* pProps = aProps.getConstArray();
                 for( int i = 0; i < nProps; i++ )
                 {
-                    if( pProps[i].Name.equalsAscii( "WINDOW" ) )
+                    if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WINDOW" ) ) )
                         pProps[i].Value >>= nWindowHandle;
-                    else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
+                    else if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XEMBED" ) ) )
                         pProps[i].Value >>= bXEmbed;
                 }
             }
@@ -1205,10 +1211,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             aParentData.bXEmbedSupport = bXEmbed;
             #elif defined WNT
             aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
-            #elif defined OS2
-            aParentData.hWnd = (HWND)nWindowHandle;
             #endif
-            osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             try
             {
                 pChildWindow = new WorkWindow( &aParentData );
@@ -1226,7 +1230,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     }
     else if (nSystemType == com::sun::star::lang::SystemDependent::SYSTEM_JAVA)
     {
-        osl::Guard< vos::IMutex > aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         pChildWindow = new WorkWindow(0, Parent);
     }
 
@@ -1234,7 +1238,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if ( pChildWindow )
     {
         VCLXTopWindow* pPeer = new VCLXTopWindow(true);
-        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         pPeer->SetWindow( pChildWindow );
         xPeer = pPeer;
     }
@@ -1301,7 +1305,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         Window * pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
         {
-            osl::Guard< vos::IMutex > aGuard(Application::GetSolarMutex());
+            SolarMutexGuard aGuard;
             xMsgBox->setCaptionText( aTitle );
             xMsgBox->setMessageText( aMessage );
         }
@@ -1351,14 +1355,14 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             {
                 // remember clipboard here
                 mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
-                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), ::com::sun::star::uno::UNO_QUERY );
+                    xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")) ), ::com::sun::star::uno::UNO_QUERY );
             }
         }
 
         return mxClipboard;
     }
 
-    else if( clipboardName.equals( ::rtl::OUString::createFromAscii("Selection") ) )
+    else if( clipboardName.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection")) ) )
     {
         return mxSelection;
     }
@@ -1369,7 +1373,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 // XServiceInfo
 ::rtl::OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "stardiv.Toolkit.VCLXToolkit" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.Toolkit.VCLXToolkit"));
 }
 
 sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
@@ -1743,3 +1747,4 @@ void SAL_CALL VCLXToolkit::reschedule()
     Application::Reschedule(true);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -131,9 +132,11 @@ private :
         getCalendarItemByName(const rtl::OUString& name,
         const com::sun::star::lang::Locale& rLocale,
         const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar >& calendarsSeq,
-        sal_Int16 len, sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
+        sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
 };
 
 } } } }
 
 #endif // _I18N_LOCALEDATA_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

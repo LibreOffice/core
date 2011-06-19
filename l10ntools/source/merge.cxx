@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <stdio.h>
 #include <tools/fsys.hxx>
 #include "export.hxx"
-#include "utf8conv.hxx"
 #include <iostream>
 
 using namespace std;
@@ -384,3 +384,5 @@ ByteString MergeDataFile::CreateKey( const ByteString& rTYP , const ByteString& 
         return sKey;         // officecfg case sensitive identifier
     return sKey.toAsciiUpperCase();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

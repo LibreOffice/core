@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,11 +64,10 @@ namespace canvas
 
             if ( 0 == SetThreadPriority( aCurrThread, mpImpl->mnOldPriority + nDelta ) )
             {
-                OSL_ENSURE( false,
-                            "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
+                OSL_FAIL( "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
             }
 #else
-            nDelta = 0; // #i55991# placate gcc warning
+            (void)nDelta;
 #endif
         }
 
@@ -81,3 +81,5 @@ namespace canvas
     } // namespace tools
 
 } // namespace canvas
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

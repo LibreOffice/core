@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,10 @@
 #include "sallayout.hxx"
 #include "osl/file.hxx"
 #include "tools/gen.hxx"
+#include "vclpluginapi.h"
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace psp {
 
@@ -138,7 +140,7 @@ struct CharacterMetric;
  *      vcl/unx/source/gdi/salgdi2.cxx
  */
 
-class PrinterBmp
+class VCLPLUG_GEN_PUBLIC PrinterBmp
 {
 public:
 
@@ -181,7 +183,7 @@ struct GraphicsStatus
 
 class Font3;
 
-class PrinterGfx
+class VCLPLUG_GEN_PUBLIC PrinterGfx
 {
 private:
 
@@ -252,7 +254,7 @@ private:
 
     /* font / font substitution */
     friend class Font3;
-    const ::std::hash_map< fontID, fontID >*    mpFontSubstitutes;
+    const ::boost::unordered_map< fontID, fontID >*    mpFontSubstitutes;
     int             getCharWidth (sal_Bool b_vert, sal_Unicode n_char,
                                   CharacterMetric *p_bbox);
     fontID          getCharMetric (const Font3 &rFont, sal_Unicode n_char,
@@ -440,3 +442,4 @@ public:
 
 #endif /* _PSPRINT_PRINTERGFX_HXX_ */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

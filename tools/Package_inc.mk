@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -47,14 +47,12 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fontenum.hxx,tools/fontenu
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fract.hxx,tools/fract.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fsys.hxx,tools/fsys.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/gen.hxx,tools/gen.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/geninfo.hxx,tools/geninfo.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/getprocessworkingdir.hxx,tools/getprocessworkingdir.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/globname.hxx,tools/globname.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetdef.hxx,tools/inetdef.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetmime.hxx,tools/inetmime.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetmsg.hxx,tools/inetmsg.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/inetstrm.hxx,tools/inetstrm.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/iparser.hxx,tools/iparser.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/isofallback.hxx,tools/isofallback.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/line.hxx,tools/line.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/link.hxx,tools/link.hxx))
@@ -62,17 +60,13 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/list.hxx,tools/list.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/mapunit.hxx,tools/mapunit.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/mempool.hxx,tools/mempool.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/multisel.hxx,tools/multisel.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/ownlist.hxx,tools/ownlist.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/pathutils.hxx,tools/pathutils.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/poly.hxx,tools/poly.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/postsys.h,tools/postsys.h))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/postwin.h,tools/postwin.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/postx.h,tools/postx.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/presys.h,tools/presys.h))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/prewin.h,tools/prewin.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/prex.h,tools/prex.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/pstm.hxx,tools/pstm.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/queue.hxx,tools/queue.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/rc.h,tools/rc.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/rc.hxx,tools/rc.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/rcid.h,tools/rcid.h))
@@ -90,7 +84,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/stream.hxx,tools/stream.hx
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/string.hxx,tools/string.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svborder.hxx,tools/svborder.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/svlibrary.hxx,tools/svlibrary.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/svwin.h,tools/svwin.h))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/table.hxx,tools/table.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tempfile.hxx,tools/tempfile.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/tenccvt.hxx,tools/tenccvt.hxx))

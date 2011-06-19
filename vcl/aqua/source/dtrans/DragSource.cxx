@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@
 #include <memory>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star;
@@ -62,6 +62,7 @@ using namespace com::sun::star::lang;
 using namespace comphelper;
 using namespace std;
 
+using ::rtl::OUString;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut
@@ -381,3 +382,4 @@ Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames() throw (Runt
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

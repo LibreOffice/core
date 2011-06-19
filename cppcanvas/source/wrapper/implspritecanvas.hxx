@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,11 @@
 #ifndef _CPPCANVAS_IMPLSPRITECANVAS_HXX
 #define _CPPCANVAS_IMPLSPRITECANVAS_HXX
 
-#ifndef _COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP__
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#endif
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 
 #include <cppcanvas/spritecanvas.hxx>
@@ -108,3 +105,5 @@ namespace cppcanvas
 }
 
 #endif /* _CPPCANVAS_IMPLSPRITECANVAS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

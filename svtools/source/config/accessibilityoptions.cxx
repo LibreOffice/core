@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,21 +37,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
-#endif
-#ifndef _SVT_LOGHELPER_HXX_
 #include <unotools/loghelper.hxx>
-#endif
 
 #include <svl/smplhint.hxx>
 
@@ -61,8 +52,8 @@
 #include <itemholder2.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
 namespace css = com::sun::star;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
@@ -559,12 +550,12 @@ void SvtAccessibilityOptions::Commit()
 
 sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
 {
-    DBG_ERROR( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
+    OSL_FAIL( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
 {
-    DBG_ERROR( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
+    OSL_FAIL( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
@@ -647,3 +638,5 @@ void SvtAccessibilityOptions::SetVCLSettings()
     sm_pSingleImplConfig->SetVCLSettings();
 }
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,19 +34,19 @@
 
 #ifndef MSC
 #include <graphite_layout.hxx>
-#include <graphite_adaptors.hxx>
 
 // Modules
 
 class VCL_PLUGIN_PUBLIC GraphiteLayoutImpl : public GraphiteLayout
 {
 public:
-    GraphiteLayoutImpl(const gr::Font & font, const grutils::GrFeatureParser * features, GraphiteFontAdaptor * pFont) throw()
-    : GraphiteLayout(font, features), mpFont(pFont) {};
+    GraphiteLayoutImpl(const gr_face * pFace,
+                       ServerFont & rServerFont) throw()
+    : GraphiteLayout(pFace), mrServerFont(rServerFont) {};
     virtual ~GraphiteLayoutImpl() throw() {};
     virtual sal_GlyphId getKashidaGlyph(int & width);
 private:
-    GraphiteFontAdaptor * mpFont;
+    ServerFont & mrServerFont;
 };
 
 // This class implments the server font specific parts.
@@ -54,13 +55,19 @@ private:
 class VCL_PLUGIN_PUBLIC GraphiteServerFontLayout : public ServerFontLayout
 {
 private:
-        mutable GraphiteFontAdaptor * mpFont;
         // mutable so that the DrawOffset/DrawBase can be set
         mutable GraphiteLayoutImpl maImpl;
+        grutils::GrFeatureParser * mpFeatures;
+        const sal_Unicode * mpStr;
 public:
-        explicit GraphiteServerFontLayout( GraphiteFontAdaptor* font ) throw();
+        GraphiteServerFontLayout(ServerFont& pServerFont) throw();
 
-        virtual bool  LayoutText( ImplLayoutArgs& rArgs) { SalLayout::AdjustLayout(rArgs); return maImpl.LayoutText(rArgs); };    // first step of layout
+        virtual bool  LayoutText( ImplLayoutArgs& rArgs)
+        {
+            mpStr = rArgs.mpStr;
+            SalLayout::AdjustLayout(rArgs);
+            return maImpl.LayoutText(rArgs);
+        };    // first step of layout
         virtual void  AdjustLayout( ImplLayoutArgs& rArgs)
         {
             SalLayout::AdjustLayout(rArgs);
@@ -88,11 +95,14 @@ public:
 
         virtual ~GraphiteServerFontLayout() throw();
 
+        static bool IsGraphiteEnabledFont(ServerFont * pServerFont);
 // For use with PspGraphics
-        const sal_Unicode* getTextPtr() const;
+        const sal_Unicode* getTextPtr() const { return mpStr; };
         int getMinCharPos() const { return mnMinCharPos; }
         int getMaxCharPos() const { return mnEndCharPos; }
 };
 
 #endif
 #endif //_SV_GRAPHITESERVERFONT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

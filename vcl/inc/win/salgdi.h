@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,14 @@
 #include <salgdi.hxx>
 #include <outfont.hxx>
 #include <impfont.hxx>
+#include <vcl/fontcapabilities.hxx>
 
 #include "boost/scoped_ptr.hpp"
-#include <hash_set>
+#include <boost/unordered_set.hpp>
+
+#ifdef ENABLE_GRAPHITE
+#include <graphite2/Font.h>
+#endif
 
 class ImplFontSelectData;
 class ImplWinFontEntry;
@@ -51,6 +57,26 @@ class ImplFontAttrCache;
 
 #define GCP_KERN_HACK
 #define GNG_VERT_HACK
+
+#ifdef ENABLE_GRAPHITE
+class RawFontData;
+class GrFontData
+{
+public:
+    GrFontData(HDC hDC);
+    ~GrFontData();
+    const void * getTable(unsigned int name, size_t *len) const;
+    const gr_face * getFace() const { return mpFace; }
+    void AddReference() { ++mnRefCount; }
+    void DeReference() { if (--mnRefCount == 0) delete this; }
+private:
+    GrFontData(GrFontData &) {};
+    HDC mhDC;
+    mutable std::vector<RawFontData*> mvData;
+    gr_face * mpFace;
+    unsigned int mnRefCount;
+};
+#endif
 
 // win32 specific physically available font face
 class ImplWinFontData : public ImplFontData
@@ -79,9 +105,11 @@ public:
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 #ifdef ENABLE_GRAPHITE
     bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
+    const gr_face*          GraphiteFace() const;
 #endif
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
+    bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {
@@ -97,11 +125,14 @@ private:
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
 #ifdef ENABLE_GRAPHITE
+    mutable GrFontData*             mpGraphiteData;
     mutable bool                    mbHasGraphiteSupport;
 #endif
     mutable bool                    mbHasArabicSupport;
+    mutable bool                    mbFontCapabilitiesRead;
     mutable ImplFontCharMap*        mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
+    mutable vcl::FontCapabilities   maFontCapabilities;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
@@ -112,12 +143,12 @@ private:
     bool                    mbAliasSymbolsLow;
 private:
     void                    ReadCmapTable( HDC ) const;
-    void                    ReadOs2Table( HDC ) const;
+    void                    GetFontCapabilities( HDC hDC ) const;
 
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::hash_set<sal_UCS4> UcsHashSet;
+    typedef boost::unordered_set<sal_UCS4> UcsHashSet;
     mutable UcsHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:
@@ -138,7 +169,8 @@ public:
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
-    float                   mfFontScale;        // allows metrics emulation of huge font sizes
+    float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
+    float                   mfCurrentFontScale;
     HPEN                    mhPen;              // Pen
     HBRUSH                  mhBrush;            // Brush
     HRGN                    mhRegion;           // Region Handle
@@ -246,7 +278,7 @@ public:
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
     // get the depth of the device
-    virtual sal_uInt16          GetBitCount();
+    virtual sal_uInt16          GetBitCount() const;
     // get the width of the device
     virtual long            GetGraphicsWidth() const;
 
@@ -279,6 +311,8 @@ public:
     virtual sal_uLong           GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
+    // get the layout capabilities of the current font
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
@@ -335,8 +369,8 @@ public:
                                             Ucs2UIntMap& rUnicodeEnc );
     virtual int             GetMinKashidaWidth();
 
-    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual sal_Bool                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual sal_Bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
+    virtual sal_Bool                    GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );
@@ -395,3 +429,4 @@ inline bool ImplWinFontData::HasChar( sal_uInt32 cChar ) const
 
 #endif // _SV_SALGDI_H
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

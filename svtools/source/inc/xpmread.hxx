@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _XPMREAD_HXX
 #define _XPMREAD_HXX
 
-#ifndef _BITMAP_HXX
 #include <vcl/bitmap.hxx>
-#endif
 
 #ifdef _XPMPRIVATE
 
@@ -129,3 +128,5 @@ public:
 sal_Bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _XPMREAD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

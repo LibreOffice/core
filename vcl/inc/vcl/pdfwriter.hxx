@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -208,7 +209,7 @@ public:
         // PDF/A does not allow transparency
         Warning_Transparency_Omitted_PDFA,
 
-        // transparent object occured but is only supported since
+        // transparent object occurred but is only supported since
         // PDF 1.4
         Warning_Transparency_Omitted_PDF13,
 
@@ -691,9 +692,9 @@ The following structure describes the permissions used in PDF security
     bool Emit();
 
     /*
-     * Get a list of errors that occured during processing
+     * Get a list of errors that occurred during processing
      * this should enable the producer to give feedback about
-     * any anomalies that might have occured
+     * any anomalies that might have occurred
      */
     std::set< ErrorCode > GetErrors();
 
@@ -1360,3 +1361,5 @@ The following structure describes the permissions used in PDF security
 }
 
 #endif // _VCL_PDFWRITER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

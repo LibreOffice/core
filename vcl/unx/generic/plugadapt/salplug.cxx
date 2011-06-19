@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,29 +36,19 @@
 
 #include "salinst.hxx"
 #include "unx/saldata.hxx"
+#include "unx/desktops.hxx"
 #include "vcl/printerinfomanager.hxx"
 
 #include <cstdio>
 #include <unistd.h>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 extern "C" {
 typedef SalInstance*(*salFactoryProc)( oslModule pModule);
 }
 
 static oslModule pCloseModule = NULL;
-
-enum {
-    DESKTOP_NONE = 0,
-    DESKTOP_UNKNOWN,
-    DESKTOP_GNOME,
-    DESKTOP_KDE,
-    DESKTOP_KDE4,
-    DESKTOP_CDE
-};
-
-static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4", "CDE" };
 
 static SalInstance* tryInstance( const OUString& rModuleBase )
 {
@@ -93,7 +84,8 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  * So make sure libgtk+ & co are still mapped into memory when
                  * atk-bridge's atexit handler gets called.
                  */
-                if( rModuleBase.equalsAscii("gtk") )
+                if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk")) ||
+                    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")) )
                 {
                     pCloseModule = NULL;
                 }
@@ -101,7 +93,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                  * #i109007# KDE3 seems to have the same problem; an atexit cleanup
                  * handler, which cannot be resolved anymore if the plugin is already unloaded.
                  */
-                else if( rModuleBase.equalsAscii("kde") )
+                else if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) )
                 {
                     pCloseModule = NULL;
                 }
@@ -130,42 +122,38 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     return pInst;
 }
 
-static const rtl::OUString& get_desktop_environment()
+static DesktopType get_desktop_environment()
 {
-    static rtl::OUString aRet;
-    if( ! aRet.getLength() )
-    {
-        OUStringBuffer aModName( 128 );
-        aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
-        aModName.appendAscii( SAL_DLLPOSTFIX );
-        aModName.appendAscii( SAL_DLLEXTENSION );
-        OUString aModule = aModName.makeStringAndClear();
+    OUStringBuffer aModName( 128 );
+    aModName.appendAscii( SAL_DLLPREFIX"desktop_detector" );
+    aModName.appendAscii( SAL_DLLPOSTFIX );
+    OUString aModule = aModName.makeStringAndClear();
 
-        oslModule aMod = osl_loadModuleRelative(
-            reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
-            SAL_LOADMODULE_DEFAULT );
-        if( aMod )
-        {
-            rtl::OUString (*pSym)() = (rtl::OUString(*)())
-                osl_getAsciiFunctionSymbol( aMod, "get_desktop_environment" );
-            if( pSym )
-                aRet = pSym();
-        }
-        osl_unloadModule( aMod );
+    oslModule aMod = osl_loadModuleRelative(
+        reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
+        SAL_LOADMODULE_DEFAULT );
+    DesktopType ret = DESKTOP_UNKNOWN;
+    if( aMod )
+    {
+        DesktopType (*pSym)() = (DesktopType(*)())
+            osl_getAsciiFunctionSymbol( aMod, "get_desktop_environment" );
+        if( pSym )
+            ret = pSym();
     }
-    return aRet;
+    osl_unloadModule( aMod );
+    return ret;
 }
 
 static SalInstance* autodetect_plugin()
 {
     static const char* pKDEFallbackList[] =
     {
-        "kde4", "kde", "gtk", "gen", 0
+        "kde4", "kde", "gtk3", "gtk", "gen", 0
     };
 
     static const char* pStandardFallbackList[] =
     {
-        "gtk", "gen", 0
+        "gtk3", "gtk", "gen", 0
     };
 
     static const char* pHeadlessFallbackList[] =
@@ -173,21 +161,21 @@ static SalInstance* autodetect_plugin()
         "svp", 0
     };
 
-    const rtl::OUString& desktop( get_desktop_environment() );
+    DesktopType desktop = get_desktop_environment();
     const char ** pList = pStandardFallbackList;
     int nListEntry = 0;
 
     // no server at all: dummy plugin
-    if ( desktop.equalsAscii( desktop_strings[DESKTOP_NONE] ) )
+    if ( desktop == DESKTOP_NONE )
         pList = pHeadlessFallbackList;
-    else if ( desktop.equalsAscii( desktop_strings[DESKTOP_GNOME] ) )
+    else if ( desktop == DESKTOP_GNOME )
         pList = pStandardFallbackList;
-    else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE] ) )
+    else if( desktop == DESKTOP_KDE )
     {
         pList = pKDEFallbackList;
         nListEntry = 1;
     }
-    else if( desktop.equalsAscii( desktop_strings[DESKTOP_KDE4] ) )
+    else if( desktop == DESKTOP_KDE4 )
         pList = pKDEFallbackList;
 
     SalInstance* pInst = NULL;
@@ -212,8 +200,11 @@ static SalInstance* check_headless_plugin()
     for( int i = 0; i < nParams; i++ )
     {
         osl_getCommandArg( i, &aParam.pData );
-        if( aParam.equalsAscii( "-headless" ) )
+        if( aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-headless")) ||
+            aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("--headless")) )
+        {
             return tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "svp" ) ) );
+        }
     }
     return NULL;
 }
@@ -224,17 +215,19 @@ SalInstance *CreateSalInstance()
 
     static const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
 
-    if( !(pUsePlugin && *pUsePlugin) )
-        pInst = check_headless_plugin();
-    else
+    pInst = check_headless_plugin();
+
+    if( !pInst && pUsePlugin && *pUsePlugin )
         pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
 
     if( ! pInst )
         pInst = autodetect_plugin();
 
-    // fallback to gen
-    if( ! pInst )
-        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "gen" ) ) );
+    // fallback, try everything
+    const char* pPlugin[] = { "gtk3", "gtk", "kde4", "kde", "gen", 0 };
+
+    for ( int i = 0; !pInst && pPlugin[ i ]; ++i )
+        pInst = tryInstance( OUString::createFromAscii( pPlugin[ i ] ) );
 
     if( ! pInst )
     {
@@ -277,15 +270,24 @@ void DeInitSalMain()
 void SalAbort( const XubString& rErrorText )
 {
     if( !rErrorText.Len() )
-        std::fprintf( stderr, "Application Error" );
+        std::fprintf( stderr, "Application Error\n" );
     else
-        std::fprintf( stderr, ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
-    abort();
+        std::fprintf( stderr, "%s\n", ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
+    exit(-1);
 }
+
+static const char * desktop_strings[] = { "none", "unknown", "GNOME", "KDE", "KDE4", "CDE" };
 
 const OUString& SalGetDesktopEnvironment()
 {
-    return get_desktop_environment();
+    static rtl::OUString aRet;
+    if( aRet.isEmpty())
+    {
+        rtl::OUStringBuffer buf( 8 );
+        buf.appendAscii( desktop_strings[ get_desktop_environment() ] );
+        aRet = buf.makeStringAndClear();
+    }
+    return aRet;
 }
 
 SalData::SalData() :
@@ -299,3 +301,5 @@ SalData::~SalData()
 {
     psp::PrinterInfoManager::release();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

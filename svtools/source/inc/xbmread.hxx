@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _XBMREAD_HXX
 #define _XBMREAD_HXX
 
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 
 #ifdef _XBMPRIVATE
 
@@ -95,3 +92,5 @@ public:
 sal_Bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _XBMREAD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

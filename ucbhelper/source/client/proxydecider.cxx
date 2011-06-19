@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,7 +115,7 @@ public:
                 rValue = (*it).second;
                 return true;
             }
-            it++;
+            ++it;
         }
         return false;
     }
@@ -259,8 +260,7 @@ bool getConfigStringValue(
         if ( !( xNameAccess->getByName( rtl::OUString::createFromAscii( key ) )
                 >>= value ) )
         {
-            OSL_ENSURE( sal_False,
-                        "InternetProxyDecider - "
+            OSL_FAIL( "InternetProxyDecider - "
                         "Error getting config item value!" );
             return false;
         }
@@ -288,8 +288,7 @@ bool getConfigInt32Value(
             rtl::OUString::createFromAscii( key ) );
         if ( aValue.hasValue() && !( aValue >>= value ) )
         {
-            OSL_ENSURE( sal_False,
-                        "InternetProxyDecider - "
+            OSL_FAIL( "InternetProxyDecider - "
                         "Error getting config item value!" );
             return false;
         }
@@ -326,17 +325,17 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
 
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 rxSMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.ConfigurationProvider" )) ),
                 uno::UNO_QUERY );
 
         uno::Sequence< uno::Any > aArguments( 1 );
-        aArguments[ 0 ] <<= rtl::OUString::createFromAscii( CONFIG_ROOT_KEY );
+        aArguments[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONFIG_ROOT_KEY ));
 
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
-                        rtl::OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationAccess" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationAccess" )),
                     aArguments ) );
 
         OSL_ENSURE( xInterface.is(),
@@ -405,7 +404,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     catch ( uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
-        OSL_ENSURE( sal_False, "InternetProxyDecider - Exception!" );
+        OSL_FAIL( "InternetProxyDecider - Exception!" );
     }
 }
 
@@ -478,7 +477,7 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const rtl::OUString & rHost,
             if ( (*it).first.Matches( aHostAndPort ) )
                 return false;
         }
-        it++;
+        ++it;
     }
 
     return true;
@@ -602,8 +601,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_nProxyType ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -613,8 +611,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                     rtl::OUString aNoProxyList;
                     if ( !( rElem.Element >>= aNoProxyList ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -625,8 +622,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.aName ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -635,8 +631,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpProxy.nPort ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -648,8 +643,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpsProxy.aName ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -658,8 +652,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aHttpsProxy.nPort ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
 
@@ -671,8 +664,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.aName ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -681,8 +673,7 @@ void SAL_CALL InternetProxyDecider_Impl::changesOccurred(
                 {
                     if ( !( rElem.Element >>= m_aFtpProxy.nPort ) )
                     {
-                        OSL_ENSURE( sal_False,
-                                    "InternetProxyDecider - changesOccurred - "
+                        OSL_FAIL( "InternetProxyDecider - changesOccurred - "
                                     "Error getting config item value!" );
                     }
                 }
@@ -746,14 +737,14 @@ void InternetProxyDecider_Impl::setNoProxyList(
                 if ( nColonPos == -1 )
                 {
                     // No port given, server pattern equals current token
-                    aPort = rtl::OUString::createFromAscii( "*" );
+                    aPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
                     if ( aToken.indexOf( '*' ) == -1 )
                     {
                         // pattern describes exactly one server
                         aServer = aToken;
                     }
 
-                    aToken += rtl::OUString::createFromAscii( ":*" );
+                    aToken += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":*"));
                 }
                 else
                 {
@@ -864,3 +855,5 @@ const InternetProxyServer & InternetProxyDecider::getProxy(
 }
 
 } // namespace ucbhelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

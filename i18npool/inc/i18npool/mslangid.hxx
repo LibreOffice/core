@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <sal/config.h>
 
-#ifndef INCLUDED_I18NPOOL_DLLAPI_H
 #include "i18npool/i18npooldllapi.h"
-#endif
 #include "i18npool/lang.h"
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -312,3 +311,5 @@ inline LanguageType MsLangId::getSystemUILanguage()
 }
 
 #endif // INCLUDED_I18NPOOL_MSLANGID_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,23 +29,19 @@
 #ifndef _SFXDATWIN_HXX
 #define _SFXDATWIN_HXX
 
-#ifndef _BRWBOX_HXX
 #include <svtools/brwbox.hxx>
-#endif
 #include <svtools/brwhead.hxx>
 #include <vcl/timer.hxx>
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
-#include <tools/list.hxx>
 #include <svtools/transfer.hxx>
+#include <vector>
 
 //===================================================================
 
 #define MIN_COLUMNWIDTH  2
 #define DRAG_CRITICAL    4
 
-DECLARE_LIST( RectangleList, Rectangle* )
+typedef ::std::vector< Rectangle* > RectangleList;
 
 //===================================================================
 
@@ -133,21 +130,21 @@ public:
     String          aRealRowCount;  // zur Anzeige im VScrollBar
 
     RectangleList   aInvalidRegion; // invalidated Rectangles during !UpdateMode
-    FASTBOOL        bInPaint;       // sal_True while in Paint
-    FASTBOOL        bInCommand;     // sal_True while in Command
-    FASTBOOL        bNoScrollBack;  // nur vorwaerts scrollen
-    FASTBOOL        bNoHScroll;     // kein horizontaler Scrollbar
-    FASTBOOL        bNoVScroll;     // no vertical scrollbar
-    FASTBOOL        bAutoHScroll;   // autohide horizontaler Scrollbar
-    FASTBOOL        bAutoVScroll;   // autohide horizontaler Scrollbar
-    FASTBOOL        bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
-    FASTBOOL        bAutoSizeLastCol;// last column always fills up window
-    FASTBOOL        bResizeOnPaint; // outstanding resize-event
-    FASTBOOL        bUpdateOnUnlock;    // Update() while locked
-    FASTBOOL        bInUpdateScrollbars;    // Rekursionsschutz
-    FASTBOOL        bHadRecursion;          // Rekursion war aufgetreten
-    FASTBOOL        bOwnDataChangedHdl;     // dont change colors in DataChanged
-    FASTBOOL        bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop curently
+    bool            bInPaint;       // TRUE while in Paint
+    bool            bInCommand;     // TRUE while in Command
+    bool            bNoScrollBack;  // nur vorwaerts scrollen
+    bool            bNoHScroll;     // kein horizontaler Scrollbar
+    bool            bNoVScroll;     // no vertical scrollbar
+    bool            bAutoHScroll;   // autohide horizontaler Scrollbar
+    bool            bAutoVScroll;   // autohide horizontaler Scrollbar
+    bool            bUpdateMode;    // nicht SV-UpdateMode wegen Invalidate()
+    bool            bAutoSizeLastCol; // last column always fills up window
+    bool            bResizeOnPaint;   // outstanding resize-event
+    bool            bUpdateOnUnlock;  // Update() while locked
+    bool            bInUpdateScrollbars;  // Rekursionsschutz
+    bool            bHadRecursion;        // Rekursion war aufgetreten
+    bool            bOwnDataChangedHdl;   // dont change colors in DataChanged
+    bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop curently
     sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!
     short           nCursorHidden;  // new conuter for DoHide/ShowCursor
 
@@ -185,7 +182,7 @@ public:
     const String&   GetRealRowCount() const { return aRealRowCount; }
 
     void            SetUpdateMode( sal_Bool bMode );
-    FASTBOOL        GetUpdateMode() const { return bUpdateMode; }
+    bool            GetUpdateMode() const { return bUpdateMode; }
     void            EnterUpdateLock() { ++nUpdateLock; }
     void            LeaveUpdateLock();
     void            Update();
@@ -238,17 +235,6 @@ void InitSettings_Impl( Window *pWin,
 
 //===================================================================
 
-#ifdef DBG_MI
-
-void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
-#define LOG(pThis,what,who) DoLog_Impl(pThis,what,who)
-
-#else
-
-#define LOG(pThis,what,who)
-
 #endif
 
-
-#endif
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,6 @@ private:
     sal_uInt32      cExitCode;
 
     sal_Bool            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
-    sal_Bool            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
 
     void            SetExitCode( sal_uInt8 cExit )
                     {
@@ -128,38 +128,6 @@ sal_Bool BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const S
 
 // -----------------------------------------------------------------------
 
-sal_Bool BmpSum::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
-{
-    sal_Bool bRet = sal_False;
-
-    for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
-    {
-        String  aTestStr( '-' );
-
-        for( int n = 0; ( n < 2 ) && !bRet; n++ )
-        {
-            aTestStr += rSwitch;
-
-            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
-            {
-                if( i < ( nCount - 1 ) )
-                    rParams.push_back( rArgs[ i + 1 ] );
-                else
-                    rParams.push_back( String() );
-
-                break;
-            }
-
-            if( 0 == n )
-                aTestStr = '/';
-        }
-    }
-
-    return( rParams.size() > 0 );
-}
-
-// -----------------------------------------------------------------------
-
 void BmpSum::Message( const String& rText, sal_uInt8 nExitCode )
 {
     if( EXIT_NOERROR != nExitCode )
@@ -167,7 +135,7 @@ void BmpSum::Message( const String& rText, sal_uInt8 nExitCode )
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
-    fprintf( stderr, aText.GetBuffer() );
+    fprintf( stderr, "%s", aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------
@@ -223,7 +191,6 @@ sal_uInt64 BmpSum::GetCRC( const BitmapEx& rBmpEx )
     AlphaMask           aAlpha;
     BitmapReadAccess*   pAAcc = NULL;
     sal_uInt64          nRet = 0;
-    sal_uInt32          nCrc = 0;
 
     if( rBmpEx.IsTransparent() )
     {
@@ -234,6 +201,7 @@ sal_uInt64 BmpSum::GetCRC( const BitmapEx& rBmpEx )
     if( pRAcc && pRAcc->Width() && pRAcc->Height() )
     {
         SVBT32 aBT32;
+        sal_uInt32 nCrc = 0;
 
         for( long nY = 0; nY < pRAcc->Height(); ++nY )
         {
@@ -506,3 +474,5 @@ int main( int nArgCount, char* ppArgs[] )
 
     return aBmpSum.Start( aArgs );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

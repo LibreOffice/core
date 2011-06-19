@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,7 @@
 //_______________________________________________
 // includes
 
-#ifndef INCLUDED_HASH_MAP
-#include <hash_map>
-#define INCLUDED_HASH_MAP
-#endif
+#include <boost/unordered_map.hpp>
 
 #ifndef INCLUDED_ALGORITHM
 #include <algorithm>
@@ -44,9 +42,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#ifndef _COM_SUN_STAR_BEANS_IllegalTypeException_HPP_
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#endif
 #include "comphelper/comphelperdllapi.h"
 
 // see method dbg_dumpToFile() below!
@@ -74,7 +70,7 @@ namespace comphelper{
             such name sequences very easy ...
  */
 
-struct SequenceAsHashMapBase : public ::std::hash_map<
+struct SequenceAsHashMapBase : public ::boost::unordered_map<
     ::rtl::OUString                    ,
     ::com::sun::star::uno::Any         ,
     ::rtl::OUStringHash                ,
@@ -382,3 +378,5 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 } // namespace comphelper
 
 #endif // _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

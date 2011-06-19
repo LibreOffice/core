@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,6 @@ private:
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
 
-//#if 0 // _SOLAR__PRIVATE
 private:
     SAL_DLLPRIVATE void     ImplInitComboBoxData();
     SAL_DLLPRIVATE void     ImplUpdateFloatSelection();
@@ -78,7 +78,6 @@ protected:
     SAL_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
-//#endif
 
 protected:
                     ComboBox( WindowType nType );
@@ -228,3 +227,5 @@ public:
 };
 
 #endif  // _COMBOBOX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

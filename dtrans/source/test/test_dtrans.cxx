@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,10 +54,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-//#include <memory>
-
-//#include <process.h>
 
 //------------------------------------------------------------------------
 // my defines
@@ -239,7 +236,7 @@ private:
 StringTransferable::StringTransferable( ) :
     m_seqDFlv( 1 ),
     m_receivedLostOwnership( sal_False ),
-    m_Data( OUString::createFromAscii("clipboard test content") )
+    m_Data( OUString(RTL_CONSTASCII_USTRINGPARAM("clipboard test content")) )
 {
     DataFlavor df;
 
@@ -251,7 +248,7 @@ StringTransferable::StringTransferable( ) :
     */
 
     //df.MimeType = L"text/plain; charset=windows1252";
-    df.MimeType = OUString::createFromAscii( "text/html" );
+    df.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/html"));
     df.DataType = getCppuType( ( Sequence< sal_Int8 >* )0 );
 
     m_seqDFlv[0] = df;
@@ -270,19 +267,6 @@ Any SAL_CALL StringTransferable::getTransferData( const DataFlavor& aFlavor )
     {
         anyData = makeAny( m_Data );
     } */
-#if 0
-    else if ( aFlavor == m_seqDFlv[0] )
-    {
-        OString aStr( m_Data.getStr( ), m_Data.getLength( ), 1252 );
-        Sequence< sal_Int8 > sOfChars( aStr.getLength( ) );
-        sal_Int32 lenStr = aStr.getLength( );
-
-        for ( sal_Int32 i = 0; i < lenStr; ++i )
-            sOfChars[i] = aStr[i];
-
-        anyData = makeAny( sOfChars );
-    }
-#endif
 
     return anyData;
 }
@@ -375,10 +359,10 @@ int SAL_CALL main( int argc, const char* argv[] )
         //--------------------------------------------------------------
 
         Sequence< Any > arguments(1);
-        arguments[0] = makeAny( OUString::createFromAscii( "generic" ) );
+        arguments[0] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) );
 
         Reference< XClipboard > xClipboard( xServiceManager->createInstanceWithArguments(
-            OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboard")),
             arguments ), UNO_QUERY );
 
         ENSURE( xClipboard.is(), "*** ERROR *** generic clipboard service could not be created." );
@@ -458,7 +442,7 @@ int SAL_CALL main( int argc, const char* argv[] )
         //--------------------------------------------------------------
 
         Reference< XClipboardManager > xClipboardManager( xServiceManager->createInstance(
-            OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.ClipboardManager" ) ), UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.ClipboardManager")) ), UNO_QUERY );
 
         ENSURE( xClipboardManager.is(), "*** ERROR *** clipboard manager service could not be created." );
 
@@ -471,14 +455,14 @@ int SAL_CALL main( int argc, const char* argv[] )
         TEST( "initial number of clipboards (0): ", xClipboardManager->listClipboardNames().getLength() == 0 );
         PERFORM( "insertion of generic clipboard: ", xClipboardManager->addClipboard( xClipboard ) );
         TEST( "number of inserted clipboards (1): ", xClipboardManager->listClipboardNames().getLength() == 1 );
-        TEST( "name of inserted clipboard (generic): ", xClipboardManager->listClipboardNames()[0] == OUString::createFromAscii( "generic" ) );
-        TEST( "inserted clipboard instance: ", xClipboardManager->getClipboard( OUString::createFromAscii( "generic" ) ) == xClipboard );
-        PERFORM( "removal of generic clipboard: ", xClipboardManager->removeClipboard( OUString::createFromAscii( "generic" ) ) );
+        TEST( "name of inserted clipboard (generic): ", xClipboardManager->listClipboardNames()[0] == OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) );
+        TEST( "inserted clipboard instance: ", xClipboardManager->getClipboard( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) ) == xClipboard );
+        PERFORM( "removal of generic clipboard: ", xClipboardManager->removeClipboard( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) ) );
         TEST( "number of inserted clipboards (0): ", xClipboardManager->listClipboardNames().getLength() == 0 );
         TRACE( "Testing inserted clipboard instance (none): " );
         try
         {
-            xClipboardManager->getClipboard( OUString::createFromAscii( "generic" ) );
+            xClipboardManager->getClipboard( OUString(RTL_CONSTASCII_USTRINGPARAM("generic")) );
             TRACE( "FAILED\n" );
         }
         catch( NoSuchElementException e )
@@ -510,3 +494,4 @@ int SAL_CALL main( int argc, const char* argv[] )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

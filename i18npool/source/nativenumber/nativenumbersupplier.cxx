@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "precompiled_i18npool.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 #include <nativenumbersupplier.hxx>
 #include <localedata.hxx>
 #include <data/numberchar.h>
@@ -465,7 +467,7 @@ static const sal_Char *natnum1Locales[] = {
     "dz",
     "fa"
 };
-static sal_Int16 nbOfLocale = sizeof(natnum1Locales)/sizeof(natnum1Locales[0]);
+static sal_Int16 nbOfLocale = SAL_N_ELEMENTS(natnum1Locales);
 
 //! ATTENTION: Do not change order of elements!
 //! Number and order must match elements of natnum1Locales!
@@ -496,7 +498,7 @@ static sal_Int16 natnum1[] = {
     NumberChar_dz,
     NumberChar_EastIndic_ar
 };
-static sal_Int16 sizeof_natnum1 = sizeof(natnum1)/sizeof(natnum1[0]);
+static sal_Int16 sizeof_natnum1 = SAL_N_ELEMENTS(natnum1);
 
 //! ATTENTION: Do not change order of elements!
 //! Order must match first elements of natnum1Locales!
@@ -507,7 +509,7 @@ static sal_Int16 natnum2[] = {
     NumberChar_Upper_ko,
     NumberChar_he
 };
-static sal_Int16 sizeof_natnum2 = sizeof(natnum2)/sizeof(natnum2[0]);
+static sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 
 #define isLang(lang) rLocale.Language.equalsAsciiL(lang, 2)
 #define isCtry(ctry) rLocale.Country.equalsAsciiL(ctry, 2)
@@ -755,7 +757,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
 
         sal_Int16 num = sal::static_int_cast<sal_Int16>( number.indexOf(aAttr.Format) );
 
-        if (aAttr.Style.equalsAscii("short")) {
+        if (aAttr.Style.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("short"))) {
             if (num == NumberChar_FullWidth)
                 return NativeNumberMode::NATNUM3;
             else if (num == NumberChar_Hangul_ko)
@@ -764,7 +766,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
                 return NativeNumberMode::NATNUM1;
             else if (natNumIn(num, natnum2, sizeof_natnum2))
                 return NativeNumberMode::NATNUM2;
-        } else if (aAttr.Style.equalsAscii("medium")) {
+        } else if (aAttr.Style.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("medium"))) {
             if (num == NumberChar_Hangul_ko)
                 return NativeNumberMode::NATNUM11;
             else if (num == NumberChar_he)
@@ -773,7 +775,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
                 return NativeNumberMode::NATNUM7;
             else if (natNumIn(num, natnum2, sizeof_natnum2))
                 return NativeNumberMode::NATNUM8;
-        } else if (aAttr.Style.equalsAscii("long")) {
+        } else if (aAttr.Style.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("long"))) {
             if (num == NumberChar_FullWidth)
                 return NativeNumberMode::NATNUM6;
             else if (num == NumberChar_Hangul_ko)
@@ -865,7 +867,6 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
     sal_Int64 value = 0;
     sal_Int32 i, count = 0, len = aNumberString.getLength();
     const sal_Unicode *src = aNumberString.getStr();
-    sal_Bool neg = sal_False;
 
     for (i = 0; i < len; i++) {
         sal_Unicode ch = src[i];
@@ -875,7 +876,7 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
             value = value * 10 + (ch - NUMBER_ZERO);
         }
         else if (isSeparator(ch) && count > 0) continue;
-        else if (isMinus(ch) && count == 0) neg = sal_True;
+        else if (isMinus(ch) && count == 0) continue;
         else break;
     }
 
@@ -915,3 +916,5 @@ NativeNumberSupplier::getSupportedServiceNames() throw( RuntimeException )
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

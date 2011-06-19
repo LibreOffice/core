@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,7 +148,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoSpinButtonControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "SpinButton" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SpinButton"));
     }
 
     //--------------------------------------------------------------------
@@ -218,7 +219,7 @@ namespace toolkit
                 ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( rEvent.Value ), sal_False );
                 break;
             default:
-                DBG_ERROR( "UnoSpinButtonControl::adjustmentValueChanged - unknown Type" );
+                OSL_FAIL( "UnoSpinButtonControl::adjustmentValueChanged - unknown Type" );
         }
 
         if ( maAdjustmentListeners.getLength() )
@@ -350,3 +351,4 @@ namespace toolkit
 }  // namespace toolkit
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

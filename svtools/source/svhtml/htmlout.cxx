@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@
 #if defined(UNX)
 const sal_Char HTMLOutFuncs::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA HTMLOutFuncs::sNewLine[] = "\015\012";
+const sal_Char HTMLOutFuncs::sNewLine[] = "\015\012";
 #endif
 
 #define TXTCONV_BUFFER_SIZE 20
@@ -978,3 +979,4 @@ sal_Bool HTMLOutFuncs::PrivateURLToInternalImg( String& rURL )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

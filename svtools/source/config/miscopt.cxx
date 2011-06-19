@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,15 +39,17 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/link.hxx>
-#include <tools/list.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/urlobj.hxx>
 
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 #include "itemholder2.hxx"
 
 #include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
+
+#include <list>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -78,12 +81,20 @@ using namespace ::com::sun::star;
 #define PROPERTYHANDLE_SYMBOLSTYLE          4
 #define PROPERTYNAME_USESYSTEMPRINTDIALOG   ASCII_STR("UseSystemPrintDialog")
 #define PROPERTYHANDLE_USESYSTEMPRINTDIALOG 5
+#define PROPERTYNAME_TRYODMADIALOG          ASCII_STR("TryODMADialog")
+#define PROPERTYHANDLE_TRYODMADIALOG        6
+#define PROPERTYNAME_SHOWLINKWARNINGDIALOG  ASCII_STR("ShowLinkWarningDialog")
+#define PROPERTYHANDLE_SHOWLINKWARNINGDIALOG 7
+#define PROPERTYNAME_DISABLEUICUSTOMIZATION ASCII_STR("DisableUICustomization")
+#define PROPERTYHANDLE_DISABLEUICUSTOMIZATION           8
+#define PROPERTYNAME_ALWAYSALLOWSAVE        ASCII_STR("AlwaysAllowSave")
+#define PROPERTYHANDLE_ALWAYSALLOWSAVE      9
+#define PROPERTYNAME_EXPERIMENTALMODE       ASCII_STR("ExperimentalMode")
+#define PROPERTYHANDLE_EXPERIMENTALMODE     10
 
-#define PROPERTYCOUNT                       6
+#define PROPERTYCOUNT                       11
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
-
-DECLARE_LIST( LinkList, Link * )
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -96,9 +107,11 @@ class SvtMiscOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-    LinkList    aList;
+    ::std::list<Link> aList;
     sal_Bool    m_bUseSystemFileDialog;
     sal_Bool    m_bIsUseSystemFileDialogRO;
+    sal_Bool    m_bTryODMADialog;
+    sal_Bool    m_bIsTryODMADialogRO;
     sal_Bool    m_bPluginsEnabled;
     sal_Bool    m_bIsPluginsEnabledRO;
     sal_Int16   m_nSymbolsSize;
@@ -108,6 +121,11 @@ class SvtMiscOptions_Impl : public ConfigItem
     sal_Bool    m_bIsToolboxStyleRO;
     sal_Bool    m_bUseSystemPrintDialog;
     sal_Bool    m_bIsUseSystemPrintDialogRO;
+    sal_Bool    m_bShowLinkWarningDialog;
+    sal_Bool    m_bIsShowLinkWarningDialogRO;
+    sal_Bool    m_bDisableUICustomization;
+    sal_Bool    m_bAlwaysAllowSave;
+    sal_Bool    m_bExperimentalMode;
 
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -176,6 +194,30 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsUseSystemFileDialogReadOnly() const
         { return m_bIsUseSystemFileDialogRO; }
 
+        inline sal_Bool TryODMADialog() const
+        { return m_bTryODMADialog; }
+
+        inline void SetTryODMADialog( sal_Bool bSet )
+        {  m_bTryODMADialog = bSet; SetModified(); }
+
+        inline sal_Bool IsTryUseODMADialogReadOnly() const
+        { return m_bIsTryODMADialogRO; }
+
+        inline sal_Bool DisableUICustomization() const
+        { return m_bDisableUICustomization; }
+
+        inline void SetSaveAlwaysAllowed( sal_Bool bSet )
+        { m_bAlwaysAllowSave = bSet; SetModified(); }
+
+        inline sal_Bool IsSaveAlwaysAllowed() const
+        { return m_bAlwaysAllowSave; }
+
+        inline void SetExperimentalMode( sal_Bool bSet )
+        { m_bExperimentalMode = bSet; SetModified(); }
+
+        inline sal_Bool IsExperimentalMode() const
+        { return m_bExperimentalMode; }
+
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
@@ -224,6 +266,15 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsUseSystemPrintDialogReadOnly() const
         { return m_bIsUseSystemPrintDialogRO; }
 
+        inline sal_Bool ShowLinkWarningDialog() const
+        { return m_bShowLinkWarningDialog; }
+
+        void SetShowLinkWarningDialog( sal_Bool bSet )
+        {  m_bShowLinkWarningDialog = bSet; SetModified(); }
+
+        sal_Bool IsShowLinkWarningDialogReadOnly() const
+        { return m_bIsShowLinkWarningDialogRO; }
+
         void AddListenerLink( const Link& rLink );
         void RemoveListenerLink( const Link& rLink );
         void CallListeners();
@@ -262,6 +313,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
     , m_bUseSystemFileDialog( sal_False )
     , m_bIsUseSystemFileDialogRO( sal_False )
+    , m_bTryODMADialog( sal_False )
+    , m_bIsTryODMADialogRO( sal_False )
     , m_bPluginsEnabled( sal_False )
     , m_bIsPluginsEnabledRO( sal_False )
     , m_nSymbolsSize( 0 )
@@ -271,6 +324,10 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bIsToolboxStyleRO( sal_False )
     , m_bUseSystemPrintDialog( sal_False )
     , m_bIsUseSystemPrintDialogRO( sal_False )
+    , m_bShowLinkWarningDialog( sal_True )
+    , m_bIsShowLinkWarningDialogRO( sal_False )
+    , m_bAlwaysAllowSave( sal_False )
+    , m_bExperimentalMode( sal_False )
 
 {
     // Use our static list of configuration keys to get his values.
@@ -288,16 +345,15 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nInvalid property value detected!\n" );
+        if (seqValues[nProperty].hasValue()==sal_False)
+            continue;
         switch( nProperty )
         {
             case PROPERTYHANDLE_PLUGINSENABLED :
             {
                 if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
                 }
                 m_bIsPluginsEnabledRO = seqRO[nProperty];
                 break;
@@ -307,7 +363,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
                 }
                 m_bIsSymbolsSizeRO = seqRO[nProperty];
                 break;
@@ -317,7 +373,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
                 }
                 m_bIsToolboxStyleRO = seqRO[nProperty];
                 break;
@@ -327,7 +383,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
                 }
                 m_bIsUseSystemFileDialogRO = seqRO[nProperty];
                 break;
@@ -337,9 +393,29 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             {
                 if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
                 }
                 m_bIsUseSystemPrintDialogRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_TRYODMADIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bTryODMADialog) )
+                {
+                    OSL_FAIL("Wrong type of \"Misc\\TryODMADialog\"!" );
+                }
+                m_bIsTryODMADialogRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
+                {
+                    OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
+                }
+                m_bIsShowLinkWarningDialogRO = seqRO[nProperty];
                 break;
             }
 
@@ -350,9 +426,28 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
                     SetSymbolsStyleName( aSymbolsStyle );
                 else
                 {
-                    DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
+                    OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
                 }
                 m_bIsSymbolsStyleRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
+            {
+                if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
+                    OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_ALWAYSALLOWSAVE :
+            {
+                if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
+                    OSL_FAIL("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
+                break;
+            }
+            case PROPERTYHANDLE_EXPERIMENTALMODE :
+            {
+                if( !(seqValues[nProperty] >>= m_bExperimentalMode) )
+                    OSL_FAIL("Wrong type of \"Misc\\ExperimentalMode\"!" );
                 break;
             }
         }
@@ -373,14 +468,8 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
     {
         Commit();
     }
-
-    for ( sal_uInt16 n=0; n<aList.Count(); )
-        delete aList.Remove(n);
 }
 
-/*-- 25.02.2005 13:22:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
                 const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
 {
@@ -406,43 +495,56 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nInvalid property value detected!\n" );
+        if (seqValues[nProperty].hasValue()==sal_False)
+            continue;
         switch( lcl_MapPropertyName(rPropertyNames[nProperty], aInternalPropertyNames) )
         {
             case PROPERTYHANDLE_PLUGINSENABLED      :   {
                                                             if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\PluginsEnabled\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_SYMBOLSET           :   {
                                                             if( !(seqValues[nProperty] >>= m_nSymbolsSize) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\SymbolSet\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\ToolboxStyle\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemFileDialog\"!" );
                                                             }
                                                         }
                                                     break;
             case PROPERTYHANDLE_USESYSTEMPRINTDIALOG     :   {
                                                             if( !(seqValues[nProperty] >>= m_bUseSystemPrintDialog) )
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\UseSystemPrintDialog\"!" );
+                                                            }
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_TRYODMADIALOG       :   {
+                                                            if( !(seqValues[nProperty] >>= m_bTryODMADialog) )
+                                                            {
+                                                                OSL_FAIL("Wrong type of \"Misc\\TryODMADialog\"!" );
+                                                            }
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG     :   {
+                                                            if( !(seqValues[nProperty] >>= m_bShowLinkWarningDialog) )
+                                                            {
+                                                                OSL_FAIL("Wrong type of \"Misc\\ShowLinkWarningDialog\"!" );
                                                             }
                                                         }
                                                     break;
@@ -452,26 +554,37 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                                 SetSymbolsStyleName( aSymbolsStyle );
                                                             else
                                                             {
-                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolStyle\"!" );
+                                                                OSL_FAIL("Wrong type of \"Misc\\SymbolStyle\"!" );
                                                             }
                                                         }
                                                     break;
+            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION      :   {
+                                                            if( !(seqValues[nProperty] >>= m_bDisableUICustomization) )
+                                                                OSL_FAIL("Wrong type of \"Misc\\DisableUICustomization\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_ALWAYSALLOWSAVE:
+            {
+                if( !(seqValues[nProperty] >>= m_bAlwaysAllowSave) )
+                    OSL_FAIL("Wrong type of \"Misc\\AlwaysAllowSave\"!" );
+            }
+            break;
         }
     }
 }
 
 void SvtMiscOptions_Impl::AddListenerLink( const Link& rLink )
 {
-    aList.Insert( new Link( rLink ) );
+    aList.push_back( rLink );
 }
 
 void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 {
-    for ( sal_uInt16 n=0; n<aList.Count(); n++ )
+    for ( ::std::list<Link>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
-        if ( (*aList.GetObject(n) ) == rLink )
+        if ( *iter == rLink )
         {
-            delete aList.Remove(n);
+            aList.erase(iter);
             break;
         }
     }
@@ -479,8 +592,8 @@ void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 
 void SvtMiscOptions_Impl::CallListeners()
 {
-    for ( sal_uInt16 n = 0; n < aList.Count(); ++n )
-        aList.GetObject(n)->Call( this );
+    for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+        iter->Call( this );
 }
 
 void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified )
@@ -592,6 +705,13 @@ void SvtMiscOptions_Impl::Commit()
                 break;
             }
 
+            case PROPERTYHANDLE_TRYODMADIALOG :
+            {
+                if ( !m_bIsTryODMADialogRO )
+                    seqValues[nProperty] <<= m_bTryODMADialog;
+                break;
+            }
+
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
                 if ( !m_bIsSymbolsStyleRO )
@@ -605,6 +725,29 @@ void SvtMiscOptions_Impl::Commit()
                     seqValues[nProperty] <<= m_bUseSystemPrintDialog;
                 break;
             }
+
+            case PROPERTYHANDLE_SHOWLINKWARNINGDIALOG :
+            {
+                if ( !m_bIsShowLinkWarningDialogRO )
+                    seqValues[nProperty] <<= m_bShowLinkWarningDialog;
+                break;
+            }
+
+            case PROPERTYHANDLE_DISABLEUICUSTOMIZATION :
+            {
+                seqValues[nProperty] <<= m_bDisableUICustomization;
+                break;
+            }
+            case PROPERTYHANDLE_ALWAYSALLOWSAVE :
+            {
+                seqValues[nProperty] <<= m_bAlwaysAllowSave;
+                break;
+            }
+            case PROPERTYHANDLE_EXPERIMENTALMODE :
+            {
+                seqValues[nProperty] <<= m_bExperimentalMode;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -616,19 +759,24 @@ void SvtMiscOptions_Impl::Commit()
 //*****************************************************************************************************************
 Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_PLUGINSENABLED,
         PROPERTYNAME_SYMBOLSET,
         PROPERTYNAME_TOOLBOXSTYLE,
         PROPERTYNAME_USESYSTEMFILEDIALOG,
         PROPERTYNAME_SYMBOLSTYLE,
-        PROPERTYNAME_USESYSTEMPRINTDIALOG
+        PROPERTYNAME_USESYSTEMPRINTDIALOG,
+        PROPERTYNAME_TRYODMADIALOG,
+        PROPERTYNAME_SHOWLINKWARNINGDIALOG,
+        PROPERTYNAME_DISABLEUICUSTOMIZATION,
+        PROPERTYNAME_ALWAYSALLOWSAVE,
+        PROPERTYNAME_EXPERIMENTALMODE
     };
 
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -690,6 +838,21 @@ void SvtMiscOptions::SetUseSystemFileDialog( sal_Bool bEnable )
 sal_Bool SvtMiscOptions::IsUseSystemFileDialogReadOnly() const
 {
     return m_pDataContainer->IsUseSystemFileDialogReadOnly();
+}
+
+sal_Bool SvtMiscOptions::TryODMADialog() const
+{
+    return m_pDataContainer->TryODMADialog();
+}
+
+void SvtMiscOptions::SetTryODMADialog( sal_Bool bEnable )
+{
+    m_pDataContainer->SetTryODMADialog( bEnable );
+}
+
+sal_Bool SvtMiscOptions::IsTryUseODMADialogReadOnly() const
+{
+    return m_pDataContainer->IsTryUseODMADialogReadOnly();
 }
 
 sal_Bool SvtMiscOptions::IsPluginsEnabled() const
@@ -770,6 +933,11 @@ sal_Bool SvtMiscOptions::IsGetSymbolsStyleReadOnly() const
     return m_pDataContainer->IsGetSymbolsStyleReadOnly();
 }
 
+sal_Bool SvtMiscOptions::DisableUICustomization() const
+{
+    return m_pDataContainer->DisableUICustomization();
+}
+
 sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 {
     return m_pDataContainer->GetToolboxStyle();
@@ -795,29 +963,50 @@ void SvtMiscOptions::SetUseSystemPrintDialog( sal_Bool bEnable )
     m_pDataContainer->SetUseSystemPrintDialog( bEnable );
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+sal_Bool SvtMiscOptions::ShowLinkWarningDialog() const
+{
+    return m_pDataContainer->ShowLinkWarningDialog();
+}
+
+void SvtMiscOptions::SetShowLinkWarningDialog( sal_Bool bSet )
+{
+    m_pDataContainer->SetShowLinkWarningDialog( bSet );
+}
+
+sal_Bool SvtMiscOptions::IsShowLinkWarningDialogReadOnly() const
+{
+    return m_pDataContainer->IsShowLinkWarningDialogReadOnly();
+}
+
+void SvtMiscOptions::SetSaveAlwaysAllowed( sal_Bool bSet )
+{
+    m_pDataContainer->SetSaveAlwaysAllowed( bSet );
+}
+
+sal_Bool SvtMiscOptions::IsSaveAlwaysAllowed() const
+{
+    return m_pDataContainer->IsSaveAlwaysAllowed();
+}
+
+void SvtMiscOptions::SetExperimentalMode( sal_Bool bSet )
+{
+    m_pDataContainer->SetExperimentalMode( bSet );
+}
+
+sal_Bool SvtMiscOptions::IsExperimentalMode() const
+{
+    return m_pDataContainer->IsExperimentalMode();
+}
+
+namespace
+{
+    class theSvtMiscOptionsMutex :
+        public rtl::Static< osl::Mutex, theSvtMiscOptionsMutex > {};
+}
+
 Mutex & SvtMiscOptions::GetInitMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theSvtMiscOptionsMutex::get();
 }
 
 void SvtMiscOptions::AddListenerLink( const Link& rLink )
@@ -829,3 +1018,5 @@ void SvtMiscOptions::RemoveListenerLink( const Link& rLink )
 {
     m_pDataContainer->RemoveListenerLink( rLink );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

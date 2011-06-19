@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -360,75 +361,6 @@ SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 }
 
 // SfxInvalidItem ---------------------------------------------------------
-#if 0  /* @@@ NOT USED @@@ */
-SfxInvalidItem::SfxInvalidItem( sal_uInt16 nWhich, const SfxPoolItem &rDefault ):
-    SfxPoolItem(nWhich),
-    pDefaultItem(&rDefault)
-{
-    DBG_CTOR(SfxInvalidItem, 0);
-}
-
-// ------------------------------------------------------------------------
-SfxInvalidItem::SfxInvalidItem( const SfxInvalidItem& rCopy):
-    SfxPoolItem(rCopy),
-    pDefaultItem(rCopy.pDefaultItem)
-{
-    DBG_CTOR(SfxInvalidItem, 0);
-    //! pDefaultItem->ReleaseRef?
-}
-
-// ------------------------------------------------------------------------
-SfxInvalidItem::~SfxInvalidItem()
-{
-    DBG_DTOR(SfxInvalidItem, 0);
-}
-
-// ------------------------------------------------------------------------
-int SfxInvalidItem::operator==( const SfxPoolItem& rCmp) const
-{
-    DBG_CHKTHIS(SfxInvalidItem, 0);
-    DBG_ASSERT( SfxPoolItem::operator==(rCmp), "unequal type" );
-    return *pDefaultItem == *((SfxInvalidItem&)rCmp).pDefaultItem;
-}
-
-// ------------------------------------------------------------------------
-SfxItemPresentation SfxInvalidItem::GetPresentation
-(
-    SfxItemPresentation     ePresentation,
-    SfxMapUnit              eCoreMetric,
-    SfxMapUnit              ePresentationMetric,
-    XubString&              rText,
-    const IntlWrapper *
-)   const
-{
-    DBG_CHKTHIS(SfxInvalidItem, 0);
-    rText.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Invalid"));
-    return SFX_ITEM_PRESENTATION_NAMELESS;
-}
-
-// ------------------------------------------------------------------------
-SfxPoolItem* SfxInvalidItem::Clone(SfxItemPool *) const
-{
-    DBG_CHKTHIS(SfxInvalidItem, 0);
-    return new SfxInvalidItem(*this);
-}
-
-// ------------------------------------------------------------------------
-SfxPoolItem* SfxInvalidItem::Create(SvStream &, sal_uInt16 nVersion) const
-{
-    DBG_CHKTHIS(SfxInvalidItem, 0);
-    DBG_ERROR("SfxInvalidItem::Create() ist sinnlos");
-    return Clone();
-}
-
-// ------------------------------------------------------------------------
-SvStream& SfxInvalidItem::Store(SvStream &rStream, sal_uInt16 nItemVersion ) const
-{
-    DBG_CHKTHIS(SfxInvalidItem, 0);
-    DBG_ERROR("SfxInvalidItem::Store() ist sinnlos");
-    return rStream;
-}
-#endif /* @@@ NOT USED @@@ */
 
 // SfxItemHandle ----------------------------------------------------------
 SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
@@ -477,48 +409,36 @@ SfxItemHandle::~SfxItemHandle()
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
+bool SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
 {
-    return 0;
+    return false;
 }
 
 // ------------------------------------------------------------------------
-int SfxPoolItem::HasMetrics() const
+bool SfxPoolItem::HasMetrics() const
 {
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-#if 0  /* @@@ NOT USED @@@ */
-void SfxPoolItem::GetVersion() const
-{
-    DBG_ERROR( "dummy called" );
-}
-
-// -----------------------------------------------------------------------
-void SfxPoolItem::Store(SvStream &rStream) const
-{
-    DBG_ERROR( "dummy called" );
-}
-#endif /* @@@ NOT USED @@@ */
-
-// -----------------------------------------------------------------------
-
-sal_Bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
-{
-    DBG_ERROR("There is no implementation for QueryValue for this item!");
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8 )
+bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
 {
-    DBG_ERROR("There is no implementation for PutValue for this item!");
-    return sal_False;
+    OSL_FAIL("There is no implementation for QueryValue for this item!");
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8 )
+{
+    OSL_FAIL("There is no implementation for PutValue for this item!");
+    return false;
 }
 
 SfxVoidItem::~SfxVoidItem()
 {
     DBG_DTOR(SfxVoidItem, 0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

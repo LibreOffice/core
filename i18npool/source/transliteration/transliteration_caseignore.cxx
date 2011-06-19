@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,20 +49,6 @@ Transliteration_caseignore::Transliteration_caseignore()
     transliterationName = "case ignore (generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_caseignore";
 }
-
-#if 0
-/* NOTE: We had this, derived from Transliteration_caseignore, but it was
- * unused code. Deactivated with #i89580# but left for reference in case
- * MappingTypeSimpleFolding would be needed at some time.
- */
-Transliteration_simplecaseignore::Transliteration_simplecaseignore()
-{
-    nMappingType = MappingTypeSimpleFolding;
-    moduleLoaded = (TransliterationModules)0;
-    transliterationName = "simple case ignore (generic)";
-    implementationName = "com.sun.star.i18n.Transliteration.Transliteration_simplecaseignore";
-}
-#endif
 
 void SAL_CALL
 Transliteration_caseignore::loadModule( TransliterationModules modName, const Locale& rLocale )
@@ -170,3 +157,5 @@ Transliteration_caseignore::compare(
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

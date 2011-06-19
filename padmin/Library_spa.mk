@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,spa))
 $(eval $(call gb_Library_set_include,spa,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
 ))
 
 $(eval $(call gb_Library_add_defs,spa,\
@@ -45,10 +44,8 @@ $(eval $(call gb_Library_add_linked_libs,spa,\
     basegfx \
     comphelper \
     i18nisolang1 \
-    stl \
     cppu \
     sal \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
@@ -65,11 +62,16 @@ $(eval $(call gb_Library_add_exception_objects,spa,\
     padmin/source/titlectrl \
 ))
 
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
+$(eval $(call gb_Library_add_linked_libs,spa,\
+    m \
+    pthread \
+))
+endif
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,spa,\
     dl \
-    m \
-    pthread \
 ))
 endif
 

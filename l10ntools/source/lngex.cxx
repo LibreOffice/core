@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,14 +102,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
             nState = STATE_UTF8;
             bUTF8 = sal_True;
         }
-/*      else if ( sSwitch == "-NOUTF8" ) {
-            nState = STATE_UTF8;
-            bUTF8 = sal_False;
-        }*/
-/*      else if ( sSwitch == "-ULF" ) {
-            nState = STATE_ULF;
-            bULF = sal_True;
-        }*/
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
         }
@@ -129,7 +122,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = argv[ i ];
-//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -179,7 +171,7 @@ void Help()
 }
 
 /*****************************************************************************/
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
@@ -203,3 +195,5 @@ int _cdecl main( int argc, char *argv[] )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

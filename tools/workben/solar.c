@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ int GetStackAlignment(void);
 void PrintArgs( int p, ... );
 int check( TestFunc func, Type eT, void* p );
 
-#if defined (UNX) || defined (WNT) || defined (OS2)
+#if defined (UNX) || defined (WNT)
 
 #ifdef UNX
 #include <unistd.h>
@@ -122,7 +123,7 @@ int GetStackAlignment()
 
 
 
-#if defined (UNX) || defined (WNT) || defined (OS2)
+#if defined (UNX) || defined (WNT)
 
 #ifdef I_STDARG
 void PrintArgs( int p, ... )
@@ -153,11 +154,7 @@ va_dcl
 #ifndef USE_FORK_TO_CHECK
 static jmp_buf check_env;
 static int bSignal;
-#if defined (UNX) || defined (OS2)
-void SignalHandler( int sig )
-#else
-void __cdecl SignalHandler( int sig )
-#endif
+void SAL_CALL SignalHandler( int sig )
 {
   bSignal = 1;
   /*
@@ -353,11 +350,7 @@ void Description_Print( struct Description* pThis, char* name )
   fclose(f);
 }
 
-int
-#ifdef WNT
-__cdecl
-#endif
-main( int argc, char* argv[] )
+int SAL_CALL main( int argc, char* argv[] )
 {
   printTypeSign( char, "char" );
   printTypeSign( short, "short" );
@@ -425,3 +418,5 @@ main( int argc, char* argv[] )
   exit( 0 );
   return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

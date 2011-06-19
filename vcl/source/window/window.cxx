@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,16 +96,19 @@
 #include "com/sun/star/accessibility/XAccessible.hpp"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
 
+#include <sal/macros.h>
+
 #include <set>
 #include <typeinfo>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;
 using namespace com::sun;
+
+using ::rtl::OUString;
 
 using ::com::sun::star::awt::XTopWindow;
 
@@ -305,8 +309,6 @@ bool Window::ImplCheckUIFont( const Font& rFont )
 
 void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl )
 {
-    // reset high contrast to false, so the system can either update it
-    // or AutoDetectSystemHC can kick in (see below)
     StyleSettings aTmpSt( rSettings.GetStyleSettings() );
     aTmpSt.SetHighContrastMode( sal_False );
     rSettings.SetStyleSettings( aTmpSt );
@@ -325,7 +327,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     if ( !bUseSystemFont )
     {
         ImplInitFontList();
-        String aConfigFont = utl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
+        String aConfigFont = utl::DefaultFontConfiguration::get().getUserInterfaceFont( rSettings.GetUILocale() );
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
         {
@@ -414,8 +416,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     };
     static std::set< LanguageType > aBrokenSystemFontSizeLanguagesSet(
         eBrokenSystemFontSizeLanguages,
-        eBrokenSystemFontSizeLanguages +
-        (sizeof(eBrokenSystemFontSizeLanguages)/sizeof(eBrokenSystemFontSizeLanguages[0]))
+        eBrokenSystemFontSizeLanguages + SAL_N_ELEMENTS(eBrokenSystemFontSizeLanguages)
         );
     LanguageType aLang = Application::GetSettings().GetUILanguage();
     if( aBrokenSystemFontSizeLanguagesSet.find( aLang ) != aBrokenSystemFontSizeLanguagesSet.end() )
@@ -493,7 +494,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
 
     rSettings.SetStyleSettings( aStyleSettings );
 
-
     // auto detect HC mode; if the system already set it to "yes"
     // (see above) then accept that
     if( !rSettings.GetStyleSettings().GetHighContrastMode() )
@@ -501,10 +501,10 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/Accessibility" ) );    // note: case sensisitive !
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Accessibility")) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "AutoDetectSystemHC" ) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AutoDetectSystemHC")) );
             if( aValue >>= bTmp )
                 bAutoHCMode = bTmp;
         }
@@ -515,6 +515,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
             {
                 aStyleSettings = rSettings.GetStyleSettings();
                 aStyleSettings.SetHighContrastMode( sal_True );
+                aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
                 rSettings.SetStyleSettings( aStyleSettings );
             }
         }
@@ -524,10 +525,11 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     if( pEnvHC && *pEnvHC )
     {
         aStyleSettings.SetHighContrastMode( sal_True );
+        aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
         rSettings.SetStyleSettings( aStyleSettings );
     }
 
-#ifdef DBG_UTIL
+#if defined(DBG_UTIL)
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
     // vorhanden ist
@@ -654,10 +656,10 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbDockWin           = sal_False;        // sal_True: DockingWindow is the base class
     mpWindowImpl->mbFloatWin          = sal_False;        // sal_True: FloatingWindow is the base class
     mpWindowImpl->mbPushButton        = sal_False;        // sal_True: PushButton is the base class
-    mpWindowImpl->mbToolBox         = sal_False;        // sal_True: ToolBox is the base class
+    mpWindowImpl->mbToolBox           = sal_False;      // sal_True: ToolBox is the base class
     mpWindowImpl->mbMenuFloatingWindow= sal_False;      // sal_True: MenuFloatingWindow is the base class
     mpWindowImpl->mbToolbarFloatingWindow= sal_False;       // sal_True: ImplPopupFloatWin is the base class, used for subtoolbars
-    mpWindowImpl->mbSplitter            = sal_False;        // sal_True: Splitter is the base class
+    mpWindowImpl->mbSplitter          = sal_False;      // sal_True: Splitter is the base class
     mpWindowImpl->mbVisible           = sal_False;        // sal_True: Show( sal_True ) called
     mpWindowImpl->mbOverlapVisible    = sal_False;        // sal_True: Hide called for visible window from ImplHideAllOverlapWindow()
     mpWindowImpl->mbDisabled          = sal_False;        // sal_True: Enable( sal_False ) called
@@ -1306,7 +1308,10 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_QUICKTEXT )
         SetQuickHelpText( ReadStringRes() );
     if ( nObjMask & WINDOW_EXTRALONG )
-        SetData( (void*)ReadLongRes() );
+    {
+        sal_uIntPtr nRes = ReadLongRes();
+        SetData( (void*)nRes );
+    }
     if ( nObjMask & WINDOW_UNIQUEID )
         SetUniqueId( ReadByteStringRes() );
 
@@ -1563,7 +1568,6 @@ void Window::ImplResetReallyVisible()
     // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
     // For this, the data member of the event must not be NULL.
     // Previously, we did this in Window::Show, but there some events got lost in certain situations.
-    // #104887# - 2004-08-10 - fs@openoffice.org
     if( bBecameReallyInvisible && ImplIsAccessibleCandidate() )
         ImplCallEventListeners( VCLEVENT_WINDOW_HIDE, this );
         // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_HIDE. Normally, we should
@@ -1606,7 +1610,6 @@ void Window::ImplSetReallyVisible()
     // For this, the data member of the event must not be NULL.
     // Previously, we did this in Window::Show, but there some events got lost in certain situations. Now
     // we're doing it when the visibility really changes
-    // #104887# - 2004-08-10 - fs@openoffice.org
     if( bBecameReallyVisible && ImplIsAccessibleCandidate() )
         ImplCallEventListeners( VCLEVENT_WINDOW_SHOW, this );
         // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_SHOW. Normally, we should
@@ -1775,7 +1778,7 @@ sal_Bool Window::ImplSysObjClip( const Region* pOldRegion )
 
     if ( mpWindowImpl->mpSysObj )
     {
-        sal_Bool bVisibleState = mpWindowImpl->mbReallyVisible;
+        bool bVisibleState = mpWindowImpl->mbReallyVisible;
 
         if ( bVisibleState )
         {
@@ -2407,7 +2410,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
         {
             bool bRestoreCursor = false;
             if ( mpWindowImpl->mpCursor )
-                bRestoreCursor = mpWindowImpl->mpCursor->ImplHide( false );
+                bRestoreCursor = mpWindowImpl->mpCursor->ImplSuspend();
 
             mbInitClipRegion = sal_True;
             mpWindowImpl->mbInPaint = sal_True;
@@ -2454,7 +2457,7 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             mbInitClipRegion = sal_True;
             mpWindowImpl->mpPaintRegion = NULL;
             if ( mpWindowImpl->mpCursor )
-                mpWindowImpl->mpCursor->ImplShow( false, bRestoreCursor );
+                mpWindowImpl->mpCursor->ImplResume( bRestoreCursor );
         }
     }
     else
@@ -2896,7 +2899,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         ImplInvalidateAllOverlapBackgrounds();
 
     if ( mpWindowImpl->mpCursor )
-        mpWindowImpl->mpCursor->ImplHide( false );
+        mpWindowImpl->mpCursor->ImplSuspend();
 
     sal_uInt16 nOrgFlags = nFlags;
     if ( !(nFlags & (SCROLL_CHILDREN | SCROLL_NOCHILDREN)) )
@@ -3043,7 +3046,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         Update();
 
     if ( mpWindowImpl->mpCursor )
-        mpWindowImpl->mpCursor->ImplShow( false );
+        mpWindowImpl->mpCursor->ImplResume();
 }
 
 // -----------------------------------------------------------------------
@@ -3122,7 +3125,7 @@ void Window::ImplUpdateWindowPtr()
 void Window::ImplUpdateOverlapWindowPtr( sal_Bool bNewFrame )
 {
     sal_Bool bVisible = IsVisible();
-    Show( sal_False );
+    Show( false );
     ImplRemoveWindow( bNewFrame );
     Window* pRealParent = mpWindowImpl->mpRealParent;
     ImplInsertWindow( ImplGetParent() );
@@ -3143,7 +3146,7 @@ void Window::ImplUpdateOverlapWindowPtr( sal_Bool bNewFrame )
     }
 
     if ( bVisible )
-        Show( sal_True );
+        Show( true );
 }
 
 // -----------------------------------------------------------------------
@@ -3200,7 +3203,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 {
     sal_Bool    bNewPos         = sal_False;
     sal_Bool    bNewSize        = sal_False;
-    sal_Bool    bNewWidth       = sal_False;
     sal_Bool    bCopyBits       = sal_False;
     long    nOldOutOffX     = mnOutOffX;
     long    nOldOutOffY     = mnOutOffY;
@@ -3243,7 +3245,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             mnOutWidth = nWidth;
             bNewSize = sal_True;
             bCopyBits = sal_False;
-            bNewWidth = sal_True;
         }
     }
     if ( nFlags & WINDOW_POSSIZE_HEIGHT )
@@ -3770,7 +3771,7 @@ void Window::ImplShowAllOverlaps()
     {
         if ( pOverlapWindow->mpWindowImpl->mbOverlapVisible )
         {
-            pOverlapWindow->Show( sal_True, SHOW_NOACTIVATE );
+            pOverlapWindow->Show( true, SHOW_NOACTIVATE );
             pOverlapWindow->mpWindowImpl->mbOverlapVisible = sal_False;
         }
 
@@ -3788,7 +3789,7 @@ void Window::ImplHideAllOverlaps()
         if ( pOverlapWindow->IsVisible() )
         {
             pOverlapWindow->mpWindowImpl->mbOverlapVisible = sal_True;
-            pOverlapWindow->Show( sal_False );
+            pOverlapWindow->Show( false );
         }
 
         pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
@@ -4073,7 +4074,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         {
             // Cursor hiden
             if ( pOldFocusWindow->mpWindowImpl->mpCursor )
-                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide( true );
+                pOldFocusWindow->mpWindowImpl->mpCursor->ImplHide();
         }
 
         // !!!!! Wegen altem SV-Office Activate/Deavtivate Handling
@@ -4098,110 +4099,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                 pNewRealWindow->Activate();
             }
         }
-/*
-        // call Deactivate and Activate
-        Window* pDeactivateParent;
-        Window* pActivateParent;
-        Window* pParent;
-        Window* pLastParent;
-        pDeactivateParent = pOldFocusWindow;
-        while ( pDeactivateParent )
-        {
-            pParent = pDeactivateParent;
-            if ( pParent->ImplIsChild( this ) )
-                break;
 
-            if ( pDeactivateParent->ImplIsOverlapWindow() )
-            {
-                if ( !pDeactivateParent->mpWindowImpl->mbParentActive )
-                    break;
-            }
-
-            pDeactivateParent = pDeactivateParent->ImplGetParent();
-        }
-        if ( pOldFocusWindow )
-        {
-            pActivateParent = this;
-            while ( pActivateParent )
-            {
-                pParent = pActivateParent;
-                if ( pParent->ImplIsChild( pOldFocusWindow ) )
-                    break;
-
-                if ( pActivateParent->ImplIsOverlapWindow() )
-                {
-                    if ( !pActivateParent->mpWindowImpl->mbParentActive )
-                        break;
-                }
-
-                pActivateParent = pActivateParent->ImplGetParent();
-            }
-        }
-        else
-        {
-            if ( ImplIsOverlapWindow() )
-                pActivateParent = this;
-            else
-                pActivateParent = mpWindowImpl->mpOverlapWindow;
-            while ( pActivateParent )
-            {
-                if ( pActivateParent->ImplIsOverlapWindow() )
-                {
-                    if ( !pActivateParent->mpWindowImpl->mbParentActive )
-                        break;
-                }
-
-                pActivateParent = pActivateParent->ImplGetParent();
-            }
-        }
-        if ( pDeactivateParent )
-        {
-            do
-            {
-                pLastParent = pOldFocusWindow;
-                if ( pLastParent != pDeactivateParent )
-                {
-                    pParent = pLastParent->ImplGetParent();
-                    while ( pParent )
-                    {
-                        if ( pParent == pDeactivateParent )
-                            break;
-                        pLastParent = pParent;
-                        pParent = pParent->ImplGetParent();
-                    }
-                }
-                else
-                    pParent = pLastParent;
-
-                pParent->mpWindowImpl->mbActive = sal_False;
-                pParent->Deactivate();
-                pDeactivateParent = pLastParent;
-            }
-            while ( pDeactivateParent != pOldFocusWindow );
-        }
-        do
-        {
-            pLastParent = this;
-            if ( pLastParent != pActivateParent )
-            {
-                pParent = pLastParent->ImplGetParent();
-                while ( pParent )
-                {
-                    if ( pParent == pActivateParent )
-                        break;
-                    pLastParent = pParent;
-                    pParent = pParent->ImplGetParent();
-                }
-            }
-            else
-                pParent = pLastParent;
-
-            pParent->mpWindowImpl->mbActive = sal_True;
-            pParent->Activate();
-            pActivateParent = pLastParent;
-        }
-        while ( pActivateParent != this );
-*/
         // call Get- and LoseFocus
         if ( pOldFocusWindow && ! aOldFocusDel.IsDelete() )
         {
@@ -4443,7 +4341,7 @@ Window::~Window()
                 xComponent->dispose();
         }
 
-        catch ( Exception exc )
+        catch ( Exception )
         {
             // can be safely ignored here.
         }
@@ -4484,7 +4382,7 @@ Window::~Window()
     if ( pSVData->maWinData.mpDefDialogParent == this )
         pSVData->maWinData.mpDefDialogParent = NULL;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     if ( sal_True ) // always perform these tests in non-pro versions
     {
         ByteString  aErrorStr;
@@ -4505,7 +4403,7 @@ Window::~Window()
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4526,7 +4424,7 @@ Window::~Window()
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4541,7 +4439,7 @@ Window::~Window()
                 lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4556,7 +4454,7 @@ Window::~Window()
                 lcl_appendWindowInfo( aTempStr, *pTempWin );
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
 
@@ -4574,7 +4472,7 @@ Window::~Window()
             ByteString aTempStr( "Window (" );
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") still in TaskPanelList!";
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
             GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
         }
     }
@@ -4600,7 +4498,7 @@ Window::~Window()
             ByteString aTempStr( "Window (" );
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") not found in TaskPanelList!";
-            DBG_ERROR( aTempStr.GetBuffer() );
+            OSL_FAIL( aTempStr.GetBuffer() );
         }
     }
 
@@ -4627,11 +4525,11 @@ Window::~Window()
     {
         // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
         bHasFocussedChild = sal_True;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ByteString aTempStr( "Window (" );
         aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
         aTempStr += ") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
-        DBG_ERROR( aTempStr.GetBuffer() );
+        OSL_FAIL( aTempStr.GetBuffer() );
         GetpApp()->Abort( String( aTempStr, RTL_TEXTENCODING_UTF8 ) );   // abort in non-pro version, this must be fixed!
 #endif
     }
@@ -4796,10 +4694,20 @@ void Window::doLazyDelete()
     DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(this);
     if( pSysWin || ( pDockWin && pDockWin->IsFloatingMode() ) )
     {
-        Show( sal_False );
+        Show( false );
         SetParent( ImplGetDefaultWindow() );
     }
     vcl::LazyDeletor<Window>::Delete( this );
+}
+
+sal_uInt16 Window::GetIndicatorState() const
+{
+    return mpWindowImpl->mpFrame->GetIndicatorState().mnState;
+}
+
+void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
+{
+    mpWindowImpl->mpFrame->SimulateKeyPress(nKeyCode);
 }
 
 // -----------------------------------------------------------------------
@@ -5210,48 +5118,6 @@ long Window::PreNotify( NotifyEvent& rNEvt )
         // #82968# mouse and key events will be notified after processing ( in ImplNotifyKeyMouseCommandEventListeners() )!
         //    see also ImplHandleMouseEvent(), ImplHandleKey()
 
-        /*
-        else if( rNEvt.GetType() == EVENT_MOUSEMOVE )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            {
-                if ( rNEvt.GetWindow() == this )
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, (void*)rNEvt.GetMouseEvent() );
-                else
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEMOVE, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
-            }
-        }
-        else if( rNEvt.GetType() == EVENT_MOUSEBUTTONUP )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            {
-                if ( rNEvt.GetWindow() == this )
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, (void*)rNEvt.GetMouseEvent() );
-                else
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONUP, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
-            }
-        }
-        else if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-            {
-                if ( rNEvt.GetWindow() == this )
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, (void*)rNEvt.GetMouseEvent() );
-                else
-                    ImplCallEventListeners( VCLEVENT_WINDOW_MOUSEBUTTONDOWN, &ImplTranslateMouseEvent( *rNEvt.GetMouseEvent(), rNEvt.GetWindow(), this ) );
-            }
-        }
-        else if( rNEvt.GetType() == EVENT_KEYINPUT )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-                ImplCallEventListeners( VCLEVENT_WINDOW_KEYINPUT, (void*)rNEvt.GetKeyEvent() );
-        }
-        else if( rNEvt.GetType() == EVENT_KEYUP )
-        {
-            if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
-                ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
-        }
-        */
     }
 
     return bDone;
@@ -5397,8 +5263,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     if ( aDelData.IsDelete() )
         return;
 
-    if ( !mpWindowImpl->maEventListeners.empty() )
-        mpWindowImpl->maEventListeners.Call( &aEvent );
+    mpWindowImpl->maEventListeners.Call( &aEvent );
 
     if ( aDelData.IsDelete() )
         return;
@@ -5410,8 +5275,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     {
         pWindow->ImplAddDel( &aDelData );
 
-        if ( !pWindow->mpWindowImpl->maChildEventListeners.empty() )
-            pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
+        pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
 
         if ( aDelData.IsDelete() )
             return;
@@ -5431,28 +5295,28 @@ void Window::FireVclEvent( VclSimpleEvent* pEvent )
 
 void Window::AddEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maEventListeners.push_back( rEventListener );
+    mpWindowImpl->maEventListeners.addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maEventListeners.remove( rEventListener );
+    mpWindowImpl->maEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::AddChildEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maChildEventListeners.push_back( rEventListener );
+    mpWindowImpl->maChildEventListeners.addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveChildEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maChildEventListeners.remove( rEventListener );
+    mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -5985,17 +5849,6 @@ Font Window::GetPointFont() const
 
 // -----------------------------------------------------------------------
 
-// TODO: remove in next incompatible build
-void Window::GetFontResolution( sal_Int32& nDPIX, sal_Int32& nDPIY ) const
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    nDPIX = mpWindowImpl->mpFrameData->mnDPIX;
-    nDPIY = mpWindowImpl->mpFrameData->mnDPIY;
-}
-
-// -----------------------------------------------------------------------
-
 void Window::SetParentClipMode( sal_uInt16 nMode )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -6105,8 +5958,6 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
     }
     else
     {
-        sal_Bool bInvalidate = sal_False;
-
         if ( rRegion.GetType() == REGION_NULL )
         {
             if ( mpWindowImpl->mbWinRegion )
@@ -6114,7 +5965,6 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
                 mpWindowImpl->maWinRegion = Region( REGION_NULL );
                 mpWindowImpl->mbWinRegion = sal_False;
                 ImplSetClipFlag();
-                bInvalidate = sal_True;
             }
         }
         else
@@ -6122,7 +5972,6 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
             mpWindowImpl->maWinRegion = rRegion;
             mpWindowImpl->mbWinRegion = sal_True;
             ImplSetClipFlag();
-            bInvalidate = sal_True;
         }
 
         if ( IsReallyVisible() )
@@ -6307,7 +6156,7 @@ void Window::SetParent( Window* pNewParent )
         mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
 
     sal_Bool bVisible = IsVisible();
-    Show( sal_False, SHOW_NOFOCUSCHANGE );
+    Show( false, SHOW_NOFOCUSCHANGE );
 
     // Testen, ob sich das Overlap-Window aendert
     Window* pOldOverlapWindow;
@@ -6423,7 +6272,7 @@ void Window::SetParent( Window* pNewParent )
         ImplGetOwnerDrawList().push_back( this );
 
     if ( bVisible )
-        Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+        Show( true, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
 }
 
 // -----------------------------------------------------------------------
@@ -6448,10 +6297,10 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 
         if ( mpWindowImpl->mpBorderWindow )
         {
-            sal_Bool bOldUpdate = mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate;
+            bool bOldUpdate = mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate;
             if ( mpWindowImpl->mbNoParentUpdate )
                 mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate = sal_True;
-            mpWindowImpl->mpBorderWindow->Show( sal_False, nFlags );
+            mpWindowImpl->mpBorderWindow->Show( false, nFlags );
             mpWindowImpl->mpBorderWindow->mpWindowImpl->mbNoParentUpdate = bOldUpdate;
         }
         else if ( mpWindowImpl->mbFrame )
@@ -6589,13 +6438,22 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
         }
 
         if ( mpWindowImpl->mpBorderWindow )
-            mpWindowImpl->mpBorderWindow->Show( sal_True, nFlags );
+            mpWindowImpl->mpBorderWindow->Show( true, nFlags );
         else if ( mpWindowImpl->mbFrame )
         {
-            ImplSVData* pSVData = ImplGetSVData();
             // #106431#, hide SplashScreen
-            if( pSVData->mpIntroWindow && !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
+            ImplSVData* pSVData = ImplGetSVData();
+            if ( !pSVData->mpIntroWindow )
+            {
+                // The right way would be just to call this (not even in the 'if')
+                GetpApp()->InitFinished();
+            }
+            else if ( !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
+            {
+                // ... but the VCL splash is broken, and it needs this
+                // (for ./soffice slot:5500)
                 pSVData->mpIntroWindow->Hide();
+            }
 
             //DBG_ASSERT( !mpWindowImpl->mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
             mpWindowImpl->mbSuppressAccessibilityEvents = sal_False;
@@ -6620,7 +6478,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
         if( aDogTag.IsDelete() )
             return;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         if ( IsDialog() || (GetType() == WINDOW_TABPAGE) || (GetType() == WINDOW_DOCKINGWINDOW) )
         {
             DBG_DIALOGTEST( this );
@@ -6914,7 +6772,7 @@ void Window::EnableInput( sal_Bool bEnable, sal_Bool bChild, sal_Bool bSysWin,
                     if ( !pExcludeWindow || !pExcludeWindow->ImplIsWindowOrChild( (*p), sal_True ) )
                         (*p)->EnableInput( bEnable, bChild );
                 }
-                p++;
+                ++p;
             }
         }
     }
@@ -8054,7 +7912,7 @@ void Window::SetCursor( Cursor* pCursor )
     if ( mpWindowImpl->mpCursor != pCursor )
     {
         if ( mpWindowImpl->mpCursor )
-            mpWindowImpl->mpCursor->ImplHide( true );
+            mpWindowImpl->mpCursor->ImplHide();
         mpWindowImpl->mpCursor = pCursor;
         if ( pCursor )
             pCursor->ImplShow();
@@ -8521,7 +8379,7 @@ uno::Reference< XDropTarget > Window::GetDropTarget()
 
                     }
 
-                    catch( RuntimeException exc )
+                    catch( RuntimeException )
                     {
                         // release all instances
                         mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8561,22 +8419,22 @@ uno::Reference< XDragSource > Window::GetDragSource()
                         Sequence< Any > aDragSourceAL( 2 ), aDropTargetAL( 2 );
                         OUString aDragSourceSN, aDropTargetSN;
 #if defined WNT
-                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
-                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
+                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
+                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
                         aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
                         aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
 #elif defined QUARTZ
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */
-                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
-                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
+                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDragSource"));
+                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.OleDropTarget"));
                         aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
                         aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined UNX
                         aDropTargetAL.realloc( 3 );
                         aDragSourceAL.realloc( 3 );
-                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragSource" );
-                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DropTarget" );
+                        aDragSourceSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DragSource"));
+                        aDropTargetSN = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DropTarget"));
 
                         aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
                         aDragSourceAL[ 2 ] = makeAny( vcl::createBmpConverter() );
@@ -8594,7 +8452,7 @@ uno::Reference< XDragSource > Window::GetDragSource()
             }
 
             // createInstance can throw any exception
-            catch( Exception exc )
+            catch( Exception )
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxDropTarget.clear();
@@ -8649,10 +8507,10 @@ uno::Reference< XClipboard > Window::GetClipboard()
 
                 if( xFactory.is() )
                 {
-                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboardExt" ) ), UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboardExt")) ), UNO_QUERY );
 
                     if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
-                        mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                        mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")) ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
@@ -8663,7 +8521,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
                         {
                             Sequence< Any > aArgumentList( 3 );
                             aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                            aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "CLIPBOARD" ) );
+                            aArgumentList[ 1 ] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
                             aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
                             xInit->initialize( aArgumentList );
@@ -8674,7 +8532,7 @@ uno::Reference< XClipboard > Window::GetClipboard()
             }
 
             // createInstance can throw any exception
-            catch( Exception exc )
+            catch( Exception )
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxClipboard.clear();
@@ -8706,27 +8564,27 @@ uno::Reference< XClipboard > Window::GetPrimarySelection()
 #if defined(UNX) && !defined(QUARTZ)
                     Sequence< Any > aArgumentList( 3 );
                       aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
+                    aArgumentList[ 1 ] = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("PRIMARY")) );
                     aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
                     mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xFactory->createInstanceWithArguments(
-                    OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
-#   else
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")), aArgumentList ), UNO_QUERY );
+#       else
                     static uno::Reference< XClipboard > s_xSelection;
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
+                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboardExt")) ), UNO_QUERY );
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
+                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboard")) ), UNO_QUERY );
 
                     mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
-#   endif
+#       endif
                 }
             }
 
             // createInstance can throw any exception
-            catch( Exception exc )
+            catch( Exception )
             {
                 // release all instances
                 mpWindowImpl->mpFrameData->mxSelection.clear();
@@ -9960,9 +9818,6 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
     DBG_ASSERT( ! pDev->ImplHasMirroredGraphics(), "PaintToDevice to mirroring graphics" );
     DBG_ASSERT( ! pDev->IsRTLEnabled(), "PaintToDevice to mirroring device" );
 
-
-    Point       aPos  = pDev->LogicToPixel( rPos );
-
     Window* pRealParent = NULL;
     if( ! mpWindowImpl->mbVisible )
     {
@@ -10000,3 +9855,4 @@ Selection Window::GetSurroundingTextSelection() const
   return Selection( 0, 0 );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

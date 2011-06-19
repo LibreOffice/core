@@ -38,10 +38,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,svt/res))
 $(eval $(call gb_SrsTarget_set_include,svt/res,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc \
-    -I$(SRCDIR)/svtools/source/uno \
-    -I$(SRCDIR)/svtools/source/inc \
-    -I$(SRCDIR)/svtools/inc/ \
-    -I$(SRCDIR)/svtools/inc/svtools \
+    -I$(realpath $(SRCDIR)/svtools/source/inc) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svt/res,\
@@ -54,7 +51,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/control/ctrltool.src \
     svtools/source/control/filectrl.src \
     svtools/source/dialogs/addresstemplate.src \
-    svtools/source/dialogs/colrdlg.src \
     svtools/source/dialogs/filedlg2.src \
     svtools/source/dialogs/formats.src \
     svtools/source/dialogs/prnsetup.src \
@@ -70,6 +66,5 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/plugapp/testtool.src \
     svtools/source/toolpanel/toolpanel.src \
 ))
-
 
 # vim: set noet sw=4 ts=4:

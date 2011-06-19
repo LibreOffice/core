@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 
 #include <list>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "tools/string.hxx"
 #include "tools/stream.hxx"
@@ -64,7 +65,7 @@ class VCL_DLLPUBLIC PPDKey
 {
     friend class PPDParser;
 
-    typedef ::std::hash_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDValue* > value_type;
 
     String              m_aKey;
@@ -126,8 +127,9 @@ class VCL_DLLPUBLIC PPDParser
 {
     friend class PPDContext;
     friend class CUPSManager;
+    friend class PPDCache;
 
-    typedef ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
 
     void insertKey( const String& rKey, PPDKey* pKey );
@@ -142,11 +144,6 @@ public:
         PPDConstraint() : m_pKey1( NULL ), m_pOption1( NULL ), m_pKey2( NULL ), m_pOption2( NULL ) {}
     };
 private:
-
-    static ::std::list< PPDParser* >           aAllParsers;
-    static ::std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >*
-                                                pAllPPDFiles;
-
     hash_type                                   m_aKeys;
     value_type                                  m_aOrderedKeys;
     ::std::list< PPDConstraint >                m_aConstraints;
@@ -300,7 +297,7 @@ public:
 
 class VCL_DLLPUBLIC PPDContext
 {
-    typedef ::std::hash_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
+    typedef ::boost::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
     hash_type m_aCurrentValues;
     const PPDParser*                                    m_pParser;
 
@@ -329,8 +326,8 @@ public:
     void getUnconstrainedValues( const PPDKey*, ::std::list< const PPDValue* >& rValues );
 
     // for printer setup
-    void*   getStreamableBuffer( sal_uLong& rBytes ) const;
-    void    rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes );
+    char*   getStreamableBuffer( sal_uLong& rBytes ) const;
+    void    rebuildFromStreamBuffer( char* pBuffer, sal_uLong nBytes );
 
     // convenience
     int getRenderResolution() const;
@@ -343,3 +340,5 @@ public:
 } // namespace
 
 #endif // _PSPRINT_PPDPARSER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

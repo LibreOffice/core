@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -562,7 +563,7 @@ void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
         maItems.insert( maItems.begin() + nPos, pAquaSalMenuItem );
     else
     {
-        DBG_ERROR( "invalid item index in insert" );
+        OSL_FAIL( "invalid item index in insert" );
         return;
     }
 
@@ -585,7 +586,7 @@ void AquaSalMenu::RemoveItem( unsigned nPos )
     }
     else
     {
-        DBG_ERROR( "invalid item index in remove" );
+        OSL_FAIL( "invalid item index in remove" );
         return;
     }
 
@@ -808,7 +809,7 @@ void AquaSalMenu::statusLayout()
         if( [pView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
             [(OOStatusItemView*)pView layout];
         else
-            DBG_ERROR( "someone stole our status view" );
+            OSL_FAIL( "someone stole our status view" );
     }
 }
 
@@ -965,3 +966,4 @@ AquaSalMenuItem::~AquaSalMenuItem()
 
 // -------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

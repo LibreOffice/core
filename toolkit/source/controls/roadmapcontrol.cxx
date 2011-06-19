@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
-#ifndef _TOOLKIT_ROADMAP_CONTROL_HXX
 #include <toolkit/controls/roadmapcontrol.hxx>
-#endif
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -199,7 +198,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( !xRoadmapItem.is() )
             lcl_throwIllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
-        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService( ::rtl::OUString::createFromAscii( "com.sun.star.awt.RoadmapItem" ) );
+        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.RoadmapItem")) );
         if ( !bIsRoadmapItem )
             lcl_throwIllegalArgumentException();
     }
@@ -213,12 +212,12 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( xProps.is() )
         {
             sal_Int32 LocID = 0;
-            Any aValue = xPropertySet->getPropertyValue( ::rtl::OUString::createFromAscii( "ID" ) );
+            Any aValue = xPropertySet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) );
             aValue >>= LocID;
             if (LocID < 0)              // index may not be smaller than zero
             {
                 aAny <<= GetUniqueID();
-                xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "ID" ), aAny );
+                xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")), aAny );
             }
         }
     }
@@ -236,12 +235,12 @@ static void lcl_throwIndexOutOfBoundsException( )
           Reference< XInterface > CurRoadmapItem;
           while ( bIncrement )
           {
-           bIncrement = sal_False;
-              for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); i++ )
+              bIncrement = sal_False;
+              for ( RoadmapItemHolderList::iterator i = maRoadmapItems.begin(); i < maRoadmapItems.end(); ++i )
               {
                 CurRoadmapItem = *i;
                 Reference< XPropertySet > xPropertySet( CurRoadmapItem, UNO_QUERY );
-                aAny = xPropertySet->getPropertyValue( ::rtl::OUString::createFromAscii( "ID" ) );
+                aAny = xPropertySet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) );
                 aAny >>= n_CurItemID;
                 if (n_CurItemID == CurID)
                 {
@@ -401,7 +400,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     // -------------------------------------------------------------------
     ::rtl::OUString UnoRoadmapControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "Roadmap" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Roadmap"));
     }
 
 
@@ -501,3 +500,4 @@ void SAL_CALL UnoRoadmapControl::propertyChange( const PropertyChangeEvent& evt 
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

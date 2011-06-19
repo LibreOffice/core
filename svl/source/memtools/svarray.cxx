@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,21 +31,15 @@
 
 #define _SVARRAY_CXX
 
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_ULONGSSORT
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_LONGS
-#define _SVSTDARR_LONGSSORT
-#define _SVSTDARR_SHORTS
+#define _SVSTDARR_sal_uInt16S
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSSORT
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSISORT
 #define _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_USHORTSSORT
+#define _SVSTDARR_sal_uInt16SSORT
 
 #define _SVSTDARR_BYTESTRINGS
 #define _SVSTDARR_BYTESTRINGSDTOR
@@ -54,7 +49,6 @@
 #define _SVSTDARR_BYTESTRINGSISORTDTOR
 
 #define _SVSTDARR_XUB_STRLEN
-#define _SVSTDARR_XUB_STRLENSORT
 
 #include <svl/svstdarr.hxx>
 #include <tools/string.hxx>
@@ -70,10 +64,6 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
 
 SV_IMPL_VARARR( SvULongs, sal_uLong )
 SV_IMPL_VARARR( SvUShorts, sal_uInt16 )
-SV_IMPL_VARARR( SvLongs, long)
-
-SV_IMPL_VARARR_SORT( SvULongsSort, sal_uLong )
-SV_IMPL_VARARR_SORT( SvLongsSort, long )
 
 SV_IMPL_PTRARR( SvStrings, StringPtr )
 SV_IMPL_PTRARR( SvStringsDtor, StringPtr )
@@ -181,98 +171,6 @@ sal_Bool SvStringsISortDtor::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) co
     return sal_False;
 }
 
-// ---------------- Ushorts -------------------------------------
-
-/* SortArray fuer UShorts */
-sal_Bool SvUShortsSort::Seek_Entry( const sal_uInt16 aE, sal_uInt16* pP ) const
-{
-    register sal_uInt16 nO  = SvUShorts::Count(),
-            nM,
-            nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            if( *(pData + nM) == aE )
-            {
-                if( pP ) *pP = nM;
-                return sal_True;
-            }
-            else if( *(pData + nM) < aE )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pP ) *pP = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pP ) *pP = nU;
-    return sal_False;
-}
-
-void SvUShortsSort::Insert( const SvUShortsSort * pI, sal_uInt16 nS, sal_uInt16 nE )
-{
-    if( USHRT_MAX == nE )
-        nE = pI->Count();
-    sal_uInt16 nP;
-    const sal_uInt16 * pIArr = pI->GetData();
-    for( ; nS < nE; ++nS )
-    {
-        if( ! Seek_Entry( *(pIArr+nS), &nP) )
-                SvUShorts::Insert( *(pIArr+nS), nP );
-        if( ++nP >= Count() )
-        {
-            SvUShorts::Insert( pI, nP, nS+1, nE );
-            nS = nE;
-        }
-    }
-}
-
-sal_Bool SvUShortsSort::Insert( const sal_uInt16 aE )
-{
-    sal_uInt16 nP;
-    sal_Bool bExist = Seek_Entry( aE, &nP );
-    if( !bExist )
-        SvUShorts::Insert( aE, nP );
-    return !bExist;
-}
-
-sal_Bool SvUShortsSort::Insert( const sal_uInt16 aE, sal_uInt16& rP )
-{
-    sal_Bool bExist = Seek_Entry( aE, &rP );
-    if( !bExist )
-        SvUShorts::Insert( aE, rP );
-    return !bExist;
-}
-
-void SvUShortsSort::Insert( const sal_uInt16* pE, sal_uInt16 nL)
-{
-    sal_uInt16 nP;
-    for( sal_uInt16 n = 0; n < nL; ++n )
-        if( ! Seek_Entry( *(pE+n), &nP ))
-            SvUShorts::Insert( *(pE+n), nP );
-}
-
-// remove ab Pos
-void SvUShortsSort::RemoveAt( const sal_uInt16 nP, sal_uInt16 nL )
-{
-    if( nL )
-        SvUShorts::Remove( nP, nL);
-}
-
-// remove ab dem Eintrag
-void SvUShortsSort::Remove( const sal_uInt16 aE, sal_uInt16 nL )
-{
-    sal_uInt16 nP;
-    if( nL && Seek_Entry( aE, &nP ) )
-        SvUShorts::Remove( nP, nL);
-}
-
 // ---------------- bytestrings -------------------------------------
 
 // Array mit anderer Seek-Methode!
@@ -366,3 +264,4 @@ sal_Bool SvByteStringsISortDtor::Seek_Entry( const ByteStringPtr aE, sal_uInt16*
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

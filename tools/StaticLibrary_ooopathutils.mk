@@ -42,7 +42,7 @@ $(call gb_StaticLibrary_get_target,ooopathutils) : $(OUTDIR)/lib/$(1)
 $$(eval $$(call gb_Deliver_add_deliverable,$(OUTDIR)/lib/$(1),$(call gb_CxxObject_get_target,tools/source/misc/pathutils)))
 
 $(OUTDIR)/lib/$(1) : $(call gb_CxxObject_get_target,tools/source/misc/pathutils)
-    $$(call gb_Deliver_deliver,$$<,$$@)
+	$$(call gb_Deliver_deliver,$$<,$$@)
 
 endef
 

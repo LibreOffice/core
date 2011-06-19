@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,6 +80,9 @@ public:
     bool            Create( const SalBitmap& rSalBmp );
     bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics );
     bool            Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount );
+    virtual bool    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+                            Size& rSize,
+                            bool bMask = false );
 
     void            Destroy();
 
@@ -110,3 +114,5 @@ public:
 };
 
 #endif // _SV_SALBMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

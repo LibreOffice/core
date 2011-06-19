@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -446,8 +447,6 @@ table_wrapper_get_summary( AtkTable *table )
 
         if( pTable )
         {
-    // FIXME: Summary ??
-//            AtkObject* summary;
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleSummary() );
         }
     }
@@ -719,3 +718,5 @@ tableIfaceInit (AtkTableIface *iface)
   iface->get_column_description = table_wrapper_get_column_description;
   iface->set_column_description = table_wrapper_set_column_description;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

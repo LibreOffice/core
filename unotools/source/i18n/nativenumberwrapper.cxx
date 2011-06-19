@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <unotools/nativenumberwrapper.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
-#endif
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -168,3 +167,4 @@ NativeNumberWrapper::convertFromXmlAttributes(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

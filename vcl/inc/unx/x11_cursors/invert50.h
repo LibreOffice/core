@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 #define invert50_width 32
 #define invert50_height 32
-static char invert50_bits[] = {
+static unsigned char invert50_bits[] = {
 #if 1
    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
@@ -63,3 +64,5 @@ static char invert50_bits[] = {
    0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x33,
 #endif
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

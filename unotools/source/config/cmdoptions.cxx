@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,11 +42,12 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
 
 #include <itemholder1.hxx>
 
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -104,11 +106,6 @@ class SvtCmdOptions
             return ( m_aCommandHashMap.size() > 0 );
         }
 
-        void SetContainerSize( sal_Int32 nSize )
-        {
-            m_aCommandHashMap.resize( nSize );
-        }
-
         sal_Bool Lookup( const OUString& aCmd ) const
         {
             CommandHashMap::const_iterator pEntry = m_aCommandHashMap.find( aCmd );
@@ -142,7 +139,7 @@ class SvtCmdOptions
         }
 
     private:
-        class CommandHashMap : public ::std::hash_map< ::rtl::OUString      ,
+        class CommandHashMap : public ::boost::unordered_map< ::rtl::OUString       ,
                                                         sal_Int32           ,
                                                         OUStringHashCode    ,
                                                         ::std::equal_to< ::rtl::OUString >  >
@@ -291,9 +288,6 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     sal_Int32   nItem     = 0 ;
     OUString    sCmd          ;
 
-    // Set size of hash_map reach a used size of approx. 60%
-    m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
-
     // Get names/values for disabled commands.
     for( nItem=0; nItem < lNames.getLength(); ++nItem )
     {
@@ -342,9 +336,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     sal_Int32   nItem     = 0 ;
     OUString    sCmd          ;
 
-    // Set size of hash_map reach a used size of approx. 60%
     m_aDisabledCommands.Clear();
-    m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
 
     // Get names/values for disabled commands.
     for( nItem=0; nItem < lNames.getLength(); ++nItem )
@@ -371,7 +363,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::Commit()
 {
-    DBG_ERROR( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
+    OSL_FAIL( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
 
 //*****************************************************************************************************************
@@ -602,27 +594,17 @@ void SvtCommandOptions::EstablisFrameCallback(const ::com::sun::star::uno::Refer
     m_pDataContainer->EstablisFrameCallback(xFrame);
 }
 
+namespace
+{
+    class theCommandOptionsMutex : public rtl::Static<osl::Mutex, theCommandOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtCommandOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theCommandOptionsMutex::get();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

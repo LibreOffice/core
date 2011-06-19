@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,20 +29,17 @@
 #ifndef _SOT_FACTORY_HXX
 #define _SOT_FACTORY_HXX
 
-#ifndef _TOOLS_GLOBNAME_HXX
 #include <tools/globname.hxx>
-#endif
-#ifndef _TOOLS_RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
 #include "sot/sotdllapi.h"
+#include <vector>
 
 /*************************************************************************
 *************************************************************************/
 class SotObject;
 class SotFactory;
 
-DECLARE_LIST( SotFactoryList, SotFactory * )
+typedef ::std::vector< SotFactory* > SotFactoryList;
 typedef void * (*CreateInstanceType)( SotObject ** );
 
 //==================class SotFactory=======================================
@@ -88,3 +86,5 @@ private:
 };
 
 #endif // _FACTORY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

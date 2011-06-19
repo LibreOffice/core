@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,17 +140,10 @@ public:
     Point&              operator *= ( const long nVal );
     Point&              operator /= ( const long nVal );
 
-#ifdef __BORLANDC__
-    friend Point        operator+( const Point &rVal1, const Point &rVal2 );
-    friend Point        operator-( const Point &rVal1, const Point &rVal2 );
-    friend Point        operator*( const Point &rVal1, const long nVal2 );
-    friend Point        operator/( const Point &rVal1, const long nVal2 );
-#else
     friend inline Point operator+( const Point &rVal1, const Point &rVal2 );
     friend inline Point operator-( const Point &rVal1, const Point &rVal2 );
     friend inline Point operator*( const Point &rVal1, const long nVal2 );
     friend inline Point operator/( const Point &rVal1, const long nVal2 );
-#endif
 
     long                getX() const { return X(); }
     long                getY() const { return Y(); }
@@ -448,13 +442,8 @@ public:
     Rectangle&          operator += ( const Point& rPt );
     Rectangle&          operator -= ( const Point& rPt );
 
-#ifdef __BORLANDC__
-    friend Rectangle    operator + ( const Rectangle& rRect, const Point& rPt );
-    friend Rectangle    operator - ( const Rectangle& rRect, const Point& rPt );
-#else
     friend inline Rectangle operator + ( const Rectangle& rRect, const Point& rPt );
     friend inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt );
-#endif
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Rectangle& rRect );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Rectangle& rRect );
@@ -710,3 +699,5 @@ inline Rectangle operator - ( const Rectangle& rRect, const Point& rPt )
 }
 
 #endif // _GEN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,8 +157,8 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
             rOutDev.EnableMapMode( sal_False );
-            rOutDev.SetLineColor( COL_WHITE );
-            rOutDev.SetFillColor( COL_WHITE );
+            rOutDev.SetLineColor( COL_TRANSPARENT );
+            rOutDev.SetFillColor( COL_TRANSPARENT );
             rOutDev.DrawRect( Rectangle( Point(),
                                          rOutDev.GetOutputSizePixel()) );
 
@@ -167,8 +168,8 @@ namespace vclcanvas
 
                 rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
                 rOutDev2.EnableMapMode( sal_False );
-                rOutDev2.SetLineColor( COL_WHITE );
-                rOutDev2.SetFillColor( COL_WHITE );
+                rOutDev2.SetLineColor( COL_TRANSPARENT );
+                rOutDev2.SetFillColor( COL_TRANSPARENT );
                 rOutDev2.DrawRect( Rectangle( Point(),
                                               rOutDev2.GetOutputSizePixel()) );
                 rOutDev2.SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
@@ -947,8 +948,7 @@ namespace vclcanvas
         Bitmap aBitmap( rOutDev.GetBitmap(aRect.TopLeft(),
                                           aRect.GetSize()) );
 
-        ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
-                                            aBitmap );
+        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
 
         ENSURE_OR_THROW( pReadAccess.get() != NULL,
                          "Could not acquire read access to OutDev bitmap" );
@@ -1013,8 +1013,7 @@ namespace vclcanvas
             Bitmap aTmpBitmap( rOutDev.GetBitmap( aEmptyPoint,
                                                   aSize ) );
 
-            ScopedBitmapReadAccess pReadAccess( aTmpBitmap.AcquireReadAccess(),
-                                                aTmpBitmap );
+            Bitmap::ScopedReadAccess pReadAccess( aTmpBitmap );
 
             pPalette = &pReadAccess->GetPalette();
         }
@@ -1025,8 +1024,7 @@ namespace vclcanvas
         bool bCopyBack( false ); // only copy something back, if we
                                  // actually changed some pixel
         {
-            ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                  aBitmap );
+            Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
 
             ENSURE_OR_THROW( pWriteAccess.get() != NULL,
                              "Could not acquire write access to OutDev bitmap" );
@@ -1426,3 +1424,5 @@ namespace vclcanvas
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

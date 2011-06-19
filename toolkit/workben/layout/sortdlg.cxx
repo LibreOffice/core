@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,15 +57,16 @@ ScSortDlg::ScSortDlg( Window*           pParent,
     AddTabPage( TP_FIELDS,  ScTabPageSortFields::Create,  0 );
     AddTabPage( TP_OPTIONS, ScTabPageSortOptions::Create, 0 );
 #else /* !LAYOUT_SFX_TABDIALOG_BROKEN */
-    String fields = rtl::OUString::createFromAscii ("fields");
+    String fields(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("fields")));
     AddTabPage( TP_FIELDS, fields, ScTabPageSortFields::Create, 0, FALSE, TAB_APPEND);
-    String options = rtl::OUString::createFromAscii ("options");
+    String options(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("options")));
     AddTabPage( TP_OPTIONS, options, ScTabPageSortOptions::Create, 0, FALSE, TAB_APPEND);
 #endif /* !LAYOUT_SFX_TABDIALOG_BROKEN */
     FreeResource();
 }
 
-__EXPORT ScSortDlg::~ScSortDlg()
+ScSortDlg::~ScSortDlg()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ void FileControl::ImplBrowseFile( )
     {
         XubString aNewText;
 
-        const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
+        const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
 
         Reference< XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
         Reference < dialogs::XFilePicker > xFilePicker( xMSF->createInstance( sServiceName ), UNO_QUERY );
@@ -88,7 +89,8 @@ void FileControl::ImplBrowseFile( )
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
+        OSL_FAIL( "FileControl::ImplBrowseFile: caught an exception while executing the file picker!" );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

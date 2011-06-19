@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <osl/conditn.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <toolkit/unohlp.hxx>
@@ -138,7 +139,7 @@ void SAL_CALL StateEventHelper::disposing(
     const lang::EventObject& )
 throw ( uno::RuntimeException )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     m_xDispatchProvider.clear();
     m_xURLTransformer.clear();
     m_aCondition.set();
@@ -148,7 +149,7 @@ void SAL_CALL StateEventHelper::statusChanged(
     const frame::FeatureStateEvent& Event )
 throw ( uno::RuntimeException )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     m_bCurrentCommandEnabled = Event.IsEnabled;
     m_aCondition.set();
 }
@@ -162,7 +163,7 @@ bool StateEventHelper::isCommandEnabled()
     uno::Reference< frame::XDispatch > xDispatch;
     util::URL                          aTargetURL;
     {
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         if ( m_xDispatchProvider.is() && m_xURLTransformer.is() )
         {
             ::rtl::OUString aSelf( RTL_CONSTASCII_USTRINGPARAM( "_self" ));
@@ -204,7 +205,7 @@ bool StateEventHelper::isCommandEnabled()
         {
         }
 
-        vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         bResult = m_bCurrentCommandEnabled;
     }
 
@@ -276,7 +277,7 @@ ContextMenuHelper::completeAndExecute(
     const Point& aPos,
     PopupMenu& rPopupMenu )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     associateUIConfigurationManagers();
     completeMenuProperties( &rPopupMenu );
@@ -289,7 +290,7 @@ ContextMenuHelper::completeAndExecute(
     const Point& aPos,
     const uno::Reference< awt::XPopupMenu >& xPopupMenu )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     VCLXMenu* pXMenu = VCLXMenu::GetImplementation( xPopupMenu );
     if ( pXMenu )
@@ -503,15 +504,11 @@ ContextMenuHelper::associateUIConfigurationManagers()
 }
 
 Image
-ContextMenuHelper::getImageFromCommandURL(
-    const ::rtl::OUString& aCmdURL,
-    bool                   bHiContrast ) const
+ContextMenuHelper::getImageFromCommandURL( const ::rtl::OUString& aCmdURL ) const
 {
     Image     aImage;
     sal_Int16 nImageType( ui::ImageType::COLOR_NORMAL|
                           ui::ImageType::SIZE_DEFAULT );
-    if ( bHiContrast )
-        nImageType |= ui::ImageType::COLOR_HIGHCONTRAST;
 
     uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
     uno::Sequence< ::rtl::OUString > aImageCmdSeq( 1 );
@@ -543,7 +540,7 @@ ContextMenuHelper::getImageFromCommandURL(
         {
             aGraphicSeq = m_xModuleImageMgr->getImages( nImageType, aImageCmdSeq );
             uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic = aGraphicSeq[0];
-        aImage = Image( xGraphic );
+            aImage = Image( xGraphic );
 
             if ( !!aImage )
                 return aImage;
@@ -579,7 +576,7 @@ ContextMenuHelper::getLabelFromCommandURL(
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                        if ( aPropSeq[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")) )
                         {
                             aPropSeq[i].Value >>= aStr;
                             break;
@@ -608,7 +605,6 @@ ContextMenuHelper::completeMenuProperties(
     // menu correctly.
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool  bShowMenuImages( rSettings.GetUseImagesInMenus() );
-    bool  bIsHiContrast( rSettings.GetHighContrastMode() );
 
     if ( pMenu )
     {
@@ -638,7 +634,7 @@ ContextMenuHelper::completeMenuProperties(
                 {
                     Image aImage;
                     if ( aCmdURL.getLength() > 0 )
-                        aImage = getImageFromCommandURL( aCmdURL, bIsHiContrast );
+                        aImage = getImageFromCommandURL( aCmdURL );
                     pMenu->SetItemImage( nId, aImage );
                 }
                 else
@@ -685,3 +681,5 @@ IMPL_STATIC_LINK_NOINSTANCE( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, p
 }
 
 } // namespace svt
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

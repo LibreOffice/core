@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,13 +50,15 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringHash;
 
 const char* StringContainer::putString( const char* pString )
 {
     OString aString( static_cast<const sal_Char*>(pString) );
     std::pair<
-        std::hash_set< OString, OStringHash >::iterator,
+        boost::unordered_set< OString, OStringHash >::iterator,
         bool > aInsert =
         m_aStrings.insert( aString );
 
@@ -117,7 +120,6 @@ sal_uInt32 GetNumber(){
 
 int MakeToken( YYSTYPE * pTokenVal ){
     int             c1;
-    char *          pStr;
 
     while( sal_True ){  // Kommentare und Leerzeichen ueberlesen
         while( isspace( c ) )
@@ -199,7 +201,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
             else
                 aBuf.append( sal_Char(c) );
         }
-        pStr = pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
+        pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
         return( STRING );
     }
     if (isdigit (c)){
@@ -300,7 +302,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
     return( c1 );
 }
 
-#if defined( RS6000 ) || defined( HP9000 ) || defined( SCO )
+#if defined( RS6000 )
 extern "C" int yylex()
 #else
 int yylex()
@@ -319,7 +321,7 @@ int yylex()
 /****************** yyerror **********************************************/
 #ifdef RS6000
 extern "C" void yyerror( char* pMessage )
-#elif defined HP9000 || defined SCO || defined SOLARIS
+#elif defined SOLARIS
 extern "C" void yyerror( const char* pMessage )
 #else
 void yyerror( char* pMessage )
@@ -377,12 +379,12 @@ void IncludeParser( RscFileInst * pFileInst )
                 if( STRING == (nToken = MakeToken( &aYYSType )) ){
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          aYYSType.string );
-                    pFName->InsertDependFile( lKey, LIST_APPEND );
+                    pFName->InsertDependFile( lKey, ULONG_MAX );
                 }
                 else if( INCLUDE_STRING == nToken ){
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
                                                          ByteString() );
-                    pFName->InsertDependFile( lKey, LIST_APPEND );
+                    pFName->InsertDependFile( lKey, ULONG_MAX );
                 };
             };
         };
@@ -445,3 +447,4 @@ RscExpression * MacroParser( RscFileInst & rFileInst )
     return( pExpression );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_COMPHELPERDLLAPI_H
 #define INCLUDED_COMPHELPERDLLAPI_H
 
@@ -12,3 +13,4 @@
 
 #endif /* INCLUDED_COMPHELPERDLLAPI_H */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

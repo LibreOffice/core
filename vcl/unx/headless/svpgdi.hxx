@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,7 @@ public:
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
-    virtual sal_uInt16          GetBitCount();
+    virtual sal_uInt16          GetBitCount() const;
     virtual long            GetGraphicsWidth() const;
 
     virtual void            ResetClipRegion();
@@ -87,6 +88,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual sal_uLong           GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
@@ -109,8 +111,8 @@ public:
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
-    virtual sal_Bool            GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual sal_Bool            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual sal_Bool            GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
+    virtual sal_Bool            GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void            DrawServerFontLayout( const ServerFontLayout& );
     virtual bool            supportsOperation( OutDevSupportType ) const;
@@ -169,3 +171,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

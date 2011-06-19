@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,13 +38,18 @@
 
 #include "osl/thread.h"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 
-using namespace rtl;
 using namespace psp;
 using namespace padmin;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringHash;
+using ::rtl::OUStringToOString;
+
 
 APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
             : TabPage( pParent, rResId ),
@@ -89,11 +95,11 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
 {
     if( m_aPDFBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString::createFromAscii( "pdf=" );
+        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("pdf="));
     }
     else if( m_aFaxBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString::createFromAscii( "fax" );
+        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax"));
     }
     else
         rInfo.m_aFeatures = OUString();
@@ -693,7 +699,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
     {
-        rInfo.m_aDriverName = OUString::createFromAscii( "SGENPRT" );
+        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
     }
 }
 
@@ -726,9 +732,9 @@ bool APPdfDriverPage::check()
 void APPdfDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
-        rInfo.m_aDriverName = OUString::createFromAscii( "SGENPRT" );
+        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
     else if( isDist() )
-        rInfo.m_aDriverName = OUString::createFromAscii( "ADISTILL" );
+        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("ADISTILL"));
 }
 
 //--------------------------------------------------------------------
@@ -804,10 +810,7 @@ AddPrinterDialog::~AddPrinterDialog()
 
 void AddPrinterDialog::updateSettings()
 {
-    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
-        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
-    else
-        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER_HC ) ) ) );
+    m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
 }
 
 void AddPrinterDialog::DataChanged( const DataChangedEvent& rEv )
@@ -1017,13 +1020,13 @@ void AddPrinterDialog::addPrinter()
             }
             else if( m_pChooseDevicePage->isFax() )
             {
-                aInfo.m_aFeatures = OUString::createFromAscii( "fax=" );
+                aInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax="));
                 if( m_pFaxNamePage->isFaxSwallow() )
-                    aInfo.m_aFeatures += OUString::createFromAscii( "swallow" );
+                    aInfo.m_aFeatures += OUString(RTL_CONSTASCII_USTRINGPARAM("swallow"));
             }
             else if( m_pChooseDevicePage->isPDF() )
             {
-                OUString aPdf( OUString::createFromAscii( "pdf=" ) );
+                OUString aPdf( RTL_CONSTASCII_USTRINGPARAM("pdf=") );
                 aPdf += m_pPdfCommandPage->getPdfDir();
                 aInfo.m_aFeatures = aPdf;
             }
@@ -1075,7 +1078,7 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     int nVersion = 1;
     list< OUString > aPrinterList;
     rManager.listPrinters( aPrinterList );
-    hash_set< OUString, OUStringHash > aPrinters;
+    boost::unordered_set< OUString, OUStringHash > aPrinters;
     for( list< OUString >::const_iterator it = aPrinterList.begin(); it != aPrinterList.end(); ++it )
         aPrinters.insert( *it );
     while( aPrinters.find( aResult ) != aPrinters.end() )
@@ -1126,3 +1129,5 @@ String AddPrinterDialog::getOldPrinterLocation()
         aRet = String( aFileName, aEncoding );
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

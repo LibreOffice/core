@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -287,7 +288,6 @@ private:
                     mbDockBtn:1,
                     mbHideBtn:1;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
 
     // Copy assignment is forbidden and not implemented.
@@ -302,7 +302,6 @@ protected:
 
 public:
     SAL_DLLPRIVATE sal_Bool    ImplStartDocking( const Point& rPos );
-//#endif
 
 protected:
                     DockingWindow( WindowType nType );
@@ -450,3 +449,5 @@ inline void DockingWindow::SetFloatingPos( const Point& rNewPos )
 
 
 #endif  // _SV_DOCKWIN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -190,8 +191,7 @@ public:
     virtual void    Destroy( const RSCINST & rInst );
 
                     // prueft auf konsistenz
-    virtual sal_Bool    IsConsistent( const RSCINST & rInst,
-                                  RscInconsList * pList = NULL );
+    virtual sal_Bool    IsConsistent( const RSCINST & rInst );
 
                     // Alles auf Default setzen
     virtual void    SetToDefault( const RSCINST & rInst );
@@ -245,3 +245,5 @@ public:
 };
 
 #endif //_RSCTOP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

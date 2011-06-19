@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -201,37 +202,25 @@ namespace basegfx
 
     // external operators
     //////////////////////////////////////////////////////////////////////////
-
     class B2DTuple;
 
     BASEGFX_DLLPUBLIC B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     BASEGFX_DLLPUBLIC B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     BASEGFX_DLLPUBLIC B2ITuple absolute(const B2ITuple& rTup);
-
     BASEGFX_DLLPUBLIC B2DTuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t);
-
     BASEGFX_DLLPUBLIC B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2);
-
     BASEGFX_DLLPUBLIC B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3);
 
     BASEGFX_DLLPUBLIC B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     BASEGFX_DLLPUBLIC B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     BASEGFX_DLLPUBLIC B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     BASEGFX_DLLPUBLIC B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     BASEGFX_DLLPUBLIC B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t);
-
     BASEGFX_DLLPUBLIC B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup);
-
     BASEGFX_DLLPUBLIC B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t);
-
     BASEGFX_DLLPUBLIC B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup);
-
 } // end of namespace basegfx
 
 #endif /* _BGFX_TUPLE_B2ITUPLE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

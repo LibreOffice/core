@@ -78,7 +78,7 @@ namespace vcl
 
         if( nStmLen )
         {
-            const vcl::RenderGraphic aSVGGraphic( ::rtl::OUString::createFromAscii( "image/svg+xml" ), nStmLen );
+            const vcl::RenderGraphic aSVGGraphic( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/svg+xml")), nStmLen );
 
             mrStm.Seek( nStmPos );
             mrStm.Read( aSVGGraphic.GetGraphicData().get(), nStmLen );

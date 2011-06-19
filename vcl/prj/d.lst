@@ -1,1 +1,4 @@
+..\inc\vcl\fontcapabilities.hxx %_DEST%\inc\vcl\fontcapabilities.hxx
+..\inc\vcl\scopedbitmapaccess.hxx %_DEST%\inc\vcl\scopedbitmapaccess.hxx
+..\inc\vcl\solarmutex.hxx %_DEST%\inc\vcl\solarmutex.hxx
 

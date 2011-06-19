@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,7 @@ register int    op;
 #define isbinary(op)    (op >= FIRST_BINOP && op <= LAST_BINOP)
 #define isunary(op) (op >= FIRST_UNOP  && op <= LAST_UNOP)
 #endif
-
+
 /*
  * The following definitions are used to specify basic variable sizes.
  */
@@ -157,7 +158,7 @@ register int    op;
 #ifndef S_PFPTR
 #define S_PFPTR     (sizeof (int (*)()))
 #endif
-
+
 typedef struct types {
     short   type;           /* This is the bit if       */
     char    *name;          /* this is the token word   */
@@ -202,7 +203,6 @@ SIZES size_table[] = {
     { T_FPTR,   0,      S_PFPTR     },  /* int (*())    */
     { 0,    0,      0       },  /* End of table */
 };
-
 
 void InitCpp5()
 {
@@ -235,9 +235,7 @@ eval()
     int     skip;       /* For short-circuit testing    */
     int     value[NEXP];    /* Value stack          */
     OPTAB       opstack[NEXP];  /* Operand stack        */
-#ifndef ZTC  /* BP */
     extern int  *evaleval();    /* Does actual evaluation   */
-#endif
     valp = value;
     opp = opstack;
     opp->op = OP_END;       /* Mark bottom of stack     */
@@ -380,7 +378,7 @@ again:  ;
         }                   /* op1 switch end   */
     }                   /* Stack unwind loop    */
 }
-
+
 FILE_LOCAL int
 evallex(int skip)
 /*
@@ -663,7 +661,7 @@ evalnum(int c)
     unget();
     return (value);
 }
-
+
 FILE_LOCAL int
 evalchar(int skip)
 /*
@@ -769,7 +767,7 @@ evalchar(int skip)
     instring = FALSE;
     return (value);
 }
-
+
 FILE_LOCAL int *
 evaleval(int* valp, int op, int skip)
 /*
@@ -907,7 +905,7 @@ evaleval(int* valp, int op, int skip)
     *valp++ = v1;
     return (valp);
 }
-
+
 #ifdef  DEBUG_EVAL
 dumpstack(opstack, opp, value, valp)
 OPTAB       opstack[NEXP];  /* Operand stack        */
@@ -927,3 +925,4 @@ register int    *valp;      /* -> value vector      */
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

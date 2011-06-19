@@ -28,23 +28,24 @@
 $(eval $(call gb_Library_Library,vcl))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx,vcl/vcl))
 else ifeq ($(OS),WNT)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows,vcl/vcl))
 else
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx,vcl/vcl))
 endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
+$(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
+    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
+    -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_include,vcl,\
@@ -71,10 +72,8 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     i18npaper \
     i18nutil \
     jvmaccess \
-    stl \
     cppu \
     sal \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
@@ -233,6 +232,7 @@ $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/fontsubset/list \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/app/brand \
     vcl/source/app/dbggui \
     vcl/source/app/dndhelp \
     vcl/source/app/help \
@@ -241,6 +241,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/salvtables \
     vcl/source/app/session \
     vcl/source/app/settings \
+    vcl/source/app/solarmutex \
     vcl/source/app/sound \
     vcl/source/app/stdtext \
     vcl/source/app/svapp \
@@ -418,17 +419,19 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_GRAPHITE \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/graphite_cache \
     vcl/source/glyphs/graphite_features \
     vcl/source/glyphs/graphite_layout \
-    vcl/source/glyphs/graphite_textsrc \
 ))
 
 # handle X11 platforms, which have additional files and possibly system graphite
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/graphite_adaptors \
     vcl/source/glyphs/graphite_serverfont \
+))
+else
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    graphite2_off \
+    version \
 ))
 endif
 

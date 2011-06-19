@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -241,8 +242,8 @@ public:
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
                 ::std::swap(*aStart, *aEnd);
-                aStart++;
-                aEnd--;
+                ++aStart;
+                --aEnd;
             }
         }
     }
@@ -252,7 +253,7 @@ public:
         CoordinateData3DVector::iterator aStart(maVector.begin());
         CoordinateData3DVector::iterator aEnd(maVector.end());
 
-        for(; aStart != aEnd; aStart++)
+        for(; aStart != aEnd; ++aStart)
         {
             aStart->transform(rMatrix);
         }
@@ -1814,3 +1815,5 @@ namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

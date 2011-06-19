@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 #include "DataFmtTransl.hxx"
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
@@ -131,3 +130,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

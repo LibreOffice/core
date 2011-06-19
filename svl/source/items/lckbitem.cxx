@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,7 +138,7 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if ( rVal >>= aSeq )
@@ -153,16 +154,16 @@ sal_Bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_u
         else
             _xVal = NULL;
 
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "SfxLockBytesItem::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "SfxLockBytesItem::PutValue - Wrong type!" );
+    return true;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,sal_uInt8 ) const
+bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     if ( _xVal.Is() )
     {
@@ -172,7 +173,7 @@ sal_Bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,sal_uInt8 
         if ( _xVal->Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
             nLen = aStat.nSize;
         else
-            return sal_False;
+            return false;
 
         sal_uLong nRead = 0;
         com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
@@ -186,6 +187,7 @@ sal_Bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,sal_uInt8 
         rVal <<= aSeq;
     }
 
-    return sal_True;
+    return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

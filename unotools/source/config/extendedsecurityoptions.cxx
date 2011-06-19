@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 
 #include <unotools/pathoptions.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -85,7 +86,7 @@ struct OUStringHashCode
     }
 };
 
-class ExtensionHashMap : public ::std::hash_map< ::rtl::OUString,
+class ExtensionHashMap : public ::boost::unordered_map< ::rtl::OUString,
                                                  sal_Int32,
                                                  OUStringHashCode,
                                                  ::std::equal_to< ::rtl::OUString > >
@@ -256,7 +257,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
                 if ( seqValues[nProperty] >>= nMode )
                     m_eOpenHyperlinkMode = (SvtExtendedSecurityOptions::OpenHyperlinkMode)nMode;
                 else {
-                    DBG_ERROR("Wrong type for Open mode!");
+                    OSL_FAIL("Wrong type for Open mode!");
                 }
                 m_bROOpenHyperlinkMode = seqRO[nProperty];
             }
@@ -341,7 +342,7 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetSecureExtensionList() c
 
     sal_Int32 nIndex = 0;
     for ( ExtensionHashMap::const_iterator pIter = m_aExtensionHashMap.begin();
-            pIter != m_aExtensionHashMap.end(); pIter++ )
+            pIter != m_aExtensionHashMap.end(); ++pIter )
     {
         aResult[nIndex++] = pIter->first;
     }
@@ -356,9 +357,7 @@ SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::G
 {
     return m_eOpenHyperlinkMode;
 }
-/* -----------------09.07.2003 11:26-----------------
 
- --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions_Impl::IsOpenHyperlinkModeReadOnly() const
 {
     return m_bROOpenHyperlinkMode;
@@ -413,13 +412,13 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
 //*****************************************************************************************************************
 Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_HYPERLINKS_OPEN
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -495,9 +494,7 @@ SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpe
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetOpenHyperlinkMode();
 }
-/* -----------------09.07.2003 11:26-----------------
 
- --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions::IsOpenHyperlinkModeReadOnly() const
 {
     return m_pDataContainer->IsOpenHyperlinkModeReadOnly();
@@ -512,27 +509,17 @@ void SvtExtendedSecurityOptions::SetOpenHyperlinkMode( SvtExtendedSecurityOption
     m_pDataContainer->SetOpenHyperlinkMode( eMode );
 }
 
+namespace
+{
+    class theExtendedSecurityOptionsMutex : public rtl::Static<osl::Mutex, theExtendedSecurityOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtExtendedSecurityOptions::GetInitMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theExtendedSecurityOptionsMutex::get();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <svsys.h>
 #include <tools/debug.hxx>
-#include <tools/svwin.h>
 #include <win/saldata.hxx>
 
 // =======================================================================
@@ -163,3 +164,5 @@ sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 
     return (rSmallIcon != 0);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,8 @@
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -98,17 +100,17 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw
         Reference < XInterface > xI;
 
         xI = xMSF->createInstance(
-            OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language);
 
         if ( ! xI.is() )
             xI = xMSF->createInstance(
-                OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language +
-                OUString::createFromAscii("_") + aLocale.Country);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language +
+                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Country);
         if ( ! xI.is() )
             xI = xMSF->createInstance(
-                OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language +
-                OUString::createFromAscii("_") + aLocale.Country +
-                OUString::createFromAscii("_") + aLocale.Variant);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language +
+                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Country +
+                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Variant);
 
         if (xI.is())
             xI->queryInterface( getCppuType((const Reference< XTextConversion>*)0) ) >>= xTC;
@@ -143,3 +145,5 @@ TextConversionImpl::getSupportedServiceNames() throw( RuntimeException )
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

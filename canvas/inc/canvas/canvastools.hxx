@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -475,6 +476,9 @@ namespace canvas
             typedef ::std::numeric_limits< Source > SourceLimits;
             typedef ::std::numeric_limits< Target > TargetLimits;
 
+#undef min
+#undef max
+
             if( ( arg<0 && !TargetLimits::is_signed) ||                     // loosing the sign here
                 ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
                 ( arg>TargetLimits::max() ) )                               // overflow will happen
@@ -565,7 +569,7 @@ namespace canvas
                 {
                     OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
                               pMap->maKey);
-                    OSL_ENSURE( false, "ValueMap::ValueMap(): Key is not lowercase" );
+                    OSL_FAIL( "ValueMap::ValueMap(): Key is not lowercase" );
                 }
 
                 if( mnEntries > 1 )
@@ -578,8 +582,7 @@ namespace canvas
                             OSL_TRACE("ValueMap::ValueMap(): Map is not sorted, keys %s and %s are wrong",
                                       pMap[0].maKey,
                                       pMap[1].maKey);
-                            OSL_ENSURE( false,
-                                        "ValueMap::ValueMap(): Map is not sorted" );
+                            OSL_FAIL( "ValueMap::ValueMap(): Map is not sorted" );
                         }
 
                         const ::rtl::OString aStr2( pMap[1].maKey );
@@ -588,7 +591,7 @@ namespace canvas
                         {
                             OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
                                       pMap[1].maKey);
-                            OSL_ENSURE( false, "ValueMap::ValueMap(): Key is not lowercase" );
+                            OSL_FAIL( "ValueMap::ValueMap(): Key is not lowercase" );
                         }
                     }
                 }
@@ -660,3 +663,5 @@ namespace canvas
 
 #endif /* INCLUDED_CANVAS_CANVASTOOLS_HXX */
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

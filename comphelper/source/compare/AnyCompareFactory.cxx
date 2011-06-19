@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //=============================================================================
 
@@ -64,7 +66,7 @@ public:
         if ( xFactory.is() )
     {
         m_rCollator = Reference< XCollator >(
-                xFactory->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.i18n.Collator" ), xContext ),
+                xFactory->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Collator" )), xContext ),
                         UNO_QUERY );
         m_rCollator->loadDefaultCollator( rLocale,
                                           0 ); //???
@@ -132,7 +134,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     // for now only OUString properties compare is implemented
     // so no check for the property name is done
 
-    if( aPropertyName.equals( OUString::createFromAscii( "Title" ) ) )
+    if( aPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) )
         return m_rAnyCompare;
 
     return Reference< XAnyCompare >();
@@ -189,3 +191,5 @@ void createRegistryInfo_AnyCompareFactory()
 {
     static ::comphelper::module::OAutoRegistration< AnyCompareFactory > aAutoRegistration;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

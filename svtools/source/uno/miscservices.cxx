@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
 
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
@@ -126,7 +127,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString::createFromAscii( "com.sun.star.ui.dialogs.FilterOptionsDialog" );
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilterOptionsDialog" ));
 
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< XMultiServiceFactory* >( _pServiceManager ),
@@ -168,3 +169,4 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
 
 }   // "C"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

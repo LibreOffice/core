@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -652,6 +653,52 @@ void ToolbarMenu::initWindow()
 
 // --------------------------------------------------------------------
 
+static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
+{
+    rMaxWidth = rCheckHeight = rRadioHeight = 0;
+
+    ImplControlValue aVal;
+    Rectangle aNativeBounds;
+    Rectangle aNativeContent;
+    Point tmp( 0, 0 );
+    Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
+    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
+    {
+        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                          ControlPart(PART_MENU_ITEM_CHECK_MARK),
+                                          aCtrlRegion,
+                                          ControlState(CTRL_STATE_ENABLED),
+                                          aVal,
+                                          OUString(),
+                                          aNativeBounds,
+                                          aNativeContent )
+        )
+        {
+            rCheckHeight = aNativeBounds.GetHeight();
+            rMaxWidth = aNativeContent.GetWidth();
+        }
+    }
+    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
+    {
+        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                          ControlPart(PART_MENU_ITEM_RADIO_MARK),
+                                          aCtrlRegion,
+                                          ControlState(CTRL_STATE_ENABLED),
+                                          aVal,
+                                          OUString(),
+                                          aNativeBounds,
+                                          aNativeContent )
+        )
+        {
+            rRadioHeight = aNativeBounds.GetHeight();
+            rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
+        }
+    }
+    return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
+}
+
+#define gfxExtra 7
+
 Size ToolbarMenu::implCalcSize()
 {
     const long nFontHeight = GetTextHeight();
@@ -723,6 +770,28 @@ Size ToolbarMenu::implCalcSize()
                 pEntry->maSize.Height() = aControlSize.Height() + 1;
             }
 
+            if( pEntry->HasCheck() && !pEntry->mbHasImage )
+            {
+                if( this->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                     (pEntry->mnBits & MIB_RADIOCHECK)
+                                                     ? PART_MENU_ITEM_CHECK_MARK
+                                                     : PART_MENU_ITEM_RADIO_MARK ) )
+                {
+                    long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
+                    ImplGetNativeCheckAndRadioSize( this, nCheckHeight, nRadioHeight, nMaxCheckWidth );
+
+                    long nCtrlHeight = (pEntry->mnBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                    nMaxTextWidth += nCtrlHeight + gfxExtra;
+                }
+                else if( pEntry->mbChecked )
+                {
+                    long nSymbolWidth = (nFontHeight*25)/40;
+                    if ( pEntry->mnBits & MIB_RADIOCHECK )
+                        nSymbolWidth = nFontHeight/2;
+
+                    nMaxTextWidth += nSymbolWidth;
+                }
+            }
         }
     }
 
@@ -1012,12 +1081,12 @@ void ToolbarMenu::MouseMove( const MouseEvent& rMEvt )
 
 void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
 {
-    long nY = 0;
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();
     if ( ( nMouseY >= 0 ) && ( nMouseY < aOutSz.Height() ) )
     {
         bool bHighlighted = sal_False;
+        long nY = 0;
 
         const int nEntryCount = mpImpl->maEntryVector.size();
         int nEntry;
@@ -1329,50 +1398,6 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     }
 }
 
-static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
-{
-    rMaxWidth = rCheckHeight = rRadioHeight = 0;
-
-    ImplControlValue aVal;
-    Rectangle aNativeBounds;
-    Rectangle aNativeContent;
-    Point tmp( 0, 0 );
-    Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
-    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
-    {
-        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
-                                          ControlPart(PART_MENU_ITEM_CHECK_MARK),
-                                          aCtrlRegion,
-                                          ControlState(CTRL_STATE_ENABLED),
-                                          aVal,
-                                          OUString(),
-                                          aNativeBounds,
-                                          aNativeContent )
-        )
-        {
-            rCheckHeight = aNativeBounds.GetHeight();
-            rMaxWidth = aNativeContent.GetWidth();
-        }
-    }
-    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
-    {
-        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
-                                          ControlPart(PART_MENU_ITEM_RADIO_MARK),
-                                          aCtrlRegion,
-                                          ControlState(CTRL_STATE_ENABLED),
-                                          aVal,
-                                          OUString(),
-                                          aNativeBounds,
-                                          aNativeContent )
-        )
-        {
-            rRadioHeight = aNativeBounds.GetHeight();
-            rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
-        }
-    }
-    return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
-}
-
 void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 {
     sal_uInt16 nBorder = 0; long nStartY = 0; // from Menu implementations, needed when we support native menu background & scrollable menu
@@ -1492,6 +1517,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
                             DrawNativeControl( CTRL_MENU_POPUP, nPart, aCheckRect, nState, ImplControlValue(), OUString() );
+                            aPos.setX( aPos.getX() + nCtrlHeight + gfxExtra );
                         }
                         else if ( pEntry->mbChecked ) // by default do nothing for unchecked items
                         {
@@ -1513,6 +1539,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2;
                             Rectangle aRect( aTmpPos, aSymbolSize );
                             aDecoView.DrawSymbol( aRect, eSymbol, GetTextColor(), nSymbolStyle );
+                            aPos.setX( aPos.getX() + aSymbolSize.getWidth( ) + gfxExtra );
                         }
                     }
                 }
@@ -1542,53 +1569,6 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                     DrawCtrlText( aTmpPos, pEntry->maText, 0, pEntry->maText.Len(), nStyle, NULL, NULL ); // pVector, pDisplayText );
                 }
-
-/*
-                // Accel
-                if ( !bLayout && !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
-                {
-                    XubString aAccText = pData->aAccelKey.GetName();
-                    aTmpPos.X() = aOutSz.Width() - this->GetTextWidth( aAccText );
-                    aTmpPos.X() -= 4*nExtra;
-
-                    aTmpPos.X() -= nOuterSpace;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nTextOffsetY;
-                    this->DrawCtrlText( aTmpPos, aAccText, 0, aAccText.Len(), nTextStyle );
-                }
-*/
-
-/*
-                // SubMenu?
-                if ( !bLayout && !bIsMenuBar && pData->pSubMenu )
-                {
-                    aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nExtra/2;
-                    aTmpPos.Y() += ( pEntry->maSize.Height() / 2 ) - ( nFontHeight/4 );
-                    if ( pEntry->mnBits & MIB_POPUPSELECT )
-                    {
-                        this->SetTextColor( rSettings.GetMenuTextColor() );
-                        Point aTmpPos2( aPos );
-                        aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
-                        aDecoView.DrawFrame(
-                            Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pEntry->maSize.Height() ) ), FRAME_DRAW_GROUP );
-                    }
-                    aDecoView.DrawSymbol(
-                        Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
-                        SYMBOL_SPIN_RIGHT, this->GetTextColor(), nSymbolStyle );
-//                  if ( pEntry->mnBits & MIB_POPUPSELECT )
-//                  {
-//                      aTmpPos.Y() += nFontHeight/2 ;
-//                      this->SetLineColor( rSettings.GetShadowColor() );
-//                      this->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      this->SetLineColor( rSettings.GetLightColor() );
-//                      aTmpPos.Y()++;
-//                      this->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      this->SetLineColor();
-//                  }
-                }
-*/
 
                 if ( pThisOnly && bHighlighted )
                 {
@@ -1803,3 +1783,4 @@ Reference< XFrame > ToolbarMenu::GetFrame() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

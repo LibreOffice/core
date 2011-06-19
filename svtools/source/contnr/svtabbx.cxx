@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,10 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtdata.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#ifndef SVTOOLS_ACCESSIBLE_FACTORY_HXX
 #include "svtaccessiblefactory.hxx"
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -418,7 +415,7 @@ sal_uLong SvTabListBox::GetEntryPos( const SvLBoxEntry* pEntry ) const
     return 0xffffffff;
 }
 
-void __EXPORT SvTabListBox::Resize()
+void SvTabListBox::Resize()
 {
     SvTreeListBox::Resize();
 }
@@ -1118,7 +1115,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
             break;
 
         default:
-            OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
+            OSL_FAIL("BrowseBox::GetAccessibleName: invalid enum!");
     }
     return aRetText;
 }
@@ -1129,8 +1126,8 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
 
     if( _eType == ::svt::BBTYPE_TABLECELL && _nPos != -1 )
     {
-        static const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
-        static const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
+        const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+        const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
 
         sal_uInt16 nColumnCount = GetColumnCount();
         if (nColumnCount > 0)
@@ -1302,3 +1299,4 @@ sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nC
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

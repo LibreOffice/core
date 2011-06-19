@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,11 +61,12 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 // const
@@ -76,11 +78,11 @@ const Type       CPPUTYPE_OUSTRING   = getCppuType((OUString*)0);
 const Type       CPPUTYPE_SEQSALINT8 = getCppuType((Sequence< sal_Int8>*)0);
 const sal_Int32  MAX_CLIPFORMAT_NAME = 256;
 
-const OUString TEXT_PLAIN_CHARSET   = OUString::createFromAscii( "text/plain;charset=" );
-const OUString HPNAME_OEM_ANSI_TEXT = OUString::createFromAscii( "OEM/ANSI Text" );
+const OUString TEXT_PLAIN_CHARSET   (RTL_CONSTASCII_USTRINGPARAM("text/plain;charset="));
+const OUString HPNAME_OEM_ANSI_TEXT (RTL_CONSTASCII_USTRINGPARAM("OEM/ANSI Text"));
 
-const OUString HTML_FORMAT_NAME_WINDOWS = OUString::createFromAscii( "HTML Format" );
-const OUString HTML_FORMAT_NAME_SOFFICE = OUString::createFromAscii( "HTML (HyperText Markup Language)" );
+const OUString HTML_FORMAT_NAME_WINDOWS (RTL_CONSTASCII_USTRINGPARAM("HTML Format"));
+const OUString HTML_FORMAT_NAME_SOFFICE (RTL_CONSTASCII_USTRINGPARAM("HTML (HyperText Markup Language)"));
 
 //------------------------------------------------------------------------
 //
@@ -90,7 +92,7 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFact
     m_SrvMgr( aServiceManager )
 {
     m_XDataFormatTranslator = Reference< XDataFormatTranslator >(
-        m_SrvMgr->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.DataFormatTranslator" ) ), UNO_QUERY );
+        m_SrvMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.DataFormatTranslator")) ), UNO_QUERY );
 }
 
 //------------------------------------------------------------------------
@@ -125,13 +127,13 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
                     OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
                 }
                 else
-                    OSL_ENSURE( sal_False, "Wrong Any-Type detected" );
+                    OSL_FAIL( "Wrong Any-Type detected" );
             }
         }
     }
     catch( ... )
     {
-        OSL_ENSURE( sal_False, "Unexpected error" );
+        OSL_FAIL( "Unexpected error" );
     }
 
     return sal::static_int_cast<CFormatEtc>(getFormatEtcForClipformat( sal::static_int_cast<CLIPFORMAT>(cf) ));
@@ -174,7 +176,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
                     OUString clipFormatName = getClipboardFormatName( aClipformat );
 
                     // if we could not get a clipboard format name an
-                    // error must have occured or it is a standard
+                    // error must have occurred or it is a standard
                     // clipboard format that we don't translate, e.g.
                     // CF_BITMAP (the office only uses CF_DIB)
                     if ( clipFormatName.getLength( ) )
@@ -188,7 +190,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
     }
     catch( ... )
     {
-        OSL_ENSURE( sal_False, "Unexpected error" );
+        OSL_FAIL( "Unexpected error" );
     }
 
     return aFlavor;
@@ -334,3 +336,5 @@ OUString SAL_CALL CDataFormatTranslator::getTextCharsetFromLCID( LCID lcid, CLIP
 
     return charset;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

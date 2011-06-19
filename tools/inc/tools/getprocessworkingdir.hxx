@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,11 +39,13 @@ namespace tools {
 
 // get the process's current working directory, taking OOO_CWD into account
 //
-// @param url
-// a non-null pointer that receives the directory URL (with or without a final
-// slash) upon successful return, and the empty string upon unsuccessful return
-TOOLS_DLLPUBLIC bool getProcessWorkingDir(rtl::OUString * url);
+// @param rUrl
+// Receives the directory URL (with or without a final slash) upon successful
+// return, and the empty string upon unsuccessful return
+TOOLS_DLLPUBLIC bool getProcessWorkingDir(rtl::OUString& rUrl);
 
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

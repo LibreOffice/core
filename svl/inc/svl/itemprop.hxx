@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,8 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <vector>
-/* -----------------------------21.02.00 11:03--------------------------------
-    UNO III - Implementation
- ---------------------------------------------------------------------------*/
+
+// UNO III - Implementation
 #define MAP_CHAR_LEN(cchar) cchar, sizeof(cchar) - 1
 
 struct SfxItemPropertyMapEntry
@@ -108,9 +108,7 @@ public:
     sal_uInt32 getSize() const;
 
 };
-/* -----------------------------21.02.00 11:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVL_DLLPUBLIC SfxItemPropertySet
 {
     SfxItemPropertyMap                                                              m_aMap;
@@ -162,9 +160,7 @@ public:
         getPropertyMap() const {return &m_aMap;}
 
 };
-/* -----------------------------21.02.00 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct SfxItemPropertySetInfo_Impl;
 class SVL_DLLPUBLIC SfxItemPropertySetInfo : public
     cppu::WeakImplHelper1<com::sun::star::beans::XPropertySetInfo>
@@ -191,9 +187,7 @@ public:
 
     const SfxItemPropertyMap* getMap() const;
 };
-/* -----------------------------21.02.00 12:01--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySetInfo >
 {
     SfxItemPropertyMap aExtMap;
@@ -217,3 +211,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

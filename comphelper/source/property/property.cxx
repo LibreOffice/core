@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 {
     if (!_rxSource.is() || !_rxDest.is())
     {
-        OSL_ENSURE(sal_False, "copyProperties: invalid arguments !");
+        OSL_FAIL("copyProperties: invalid arguments !");
         return;
     }
 
@@ -135,7 +136,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
                 }
                 aBuffer.append( "." );
 
-                OSL_ENSURE( sal_False, aBuffer.getStr() );
+                OSL_FAIL( aBuffer.getStr() );
 #endif
             }
         }
@@ -243,3 +244,4 @@ sal_Bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rV
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

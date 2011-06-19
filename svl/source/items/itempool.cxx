@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#ifndef GCC
-#endif
 
 #include <svl/itempool.hxx>
 #include "whassert.hxx"
@@ -74,7 +73,7 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 
 // -----------------------------------------------------------------------
 
-inline FASTBOOL SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
+inline bool SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
 {
     sal_uInt16 nItemFlag = pItemInfos[nPos]._nFlags;
     return nFlag == (nItemFlag & nFlag);
@@ -82,7 +81,7 @@ inline FASTBOOL SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag 
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
+bool SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
 {
     for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pSecondary )
     {
@@ -118,7 +117,7 @@ SfxItemPool::SfxItemPool
 #ifndef TF_POOLABLE
     sal_uInt16*             pSlotIdArray,   /* Zuordnung von Slot-Ids zu Which-Ids */
 #endif
-    FASTBOOL            bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
+    bool                bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
 )
 
 /*  [Beschreibung]
@@ -179,7 +178,7 @@ SfxItemPool::SfxItemPool
     pImp->nInitRefCount = 1;
     pImp->nVerStart = nStart;
     pImp->nVerEnd = nEnd;
-    pImp->bInSetItem = sal_False;
+    pImp->bInSetItem = false;
     pImp->nStoringStart = nStartWhich;
     pImp->nStoringEnd = nEndWhich;
 
@@ -238,7 +237,7 @@ SfxItemPool::SfxItemPool
     pImp->nInitRefCount = 1;
     pImp->nVerStart = rPool.pImp->nVerStart;
     pImp->nVerEnd = rPool.pImp->nVerEnd;
-    pImp->bInSetItem = sal_False;
+    pImp->bInSetItem = false;
     pImp->nStoringStart = nStart;
     pImp->nStoringEnd = nEnd;
 
@@ -399,7 +398,7 @@ void SfxItemPool::Free(SfxItemPool* pPool)
     {
         // tell all the registered SfxItemPoolUsers that the pool is in destruction
         SfxItemPoolUserVector aListCopy(pPool->maSfxItemPoolUsers.begin(), pPool->maSfxItemPoolUsers.end());
-        for(SfxItemPoolUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); aIterator++)
+        for(SfxItemPoolUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
         {
             SfxItemPoolUser* pSfxItemPoolUser = *aIterator;
             DBG_ASSERT(pSfxItemPoolUser, "corrupt SfxItemPoolUser list (!)");
@@ -449,7 +448,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                         for( size_t i = (*ppItemArr)->size(); i; ++ppHtArr, --i )
                             if ( !(*ppHtArr) )
                             {
-                                DBG_ERROR( "old secondary pool must be empty" );
+                                OSL_FAIL( "old secondary pool must be empty" );
                                 bOK = sal_False;
                                 break;
                             }
@@ -748,7 +747,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     {
         if ( pSecondary )
             return pSecondary->Put( rItem, nWhich );
-        DBG_ERROR( "unknown Which-Id - cannot put item" );
+        OSL_FAIL( "unknown Which-Id - cannot put item" );
     }
 
     // SID oder nicht poolable (neue Definition)?
@@ -882,7 +881,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
             pSecondary->Remove( rItem );
             return;
         }
-        DBG_ERROR( "unknown Which-Id - cannot remove item" );
+        OSL_FAIL( "unknown Which-Id - cannot remove item" );
     }
 
     // SID oder nicht poolable (neue Definition)?
@@ -1166,3 +1165,4 @@ void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

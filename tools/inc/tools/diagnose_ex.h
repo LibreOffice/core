@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,33 +90,36 @@
 #define ENSURE_ARG_OR_THROW(c, m) if( !(c) ) { \
                                      OSL_ENSURE(c, m); \
                                      throw ::com::sun::star::lang::IllegalArgumentException( \
-                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                     ::rtl::OUString::createFromAscii(",\n"m), \
+                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(BOOST_CURRENT_FUNCTION)) + \
+                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
                                      ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(), \
                                      0 ); }
 #define ENSURE_ARG_OR_THROW2(c, m, ifc, arg) if( !(c) ) { \
                                                OSL_ENSURE(c, m); \
                                                throw ::com::sun::star::lang::IllegalArgumentException( \
-                                               ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                               ::rtl::OUString::createFromAscii(",\n"m), \
+                                               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(BOOST_CURRENT_FUNCTION)) + \
+                                               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
                                                ifc, \
                                                arg ); }
 
 /** This macro asserts the given condition (in debug mode), and throws
     an RuntimeException afterwards.
  */
-#define ENSURE_OR_THROW(c, m) if( !(c) ) { \
-                                     OSL_ENSURE(c, m); \
-                                     throw ::com::sun::star::uno::RuntimeException( \
-                                     ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                     ::rtl::OUString::createFromAscii(",\n"m), \
-                                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
-#define ENSURE_OR_THROW2(c, m, ifc) if( !(c) ) { \
-                                          OSL_ENSURE(c, m); \
-                                          throw ::com::sun::star::uno::RuntimeException( \
-                                          ::rtl::OUString::createFromAscii(BOOST_CURRENT_FUNCTION) + \
-                                          ::rtl::OUString::createFromAscii(",\n"m), \
-                                          ifc ); }
+#define ENSURE_OR_THROW(c, m) \
+    if( !(c) ){ \
+        OSL_ENSURE(c, m); \
+        throw ::com::sun::star::uno::RuntimeException( \
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(BOOST_CURRENT_FUNCTION)) + \
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() ); }
+
+#define ENSURE_OR_THROW2(c, m, ifc) \
+    if( !(c) ) { \
+        OSL_ENSURE(c, m); \
+        throw ::com::sun::star::uno::RuntimeException( \
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(BOOST_CURRENT_FUNCTION)) + \
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ",\n"m )), \
+        ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and
     returns the given value afterwards.
@@ -173,3 +177,5 @@
     }
 
 #endif // TOOLS_DIAGNOSE_EX_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

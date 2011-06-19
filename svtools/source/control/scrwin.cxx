@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,7 +115,7 @@ void ScrollableWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 //-------------------------------------------------------------------
 
-Size __EXPORT ScrollableWindow::GetOutputSizePixel() const
+Size ScrollableWindow::GetOutputSizePixel() const
 {
     Size aSz( Window::GetOutputSizePixel() );
 
@@ -182,7 +183,7 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
 
 //-------------------------------------------------------------------
 
-void __EXPORT ScrollableWindow::Resize()
+void ScrollableWindow::Resize()
 {
     // get the new output-size in pixel
     Size aOutPixSz = Window::GetOutputSizePixel();
@@ -304,13 +305,13 @@ void __EXPORT ScrollableWindow::Resize()
 
 //-------------------------------------------------------------------
 
-void __EXPORT ScrollableWindow::StartScroll()
+void ScrollableWindow::StartScroll()
 {
 }
 
 //-------------------------------------------------------------------
 
-void __EXPORT ScrollableWindow::EndScroll( long, long )
+void ScrollableWindow::EndScroll( long, long )
 {
 }
 
@@ -570,3 +571,4 @@ void ScrollableWindow::ScrollPages( long nPagesX, sal_uLong nOverlapX,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

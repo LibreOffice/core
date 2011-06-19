@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
-#ifndef _MENU_HXX
 #include <vcl/menu.hxx>
-#endif
 
 class FontList;
 class FontInfo;
@@ -239,3 +238,5 @@ public:
 };
 
 #endif  // _STDMENU_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ SvStream& SfxRectangleItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 
 // -----------------------------------------------------------------------
-sal_Bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    sal_uInt8 nMemberId) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -157,17 +158,17 @@ sal_Bool SfxRectangleItem::QueryValue( com::sun::star::uno::Any& rVal,
         case MID_RECT_RIGHT: rVal <<= aVal.getY(); break;
         case MID_WIDTH: rVal <<= aVal.getWidth(); break;
         case MID_HEIGHT: rVal <<= aVal.getHeight(); break;
-        default: DBG_ERROR("Wrong MemberID!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberID!"); return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
                                  sal_uInt8 nMemberId  )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::awt::Rectangle aValue;
     sal_Int32 nVal = 0;
@@ -190,7 +191,7 @@ sal_Bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
             case MID_RECT_RIGHT: aVal.setY( nVal ); break;
             case MID_WIDTH: aVal.setWidth( nVal ); break;
             case MID_HEIGHT: aVal.setHeight( nVal ); break;
-            default: DBG_ERROR("Wrong MemberID!"); return sal_False;
+            default: OSL_FAIL("Wrong MemberID!"); return false;
         }
     }
 
@@ -199,3 +200,4 @@ sal_Bool SfxRectangleItem::PutValue( const com::sun::star::uno::Any& rVal,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

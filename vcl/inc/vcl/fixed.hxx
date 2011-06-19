@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@ class UserDrawEvent;
 
 class VCL_DLLPUBLIC FixedText : public Control
 {
-//#if 0 // _SOLAR__PRIVATE
 private:
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -53,7 +53,6 @@ private:
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
     SAL_DLLPRIVATE static sal_uInt16   ImplGetTextStyle( WinBits nWinBits );
-//#endif
 protected:
     virtual void    FillLayoutData() const;
     virtual const Font&
@@ -119,7 +118,6 @@ class VCL_DLLPUBLIC FixedBitmap : public Control
 {
 private:
     Bitmap          maBitmap;
-    Bitmap          maBitmapHC;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -146,8 +144,8 @@ public:
     void            SetBitmap( const Bitmap& rBitmap );
     using OutputDevice::GetBitmap;
     const Bitmap&   GetBitmap() const { return maBitmap; }
-    sal_Bool            SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Bitmap&   GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    sal_Bool        SetModeBitmap( const Bitmap& rBitmap );
+    const Bitmap&   GetModeBitmap( ) const;
 };
 
 // --------------
@@ -158,7 +156,6 @@ class VCL_DLLPUBLIC FixedImage : public Control
 {
 private:
     Image           maImage;
-    Image           maImageHC;
     sal_Bool            mbInUserDraw;
 
 private:
@@ -189,11 +186,13 @@ public:
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
-    sal_Bool            SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Image&    GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    sal_Bool        SetModeImage( const Image& rImage );
+    const Image&    GetModeImage( ) const;
 
     Point           CalcImagePos( const Point& rPos,
                                   const Size& rObjSize, const Size& rWinSize );
 };
 
 #endif  // _SV_FIXED_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

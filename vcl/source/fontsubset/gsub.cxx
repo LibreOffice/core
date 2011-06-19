@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,9 @@ typedef sal_uInt8 FT_Byte;
 typedef std::map<sal_uInt16,sal_uInt16> GlyphSubstitution;
 
 
-inline long NEXT_Long( const unsigned char* &p )
+inline sal_uInt32 NEXT_Long( const unsigned char* &p )
 {
-    long nVal = (p[0]<<24) + (p[1]<<16) + (p[2]<<8) + p[3];
+    sal_uInt32 nVal = (p[0]<<24) + (p[1]<<16) + (p[2]<<8) + p[3];
     p += 4;
     return nVal;
 }
@@ -356,3 +357,5 @@ int HasVerticalGSUB( struct _TrueTypeFont* pTTFile )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

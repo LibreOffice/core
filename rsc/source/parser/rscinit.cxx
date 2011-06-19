@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,10 +84,6 @@ void NameToVerCtrl( RSCINST & aVersion, RscTop * pClass,
 /*************************************************************************
 |*
 |*    RscTypCont::Init()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.03.91
-|*    Letzte Aenderung  MM 27.06.91
 |*
 *************************************************************************/
 void RscTypCont::Init()
@@ -374,35 +371,31 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nVertId, sal::static_int_cast<sal_Int32>(WB_VERT) );
     nSysWinId           = pHS->getID( "WB_SYSTEMWINDOW" );
     aWinBits.SetConstant( nSysWinId, sal::static_int_cast<sal_Int32>(WB_SYSTEMWINDOW) );
+    nStdPopupId         = pHS->getID( "WB_STDPOPUP" );
+    aWinBits.SetConstant( nStdPopupId, sal::static_int_cast<sal_Int32>(WB_STDPOPUP) );
 }
 {
     /********** I n i t   B a s i c   T y p e s **************************/
     InitLangType();
-    aBaseLst.Insert( pFieldUnits = InitFieldUnitsType(), LIST_APPEND );
-    aBaseLst.Insert( pTimeFieldFormat = InitTimeFieldFormat(), LIST_APPEND );
-    aBaseLst.Insert( pColor   = InitColor(), LIST_APPEND             );
-    aBaseLst.Insert( pMapUnit       = InitMapUnit(),       LIST_APPEND );
-    aBaseLst.Insert( pKey           = InitKey(),           LIST_APPEND );
-    aBaseLst.Insert( pTriState      = InitTriState(),      LIST_APPEND );
-    aBaseLst.Insert( pMessButtons   = InitMessButtons(),   LIST_APPEND );
-    aBaseLst.Insert( pMessDefButton = InitMessDefButton(), LIST_APPEND );
+    aBaseLst.push_back( pFieldUnits      = InitFieldUnitsType() );
+    aBaseLst.push_back( pTimeFieldFormat = InitTimeFieldFormat() );
+    aBaseLst.push_back( pColor           = InitColor() );
+    aBaseLst.push_back( pMapUnit         = InitMapUnit() );
+    aBaseLst.push_back( pKey             = InitKey() );
+    aBaseLst.push_back( pTriState        = InitTriState() );
+    aBaseLst.push_back( pMessButtons     = InitMessButtons() );
+    aBaseLst.push_back( pMessDefButton   = InitMessDefButton() );
 
-    aBaseLst.Insert( pGeometry      = InitGeometry(),           LIST_APPEND );
-    aBaseLst.Insert( pLangGeometry = InitLangGeometry( pGeometry ),
-                     LIST_APPEND );
-    aBaseLst.Insert( pStringList = InitStringList(), LIST_APPEND );
-    aBaseLst.Insert( pLangStringList = InitLangStringList( pStringList ),
-                     LIST_APPEND );
-    aBaseLst.Insert( pStringTupel = InitStringTupel(), LIST_APPEND );
-    aBaseLst.Insert( pStringTupelList = InitStringTupelList( pStringTupel ),
-                     LIST_APPEND );
-    aBaseLst.Insert( pLangStringTupelList =
-                  InitLangStringTupelList( pStringTupelList ), LIST_APPEND );
-    aBaseLst.Insert( pStringLongTupel = InitStringLongTupel(), LIST_APPEND );
-    aBaseLst.Insert( pStringLongTupelList = InitStringLongTupelList( pStringLongTupel ),
-                     LIST_APPEND );
-    aBaseLst.Insert( pLangStringLongTupelList =
-                  InitLangStringLongTupelList( pStringLongTupelList ), LIST_APPEND );
+    aBaseLst.push_back( pGeometry        = InitGeometry() );
+    aBaseLst.push_back( pLangGeometry    = InitLangGeometry( pGeometry ) );
+    aBaseLst.push_back( pStringList      = InitStringList() );
+    aBaseLst.push_back( pLangStringList  = InitLangStringList( pStringList ) );
+    aBaseLst.push_back( pStringTupel     = InitStringTupel() );
+    aBaseLst.push_back( pStringTupelList = InitStringTupelList( pStringTupel ) );
+    aBaseLst.push_back( pLangStringTupelList = InitLangStringTupelList( pStringTupelList ) );
+    aBaseLst.push_back( pStringLongTupel = InitStringLongTupel() );
+    aBaseLst.push_back( pStringLongTupelList = InitStringLongTupelList( pStringLongTupel ) );
+    aBaseLst.push_back( pLangStringLongTupelList = InitLangStringLongTupelList( pStringLongTupelList ) );
 }
 {
     /********** R E S O U R C E   T Y P E N ******************************/
@@ -473,7 +466,7 @@ void RscTypCont::Init()
     pClassDialog = new RscClass( pHS->getID( "Dialog" ),
                                  RSC_DIALOG, pClassSystemWindow );
     pClassDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aBaseLst.Insert( pClassDialog, LIST_APPEND );
+    aBaseLst.push_back( pClassDialog );
 
     /********** M O D A L D I A L O G ***********************************/
     // Klasse anlegen
@@ -606,7 +599,7 @@ void RscTypCont::Init()
     {
     pLangClassKeyCode = new RscClassArray( pHS->getID( "LangKeyCode" ),
                     RSC_KEYCODE, pClassKeyCode, &aLangType );
-    aBaseLst.Insert( pLangClassKeyCode );
+    aBaseLst.push_back( pLangClassKeyCode );
     }
 
     /********** A C C E L I T E M  ***************************************/
@@ -701,10 +694,9 @@ void RscTypCont::Init()
 
         // Clientvariablen einfuegen
         // Sysmodal
-        aBaseLst.Insert(
-            pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE,
-                                     &aWinBits, nRepeatId ),
-            LIST_APPEND );
+        aBaseLst.push_back(
+            pClient = new RscClient( pHS->getID( "sal_Bool" ), RSC_NOTYPE, &aWinBits, nRepeatId )
+        );
         nId = aNmTb.Put( "Repeat", VARNAME );
         pClassSpinButton->SetVariable( nId, pClient, NULL,
                                       VAR_NODATAINST, 0, nWinBitVarId );
@@ -729,7 +721,7 @@ void RscTypCont::Init()
     /********** P A T T E R N F I E L D **********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassPatternFormatter( pClassSpinField );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassPatternField = InitClassPatternField( pClassTmp );
     pRoot->Insert( pClassPatternField );
@@ -737,7 +729,7 @@ void RscTypCont::Init()
     /********** N U M E R I C F I E L D **********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassNumericField = InitClassNumericField( pClassTmp );
     pRoot->Insert( pClassNumericField );
@@ -745,9 +737,9 @@ void RscTypCont::Init()
     /********** M E T R I C F I E L D ************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
     pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassMetricField = InitClassMetricField( pClassTmp );
     pRoot->Insert( pClassMetricField );
@@ -755,9 +747,9 @@ void RscTypCont::Init()
     /********** C U R R E N C Y F I E L D ********************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
     pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassCurrencyField = InitClassCurrencyField( "CurrencyField", RSC_CURRENCYFIELD, pClassTmp );
     pRoot->Insert( pClassCurrencyField );
@@ -769,7 +761,7 @@ void RscTypCont::Init()
     /********** D A T E F I E L D ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassDateFormatter( pClassSpinField, pClassDate );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassDateField = InitClassDateField( pClassTmp, pClassDate );
     pRoot->Insert( pClassDateField );
@@ -778,7 +770,7 @@ void RscTypCont::Init()
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassSpinField, pClassTime,
                                                  pTimeFieldFormat );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassTimeField = InitClassTimeField( pClassTmp, pClassTime );
     pRoot->Insert( pClassTimeField );
@@ -786,7 +778,7 @@ void RscTypCont::Init()
     /********** P A T T E R N B O X **************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassPatternFormatter( pClassComboBox );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassPatternBox = InitClassPatternBox( pClassTmp );
     pRoot->Insert( pClassPatternBox );
@@ -794,7 +786,7 @@ void RscTypCont::Init()
     /********** N U M E R I C B O X **************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassNumericBox = InitClassNumericBox( pClassTmp );
     pRoot->Insert( pClassNumericBox );
@@ -804,9 +796,9 @@ void RscTypCont::Init()
     /********** M E T R I C B O X ****************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
     pClassTmp = InitClassMetricFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassMetricBox = InitClassMetricBox( pClassTmp );
     pRoot->Insert( pClassMetricBox );
@@ -814,9 +806,9 @@ void RscTypCont::Init()
     /********** C U R R E N C Y B O X ************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
     pClassTmp = InitClassCurrencyFormatter( pClassTmp, pFieldUnits );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassCurrencyBox = InitClassCurrencyBox( "CurrencyBox", RSC_CURRENCYBOX, pClassTmp );
     pRoot->Insert( pClassCurrencyBox );
@@ -827,7 +819,7 @@ void RscTypCont::Init()
     /********** D A T E B O X ********************************************/
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassDateFormatter( pClassComboBox, pClassDate );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassDateBox = InitClassDateBox( pClassTmp, pClassDate );
     pRoot->Insert( pClassDateBox );
@@ -836,7 +828,7 @@ void RscTypCont::Init()
     { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassTimeFormatter( pClassComboBox, pClassTime,
                                                  pTimeFieldFormat );
-    aBaseLst.Insert( pClassTmp, LIST_APPEND );
+    aBaseLst.push_back( pClassTmp );
 
     pClassTimeBox = InitClassTimeBox( pClassTmp, pClassTime );
     pRoot->Insert( pClassTimeBox );
@@ -939,3 +931,4 @@ void RscTypCont::Init()
     aNmTb.SetSort();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

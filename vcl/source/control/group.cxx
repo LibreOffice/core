@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,6 +135,7 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
 void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
+        OSL_TRACE("GroupBox::ImplDraw Y %d, X %d", rPos.Y(), rPos.X() );
     long                    nTop;
     long                    nTextOff;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
@@ -320,3 +322,4 @@ void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

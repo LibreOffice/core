@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -303,7 +304,7 @@
 
 #include <algorithm>
 #include <deque>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <limits>
 
 #include <list>
@@ -352,7 +353,6 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <osl/conditn.hxx>
-#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>
@@ -362,6 +362,7 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
+#include <osl/security.hxx>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 
@@ -384,6 +385,7 @@
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/memory.h>
+#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
@@ -394,8 +396,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 
-#include "unotools/configitem.hxx"
-#include "unotools/configmgr.hxx"
+#include <salhelper/simplereferenceobject.hxx>
+#include <salhelper/timer.hxx>
 
 #include <sot/clsids.hxx>
 
@@ -423,15 +425,11 @@
 #include <tools/mapunit.hxx>
 #include <vcl/unohelp.hxx>
 
-#include <vos/mutex.hxx>
-#include <vos/process.hxx>
-#include <vos/ref.hxx>
-#include <vos/refernce.hxx>
-#include <vos/security.hxx>
-#include <vos/thread.hxx>
-#include <vos/timer.hxx>
+#include <osl/mutex.hxx>
+#include <osl/process.h>
 
 //---MARKER---
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

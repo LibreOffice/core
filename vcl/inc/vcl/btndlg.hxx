@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,13 @@
 #ifndef _SV_BTNDLG_HXX
 #define _SV_BTNDLG_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
 
 struct ImplBtnDlgItem;
-class ImplBtnDlgItemList;
 class PushButton;
 
 // ----------------------
@@ -55,7 +57,7 @@ class PushButton;
 class VCL_DLLPUBLIC ButtonDialog : public Dialog
 {
 private:
-    ImplBtnDlgItemList* mpItemList;
+    boost::ptr_vector<ImplBtnDlgItem> maItemList;
     Size                maPageSize;
     Size                maCtrlSize;
     long                mnButtonSize;
@@ -115,3 +117,5 @@ public:
 };
 
 #endif  // _SV_BTNDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

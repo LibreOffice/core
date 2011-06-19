@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,9 +149,8 @@ namespace vclcanvas
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
         Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
 
-        ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
-                                            aBitmap );
-        ScopedBitmapReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
+        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
+        Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
                                                  (BitmapReadAccess*)NULL : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
 
@@ -228,9 +228,8 @@ namespace vclcanvas
                                  // actually changed a pixel
 
         {
-            ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                  aBitmap );
-            ScopedBitmapWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
+            Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+            Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
                                                        (BitmapWriteAccess*)NULL : aAlpha.AcquireWriteAccess(),
                                                        aAlpha );
 
@@ -470,9 +469,8 @@ namespace vclcanvas
                                  // actually changed a pixel
 
         {
-            ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                  aBitmap );
-            ScopedBitmapWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
+            Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+            Bitmap::ScopedWriteAccess pAlphaWriteAccess( aAlpha.IsEmpty() ?
                                                        (BitmapWriteAccess*)NULL : aAlpha.AcquireWriteAccess(),
                                                        aAlpha );
 
@@ -524,9 +522,8 @@ namespace vclcanvas
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
         Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
 
-        ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
-                                            aBitmap );
-        ScopedBitmapReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
+        Bitmap::ScopedReadAccess pReadAccess( aBitmap );
+        Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha.IsEmpty() ?
                                                  (BitmapReadAccess*)NULL : aAlpha.AcquireReadAccess(),
                                                  aAlpha );
         ENSURE_OR_THROW( pReadAccess.get() != NULL,
@@ -565,3 +562,5 @@ namespace vclcanvas
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

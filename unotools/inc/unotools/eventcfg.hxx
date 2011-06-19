@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 #define STR_EVENT_STARTAPP                   0
@@ -66,7 +67,7 @@
 #define STR_EVENT_MODECHANGED               26
 #define STR_EVENT_STORAGECHANGED            27
 
-typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventBindingHash;
+typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventBindingHash;
 typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > > FrameVector;
 typedef ::std::vector< ::rtl::OUString > SupportedEventsVector;
 
@@ -120,3 +121,5 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig:
 };
 
 #endif // _EVENTCFG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

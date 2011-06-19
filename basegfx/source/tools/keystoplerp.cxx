@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: canvastools.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,8 +45,7 @@ static void validateInput(const std::vector<double>& rKeyStops)
     for( ::std::size_t i=1, len=rKeyStops.size(); i<len; ++i )
     {
         if( rKeyStops[i-1] > rKeyStops[i] )
-            OSL_ENSURE( false,
-                        "KeyStopLerp::KeyStopLerp(): time vector is not sorted in ascending order!" );
+            OSL_FAIL( "KeyStopLerp::KeyStopLerp(): time vector is not sorted in ascending order!" );
     }
 #endif
 }
@@ -105,3 +102,5 @@ namespace basegfx
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

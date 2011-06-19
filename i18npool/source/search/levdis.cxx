@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,13 +76,6 @@
 
 #include "levdis.hxx"
 
-
-#ifdef erTEST
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream.h>
-#endif
-
 #ifdef SOLARIS
 #undef min
 #endif
@@ -126,24 +120,11 @@ static sal_Int32 Impl_WLD_StringLen( const sal_Unicode* pStr )
     return (sal_Int32)(pTempStr-pStr);
 }
 
-#ifdef erTESTMAT
-#define erTESTMATMAX 180
-static int npMatrix[erTESTMATMAX][erTESTMATMAX];        // nearly 64K
-#endif
-
 // Distanz von String zu Pattern
 int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 {
     int nSPMin = 0;     // StrafPunkteMinimum
     int nRepS = 0;      // fuer SplitCount
-
-#ifdef erTESTMAT
-{
-    for ( sal_Int32 r=0; r<=nStringLen && r < erTESTMATMAX; r++ )
-        for ( sal_Int32 c=0; c<=nPatternLen && c < erTESTMATMAX; c++ )
-            npMatrix[r][c] = 99;    // Matrix initialisieren, nur visuell
-}
-#endif
 
     // Laengendifferenz von Pattern und String
     int nLenDiff = nPatternLen - nStars - nStringLen;
@@ -163,13 +144,6 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         else
             nArrayLen = nStringLen + 1;
         npDistance = aDisMem.NewMem( nArrayLen );
-#ifdef erTEST
-        if ( !npDistance )
-        {
-            cerr << "DOOM! (Damned, Out Of Memory)" << endl;
-            exit(1);
-        }
-#endif
     }
 
     // Anfangswerte der zweiten Spalte (erstes Pattern-Zeichen) berechnen
@@ -214,9 +188,6 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                 {   // diese Stelle wird ersetzt
                     nRepS++;
                     nReplacePos = i;
-#ifdef erTESTMAT
-                    npMatrix[i][1] = -npDistance[i];
-#endif
                 }
                 else if ( nReplacePos > 0 && !nP )
                 {
@@ -225,9 +196,6 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                     if ( !nBalance )
                     {   // einer wurde ersetzt, der ein Insert war
                         nRepS--;
-#ifdef erTESTMAT
-                        npMatrix[nReplacePos][1] = npDistance[nReplacePos];
-#endif
                         nReplacePos = 0;
                     }
                 }
@@ -235,16 +203,6 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         }
         nSPMin = Min3( npDistance[0], npDistance[1], npDistance[2] );
     }
-#ifdef erTESTMAT
-{
-    for ( sal_Int32 r=0; r<=nStringLen && r < erTESTMATMAX; r++ )
-    {
-        npMatrix[r][0] = r * nInsQ0;
-        if ( npMatrix[r][1] >= 0)
-            npMatrix[r][1] = npDistance[r];
-    }
-}
-#endif
 
     // Distanzmatrix berechnen
     sal_Int32 j = 0;        // fuer alle Spalten des Pattern, solange nicht Limit
@@ -305,9 +263,6 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                 {   // diese Stelle wird ersetzt
                     nRepS++;
                     nReplacePos = i;
-#ifdef erTESTMAT
-                    npMatrix[i][j+1] = -npDistance[i];
-#endif
                 }
                 else if ( nReplacePos > 0 && !nPij )
                 {   // Zeichen in String und Pattern gleich.
@@ -322,25 +277,12 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                     if ( !nBalance )
                     {   // einer wurde ersetzt, der ein Insert war
                         nRepS--;
-#ifdef erTESTMAT
-                        npMatrix[nReplacePos][j+1] = npDistance[nReplacePos];
-#endif
                         nReplacePos = 0;
                     }
                 }
             }
         }
-#ifdef erTESTMAT
-{
-        for ( sal_Int32 r=0; r<=nStringLen && r < erTESTMATMAX; r++ )
-            if ( npMatrix[r][j+1] >= 0)
-                npMatrix[r][j+1] = npDistance[r];
-}
-#endif
     }
-#ifdef erTESTSPLIT
-    printf(" nRepS: %d ", nRepS );
-#endif
     if ( (nSPMin <= nLimit) && (npDistance[nStringLen] <= nLimit) )
         return(npDistance[nStringLen]);
     else
@@ -349,9 +291,6 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         {
             if ( nRepS && nLenDiff > 0 )
                 nRepS -= nLenDiff;      // Inserts wurden mitgezaehlt
-#ifdef erTESTSPLIT
-            printf(" nRepSdiff: %d ", nRepS );
-#endif
             if ( (nSPMin <= 2 * nLimit)
                     && (npDistance[nStringLen] <= 2 * nLimit)
                     && (nRepS * nRepP0 <= nLimit) )
@@ -368,12 +307,12 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
 // aus Userwerten           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
 int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 {
-    int nMin, nMid, nMax;
     if ( nX < 0 ) nX = 0;       // nur positive Werte
     if ( nY < 0 ) nY = 0;
     if ( nZ < 0 ) nZ = 0;
-    if ( 0 == (nMin = Min3( nX, nY, nZ )) )     // mindestens einer 0
+    if (0 == Min3( nX, nY, nZ ))     // mindestens einer 0
     {
+        int nMid, nMax;
         nMax = Max3( nX, nY, nZ );      // entweder 0 bei drei 0 oder Max
         if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     // sogar zwei 0
             nLimit = nMax;  // entweder 0 oder einziger >0
@@ -493,27 +432,6 @@ void WLevDistance::InitData( const sal_Unicode* cPattern )
 }
 
 
-// CTor
-
-#ifdef erTEST
-
-WLevDistance::WLevDistance( const ::rtl::OUString& rPattern ) :
-    nPatternLen( rPattern.getLength() ),
-    aPatMem( nPatternLen + 1 ),
-    nArrayLen( nPatternLen + 1 ),
-    aDisMem( nArrayLen ),
-    nLimit( LEVDISDEFAULTLIMIT ),
-    nRepP0( LEVDISDEFAULT_P0 ),
-    nInsQ0( LEVDISDEFAULT_Q0 ),
-    nDelR0( LEVDISDEFAULT_R0 ),
-    bSplitCount( false )
-{
-    InitData( rPattern.getStr() );
-}
-
-#endif  // erTEST
-
-
 WLevDistance::WLevDistance( const sal_Unicode* cPattern,
                             int nOtherX, int nShorterY, int nLongerZ,
                             bool bRelaxed ) :
@@ -558,222 +476,4 @@ WLevDistance::~WLevDistance()
 {
 }
 
-/*************************************************************************
- * Test
- *************************************************************************/
-
-#ifdef erTEST
-
-#define LINESIZE 1000
-typedef char MAXSTRING [LINESIZE+1];
-
-#ifdef erTESTMAT
-
-void WLevDistance::ShowMatrix( const sal_Unicode* cString )
-{
-    sal_Int32 r, c, l = Impl_WLD_StringLen(cString);
-    printf("   |   ");
-    for ( c=0; c<nPatternLen; c++ )
-#error Error: conversion from sal_Unicode to char needed!
-        printf( " %c ", cpPattern[c] );
-    printf("\n---+---");
-    for ( c=0; c<nPatternLen; c++ )
-        printf( "---" );
-    for ( r=0; r<=l && r < erTESTMATMAX; r++ )
-    {
-#error Error: conversion from sal_Unicode to char needed!
-        printf( "\n %c |", ( r==0 ? ' ' : cString[r-1] ) );
-        for ( c=0; c<=nPatternLen && c < erTESTMATMAX; c++ )
-            printf( "%2d ", npMatrix[r][c] );
-    }
-    printf("\n\n");
-}
-
-#endif  // erTESTMAT
-
-// Delimiter fuer Token, \t Tab bleibt fuer immer an der ersten Stelle
-MAXSTRING cDelim = "\t, ;(){}[]<>&=+-/%!|.\\'\"~";
-
-void WLevDistance::ShowTest()
-{
-    printf("  \n");
-#error Error: conversion from sal_Unicode to char needed!
-    printf(" a *cpPattern . . . . : %s\n", cpPattern);
-    printf(" b *bpPatIsWild . . . : ");
-    for ( sal_Int32 i=0; i<nPatternLen; i++ )
-        printf("%d", bpPatIsWild[i]);
-    printf("\n");
-    printf(" c nPatternLen  . . . : %d\n", (int)nPatternLen);
-    printf(" d nStars . . . . . . : %d\n", nStars);
-    printf(" e nLimit . . . . . . : %d\n", nLimit);
-    printf(" f nRepP0 (Ersetzen)  : %d\n", nRepP0);
-    printf(" g nInsQ0 (Einfuegen) : %d\n", nInsQ0);
-    printf(" h nDelR0 (Loeschen)  : %d\n", nDelR0);
-    printf(" i bSplitCount  . . . : %d\n", bSplitCount);
-#error Error: conversion from sal_Unicode to char needed!
-    printf(" j cDelim . . . . . . : '%s'\n", cDelim);
-    printf(" ~\n");
-}
-
-inline bool IsDelim( char c )
-{
-    char* cp = cDelim;
-    while ( *cp )
-        if ( *cp++ == c )
-            return( true );
-    return( false );
-}
-
-MAXSTRING cString, cLine, cIgString;
-
-int main( int argc, char **argv )
-{
-    int nLim, nP0, nQ0, nR0, nX, nY, nZ;
-    int args = 0;
-    bool IgnoreCase = false, Direct = false, bStrict = false;
-    WLevDistance* pTest;
-    if ( argc < 2 )
-    {
-        printf("%s  Syntax:\n"
-            " ... [-i] cPattern [nOtherX, nShorterY, nLongerZ [bStrict [cDelim]]] [<stdin] [>stdout]\n"
-            " ...  -d  cPattern [nLimit [nRepP0 nInsQ0 nDelR0 [cDelim]]] [<stdin] [>stdout]\n"
-            , argv[0]);
-        exit(1);
-    }
-    if ( *argv[1] == '-' )
-    {
-        args++;
-        argc--;
-        switch ( *(argv[1]+1) )
-        {
-            case 'i':
-            {
-                IgnoreCase = true;
-                char* cp = argv[args+1];
-                while ( (*cp = tolower( *cp )) != 0 )
-                    cp++;
-        break;
-            }
-            case 'd':
-                Direct = true;
-        break;
-        }
-    }
-    if ( Direct )
-    {
-        if ( argc > 2 )
-            nLim = atoi(argv[args+2]);
-        else
-            nLim = LEVDISDEFAULTLIMIT;
-        if ( argc > 3 )
-        {
-            nP0 = atoi(argv[args+3]);
-            nQ0 = atoi(argv[args+4]);
-            nR0 = atoi(argv[args+5]);
-        }
-        else
-        {
-            nP0 = LEVDISDEFAULT_P0;
-            nQ0 = LEVDISDEFAULT_Q0;
-            nR0 = LEVDISDEFAULT_R0;
-        }
-        if ( argc > 6 )
-        {
-            strncpy( cDelim+1, argv[args+6], LINESIZE );    // \t Tab always remains
-            cDelim[LINESIZE-1] = 0;
-        }
-    }
-    else
-    {
-        if ( argc > 2 )
-        {
-            nX = atoi(argv[args+2]);
-            nY = atoi(argv[args+3]);
-            nZ = atoi(argv[args+4]);
-        }
-        else
-        {
-            nX = LEVDISDEFAULT_XOTHER;
-            nY = LEVDISDEFAULT_YSHORTER;
-            nZ = LEVDISDEFAULT_ZLONGER;
-        }
-        if ( argc > 5 )
-            bStrict = atoi(argv[args+5]);
-        if ( argc > 6 )
-        {
-            strncpy( cDelim+1, argv[args+6], LINESIZE );    // \t Tab always remains
-            cDelim[LINESIZE-1] = 0;
-        }
-    }
-    if ( Direct )
-    {
-#error Error: conversion from char to OUString needed!
-        pTest = new WLevDistance( argv[args+1] );
-#ifdef erTESTDEFAULT
-        pTest->ShowTest();
-#endif
-        pTest->SetLimit( nLim );
-        pTest->SetReplaceP0( nP0 );
-        pTest->SetInsertQ0( nQ0 );
-        pTest->SetDeleteR0( nR0 );
-    }
-    else
-    {
-#error Error: conversion from char to sal_Unicode needed!
-        pTest = new WLevDistance( argv[args+1], nX, nY, nZ, !bStrict );
-#ifdef erTESTCCTOR
-        WLevDistance aTmp( *pTest );
-        aTmp.ShowTest();
-#endif
-        nLim = pTest->GetLimit();
-    }
-    pTest->ShowTest();
-    do
-    {
-        char* cp1, *cp2;
-        static long unsigned int nLine = 0;
-        cp1 = cLine;
-        cin.getline( cLine, LINESIZE ) ;
-        nLine++;
-        while ( *cp1 )
-        {
-            while ( *cp1 && IsDelim(*cp1) )
-                cp1++;
-            cp2 = cString;
-            while ( *cp1 && !IsDelim(*cp1) )
-                *cp2++ = *cp1++;
-            *cp2 = '\0';
-            while ( *cp1 && IsDelim(*cp1) )
-                cp1++;
-            if ( *cString )
-            {
-                int ret;
-                if ( IgnoreCase )
-                {
-                    char* cpi1 = cString;
-                    char* cpi2 = cIgString;
-                    while ( *cpi1 )
-                        *cpi2++ = tolower( *cpi1++ );
-                    *cpi2 = '\0';
-#error Error: conversion from char to OUString / sal_Unicode,length needed!
-                    ret = pTest->WLD( cIgString );
-                }
-                else
-#error Error: conversion from char to OUString / sal_Unicode,length needed!
-                    ret = pTest->WLD( cString );
-#ifdef erTESTMAT
-                printf("\n# %3d : %s\n", ret, cString);
-#error Error: conversion from char to sal_Unicode needed!
-                pTest->ShowMatrix( cString );
-#else
-                if ( ret <= nLim )
-                    printf("# %3d : %s\t(line %lu)\t%s\n", ret, cString, nLine, cLine);
-#endif
-            }
-        }
-    } while ( !cin.eof() );
-    return 0;
-}
-
-#endif  // erTEST
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

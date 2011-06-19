@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,7 +168,7 @@ public:
 
     sal_uInt16          GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
-    sal_Bool            IsShift() const
+    bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
     sal_Bool            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }
@@ -477,3 +478,4 @@ inline const AllSettings* DataChangedEvent::GetOldSettings() const
 
 #endif // _SV_EVENT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

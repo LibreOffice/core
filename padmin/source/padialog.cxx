@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +54,7 @@
 #include "osl/file.hxx"
 
 #include "rtl/ustrbuf.hxx"
+#include <sal/macros.h>
 
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/configitem.hxx"
@@ -61,12 +63,14 @@
 #include "com/sun/star/awt/Size.hpp"
 
 using namespace psp;
-using namespace rtl;
 using namespace padmin;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 PADialog* PADialog::Create( Window* pParent, sal_Bool bAdmin )
 {
@@ -107,18 +111,9 @@ PADialog::PADialog( Window* pParent, sal_Bool /*bAdmin*/ ) :
 
 void PADialog::updateSettings()
 {
-    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
-        m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX ) ) );
-        m_aPdfImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF ) ) );
-    }
-    else
-    {
-        m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER_HC ) ) );
-        m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX_HC ) ) );
-        m_aPdfImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF_HC ) ) );
-    }
+    m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
+    m_aFaxImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX     ) ) );
+    m_aPdfImg     = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF     ) ) );
 }
 
 void PADialog::Init()
@@ -468,7 +463,7 @@ void SpaPrinterController::printPage( int ) const
             { NULL, RID_TXT_TESTPAGE_TIME }
         };
 
-    for( unsigned int i = 0; i < sizeof(aResIds)/sizeof(aResIds[0]); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS(aResIds); i++ )
     {
         if( aResIds[i].pDirect )
             aToken = String::CreateFromAscii( aResIds[i].pDirect );
@@ -758,7 +753,7 @@ void PADialog::UpdateDevice()
                                       bFax ? m_aFaxImg :
                                       bPdf ? m_aPdfImg : m_aPrinterImg
                                       );
-        m_aDevicesLB.SetEntryData( nPos, (void*)it->getLength() );
+        m_aDevicesLB.SetEntryData( nPos, (void*)(sal_IntPtr)it->getLength() );
         if( *it == m_rPIManager.getDefaultPrinter() )
         {
             m_aDevicesLB.SelectEntryPos( nPos );
@@ -767,3 +762,4 @@ void PADialog::UpdateDevice()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

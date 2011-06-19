@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ ChapterCollator::ChapterCollator( const Reference < XMultiServiceFactory >& rxMS
 {
     if ( rxMSF.is()) {
         Reference < XInterface > xI =
-        rxMSF->createInstance( OUString::createFromAscii("com.sun.star.i18n.CharacterClassification"));
+        rxMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")));
         if ( xI.is() )
             xI->queryInterface(::getCppuType((const Reference< XCharacterClassification>*)0)) >>= cclass;
     }
@@ -77,9 +78,9 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     if( ans != 0 )
         return ans;
 
-    const OUString &aAddAllowed = OUString::createFromAscii("?");
+    const OUString aAddAllowed(RTL_CONSTASCII_USTRINGPARAM("?"));
     ParseResult res1, res2;
-    // Bug #100323#, since parseAnyToken does not take length as parameter, we have to copy
+    // since parseAnyToken does not take length as parameter, we have to copy
     // it to a temp. string.
     OUString s1 = str1.copy(off1+i1, len1-i1), s2 = str2.copy(off2+i2, len2-i2);
     res1 = cclass->parseAnyToken( s1, 0, nLocale, DIGIT, aAddAllowed, DIGIT, aAddAllowed );
@@ -109,3 +110,5 @@ ChapterCollator::getSupportedServiceNames() throw( RuntimeException )
     aRet[0] = OUString::createFromAscii(cChapCollator);
     return aRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

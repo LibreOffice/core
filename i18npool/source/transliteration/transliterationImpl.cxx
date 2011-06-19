@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,8 +52,9 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -159,7 +161,7 @@ TransliterationImpl::TransliterationImpl(const Reference <XMultiServiceFactory>&
     if ( xMSF.is() )
     {
         Reference < XInterface > xI=
-                xMSF->createInstance(OUString::createFromAscii("com.sun.star.i18n.LocaleData"));
+                xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.LocaleData")));
         if ( xI.is() ) {
             Any x = xI->queryInterface( ::getCppuType( (const uno::Reference< i18n::XLocaleData >*)0) );
             x >>= localedata;
@@ -181,7 +183,7 @@ TransliterationImpl::getName() throw(RuntimeException)
     if (numCascade == 1 && bodyCascade[0].is())
         return bodyCascade[0]->getName();
     if (numCascade < 1)
-        return ( OUString::createFromAscii("Not Loaded"));
+        return ( OUString(RTL_CONSTASCII_USTRINGPARAM("Not Loaded")));
     throw ERROR;
 }
 
@@ -606,7 +608,7 @@ void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTrans
 
     Reference< XContentEnumerationAccess > xEnumAccess( xSMgr, UNO_QUERY );
     Reference< XEnumeration > xEnum(xEnumAccess->createContentEnumeration(
-                                    OUString::createFromAscii(TRLT_SERVICELNAME_L10N)));
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(TRLT_SERVICELNAME_L10N))));
     if (xEnum.is()) {
         while (xEnum->hasMoreElements()) {
             Any a = xEnum->nextElement();
@@ -636,7 +638,7 @@ sal_Bool SAL_CALL
 TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale) throw(RuntimeException)
 {
-    OUString cname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) + implName;
+    OUString cname = OUString(RTL_CONSTASCII_USTRINGPARAM(TRLT_IMPLNAME_PREFIX)) + implName;
     loadBody(cname, body);
     if (body.is()) {
         body->loadModule((TransliterationModules)0, rLocale); // toUpper/toLoad need rLocale
@@ -647,7 +649,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
                 if (i == 0) // current module is caseignore
                     body->loadModule(TMlist[0].tm, rLocale); // caseingore need to setup module name
                 if (! caseignore.is()) {
-                    OUString bname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) +
+                    OUString bname = OUString(RTL_CONSTASCII_USTRINGPARAM(TRLT_IMPLNAME_PREFIX)) +
                                 OUString::createFromAscii(TMlist[0].implName);
                     loadBody(bname, caseignore);
                 }
@@ -685,3 +687,5 @@ TransliterationImpl::getSupportedServiceNames(void) throw( RuntimeException )
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

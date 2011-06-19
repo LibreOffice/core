@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ namespace svt
                     }
                     catch( const ::com::sun::star::uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "THeaderCellMapFunctorDispose: caught an exception!" );
+                        OSL_FAIL( "THeaderCellMapFunctorDispose: caught an exception!" );
                     }
             }
         };
@@ -85,3 +86,5 @@ namespace svt
 }
 
 #endif // _SVTOOLS_BRWIMPL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

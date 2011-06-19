@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,16 +30,7 @@
 #include "precompiled_svtools.hxx"
 #include "registrationdlg.hxx"
 
-#if 0 /* @@@ */
-#include <svtools/svtdata.hxx>
-#ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
-#endif
-#endif /* @@@ */
-
-#ifndef SVTOOLS_REGISTRATIONDLG_HRC
 #include "registrationdlg.hrc"
-#endif
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 
@@ -141,7 +133,7 @@ namespace svt
 #ifdef DBG_UTIL
             else
             {
-                DBG_ERROR( "RegistrationDialog::Execute: invalid dialog state!" );
+                OSL_FAIL( "RegistrationDialog::Execute: invalid dialog state!" );
             }
 #endif
         }
@@ -169,3 +161,4 @@ namespace svt
 //........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

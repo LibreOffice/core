@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,11 +47,7 @@
 #define _getcwd         getcwd
 #define _access         access
 
-#ifdef SYSV3
-#define DEFSTYLE        FSYS_STYLE_SYSV
-#else
 #define DEFSTYLE        FSYS_STYLE_BSD
-#endif
 
 #define CMP_LOWER(s)    (s)
 #define TEMPNAME()      tmpnam(0)
@@ -93,3 +90,5 @@ const char* TempDirImpl( char *pBuf );
 #define FSysFailOnErrorImpl()
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

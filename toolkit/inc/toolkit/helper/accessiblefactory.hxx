@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 #ifndef TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
 #define TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 
-#ifndef _RTL_REF_HXX
 #include <rtl/ref.hxx>
-#endif
 
 namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
@@ -139,3 +136,5 @@ namespace toolkit
 //........................................................................
 
 #endif // TOOLKIT_HELPER_ACCESSIBLE_FACTORY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

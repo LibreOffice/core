@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 #include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/virdev.hxx>
 
 #include <image.h>
 #include <impimagetree.hxx>
@@ -107,11 +109,11 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     const String aFileName( pResMgr->ReadString() );
     ::rtl::OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
-    if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this ) )
+    if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this, true ) )
     {
 #ifdef DBG_UTIL
         ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );
-        DBG_ERROR( ( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
+        OSL_FAIL( ( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' ).GetBuffer() );
 #endif
     }
 }
@@ -297,36 +299,6 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
     }
 
     return aRetBmp;
-}
-
-// ------------------------------------------------------------------
-
-BitmapEx BitmapEx::GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const
-{
-    BitmapEx aRet;
-
-    if( BMP_COLOR_HIGHCONTRAST == eColorMode )
-    {
-        aRet = *this;
-        aRet.aBitmap = aBitmap.GetColorTransformedBitmap( eColorMode );
-    }
-    else if( BMP_COLOR_MONOCHROME_BLACK == eColorMode ||
-             BMP_COLOR_MONOCHROME_WHITE == eColorMode )
-    {
-        aRet = *this;
-        aRet.aBitmap = aRet.aBitmap.GetColorTransformedBitmap( eColorMode );
-
-        if( !aRet.aMask.IsEmpty() )
-        {
-            aRet.aMask.CombineSimple( aRet.aBitmap, BMP_COMBINE_OR );
-            aRet.aBitmap.Erase( ( BMP_COLOR_MONOCHROME_BLACK == eColorMode ) ? COL_BLACK : COL_WHITE );
-
-            DBG_ASSERT( aRet.aBitmap.GetSizePixel() == aRet.aMask.GetSizePixel(),
-                        "BitmapEx::GetColorTransformedBitmapEx(): size mismatch for bitmap and alpha mask." );
-        }
-    }
-
-    return aRet;
 }
 
 // ------------------------------------------------------------------
@@ -758,6 +730,60 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, *this );
 }
 
+BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize)
+{
+    Point aEmptyPoint(0,0);
+    sal_Int32 imgNewWidth = 0;
+    sal_Int32 imgNewHeight = 0;
+    double imgposX = 0;
+    double imgposY = 0;
+    BitmapEx  aRet = aBitmap;
+    double imgOldWidth = aRet.GetSizePixel().Width();
+    double imgOldHeight =aRet.GetSizePixel().Height();
+
+    Size aScaledSize;
+    if (imgOldWidth >= aStandardSize || imgOldHeight >= aStandardSize)
+    {
+        if (imgOldWidth >= imgOldHeight)
+        {
+            imgNewWidth = aStandardSize;
+            imgNewHeight = sal_Int32(imgOldHeight / (imgOldWidth / aStandardSize) + 0.5);
+            imgposX = 0;
+            imgposY = (aStandardSize - (imgOldHeight / (imgOldWidth / aStandardSize) + 0.5)) / 2 + 0.5;
+        }
+        else
+        {
+            imgNewHeight = aStandardSize;
+            imgNewWidth = sal_Int32(imgOldWidth / (imgOldHeight / aStandardSize) + 0.5);
+            imgposY = 0;
+            imgposX = (aStandardSize - (imgOldWidth / (imgOldHeight / aStandardSize) + 0.5)) / 2 + 0.5;
+        }
+
+        aScaledSize = Size( imgNewWidth, imgNewHeight );
+        aRet.Scale( aScaledSize, BMP_SCALE_INTERPOLATE );
+    }
+    else
+    {
+        imgposX = (aStandardSize - imgOldWidth) / 2 + 0.5;
+        imgposY = (aStandardSize - imgOldHeight) / 2 + 0.5;
+    }
+
+    Size aStdSize( aStandardSize, aStandardSize );
+    Rectangle aRect(aEmptyPoint, aStdSize );
+
+    VirtualDevice aVirDevice( *Application::GetDefaultDevice(), 0, 1 );
+    aVirDevice.SetOutputSizePixel( aStdSize );
+    aVirDevice.SetFillColor( COL_TRANSPARENT );
+    aVirDevice.SetLineColor( COL_TRANSPARENT );
+
+    //draw a rect into virDevice
+    aVirDevice.DrawRect( aRect );
+    Point aPointPixel( (long)imgposX, (long)imgposY );
+    aVirDevice.DrawBitmapEx( aPointPixel, aRet );
+    aRet = aVirDevice.GetBitmapEx( aEmptyPoint, aStdSize );
+
+    return aRet;
+}
 // ------------------------------------------------------------------
 
 sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
@@ -913,3 +939,5 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
 
     return rIStm;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -318,7 +319,7 @@ void Timer::Start()
     }
     else if( !mpTimerData->mpSVTimer ) // TODO: remove when guilty found
     {
-        DBG_ERROR( "Timer::Start() on a destroyed Timer!" );
+        OSL_FAIL( "Timer::Start() on a destroyed Timer!" );
     }
     else
     {
@@ -376,3 +377,5 @@ AutoTimer& AutoTimer::operator=( const AutoTimer& rTimer )
     Timer::operator=( rTimer );
     return *this;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

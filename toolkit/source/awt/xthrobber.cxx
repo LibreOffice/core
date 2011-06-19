@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,11 @@
 #include "toolkit/helper/property.hxx"
 #include <toolkit/helper/tkresmgr.hxx>
 
-#ifndef _TOOLKIT_AWT_XTHROBBER_HRC_
 #include "xthrobber.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/throbber.hxx>
 
 //........................................................................
@@ -66,7 +66,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::start() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->start();
@@ -75,7 +75,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL XThrobber::stop() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->stop();
@@ -92,7 +92,7 @@ namespace toolkit
     void SAL_CALL XThrobber::InitImageList()
         throw( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber == NULL)
@@ -100,9 +100,6 @@ namespace toolkit
 
         uno::Sequence< uno::Reference< graphic::XGraphic > > aImageList(12);
         sal_uInt16 nIconIdStart = RID_TK_ICON_THROBBER_START;
-
-        if ( pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode() )
-            nIconIdStart = RID_TK_HC_ICON_THROBBER_START;
 
         for ( sal_uInt16 i=0; i<12; i++ )
         {
@@ -116,3 +113,5 @@ namespace toolkit
 //........................................................................
 }   // namespace toolkit
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

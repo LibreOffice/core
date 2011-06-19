@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,6 +63,7 @@
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 #include "osl/security.h"
+#include "osl/signal.h"
 #include "osl/thread.h"
 
 #include "rtl/alloc.h"
@@ -80,13 +82,12 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "salhelper/timer.hxx"
+
 #include "sys/stat.h"
 #include "sys/types.h"
 
-#include "vos/macros.hxx"
-#include "vos/mutex.hxx"
-#include "vos/process.hxx"
-#include "vos/signal.hxx"
-#include "vos/timer.hxx"
 //---MARKER---
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

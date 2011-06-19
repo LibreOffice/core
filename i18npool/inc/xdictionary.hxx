@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,6 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-// Whether to use cell boundary code, currently unused but prepared.
-#define USE_CELL_BOUNDARY_CODE 0
-
 #define CACHE_MAX 32        // max cache structure number
 #define DEFAULT_SIZE 256    // for boundary size, to avoid alloc and release memory
 
@@ -63,12 +61,6 @@ private:
     Boundary boundary;
     sal_Bool japaneseWordBreak;
 
-#if USE_CELL_BOUNDARY_CODE
-    // For CTL breakiterator, where the word boundary should not be inside cell.
-    sal_Bool useCellBoundary;
-    sal_Int32* cellBoundary;
-#endif
-
 public:
     xdictionary(const sal_Char *lang);
     ~xdictionary();
@@ -76,10 +68,6 @@ public:
     Boundary previousWord( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
     Boundary getWordBoundary( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType, sal_Bool bDirection );
     void setJapaneseWordBreak();
-
-#if USE_CELL_BOUNDARY_CODE
-    void setCellBoundary(sal_Int32* cellArray);
-#endif
 
 private:
     WordBreakCache cache[CACHE_MAX];
@@ -94,3 +82,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ void SalData::ensureThreadAutoreleasePool()
     }
     else
     {
-        DBG_ERROR( "no autorelease key" );
+        OSL_FAIL( "no autorelease key" );
     }
 }
 
@@ -135,7 +136,7 @@ void SalData::drainThreadAutoreleasePool()
     }
     else
     {
-        DBG_ERROR( "no autorelease key" );
+        OSL_FAIL( "no autorelease key" );
     }
 }
 
@@ -292,3 +293,5 @@ NSStatusItem* SalData::getStatusItem()
     }
     return pData->mpStatusItem;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

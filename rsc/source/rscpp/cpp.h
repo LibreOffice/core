@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -413,3 +414,5 @@ void ciwarn( char *format, int n);
 void dumpdef( char *why );
 void dumpadef( char *why, DEFBUF *dp );
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

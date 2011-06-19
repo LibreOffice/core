@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,9 @@
 #include "precompiled_svtools.hxx"
 
 #include <string.h>
-// #include <math.h>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sot/formats.hxx>
 
 #include "svl/urihelper.hxx"
@@ -749,3 +747,5 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
 
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

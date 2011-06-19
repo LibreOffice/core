@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,17 +75,10 @@ private:
     SVT_DLLPRIVATE static String    GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
 
 public:
-    // depricated, because no high contrast mode
     SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    static Image    GetFileImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
-    static Image    GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
+    SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig = sal_False );
     SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig = sal_False );
-
-    // now with high contrast mode
-    SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
-    SVT_DLLPUBLIC static Image  GetFileImage( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
-    SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig, sal_Bool bHighContrast );
-    SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast );
 
     SVT_DLLPUBLIC static String GetDescription( const INetURLObject& rObject );
     SVT_DLLPUBLIC static String GetFileDescription( const INetURLObject& rObject );
@@ -93,3 +87,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

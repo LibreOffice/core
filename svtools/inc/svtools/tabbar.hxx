@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,14 +32,17 @@
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
+#include <vector>
 
 class MouseEvent;
 class TrackingEvent;
 class DataChangedEvent;
-class ImplTabBarList;
 class ImplTabButton;
 class ImplTabSizer;
 class TabBarEdit;
+
+struct ImplTabBarItem;
+typedef ::std::vector< ImplTabBarItem* > ImplTabBarList;
 
 // -----------------
 // - Dokumentation -
@@ -302,6 +306,7 @@ ueber einem bzw. ueber welchem Item durchgefuehrt wurde.
 #define WB_TOPBORDER        ((WinBits)0x04000000)
 #define WB_3DTAB            ((WinBits)0x08000000)
 #define WB_MINSCROLL        ((WinBits)0x20000000)
+#define WB_INSERTTAB        ((WinBits)0x40000000)
 #define WB_STDTABBAR        WB_BORDER
 
 // ------------------
@@ -328,6 +333,7 @@ typedef sal_uInt16 TabBarPageBits;
 // - TabBar -
 // ----------
 struct TabBar_Impl;
+struct ImplTabBarItem;
 
 class SVT_DLLPUBLIC TabBar : public Window
 {
@@ -371,6 +377,7 @@ private:
     sal_Bool            mbSelColor;
     sal_Bool            mbSelTextColor;
     sal_Bool            mbMirrored;
+    bool            mbHasInsertTab; // if true, the tab bar has an extra tab at the end.
     Link            maSelectHdl;
     Link            maDoubleClickHdl;
     Link            maSplitHdl;
@@ -379,6 +386,7 @@ private:
     Link            maStartRenamingHdl;
     Link            maAllowRenamingHdl;
     Link            maEndRenamingHdl;
+    size_t          maCurrentItemList;
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
@@ -394,11 +402,19 @@ private:
     SVT_DLLPRIVATE void         ImplSelect();
     SVT_DLLPRIVATE void         ImplActivatePage();
     SVT_DLLPRIVATE long         ImplDeactivatePage();
+    SVT_DLLPRIVATE void            ImplPrePaint();
+    SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
+    SVT_DLLPRIVATE Rectangle       ImplGetInsertTabRect(ImplTabBarItem* pItem) const;
                     DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
+
+    ImplTabBarItem* seek( size_t i );
+    ImplTabBarItem* prev();
+    ImplTabBarItem* next();
 
 public:
     static const sal_uInt16 APPEND;
     static const sal_uInt16 PAGE_NOT_FOUND;
+    static const sal_uInt16 INSERT_TAB_POS;
 
                     TabBar( Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
     virtual         ~TabBar();
@@ -443,7 +459,7 @@ public:
     sal_uInt16          GetPageCount() const;
     sal_uInt16          GetPageId( sal_uInt16 nPos ) const;
     sal_uInt16          GetPagePos( sal_uInt16 nPageId ) const;
-    sal_uInt16          GetPageId( const Point& rPos ) const;
+    sal_uInt16          GetPageId( const Point& rPos, bool bCheckInsTab = false ) const;
     Rectangle       GetPageRect( sal_uInt16 nPageId ) const;
     // returns the rectangle in which page tabs are drawn
     Rectangle       GetPageArea() const;
@@ -558,3 +574,5 @@ public:
 };
 
 #endif  // _TABBAR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

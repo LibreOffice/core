@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,7 +118,7 @@ namespace comphelper
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exceptiopn catched!");
+            OSL_FAIL("Exceptiopn caught!");
         }
         ::comphelper::decrement(m_refCount);
     }
@@ -152,7 +153,7 @@ namespace comphelper
             }
             catch(const Exception&)
             {
-                OSL_ENSURE(0,"Exception catched!");
+                OSL_FAIL("Exception caught!");
             }
             m_xContainer = NULL;
             m_pListener = NULL;
@@ -201,3 +202,4 @@ namespace comphelper
 }   // namespace comphelper
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

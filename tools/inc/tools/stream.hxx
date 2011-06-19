@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#ifndef _EINF_HXX
 #include <tools/errinf.hxx>
-#endif
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 
@@ -94,9 +93,6 @@ typedef sal_uInt16 StreamMode;
 #define COMPRESSMODE_NONE           (sal_uInt16)0x0000
 #define COMPRESSMODE_ZBITMAP            (sal_uInt16)0x0001
 #define COMPRESSMODE_NATIVE             (sal_uInt16)0x0010
-
-#define JUSTIFY_RIGHT               0x00
-#define JUSTIFY_LEFT                0x01
 
 #define STREAM_IO_DONTKNOW          0
 #define STREAM_IO_READ              1
@@ -268,26 +264,15 @@ private:
     sal_uInt16  nCompressMode;
     LineEnd         eLineDelimiter;
     CharSet         eStreamCharSet;
-//  CharSet         eTargetCharSet;
 
     // Verschluesselung
-    ByteString      aKey;           // aKey.Len != 0  -> Verschluesselung
+    rtl::OString m_aCryptMaskKey;           // aCryptMaskKey.getLength != 0  -> Verschluesselung
     unsigned char   nCryptMask;
-
-    // Formatierung von Strings
-    char            cFiller;
-    sal_uInt8           nRadix;
-    sal_uInt8           nPrecision;
-    sal_uInt8           nWidth;
-    sal_uInt8           nPrintfParams;
-    sal_uInt8           nJustification;
-    ByteString      aFormatString;
 
     // Userdata
     long            nVersion;       // for external use
 
     // Hilfsmethoden
-    void            CreateFormatString();
     TOOLS_DLLPRIVATE void           ImpInit();
 
                      SvStream ( const SvStream& rStream ); // not implemented
@@ -339,15 +324,12 @@ public:
                         { nCompressMode = nNewMode; }
     sal_uInt16          GetCompressMode() const { return nCompressMode; }
 
-    void            SetKey( const ByteString& rKey );
-    const ByteString&   GetKey() const { return aKey; }
+    void SetCryptMaskKey(const rtl::OString& rCryptMaskKey);
+    const rtl::OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
 
     void            SetStreamCharSet( CharSet eCharSet )
                         { eStreamCharSet = eCharSet; }
     CharSet         GetStreamCharSet() const { return eStreamCharSet; }
-//  void            SetTargetCharSet( CharSet eCharSet )
-//                      { eTargetCharSet = eCharSet; }
-//  CharSet         GetTargetCharSet() const { return eTargetCharSet; }
 
     void            SetLineDelimiter( LineEnd eLineEnd )
                         { eLineDelimiter = eLineEnd; }
@@ -355,6 +337,7 @@ public:
 
     SvStream&       operator>>( sal_uInt16& rUInt16 );
     SvStream&       operator>>( sal_uInt32& rUInt32 );
+    SvStream&       operator>>( sal_uInt64& rUInt64 );
     SvStream&       operator>>( long& rLong );
     SvStream&       operator>>( short& rShort );
     SvStream&       operator>>( int& rInt );
@@ -373,6 +356,7 @@ public:
 
     SvStream&       operator<<( sal_uInt16 nUInt16 );
     SvStream&       operator<<( sal_uInt32 nUInt32 );
+    SvStream&       operator<<( sal_uInt64 nuInt64 );
     SvStream&       operator<<( long nLong );
     SvStream&       operator<<( short nShort );
     SvStream&       operator<<( int nInt );
@@ -398,37 +382,8 @@ public:
     SvStream&       WriteByteString( const UniString& rStr ) { return WriteByteString( rStr, GetStreamCharSet() ); }
     SvStream&       WriteByteString( const ByteString& rStr );
 
-    void            SetRadix( sal_uInt8 nRad )
-                        { nRadix = nRad; CreateFormatString(); }
-    sal_uInt8           GetRadix() const { return nRadix; }
-    void            SetPrecision( sal_uInt8 nPrec )
-                        { nPrecision = nPrec; CreateFormatString(); }
-    sal_uInt8           GetPrecision() const { return nPrecision; }
-    void            SetWidth( sal_uInt8 nWid)
-                        { nWidth = nWid; CreateFormatString(); }
-    sal_uInt8           GetWidth() const { return nWidth; }
-    void            SetFiller( char cFil )
-                        { cFiller = cFil; CreateFormatString(); }
-    char            GetFiller() const { return cFiller; }
-    void            SetJustification( sal_uInt8 nJus )
-                         { nJustification = nJus; CreateFormatString(); }
-    sal_uInt8           GetJustification() const { return nJustification; }
-
-    SvStream&       ReadNumber( short& rShort );
-    SvStream&       ReadNumber( sal_uInt16& rUInt16 );
-    SvStream&       ReadNumber( long& rLong );
-    SvStream&       ReadNumber( sal_uInt32& rUInt32 );
-    SvStream&       ReadNumber( int& rInt );
-    SvStream&       ReadNumber( float& rFloat );
-    SvStream&       ReadNumber( double& rDouble );
-
-    SvStream&       WriteNumber( short nShort );
-    SvStream&       WriteNumber( sal_uInt16 nUInt16 );
-    SvStream&       WriteNumber( long nLong );
     SvStream&       WriteNumber( sal_uInt32 nUInt32 );
-    SvStream&       WriteNumber( int nInt );
-    SvStream&       WriteNumber( float nFloat );
-    SvStream&       WriteNumber( const double& rDouble );
+    SvStream&       WriteNumber( sal_Int32 nInt32 );
 
     sal_Size        Read( void* pData, sal_Size nSize );
     sal_Size        Write( const void* pData, sal_Size nSize );
@@ -455,8 +410,6 @@ public:
     sal_Bool        ReadByteStringLine( String& rStr ) { return ReadByteStringLine( rStr, GetStreamCharSet()); }
     sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
     sal_Bool        WriteByteStringLine( const String& rStr ) { return WriteByteStringLine( rStr, GetStreamCharSet()); }
-    sal_Bool        WriteByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteByteStringLines( const String& rStr ) { return WriteByteStringLine( rStr, GetStreamCharSet()); }
 
                 /// Switch to no endian swapping and write 0xfeff
     sal_Bool        StartWritingUnicodeText();
@@ -493,17 +446,7 @@ public:
     sal_Bool        WriteUniStringLine( const String& rStr );
                 /// Write multiple lines of Unicode (with CovertLineEnd) and append line end (endlu())
     sal_Bool        WriteUniStringLines( const String& rStr );
-                /// Write a line of Unicode if eDestCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise write a line of Bytecode converted to eDestCharSet
-    sal_Bool        WriteUniOrByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteUniOrByteStringLine( const String& rStr )
-                    { return WriteUniOrByteStringLine( rStr, GetStreamCharSet() ); }
-                /// Write multiple lines of Unicode if eDestCharSet==RTL_TEXTENCODING_UNICODE,
-                /// otherwise write multiple lines of Bytecode converted to eDestCharSet,
-                /// CovertLineEnd is applied.
-    sal_Bool        WriteUniOrByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteUniOrByteStringLines( const String& rStr )
-                    { return WriteUniOrByteStringLines( rStr, GetStreamCharSet() ); }
+
                 /// Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
                 /// otherwise write as Bytecode converted to eDestCharSet.
                 /// This may result in more than one byte being written
@@ -581,48 +524,6 @@ public:
     long            GetVersion() { return nVersion; }
     void            SetVersion( long n ) { nVersion = n; }
 
-    /** Add a mark to indicate to which position in the stream you want to be
-        able to seek back.
-
-        @descr  If you set a mark at nPos, you indicate to the stream that you
-        won't issue seek operations to any position 'before' nPos.  This can
-        be exploited by 'transient streams' that do not permanently store
-        their data; they can discard any buffered data up to nPos.
-
-        @descr  However, if the stream is already positioned past nPos, this
-        method is not guaranteed to have the desired effect.  A 'transient
-        stream' may have already discarded the buffered data at nPos, so that
-        a seek operation to nPos will fail nonetheless.
-
-        @descr  There can be more than one mark for a stream, indicating that
-        you want to be able to seek back in the stream as far as the 'lowest'
-        off all the marks.  There can even be multiple marks at the same
-        position (and they must all be individually removed with
-        RemoveMark()).
-
-        @param nPos  The position in the stream at which to add a mark.
-     */
-    virtual void    AddMark(sal_Size nPos);
-
-    /** Remove a mark introduced with AddMark().
-
-        @descr  If you no longer need to seek back to some position for which
-        you added a mark, you should remove that mark.  (And a 'transient
-        stream' that does not permanently store its data can then potentially
-        discard some of its buffered data.)
-
-        @descr  Removing one mark does not have any effects on any other
-        marks.  Especially, if you have multiple marks at the same position,
-        you must call this method multiple times to effectively 'unmark' that
-        position.
-
-        @descr  If you specify a position for which there is no mark, this
-        method simply has no effect.
-
-        @param nPos  The position in the stream at which to remove the mark.
-     */
-    virtual void    RemoveMark(sal_Size nPos);
-
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // fuer Manips
 };
 
@@ -630,81 +531,6 @@ inline SvStream& operator<<( SvStream& rStr, SvStrPtr f )
 {
     (*f)(rStr);
     return rStr;
-}
-
-inline SvStream& SvStream::ReadNumber( short& rShort )
-{
-    long nTmp;
-    ReadNumber( nTmp );
-    rShort = (short)nTmp;
-    return *this;
-}
-
-inline SvStream& SvStream::ReadNumber( sal_uInt16& rUShort )
-{
-    sal_uInt32 nTmp;
-    ReadNumber( nTmp );
-    rUShort = (sal_uInt16)nTmp;
-    return *this;
-}
-
-inline SvStream& SvStream::ReadNumber( int& rInt )
-{
-    long nTmp;
-    ReadNumber( nTmp );
-    rInt = (int)nTmp;
-    return *this;
-}
-
-/*
-inline SvStream& SvStream::ReadNumber( unsigned int& rUInt )
-{
-    sal_uIntPtr nTmp;
-    ReadNumber( nTmp );
-    rUInt = (unsigned int)nTmp;
-    return *this;
-}
-*/
-
-inline SvStream& SvStream::ReadNumber( float& rFloat )
-{
-    double nTmp;
-    ReadNumber( nTmp );
-    rFloat = (float)nTmp;
-    return *this;
-}
-
-inline SvStream& SvStream::WriteNumber( short nShort )
-{
-    WriteNumber( (long)nShort );
-    return *this;
-}
-
-inline SvStream& SvStream::WriteNumber( sal_uInt16 nUShort )
-{
-    WriteNumber( (sal_uInt32)nUShort );
-    return *this;
-}
-
-inline SvStream& SvStream::WriteNumber( int nInt )
-{
-    WriteNumber( (long)nInt );
-    return *this;
-}
-
-/*
-inline SvStream& SvStream::WriteNumber( unsigned int nUInt )
-{
-    WriteNumber( (sal_uIntPtr)nUInt );
-    return *this;
-}
-*/
-
-inline SvStream& SvStream::WriteNumber( float nFloat )
-{
-    double nTemp = nFloat;
-    WriteNumber( nTemp );
-    return *this;
 }
 
 inline void SvStream::SetEndianSwap( sal_Bool bVal )
@@ -854,9 +680,7 @@ public:
 class TOOLS_DLLPUBLIC SvDataCopyStream
 {
 public:
-    /*-----------------MM 30.04.96 11:01-----------------
-     mehrfaches Aufrufen von Load und Assign erlaubt
-    --------------------------------------------------*/
+    // mehrfaches Aufrufen von Load und Assign erlaubt
                     TYPEINFO();
     virtual         ~SvDataCopyStream(){}
     virtual void    Load( SvStream & ) = 0;
@@ -865,3 +689,5 @@ public:
 };
 
 #endif // _STREAM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

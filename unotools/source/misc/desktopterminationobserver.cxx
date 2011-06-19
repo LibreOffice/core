@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OObserverImpl::ensureObservation: caught an exception!" );
+                OSL_FAIL( "OObserverImpl::ensureObservation: caught an exception!" );
             }
         }
 
@@ -229,3 +230,4 @@ namespace utl
 } // namespace utl
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

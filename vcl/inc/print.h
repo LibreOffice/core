@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include "rtl/ustring.hxx"
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 struct SalPrinterQueueInfo;
 class QueueInfo;
@@ -60,7 +61,7 @@ struct ImplPrnQueueData
 class VCL_PLUGIN_PUBLIC ImplPrnQueueList
 {
 public:
-    std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash >
+    boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash >
                                         m_aNameToIndex;
     std::vector< ImplPrnQueueData >     m_aQueueInfos;
     std::vector< rtl::OUString >        m_aPrinterList;
@@ -81,3 +82,5 @@ void SAL_DLLPRIVATE ImplUpdateJobSetupPaper( JobSetup& rJobSetup );
 
 
 #endif // _SV_PRINT_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

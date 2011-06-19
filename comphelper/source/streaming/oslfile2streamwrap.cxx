@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,7 +139,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nDummy = 0;
-    eError = m_pFile->setPos(Pos_End, nDummy);
+    eError = m_pFile->setPos(osl_Pos_End, nDummy);
     if (eError != FileBase::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
@@ -148,7 +149,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     nAvailable = nAvailable - nPos;
-    eError = m_pFile->setPos(Pos_Absolut, nPos);
+    eError = m_pFile->setPos(osl_Pos_Absolut, nPos);
     if (eError != FileBase::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
     return sal::static_int_cast< sal_Int32 >(
@@ -196,3 +197,4 @@ void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( stario::NotConnectedE
 } // namespace comphelper
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

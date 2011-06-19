@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -351,6 +352,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_TAJIK                      0x0428
 #define LANGUAGE_TAMAZIGHT_ARABIC           0x045F
 #define LANGUAGE_TAMAZIGHT_LATIN            0x085F
+#define LANGUAGE_TAMAZIGHT_TIFINAGH         0x0C5F
 #define LANGUAGE_TAMIL                      0x0449
 #define LANGUAGE_TATAR                      0x0444
 #define LANGUAGE_TELUGU                     0x044A
@@ -520,6 +522,18 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
 #define LANGUAGE_USER_KABYLE                0x0659
 #define LANGUAGE_USER_HAITIAN               0x065A
-
+#define LANGUAGE_USER_BEEMBE                0x065B
+#define LANGUAGE_USER_BEKWEL                0x065C
+#define LANGUAGE_USER_KITUBA                0x065D
+#define LANGUAGE_USER_LARI                  0x065E
+#define LANGUAGE_USER_MBOCHI                0x065F
+#define LANGUAGE_USER_TEKE_IBALI            0x0660
+#define LANGUAGE_USER_TEKE_TYEE             0x0661
+#define LANGUAGE_USER_VILI                  0x0662
+#define LANGUAGE_USER_PORTUGUESE_ANGOLA     0x8016  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PORTUGUESE)) */
+#define LANGUAGE_USER_MANX                  0x0663
+#define LANGUAGE_USER_TEKE_EBOO             0x0664
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

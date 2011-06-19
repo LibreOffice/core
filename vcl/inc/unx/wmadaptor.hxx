@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _VCL_WMADAPTOR_HXX_
 #define _VCL_WMADAPTOR_HXX_
 
-#ifndef _TL_STRING_HXX
 #include <tools/string.hxx>
-#endif
 #include <tools/gen.hxx>
 #ifndef _PREX_H
 #include <tools/prex.h>
@@ -352,3 +351,5 @@ public:
 } // namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

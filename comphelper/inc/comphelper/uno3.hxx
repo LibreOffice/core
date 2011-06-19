@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define _COMPHELPER_UNO3_HXX_
 
 #include <osl/interlck.h>
+#include <rtl/instance.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/sequence.hxx>
@@ -196,19 +198,13 @@ namespace comphelper
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
     #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
+        namespace \
+        { \
+            class the##classname##ImplementationId : public rtl::Static< ::cppu::OImplementationId, the##classname##ImplementationId> {}; \
+        } \
         ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException) \
         { \
-            static ::cppu::OImplementationId* pId = NULL; \
-            if (!pId) \
-            { \
-                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ); \
-                if (!pId) \
-                { \
-                    static ::cppu::OImplementationId aId; \
-                    pId = &aId; \
-                } \
-            } \
-            return pId->getImplementationId(); \
+            return the##classname##ImplementationId::get().getImplementationId(); \
         }
 
     #define IMPLEMENT_FORWARD_XTYPEPROVIDER2( classname, baseclass1, baseclass2 ) \
@@ -300,3 +296,4 @@ namespace comphelper
 
 #endif // _COMPHELPER_UNO3_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

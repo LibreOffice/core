@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,7 +154,7 @@ namespace comphelper
 
 
     private:
-        COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
+        COMPHELPER_DLLPRIVATE static const ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 
 //.........................................................................
@@ -164,3 +165,4 @@ namespace comphelper
 #endif // COMPHELPER_ACCIMPLACCESS_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

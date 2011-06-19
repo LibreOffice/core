@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,8 +27,6 @@
  ************************************************************************/
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #define _COMPHELPER_STLTYPES_HXX_
-
-#if !defined(__SGI_STL_VECTOR_H) || !defined(__SGI_STL_MAP_H) || !defined(__SGI_STL_MULTIMAP_H)
 
 #include <vector>
 #include <map>
@@ -276,7 +275,6 @@ OutputIter intersperse(
     typedef ::std::set< valuetype, comparefct > classname;  \
     DECLARE_STL_ITERATORS(classname)                        \
 
-#endif
-
 #endif  // _COMPHELPER_STLTYPES_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

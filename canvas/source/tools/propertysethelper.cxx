@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,9 @@ namespace canvas
         void throwUnknown( const ::rtl::OUString& aPropertyName )
         {
             throw beans::UnknownPropertyException(
-                ::rtl::OUString::createFromAscii("PropertySetHelper: property ") +
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PropertySetHelper: property " )) +
                 aPropertyName +
-                ::rtl::OUString::createFromAscii(" not found."),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not found." )),
                 uno::Reference< uno::XInterface >()
                 );
         }
@@ -49,9 +50,9 @@ namespace canvas
         void throwVeto( const ::rtl::OUString& aPropertyName )
         {
             throw beans::PropertyVetoException(
-                ::rtl::OUString::createFromAscii("PropertySetHelper: property ") +
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PropertySetHelper: property " )) +
                 aPropertyName +
-                ::rtl::OUString::createFromAscii(" access was vetoed."),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " access was vetoed." )),
                 uno::Reference< uno::XInterface >() );
         }
 
@@ -185,3 +186,5 @@ namespace canvas
         // ignore request, no listener added in the first place
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

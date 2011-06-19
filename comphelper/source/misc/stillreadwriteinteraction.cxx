@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,11 @@
 #include "precompiled_comphelper.hxx"
 #include <comphelper/stillreadwriteinteraction.hxx>
 
-#ifndef __COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP__
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP__
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP__
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
-#endif
 
 namespace comphelper{
 
@@ -142,3 +137,5 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
     return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

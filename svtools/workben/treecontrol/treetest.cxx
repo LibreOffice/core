@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -217,7 +218,7 @@ void DirectoryTree::fillNode( const Reference< XMutableTreeNode >& xNode )
         if( aDirectory.open() == osl::Directory::E_None )
         {
             osl::DirectoryItem aItem;
-            osl::FileStatus fs( FileStatusMask_Type | FileStatusMask_FileURL);
+            osl::FileStatus fs( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL);
             while( aDirectory.getNextItem( aItem, 0xffffffff ) == osl::Directory::E_None )
             {
                 if (aItem.getFileStatus(fs) == osl::FileBase::E_None)
@@ -347,7 +348,7 @@ int SAL_CALL main( int argc, char **argv )
     */
     Reference< XInterface > xInterface =
         xMultiComponentFactoryClient->createInstanceWithContext(
-            OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.UnoUrlResolver" )),
             xComponentContext );
 
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
@@ -368,7 +369,7 @@ int SAL_CALL main( int argc, char **argv )
 
     // gets the server component context as property of the office component factory
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
-    xPropSet->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xComponentContext;
+    xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )) ) >>= xComponentContext;
 
     // gets the service manager from the office
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
@@ -394,3 +395,5 @@ int SAL_CALL main( int argc, char **argv )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,12 @@
 #define _SV_ACCMGR_HXX
 
 #include <vcl/sv.h>
+#include <vector>
 
-class ImplAccelList;
 class Accelerator;
 class KeyCode;
+
+typedef ::std::vector< Accelerator* > ImplAccelList;
 
 // --------------------
 // - ImplAccelManager -
@@ -62,3 +65,5 @@ public:
 };
 
 #endif  // _SV_ACCMGR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

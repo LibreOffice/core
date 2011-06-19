@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <unotools/readwritemutexguard.hxx>
 #include "unotools/unotoolsdllapi.h"
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 
 namespace com { namespace sun { namespace star {
@@ -361,3 +360,5 @@ private:
 
 
 #endif // _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

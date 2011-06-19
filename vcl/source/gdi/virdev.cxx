@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
 }
@@ -150,7 +151,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 }
@@ -161,7 +162,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 
@@ -175,7 +176,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
 :   mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+    OSL_TRACE( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
 
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
 }
@@ -184,7 +185,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
 
 VirtualDevice::~VirtualDevice()
 {
-    DBG_TRACE( "VirtualDevice::~VirtualDevice()" );
+    OSL_TRACE( "VirtualDevice::~VirtualDevice()" );
 
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -209,7 +210,7 @@ VirtualDevice::~VirtualDevice()
 
 sal_Bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase )
 {
-    DBG_TRACE3( "VirtualDevice::ImplSetOutputSizePixel( %ld, %ld, %d )", rNewSize.Width(), rNewSize.Height(), (int)bErase );
+    OSL_TRACE( "VirtualDevice::ImplSetOutputSizePixel( %ld, %ld, %d )", rNewSize.Width(), rNewSize.Height(), (int)bErase );
 
     if ( !mpVirDev )
         return sal_False;
@@ -446,3 +447,4 @@ void VirtualDevice::Compat_ZeroExtleadBug()
 
 // -----------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

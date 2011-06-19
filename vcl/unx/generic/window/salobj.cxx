@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -151,7 +152,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            pVisual,
                            CWEventMask|CWColormap, &aAttribs );
         XSync( pDisp, False );
-        sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+        sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
         pSalDisp->GetXLib()->PopXErrorLevel();
         if( bWasXError )
         {
@@ -178,7 +179,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     pObjData->pAppContext   = NULL;
 
     XSync(pDisp, False);
-    sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+    sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
     pSalDisp->GetXLib()->PopXErrorLevel();
     if( bWasXError )
     {
@@ -565,3 +566,4 @@ void X11SalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

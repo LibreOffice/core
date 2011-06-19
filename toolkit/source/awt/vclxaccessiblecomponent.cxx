@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, AccessibleExtendedCom
 
 ::rtl::OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleWindow" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleWindow"));
 }
 
 sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServiceName ) throw (uno::RuntimeException)
@@ -126,7 +127,7 @@ sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServi
 uno::Sequence< ::rtl::OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleWindow" );
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleWindow"));
     return aNames;
 }
 
@@ -922,3 +923,4 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
     return sRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

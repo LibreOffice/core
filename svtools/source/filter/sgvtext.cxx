@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"
-// #include "Debug.c"
 
 extern SgfFontLst* pSgfFonts;
 
@@ -617,8 +617,8 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, sal_Bool Kapt, s
         switch (Atr.GetFont()) {
           case 92500: case 92501: case 92504: case 92505:
           {
-#if defined(WNT) || defined(PM2)
-              FNam=String::CreateFromAscii( "Times New Roman" );  // CG Times ist unter Windows und OS/2 Times New Roman
+#if defined(WNT)
+              FNam=String::CreateFromAscii( "Times New Roman" );  // CG Times ist unter Windows Times New Roman
 #else
               FNam=String::CreateFromAscii( "Times" );            // ansonsten ist das einfach Times
 #endif
@@ -765,7 +765,6 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
                   sal_uInt16& nChars, sal_uInt16 Rest,
                   short* Line, UCHAR* cLine)
 {
-    sal_uInt16       KernDist=0;       // Wert fuer Kerning
     sal_uInt16       ChrWidth;
     UCHAR        c;
     UCHAR        c1;
@@ -775,6 +774,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
 
     AbsEnd=(c==AbsatzEnd || c==TextEnd);
     if (AbsEnd==sal_False) {
+        sal_uInt16       KernDist=0;       // Wert fuer Kerning
         R.OutCh=ConvertTextChar(c); // von HardTrenn nach '-', ...
         R.Kapt=(R.Attrib.Schnitt & TextKaptBit) !=0 && UpcasePossible(R.OutCh);
         if (R.Kapt) R.OutCh=Upcase(R.OutCh);
@@ -1030,10 +1030,6 @@ void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uIn
 /*************************************************************************
 |*
 |*    TextType::Draw()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 09.08.93
-|*    Letzte Aenderung  JOE 09.08.93
 |*
 *************************************************************************/
 void TextType::Draw(OutputDevice& rOut)
@@ -1332,3 +1328,5 @@ SgfFontOne* SgfFontLst::GetFontDesc(sal_uInt32 ID)
     }
     return LastLn;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

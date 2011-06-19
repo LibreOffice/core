@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,14 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
-#include "rtl/ref.hxx"
+#include <osl/thread.hxx>
+#include <rtl/ref.hxx>
 
-#include "vos/thread.hxx"
-
-#include "tools/string.hxx"
 #include "tools/gen.hxx"
 #include "tools/shl.hxx"
 #include "tools/link.hxx"
 #include "tools/fldunit.hxx"
+#include "tools/string.hxx"
 #include "tools/color.hxx"
 #include "tools/debug.hxx"
 
@@ -50,7 +50,7 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com {
 namespace sun {
@@ -73,7 +73,6 @@ class Point;
 class Rectangle;
 class ImpResMgr;
 class ResMgr;
-class UniqueIndex;
 class ImplAccelManager;
 class ImplDevFontList;
 class ImplFontCache;
@@ -117,8 +116,6 @@ class SalI18NImeStatus;
 class DockingManager;
 class VclEventListeners2;
 
-namespace vos { class OMutex; }
-namespace vos { class OCondition; }
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
 namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 
@@ -184,7 +181,7 @@ struct ImplSVAppData
      */
     ImeStatusWindowMode meShowImeStatusWindow;
 
-                            DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
+    DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
 
 };
 
@@ -241,7 +238,6 @@ struct ImplSVWinData
     Window*                 mpTrackWin;         // window, that is in tracking mode
     AutoTimer*              mpTrackTimer;       // tracking timer
     ImageList*              mpMsgBoxImgList;    // ImageList for MessageBox
-    ImageList*              mpMsgBoxHCImgList;  // ImageList for MessageBox (high contrast mode)
     Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
     sal_uInt16                  mnTrackFlags;       // tracking flags
     sal_uInt16                  mnAutoScrollFlags;  // auto scroll flags
@@ -267,9 +263,7 @@ struct ImplSVCtrlData
     ImageList*              mpSplitHArwImgList; // ImageList for Horizontale SplitWindows (Arrows)
     ImageList*              mpSplitVArwImgList; // ImageList for Vertikale SplitWindows (Arrows)
     Image*                  mpDisclosurePlus;
-    Image*                  mpDisclosurePlusHC;
     Image*                  mpDisclosureMinus;
-    Image*                  mpDisclosureMinusHC;
     ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
     sal_uInt16                  mnCheckStyle;       // CheckBox-Style for ImageList-Update
     sal_uInt16                  mnRadioStyle;       // Radio-Style for ImageList-Update
@@ -367,14 +361,14 @@ struct ImplSVData
     DockingManager*         mpDockingManager;
     sal_Bool                    mbIsTestTool;
 
-    vos::OThread::TThreadIdentifier                     mnMainThreadId;
+    oslThreadIdentifier                     mnMainThreadId;
     rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
     com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
-    std::hash_map< int, rtl::OUString >*     mpPaperNames;
+    boost::unordered_map< int, rtl::OUString >*     mpPaperNames;
 };
 
 void        ImplInitSVData();
@@ -418,8 +412,6 @@ FieldUnitStringList* ImplGetCleanedFieldUnits();
 
 inline const String& ImplGetSVEmptyStr()
     { return String::EmptyString(); }
-inline const ByteString& ImplGetSVEmptyByteStr()
-    { return ByteString::EmptyString(); }
 
 // -----------------------------------------------------------------------
 
@@ -468,3 +460,5 @@ struct ImplSVEvent
 };
 
 #endif  // _SV_SVDATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

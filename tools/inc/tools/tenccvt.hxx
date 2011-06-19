@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _TOOLS_TENCCVT_HXX
 
 #include <rtl/textenc.h>
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 #include "tools/toolsdllapi.h"
 
 // ----------------------------------------
@@ -55,4 +54,17 @@ TOOLS_DLLPUBLIC rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncod
 TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 nVersion = SOFFICE_FILEFORMAT_50 );
 TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 nVersion = SOFFICE_FILEFORMAT_50 );
 
+/*
+ * Given a Unicode character, return a legacy Microsoft Encoding which
+ * supports it. Returns RTL_TEXTENCODING_DONTKNOW if there is
+ * no encoding which could support the character
+ *
+ * Useful as a utility to categorize unicode characters into the best fit
+ * windows charset range for exporting to ww6 & wmf or as a hint to non \u
+ * unicode token aware rtf readers
+ */
+TOOLS_DLLPUBLIC rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c);
+
 #endif  // _TOOLS_TENCCVT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

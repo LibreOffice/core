@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,9 @@
 #include <rtl/strbuf.hxx>
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 OString PDFWriterImpl::BuiltinFont::getNameObject() const
 {
@@ -685,3 +688,4 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <toolkit/helper/property.hxx>
 #include <tools/debug.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -68,7 +70,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER1( VCLXScroller, VCLXWindow );
 void SAL_CALL VCLXScroller::dispose() throw(RuntimeException)
 {
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -148,24 +150,12 @@ void SAL_CALL VCLXScroller::allocateArea(
 
 void VCLXScroller::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-/*
-    ::vos::OClearableGuard aGuard( GetMutex() );
-
-    switch ( _rVclWindowEvent.GetId() )
-    {
-        default:
-            aGuard.clear();
-*/
-            VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
-/*
-        break;
-    }
-*/
+    VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
 }
 
 void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, const Any &Value ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -184,7 +174,7 @@ void SAL_CALL VCLXScroller::setProperty( const ::rtl::OUString& PropertyName, co
 
 Any SAL_CALL VCLXScroller::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Any aReturn;
     if ( GetWindow() )
@@ -210,3 +200,5 @@ IMPL_LINK( VCLXScroller, ScrollHdl, ScrollBar *, pScrollBar )
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

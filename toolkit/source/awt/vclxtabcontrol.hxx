@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,6 +123,8 @@ public:
         ChildProps( VCLXTabControl::ChildData *pData );
     };
 
+    inline TabControl *getTabControl() const throw (::com::sun::star::uno::RuntimeException);
+
 protected:
     ChildData *createChild( css::uno::Reference< css::awt::XLayoutConstrains > const& xChild );
     ChildProps *createChildProps( Box_Base::ChildData* pData );
@@ -132,7 +135,6 @@ protected:
     std::list< ::com::sun::star::uno::Reference
                < ::com::sun::star::awt::XTabListener > > mxTabListeners;
 
-    inline TabControl *getTabControl() const throw (::com::sun::star::uno::RuntimeException);
 
 private:
     VCLXTabControl( const VCLXTabControl& );            // never implemented
@@ -142,3 +144,5 @@ private:
 } // namespace layoutimpl
 
 #endif /* LAYOUT_AWT_VCLXTABCONTROLLER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

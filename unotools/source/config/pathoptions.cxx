@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
 
 #include <unotools/pathoptions.hxx>
 #include <unotools/configitem.hxx>
@@ -44,7 +43,6 @@
 #include <unotools/bootstrap.hxx>
 
 #include <unotools/ucbhelper.hxx>
-#include <vos/process.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -59,15 +57,18 @@
 #include <itemholder1.hxx>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace osl;
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 // define ----------------------------------------------------------------
 
@@ -110,19 +111,19 @@ enum VarNameProperty
     VAR_NEEDS_FILEURL
 };
 
-class NameToHandleMap : public ::std::hash_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
+class NameToHandleMap : public ::boost::unordered_map<  ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
 {
     public:
         inline void free() { NameToHandleMap().swap( *this ); }
 };
 
-class EnumToHandleMap : public ::std::hash_map< sal_Int32, sal_Int32, std::hash< sal_Int32 >, std::equal_to< sal_Int32 > >
+class EnumToHandleMap : public ::boost::unordered_map< sal_Int32, sal_Int32, boost::hash< sal_Int32 >, std::equal_to< sal_Int32 > >
 {
     public:
         inline void free() { EnumToHandleMap().swap( *this ); }
 };
 
-class VarNameToEnumMap : public ::std::hash_map< OUString, VarNameProperty, OUStringHashCode, ::std::equal_to< OUString > >
+class VarNameToEnumMap : public ::boost::unordered_map< OUString, VarNameProperty, OUStringHashCode, ::std::equal_to< OUString > >
 {
     public:
         inline void free() { VarNameToEnumMap().swap( *this ); }
@@ -263,51 +264,45 @@ static VarNameAttribute aVarNameAttribute[] =
     { SUBSTITUTE_PATH,      VAR_NEEDS_SYSTEM_PATH },    // $(path)
 };
 
-#if 0
-// currently unused
-static Sequence< OUString > GetPathPropertyNames()
-{
-    const int nCount = sizeof( aPropNames ) / sizeof( PropertyStruct );
-    Sequence< OUString > aNames( nCount );
-    OUString* pNames = aNames.getArray();
-    for ( int i = 0; i < nCount; i++ )
-        pNames[i] = OUString::createFromAscii( aPropNames[i].pPropName );
-
-    return aNames;
-}
-#endif
-
 // class SvtPathOptions_Impl ---------------------------------------------
 
 const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     if ( ePath >= SvtPathOptions::PATH_COUNT )
         return m_aEmptyString;
 
-    OUString    aPathValue;
-    String      aResult;
-    sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
+    ::osl::MutexGuard aGuard( m_aMutex );
 
-    // Substitution is done by the service itself using the substition service
-    Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
-    a >>= aPathValue;
-    if( ePath == SvtPathOptions::PATH_ADDIN     ||
-        ePath == SvtPathOptions::PATH_FILTER    ||
-        ePath == SvtPathOptions::PATH_HELP      ||
-        ePath == SvtPathOptions::PATH_MODULE    ||
-        ePath == SvtPathOptions::PATH_PLUGIN    ||
-        ePath == SvtPathOptions::PATH_STORAGE
-      )
+    try
     {
-        // These office paths have to be converted to system pathes
-        utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
-        aPathValue = aResult;
+        OUString    aPathValue;
+        String      aResult;
+        sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
+
+        // Substitution is done by the service itself using the substition service
+        Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
+        a >>= aPathValue;
+        if( ePath == SvtPathOptions::PATH_ADDIN     ||
+            ePath == SvtPathOptions::PATH_FILTER    ||
+            ePath == SvtPathOptions::PATH_HELP      ||
+            ePath == SvtPathOptions::PATH_MODULE    ||
+            ePath == SvtPathOptions::PATH_PLUGIN    ||
+            ePath == SvtPathOptions::PATH_STORAGE
+          )
+        {
+            // These office paths have to be converted to system pathes
+            utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
+            aPathValue = aResult;
+        }
+
+        m_aPathArray[ ePath ] = aPathValue;
+        return m_aPathArray[ ePath ];
+    }
+    catch (UnknownPropertyException &)
+    {
     }
 
-    m_aPathArray[ ePath ] = aPathValue;
-    return m_aPathArray[ ePath ];
+    return m_aEmptyString;
 }
 // -----------------------------------------------------------------------
 sal_Bool SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
@@ -482,7 +477,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     if ( !m_xPathSettings.is() )
     {
         // #112719#: check for existance
-        DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
+        OSL_FAIL( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
         throw RuntimeException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSettings cannot be created" )),
             Reference< XInterface >() );
@@ -530,7 +525,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Set language type!
-    Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    Any aLocale = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocaleStr;
     if ( aLocale >>= aLocaleStr )
     {
@@ -541,7 +536,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
     else
     {
-        DBG_ERRORFILE( "wrong any type" );
+        DBG_ASSERT(!aLocale.hasValue(), "wrong any type");
         m_aLocale.Language = OStringToOUString(OString("en"), RTL_TEXTENCODING_UTF8);
         m_aLocale.Country =  OStringToOUString(OString("US"), RTL_TEXTENCODING_UTF8);
         m_aLocale.Variant =  OStringToOUString(OString(""), RTL_TEXTENCODING_UTF8);
@@ -1060,50 +1055,4 @@ void SvtPathOptions::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPa
     pImp->SetPath(ePath, rNewPath);
 }
 
-// class PathService -----------------------------------------------------
-#include <com/sun/star/frame/XConfigManager.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
-
-class PathService : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XConfigManager, ::com::sun::star::lang::XServiceInfo >
-{
-    virtual ::rtl::OUString SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-                                        getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL    substituteVariables( const ::rtl::OUString& sText ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               addPropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               removePropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               flush(  ) throw(::com::sun::star::uno::RuntimeException);
-};
-
-// class PathService -----------------------------------------------------
-
-void SAL_CALL PathService::addPropertyChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& ) throw(::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL PathService::removePropertyChangeListener( const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& ) throw(::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL PathService::flush(  ) throw(::com::sun::star::uno::RuntimeException) {}
-
-::rtl::OUString SAL_CALL PathService::substituteVariables( const ::rtl::OUString& sText ) throw(::com::sun::star::uno::RuntimeException)
-{
-    return SvtPathOptions().SubstituteVariable( sText );
-}
-
-::rtl::OUString SAL_CALL PathService::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    return OUString::createFromAscii("com.sun.star.comp.unotools.PathService");
-}
-
-sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
-{
-    if ( ServiceName.compareToAscii("com.sun.star.config.SpecialConfigManager") == COMPARE_EQUAL )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL PathService::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
-{
-    Sequence< OUString > aRet(1);
-    *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
-    return aRet;
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

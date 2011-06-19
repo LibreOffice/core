@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <osl/mutex.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/instance.hxx>
 
 //........................................................................
 namespace utl
@@ -138,7 +140,7 @@ namespace utl
     #define DECLARE_STATIC_LAZY_USTRING( name ) \
     static const ::rtl::OUString& lcl_get##name##Name() \
     {   \
-        static const ::rtl::OUString sName = ::rtl::OUString::createFromAscii( #name ); \
+        static const ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM( #name )); \
         return sName;   \
     }
 
@@ -195,20 +197,15 @@ namespace utl
     sal_Bool        RegOptionsImpl::s_bThisSessionDone = sal_False;
     sal_Int32       RegOptionsImpl::s_nInstanceCount = 0;
 
+    namespace
+    {
+        class theRegOptionsImplMutex : public rtl::Static<osl::Mutex, theRegOptionsImplMutex>{};
+    }
+
     //--------------------------------------------------------------------
     ::osl::Mutex& RegOptionsImpl::getStaticMutex()
     {
-        static ::osl::Mutex* s_pStaticMutex = NULL;
-        if ( !s_pStaticMutex )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !s_pStaticMutex )
-            {
-                static ::osl::Mutex s_aStaticMutex;
-                s_pStaticMutex = &s_aStaticMutex;
-            }
-        }
-        return *s_pStaticMutex;
+        return theRegOptionsImplMutex::get();
     }
 
     //--------------------------------------------------------------------
@@ -258,13 +255,13 @@ namespace utl
         // create the config node for all our registration information
         m_aRegistrationNode = OConfigurationTreeRoot::createWithServiceFactory(
             ::comphelper::getProcessServiceFactory(),
-            ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Common/Help/Registration" )
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/Help/Registration"))
         );
 
         // cache some data
         //the URL to use for online registration
         ::rtl::OUString sStringValue;
-        m_aRegistrationNode.getNodeValue( ::rtl::OUString::createFromAscii( "URL" ) ) >>= sStringValue;
+        m_aRegistrationNode.getNodeValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) ) >>= sStringValue;
         m_sRegistrationURL = sStringValue;
 
         // the state of the dialog
@@ -548,3 +545,4 @@ namespace utl
 }   // namespace utl
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

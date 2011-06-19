@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase5.hxx>
-#ifndef _CPPUHELPER_PROPERTYSETMIXIN_HXX_
 #include <cppuhelper/propertysetmixin.hxx>
-#endif
 #include <osl/mutex.hxx>
 
 class SvStream;
@@ -151,3 +150,5 @@ private:
 
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

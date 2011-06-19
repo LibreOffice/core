@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,21 +86,21 @@ SfxItemPresentation SfxVisibilityItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-sal_Bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal,sal_uInt8) const
+bool SfxVisibilityItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= m_nValue;
-    return sal_True;
+    return true;
 }
 
 //============================================================================
 // virtual
-sal_Bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal,sal_uInt8)
+bool SfxVisibilityItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     if (rVal >>= m_nValue)
-        return sal_True;
+        return true;
 
-    DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "SfxInt16Item::PutValue - Wrong type!" );
+    return false;
 }
 
 //============================================================================
@@ -140,6 +141,8 @@ UniString SfxVisibilityItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
     return
         bTheValue ?
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_True")) :
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_False"));
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TRUE")) :
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("FALSE"));
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

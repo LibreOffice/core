@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,6 @@
 
 
 #include <unoctrl.hxx>
-// #include <unoctrl2.hxx>
 
 #include <svtools/unoiface.hxx> // InitExtToolkit
 
@@ -121,35 +121,6 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
         XViewRef xV( xDrawCtrl, USR_QUERY );
         XWindowRef xC( xDrawCtrl, USR_QUERY );
         xV->draw( xC->getPosSize().Left(), xC->getPosSize().Top() );
-
-        // Printer Testen...
-/*
-        XServiceManagerRef xProv = getGlobalServiceManager();
-        XServiceProviderRef xSSI = xProv->queryServiceProvider( L"stardiv.vcl.PrinterServer" );
-        XPrinterServerRef xPrinterServer( xSSI->createInstance(), USR_QUERY );
-
-        Sequence< UString > aPrinterNames = xPrinterServer->getPrinterNames();
-        USHORT nPrinters = aPrinterNames.getLen();
-        String aInfo( "Printers: " );
-        aInfo += nPrinters;
-        if ( nPrinters )
-        {
-            for ( USHORT n = 0; n < nPrinters; n++ )
-            {
-                aInfo += '\n';
-                aInfo += OUStringToString( aPrinterNames.getConstArray()[n], CHARSET_SYSTEM );
-            }
-
-            XPrinterRef xPrinter = xPrinterServer->createPrinter( aPrinterNames.getConstArray()[0] );
-            xPrinter->start( L"UNOPrinterTest", 1, TRUE );
-            XDeviceRef xDev = xPrinter->startPage();
-            XGraphicsRef xGraphics = xDev->createGraphics();
-            xGraphics->drawText( 200, 200, L"Printed with UNO"  );
-            xPrinter->endPage();
-            xPrinter->end();
-        }
-        InfoBox( this, aInfo ).Execute();
-*/
     }
     else if( rMEvt.GetClicks() == 1 )
     {
@@ -263,135 +234,6 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 
             xCont->addControl( L"", xButton1 );
 
-/*
-
-            // ListBox...
-            xModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.ListBox" );
-            xModel = (XInterface*)xModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-
-            xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
-            Sequence<UString> aSeq( 7 );
-            aSeq.getArray()[0] = L"Item1";
-            aSeq.getArray()[1] = L"Item2";
-            aSeq.getArray()[2] = L"Item3";
-            aSeq.getArray()[3] = L"Item4";
-            aSeq.getArray()[4] = L"Item5";
-            aSeq.getArray()[5] = L"Item6";
-            aSeq.getArray()[6] = L"Item7";
-            xPSet->setPropertyValue( L"StringItemList", UsrAny( &aSeq, Sequence<UString>::getReflection() ) );
-            xPSet->setPropertyValue( L"LineCount", UsrAny_UINT16( 4 ) );
-            xPSet->setPropertyValue( L"Dropdown", UsrAny( (BOOL)TRUE ) );
-
-            XServiceProviderRef xListBoxCtrlProv = xProv->queryServiceProvider( L"stardiv.vcl.control.ListBox" );
-            XControlRef xListBox1 = (XControl*)xListBoxCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
-            xListBox1->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
-            XWindowRef xListBoxCmp1 = (XWindow*)xListBox1->queryInterface( XWindow::getSmartUik() );
-            xListBoxCmp1->setPosSize( 20, 250, 200, 20, PosSize_POSSIZE );
-            xCont->addControl( L"", xListBox1 );
-
-            // FixedText...
-            xModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.FixedText" );
-            xModel = (XInterface*)xModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-            DBG_ASSERT( xModel, "No Model!" );
-
-            xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
-            xPSet->setPropertyValue( L"Label", UsrAny( L"Label:" ) );
-             xPSet->setPropertyValue( L"BackgroundColor", UsrAny( (UINT32)0x00888888) );
-
-            Font_Attribs aFontAttrs;
-            aFontAttrs.Italic = ITALIC_NORMAL;
-            xPSet->setPropertyValue( L"Font_Attribs", UsrAny( &aFontAttrs, Font_Attribs_getReflection() ) );
-
-            XPropertyStateRef xState = (XPropertyState*)xPSet->queryInterface( XPropertyState::getSmartUik() );
-            xState->getPropertyState( L"Font_Attribs" );
-            xState->getPropertyState( L"Font_Size" );
-
-            XServiceProviderRef xFixedTextCtrlProv = xProv->queryServiceProvider( L"stardiv.vcl.control.FixedText" );
-            XControlRef xFixedText1 = (XControl*)xFixedTextCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
-            DBG_ASSERT( xFixedText1, "No FixedText!" );
-            xFixedText1->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
-            XWindowRef xFixedTextCmp1 = (XWindow*)xFixedText1->queryInterface( XWindow::getSmartUik() );
-            xFixedTextCmp1->setPosSize( 20, 20, 120, 20, PosSize_POSSIZE );
-            xCont->addControl( L"", xFixedText1 );
-
-            // TabTest...
-            xModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.GroupBox" );
-            xModel = (XInterface*)xModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-            xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
-            xPSet->setPropertyValue( L"Label", UsrAny( L"Radio-Test:" ) );
-            XServiceProviderRef xGroupBoxCtrlProv = xProv->queryServiceProvider( L"stardiv.vcl.control.GroupBox" );
-            XControlRef xGroupBox1 = (XControl*)xGroupBoxCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
-            xGroupBox1->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
-            XWindowRef xGroupBoxCmp1 = (XWindow*)xGroupBox1->queryInterface( XWindow::getSmartUik() );
-            xGroupBoxCmp1->setPosSize( 30, 410, 100, 130, PosSize_POSSIZE );
-            xCont->addControl( L"", xGroupBox1 );
-
-            XServiceProviderRef xRadioButtonModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.RadioButton" );
-            XServiceProviderRef xRadioButtonCtrlProv = xProv->queryServiceProvider( L"stardiv.vcl.control.RadioButton" );
-
-            xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-            XControlRef xT1 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
-            xT1->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
-            XWindowRef xTC1 = (XWindow*)xT1->queryInterface( XWindow::getSmartUik() );
-            xTC1->setPosSize( 40, 430, 80, 20, PosSize_POSSIZE );
-            xCont->addControl( L"", xT1 );
-            xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
-            xPSet->setPropertyValue( L"Label", UsrAny( L"Radio1" ) );
-            xPSet->setPropertyValue( L"State", UsrAny_UINT16( 1 ) );
-
-            xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-            XControlRef xT2 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
-            xT2->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
-            XWindowRef xTC2 = (XWindow*)xT2->queryInterface( XWindow::getSmartUik() );
-            xTC2->setPosSize( 40, 470, 80, 20, PosSize_POSSIZE );
-            xCont->addControl( L"", xT2 );
-            xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
-            xPSet->setPropertyValue( L"Label", UsrAny( L"Radio2" ) );
-
-            xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-            XControlRef xT3 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
-            xT3->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
-            XWindowRef xTC3 = (XWindow*)xT3->queryInterface( XWindow::getSmartUik() );
-            xTC3->setPosSize( 40, 510, 80, 20, PosSize_POSSIZE );
-            xCont->addControl( L"", xT3 );
-            xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
-            xPSet->setPropertyValue( L"Label", UsrAny( L"Radio3" ) );
-
-            xModel = (XInterface*)xRadioButtonModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-            XControlRef xT4 = (XControl*)xRadioButtonCtrlProv->createInstance()->queryInterface( XControl::getSmartUik() );
-            xT4->setModel( (XControlModel*)xModel->queryInterface( XControlModel::getSmartUik() ) );
-            XWindowRef xTC4 = (XWindow*)xT4->queryInterface( XWindow::getSmartUik() );
-            xTC4->setPosSize( 40, 550, 80, 20, PosSize_POSSIZE );
-            xCont->addControl( L"", xT4 );
-            xPSet = (XPropertySet*)xModel->queryInterface( XPropertySet::getSmartUik() );
-            xPSet->setPropertyValue( L"Label", UsrAny( L"Radio4 - no" ) );
-            xPSet->setPropertyValue( L"Tabstop", UsrAny( (BOOL)TRUE ) );
-
-            // TabController:
-            xModelProv = xProv->queryServiceProvider( L"stardiv.vcl.controlmodel.TabController" );
-            xModel = (XInterface*)xModelProv->createInstance()->queryInterface( XInterface::getSmartUik() );
-            XTabControllerModelRef xTCModel = (XTabControllerModel*)xModel->queryInterface( XTabControllerModel::getSmartUik() );
-
-            XServiceProviderRef xTCProv = xProv->queryServiceProvider( L"stardiv.vcl.control.TabController" );
-            XTabControllerRef xTC = (XTabController*)xTCProv->createInstance()->queryInterface( XTabController::getSmartUik() );
-            xTC->setModel( (XTabControllerModel*)xModel->queryInterface( XTabControllerModel::getSmartUik() ) );
-            XUnoControlContainerRef xUCC = (XUnoControlContainer*)xCont->queryInterface( XUnoControlContainer::getSmartUik() );
-            xUCC->addTabController( xTC );
-
-            Sequence<XControlModelRef> aControls( 5 );
-            aControls.getArray()[0] = xGroupBox1->getModel();
-            aControls.getArray()[1] = xT1->getModel();
-            aControls.getArray()[2] = xT3->getModel();
-            aControls.getArray()[3] = xT2->getModel();
-            aControls.getArray()[4] = xT4->getModel();
-            xTCModel->setControls( aControls );
-
-            Sequence<XControlModelRef> aGroup( 3 );
-            aGroup.getArray()[0] = xT1->getModel();
-            aGroup.getArray()[1] = xT3->getModel();
-            aGroup.getArray()[2] = xT2->getModel();
-            xTCModel->setGroup( aGroup, L"test" );
-*/
             // Container anzeigen...
             // Als Child zu diesem Fenster
             xContControl->createPeer( XToolkitRef(), GetComponentInterface( TRUE ) );
@@ -401,26 +243,6 @@ void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
             XViewRef xV ( xDrawCtrl, USR_QUERY );
             xV->setGraphics( xG );
 
-//      ((UnoControl*)(XControl*)xNumField))->updateFromModel();
-
-/*
-            // TEST:
-            WindowDecriptor aDescr;
-            aDescr.ComponentServiceName = "window";
-            aDescr.Type = VCLCOMPONENTTYPE_CONTAINER;
-            aDescr.Parent = GetComponentInterface( TRUE );
-            aDescr.WindowAttributes = WA_SHOW|WA_BORDER;
-            aDescr.Bounds = Rectangle( Point( 500, 50 ), Size( 300, 200 ) );
-            XVclWindowPeerRef xSPWin = xToolkit->createComponent( aDescr );
-
-            WindowDecriptor aDescr2;
-            aDescr2.ComponentServiceName = "scrollbar";
-            aDescr2.Type = VCLCOMPONENTTYPE_SIMPLE;
-            aDescr2.Parent = xSPWin;
-            aDescr2.WindowAttributes = WA_SHOW|WA_BORDER|WA_VSCROLL;
-            aDescr2.Bounds = Rectangle( Point( 250, 0 ), Size( 50, 200 ) );
-            XVclWindowPeerRef xSB = xToolkit->createComponent( aDescr2 );
-*/
         }
         return;
     }
@@ -447,3 +269,4 @@ void MyWin::Paint( const Rectangle& r )
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

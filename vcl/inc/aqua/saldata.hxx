@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 #include <cstdio>
 #include <cstdarg>
@@ -70,10 +71,10 @@ class SystemFontList;
 // -----------
 
 class AquaSalFrame;
-struct FrameHash : public std::hash<sal_IntPtr>
+struct FrameHash : public boost::hash<sal_IntPtr>
 {
     size_t operator()(const AquaSalFrame* frame) const
-    { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
+    { return boost::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
 #define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef
@@ -84,7 +85,7 @@ struct SalData
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
     std::list<AquaSalFrame*>                      maFrames;         // list of all frames
-    std::hash_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
+    boost::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
     std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
@@ -137,3 +138,5 @@ void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 
 #endif  // _SV_SALDATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

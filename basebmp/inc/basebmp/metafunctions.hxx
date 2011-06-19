@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,8 @@
 #include <boost/mpl/integral_c.hpp>
 #include <vigra/metaprogramming.hxx>
 #include <vigra/numerictraits.hxx>
+
+#include <functional>
 
 namespace basebmp
 {
@@ -216,7 +219,17 @@ template< typename T > inline T shiftRight( T v, int shift )
     return shift > 0 ? v >> shift : v << (-shift);
 }
 
+//--------------------------------------------------------------
+
+/// Replace non-std project2nd from SGI extensions
+template< typename T1, typename T2 >
+struct project2nd : public std::binary_function<T1, T2, T2>
+{
+    T2 operator() (const T1&, const T2& v) const { return v; }
+};
 
 } // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_METAFUNCTIONS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

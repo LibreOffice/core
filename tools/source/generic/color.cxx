@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,16 +30,13 @@
 #include "precompiled_tools.hxx"
 
 #include <stdlib.h>
-#include <vos/macros.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 // -----------
 // - Inlines -
@@ -90,18 +88,18 @@ sal_uInt8 Color::GetColorError( const Color& rCompareColor ) const
 
 void Color::IncreaseLuminance( sal_uInt8 cLumInc )
 {
-    SetRed( (sal_uInt8) VOS_BOUND( (long) COLORDATA_RED( mnColor ) + cLumInc, 0L, 255L ) );
-    SetGreen( (sal_uInt8) VOS_BOUND( (long) COLORDATA_GREEN( mnColor ) + cLumInc, 0L, 255L ) );
-    SetBlue( (sal_uInt8) VOS_BOUND( (long) COLORDATA_BLUE( mnColor ) + cLumInc, 0L, 255L ) );
+    SetRed( (sal_uInt8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) + cLumInc, 0L, 255L ) );
+    SetGreen( (sal_uInt8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) + cLumInc, 0L, 255L ) );
+    SetBlue( (sal_uInt8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) + cLumInc, 0L, 255L ) );
 }
 
 // -----------------------------------------------------------------------
 
 void Color::DecreaseLuminance( sal_uInt8 cLumDec )
 {
-    SetRed( (sal_uInt8) VOS_BOUND( (long) COLORDATA_RED( mnColor ) - cLumDec, 0L, 255L ) );
-    SetGreen( (sal_uInt8) VOS_BOUND( (long) COLORDATA_GREEN( mnColor ) - cLumDec, 0L, 255L ) );
-    SetBlue( (sal_uInt8) VOS_BOUND( (long) COLORDATA_BLUE( mnColor ) - cLumDec, 0L, 255L ) );
+    SetRed( (sal_uInt8) SAL_BOUND( (long) COLORDATA_RED( mnColor ) - cLumDec, 0L, 255L ) );
+    SetGreen( (sal_uInt8) SAL_BOUND( (long) COLORDATA_GREEN( mnColor ) - cLumDec, 0L, 255L ) );
+    SetBlue( (sal_uInt8) SAL_BOUND( (long) COLORDATA_BLUE( mnColor ) - cLumDec, 0L, 255L ) );
 }
 
 // -----------------------------------------------------------------------
@@ -113,9 +111,9 @@ void Color::IncreaseContrast( sal_uInt8 cContInc )
         const double fM = 128.0 / ( 128.0 - 0.4985 * cContInc );
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( (sal_uInt8) VOS_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetGreen( (sal_uInt8) VOS_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetBlue( (sal_uInt8) VOS_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetRed( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetGreen( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetBlue( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
     }
 }
 
@@ -128,9 +126,9 @@ void Color::DecreaseContrast( sal_uInt8 cContDec )
         const double fM = ( 128.0 - 0.4985 * cContDec ) / 128.0;
         const double fOff = 128.0 - fM * 128.0;
 
-        SetRed( (sal_uInt8) VOS_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetGreen( (sal_uInt8) VOS_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
-        SetBlue( (sal_uInt8) VOS_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetRed( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_RED( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetGreen( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_GREEN( mnColor ) * fM + fOff ), 0L, 255L ) );
+        SetBlue( (sal_uInt8) SAL_BOUND( _FRound( COLORDATA_BLUE( mnColor ) * fM + fOff ), 0L, 255L ) );
     }
 }
 
@@ -259,6 +257,53 @@ ColorData Color::HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri )
     }
 
     return RGB_COLORDATA( cR, cG, cB );
+}
+
+// -----------------------------------------------------------------------
+
+// CMYK values from 0 to 1
+ColorData Color::CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKey )
+{
+    fCyan = (fCyan * ( 1.0 - fKey )) + fKey;
+    fMagenta = (fMagenta * ( 1.0 - fKey )) + fKey;
+    fYellow = (fYellow * ( 1.0 - fKey )) + fKey;
+
+    sal_uInt8 nRed = static_cast< sal_uInt8 >( std::max( std::min( ( 1.0 - fCyan ) * 255.0, 255.0), 0.0 ) );
+    sal_uInt8 nGreen = static_cast< sal_uInt8 >( std::max( std::min( ( 1.0 - fMagenta ) * 255.0, 255.0), 0.0 ) );
+    sal_uInt8 nBlue = static_cast< sal_uInt8 >( std::max( std::min( ( 1.0 - fYellow ) * 255.0, 255.0), 0.0 ) );
+
+    return RGB_COLORDATA( nRed, nGreen, nBlue );
+}
+
+// -----------------------------------------------------------------------
+
+// RGB values from 0 to 255
+// CMY results from 0 to 1
+void Color::RGBtoCMYK( double& fCyan, double& fMagenta, double& fYellow, double& fKey )
+{
+    fCyan = 1 - ( GetRed() / 255.0 );
+    fMagenta = 1 - ( GetGreen() / 255.0 );
+    fYellow = 1 - ( GetBlue() / 255.0 );
+
+    //CMYK and CMY values from 0 to 1
+    fKey = 1.0;
+    if( fCyan < fKey ) fKey = fCyan;
+    if( fMagenta < fKey ) fKey = fMagenta;
+    if( fYellow < fKey ) fKey = fYellow;
+
+    if ( fKey == 1.0 )
+    {
+       //Black
+       fCyan = 0.0;
+       fMagenta = 0.0;
+       fYellow = 0.0;
+    }
+    else
+    {
+       fCyan = ( fCyan - fKey ) / ( 1.0 - fKey );
+       fMagenta = ( fMagenta - fKey ) / ( 1.0 - fKey );
+       fYellow = ( fYellow - fKey ) / ( 1.0 - fKey );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -508,3 +553,5 @@ SvStream& operator<<( SvStream& rOStream, const Color& rColor )
 
     return rOStream;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

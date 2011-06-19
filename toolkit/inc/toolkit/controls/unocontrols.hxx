@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,6 @@
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
 #define UNO_NAME_GRAPHOBJ_URLPKGPREFIX                  "vnd.sun.star.Package:"
-
 
 //  ----------------------------------------------------
 //  class UnoControlEditModel
@@ -1517,3 +1517,4 @@ public:
 
 #endif // _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

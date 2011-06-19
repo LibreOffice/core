@@ -196,18 +196,18 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
                     uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
                     uno::Reference< graphic::XGraphicProvider > xGraphicProvider( ImplGetSVData()->maAppData.mxMSF->createInstance(
-                        OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ), UNO_QUERY );
                     if ( xGraphicProvider.is() )
                     {
                         uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
                         uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
-                        rtl::OUString aMimeType( ::rtl::OUString::createFromAscii( "image/jpeg" ) );
+                        rtl::OUString aMimeType(RTL_CONSTASCII_USTRINGPARAM("image/jpeg"));
                         uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
-                        aOutMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                        aOutMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutputStream"));
                         aOutMediaProperties[0].Value <<= xOut;
-                        aOutMediaProperties[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
+                        aOutMediaProperties[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MimeType"));
                         aOutMediaProperties[1].Value <<= aMimeType;
-                        aOutMediaProperties[2].Name = ::rtl::OUString::createFromAscii( "FilterData" );
+                        aOutMediaProperties[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterData"));
                         aOutMediaProperties[2].Value <<= aFilterData;
                         xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
                         xOut->flush();
@@ -221,13 +221,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
 
                             xSeekable->seek( 0 );
                             Sequence< PropertyValue > aArgs( 1 );
-                            aArgs[ 0 ].Name = ::rtl::OUString::createFromAscii( "InputStream" );
+                            aArgs[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
                             aArgs[ 0 ].Value <<= xStream;
                             uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
                             if ( xPropSet.is() )
                             {
                                 sal_Int16 nBitsPerPixel = 24;
-                                if ( xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "BitsPerPixel" ) ) >>= nBitsPerPixel )
+                                if ( xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BitsPerPixel")) ) >>= nBitsPerPixel )
                                 {
                                     bTrueColorJPG = nBitsPerPixel != 8;
                                 }
@@ -268,7 +268,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
     }
     GDIMetaFile aMtf( i_rMtf );
 
-    for( sal_uInt32 i = 0, nCount = aMtf.GetActionCount(); i < nCount; )
+    for( sal_uInt32 i = 0, nCount = aMtf.GetActionSize(); i < (sal_uInt32)nCount; )
     {
         if ( !i_pOutDevData || !i_pOutDevData->PlaySyncPageAct( m_rOuterFace, i ) )
         {
@@ -834,7 +834,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( META_MASKSCALE_ACTION ):
                 case( META_MASKSCALEPART_ACTION ):
                 {
-                    DBG_ERROR( "MetaMask...Action not supported yet" );
+                    OSL_TRACE( "MetaMask...Action not supported yet" );
                 }
                 break;
 
@@ -1066,7 +1066,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     if( !bAssertionFired )
                     {
                         bAssertionFired = true;
-                        DBG_ERROR( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
+                        OSL_TRACE( "PDFExport::ImplWriteActions: deprecated and unsupported MetaAction encountered" );
                     }
                 break;
             }

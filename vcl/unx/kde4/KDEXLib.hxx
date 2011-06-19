@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,21 +30,65 @@
 
 #include <unx/saldisp.hxx>
 
-class KDEXLib : public SalXLib
+#include <fixx11h.h>
+
+#include <qhash.h>
+#include <qsocketnotifier.h>
+#include <qtimer.h>
+
+class VCLKDEApplication;
+
+class KDEXLib : public QObject, public SalXLib
 {
+    Q_OBJECT
     private:
         bool m_bStartupDone;
-        void* m_pApplication;
+        VCLKDEApplication* m_pApplication;
         char** m_pFreeCmdLineArgs;
         char** m_pAppCmdLineArgs;
         int m_nFakeCmdLineArgs;
+        struct SocketData
+            {
+            void* data;
+            YieldFunc pending;
+            YieldFunc queued;
+            YieldFunc handle;
+            QSocketNotifier* notifier;
+            };
+        QHash< int, SocketData > socketData; // key is fd
+        QTimer timeoutTimer;
+        QTimer userEventTimer;
+        enum { LibreOfficeEventLoop, GlibEventLoop, QtUnixEventLoop } eventLoopType;
+
+    private:
+        void setupEventLoop();
+
+    private slots:
+        void socketNotifierActivated( int fd );
+        void timeoutActivated();
+        void userEventActivated();
+        void startTimeoutTimer();
+        void startUserEventTimer();
+        bool processYield( bool bWait, bool bHandleAllCurrentEvents );
+    signals:
+        void startTimeoutTimerSignal();
+        void startUserEventTimerSignal();
+        void processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
 
     public:
         KDEXLib();
-
         virtual ~KDEXLib();
+
         virtual void Init();
+        virtual void Yield( bool bWait, bool bHandleAllCurrentEvents );
+        virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle );
+        virtual void Remove( int fd );
+        virtual void StartTimer( sal_uLong nMS );
+        virtual void StopTimer();
+        virtual void Wakeup();
+        virtual void PostUserEvent();
 
         void doStartup();
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

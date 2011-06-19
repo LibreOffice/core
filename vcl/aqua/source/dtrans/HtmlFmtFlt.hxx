@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef INCLUDED_HTMLFMTFLT_HXX
 #define INCLUDED_HTMLFMTFLT_HXX
 
@@ -18,3 +19,5 @@ com::sun::star::uno::Sequence<sal_Int8> HTMLFormatToTextHtml(const com::sun::sta
 bool isHTMLFormat (const com::sun::star::uno::Sequence<sal_Int8>& aHtmlSequence);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

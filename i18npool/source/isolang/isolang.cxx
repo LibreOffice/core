@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -384,7 +385,9 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH" },
 //  { LANGUAGE_IBIBIO_NIGERIA,             "nic", "NG" },   // ISO "nic" is only a collective language code
     { LANGUAGE_YI,                          "ii", "CN" },
-//  { LANGUAGE_TAMAZIGHT_LATIN,            "ber", ""   },   // ISO "ber" only collective!
+    { LANGUAGE_TAMAZIGHT_LATIN,            "kab", "DZ" },   // In practice Kabyle is the language used for this
+    { LANGUAGE_TAMAZIGHT_LATIN,            "ber", "DZ" },   // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
+    { LANGUAGE_TAMAZIGHT_TIFINAGH,         "ber", "MA" },   // Morocco is officially using Tifinagh for its Berber languages so store it to distinguish explicitly from LANGUAGE_TAMAZIGHT_LATIN, even though as a collective language its not of much use
 //  { LANGUAGE_TAMAZIGHT_ARABIC,           "ber", ""   },   // ISO "ber" only collective!
     { LANGUAGE_LATIN,                       "la", "VA" },
     { LANGUAGE_OBSOLETE_USER_LATIN,         "la", "VA" },
@@ -457,6 +460,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_BUSHI,                 "buc", "YT" },
     { LANGUAGE_USER_TAHITIAN,               "ty", "PF" },
     { LANGUAGE_USER_MALAGASY_PLATEAU,      "plt", "MG" },
+    { LANGUAGE_USER_MALAGASY_PLATEAU,       "mg", "MG" },
     { LANGUAGE_USER_BAFIA,                 "ksf", "CM" },
     { LANGUAGE_USER_GIKUYU,                 "ki", "KE" },
     { LANGUAGE_USER_RUSYN_UKRAINE,         "rue", "UA" },
@@ -466,6 +470,17 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_KABYLE,                "kab", "DZ" },
     { LANGUAGE_USER_HAITIAN,                "ht", "HT" },
     { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
+    { LANGUAGE_USER_BEEMBE,                "beq", "CG" },
+    { LANGUAGE_USER_BEKWEL,                "bkw", "CG" },
+    { LANGUAGE_USER_KITUBA,                "mkw", "CG" },
+    { LANGUAGE_USER_LARI,                  "ldi", "CG" },
+    { LANGUAGE_USER_MBOCHI,                "mdw", "CG" },
+    { LANGUAGE_USER_TEKE_EBOO,             "ebo", "CG" },
+    { LANGUAGE_USER_TEKE_IBALI,            "tek", "CG" },
+    { LANGUAGE_USER_TEKE_TYEE,             "tyx", "CG" },
+    { LANGUAGE_USER_VILI,                  "vif", "CG" },
+    { LANGUAGE_USER_PORTUGUESE_ANGOLA,      "pt", "AO" },
+    { LANGUAGE_USER_MANX,                   "gv", "GB" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
@@ -893,7 +908,7 @@ LanguageType MsLangId::convertIsoNamesToLanguage( const rtl::OUString& rLang,
     while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
 
     // some eng countries should be mapped to a specific english language
-    if ( aLowerLang.equalsAscii( "en" ) )
+    if ( aLowerLang.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "en" ) ) )
     {
         const IsoLangEngEntry* pEngEntry = aImplIsoLangEngEntries;
         do
@@ -1110,3 +1125,5 @@ const MsLangId::IsoLangEntry* MsLangId::getIsoLangEntry( size_t nIndex )
         return &aImplIsoLangEntries[ nIndex];
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

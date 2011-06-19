@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@ sal_Bool SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevic
     //        2 = the converted character does not look like the original but got the same meaning
     //        3 = the destination does not match looking and meaning of the original
 
-    static sal_uInt16 __READONLY_DATA aWingdingsToStarBatsTable[ 256 - 32 ] =
+    static sal_uInt16 const aWingdingsToStarBatsTable[ 256 - 32 ] =
     {
         0x0020, 0x0238, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0174, 0x02BA, 0x017B, 0x017C, 0x037C, 0x037C, 0x037C, 0x037C,
         0x0000, 0x0000, 0x0372, 0x0272, 0x0372, 0x0000, 0x0000, 0x0374, 0x0279, 0x0000, 0x027A, 0x0000, 0x0178, 0x0278, 0x0000, 0x0137,
@@ -55,7 +56,7 @@ sal_Bool SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevic
         0x01AF, 0x01B2, 0x01B0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0150, 0x0032, 0x0033, 0x0034, 0x01C8
     };
 
-    static sal_uInt16 __READONLY_DATA aMonotypeSortsToStarBatsTable[ 256 - 32 ]=
+    static sal_uInt16 const aMonotypeSortsToStarBatsTable[ 256 - 32 ]=
     {
         0x0020, 0x00cb, 0x00cb, 0x00cb, 0x00cb, 0x0074, 0x00ba, 0x0021, 0x00cc, 0x007b, 0x0036, 0x007d, 0x007e, 0x0037, 0x0038, 0x0038,
         0x0039, 0x0038, 0x0038, 0x0039, 0x003a, 0x004f, 0x0050, 0x004f, 0x0050, 0x0051, 0x0052, 0x0053, 0x0054, 0x0086, 0x0086, 0x0086,
@@ -101,3 +102,5 @@ sal_Bool SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevic
     }
     else return sal_False;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

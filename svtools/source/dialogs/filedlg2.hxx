@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,9 @@
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
-#ifndef _SV_BUTTON_HXX //autogen wg. PushButton
 #include <vcl/button.hxx>
-#endif
 #include <vcl/unohelp.hxx>
+#include <vector>
 
 class FixedText;
 class Edit;
@@ -57,7 +57,7 @@ struct ImpFilterItem
     }
 };
 
-DECLARE_LIST( ImpFilterList, ImpFilterItem* )
+typedef ::std::vector< ImpFilterItem* > ImpFilterList;
 #include <vcl/lstbox.hxx>
 
 class KbdListBox : public ListBox
@@ -96,10 +96,6 @@ private:
     DirEntry            aPath;          // aktuell angewaehlter Pfad
     sal_uInt16              nDirCount;      // Anzahl der Verzeichnis-
                                         // Verschachtelungen
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
-                        xCollator;
-
 protected:
 
     virtual void        UpdateEntries( const sal_Bool bWithDirs );
@@ -168,9 +164,9 @@ public:
     void                SetCurFilter( const String& rFilter );
     String              GetCurFilter() const;
 
-    sal_uInt16              GetFilterCount() const  { return (sal_uInt16)aFilterList.Count(); }
-    inline String       GetFilterName( sal_uInt16 nPos ) const;
-    inline String       GetFilterType( sal_uInt16 nPos ) const;
+    size_t              GetFilterCount() const  { return aFilterList.size(); }
+    inline String       GetFilterName( size_t nPos ) const;
+    inline String       GetFilterType( size_t nPos ) const;
 
     virtual void        SetPath( const String& rPath );
     virtual void        SetPath( const Edit& rEdit );
@@ -181,21 +177,21 @@ public:
     FileDialog*     GetFileDialog() const { return (FileDialog*)GetPathDialog(); }
 };
 
-inline String ImpFileDialog::GetFilterName( sal_uInt16 nPos ) const
+inline String ImpFileDialog::GetFilterName( size_t nPos ) const
 {
     String aName;
-    ImpFilterItem* pItem = aFilterList.GetObject( nPos );
-    if ( pItem )
-        aName = pItem->aName;
+    if ( nPos < aFilterList.size() ) {
+        aName = aFilterList[ nPos ]->aName;
+    }
     return aName;
 }
 
-inline String ImpFileDialog::GetFilterType( sal_uInt16 nPos ) const
+inline String ImpFileDialog::GetFilterType( size_t nPos ) const
 {
     String aFilterMask;
-    ImpFilterItem* pItem = aFilterList.GetObject( nPos );
-    if ( pItem )
-        aFilterMask = pItem->aMask;
+    if ( nPos < aFilterList.size() ) {
+        aFilterMask = aFilterList[ nPos ]->aMask;
+    }
     return aFilterMask;
 }
 
@@ -217,3 +213,5 @@ public:
 };
 
 #endif // _FILEDLG2_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

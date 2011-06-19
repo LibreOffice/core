@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include "tools/gen.hxx"
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace psp {
 
@@ -55,9 +56,9 @@ private:
     rtl_TextEncoding    mnBaseEncoding;
     bool                mbUseFontEncoding;
 
-    typedef std::hash_map< sal_Unicode, sal_uInt8 > char_map_t;
+    typedef boost::unordered_map< sal_Unicode, sal_uInt8 > char_map_t;
     typedef std::list< char_map_t > char_list_t;
-    typedef std::hash_map< sal_uInt32, sal_uInt8 > glyph_map_t;
+    typedef boost::unordered_map< sal_uInt32, sal_uInt8 > glyph_map_t;
     typedef std::list< glyph_map_t > glyph_list_t;
 
     char_list_t     maCharList;
@@ -133,3 +134,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -202,7 +203,7 @@ public:
     virtual sal_Bool                HasRowHeader() const; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
     virtual sal_Bool                IsCellFocusable() const;
-    virtual sal_Bool                GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual sal_Bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
 
     virtual void                    SetNoSelection();
     using SvListView::SelectAll;
@@ -266,3 +267,4 @@ public:
 #endif // #ifndef _SVTABBX_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,14 +64,15 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
     if ( bInExecute ) {
         rtl::OUString sDirName = aDirectory.getDirectoryName();
 
-        static rtl::OUString WCARD1 ( rtl::OUString::createFromAscii( "unxlng" ) );
-        static rtl::OUString WCARD2 ( rtl::OUString::createFromAscii( "unxsol" ) );
-        static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsc" ) );
-        static rtl::OUString WCARD4 ( rtl::OUString::createFromAscii( "common" ) );
-        static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "unxmac" ) );
-        static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxubt" ) );
-        static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( ".svn" ) );
-        static rtl::OUString WCARD8 ( rtl::OUString::createFromAscii( ".hg" ) );
+        static rtl::OUString WCARD1 ( RTL_CONSTASCII_USTRINGPARAM("unxlng") );
+        static rtl::OUString WCARD2 ( RTL_CONSTASCII_USTRINGPARAM("unxsol") );
+        static rtl::OUString WCARD3 ( RTL_CONSTASCII_USTRINGPARAM("wntmsc") );
+        static rtl::OUString WCARD4 ( RTL_CONSTASCII_USTRINGPARAM("common") );
+        static rtl::OUString WCARD5 ( RTL_CONSTASCII_USTRINGPARAM("unxmac") );
+        static rtl::OUString WCARD6 ( RTL_CONSTASCII_USTRINGPARAM("unxubt") );
+        static rtl::OUString WCARD7 ( RTL_CONSTASCII_USTRINGPARAM(".git") );
+        static rtl::OUString WCARD8 ( RTL_CONSTASCII_USTRINGPARAM("clone") );
+        static rtl::OUString WCARD9 ( RTL_CONSTASCII_USTRINGPARAM("install") );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
@@ -80,7 +82,10 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
             sDirName.indexOf( WCARD7 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD8 , 0 ) > -1
+#ifndef WNT
+            sDirName.indexOf( WCARD8 , 0 ) > -1 ||
+#endif
+            sDirName.indexOf( WCARD9 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
@@ -138,3 +143,5 @@ void SourceTreeIterator::OnExecuteDirectory( const rtl::OUString &rDirectory )
 {
     fprintf( stdout, "%s\n", rtl::OUStringToOString( rDirectory, RTL_TEXTENCODING_UTF8, rDirectory.getLength() ).getStr() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

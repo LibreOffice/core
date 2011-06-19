@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-
-#ifndef GCC
-#endif
-
-//------------------------------------------------------------------
-
-//#include "Svitems.hxx"
-
 #include "property.hxx"
-/*
-#include "property.hrc"
-#include "Scresid.hxx"
-*/
+
 #define FRAME_OFFSET 4
 
 
@@ -1416,145 +1406,4 @@ void SvBasicPropertyDataControl::SetIsCorrect(sal_Bool nFlag)
     bCorrectness=nFlag;
 }
 
-
-
-//========================================================================
-// Property-Dialog:
-/* zum TESTEN im CALC*/
-//========================================================================
-/*
-ScPropertyDlg::ScPropertyDlg( Window* pParent) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_PROPERTIES) ),
-    aPropListBox    ( this, ResId( CTR_PROPLINE) ),
-    aKindOfListBox  (this,ResId( LB_KIND_OF_PROP)),
-    aModAnswer      (this,ResId(FT_ANSMOD   )),
-    aClickAnswer    (this,ResId(FT_ANSCLICK )),
-    aCommitAnswer   (this,ResId(FT_ANSCOMMIT)),
-    aSelectAnswer   (this,ResId(FT_ANSSELECT)),
-    anOk(this,ResId( BTN_OK)),
-    aCancel(this,ResId( BTN_CANCEL))
-{
-    FreeResource();
-
-    aKindOfListBox.SelectEntryPos(0);
-    aKindOfListBox.SetSelectHdl(
-        LINK( this, ScPropertyDlg, ModifiedHdl ));
-    nCount=0;
-    nClickCount=0;
-
-    String aString("Don't know ");
-
-    aBaProDatCtr.SetModifyHdl (LINK( this, ScPropertyDlg, RowModifiedHdl ));
-    aBaProDatCtr.SetClickedHdl(LINK( this, ScPropertyDlg, ClickHdl       ));
-    aBaProDatCtr.SetCommitHdl (LINK( this, ScPropertyDlg, SelectHdl      ));
-    aBaProDatCtr.SetSelectHdl (LINK( this, ScPropertyDlg, CommitHdl      ));
-
-    aPropListBox.SetController(&aBaProDatCtr);
-
-    sal_uInt16 nPageId=aPropListBox.AppendPage("YabbaDabbaDo");
-    aPropListBox.SetPage(nPageId);
-    aProperty.eKind=KOC_EDIT;
-    aProperty.aName=aString;
-    aProperty.aName+=String((sal_uInt16)++nCount);
-    aProperty.aValue=sizeof ComboBox;
-    aProperty.bHasVisibleXButton=sal_False;
-    aProperty.bIsHyperLink=sal_False;
-    aProperty.bIsLocked=sal_False;
-    aProperty.pDataPtr=NULL;
-    aProperty.pControl=NULL;
-    aProperty.theValues.Insert(new String("1"),aProperty.theValues.Count());
-    aProperty.theValues.Insert(new String("2"),aProperty.theValues.Count());
-    aProperty.theValues.Insert(new String("3"),aProperty.theValues.Count());
-    aProperty.theValues.Insert(new String("4"),aProperty.theValues.Count());
-    aPropListBox.InsertEntry(aProperty);
-    aProperty.bHasVisibleXButton=sal_True;
-    aProperty.aName=aString;
-    aProperty.aName+=String((sal_uInt16)++nCount);
-    aProperty.aValue="42";
-    aProperty.eKind=KOC_LISTBOX;
-    aPropListBox.InsertEntry(aProperty);
-    aProperty.aName=aString;
-    aProperty.aName+=String((sal_uInt16)++nCount);
-    aProperty.eKind=KOC_COMBOBOX;
-    aProperty.bHasVisibleXButton=sal_False;
-    aPropListBox.InsertEntry(aProperty);
-}
-
-ScPropertyDlg::~ScPropertyDlg()
-{
-    delete aProperty.theValues[0];
-    delete aProperty.theValues[1];
-    delete aProperty.theValues[2];
-    delete aProperty.theValues[3];
-}
-
-IMPL_LINK( ScPropertyDlg, ModifiedHdl, ListBox*, pLB )
-{
-    if(pLB!=NULL)
-    {
-        String aString("Don't know ");
-        aProperty.aName=aString;
-        aProperty.aName+=String((sal_uInt16)++nCount);
-        if(nCount>20)
-        {
-            String aStr("Yabba ");
-            aStr+=aPropListBox.GetCurPage();
-            sal_uInt16 nPageId=aPropListBox.AppendPage(aStr);
-            aPropListBox.SetPage(nPageId);
-            nCount=0;
-        }
-
-        aProperty.eKind=(eKindOfControl)(aKindOfListBox.GetSelectEntryPos()+1);
-        aProperty.bHasVisibleXButton=sal_False;
-        if((nCount % 5)==0) aProperty.bHasVisibleXButton=sal_True;
-        aPropListBox.InsertEntry(aProperty);
-    }
-    return 0;
-}
-
-IMPL_LINK( ScPropertyDlg, RowModifiedHdl, SvBasicPropertyDataControl* ,pProCtr)
-{
-    if(pProCtr!=NULL)
-    {
-        aModAnswer.SetText(aBaProDatCtr.GetProperty());
-        aModAnswer.Invalidate();
-        aBaProDatCtr.SetIsCorrect(sal_True);
-    }
-    return 0;
-}
-
-IMPL_LINK( ScPropertyDlg, CommitHdl, SvBasicPropertyDataControl*,pProCtr)
-{
-    if(pProCtr!=NULL)
-    {
-        aCommitAnswer.SetText(aBaProDatCtr.GetProperty());
-        aCommitAnswer.Invalidate();
-        aBaProDatCtr.SetIsCorrect(sal_True);
-    }
-    return 0;
-}
-
-IMPL_LINK( ScPropertyDlg, ClickHdl, SvBasicPropertyDataControl*,pProCtr)
-{
-    if(pProCtr!=NULL)
-    {
-        aClickAnswer.SetText(aBaProDatCtr.GetName());
-        aClickAnswer.Invalidate();
-        aBaProDatCtr.SetIsCorrect(sal_True);
-    }
-    return 0;
-}
-
-IMPL_LINK( ScPropertyDlg, SelectHdl, SvBasicPropertyDataControl*,pProCtr)
-{
-    if(pProCtr!=NULL)
-    {
-        aSelectAnswer.SetText(aBaProDatCtr.GetName());
-        aSelectAnswer.Invalidate();
-        aBaProDatCtr.SetIsCorrect(sal_True);
-    }
-    return 0;
-}
-*/
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

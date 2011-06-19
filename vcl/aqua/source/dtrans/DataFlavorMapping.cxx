@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,11 +47,14 @@
 #include <postmac.h>
 
 using namespace ::com::sun::star::datatransfer;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace cppu;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 namespace // private
 {
@@ -738,3 +742,5 @@ NSArray* DataFlavorMapper::getAllSupportedPboardTypes() const
 
   return [array autorelease];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

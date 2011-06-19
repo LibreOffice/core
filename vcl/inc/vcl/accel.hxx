@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,6 @@ private:
     sal_Bool            mbIsCancel;
     sal_Bool*           mpDel;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE  void        ImplInit();
     SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );
     SAL_DLLPRIVATE  void        ImplDeleteData();
@@ -67,7 +67,6 @@ private:
                                      sal_Bool bEnable, Accelerator* pAutoAccel );
 
     SAL_DLLPRIVATE  ImplAccelEntry* ImplGetAccelData( const KeyCode& rKeyCode ) const;
-//#endif
 
 protected:
     SAL_DLLPRIVATE  void        ImplLoadRes( const ResId& rResId );
@@ -126,3 +125,5 @@ public:
 };
 
 #endif  // _SV_ACCEL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

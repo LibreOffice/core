@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,18 +32,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_H_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 #include <com/sun/star/embed/XStorage.hpp>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _TOOLS_ERRCODE_HXX
 #include <tools/errcode.hxx>
-#endif
+#include "sot/storinfo.hxx"
 #include "sot/sotdllapi.h"
 
 #define STORAGE_FAILIFTHERE     0x02
@@ -113,7 +109,6 @@ namespace ucbhelper
     class Content;
 }
 
-class  SvStorageInfoList;
 class  BaseStorage;
 class  UNOStorageHolder;
 class SOT_DLLPUBLIC SotStorage : virtual public SotObject
@@ -270,3 +265,5 @@ SO2_IMPL_REF(SotStorage)
 #define SvStorageStreamRef SotStorageStreamRef
 
 #endif // _SVSTOR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

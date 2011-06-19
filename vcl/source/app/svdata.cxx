@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,17 +31,16 @@
 
 #include <string.h>
 
-#include "rtl/instance.hxx"
+#include <boost/ptr_container/ptr_vector.hpp>
 
-#include "osl/process.h"
-#include "osl/file.hxx"
 
+#include <osl/file.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/process.h>
 #include "tools/debug.hxx"
 #include "tools/resary.hxx"
 
 #include "unotools/fontcfg.hxx"
-
-#include "vos/mutex.hxx"
 
 #include "cppuhelper/implbase1.hxx"
 
@@ -53,7 +53,6 @@
 #include "vcl/unohelp.hxx"
 #include "vcl/button.hxx" // for Button::GetStandardText
 #include "vcl/dockwin.hxx"  // for DockingManager
-
 #include "salinst.hxx"
 #include "salframe.hxx"
 #include "svdata.hxx"
@@ -81,7 +80,7 @@ namespace css = com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
-using namespace rtl;
+using ::rtl::OUString;
 
 // =======================================================================
 
@@ -130,7 +129,7 @@ void ImplInitSVData()
     {
         rtl::OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
-        if( aArg.equalsAscii( "-enableautomation" ) )
+        if( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-enableautomation" ) ) )
         {
             pImplSVData->mbIsTestTool = true;
             break;
@@ -331,7 +330,7 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
     throw (com::sun::star::uno::RuntimeException)
 {
     com::sun::star::uno::Any ret;
-    if( Name.equalsAscii( "java-vm.interaction-handler" ) )
+    if( Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "java-vm.interaction-handler" ) ) )
     {
         // Currently, for accessbility no interaction handler shall be offered.
         // There may be introduced later on a handler using native toolkits
@@ -392,14 +391,14 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
                         new AccessBridgeCurrentContext( com::sun::star::uno::getCurrentContext() ) );
 
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
                             arguments
                         );
                 }
                 else
                 {
                     pSVData->mxAccessBridge = xFactory->createInstanceWithArguments(
-                            OUString::createFromAscii( "com.sun.star.accessibility.AccessBridge" ),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessBridge")),
                             arguments
                         );
                 }
@@ -521,11 +520,11 @@ bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
             String aTitle;
             String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr));
 
-            if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
+            if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassNotFound")), 13) )
             {
                 aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, *pResMgr));
             }
-            else if( 0 == e.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
+            else if( 0 == e.Message.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NoSuchMethod")), 12) )
             {
                 aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, *pResMgr));
             }
@@ -599,3 +598,4 @@ void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadc
     AllSettings::LocaleSettingsChanged( nHint );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

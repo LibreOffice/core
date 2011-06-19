@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,10 +43,6 @@
 |*
 |*    RscFlag::RscFlag()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 RscFlag::RscFlag( Atom nId, sal_uInt32 nTypeId )
             : RscConst( nId, nTypeId )
@@ -57,8 +54,6 @@ RscFlag::RscFlag( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    Beschreibung      Die Groe�e der Instanzdaten richtet sich nach
 |*                      der Anzahl der Flags
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 sal_uInt32 RscFlag::Size()
@@ -70,10 +65,6 @@ sal_uInt32 RscFlag::Size()
 /*************************************************************************
 |*
 |*    RscFlag::SetNotConst()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
@@ -95,10 +86,6 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
 |*
 |*    RscFlag::SetConst()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*/ )
 {
@@ -119,10 +106,6 @@ ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, sal_Int32 /*nVal*
 |*
 |*    RscFlag::CreateBasic()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.01.92
-|*    Letzte Aenderung  MM 16.01.92
-|*
 *************************************************************************/
 RSCINST RscFlag::CreateBasic( RSCINST * pInst )
 {
@@ -141,10 +124,6 @@ RSCINST RscFlag::CreateBasic( RSCINST * pInst )
 /*************************************************************************
 |*
 |*    RscFlag::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 16.01.92
 |*
 *************************************************************************/
 RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnClass )
@@ -172,10 +151,6 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool bOwnCl
 /*************************************************************************
 |*
 |*    RscFlag::CreateClient()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 16.01.92
-|*    Letzte Aenderung  MM 16.01.92
 |*
 *************************************************************************/
 RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
@@ -209,10 +184,6 @@ RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
 |*
 |*    RscFlag::SetToDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
-|*
 *************************************************************************/
 void RscFlag::SetToDefault( const RSCINST & rInst )
 {
@@ -225,10 +196,6 @@ void RscFlag::SetToDefault( const RSCINST & rInst )
 /*************************************************************************
 |*
 |*    RscFlag::IsDlft()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.04.91
-|*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
 sal_Bool RscFlag::IsDefault( const RSCINST & rInst )
@@ -259,10 +226,6 @@ sal_Bool RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
 /*************************************************************************
 |*
 |*    RscFlag::IsValueDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
 sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
@@ -316,10 +279,6 @@ sal_Bool RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 |*
 |*    RscFlag::IsSet()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 10.04.91
-|*    Letzte Aenderung  MM 10.04.91
-|*
 *************************************************************************/
 sal_Bool RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
 {
@@ -339,10 +298,6 @@ sal_Bool RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
 /*************************************************************************
 |*
 |*    RscFlag::WriteSrc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -375,10 +330,6 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscFlag::WriteRc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
-|*
 *************************************************************************/
 ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                           RscTypCont *, sal_uInt32, sal_Bool )
@@ -405,10 +356,6 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 |*
 |*    RscClient::RscClient()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
-|*
 *************************************************************************/
 RscClient::RscClient( Atom nId, sal_uInt32 nTypeId, RscFlag * pClass,
                        Atom nConstantId )
@@ -422,10 +369,6 @@ RscClient::RscClient( Atom nId, sal_uInt32 nTypeId, RscFlag * pClass,
 |*
 |*    RscClient::GetClassType()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
-|*
 *************************************************************************/
 RSCCLASS_TYPE RscClient::GetClassType() const
 {
@@ -435,10 +378,6 @@ RSCCLASS_TYPE RscClient::GetClassType() const
 /*************************************************************************
 |*
 |*    RscClient::WriteSrc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 void RscClient::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -453,10 +392,6 @@ void RscClient::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscClient::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 RSCINST RscClient::Create( RSCINST * pInst, const RSCINST & rDflt,
@@ -488,3 +423,4 @@ RSCINST RscClient::Create( RSCINST * pInst, const RSCINST & rDflt,
     return( aTmpI );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

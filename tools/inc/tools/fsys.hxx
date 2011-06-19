@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,11 @@
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/wldcrd.hxx>
-#ifndef __ERRCODE_HXX
 #include <tools/errcode.hxx>
-#endif
 #include "tools/toolsdllapi.h"
 
 #include <cstdarg>
+#include <vector>
 
 #define FEAT_FSYS_DOUBLESPEED
 
@@ -46,12 +46,13 @@
 // --------------
 
 class DirEntry;
-class DirEntryList;
-class FSysSortList;
-class FileStatList;
+class FileStat;
 struct FileCopier_Impl;
 class SvFileStream;
 class BigInt;
+
+typedef ::std::vector< DirEntry* > DirEntryList;
+typedef ::std::vector< FileStat* > FileStatList;
 
 #define FSYS_BUFSIZE                1024
 #define FSYS_SHORTNAME_DELIMITER    '@'
@@ -95,6 +96,7 @@ typedef int FSysSort;
 #define FSYS_SORT_KIND              ((FSysSort) 256)
 #define FSYS_SORT_CREATOR           ((FSysSort) 512)
 #define FSYS_SORT_END               ((FSysSort)1024)
+typedef ::std::vector< FSysSort > FSysSortList;
 
 // DirEntryFlag
 enum DirEntryFlag
@@ -112,21 +114,10 @@ enum DirEntryFlag
 enum FSysPathStyle
 {
     FSYS_STYLE_HOST,
-    FSYS_STYLE_FAT,
-    FSYS_STYLE_MSDOS = FSYS_STYLE_FAT,
-    FSYS_STYLE_VFAT,
-    FSYS_STYLE_WIN95 = FSYS_STYLE_VFAT,
-    FSYS_STYLE_HPFS,
-    FSYS_STYLE_OS2 = FSYS_STYLE_HPFS,
     FSYS_STYLE_NTFS,
-    FSYS_STYLE_NWFS,
-    FSYS_STYLE_SYSV,
     FSYS_STYLE_BSD,
     FSYS_STYLE_UNX = FSYS_STYLE_BSD,
-    FSYS_STYLE_MAC,
     FSYS_STYLE_DETECT,
-    FSYS_STYLE_UNKNOWN,
-    FSYS_STYLE_URL
 };
 
 // FSysAction
@@ -221,10 +212,8 @@ public:
     Time            TimeAccessed() const { return aTimeAccessed; }
     sal_Bool            IsYounger( const FileStat& rIsOlder ) const;
 
-#define TF_FSYS_READONLY_FLAG
     static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
     static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
-    static sal_Bool     HasReadOnlyFlag();
 
     static ErrCode  QueryDiskSpace( const String &rPath,
                                     BigInt &rFreeBytes, BigInt &rTotalBytes );
@@ -259,8 +248,6 @@ private:
                                   DirEntryFlag aDirFlag,
                                   FSysPathStyle eStyle );
 
-//#if 0 // _SOLAR__PRIVATE
-
     friend class Dir;
     friend class FileStat;
     friend const char* ImpCheckDirEntry( const void* p );
@@ -271,11 +258,8 @@ private:
                                          FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
                                           FSysPathStyle eStyle );
-    TOOLS_DLLPRIVATE sal_uInt16             ImpTryUrl( DirEntryStack& rStack, const String& rPfad, FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
-    TOOLS_DLLPRIVATE DirEntry*          ImpGetPreTopPtr();
-    TOOLS_DLLPRIVATE sal_Bool               ImpToRel( String aStart );
 
 protected:
     void                ImpTrim( FSysPathStyle eStyle );
@@ -288,8 +272,6 @@ protected:
     void                ImpSetStat( FileStat *p ) { pStat = p; }
 #endif
 
-//#endif
-
 protected:
     void                SetError( sal_uIntPtr nErr ) { nError = nErr; }
     DirEntry*           GetParent() { return pParent; }
@@ -301,9 +283,6 @@ public:
                         DirEntry( const String& rInitName,
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         ~DirEntry();
-
-    sal_Bool                IsLongNameOnFAT() const;
-    sal_Bool                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
 
     sal_uIntPtr             GetError() const { return nError; }
     sal_Bool                IsValid() const;
@@ -335,9 +314,6 @@ public:
     bool                IsAbs() const;
     sal_Bool                ToAbs();
     sal_Bool                Find( const String& rPfad, char cDelim = 0 );
-    sal_Bool                ToRel();
-    sal_Bool                ToRel( const DirEntry& rRefDir );
-    sal_uInt16              CutRelParents();
 
     sal_Bool                SetCWD( sal_Bool bSloppy = sal_False ) const;
     sal_Bool                MakeDir( sal_Bool bSloppy = sal_False ) const;
@@ -372,11 +348,7 @@ public:
 
     static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    static sal_uInt16       GetMaxNameLen( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static FSysPathStyle GetPathStyle( const String &rDevice );
-    static String       ConvertNameToSystem( const String & rName );
-    static String       ConvertSystemToName( const String & rName );
-    static sal_Bool         IsRFSAvailable();
 };
 
 // --------------
@@ -466,8 +438,8 @@ private:
 protected:
     sal_Bool            ImpInsertPointReached( const DirEntry& rIsSmaller,
                                            const FileStat& rNewStat,
-                                           sal_uIntPtr nCurPos,
-                                           sal_uIntPtr nSortIndex ) const;
+                                           size_t nCurPos,
+                                           size_t nSortIndex ) const;
     void            ImpSortedInsert( const DirEntry *pNewEntry,
                                      const FileStat *pNewStat );
 #endif
@@ -487,11 +459,11 @@ public:
 
     void            Reset();
     sal_uInt16          Scan( sal_uInt16 nCount = 5 );
-    sal_uInt16          Count( sal_Bool bUpdated = sal_True ) const;
+    size_t          Count( sal_Bool bUpdated = sal_True ) const;
     sal_Bool            Update();
 
     Dir&            operator +=( const Dir& rDir );
-    DirEntry&       operator []( sal_uInt16 nIndex ) const;
+    DirEntry&       operator []( size_t nIndex ) const;
 };
 
 // we don't need this stuff for bootstraping
@@ -562,3 +534,4 @@ void FSysTest();
 
 #endif // #ifndef _FSYS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

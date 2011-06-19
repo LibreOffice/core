@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -451,7 +452,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw ::com::sun::star::lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": reference is NULL"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": reference is NULL" )),
                     xIf,
                     nArgPos );
 #else
@@ -719,3 +720,5 @@ namespace canvas
 
 #endif /* INCLUDED_CANVAS_VERIFYINPUT_HXX */
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

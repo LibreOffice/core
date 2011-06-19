@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
         throw uno::RuntimeException();
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
                     uno::UNO_QUERY );
 
     if ( !xStorageFactory.is() )
@@ -82,7 +83,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStora
         throw uno::RuntimeException();
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.embed.FileSystemStorageFactory" ) ),
+                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" )) ),
                     uno::UNO_QUERY );
 
     if ( !xStorageFactory.is() )
@@ -228,7 +229,7 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
         throw uno::RuntimeException();
 
     uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
-            xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+            xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ),
             uno::UNO_QUERY );
 
     if ( !xTempAccess.is() )
@@ -262,7 +263,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
 
     ::rtl::OUString aMediaType;
-    xStorProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" )) ) >>= aMediaType;
 
     sal_Int32 nResult = 0;
 
@@ -554,3 +555,4 @@ sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::r
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,17 +31,11 @@
 
 #include "svtools/svtdllapi.h"
 #include <unotools/calendarwrapper.hxx>
-#ifndef _COM_SUN_STAR_I18N_WEEKDAYS_HPP
 #include <com/sun/star/i18n/Weekdays.hpp>
-#endif
 
-#ifndef _CTRL_HXX
 #include <vcl/ctrl.hxx>
-#endif
 #include <vcl/timer.hxx>
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 
 class Table;
 class MouseEvent;
@@ -499,3 +494,5 @@ protected:
 };
 
 #endif  // _CALENDAR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

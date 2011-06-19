@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,19 +41,17 @@
 
 class SimpleConfig
 {
-    long            nLine;
-    String          aFileName;
-    SvFileStream    aFileStream;
-    ByteString          aTmpStr;
-    ByteString          aStringBuffer;
+    SvFileStream aFileStream;
+    ByteString aTmpStr;
+    ByteString aStringBuffer;
 
-    ByteString          GetNextLine();
+    ByteString GetNextLine();
 public:
-                    SimpleConfig(String aSimpleConfigFileName);
-                    SimpleConfig(DirEntry& rDirEntry);
-                    ~SimpleConfig();
-    ByteString          GetNext();
-    ByteString          GetCleanedNextLine( sal_Bool bReadComments = sal_False );
+    SimpleConfig(const String& rSimpleConfigFileName);
+    ~SimpleConfig();
+    ByteString GetNext();
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

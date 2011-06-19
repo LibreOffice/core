@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <tools/string.hxx>
 #include <vcl/sv.h>
 #include <vcl/prntypes.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 
 // ------------------
@@ -64,7 +65,7 @@ struct ImplJobSetup
     long            mnPaperHeight;      // paper height (100th mm)
     sal_uIntPtr         mnDriverDataLen;    // length of system specific data
     sal_uInt8*          mpDriverData;       // system specific data (will be streamed a byte block)
-    ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >            maValueMap;
+    ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >         maValueMap;
 
                     ImplJobSetup();
                     ImplJobSetup( const ImplJobSetup& rJobSetup );
@@ -77,3 +78,5 @@ struct ImplJobSetup
 // Papierformat berechnet, wenn dieses ungleich PAPER_USER ist
 
 #endif  // _SV_JOBSET_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

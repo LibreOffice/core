@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifndef _BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
 #include "rgbtable.hxx"
 #define _XPMPRIVATE
 #include "xpmread.hxx"
@@ -700,3 +697,5 @@ sal_Bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ rDevice
     aBuf.append( "debug" );
     mkdir( aBuf.getStr(), 0777 );
     aBuf.append( "/" );
-    aBuf.append( sal_Int64(reinterpret_cast<sal_uInt32>(rDevice.get())), 16 );
+    aBuf.append( sal_Int64(reinterpret_cast<sal_IntPtr>(rDevice.get())), 16 );
     mkdir( aBuf.getStr(), 0777 );
     aBuf.append( "/bmp" );
     aBuf.append( sal_Int32(dbgStreamNum++) );
@@ -132,7 +133,7 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-sal_uInt16 SvpSalGraphics::GetBitCount()
+sal_uInt16 SvpSalGraphics::GetBitCount() const
 {
     return SvpElement::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );
 }
@@ -570,7 +571,7 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
     aRes.hDrawable = 0;
-    aRes.pRenderFormat = 0;
+    aRes.pXRenderFormat = 0;
     return aRes;
 }
 
@@ -579,3 +580,4 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

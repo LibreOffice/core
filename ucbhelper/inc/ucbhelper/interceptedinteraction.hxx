@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,9 @@
 
 #include <vector>
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP__
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP__
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#endif
 #include <cppuhelper/implbase1.hxx>
 #include "ucbhelper/ucbhelperdllapi.h"
 
@@ -349,3 +346,5 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
 } // namespace ucbhelper
 
 #endif // _UCBHELPER_INTERCEPTEDINTERACTION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

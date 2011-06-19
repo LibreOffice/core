@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-
-#include <svtools/svparser.hxx>
-#include <svtools/htmlkywd.hxx>
+#include <limits.h>                     // for USHRT_MAX
+#include <sal/types.h>                  // for sal_Char, sal_Unicode, etc
+#include <stdlib.h>                     // for bsearch, qsort
+#include <string.h>                     // for strcmp
 #include <svtools/htmltokn.h>
+#include <tools/solar.h>                // for String
+#include <svtools/htmlkywd.hxx>
+#include <tools/string.hxx>             // for String::CompareToAscii, etc
 
-// die Tabelle muss noch sortiert werden
+// Table has still to be sorted
 struct HTML_TokenEntry
 {
     union
@@ -48,10 +49,10 @@ struct HTML_TokenEntry
     int nToken;
 };
 
-// Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortKeyWords = sal_False;
+// Flag: RTF token table has already been sorted
+static bool bSortKeyWords = false;
 
-static HTML_TokenEntry __FAR_DATA aHTMLTokenTab[] = {
+static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_area},            HTML_AREA}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_base},            HTML_BASE}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_comment},     HTML_COMMENT},
@@ -202,14 +203,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLTokenTab[] = {
 extern "C"
 {
 
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
- _Optlink
-#endif
-    HTMLKeyCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL HTMLKeyCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( -1 == ((HTML_TokenEntry*)pFirst)->nToken )
@@ -244,7 +238,7 @@ int GetHTMLToken( const String& rName )
                 sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
-        bSortKeyWords = sal_True;
+        bSortKeyWords = true;
     }
 
     int nRet = 0;
@@ -266,8 +260,6 @@ int GetHTMLToken( const String& rName )
     return nRet;
 }
 
-/**/
-
 struct HTML_CharEntry
 {
     union
@@ -278,10 +270,10 @@ struct HTML_CharEntry
     sal_Unicode cChar;
 };
 
-// Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortCharKeyWords = sal_False;
+// Flag: RTF token table has already been sorted
+static bool bSortCharKeyWords = false;
 
-static HTML_CharEntry __FAR_DATA aHTMLCharNameTab[] = {
+static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_C_lt},             60},
     {{OOO_STRING_SVTOOLS_HTML_C_gt},             62},
     {{OOO_STRING_SVTOOLS_HTML_C_amp},        38},
@@ -352,7 +344,7 @@ static HTML_CharEntry __FAR_DATA aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_thorn},     254},
     {{OOO_STRING_SVTOOLS_HTML_S_yuml},      255},
 
-// Sonderzeichen
+// special characters
     {{OOO_STRING_SVTOOLS_HTML_S_acute},     180},
     {{OOO_STRING_SVTOOLS_HTML_S_brvbar},    166},
     {{OOO_STRING_SVTOOLS_HTML_S_cedil},      184},
@@ -386,7 +378,7 @@ static HTML_CharEntry __FAR_DATA aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_uml},        168},
     {{OOO_STRING_SVTOOLS_HTML_S_yen},        165},
 
-// Netscape kennt noch ein paar in Grossbuchstaben ...
+// Netscape has some in upper case...
     {{OOO_STRING_SVTOOLS_HTML_C_LT},             60},
     {{OOO_STRING_SVTOOLS_HTML_C_GT},             62},
     {{OOO_STRING_SVTOOLS_HTML_C_AMP},        38},
@@ -394,7 +386,7 @@ static HTML_CharEntry __FAR_DATA aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_COPY},      169},
     {{OOO_STRING_SVTOOLS_HTML_S_REG},       174},
 
-// Sonderzeichen, die zu Tokens konvertiert werden !!!
+// special characters, which will be converted to tokens !!!
     {{OOO_STRING_SVTOOLS_HTML_S_nbsp},      1},
     {{OOO_STRING_SVTOOLS_HTML_S_shy},       2},
 
@@ -557,14 +549,7 @@ static HTML_CharEntry __FAR_DATA aHTMLCharNameTab[] = {
 extern "C"
 {
 
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
- _Optlink
-#endif
-    HTMLCharNameCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL HTMLCharNameCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( USHRT_MAX == ((HTML_CharEntry*)pFirst)->cChar )
@@ -599,7 +584,7 @@ sal_Unicode GetHTMLCharName( const String& rName )
                 sizeof( aHTMLCharNameTab ) / sizeof( HTML_CharEntry ),
                 sizeof( HTML_CharEntry ),
                 HTMLCharNameCompare );
-        bSortCharKeyWords = sal_True;
+        bSortCharKeyWords = true;
     }
 
     sal_Unicode cRet = 0;
@@ -617,14 +602,12 @@ sal_Unicode GetHTMLCharName( const String& rName )
     return cRet;
 }
 
-/**/
+// Flag: Options table has already been sorted
+static bool bSortOptionKeyWords = false;
 
-// Flag: Optionen-Tabelle wurde schon sortiert
-static int __FAR_DATA bSortOptionKeyWords = sal_False;
+static HTML_TokenEntry aHTMLOptionTab[] = {
 
-static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
-
-// Attribute ohne Wert
+// Attributes without value
     {{OOO_STRING_SVTOOLS_HTML_O_box},       HTML_O_BOX},
     {{OOO_STRING_SVTOOLS_HTML_O_checked},   HTML_O_CHECKED},
     {{OOO_STRING_SVTOOLS_HTML_O_compact},   HTML_O_COMPACT},
@@ -646,7 +629,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_selected},      HTML_O_SELECTED},
     {{OOO_STRING_SVTOOLS_HTML_O_shapes},    HTML_O_SHAPES},
 
-// Attribute mit einem String als Wert
+// Attributes with a string value
     {{OOO_STRING_SVTOOLS_HTML_O_above},     HTML_O_ABOVE},
     {{OOO_STRING_SVTOOLS_HTML_O_accept},        HTML_O_ACCEPT},
     {{OOO_STRING_SVTOOLS_HTML_O_accesskey}, HTML_O_ACCESSKEY},
@@ -687,14 +670,14 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_sdlibrary}, HTML_O_SDLIBRARY},
     {{OOO_STRING_SVTOOLS_HTML_O_sdmodule},  HTML_O_SDMODULE},
 
-// Attribute mit einem SGML-Identifier als Wert
+// Attributes with a SGML identifier value
     {{OOO_STRING_SVTOOLS_HTML_O_from},      HTML_O_FROM},
     {{OOO_STRING_SVTOOLS_HTML_O_id},            HTML_O_ID},
     {{OOO_STRING_SVTOOLS_HTML_O_target},        HTML_O_TARGET}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_to},            HTML_O_TO},
     {{OOO_STRING_SVTOOLS_HTML_O_until},     HTML_O_UNTIL},
 
-// Attribute mit einem URI als Wert
+// Attributes with an URI value
     {{OOO_STRING_SVTOOLS_HTML_O_action},        HTML_O_ACTION},
     {{OOO_STRING_SVTOOLS_HTML_O_archive},       HTML_O_ARCHIVE},
     {{OOO_STRING_SVTOOLS_HTML_O_background},    HTML_O_BACKGROUND},
@@ -710,11 +693,11 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_src},       HTML_O_SRC},
     {{OOO_STRING_SVTOOLS_HTML_O_usemap},        HTML_O_USEMAP}, // Netscape 2.0
 
-// Attribute mit Entity-Namen als Wert
+// Attributes with entity name value
     {{OOO_STRING_SVTOOLS_HTML_O_dingbat},   HTML_O_DINGBAT},
     {{OOO_STRING_SVTOOLS_HTML_O_sym},       HTML_O_SYM},
 
-// Attribute mit einer Farbe als Wert (alle Netscape)
+// Attributes with a color value (all Netscape versions)
     {{OOO_STRING_SVTOOLS_HTML_O_alink},     HTML_O_ALINK},
     {{OOO_STRING_SVTOOLS_HTML_O_bgcolor},   HTML_O_BGCOLOR},
     {{OOO_STRING_SVTOOLS_HTML_O_bordercolor}, HTML_O_BORDERCOLOR}, // IExplorer 2.0
@@ -725,7 +708,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_text},      HTML_O_TEXT},
     {{OOO_STRING_SVTOOLS_HTML_O_vlink},     HTML_O_VLINK},
 
-// Attribute mit einem numerischen Wert
+// Attributes with a numerical value
     {{OOO_STRING_SVTOOLS_HTML_O_border},        HTML_O_BORDER},
     {{OOO_STRING_SVTOOLS_HTML_O_cellspacing},HTML_O_CELLSPACING}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_O_cellpadding},HTML_O_CELLPADDING}, // HTML 3 Table Model Draft
@@ -763,7 +746,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_y},         HTML_O_Y},
     {{OOO_STRING_SVTOOLS_HTML_O_zindex},        HTML_O_ZINDEX},
 
-// Attribute mit Enum-Werten
+// Attributes with enum values
     {{OOO_STRING_SVTOOLS_HTML_O_bgproperties}, HTML_O_BGPROPERTIES}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_behavior},  HTML_O_BEHAVIOR}, // IExplorer 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_clear},     HTML_O_CLEAR},
@@ -786,7 +769,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_wrap},      HTML_O_WRAP},
     {{OOO_STRING_SVTOOLS_HTML_O_visibility},    HTML_O_VISIBILITY},
 
-// Attribute mit Script-Code als Wert
+// Attributes with script code value
     {{OOO_STRING_SVTOOLS_HTML_O_onblur},        HTML_O_ONBLUR}, // JavaScript
     {{OOO_STRING_SVTOOLS_HTML_O_onchange},  HTML_O_ONCHANGE}, // JavaScript
     {{OOO_STRING_SVTOOLS_HTML_O_onclick},   HTML_O_ONCLICK}, // JavaScript
@@ -815,7 +798,7 @@ static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_SDonerror},         HTML_O_SDONERROR}, // StarBasic
     {{OOO_STRING_SVTOOLS_HTML_O_SDonmouseout},  HTML_O_SDONMOUSEOUT}, // StarBasic
 
-// Attribute mit Kontext-abhaengigen Werten
+// Attributes with context sensitive values
     {{OOO_STRING_SVTOOLS_HTML_O_align},     HTML_O_ALIGN},
     {{OOO_STRING_SVTOOLS_HTML_O_cols},      HTML_O_COLS}, // Netscape 2.0 vs HTML 2.0
     {{OOO_STRING_SVTOOLS_HTML_O_rows},      HTML_O_ROWS}, // Netscape 2.0 vs HTML 2.0
@@ -832,7 +815,7 @@ int GetHTMLOption( const String& rName )
                 sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
-        bSortOptionKeyWords = sal_True;
+        bSortOptionKeyWords = true;
     }
 
     int nRet = HTML_O_UNKNOWN;
@@ -850,9 +833,7 @@ int GetHTMLOption( const String& rName )
     return nRet;
 }
 
-/**/
 
-// Flag: Farb-Tabelle wurde schon sortiert
 struct HTML_ColorEntry
 {
     union
@@ -860,19 +841,18 @@ struct HTML_ColorEntry
         const sal_Char* sName;
         const String *pUName;
     };
-    sal_uLong nColor;
+    sal_uInt32 nColor;
 };
 
-static int __FAR_DATA bSortColorKeyWords = sal_False;
+// Flag: color table has already been sorted
+static bool bSortColorKeyWords = false;
 
 #define HTML_NO_COLOR 0xffffffffUL
 
-// die Farbnamen werden nicht exportiert
-// Sie stammen aus "http://www.uio.no/~mnbjerke/colors_w.html"
-// und scheinen im Gegensatz zu denen aus
-// "http://www.infi.net/wwwimages/colorindex.html"
-// zu stimmen
-static HTML_ColorEntry __FAR_DATA aHTMLColorNameTab[] = {
+// Color names are not exported (source:
+// "http://www.uio.no/~mnbjerke/colors_w.html")
+// "http://www.infi.net/wwwimages/colorindex.html" seem to be buggy.
+static HTML_ColorEntry aHTMLColorNameTab[] = {
     { { "ALICEBLUE" }, 0x00f0f8ffUL },
     { { "ANTIQUEWHITE" }, 0x00faebd7UL },
     { { "AQUA" }, 0x0000ffffUL },
@@ -1018,14 +998,7 @@ static HTML_ColorEntry __FAR_DATA aHTMLColorNameTab[] = {
 extern "C"
 {
 
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
- _Optlink
-#endif
-    HTMLColorNameCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL HTMLColorNameCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( HTML_NO_COLOR == ((HTML_ColorEntry*)pFirst)->nColor )
@@ -1052,7 +1025,7 @@ static int
 
 }
 
-sal_uLong GetHTMLColor( const String& rName )
+sal_uInt32 GetHTMLColor( const String& rName )
 {
     if( !bSortColorKeyWords )
     {
@@ -1060,10 +1033,10 @@ sal_uLong GetHTMLColor( const String& rName )
                 sizeof( aHTMLColorNameTab ) / sizeof( HTML_ColorEntry ),
                 sizeof( HTML_ColorEntry ),
                 HTMLColorNameCompare );
-        bSortColorKeyWords = sal_True;
+        bSortColorKeyWords = true;
     }
 
-    sal_uLong nRet = ULONG_MAX;
+    sal_uInt32 nRet = HTML_NO_COLOR;
     void* pFound;
     HTML_ColorEntry aSrch;
     aSrch.pUName = &rName;
@@ -1079,3 +1052,4 @@ sal_uLong GetHTMLColor( const String& rName )
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

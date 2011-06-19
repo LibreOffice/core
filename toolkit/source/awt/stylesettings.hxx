@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -35,10 +36,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-namespace vos
-{
-    class IMutex;
-}
 namespace osl
 {
     class Mutex;
@@ -60,7 +57,7 @@ namespace toolkit
     class WindowStyleSettings : public WindowStyleSettings_Base
     {
     public:
-        WindowStyleSettings( ::vos::IMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow );
+        WindowStyleSettings( ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow );
         ~WindowStyleSettings();
 
         void dispose();
@@ -186,3 +183,5 @@ namespace toolkit
 //......................................................................................................................
 
 #endif // TOOLKIT_STYLESETTINGS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

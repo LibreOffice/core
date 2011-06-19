@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,31 +46,32 @@ namespace css = com::sun::star;
 
 }
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
 
+using ::rtl::OUString;
+
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragSource");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DragSource"));
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DropTarget");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DropTarget"));
     return aRet;
 }
 
@@ -77,7 +79,7 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    static std::hash_map< OUString, ::std::hash_map< Atom, css::uno::Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
+    static boost::unordered_map< OUString, ::boost::unordered_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
 
     OUString aDisplayName;
     Atom nSelection;
@@ -110,11 +112,11 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     else
     {
         // default atom is clipboard selection
-        nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
+        nSelection = rManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
     }
 
-    ::std::hash_map< Atom, css::uno::Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
-    ::std::hash_map< Atom, css::uno::Reference< XClipboard > >::iterator it = rMap.find( nSelection );
+    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
+    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = rMap.find( nSelection );
     if( it != rMap.end() )
         return it->second;
 
@@ -139,3 +141,4 @@ css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

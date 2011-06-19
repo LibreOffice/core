@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
-#include <tools/svwin.h>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #ifndef _SV_WORKWIN
@@ -37,9 +37,8 @@
 #include <vcl/window.hxx>
 
 #ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
@@ -56,7 +55,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     {
         ::com::sun::star::uno::Exception *pException =
             new ::com::sun::star::uno::RuntimeException;
-        pException->Message = ::rtl::OUString::createFromAscii( "not a work window" );
+        pException->Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("not a work window"));
         throw pException;
     }
 
@@ -74,9 +73,9 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
             const com::sun::star::beans::NamedValue* pProps = aProps.getConstArray();
             for( int i = 0; i < nProps; i++ )
             {
-                if( pProps[i].Name.equalsAscii( "WINDOW" ) )
+                if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WINDOW" ) ) )
                     pProps[i].Value >>= nHandle;
-                else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
+                else if( pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XEMBED" ) ) )
                     pProps[i].Value >>= bXEmbed;
             }
         }
@@ -87,13 +86,13 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     {
         ::com::sun::star::uno::Exception *pException =
             new ::com::sun::star::uno::RuntimeException;
-        pException->Message = ::rtl::OUString::createFromAscii( "incorrect window handle type" );
+        pException->Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("incorrect window handle type"));
         throw pException;
     }
     // create system parent data
     SystemParentData aSysParentData;
     aSysParentData.nSize = sizeof ( SystemParentData );
-#if defined( WNT ) || defined ( OS2 )
+#if defined( WNT )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( QUARTZ )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);
@@ -106,3 +105,4 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
     ((WorkWindow*)pWindow)->SetPluginParent( &aSysParentData );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

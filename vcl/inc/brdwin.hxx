@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,7 +85,8 @@ class ImplBorderWindowView;
 #define BORDERWINDOW_TITLE_NORMAL           ((sal_uInt16)0x0001)
 #define BORDERWINDOW_TITLE_SMALL            ((sal_uInt16)0x0002)
 #define BORDERWINDOW_TITLE_TEAROFF          ((sal_uInt16)0x0004)
-#define BORDERWINDOW_TITLE_NONE             ((sal_uInt16)0x0008)
+#define BORDERWINDOW_TITLE_POPUP            ((sal_uInt16)0x0008)
+#define BORDERWINDOW_TITLE_NONE             ((sal_uInt16)0x0010)
 
 // --------------------
 // - ImplBorderWindow -
@@ -350,3 +352,5 @@ public:
 
 
 #endif  // _SV_BRDWIN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

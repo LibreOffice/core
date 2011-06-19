@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -790,3 +791,5 @@ IMPL_CONSTRUCTORS_BODY( MultiListBox, ListBox, "multilistbox", GetMultiListBox()
 IMPL_GET_IMPL( MultiListBox );
 IMPL_GET_WINDOW( MultiListBox );
 } // namespace layout
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

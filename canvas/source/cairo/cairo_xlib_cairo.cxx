@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ namespace cairo
         nScreen(pSysDat.nScreen),
         nDepth(pSysDat.nDepth),
         aColormap(pSysDat.aColormap),
-        pRenderFormat(pSysDat.pRenderFormat)
+        pRenderFormat(pSysDat.pXRenderFormat)
     {}
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat ) :
@@ -262,7 +263,7 @@ namespace cairo
 
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDrawable = getDrawable();
-        aSystemGraphicsData.pRenderFormat = getRenderFormat();
+        aSystemGraphicsData.pXRenderFormat = getRenderFormat();
 
         return boost::shared_ptr<VirtualDevice>(
             new VirtualDevice( &aSystemGraphicsData, getDepth() ));
@@ -350,3 +351,5 @@ namespace cairo
         return SurfaceSharedPtr();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

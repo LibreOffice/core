@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,12 @@
 #define _VCL_GTKFRAME_HXX
 
 #include <tools/prex.h>
-#include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
+#include <gtk/gtk.h>
+#if GTK_CHECK_VERSION(3,0,0)
+#  include <gtk/gtkx.h>
+#endif
 #include <gdk/gdkkeysyms.h>
 #include <tools/postx.h>
 
@@ -45,6 +49,13 @@
 
 class GtkSalGraphics;
 class GtkSalDisplay;
+
+#if GTK_CHECK_VERSION(3,0,0)
+typedef XLIB_Window GdkNativeWindow;
+#define GDK_WINDOW_XWINDOW(o) GDK_WINDOW_XID(o)
+#define gdk_set_sm_client_id(i) gdk_x11_set_sm_client_id(i)
+#define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
+#endif
 
 class GtkSalFrame : public SalFrame
 {
@@ -117,11 +128,12 @@ class GtkSalFrame : public SalFrame
                 return (event != NULL)
                     && (event->window == window)
                     && (event->send_event == send_event)
-                    && (event->state == state)
+                    // ignore non-Gdk state bits, e.g., these used by IBus
+                    && ((event->state & GDK_MODIFIER_MASK) == (state & GDK_MODIFIER_MASK))
                     && (event->keyval == keyval)
                     && (event->hardware_keycode == hardware_keycode)
                     && (event->group == group)
-                    && (event->time - time < 3)
+                    && (event->time - time < 300)
                     ;
             }
         };
@@ -183,13 +195,13 @@ class GtkSalFrame : public SalFrame
     guint                           m_nGSMCookie;
     int                             m_nWorkArea;
     bool                            m_bFullscreen;
-    bool                            m_bSingleAltPress;
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
     String                          m_aTitle;
+    rtl::OUString                   m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
 
@@ -197,7 +209,11 @@ class GtkSalFrame : public SalFrame
     Size                            m_aMinSize;
     Rectangle                       m_aRestorePosSize;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    cairo_region_t*                 m_pRegion;
+#else
     GdkRegion*                      m_pRegion;
+#endif
 
     void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
@@ -206,6 +222,7 @@ class GtkSalFrame : public SalFrame
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static void         signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer );
+    static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
     static gboolean     signalExpose( GtkWidget*, GdkEventExpose*, gpointer );
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
     static gboolean     signalMap( GtkWidget*, GdkEvent*, gpointer );
@@ -218,7 +235,7 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
     static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
-    static void         signalDestroy( GtkObject*, gpointer );
+    static void         signalDestroy( GtkWidget*, gpointer );
 
     void            Center();
     void            SetDefaultSize();
@@ -267,6 +284,8 @@ class GtkSalFrame : public SalFrame
     void setMinMaxSize();
     void createNewWindow( XLIB_Window aParent, bool bXEmbed, int nScreen );
     void askForXEmbedFocus( sal_Int32 nTimecode );
+
+    void updateWMClass();
 
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
@@ -371,6 +390,10 @@ public:
     // get current modifier and button mask
     virtual SalPointerState     GetPointerState();
 
+    virtual SalIndicatorState   GetIndicatorState();
+
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
+
     // set new parent window
     virtual void                SetParent( SalFrame* pNewParent );
     // reparent window to act as a plugin; implementation
@@ -381,6 +404,7 @@ public:
     virtual void                SetBackgroundBitmap( SalBitmap* );
 
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rWMClass );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
@@ -405,3 +429,5 @@ GType ooo_fixed_get_type( void );
 } // extern "C"
 
 #endif //_VCL_GTKFRAME_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

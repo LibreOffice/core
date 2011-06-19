@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <boost/utility.hpp> // for noncopyable
 #include <vector>
 #include <utility>
-#include <iostream>
+#include <iosfwd>
 #include <basegfx/basegfxdllapi.h>
 
 
@@ -106,3 +107,5 @@ namespace basegfx
 }
 
 #endif /* _BGFX_TOOLS_DEBUGPLOTTER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

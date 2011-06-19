@@ -1,2 +1,2 @@
-ch comphelper : cppuhelper ucbhelper offuh vos salhelper LIBXSLT:libxslt NULL
+ph	comphelper	:	cppuhelper ucbhelper offuh salhelper LIBXSLT:libxslt NULL
 ch comphelper\prj nmake - all ch_all NULL

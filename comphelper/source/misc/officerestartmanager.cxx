@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
 
         uno::Reference< awt::XRequestCallback > xRequestCallback(
             xFactory->createInstanceWithContext(
-                 ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback"),
+                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AsyncCallback" )),
                  m_xContext ),
              uno::UNO_QUERY_THROW );
 
@@ -208,3 +209,5 @@ void createRegistryInfo_OOfficeRestartManager()
     static ::comphelper::module::OAutoRegistration< ::comphelper::OOfficeRestartManager > aAutoRegistration;
     static ::comphelper::module::OSingletonRegistration< ::comphelper::OOfficeRestartManager > aSingletonRegistration;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

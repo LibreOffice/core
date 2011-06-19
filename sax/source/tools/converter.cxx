@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,13 +37,13 @@
 #include <rtl/math.hxx>
 #include "sax/tools/converter.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-//using namespace com::sun::star::text;
-//using namespace com::sun::star::style;
 using namespace ::com::sun::star::i18n;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace sax {
 
@@ -269,198 +270,11 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int16 nSourceUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::INCH */  )
 {
-    OSL_ENSURE( false, "Converter::convertMeasure - not implemented, tools/BigInt needs replacement" );
+    OSL_FAIL( "Converter::convertMeasure - not implemented, tools/BigInt needs replacement" );
     (void)rBuffer;
     (void)nMeasure;
     (void)nSourceUnit;
     (void)nTargetUnit;
-#if 0
-    if( nSourceUnit == MeasureUnit::PERCENT )
-    {
-        OSL_ENSURE( nTargetUnit == MeasureUnit::PERCENT,
-                    "MeasureUnit::PERCENT only maps to MeasureUnit::PERCENT!" );
-
-        rBuffer.append( nMeasure );
-        rBuffer.append( sal_Unicode('%' ) );
-    }
-    else
-    {
-    // the sign is processed seperatly
-    if( nMeasure < 0 )
-    {
-        nMeasure = -nMeasure;
-        rBuffer.append( sal_Unicode('-') );
-    }
-
-    // The new length is (nVal * nMul)/(nDiv*nFac*10)
-    long nMul = 1000;
-    long nDiv = 1;
-    long nFac = 100;
-    const sal_Char* psUnit = 0;
-    switch( nSourceUnit )
-    {
-    case MeasureUnit::TWIP:
-        switch( nTargetUnit )
-        {
-        case MeasureUnit::MM_100TH:
-        case MeasureUnit::MM_10TH:
-            OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,"output unit not supported for twip values" );
-        case MeasureUnit::MM:
-            // 0.01mm = 0.57twip (exactly)
-            nMul = 25400;   // 25.4 * 1000
-            nDiv = 1440;    // 72 * 20;
-            nFac = 100;
-            psUnit = gpsMM;
-            break;
-
-        case MeasureUnit::CM:
-            // 0.001cm = 0.57twip (exactly)
-            nMul = 25400;   // 2.54 * 10000
-            nDiv = 1440;    // 72 * 20;
-            nFac = 1000;
-            psUnit = gpsCM;
-            break;
-
-        case MeasureUnit::POINT:
-            // 0.01pt = 0.2twip (exactly)
-            nMul = 1000;
-            nDiv = 20;
-            nFac = 100;
-            psUnit = gpsPT;
-            break;
-
-        case MeasureUnit::INCH:
-        default:
-            OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,
-                        "output unit not supported for twip values" );
-            // 0.0001in = 0.144twip (exactly)
-            nMul = 100000;
-            nDiv = 1440;    // 72 * 20;
-            nFac = 10000;
-            psUnit = gpsINCH;
-            break;
-        }
-        break;
-
-    case MeasureUnit::POINT:
-        // 1pt = 1pt (exactly)
-        OSL_ENSURE( MeasureUnit::POINT == nTargetUnit,
-                    "output unit not supported for pt values" );
-        nMul = 10;
-        nDiv = 1;
-        nFac = 1;
-        psUnit = gpsPT;
-        break;
-    case MeasureUnit::MM_10TH:
-    case MeasureUnit::MM_100TH:
-        {
-            long nFac2 = (MeasureUnit::MM_100TH == nSourceUnit) ? 100 : 10;
-            switch( nTargetUnit )
-            {
-            case MeasureUnit::MM_100TH:
-            case MeasureUnit::MM_10TH:
-                OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,
-                            "output unit not supported for 1/100mm values" );
-            case MeasureUnit::MM:
-                // 0.01mm = 1 mm/100 (exactly)
-                nMul = 10;
-                nDiv = 1;
-                nFac = nFac2;
-                psUnit = gpsMM;
-                break;
-
-            case MeasureUnit::CM:
-                // 0.001mm = 1 mm/100 (exactly)
-                nMul = 10;
-                nDiv = 1;   // 72 * 20;
-                nFac = 10*nFac2;
-                psUnit = gpsCM;
-                break;
-
-            case MeasureUnit::POINT:
-                // 0.01pt = 0.35 mm/100 (exactly)
-                nMul = 72000;
-                nDiv = 2540;
-                nFac = nFac2;
-                psUnit = gpsPT;
-                break;
-
-            case MeasureUnit::INCH:
-            default:
-                OSL_ENSURE( MeasureUnit::INCH == nTargetUnit,
-                            "output unit not supported for 1/100mm values" );
-                // 0.0001in = 0.254 mm/100 (exactly)
-                nMul = 100000;
-                nDiv = 2540;
-                nFac = 100*nFac2;
-                psUnit = gpsINCH;
-                break;
-            }
-            break;
-        }
-    }
-
-    long nLongVal = 0;
-    bool bOutLongVal = true;
-    if( nMeasure > SAL_INT32_MAX / nMul )
-    {
-        // A big int is required for calculation
-        BigInt nBigVal( nMeasure );
-        BigInt nBigFac( nFac );
-        nBigVal *= nMul;
-        nBigVal /= nDiv;
-        nBigVal += 5;
-        nBigVal /= 10;
-
-        if( nBigVal.IsLong() )
-        {
-            // To convert the value into a string a long is sufficient
-            nLongVal = (long)nBigVal;
-        }
-        else
-        {
-            BigInt nBigFac2( nFac );
-            BigInt nBig10( 10 );
-            rBuffer.append( (sal_Int32)(nBigVal / nBigFac2) );
-            if( !(nBigVal % nBigFac2).IsZero() )
-            {
-                rBuffer.append( sal_Unicode('.') );
-                while( nFac > 1 && !(nBigVal % nBigFac2).IsZero() )
-                {
-                    nFac /= 10;
-                    nBigFac2 = nFac;
-                    rBuffer.append( (sal_Int32)((nBigVal / nBigFac2) % nBig10 ) );
-                }
-            }
-            bOutLongVal = false;
-        }
-    }
-    else
-    {
-        nLongVal = nMeasure * nMul;
-        nLongVal /= nDiv;
-        nLongVal += 5;
-        nLongVal /= 10;
-    }
-
-    if( bOutLongVal )
-    {
-        rBuffer.append( (sal_Int32)(nLongVal / nFac) );
-        if( nFac > 1 && (nLongVal % nFac) != 0 )
-        {
-            rBuffer.append( sal_Unicode('.') );
-            while( nFac > 1 && (nLongVal % nFac) != 0 )
-            {
-                nFac /= 10;
-                rBuffer.append( (sal_Int32)((nLongVal / nFac) % 10) );
-            }
-        }
-    }
-
-    if( psUnit )
-        rBuffer.appendAscii( psUnit );
-    }
-#endif
 }
 
 static const OUString& getTrueString()
@@ -847,7 +661,7 @@ bool Converter::convertDuration(double& rfTime,
             {
                 //! how many days is a year or month?
 
-                OSL_ENSURE( false, "years or months in duration: not implemented");
+                OSL_FAIL( "years or months in duration: not implemented");
                 bSuccess = false;
             }
             else
@@ -1365,11 +1179,10 @@ bool Converter::convertDateOrDateTime(
 
     const ::rtl::OUString string = rString.trim().toAsciiUpperCase();
     sal_Int32 nPos(0);
-    bool bNegative(false);
     if ((string.getLength() > nPos) && (sal_Unicode('-') == string[nPos]))
     {
+        //Negative Number
         ++nPos;
-        bNegative = true;
     }
 
     sal_Int32 nYear(0);
@@ -1495,13 +1308,6 @@ bool Converter::convertDateOrDateTime(
             {
                 bSuccess = false; // only 24:00:00 is valid
             }
-#if 0
-            else
-            {
-                nHours = 0; // normalize 24:00:00 to 00:00:00 of next day
-                lcl_addDay(bNegative, nYear, nMonth, nDay, 1);
-            }
-#endif
         }
     }
 
@@ -1569,11 +1375,6 @@ bool Converter::convertDateOrDateTime(
     if (bSuccess && bHaveTimezone)
     {
         // util::DateTime does not support timezones!
-#if 0
-        // do not add timezone, just strip it (as suggested by er)
-        lcl_addTimezone(bNegative, nYear, nMonth, nDay, nHours, nMinutes,
-                !bHaveTimezoneMinus, nTimezoneHours, nTimezoneMinutes);
-#endif
     }
 
     if (bSuccess)
@@ -2096,3 +1897,5 @@ sal_Int16 Converter::GetUnitFromString(const ::rtl::OUString& rString, sal_Int16
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

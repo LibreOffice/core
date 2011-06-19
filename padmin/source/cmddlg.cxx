@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,16 @@
 #include <stdio.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _PAD_RTSETUP_HRC_
 #include <rtsetup.hrc>
-#endif
 #include <cmddlg.hxx>
 #include <padialog.hxx>
 #include <helper.hxx>
 #include <prtsetup.hxx>
 
 using namespace psp;
-using namespace rtl;
 using namespace padmin;
+
+using ::rtl::OUString;
 
 #define PRINTER_PERSISTENCE_GROUP "KnownPrinterCommands"
 #define FAX_PERSISTENCE_GROUP "KnownFaxCommands"
@@ -334,7 +334,7 @@ void RTSCommandPage::save()
     String aOldPdfPath;
     bool bOldFaxSwallow = false;
     bool bFaxSwallow = m_aFaxSwallowBox.IsChecked() ? true : false;
-    bool bOldExternalDialog = false, bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
+    bool bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
 
     while( nIndex != -1 )
     {
@@ -360,10 +360,6 @@ void RTSCommandPage::save()
         {
             sal_Int32 nPos = 0;
             bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? false : true;
-        }
-        else if( ! aToken.compareToAscii( "external_dialog" ) )
-        {
-            bOldExternalDialog = true;
         }
     }
     ::std::list< String >* pList = &m_aPrinterCommands;
@@ -549,3 +545,5 @@ void RTSCommandPage::ConnectCommand()
 
     m_aConnectedTo.SetText( aString );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define SW_WORDCOUNTDIALOG_HXX
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <layout/layout.hxx>
 #include <layout/layout-pre.hxx>
 struct SwDocStat;
@@ -41,12 +40,16 @@ class SwWordCountDialog : public SfxModalDialog
     FixedInfo       aCurrentWordFI;
     FixedText       aCurrentCharacterFT;
     FixedInfo       aCurrentCharacterFI;
+    FixedText       aCurrentCharacterExcludingSpacesFT;
+    FixedInfo       aCurrentCharacterExcludingSpacesFI;
 
     FixedLine       aDocFL;
     FixedText       aDocWordFT;
     FixedInfo       aDocWordFI;
     FixedText       aDocCharacterFT;
     FixedInfo       aDocCharacterFI;
+    FixedText       aDocCharacterExcludingSpacesFT;
+    FixedInfo       aDocCharacterExcludingSpacesFI;
 
     FixedLine       aBottomFL;
 
@@ -63,3 +66,5 @@ public:
 #include <layout/layout-post.hxx>
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

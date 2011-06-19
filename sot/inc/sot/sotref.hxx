@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SOT_SOTREF_HXX
 #define _SOT_SOTREF_HXX
 
-#ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
-#endif
 
 //========================================================================
 #ifndef SVT_DECL_SOTOBJECT_DEFINED
@@ -69,3 +68,5 @@ inline ClassName##Ref::ClassName##Ref( SotObject * pObjP )                \
     SO2_IMPL_REF(ClassName)
 
 #endif // _SO2REF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
-#include <tools/svwin.h>
+#include <windows.h>
 #include <dll.hxx>
 #include <tools/shl.hxx>
 
@@ -45,3 +46,5 @@ void** GetAppData( USHORT nSharedLib )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

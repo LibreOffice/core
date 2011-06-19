@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,8 @@
 #include <osl/thread.h>
 #include <rtl/textenc.h>
 #include <rtl/textcvt.h>
-#ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 #include "tools/toolsdllapi.h"
 
 /*******************************************************************************
@@ -136,8 +133,6 @@ enum StringCompare { COMPARE_LESS = -1, COMPARE_EQUAL = 0, COMPARE_GREATER = 1 }
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
-#elif defined(SAL_OS2)
-#pragma pack(1)
 #endif
 
 typedef struct _ByteStringData
@@ -149,8 +144,6 @@ typedef struct _ByteStringData
 
 #ifdef SAL_W32
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 // --------------
@@ -424,8 +417,6 @@ inline ByteString ByteString::GetQuotedToken( xub_StrLen nToken, const ByteStrin
 
 #ifdef SAL_W32
 #pragma pack(push, 4)
-#elif defined(SAL_OS2)
-#pragma pack(1)
 #endif
 
 typedef struct _UniStringData
@@ -437,8 +428,6 @@ typedef struct _UniStringData
 
 #ifdef SAL_W32
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 // -------------
@@ -469,6 +458,8 @@ private:
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Unicode)
 
+    //detect and reject use of RTL_CONSTASCII_STRINGPARAM instead of RTL_CONSTASCII_USTRINGPARAM
+    TOOLS_DLLPRIVATE UniString( const sal_Char*, sal_Int32 );
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -689,3 +680,5 @@ inline UniString UniString::GetQuotedToken( xub_StrLen nToken, const UniString& 
 }
 
 #endif // _STRING_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

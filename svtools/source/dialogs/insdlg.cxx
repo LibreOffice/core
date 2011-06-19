@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <unotools/configmgr.hxx>
 #include <sot/clsids.hxx>
 #include <sot/stg.hxx>
+#include <sal/macros.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -68,7 +70,6 @@ struct OleObjectDescriptor
 
 /********************** SvObjectServerList ********************************
 **************************************************************************/
-PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
 
 /*************************************************************************
 |*    SvObjectServerList::SvObjectServerList()
@@ -77,10 +78,10 @@ PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) const
 {
-    for( sal_uLong i = 0; i < Count(); i++ )
+    for( size_t i = 0; i < aObjectServerList.size(); i++ )
     {
-        if( rHumanName == GetObject( i ).GetHumanName() )
-            return &GetObject( i );
+        if( rHumanName == aObjectServerList[ i ].GetHumanName() )
+            return &aObjectServerList[ i ];
     }
     return NULL;
 }
@@ -92,26 +93,27 @@ const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) cons
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
 {
-    for( sal_uLong i = 0; i < Count(); i++ )
+    for( size_t i = 0; i < aObjectServerList.size(); i++ )
     {
-        if( rName == GetObject( i ).GetClassName() )
-            return &GetObject( i );
+        if( rName == aObjectServerList[ i ].GetClassName() )
+            return &aObjectServerList[ i ];
     }
     return NULL;
 }
 
 void SvObjectServerList::Remove( const SvGlobalName & rName )
 {
-    SvObjectServer * pS = (SvObjectServer *)aTypes.First();
-    while( pS )
+    for( size_t i = 0; i < aObjectServerList.size(); )
     {
-        if( rName == pS->GetClassName() )
+        if( aObjectServerList[ i ].GetClassName() == rName )
         {
-            Remove();
-            pS = (SvObjectServer *)aTypes.GetCurObject();
+            SvObjectServerList_impl::iterator it = aObjectServerList.begin() + i;
+            aObjectServerList.erase( it );
         }
         else
-            pS = (SvObjectServer *)aTypes.Next();
+        {
+            ++i;
+        }
     }
 }
 
@@ -127,19 +129,17 @@ void SvObjectServerList::FillInsertObjects()
     uno::Reference< lang::XMultiServiceFactory > _globalMSFactory= comphelper::getProcessServiceFactory();
     if( _globalMSFactory.is())
     {
-        ::rtl::OUString sProviderService =
-        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+        ::rtl::OUString sProviderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ));
         uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory(
             _globalMSFactory->createInstance( sProviderService ), uno::UNO_QUERY );
 
         if( sProviderMSFactory.is())
         {
-            ::rtl::OUString sReaderService =
-                ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+            ::rtl::OUString sReaderService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ));
             uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue aPathProp;
-            aPathProp.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-            aPathProp.Value <<= ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Embedding/ObjectNames");
+            aPathProp.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+            aPathProp.Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Embedding/ObjectNames" ));
             aArguments[0] <<= aPathProp;
 
             uno::Reference< container::XNameAccess > xNameAccess(
@@ -164,13 +164,13 @@ void SvObjectServerList::FillInsertObjects()
                     ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 if ( !( aProperty >>= aProductName ) )
                 {
-                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTNAME variable!\n" );
+                    OSL_FAIL( "Coudn't get PRODUCTNAME variable!\n" );
                     aProductName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
                 }
                 aProperty = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
                 if ( !( aProperty >>= aProductVersion ) )
                 {
-                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTVERSION variable!\n" );
+                    OSL_FAIL( "Coudn't get PRODUCTVERSION variable!\n" );
                 }
 
                 for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
@@ -181,8 +181,8 @@ void SvObjectServerList::FillInsertObjects()
                     {
                         ::rtl::OUString aUIName;
                         ::rtl::OUString aClassID;
-                        xEntry->getByName( ::rtl::OUString::createFromAscii("ObjectUIName") ) >>= aUIName;
-                        xEntry->getByName( ::rtl::OUString::createFromAscii("ClassID") ) >>= aClassID;
+                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ObjectUIName" )) ) >>= aUIName;
+                        xEntry->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ClassID" )) ) >>= aClassID;
 
                         if ( aUIName.getLength() )
                         {
@@ -208,7 +208,7 @@ void SvObjectServerList::FillInsertObjects()
                         {
                             if( !Get( aClassName ) )
                                 // noch nicht eingetragen
-                                Append( SvObjectServer( aClassName, String( aUIName.getStr() ) ) );
+                                aObjectServerList.push_back( SvObjectServer( aClassName, String( aUIName.getStr() ) ) );
                         }
                     }
                 }
@@ -220,12 +220,12 @@ void SvObjectServerList::FillInsertObjects()
 #ifdef WNT
     SvGlobalName aOleFact( SO3_OUT_CLASSID );
     String aOleObj( SvtResId( STR_FURTHER_OBJECT ) );
-    Append( SvObjectServer( aOleFact, aOleObj ) );
+    aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
-    }catch( container::NoSuchElementException)
+    }catch(const container::NoSuchElementException&)
     {
-    }catch( uno::Exception)
+    }catch(const uno::Exception&)
     {
     }
     catch(...)
@@ -314,7 +314,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     String aUIName;
     sal_uInt16 nResId = 0;
 
-    for( sal_uInt32 i = 0, nCount = sizeof( aSotResourcePairs ) / sizeof( aSotResourcePairs[ 0 ] ); ( i < nCount ) && !nResId; i++ )
+    for( sal_uInt32 i = 0, nCount = SAL_N_ELEMENTS( aSotResourcePairs ); ( i < nCount ) && !nResId; i++ )
     {
         if( aSotResourcePairs[ i ].mnSotId == nId )
             nResId = aSotResourcePairs[ i ].mnResId;
@@ -387,3 +387,4 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,44 +41,30 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
-#endif
 
-#ifndef _SVT_LOGHELPER_HXX
 #include <unotools/loghelper.hxx>
-#endif
 
 #include <itemholder2.hxx>
 
-
+#include <sal/macros.h>
 // -----------
 // - statics -
 // -----------
 
 static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
-#define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
+#define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 
 // -----------
 // - Defines -
@@ -868,3 +855,5 @@ SvtPrintFileOptions::~SvtPrintFileOptions()
         pPrintFileOptionsDataContainer = NULL;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

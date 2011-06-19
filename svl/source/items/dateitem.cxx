@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -174,7 +175,7 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                                    sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -188,16 +189,16 @@ sal_Bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                                       aValue.Minutes,
                                       aValue.Seconds,
                                       aValue.HundredthSeconds ) );
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "SfxDateTimeItem::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "SfxDateTimeItem::PutValue - Wrong type!" );
+    return false;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -209,7 +210,7 @@ sal_Bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                            aDateTime.GetMonth(),
                                            aDateTime.GetYear() );
     rVal <<= aValue;
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -276,3 +277,4 @@ SfxItemPresentation SfxColumnDateTimeItem::GetPresentation
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

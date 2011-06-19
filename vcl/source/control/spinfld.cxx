@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -697,7 +698,6 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
         long nBottom1 = aSize.Height()/2;
         long nBottom2 = aSize.Height()-1;
         long nTop2 = nBottom1;
-        long nTop1 = 0;
         if ( !(aSize.Height() & 0x01) )
             nBottom1--;
 
@@ -742,6 +742,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
         }
         else
         {
+            long nTop1 = 0;
             aSize.Width() -= CalcZoom( GetDrawPixel( pDev, rStyleSettings.GetSpinSize() ) );
 
             rSpinUpArea = Rectangle( aSize.Width(), nTop1, rOutSz.Width()-aDropDownSize.Width()-1, nBottom1 );
@@ -1092,3 +1093,5 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         pDev->SetSettings( aOldSettings );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <rtl/logfile.hxx>
+#include <sal/macros.h>
 
 
-using namespace rtl;
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
+
+using ::rtl::OUString;
 
 #define MAX_FLAGS_OFFSET    25
 
@@ -81,7 +84,7 @@ public:
 
 
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
-    ConfigItem( OUString::createFromAscii( "Office.Common/SearchOptions" ) )
+    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/SearchOptions")) )
 {
     RTL_LOGFILE_CONTEXT(aLog, "unotools SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
     nFlags = 0x0003FFFF;    // set all options values to 'true'
@@ -171,7 +174,7 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
         "IsNotes"                   // 25
     };
 
-    const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
+    const int nCount = SAL_N_ELEMENTS( aPropNames );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
@@ -213,18 +216,18 @@ sal_Bool SvtSearchOptions_Impl::Load()
                         SetFlag( i, bVal );
                     }
                     else {
-                        DBG_ERROR( "unexpected index" );
+                        OSL_FAIL( "unexpected index" );
                     }
                 }
                 else
                 {
-                    DBG_ERROR( "unexpected type" );
+                    OSL_FAIL( "unexpected type" );
                     bSucc = sal_False;
                 }
             }
             else
             {
-                DBG_ERROR( "value missing" );
+                OSL_FAIL( "value missing" );
                 bSucc = sal_False;
             }
         }
@@ -634,3 +637,4 @@ void SvtSearchOptions::SetNotes( sal_Bool bVal )
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,30 +29,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sot.hxx"
 
-#include<tools/list.hxx>
-#include<tools/stream.hxx>
-#include<tools/string.hxx>
-#include<tools/rtti.hxx>
-#include<sot/exchange.hxx>
+#include <tools/stream.hxx>
+#include <tools/string.hxx>
+#include <tools/rtti.hxx>
+#include <sot/exchange.hxx>
 #include<sot/filelist.hxx>
 #include <osl/thread.h>
 
 TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
-
-// String-Liste zum Speichern der Namen deklarieren
-DECLARE_LIST( FileStringList, String* )
-
 
 /*************************************************************************
 |*
 |*    FileList - Ctor/Dtor
 |*
 \*************************************************************************/
-
-FileList::FileList()
-{
-    pStrList = new FileStringList();
-}
 
 FileList::~FileList()
 {
@@ -60,13 +51,9 @@ FileList::~FileList()
 
 void FileList::ClearAll( void )
 {
-    // Strings in der Liste loeschen
-    sal_uLong nCount = pStrList->Count();
-    for( sal_uLong i = 0 ; i < nCount ; i++ )
-        delete pStrList->GetObject( i );
-
-    // Liste loeschen
-    delete pStrList;
+    for ( size_t i = 0, n = aStrList.size(); i < n; ++i )
+        delete aStrList[ i ];
+    aStrList.clear();
 }
 
 /*************************************************************************
@@ -77,14 +64,8 @@ void FileList::ClearAll( void )
 
 FileList& FileList::operator=( const FileList& rFileList )
 {
-    // Liste duplizieren
-    *pStrList = *rFileList.pStrList;
-
-    // Strings in der Liste kopieren
-    sal_uLong nCount = pStrList->Count();
-    for( sal_uLong i = 0 ; i < nCount ; i++ )
-        pStrList->Replace( new String( *rFileList.pStrList->GetObject( i ) ), i );
-
+    for ( size_t i = 0, n = rFileList.aStrList.size(); i < n; ++i )
+        aStrList.push_back( new String( *rFileList.aStrList[ i ] ) );
     return *this;
 }
 
@@ -133,7 +114,7 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
 
 SvStream& operator<<( SvStream& rOStm, const FileList& /*rFileList*/ )
 {
-    OSL_ENSURE(false, "Not implemented!");
+    OSL_FAIL("Not implemented!");
     return rOStm;
 }
 
@@ -146,7 +127,6 @@ SvStream& operator<<( SvStream& rOStm, const FileList& /*rFileList*/ )
 SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 {
     rFileList.ClearAll();
-    rFileList.pStrList = new FileStringList();
 
     String aStr;
     sal_uInt16 c;
@@ -181,19 +161,20 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 
 void FileList::AppendFile( const String& rStr )
 {
-    pStrList->Insert( new String( rStr ) , pStrList->Count() );
+    aStrList.push_back( new String( rStr ) );
 }
 
-String FileList::GetFile( sal_uLong i ) const
+String FileList::GetFile( size_t i ) const
 {
     String aStr;
-    if( i < pStrList->Count() )
-        aStr = *pStrList->GetObject( i );
+    if( i < aStrList.size() )
+        aStr = *aStrList[ i ];
     return aStr;
 }
 
-sal_uLong FileList::Count( void ) const
+size_t FileList::Count( void ) const
 {
-    return pStrList->Count();
+    return aStrList.size();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

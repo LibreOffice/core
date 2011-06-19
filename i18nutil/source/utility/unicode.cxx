@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,11 @@
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <i18nutil/unicode.hxx>
 #include "unicode_data.h"
+
+// Workaround for glibc braindamage:
+// glibc 2.4's langinfo.h does "#define CURRENCY_SYMBOL __CURRENCY_SYMBOL"
+// which (obviously) breaks UnicodeType::CURRENCY_SYMBOL
+#undef CURRENCY_SYMBOL
 
 using namespace ::com::sun::star::i18n;
 
@@ -492,3 +498,4 @@ sal_Int32 SAL_CALL unicode::getCharType( const sal_Unicode ch )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

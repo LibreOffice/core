@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_svtools.hxx"
 
 #include <limits.h>
-#ifndef _METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #ifdef DBG_UTIL
 #include <vcl/sound.hxx>
@@ -40,9 +39,7 @@
 #include <svtools/svlbox.hxx>
 #include <svtools/svicnvw.hxx>
 #include <svimpicn.hxx>
-#ifndef _SVLBITM_HXX
 #include <svtools/svlbitm.hxx>
-#endif
 #include <svl/svarray.hxx>
 
 
@@ -667,7 +664,6 @@ class ImpIcnCursor
     SvLBoxEntry*    SearchRow(sal_uInt16 nRow,sal_uInt16 nRight,sal_uInt16 nLeft,sal_uInt16 nPref,
                         sal_Bool bRight, sal_Bool bSimple );
 
-    void            ExpandGrid();
     void            CreateGridMap();
     // Rueckgabe sal_False: Eintrag liegt nicht in der GridMap. rGridx,y werden
     // dann an nGridCols, nGridRows geclippt
@@ -675,10 +671,6 @@ class ImpIcnCursor
     void            SetGridUsed( sal_uInt16 nDX, sal_uInt16 nDY, sal_Bool bUsed )
                     {
                         pGridMap[ (nDY * nGridCols) + nDX ] = bUsed;
-                    }
-    sal_Bool            IsGridUsed( sal_uInt16 nDX, sal_uInt16 nDY )
-                    {
-                        return pGridMap[ (nDY * nGridCols) + nDX ];
                     }
 public:
                     ImpIcnCursor( SvImpIconView* pOwner );
@@ -1317,7 +1309,7 @@ void SvImpIconView::PaintResizeRect( const Rectangle& rRect )
 
 void SvImpIconView::RepaintSelectionItems()
 {
-    DBG_ERROR("RepaintSelectionItems");
+    OSL_FAIL("RepaintSelectionItems");
     pView->Invalidate(); // vorlaeufig
 }
 
@@ -1644,16 +1636,6 @@ sal_Bool SvImpIconView::KeyInput( const KeyEvent& rKEvt )
             }
             break;
 
-#ifdef OS2
-        case KEY_F9:
-            if( rKEvt.GetKeyCode().IsShift() )
-            {
-                if( pCursor && pView->IsInplaceEditingEnabled() )
-                    pView->EditEntry( pCursor );
-            }
-            break;
-#endif
-
         case KEY_SPACE:
             if( pCursor )
             {
@@ -1701,9 +1683,6 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
     Point aPos( 0, nRealHeight );
     aPos.Y() -= nHorSBarHeight;
 
-#ifdef OS2
-    aPos.Y()++;
-#endif
     if( aHorSBar.GetPosPixel() != aPos )
         aHorSBar.SetPosPixel( aPos );
 
@@ -1714,11 +1693,6 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
 #if defined(WNT)
     aPos.X()++;
     aPos.Y()--;
-#endif
-
-#ifdef OS2
-    aPos.Y()--;
-    aPos.X()++;
 #endif
 
     if( aVerSBar.GetPosPixel() != aPos )
@@ -1806,9 +1780,6 @@ void SvImpIconView::AdjustScrollBars()
 #if defined(WNT)
     aSize.Height() += 2;
 #endif
-#ifdef OS2
-    aSize.Height() += 3;
-#endif
     if( aSize != aVerSBar.GetSizePixel() )
         aVerSBar.SetSizePixel( aSize );
     aVerSBar.SetVisibleSize( nVisibleHeight );
@@ -1830,11 +1801,6 @@ void SvImpIconView::AdjustScrollBars()
     aSize.Height() = nHorSBarHeight;
 #if defined(WNT)
     aSize.Width()++;
-#endif
-#ifdef OS2
-    aSize.Width() += 3;
-    if( nResult & 0x0001 ) // vertikale Scrollbar ?
-        aSize.Width()--;
 #endif
 #if defined(WNT)
     if( nResult & 0x0001 ) // vertikale Scrollbar ?
@@ -1858,22 +1824,15 @@ void SvImpIconView::AdjustScrollBars()
         aHorSBar.Hide();
     }
 
-#ifdef OS2
-    nRealWidth++;
-#endif
     aOutputSize.Width() = nRealWidth;
 #if defined(WNT)
     if( nResult & 0x0002 ) // hor scrollbar ?
         nRealHeight++; // weil unterer Rand geclippt wird
 #endif
-#ifdef OS2
-    if( nResult & 0x0002 ) // hor scrollbar ?
-        nRealHeight++;
-#endif
     aOutputSize.Height() = nRealHeight;
 }
 
-void __EXPORT SvImpIconView::Resize()
+void SvImpIconView::Resize()
 {
     StopEditTimer();
     Rectangle aRect;
@@ -1982,7 +1941,7 @@ void SvImpIconView::CheckScrollBars()
 }
 
 
-void __EXPORT SvImpIconView::GetFocus()
+void SvImpIconView::GetFocus()
 {
     if( pCursor )
     {
@@ -1991,7 +1950,7 @@ void __EXPORT SvImpIconView::GetFocus()
     }
 }
 
-void __EXPORT SvImpIconView::LoseFocus()
+void SvImpIconView::LoseFocus()
 {
     StopEditTimer();
     if( pCursor )
@@ -2033,11 +1992,7 @@ void SvImpIconView::PaintEmphasis( const Rectangle& rRect, sal_Bool bSelected,
     }
     else
     {
-#ifndef OS2
         aNewColor =rStyleSettings.GetFieldColor();
-#else
-        aNewColor = pOut->GetBackground().GetColor();
-#endif
     }
 
     if( bCursored )
@@ -3550,20 +3505,6 @@ void ImpIcnCursor::SetDeltas()
     }
 }
 
-
-void ImpIcnCursor::ExpandGrid()
-{
-    if( pGridMap )
-    {
-        long nNewGridRows = nGridRows + 20;
-        unsigned char* pTempMap = new unsigned char[ nNewGridRows * nGridCols ];
-        memcpy( pTempMap, pGridMap, nGridRows * nGridCols );
-        delete pGridMap;
-        pGridMap = pTempMap;
-        nGridRows = nNewGridRows;
-    }
-}
-
 sal_Bool ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
 {
     CreateGridMap();
@@ -3582,9 +3523,6 @@ sal_Bool ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
             rRect.Right() = rRect.Left() + nGridDX;
             SetGridUsed( nCol, nRow, sal_True );
 
-            //XXX
-            //if( nRow + 5 > nGridRows )
-            //  ExpandGrid();
             DBG_ASSERT(pGridMap[nCur],"SetGridUsed failed");
             return sal_True;
         }
@@ -3595,9 +3533,6 @@ sal_Bool ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
     rRect.Left() = LROFFS_WINBORDER;
     rRect.Right() = rRect.Left() + nGridDX;
     return sal_False;
-    //XXX
-    //ExpandGrid();
-    //return sal_True;
 }
 
 void ImpIcnCursor::CreateGridAjustData( SvPtrarr& rLists, SvLBoxEntry* pRefEntry)
@@ -3740,13 +3675,9 @@ const Size& SvImpIconView::GetItemSize( SvIconView* pIconView,
 
 Rectangle SvImpIconView::CalcFocusRect( SvLBoxEntry* pEntry )
 {
-#if !defined(OS2)
     SvLBoxString* pStringItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT(pStringItem,"Text not set");
     return CalcTextRect( pEntry, pStringItem );
-#else
-    return CalcBmpRect( pEntry );
-#endif
 }
 
 
@@ -4159,3 +4090,4 @@ void SvImpIconView::CancelUserEvent()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <algorithm>
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
+#include <rtl/ustring.hxx>
 #include <memory>
 
 #define ROADMAP_INDENT_X        4
@@ -828,7 +830,7 @@ namespace svt
 
         if ( mpID )
         {
-            ::rtl::OUString aIDText = ::rtl::OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  ::rtl::OUString::createFromAscii( "." );
+            ::rtl::OUString aIDText = ::rtl::OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ));
              mpID->SetText( aIDText );
         }
 
@@ -926,7 +928,7 @@ namespace svt
     {
         // calculate widths
         long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
-        long nMaxIDWidth = mpID->GetTextWidth( ::rtl::OUString::createFromAscii( "100." ) );
+        long nMaxIDWidth = mpID->GetTextWidth( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "100." )) );
         nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
 
         // check how many space the description would need
@@ -1016,3 +1018,5 @@ namespace svt
 //.........................................................................
 }   // namespace svt
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

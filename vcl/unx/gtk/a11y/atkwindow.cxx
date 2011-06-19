@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -295,13 +296,13 @@ ooo_window_wrapper_get_type (void)
 
         static const GTypeInfo typeInfo =
         {
-            type_query.class_size,
+            static_cast<guint16>(type_query.class_size),
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
             (GClassInitFunc) ooo_window_wrapper_class_init,
             (GClassFinalizeFunc) NULL,
             NULL,
-            type_query.instance_size,
+            static_cast<guint16>(type_query.instance_size),
             0,
             (GInstanceInitFunc) NULL,
             NULL
@@ -329,3 +330,4 @@ void restore_gail_window_vtable (void)
     atk_class->initialize = window_real_initialize;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

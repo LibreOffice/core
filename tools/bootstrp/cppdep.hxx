@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,12 +26,12 @@
  *
  ************************************************************************/
 
-#include <tools/list.hxx>
 #include <tools/string.hxx>
+#include <vector>
 #define PATH_SEP ":"
 #define DIR_SEP "/"
 
-DECLARE_LIST( ByteStringList, ByteString * )
+typedef ::std::vector< ByteString* > ByteStringList;
 
 class CppDep
 {
@@ -56,3 +57,4 @@ public:
     sal_Bool            AddSource( const char * aSource );
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

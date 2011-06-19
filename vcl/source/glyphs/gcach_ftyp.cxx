@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,17 +37,22 @@
 #include "gcach_ftyp.hxx"
 
 #include "vcl/svapp.hxx"
-
-#include "outfont.hxx"
-#include "impfont.hxx"
+#include <outfont.hxx>
+#include <impfont.hxx>
+#ifdef ENABLE_GRAPHITE
+#include <graphite2/Font.h>
+#include <graphite_layout.hxx>
+#endif
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
-#include "basegfx/matrix/b2dhommatrixtools.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include "osl/file.hxx"
 #include "osl/thread.hxx"
+
+#include "sft.hxx"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -78,10 +84,8 @@ typedef FT_Vector* FT_Vector_CPtr;
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
-    #if !defined(HPUX)
-        // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
-        #include <dlfcn.h>
-    #endif
+    // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
+    #include <dlfcn.h>
     #include <unistd.h>
     #include <fcntl.h>
     #include <sys/stat.h>
@@ -136,7 +140,8 @@ FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
-typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
+struct HashStr { size_t operator()( const char* s ) const { return rtl_str_hashCode(s); } };
+typedef ::boost::unordered_map<const char*,boost::shared_ptr<FtFontFile>,HashStr, EqStr> FontFileList;
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------
@@ -211,12 +216,12 @@ FtFontFile* FtFontFile::FindFontFile( const ::rtl::OString& rNativeFileName )
     FontFileList &rFontFileList = vclFontFileList::get();
     FontFileList::const_iterator it = rFontFileList.find( pFileName );
     if( it != rFontFileList.end() )
-        return (*it).second;
+        return it->second.get();
 
     // no => create new one
     FtFontFile* pFontFile = new FtFontFile( rNativeFileName );
     pFileName = pFontFile->maNativeFileName.getStr();
-    rFontFileList[ pFileName ] = pFontFile;
+    rFontFileList[pFileName].reset(pFontFile);
     return pFontFile;
 }
 
@@ -289,6 +294,33 @@ void FtFontFile::Unmap()
     mpFileMap = NULL;
 }
 
+#ifdef ENABLE_GRAPHITE
+// wrap FtFontInfo's table function
+const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, size_t *len)
+{
+    const FtFontInfo * pFontInfo = reinterpret_cast<const FtFontInfo*>(appFaceHandle);
+    typedef union {
+        char m_c[5];
+        unsigned int m_id;
+    } TableId;
+    TableId tableId;
+    tableId.m_id = name;
+#ifndef WORDS_BIGENDIAN
+    TableId swapped;
+    swapped.m_c[3] = tableId.m_c[0];
+    swapped.m_c[2] = tableId.m_c[1];
+    swapped.m_c[1] = tableId.m_c[2];
+    swapped.m_c[0] = tableId.m_c[3];
+    tableId.m_id = swapped.m_id;
+#endif
+    tableId.m_c[4] = '\0';
+    sal_uLong nLength = 0;
+    const void * pTable = static_cast<const void*>(pFontInfo->GetTable(tableId.m_c, &nLength));
+    if (len) *len = static_cast<size_t>(nLength);
+    return pTable;
+}
+#endif
+
 // =======================================================================
 
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
@@ -300,6 +332,10 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
     mnSynthetic( nSynthetic ),
+#ifdef ENABLE_GRAPHITE
+    mbCheckedGraphite(false),
+    mpGraphiteFace(NULL),
+#endif
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
     mpFontCharMap( NULL ),
@@ -325,6 +361,10 @@ FtFontInfo::~FtFontInfo()
     delete mpExtraKernInfo;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
+#ifdef ENABLE_GRAPHITE
+    if (mpGraphiteFace)
+        delete mpGraphiteFace;
+#endif
 }
 
 void FtFontInfo::InitHashes() const
@@ -352,6 +392,30 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
 
    return maFaceFT;
 }
+
+#ifdef ENABLE_GRAPHITE
+GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
+{
+    if (mbCheckedGraphite)
+        return mpGraphiteFace;
+    // test for graphite here so that it is cached most efficiently
+    if (GetTable("Silf", 0))
+    {
+        int graphiteSegCacheSize = 10000;
+        static const char* pGraphiteCacheStr = getenv( "SAL_GRAPHITE_CACHE_SIZE" );
+        graphiteSegCacheSize = pGraphiteCacheStr ? (atoi(pGraphiteCacheStr)) : 0;
+        gr_face * pGraphiteFace;
+        if (graphiteSegCacheSize > 500)
+            pGraphiteFace = gr_make_face_with_seg_cache(this, graphiteFontTable, graphiteSegCacheSize, gr_face_cacheCmap);
+        else
+            pGraphiteFace = gr_make_face(this, graphiteFontTable, gr_face_cacheCmap);
+        if (pGraphiteFace)
+            mpGraphiteFace = new GraphiteFaceWrapper(pGraphiteFace);
+    }
+    mbCheckedGraphite = true;
+    return mpGraphiteFace;
+}
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -508,6 +572,7 @@ FreetypeManager::FreetypeManager()
         nDefaultPrioAutoHint  = pEnv[0] - '0';
 
     InitGammaTable();
+    vclFontFileList::get();
 }
 
 // -----------------------------------------------------------------------
@@ -524,25 +589,11 @@ void* FreetypeServerFont::GetFtFace() const
 
 FreetypeManager::~FreetypeManager()
 {
-    // an application about to exit can omit garbage collecting the heap
-    // since it makes things slower and introduces risks if the heap was not perfect
-    // for debugging, for memory grinding or leak checking the env allows to force GC
-    const char* pEnv = getenv( "SAL_FORCE_GC_ON_EXIT" );
-    if( pEnv && (*pEnv != '0') )
-    {
-        // cleanup container of fontinfos
-        for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
-        {
-            FtFontInfo* pInfo = (*it).second;
-            delete pInfo;
-        }
-        maFontList.clear();
-
-#if 0   // FT_Done_FreeType crashes on Solaris 10
-    // TODO: check which versions have this problem
-    FT_Error rcFT = FT_Done_FreeType( aLibFT );
-#endif
-    }
+    ClearFontList();
+// This crashes on Solaris 10
+// TODO: check which versions have this problem
+//
+// FT_Error rcFT = FT_Done_FreeType( aLibFT );
 }
 
 // -----------------------------------------------------------------------
@@ -579,7 +630,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
     rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
     while( (rcOSL = aDir.getNextItem( aDirItem, 20 )) == osl::FileBase::E_None )
     {
-        osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+        osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
         rcOSL = aDirItem.getFileStatus( aFileStatus );
 
         ::rtl::OUString aUSytemPath;
@@ -608,7 +659,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
                 aDFA.maName        = String::CreateFromAscii( aFaceFT->family_name );
 
             if ( aFaceFT->style_name )
-                aDFA.maStyleName   = String::CreateFromAscii( aFaceFT->style_name );
+                aDFA.maStyleName = String::CreateFromAscii( aFaceFT->style_name );
 
             aDFA.mbSymbolFlag = false;
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
@@ -724,11 +775,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mpLayoutEngine( NULL )
 {
     maFaceFT = pFI->GetFaceFT();
-
-#ifdef HDU_DEBUG
-    fprintf( stderr, "FTSF::FTSF(\"%s\", h=%d, w=%d, sy=%d) => %d\n",
-        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth, pFI->IsSymbolFont(), maFaceFT!=0 );
-#endif
 
     if( !maFaceFT )
         return;
@@ -869,9 +915,14 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
+void FreetypeServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions)
 {
-    FontAutoHint eHint = rFontOptions.GetUseAutoHint();
+    mpFontOptions = pFontOptions;
+
+    if (!mpFontOptions)
+        return;
+
+    FontAutoHint eHint = mpFontOptions->GetUseAutoHint();
     if( eHint == AUTOHINT_DONTKNOW )
         eHint = mbUseGamma ? AUTOHINT_TRUE : AUTOHINT_FALSE;
 
@@ -882,11 +933,11 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-    if( rFontOptions.DontUseAntiAlias() )
+    if( mpFontOptions->DontUseAntiAlias() )
       mnPrioAntiAlias = 0;
-    if( rFontOptions.DontUseEmbeddedBitmaps() )
+    if( mpFontOptions->DontUseEmbeddedBitmaps() )
       mnPrioEmbedded = 0;
-    if( rFontOptions.DontUseHinting() )
+    if( mpFontOptions->DontUseHinting() )
       mnPrioAutoHint = 0;
 
 #if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
@@ -898,7 +949,7 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
     if( !(mnLoadFlags & FT_LOAD_NO_HINTING) && (nFTVERSION >= 2103))
     {
        mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
-       switch( rFontOptions.GetHintStyle() )
+       switch( mpFontOptions->GetHintStyle() )
        {
            case HINT_NONE:
                 mnLoadFlags |= FT_LOAD_NO_HINTING;
@@ -917,6 +968,11 @@ void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
 
     if( mnPrioEmbedded <= 0 )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
+}
+
+boost::shared_ptr<ImplFontOptions> FreetypeServerFont::GetFontOptions() const
+{
+    return mpFontOptions;
 }
 
 // -----------------------------------------------------------------------
@@ -1228,11 +1284,6 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
             // check if symbol aliasing helps
             if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
                 nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
-#if 0 // disabled for now because it introduced ae bad side-effect (#i88376#)
-            // Finally try the postscript name table
-            if (!nGlyphIndex)
-                nGlyphIndex = psp::PrintFontManager::get().FreeTypeCharIndex( maFaceFT, aChar );
-#endif
         }
         mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
     }
@@ -1269,17 +1320,6 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
             nGlyphFlags |= GF_GSUB | GF_ROTL;
         }
     }
-
-#if 0
-    // #95556# autohinting not yet optimized for non-western glyph styles
-    if( !(mnLoadFlags & (FT_LOAD_NO_HINTING | FT_LOAD_FORCE_AUTOHINT) )
-    &&  ( (aChar >= 0x0600 && aChar < 0x1E00)   // south-east asian + arabic
-        ||(aChar >= 0x2900 && aChar < 0xD800)   // CJKV
-        ||(aChar >= 0xF800) ) )                 // presentation + symbols
-    {
-        nGlyphFlags |= GF_UNHINTED;
-    }
-#endif
 
     if( nGlyphIndex != 0 )
         nGlyphIndex |= nGlyphFlags;
@@ -1825,6 +1865,29 @@ bool FtFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
     return true;
 }
 
+bool FreetypeServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    bool bRet = false;
+
+    sal_uLong nLength = 0;
+    // load GSUB table
+    const FT_Byte* pGSUB = mpFontInfo->GetTable("GSUB", &nLength);
+    if (pGSUB)
+        vcl::getTTScripts(rFontCapabilities.maGSUBScriptTags, pGSUB, nLength);
+
+    // load OS/2 table
+    const FT_Byte* pOS2 = mpFontInfo->GetTable("OS/2", &nLength);
+    if (pOS2)
+    {
+        bRet = vcl::getTTCoverage(
+            rFontCapabilities.maUnicodeRange,
+            rFontCapabilities.maCodePageRange,
+            pOS2, nLength);
+    }
+
+    return bRet;
+}
+
 // -----------------------------------------------------------------------
 // kerning stuff
 // -----------------------------------------------------------------------
@@ -2058,7 +2121,7 @@ sal_uLong FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) con
         // prepare glyphindex to character mapping
         // TODO: this is needed to support VCL's existing kerning infrastructure,
         // eliminate it up by redesigning kerning infrastructure to work with glyph indizes
-        typedef std::hash_multimap<sal_uInt16,sal_Unicode> Cmap;
+        typedef boost::unordered_multimap<sal_uInt16,sal_Unicode> Cmap;
         Cmap aCmap;
         for( sal_Unicode aChar = 0x0020; aChar < 0xFFFE; ++aChar )
         {
@@ -2147,6 +2210,7 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
     mnMaxPoints(nMaxPoints),
     mnPoints(0),
     mnPoly(0),
+    mnHeight(0),
     bHasOffline(false)
 {
     mpPointAry  = new Point[ mnMaxPoints ];
@@ -2366,7 +2430,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     sal_uLong nRequestedLangsys = 0;    //MKTAG("ZHT"); //### TODO: where to get langsys?
     // TODO: request more features depending on script and language system
 
-    if( aReqFeatureTagList.size() == 0) // nothing to do
+    if( aReqFeatureTagList.empty()) // nothing to do
         return true;
 
     // load GSUB table into memory
@@ -2446,7 +2510,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         }
     }
 
-    if( !aFeatureIndexList.size() )
+    if( aFeatureIndexList.empty() )
         return true;
 
     UshortList aLookupIndexList;
@@ -2600,3 +2664,4 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
 // =======================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,10 +36,11 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 #define ERROR RuntimeException()
+
+namespace com { namespace sun { namespace star { namespace i18n {
 
 // not used
 //static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
@@ -191,9 +193,9 @@ public:
          + HebrewEpoch));         // Days elapsed before absolute date 1.
     }
 
-    sal_Int32 GetMonth() { return month; }
-    sal_Int32 GetDay() { return day; }
-    sal_Int32 GetYear() { return year; }
+    sal_Int32 GetMonth() const { return month; }
+    sal_Int32 GetDay() const { return day; }
+    sal_Int32 GetYear() const { return year; }
 
 };
 
@@ -250,9 +252,9 @@ public:
            + (year - 1)/400);   // ...plus prior years divisible by 400
     }
 
-    int GetMonth() { return month; }
-    int GetDay() { return day; }
-    int GetYear() { return year; }
+    int GetMonth() const { return month; }
+    int GetDay() const { return day; }
+    int GetYear() const { return year; }
 
 };
 
@@ -304,3 +306,7 @@ Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNa
     else
         return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode );
 }
+
+}}}}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

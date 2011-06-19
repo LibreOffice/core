@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #define _SV_OUTFONT_HXX
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <i18npool/lang.h>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
@@ -37,7 +37,7 @@
 #include <unotools/fontdefs.hxx>
 #include <vcl/vclenum.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ImplDevFontListData;
 class ImplGetDevFontList;
@@ -192,7 +192,7 @@ private:
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
-    typedef std::hash_map<const String, ImplDevFontListData*,FontNameHash> DevFontList;
+    typedef boost::unordered_map<const String, ImplDevFontListData*,FontNameHash> DevFontList;
     DevFontList             maDevFontList;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
@@ -351,7 +351,7 @@ private:
     // TODO: at least the ones which just differ in orientation, stretching or height
     typedef ::std::pair<sal_UCS4,FontWeight> GFBCacheKey;
     struct GFBCacheKey_Hash{ size_t operator()( const GFBCacheKey& ) const; };
-    typedef ::std::hash_map<GFBCacheKey,String,GFBCacheKey_Hash> UnicodeFallbackList;
+    typedef ::boost::unordered_map<GFBCacheKey,String,GFBCacheKey_Hash> UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
 
@@ -404,3 +404,4 @@ private:
 
 #endif // _SV_OUTFONT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

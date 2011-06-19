@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -178,3 +179,5 @@ bool cow_wrapper_client3::operator<( const cow_wrapper_client3& rRHS ) const
 }
 
 } // namespace o3tltests
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

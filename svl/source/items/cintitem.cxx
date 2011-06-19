@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,26 +88,26 @@ SfxItemPresentation CntByteItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-sal_Bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal,sal_uInt8) const
+bool CntByteItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int8 nValue = m_nValue;
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
 //============================================================================
 // virtual
-sal_Bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal,sal_uInt8)
+bool CntByteItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     sal_Int8 nValue = sal_Int8();
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "CntByteItem::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "CntByteItem::PutValue - Wrong type!" );
+    return false;
 }
 
 //============================================================================
@@ -222,27 +223,27 @@ SfxItemPresentation CntUInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-sal_Bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal,sal_uInt8) const
+bool CntUInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
 //============================================================================
 // virtual
-sal_Bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal,sal_uInt8)
+bool CntUInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         DBG_ASSERT( nValue <= USHRT_MAX, "Overflow in UInt16 value!");
         m_nValue = (sal_uInt16)nValue;
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "CntUInt16Item::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "CntUInt16Item::PutValue - Wrong type!" );
+    return false;
 }
 
 //============================================================================
@@ -354,26 +355,26 @@ SfxItemPresentation CntInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-sal_Bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal,sal_uInt8) const
+bool CntInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
 //============================================================================
 // virtual
-sal_Bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal,sal_uInt8)
+bool CntInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "CntInt32Item::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "CntInt32Item::PutValue - Wrong type!" );
+    return false;
 }
 
 //============================================================================
@@ -487,28 +488,28 @@ SfxItemPresentation CntUInt32Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-sal_Bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal,sal_uInt8) const
+bool CntUInt32Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int32 nValue = m_nValue;
     DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
 //============================================================================
 // virtual
-sal_Bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal,sal_uInt8)
+bool CntUInt32Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     sal_Int32 nValue = 0;
     if (rVal >>= nValue)
     {
         DBG_ASSERT( nValue>=0, "Overflow in UInt32 value!");
         m_nValue = nValue;
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "CntUInt32Item::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "CntUInt32Item::PutValue - Wrong type!" );
+    return false;
 }
 
 //============================================================================
@@ -560,3 +561,4 @@ SfxFieldUnit CntUInt32Item::GetUnit() const
     return SFX_FUNIT_NONE;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

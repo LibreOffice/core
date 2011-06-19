@@ -49,20 +49,21 @@
 #define MID_SEARCH_CELLTYPE             2
 #define MID_SEARCH_ROWDIRECTION         3
 #define MID_SEARCH_ALLTABLES            4
-#define MID_SEARCH_BACKWARD             5
-#define MID_SEARCH_PATTERN              6
-#define MID_SEARCH_CONTENT              7
-#define MID_SEARCH_ASIANOPTIONS         8
-#define MID_SEARCH_ALGORITHMTYPE        9
-#define MID_SEARCH_FLAGS                10
-#define MID_SEARCH_SEARCHSTRING         11
-#define MID_SEARCH_REPLACESTRING        12
-#define MID_SEARCH_LOCALE               13
-#define MID_SEARCH_CHANGEDCHARS         14
-#define MID_SEARCH_DELETEDCHARS         15
-#define MID_SEARCH_INSERTEDCHARS        16
-#define MID_SEARCH_TRANSLITERATEFLAGS   17
-#define MID_SEARCH_COMMAND              18
+#define MID_SEARCH_SEARCHFILTERED       5
+#define MID_SEARCH_BACKWARD             6
+#define MID_SEARCH_PATTERN              7
+#define MID_SEARCH_CONTENT              8
+#define MID_SEARCH_ASIANOPTIONS         9
+#define MID_SEARCH_ALGORITHMTYPE        10
+#define MID_SEARCH_FLAGS                11
+#define MID_SEARCH_SEARCHSTRING         12
+#define MID_SEARCH_REPLACESTRING        13
+#define MID_SEARCH_LOCALE               14
+#define MID_SEARCH_CHANGEDCHARS         15
+#define MID_SEARCH_DELETEDCHARS         16
+#define MID_SEARCH_INSERTEDCHARS        17
+#define MID_SEARCH_TRANSLITERATEFLAGS   18
+#define MID_SEARCH_COMMAND              19
 
 
 #endif

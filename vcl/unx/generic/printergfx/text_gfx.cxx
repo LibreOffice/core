@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
   *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -178,7 +179,7 @@ void PrinterGfx::drawGlyphs(
     // draw the string
     // search for a glyph set matching the set font
     std::list< GlyphSet >::iterator aIter;
-    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
         if ( ((*aIter).GetFontID()  == mnFontID)
              && ((*aIter).IsVertical() == mbTextVertical))
         {
@@ -621,7 +622,7 @@ PrinterGfx::drawText(
 
     // search for a glyph set matching the set font
     std::list< GlyphSet >::iterator aIter;
-    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
         if (   ((*aIter).GetFontID()  == mnFontID)
             && ((*aIter).IsVertical() == mbTextVertical))
         {
@@ -702,7 +703,7 @@ PrinterGfx::getFontSubstitute () const
 {
     if( mpFontSubstitutes )
     {
-        ::std::hash_map< fontID, fontID >::const_iterator it =
+        ::boost::unordered_map< fontID, fontID >::const_iterator it =
               mpFontSubstitutes->find( mnFontID );
         if( it != mpFontSubstitutes->end() )
             return it->second;
@@ -746,7 +747,7 @@ const ::std::list< KernPair >& PrinterGfx::getKernPairs( bool bVertical ) const
     fontID nFont = mnFontID;
     if( mpFontSubstitutes )
     {
-        ::std::hash_map< fontID, fontID >::const_iterator it =
+        ::boost::unordered_map< fontID, fontID >::const_iterator it =
               mpFontSubstitutes->find( mnFontID );
         if( it != mpFontSubstitutes->end() )
             nFont = it->second;
@@ -812,7 +813,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
         WritePS (pFile, aPostScriptName.getStr());
         WritePS (pFile, "\n");
 
-        osl::File::RC nError = aFontFile.open (OpenFlag_Read);
+        osl::File::RC nError = aFontFile.open(osl_File_OpenFlag_Read);
         if (nError == osl::File::E_None)
         {
             convertPfbToPfa (aFontFile, *pFile);
@@ -860,3 +861,5 @@ void PrinterGfx::setStrictSO52Compatibility( bool bCompat)
 {
     mbStrictSO52Compatibility = bCompat;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

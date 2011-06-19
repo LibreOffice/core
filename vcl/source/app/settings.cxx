@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
+#include <svsys.h>
 #include "tools/debug.hxx"
 
 #include "i18npool/mslangid.hxx"
@@ -48,17 +49,10 @@
 #include "unotools/confignode.hxx"
 #include "unotools/syslocaleoptions.hxx"
 
-#ifdef WNT
-#include "tools/prewin.h"
-#include <windows.h>
-#include "tools/postwin.h"
-#endif
+using ::rtl::OUString;
 
 #include "svdata.hxx"
 #include "impimagetree.hxx"
-
-using namespace rtl;
-
 // =======================================================================
 
 DBG_NAME( AllSettings )
@@ -436,6 +430,7 @@ ImplStyleData::ImplStyleData()
     mnAutoMnemonic              = 1;
     mnToolbarIconSize           = STYLE_TOOLBAR_ICONSIZE_UNKNOWN;
     mnSymbolsStyle              = STYLE_SYMBOLS_AUTO;
+    mnUseImagesInMenus          = STYLE_MENUIMAGES_AUTO;
     mnPreferredSymbolsStyle         = STYLE_SYMBOLS_AUTO;
     mpFontOptions              = NULL;
 
@@ -536,7 +531,10 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnUseFlatMenues             = rData.mnUseFlatMenues;
     mnAutoMnemonic              = rData.mnAutoMnemonic;
     mnUseImagesInMenus          = rData.mnUseImagesInMenus;
+    mbPreferredUseImagesInMenus = rData.mbPreferredUseImagesInMenus;
     mnSkipDisabledInMenus       = rData.mnSkipDisabledInMenus;
+    mbHideDisabledMenuItems              = rData.mbHideDisabledMenuItems;
+    mnAcceleratorsInContextMenus    = rData.mnAcceleratorsInContextMenus;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
     mnSymbolsStyle              = rData.mnSymbolsStyle;
     mnPreferredSymbolsStyle         = rData.mnPreferredSymbolsStyle;
@@ -550,7 +548,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( utl::DefaultFontConfiguration::get()->getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
+    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -562,8 +560,8 @@ void ImplStyleData::SetStandardStyles()
     maPushButtonFont            = aStdFont;
     maFieldFont                 = aStdFont;
     maIconFont                  = aStdFont;
-    maFloatTitleFont            = aStdFont;
     aStdFont.SetWeight( WEIGHT_BOLD );
+    maFloatTitleFont            = aStdFont;
     maTitleFont                 = aStdFont;
 
     maFaceColor                 = Color( COL_LIGHTGRAY );
@@ -623,8 +621,10 @@ void ImplStyleData::SetStandardStyles()
     mnUseSystemUIFonts          = 1;
     mnUseFlatBorders            = 0;
     mnUseFlatMenues             = 0;
-    mnUseImagesInMenus          = (sal_uInt16)sal_True;
+    mbPreferredUseImagesInMenus         = sal_True;
     mnSkipDisabledInMenus       = (sal_uInt16)sal_False;
+    mbHideDisabledMenuItems     = sal_False;
+    mnAcceleratorsInContextMenus    = sal_True;
 
     Gradient aGrad( GRADIENT_LINEAR, DEFAULT_WORKSPACE_GRADIENT_START_COLOR, DEFAULT_WORKSPACE_GRADIENT_END_COLOR );
     maWorkspaceGradient = Wallpaper( aGrad );
@@ -696,36 +696,39 @@ void StyleSettings::Set3DColors( const Color& rColor )
 {
     switch ( nStyle )
     {
-        case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString::createFromAscii( "default" );
-        case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString::createFromAscii( "hicontrast" );
-        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString::createFromAscii( "industrial" );
-        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString::createFromAscii( "crystal" );
-        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString::createFromAscii( "tango" );
-        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString::createFromAscii( "oxygen" );
-        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString::createFromAscii( "classic" );
+        case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"));
+        case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hicontrast"));
+        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango")); // industrial is dead
+        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("crystal"));
+        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango"));
+        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen"));
+        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic"));
+        case STYLE_SYMBOLS_HUMAN:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human"));
     }
 
-    return ::rtl::OUString::createFromAscii( "auto" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto"));
 }
 
 // -----------------------------------------------------------------------
 
 sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
 {
-    if ( rName == ::rtl::OUString::createFromAscii( "default" ) )
+    if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default")) )
         return STYLE_SYMBOLS_DEFAULT;
-    else if ( rName == ::rtl::OUString::createFromAscii( "hicontrast" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hicontrast")) )
         return STYLE_SYMBOLS_HICONTRAST;
-    else if ( rName == ::rtl::OUString::createFromAscii( "industrial" ) )
-        return STYLE_SYMBOLS_INDUSTRIAL;
-    else if ( rName == ::rtl::OUString::createFromAscii( "crystal" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("industrial")) )
+        return STYLE_SYMBOLS_TANGO; // industrial is dead
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("crystal")) )
         return STYLE_SYMBOLS_CRYSTAL;
-    else if ( rName == ::rtl::OUString::createFromAscii( "tango" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango")) )
         return STYLE_SYMBOLS_TANGO;
-    else if ( rName == ::rtl::OUString::createFromAscii( "oxygen" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen")) )
         return STYLE_SYMBOLS_OXYGEN;
-    else if ( rName == ::rtl::OUString::createFromAscii( "classic" ) )
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic")) )
         return STYLE_SYMBOLS_CLASSIC;
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human")) )
+        return STYLE_SYMBOLS_HUMAN;
 
     return STYLE_SYMBOLS_AUTO;
 }
@@ -747,6 +750,21 @@ void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
         for( sal_uInt32 n = 0; n <= STYLE_SYMBOLS_THEMES_MAX; n++ )
             if ( rNameLowCase.indexOf( ImplSymbolsStyleToName( n ) ) != -1 )
                 SetPreferredSymbolsStyle( n );
+    }
+}
+
+void StyleSettings::SetCheckedColorSpecialCase( )
+{
+    CopyData();
+    // Light gray checked color special case
+    if ( GetFaceColor() == COL_LIGHTGRAY )
+        mpData->maCheckedColor = Color( 0xCC, 0xCC, 0xCC );
+    else
+    {
+        sal_uInt8 nRed   = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetRed()   + (sal_uInt16)mpData->maLightColor.GetRed())/2);
+        sal_uInt8 nGreen = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetGreen() + (sal_uInt16)mpData->maLightColor.GetGreen())/2);
+        sal_uInt8 nBlue  = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetBlue()  + (sal_uInt16)mpData->maLightColor.GetBlue())/2);
+        mpData->maCheckedColor = Color( nRed, nGreen, nBlue );
     }
 }
 
@@ -811,7 +829,8 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 
     if( bCont )
     {
-        if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
+        if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) ||
+            rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "windows" ) )
             nRet = STYLE_SYMBOLS_TANGO;
         else if( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
             nRet = STYLE_SYMBOLS_CRYSTAL;
@@ -851,8 +870,24 @@ sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 
 bool StyleSettings::CheckSymbolStyle( sal_uLong nStyle ) const
 {
+    if ( nStyle == STYLE_SYMBOLS_INDUSTRIAL )
+        return false; // industrial is dead
+
     static ImplImageTreeSingletonRef aImageTree;
     return aImageTree->checkStyle( ImplSymbolsStyleToName( nStyle ) );
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool StyleSettings::GetUseImagesInMenus() const
+{
+    // icon mode selected in Tools -> Options... -> OpenOffice.org -> View
+    sal_uInt16 nStyle = mpData->mnUseImagesInMenus;
+
+    if ( nStyle == STYLE_MENUIMAGES_AUTO )
+        return GetPreferredUseImagesInMenus();
+
+    return (sal_Bool)nStyle;
 }
 
 // -----------------------------------------------------------------------
@@ -1063,7 +1098,10 @@ sal_Bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
          (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
          (mpData->mnUseImagesInMenus        == rSet.mpData->mnUseImagesInMenus)         &&
+         (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
          (mpData->mnSkipDisabledInMenus     == rSet.mpData->mnSkipDisabledInMenus)      &&
+         (mpData->mbHideDisabledMenuItems   == rSet.mpData->mbHideDisabledMenuItems)    &&
+         (mpData->mnAcceleratorsInContextMenus  == rSet.mpData->mnAcceleratorsInContextMenus)       &&
          (mpData->maFontColor               == rSet.mpData->maFontColor ))
         return sal_True;
     else
@@ -1253,7 +1291,7 @@ void MiscSettings::SetDisablePrinting( sal_Bool bEnable )
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DesktopManagement" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisablePrinting" ) ),
-                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
+                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
         mpData->mnDisablePrinting = bEnable ? 1 : 0;
     }
 }
@@ -1309,7 +1347,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
         vcl::SettingsConfigItem::get()->
             setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Accessibility" ) ),
                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableATToolSupport" ) ),
-                      rtl::OUString::createFromAscii( bEnable ? "true" : "false" ) );
+                      bEnable ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false" )) );
         mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }
@@ -1525,8 +1563,6 @@ ImplAllSettingsData::ImplAllSettingsData()
     meUILanguage                  = LANGUAGE_SYSTEM;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
-    mpCollatorWrapper           = NULL;
-    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
     maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
@@ -1552,8 +1588,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     // called
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
-    mpCollatorWrapper           = NULL;
-    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
 }
@@ -1566,10 +1600,6 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpLocaleDataWrapper;
     if ( mpUILocaleDataWrapper )
         delete mpUILocaleDataWrapper;
-    if ( mpCollatorWrapper )
-        delete mpCollatorWrapper;
-    if ( mpUICollatorWrapper )
-        delete mpUICollatorWrapper;
     if ( mpI18nHelper )
         delete mpI18nHelper;
     if ( mpUII18nHelper )
@@ -1890,11 +1920,11 @@ sal_Bool AllSettings::GetLayoutRTL() const
         nUIMirroring = 0; // ask configuration only once
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/I18N/CTL" ) );    // note: case sensisitive !
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/I18N/CTL")) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
             sal_Bool bTmp = sal_Bool();
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "UIMirroring" ) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("UIMirroring")) );
             if( aValue >>= bTmp )
             {
                 // found true or false; if it was nil, nothing is changed
@@ -1997,32 +2027,6 @@ const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
     return *mpData->mpUII18nHelper;
 }
 
-
-// -----------------------------------------------------------------------
-/*
-const CollatorWrapper& AllSettings::GetCollatorWrapper() const
-{
-    if ( !mpData->mpCollatorWrapper )
-    {
-        ((AllSettings*)this)->mpData->mpCollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
-        ((AllSettings*)this)->mpData->mpCollatorWrapper->loadDefaultCollator( GetLocale(), 0 );
-    }
-    return *mpData->mpCollatorWrapper;
-}
-*/
-// -----------------------------------------------------------------------
-/*
-const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
-{
-    if ( !mpData->mpUICollatorWrapper )
-    {
-        ((AllSettings*)this)->mpData->mpUICollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
-        ((AllSettings*)this)->mpData->mpUICollatorWrapper->loadDefaultCollator( GetUILocale(), 0 );
-    }
-    return *mpData->mpUICollatorWrapper;
-}
-*/
-
 void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
 {
     AllSettings aAllSettings( Application::GetSettings() );
@@ -2042,3 +2046,5 @@ void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
 
     Application::SetSettings( aAllSettings );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

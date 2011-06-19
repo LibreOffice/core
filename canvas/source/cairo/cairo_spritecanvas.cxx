@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -124,14 +125,14 @@ namespace cairocanvas
         maArguments.realloc(0);
     }
 
-    void SAL_CALL SpriteCanvas::disposing()
+    void SpriteCanvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mxComponentContext.clear();
 
         // forward to parent
-        SpriteCanvasBaseT::disposing();
+        SpriteCanvasBaseT::disposeThis();
     }
 
     ::sal_Bool SAL_CALL SpriteCanvas::showBuffer( ::sal_Bool bUpdateAll ) throw (uno::RuntimeException)
@@ -230,3 +231,5 @@ namespace cairocanvas
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

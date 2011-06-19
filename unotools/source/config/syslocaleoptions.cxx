@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,10 +47,10 @@
 
 using namespace osl;
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
+using ::rtl::OUString;
 
 SvtSysLocaleOptions_Impl*   SvtSysLocaleOptions::pOptions = NULL;
 sal_Int32                   SvtSysLocaleOptions::nRefCount = 0;
@@ -146,14 +147,14 @@ public:
 
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
-    static const OUString pProperties[] =
+    const OUString pProperties[] =
     {
         PROPERTYNAME_LOCALE,
         PROPERTYNAME_UILOCALE,
         PROPERTYNAME_CURRENCY,
         PROPERTYNAME_DECIMALSEPARATOR
     };
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     return seqPropertyNames;
 }
 
@@ -182,7 +183,6 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
         {
             for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
             {
-                DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
                 if ( pValues[nProp].hasValue() )
                 {
                     switch ( nProp )
@@ -241,7 +241,6 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
                 }
             }
         }
-//        UpdateMiscSettings_Impl();
         EnableNotification( aNames );
     }
 
@@ -272,19 +271,16 @@ void SvtSysLocaleOptions_Impl::MakeRealLocale()
 
 void SvtSysLocaleOptions_Impl::MakeRealUILocale()
 {
-    if ( !m_aRealUILocale.Language.getLength() )
+    // as we can't switch UILocale at runtime, we only store changes in the configuration
+    m_aRealUILocale = lcl_str_to_locale( m_aUILocaleString );
+    if ( m_aRealUILocale.Language.getLength() )
     {
-        // as we can't switch UILocale at runtime, we only store changes in the configuration
-        m_aRealUILocale = lcl_str_to_locale( m_aUILocaleString );
-        if ( m_aRealUILocale.Language.getLength() )
-        {
-            m_eRealUILanguage = MsLangId::convertLocaleToLanguage( m_aRealUILocale );
-        }
-        else
-        {
-            m_eRealUILanguage = MsLangId::getSystemUILanguage();
-            MsLangId::convertLanguageToLocale( m_eRealUILanguage, m_aRealUILocale );
-        }
+        m_eRealUILanguage = MsLangId::convertLocaleToLanguage( m_aRealUILocale );
+    }
+    else
+    {
+        m_eRealUILanguage = MsLangId::getSystemUILanguage();
+        MsLangId::convertLanguageToLocale( m_eRealUILanguage, m_aRealUILocale );
     }
 }
 
@@ -398,13 +394,12 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
     if (!m_bROUILocale && rStr != m_aUILocaleString )
     {
         m_aUILocaleString = rStr;
-/*
+
         // as we can't switch UILocale at runtime, we only store changes in the configuration
         MakeRealUILocale();
         MsLangId::setConfiguredSystemLanguage( m_eRealUILanguage );
         SetModified();
         NotifyListeners( SYSLOCALEOPTIONS_HINT_UILOCALE );
-*/
     }
 }
 
@@ -577,19 +572,12 @@ void SvtSysLocaleOptions::SetCurrencyConfigString( const OUString& rStr )
     pOptions->SetCurrencyString( rStr );
 }
 
-
-
-/*-- 11.02.2004 13:31:41---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SvtSysLocaleOptions::IsDecimalSeparatorAsLocale() const
 {
     MutexGuard aGuard( GetMutex() );
     return pOptions->IsDecimalSeparatorAsLocale();
 }
-/*-- 11.02.2004 13:31:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtSysLocaleOptions::SetDecimalSeparatorAsLocale( sal_Bool bSet)
 {
     MutexGuard aGuard( GetMutex() );
@@ -700,3 +688,4 @@ LanguageType SvtSysLocaleOptions::GetRealUILanguage() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

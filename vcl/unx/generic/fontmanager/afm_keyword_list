@@ -1,4 +1,8 @@
-struct hash_entry { char* name; enum parseKey eKey; };
+%language=C++
+%global-table
+%null-strings
+%struct-type
+struct hash_entry { const char* name; enum parseKey eKey; };
 %%
 Ascender,ASCENDER
 Ascent,ASCENT

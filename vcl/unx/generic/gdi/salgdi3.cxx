@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,6 +45,7 @@
 #include "rtl/tencinfo.h"
 
 #include "osl/file.hxx"
+#include "osl/module.hxx"
 
 #include "tools/string.hxx"
 #include "tools/debug.hxx"
@@ -52,6 +54,8 @@
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include "i18npool/mslangid.hxx"
+
+#include <boost/unordered_set.hpp>
 
 #include <vcl/sysdata.hxx>
 #include "printergfx.hxx"
@@ -75,7 +79,6 @@
 #include "outdev.h"
 
 
-#include <hash_set>
 
 #ifdef ENABLE_GRAPHITE
 #include <graphite_layout.hxx>
@@ -108,8 +111,7 @@ struct _XRegion
     BOX *rects;
     BOX extents;
 };
-using namespace rtl;
-
+using ::rtl::OUString;
 // ===========================================================================
 
 // PspKernInfo allows on-demand-querying of psprint provided kerning info (#i29881#)
@@ -134,8 +136,6 @@ void PspKernInfo::Initialize() const
     if( rKernPairs.empty() )
         return;
 
-    // feed psprint's kerning list into a lookup-friendly container
-    maUnicodeKernPairs.resize( rKernPairs.size() );
     PspKernPairs::const_iterator it = rKernPairs.begin();
     for(; it != rKernPairs.end(); ++it )
     {
@@ -181,21 +181,6 @@ X11SalGraphics::GetFontGC()
 
 bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-#ifdef HDU_DEBUG
-    ByteString aReqName( "NULL" );
-    if( pEntry )
-        aReqName = ByteString( pEntry->maName, RTL_TEXTENCODING_UTF8 );
-    ByteString aUseName( "NULL" );
-    if( pEntry && pEntry->mpFontData )
-        aUseName = ByteString( pEntry->mpFontData->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
-    fprintf( stderr, "SetFont(lvl=%d,\"%s\", %d*%d, naa=%d,b=%d,i=%d) => \"%s\"\n",
-        nFallbackLevel, aReqName.GetBuffer(),
-    !pEntry?-1:pEntry->mnWidth, !pEntry?-1:pEntry->mnHeight,
-        !pEntry?-1:pEntry->mbNonAntialiased,
-    !pEntry?-1:pEntry->meWeight, !pEntry?-1:pEntry->meItalic,
-        aUseName.GetBuffer() );
-#endif
-
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
@@ -245,22 +230,21 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
     return false;
 }
 
+ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
+
 void ImplServerFontEntry::HandleFontOptions( void )
 {
-    bool GetFCFontOptions( const ImplFontAttributes&, int nSize, ImplFontOptions& );
-
     if( !mpServerFont )
         return;
     if( !mbGotFontOptions )
     {
         // get and cache the font options
         mbGotFontOptions = true;
-        mbValidFontOptions = GetFCFontOptions( *maFontSelData.mpFontData,
-            maFontSelData.mnHeight, maFontOptions );
+        mpFontOptions.reset(GetFCFontOptions( *maFontSelData.mpFontData,
+            maFontSelData.mnHeight ));
     }
     // apply the font options
-    if( mbValidFontOptions )
-        mpServerFont->SetFontOptions( maFontOptions );
+    mpServerFont->SetFontOptions( mpFontOptions );
 }
 
 //--------------------------------------------------------------------------
@@ -270,7 +254,7 @@ namespace {
 class CairoWrapper
 {
 private:
-    oslModule mpCairoLib;
+    osl::Module mpCairoLib;
 
     cairo_surface_t* (*mp_xlib_surface_create_with_xrender_format)(Display *, Drawable , Screen *, XRenderPictFormat *, int , int );
     void (*mp_surface_destroy)(cairo_surface_t *);
@@ -279,6 +263,7 @@ private:
     void (*mp_clip)(cairo_t*);
     void (*mp_rectangle)(cairo_t*, double, double, double, double);
     cairo_font_face_t * (*mp_ft_font_face_create_for_ft_face)(FT_Face, int);
+    cairo_font_face_t * (*mp_ft_font_face_create_for_pattern)(void*);
     void (*mp_set_font_face)(cairo_t *, cairo_font_face_t *);
     void (*mp_font_face_destroy)(cairo_font_face_t *);
     void (*mp_matrix_init_identity)(cairo_matrix_t *);
@@ -290,7 +275,7 @@ private:
     void (*mp_set_font_options)(cairo_t *, const void *);
     void (*mp_ft_font_options_substitute)(const void*, void*);
 
-    bool canEmbolden() const { return false; }
+    bool canEmbolden() const { return mp_ft_font_face_create_for_pattern != NULL; }
 
     CairoWrapper();
 public:
@@ -308,6 +293,12 @@ public:
         { (*mp_rectangle)(cr, x, y, width, height); }
     cairo_font_face_t* ft_font_face_create_for_ft_face(FT_Face face, int load_flags)
         { return (*mp_ft_font_face_create_for_ft_face)(face, load_flags); }
+    cairo_font_face_t* ft_font_face_create_for_pattern(void *pattern)
+    {
+        return mp_ft_font_face_create_for_pattern
+            ? (*mp_ft_font_face_create_for_pattern)(pattern)
+            : NULL;
+    }
     void set_font_face(cairo_t *cr, cairo_font_face_t *font_face)
         { (*mp_set_font_face)(cr, font_face); }
     void font_face_destroy(cairo_font_face_t *font_face)
@@ -340,7 +331,6 @@ CairoWrapper& CairoWrapper::get()
 }
 
 CairoWrapper::CairoWrapper()
-:   mpCairoLib( NULL )
 {
     static const char* pDisableCairoText = getenv( "SAL_DISABLE_CAIROTEXT" );
     if( pDisableCairoText && (pDisableCairoText[0] != '0') )
@@ -351,8 +341,7 @@ CairoWrapper::CairoWrapper()
         return;
 
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
-    mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
-    if( !mpCairoLib )
+    if ( !mpCairoLib.load( aLibName, SAL_LOADMODULE_DEFAULT ) )
         return;
 
 #ifdef DEBUG
@@ -377,6 +366,8 @@ CairoWrapper::CairoWrapper()
         osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_rectangle" );
     mp_ft_font_face_create_for_ft_face = (cairo_font_face_t * (*)(FT_Face, int))
         osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_ft_font_face_create_for_ft_face" );
+    mp_ft_font_face_create_for_pattern = (cairo_font_face_t * (*)(void*))
+        osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_ft_font_face_create_for_pattern" );
     mp_set_font_face = (void (*)(cairo_t *, cairo_font_face_t *))
         osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_set_font_face" );
     mp_font_face_destroy = (void (*)(cairo_font_face_t *))
@@ -418,8 +409,7 @@ CairoWrapper::CairoWrapper()
             mp_ft_font_options_substitute
         ) )
     {
-        osl_unloadModule( mpCairoLib );
-    mpCairoLib = NULL;
+        mpCairoLib.unload();
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not all needed symbols were found\n" );
 #endif
@@ -454,9 +444,9 @@ CairoFontsCache::~CairoFontsCache()
     }
 }
 
-void CairoFontsCache::CacheFont(void *pFont, void* pId)
+void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId)
 {
-    maLRUFonts.push_front( std::pair<void*, void *>(pFont, pId) );
+    maLRUFonts.push_front( std::pair<void*, CairoFontsCache::CacheId>(pFont, rId) );
     if (maLRUFonts.size() > 8)
     {
         CairoWrapper &rCairo = CairoWrapper::get();
@@ -465,11 +455,11 @@ void CairoFontsCache::CacheFont(void *pFont, void* pId)
     }
 }
 
-void* CairoFontsCache::FindCachedFont(void *pId)
+void* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
 {
     LRUFonts::iterator aEnd = maLRUFonts.end();
     for (LRUFonts::iterator aI = maLRUFonts.begin(); aI != aEnd; ++aI)
-        if (aI->second == pId)
+        if (aI->second == rId)
             return aI->first;
     return NULL;
 }
@@ -494,15 +484,7 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
         return;
 
     // find a XRenderPictFormat compatible with the Drawable
-    XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
-    if( !pVisualFormat )
-    {
-        Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
-        pVisualFormat = XRenderPeer::GetInstance().FindVisualFormat( pVisual );
-        // cache the XRenderPictFormat
-        SetXRenderFormat( static_cast<void*>(pVisualFormat) );
-    }
-
+    XRenderPictFormat* pVisualFormat = GetXRenderFormat();
     DBG_ASSERT( pVisualFormat!=NULL, "no matching XRenderPictFormat for text" );
     if( !pVisualFormat )
         return;
@@ -548,12 +530,21 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
     cairo_font_face_t* font_face = NULL;
 
-    void *pId = rFont.GetFtFace();
-    font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(pId);
+    void* pFace = rFont.GetFtFace();
+    CairoFontsCache::CacheId aId;
+    aId.mpFace = pFace;
+    aId.mpOptions = rFont.GetFontOptions().get();
+    aId.mbEmbolden = rFont.NeedsArtificialBold();
+    font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(aId);
     if (!font_face)
     {
-        font_face = rCairo.ft_font_face_create_for_ft_face(pId, rFont.GetLoadFlags());
-        m_aCairoFontsCache.CacheFont(font_face, pId);
+        const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
+        void *pPattern = pOptions ? pOptions->GetPattern(pFace, aId.mbEmbolden) : NULL;
+        if (pPattern)
+            font_face = rCairo.ft_font_face_create_for_pattern(pPattern);
+        if (!font_face)
+            font_face = rCairo.ft_font_face_create_for_ft_face(pFace, rFont.GetLoadFlags());
+        m_aCairoFontsCache.CacheFont(font_face, aId);
     }
 
     rCairo.set_font_face(cr, font_face);
@@ -958,6 +949,13 @@ const ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
     return pIFCMap;
 }
 
+bool X11SalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
+{
+    if (!mpServerFont[0])
+        return false;
+    return mpServerFont[0]->GetFontCapabilities(rGetImplFontCapabilities);
+}
+
 // ----------------------------------------------------------------------------
 //
 // SalGraphics
@@ -1097,106 +1095,17 @@ void cairosubcallback( void* pPattern )
     rCairo.ft_font_options_substitute( pFontOptions, pPattern );
 }
 
-bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
-    ImplFontOptions& rFontOptions)
+ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
 {
-    // TODO: get rid of these insane enum-conversions
-    // e.g. by using the classic vclenum values inside VCL
-
     psp::FastPrintFontInfo aInfo;
-    // set family name
+
     aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
-    // set italic
-    switch( rFontAttributes.GetSlant() )
-    {
-        case ITALIC_NONE:
-            aInfo.m_eItalic = psp::italic::Upright;
-            break;
-        case ITALIC_NORMAL:
-            aInfo.m_eItalic = psp::italic::Italic;
-            break;
-        case ITALIC_OBLIQUE:
-            aInfo.m_eItalic = psp::italic::Oblique;
-            break;
-        default:
-            aInfo.m_eItalic = psp::italic::Unknown;
-            break;
-    }
-    // set weight
-    switch( rFontAttributes.GetWeight() )
-    {
-        case WEIGHT_THIN:
-            aInfo.m_eWeight = psp::weight::Thin;
-            break;
-        case WEIGHT_ULTRALIGHT:
-            aInfo.m_eWeight = psp::weight::UltraLight;
-            break;
-        case WEIGHT_LIGHT:
-            aInfo.m_eWeight = psp::weight::Light;
-            break;
-        case WEIGHT_SEMILIGHT:
-            aInfo.m_eWeight = psp::weight::SemiLight;
-            break;
-        case WEIGHT_NORMAL:
-            aInfo.m_eWeight = psp::weight::Normal;
-            break;
-        case WEIGHT_MEDIUM:
-            aInfo.m_eWeight = psp::weight::Medium;
-            break;
-        case WEIGHT_SEMIBOLD:
-            aInfo.m_eWeight = psp::weight::SemiBold;
-            break;
-        case WEIGHT_BOLD:
-            aInfo.m_eWeight = psp::weight::Bold;
-            break;
-        case WEIGHT_ULTRABOLD:
-            aInfo.m_eWeight = psp::weight::UltraBold;
-            break;
-        case WEIGHT_BLACK:
-            aInfo.m_eWeight = psp::weight::Black;
-            break;
-        default:
-            aInfo.m_eWeight = psp::weight::Unknown;
-            break;
-    }
-    // set width
-    switch( rFontAttributes.GetWidthType() )
-    {
-        case WIDTH_ULTRA_CONDENSED:
-            aInfo.m_eWidth = psp::width::UltraCondensed;
-            break;
-        case WIDTH_EXTRA_CONDENSED:
-            aInfo.m_eWidth = psp::width::ExtraCondensed;
-            break;
-        case WIDTH_CONDENSED:
-            aInfo.m_eWidth = psp::width::Condensed;
-            break;
-        case WIDTH_SEMI_CONDENSED:
-            aInfo.m_eWidth = psp::width::SemiCondensed;
-            break;
-        case WIDTH_NORMAL:
-            aInfo.m_eWidth = psp::width::Normal;
-            break;
-        case WIDTH_SEMI_EXPANDED:
-            aInfo.m_eWidth = psp::width::SemiExpanded;
-            break;
-        case WIDTH_EXPANDED:
-            aInfo.m_eWidth = psp::width::Expanded;
-            break;
-        case WIDTH_EXTRA_EXPANDED:
-            aInfo.m_eWidth = psp::width::ExtraExpanded;
-            break;
-        case WIDTH_ULTRA_EXPANDED:
-            aInfo.m_eWidth = psp::width::UltraExpanded;
-            break;
-        default:
-            aInfo.m_eWidth = psp::width::Unknown;
-            break;
-    }
+    aInfo.m_eItalic = rFontAttributes.GetSlant();
+    aInfo.m_eWeight = rFontAttributes.GetWeight();
+    aInfo.m_eWidth = rFontAttributes.GetWidthType();
 
     const psp::PrintFontManager& rPFM = psp::PrintFontManager::get();
-    bool bOK = rPFM.getFontOptions( aInfo, nSize, cairosubcallback, rFontOptions);
-    return bOK;
+    return rPFM.getFontOptions(aInfo, nSize, cairosubcallback);
 }
 
 // ----------------------------------------------------------------------------
@@ -1236,7 +1145,7 @@ X11SalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 
 // ---------------------------------------------------------------------------
 
-sal_Bool X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+sal_Bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -1246,7 +1155,7 @@ sal_Bool X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
     return sal_True;
@@ -1254,7 +1163,7 @@ sal_Bool X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 
 // ---------------------------------------------------------------------------
 
-sal_Bool X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
+sal_Bool X11SalGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex,
     ::basegfx::B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
@@ -1265,7 +1174,7 @@ sal_Bool X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
         return sal_True;
 
@@ -1284,16 +1193,9 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 #ifdef ENABLE_GRAPHITE
         // Is this a Graphite font?
         if (!bDisableGraphite_ &&
-            GraphiteFontAdaptor::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))
+            GraphiteServerFontLayout::IsGraphiteEnabledFont(mpServerFont[nFallbackLevel]))
         {
-            sal_Int32 xdpi, ydpi;
-
-            xdpi = GetDisplay()->GetResolution().A();
-            ydpi = GetDisplay()->GetResolution().B();
-
-            GraphiteFontAdaptor * pGrfont = new GraphiteFontAdaptor( *mpServerFont[nFallbackLevel], xdpi, ydpi);
-            if (!pGrfont) return NULL;
-            pLayout = new GraphiteServerFontLayout(pGrfont);
+            pLayout = new GraphiteServerFontLayout(*mpServerFont[nFallbackLevel]);
         }
         else
 #endif
@@ -1415,6 +1317,11 @@ class FcPreMatchSubstititution
 {
 public:
     bool FindFontSubstitute( ImplFontSelectData& ) const;
+
+private:
+    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
+        CachedFontMapType;
+    mutable CachedFontMapType maCachedFontMap;
 };
 
 class FcGlyphFallbackSubstititution
@@ -1465,120 +1372,18 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
 
     const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
 
-    psp::italic::type eItalic = psp::italic::Unknown;
-    if( rFontSelData.GetSlant() != ITALIC_DONTKNOW )
-    {
-        switch( rFontSelData.GetSlant() )
-        {
-            case ITALIC_NONE:    eItalic = psp::italic::Upright; break;
-            case ITALIC_NORMAL:  eItalic = psp::italic::Italic; break;
-            case ITALIC_OBLIQUE: eItalic = psp::italic::Oblique; break;
-            default:
-                break;
-        }
-    }
-
-    psp::weight::type eWeight = psp::weight::Unknown;
-    if( rFontSelData.GetWeight() != WEIGHT_DONTKNOW )
-    {
-        switch( rFontSelData.GetWeight() )
-        {
-            case WEIGHT_THIN:       eWeight = psp::weight::Thin; break;
-            case WEIGHT_ULTRALIGHT: eWeight = psp::weight::UltraLight; break;
-            case WEIGHT_LIGHT:      eWeight = psp::weight::Light; break;
-            case WEIGHT_SEMILIGHT:  eWeight = psp::weight::SemiLight; break;
-            case WEIGHT_NORMAL:     eWeight = psp::weight::Normal; break;
-            case WEIGHT_MEDIUM:     eWeight = psp::weight::Medium; break;
-            case WEIGHT_SEMIBOLD:   eWeight = psp::weight::SemiBold; break;
-            case WEIGHT_BOLD:       eWeight = psp::weight::Bold; break;
-            case WEIGHT_ULTRABOLD:  eWeight = psp::weight::UltraBold; break;
-            case WEIGHT_BLACK:      eWeight = psp::weight::Black; break;
-            default:
-                break;
-        }
-    }
-
-    psp::width::type eWidth = psp::width::Unknown;
-    if( rFontSelData.GetWidthType() != WIDTH_DONTKNOW )
-    {
-        switch( rFontSelData.GetWidthType() )
-        {
-            case WIDTH_ULTRA_CONDENSED: eWidth = psp::width::UltraCondensed; break;
-            case WIDTH_EXTRA_CONDENSED: eWidth = psp::width::ExtraCondensed; break;
-            case WIDTH_CONDENSED:   eWidth = psp::width::Condensed; break;
-            case WIDTH_SEMI_CONDENSED:  eWidth = psp::width::SemiCondensed; break;
-            case WIDTH_NORMAL:      eWidth = psp::width::Normal; break;
-            case WIDTH_SEMI_EXPANDED:   eWidth = psp::width::SemiExpanded; break;
-            case WIDTH_EXPANDED:    eWidth = psp::width::Expanded; break;
-            case WIDTH_EXTRA_EXPANDED:  eWidth = psp::width::ExtraExpanded; break;
-            case WIDTH_ULTRA_EXPANDED:  eWidth = psp::width::UltraExpanded; break;
-            default:
-                break;
-        }
-    }
-
-    psp::pitch::type ePitch = psp::pitch::Unknown;
-    if( rFontSelData.GetPitch() != PITCH_DONTKNOW )
-    {
-        switch( rFontSelData.GetPitch() )
-        {
-            case PITCH_FIXED:    ePitch=psp::pitch::Fixed; break;
-            case PITCH_VARIABLE: ePitch=psp::pitch::Variable; break;
-            default:
-                break;
-        }
-    }
+    FontItalic eItalic = rFontSelData.GetSlant();
+    FontWeight eWeight = rFontSelData.GetWeight();
+    FontWidth eWidth = rFontSelData.GetWidthType();
+    FontPitch ePitch = rFontSelData.GetPitch();
 
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     aRet.maSearchName = rMgr.Substitute( rFontSelData.maTargetName, rMissingCodes, aLangAttrib, eItalic, eWeight, eWidth, ePitch);
 
-    switch (eItalic)
-    {
-        case psp::italic::Upright: aRet.meItalic = ITALIC_NONE; break;
-        case psp::italic::Italic: aRet.meItalic = ITALIC_NORMAL; break;
-        case psp::italic::Oblique: aRet.meItalic = ITALIC_OBLIQUE; break;
-        default:
-            break;
-    }
-
-    switch (eWeight)
-    {
-        case psp::weight::Thin: aRet.meWeight = WEIGHT_THIN; break;
-        case psp::weight::UltraLight: aRet.meWeight = WEIGHT_ULTRALIGHT; break;
-        case psp::weight::Light: aRet.meWeight = WEIGHT_LIGHT; break;
-        case psp::weight::SemiLight: aRet.meWeight = WEIGHT_SEMILIGHT; break;
-        case psp::weight::Normal: aRet.meWeight = WEIGHT_NORMAL; break;
-        case psp::weight::Medium: aRet.meWeight = WEIGHT_MEDIUM; break;
-        case psp::weight::SemiBold: aRet.meWeight = WEIGHT_SEMIBOLD; break;
-        case psp::weight::Bold: aRet.meWeight = WEIGHT_BOLD; break;
-        case psp::weight::UltraBold: aRet.meWeight = WEIGHT_ULTRABOLD; break;
-        case psp::weight::Black: aRet.meWeight = WEIGHT_BLACK; break;
-        default:
-                break;
-    }
-
-    switch (eWidth)
-    {
-        case psp::width::UltraCondensed: aRet.meWidthType = WIDTH_ULTRA_CONDENSED; break;
-        case psp::width::ExtraCondensed: aRet.meWidthType = WIDTH_EXTRA_CONDENSED; break;
-        case psp::width::Condensed: aRet.meWidthType = WIDTH_CONDENSED; break;
-        case psp::width::SemiCondensed: aRet.meWidthType = WIDTH_SEMI_CONDENSED; break;
-        case psp::width::Normal: aRet.meWidthType = WIDTH_NORMAL; break;
-        case psp::width::SemiExpanded: aRet.meWidthType = WIDTH_SEMI_EXPANDED; break;
-        case psp::width::Expanded: aRet.meWidthType = WIDTH_EXPANDED; break;
-        case psp::width::ExtraExpanded: aRet.meWidthType = WIDTH_EXTRA_EXPANDED; break;
-        case psp::width::UltraExpanded: aRet.meWidthType = WIDTH_ULTRA_EXPANDED; break;
-        default:
-            break;
-    }
-
-    switch (ePitch)
-    {
-        case psp::pitch::Fixed: aRet.mePitch = PITCH_FIXED; break;
-        case psp::pitch::Variable: aRet.mePitch = PITCH_VARIABLE; break;
-        default:
-            break;
-    }
+    aRet.meItalic    = eItalic;
+    aRet.meWeight    = eWeight;
+    aRet.meWidthType = eWidth;
+    aRet.mePitch     = ePitch;
 
     return aRet;
 }
@@ -1610,12 +1415,20 @@ bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelD
     ||  0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "opensymbol", 10) )
         return false;
 
+    CachedFontMapType::const_iterator itr = maCachedFontMap.find(rFontSelData.maTargetName);
+    if (itr != maCachedFontMap.end())
+    {
+        // Cached substitution pair
+        rFontSelData.maSearchName = itr->second;
+        return true;
+    }
+
     rtl::OUString aDummy;
     const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, aDummy );
-    // TODO: cache the font substitution suggestion
-    // FC doing it would be preferable because it knows the invariables
-    // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans
-    // whereas we would have to check for every size or attribute
+
+    maCachedFontMap.insert(
+        CachedFontMapType::value_type(rFontSelData.maTargetName, aOut.maSearchName));
+
     if( !aOut.maSearchName.Len() )
         return false;
 
@@ -1684,3 +1497,4 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFon
 
 // ===========================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

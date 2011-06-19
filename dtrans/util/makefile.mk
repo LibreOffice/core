@@ -155,27 +155,6 @@ DEF4EXPORTFILE=	exports.dxp
 
 .ENDIF			# "$(GUI)"=="WNT"
 
-.IF "$(GUI)"=="OS2"
-
-# --- sysdtrans dll ---
-
-SHL3TARGET=$(TARGET3)
-
-SHL3LIBS=$(SLB)$/sysdtrans.lib
-
-SHL3STDLIBS= \
-        $(SALLIB)	\
-        $(CPPULIB) 	\
-        $(CPPUHELPERLIB) \
-        UClip.lib
-        
-SHL3IMPLIB=i$(SHL3TARGET) 
-
-SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
-DEF3NAME=		$(SHL3TARGET)
-DEF3EXPORTFILE=	exports.dxp
-
-.ENDIF			# "$(GUI)"=="OS2"
 .ENDIF # L10N_framework
 
 .INCLUDE :  target.mk

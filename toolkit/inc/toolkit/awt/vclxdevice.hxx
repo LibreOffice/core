@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,8 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
-// #include <com/sun/star/awt/XTextConstraints.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
 
 class OutputDevice;
@@ -58,7 +58,6 @@ class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
     friend class VCLXGraphics;
 
 private:
-    vos::IMutex&    mrMutex;    // Reference to SolarMutex
     OutputDevice*           mpOutputDevice;
 
 public:
@@ -66,7 +65,6 @@ public:
     sal_uInt32              nFlags;
 
 protected:
-    vos::IMutex&    GetMutex() { return mrMutex; }
     void                    DestroyOutputDevice();
 
 public:
@@ -135,3 +133,4 @@ public:
 
 #endif // _TOOLKIT_AWT_VCLXDEVICE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

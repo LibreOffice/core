@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier"));
 
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< css::lang::XMultiServiceFactory* >(_pServiceManager),
@@ -87,7 +88,7 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString::createFromAscii( "com.sun.star.util.NumberFormatter" );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"));
 
             xFactory = ::cppu::createSingleFactory(
                 reinterpret_cast< css::lang::XMultiServiceFactory* >(_pServiceManager),
@@ -100,7 +101,7 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
         {
             Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.SpecialConfigManager"));
             xFactory = ::cppu::createSingleFactory (
                 reinterpret_cast< css::lang::XMultiServiceFactory* >( _pServiceManager ),
                 OUString::createFromAscii( pImplementationName ),
@@ -118,3 +119,4 @@ SVL_DLLPUBLIC void* SAL_CALL component_getFactory (
 
 }   // "C"
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

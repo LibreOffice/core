@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ public:
                     // Gibt die Groesse der Klasse in Bytes
     sal_uInt32          Size(){ return( nSize ); };
 
-    sal_Bool            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
+    sal_Bool            IsConsistent( const RSCINST & rInst );
     virtual void    SetToDefault( const RSCINST & rInst );
     sal_Bool            IsDefault( const RSCINST & rInst );
     sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
@@ -134,3 +135,5 @@ public:
 };
 
 #endif //_RSCARRAY
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

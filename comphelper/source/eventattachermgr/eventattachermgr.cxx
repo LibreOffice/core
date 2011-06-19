@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,11 @@
 
 #include <deque>
 
-#if defined( OS2 ) || defined( UNX )
+#if defined( UNX )
 #include <wchar.h>
 #endif
 #include <osl/mutex.hxx>
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
-#include <vos/macros.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
@@ -67,7 +65,8 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace comphelper
 {
@@ -95,32 +94,6 @@ struct AttacherIndex_Impl
     bool    operator<( const AttacherIndex_Impl & ) const;
     bool    operator==( const AttacherIndex_Impl & ) const;
 };
-
-#if 0
-bool AttachedObject_Impl::operator<( const AttachedObject_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return FALSE;
-    return this < &r;
-}
-
-bool AttachedObject_Impl::operator==( const AttachedObject_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return this == &r;
-}
-
-bool AttacherIndex_Impl::operator<( const AttacherIndex_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return this < &r;
-}
-bool AttacherIndex_Impl::operator==( const AttacherIndex_Impl & r ) const
-{
-    VOS_ENSHURE( FALSE, "not implemented" );
-    return this == &r;
-}
-#endif
 
 //-----------------------------------------------------------------------------
 class ImplEventAttacherManager
@@ -409,7 +382,7 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
 {
     if ( rSMgr.is() )
     {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ) );
+        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection" )) ) );
         if ( xIFace.is() )
         {
             Reference< XIntrospection > xIntrospection( xIFace, UNO_QUERY);
@@ -429,12 +402,12 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
 {
     if ( rSMgr.is() )
     {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.EventAttacher") ) );
+        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.EventAttacher" )) ) );
         if ( xIFace.is() )
         {
             xAttacher = Reference< XEventAttacher >::query( xIFace );
         }
-        xIFace = rSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Converter") );
+        xIFace = rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )) );
         if ( xIFace.is() )
         {
             xConverter = Reference< XTypeConverter >::query( xIFace );
@@ -461,7 +434,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
     // Haben wir den Service schon? Sonst anlegen
     if( !mxCoreReflection.is() )
     {
-        Reference< XInterface > xIFace( mxSMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ) );
+        Reference< XInterface > xIFace( mxSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.CoreReflection" )) ) );
         mxCoreReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
     }
     return mxCoreReflection;
@@ -497,7 +470,7 @@ void detachAll_Impl
     while( aObjIt != aObjEnd )
     {
         pMgr->detach( nIdx, (*aObjIt).xTarget );
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -514,7 +487,7 @@ void attachAll_Impl
     while( aObjIt != aObjEnd )
     {
         pMgr->attach( nIdx, (*aObjIt).xTarget, (*aObjIt).aHelper );
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -568,7 +541,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
         {
         }
 
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -632,7 +605,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
             break;
         }
 
-        aEvtIt++;
+        ++aEvtIt;
     }
 #else
     Sequence< ScriptEventDescriptor >& rEventList = (*aIt).aEventList;
@@ -725,7 +698,7 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
     while( aEvtIt != aEvtEnd )
     {
         pArray[i++] = *aEvtIt;
-        aEvtIt++;
+        ++aEvtIt;
     }
     return aSeq;
 #else
@@ -790,7 +763,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
         }
 
         pArray[i++] = xAdapter;
-        aEvtIt++;
+        ++aEvtIt;
     }
 #else
     sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
@@ -851,7 +824,7 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
                     }
                 }
                 i++;
-                aEvtIt++;
+                ++aEvtIt;
             }
 #else
             sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
@@ -874,7 +847,7 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
             aCurrentPosition->aObjList.erase( aObjIt );
             break;
         }
-        aObjIt++;
+        ++aObjIt;
     }
 }
 
@@ -937,7 +910,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
             OutStream->writeUTF( rDesc.ScriptType );
             OutStream->writeUTF( rDesc.ScriptCode );
 
-            aEvtIt++;
+            ++aEvtIt;
         }
 #else
         sal_Int32 nLen = (*aIt).aEventList.getLength();
@@ -954,7 +927,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
             OutStream->writeUTF( rDesc.ScriptCode );
         }
 #endif
-        aIt++;
+        ++aIt;
     }
 
     // Die jetzt bekannte Laenge eintragen
@@ -1016,7 +989,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
         // Ganze richtig sein. Sonst ist etwas voellig daneben gegangen.
         if( nRealLen > nLen || nVersion == 1 )
         {
-            VOS_ENSHURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
+            OSL_FAIL( "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
         }
         else
         {
@@ -1034,3 +1007,4 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
 } // namesapce comphelper
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

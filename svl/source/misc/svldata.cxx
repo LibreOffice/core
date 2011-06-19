@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <map>
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
-#include <vos/process.hxx>
 #include <svl/svldata.hxx>
 
 namespace unnamed_svl_svldata {}
@@ -89,3 +89,4 @@ ImpSvlData & ImpSvlData::GetSvlData()
     return *pSvlData;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

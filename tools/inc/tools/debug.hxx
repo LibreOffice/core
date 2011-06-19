@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "tools/toolsdllapi.h"
 
-#ifndef _SAL_TYPES_H
 #include <sal/types.h>
-#endif
 #include <tools/solar.h>
 
 // ------------
@@ -510,64 +509,6 @@ do                                              \
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
 #endif
 
-#define DBG_TRACE( aTrace )                         \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-        DbgTrace( aTrace );                         \
-} while(0)
-#define DBG_TRACE1( aTrace, x1 )                    \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1 );                          \
-    }                                               \
-} while(0)
-#define DBG_TRACE2( aTrace, x1, x2 )                \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2 );                      \
-    }                                               \
-} while(0)
-#define DBG_TRACE3( aTrace, x1, x2, x3 )            \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3 );                  \
-    }                                               \
-} while(0)
-#define DBG_TRACE4( aTrace, x1, x2, x3, x4 )        \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3, x4 );              \
-    }                                               \
-} while(0)
-#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 )    \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3, x4, x5 );          \
-    }                                               \
-} while(0)
-#define DBG_TRACEFILE( aTrace )                     \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-        DbgTrace( aTrace, __FILE__, __LINE__ );     \
-} while(0)
-
 #define DBG_WARNING( aWarning )                     \
 do                                                  \
 {                                                   \
@@ -626,57 +567,6 @@ do                                                  \
         DbgWarning( aWarning, __FILE__, __LINE__ ); \
 } while(0)
 
-#define DBG_ERROR( aError )                         \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-        DbgError( aError );                         \
-} while(0)
-#define DBG_ERROR1( aError, x1 )                    \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1 );                          \
-    }                                               \
-} while(0)
-#define DBG_ERROR2( aError, x1, x2 )                \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2 );                      \
-    }                                               \
-} while(0)
-#define DBG_ERROR3( aError, x1, x2, x3 )            \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3 );                  \
-    }                                               \
-} while(0)
-#define DBG_ERROR4( aError, x1, x2, x3, x4 )        \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3, x4 );              \
-    }                                               \
-} while(0)
-#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 )    \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3, x4, x5 );          \
-    }                                               \
-} while(0)
 #define DBG_ERRORFILE( aError )                     \
 do                                                  \
 {                                                   \
@@ -750,13 +640,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
 #define DBG_ASSERT( sCon, aError ) ((void)0)
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
-#define DBG_TRACE( aTrace ) ((void)0)
-#define DBG_TRACE1( aTrace, x1 ) ((void)0)
-#define DBG_TRACE2( aTrace, x1, x2 ) ((void)0)
-#define DBG_TRACE3( aTrace, x1, x2, x3 ) ((void)0)
-#define DBG_TRACE4( aTrace, x1, x2, x3, x4 ) ((void)0)
-#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 ) ((void)0)
-#define DBG_TRACEFILE( aTrace ) ((void)0)
 #define DBG_WARNING( aWarning ) ((void)0)
 #define DBG_WARNING1( aWarning, x1 ) ((void)0)
 #define DBG_WARNING2( aWarning, x1, x2 ) ((void)0)
@@ -764,12 +647,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) ((void)0)
 #define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) ((void)0)
 #define DBG_WARNINGFILE( aWarning ) ((void)0)
-#define DBG_ERROR( aError ) ((void)0)
-#define DBG_ERROR1( aError, x1 ) ((void)0)
-#define DBG_ERROR2( aError, x1, x2 ) ((void)0)
-#define DBG_ERROR3( aError, x1, x2, x3 ) ((void)0)
-#define DBG_ERROR4( aError, x1, x2, x3, x4 ) ((void)0)
-#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 ) ((void)0)
 #define DBG_ERRORFILE( aError ) ((void)0)
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
@@ -781,3 +658,5 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #endif
 
 #endif  // _TOOLS_DEBUG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

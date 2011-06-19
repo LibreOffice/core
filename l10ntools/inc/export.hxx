@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,17 +34,13 @@
 #include <l10ntools/directory.hxx>
 #endif
 
-
-// #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource
-
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
 
-#include <hash_map> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <iterator> /* std::iterator*/
 #include <set>      /* std::set*/
 #include <vector>   /* std::vector*/
@@ -79,8 +76,7 @@ struct lessByteString{
 
 struct hashByteString{
     size_t operator()( const ByteString& rName ) const{
-                std::hash< const char* > myHash;
-                return myHash( rName.GetBuffer() );
+        return rtl_str_hashCode_WithLength(rName.GetBuffer(), rName.Len() );
     }
 };
 
@@ -88,38 +84,45 @@ class PFormEntrys;
 class MergeData;
 typedef std::set<ByteString , lessByteString > ByteStringSet;
 
-typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
-typedef std::hash_map<ByteString , bool , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , bool , hashByteString,equalByteString>
                                 ByteStringBoolHashMap;
 
-typedef std::hash_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
                                 PFormEntrysHashMap;
 
-typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , MergeData* , hashByteString,equalByteString>
                                 MergeDataHashMap;
 
 #define SOURCE_LANGUAGE ByteString("en-US")
 #define LIST_REFID  "LIST_REFID"
 
 typedef ByteStringHashMap ExportListEntry;
-
-DECLARE_LIST( ExportListBase, ExportListEntry * )
+typedef ::std::vector< ExportListEntry* > ExportListBase;
 
 //
 // class ExportList
 //
 
-class ExportList : public ExportListBase
+class ExportList
 {
 private:
+    ExportListBase maList;
     sal_uLong nSourceLanguageListEntryCount;
 
 public:
-    ExportList() : ExportListBase() { nSourceLanguageListEntryCount = 0; }
+    ExportList() { nSourceLanguageListEntryCount = 0; }
     sal_uLong GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
     void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
+    size_t size() const { return maList.size(); }
+    void push_back( ExportListEntry* item ) { maList.push_back( item ); }
+
+    ExportListEntry* operator [] ( size_t i )
+        {
+            return ( i < maList.size() ) ? maList[ i ] : NULL;
+        }
 };
 
 #define REFID_NONE 0xFFFF
@@ -282,7 +285,7 @@ public:
 #define MERGE_MODE_NORMAL           0x0000
 #define MERGE_MODE_LIST             0x0001
 
-DECLARE_LIST( ResStack, ResData * )
+typedef ::std::vector< ResData* > ResStack;
 // forwards
 class WordTransformer;
 class ParserQueue;
@@ -339,7 +342,6 @@ public:
     static bool hasUTF8ByteOrderMarker( const ByteString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
-    static ByteString GetIsoLangByIndex( sal_uInt16 nIndex );
     static void QuotHTML( ByteString &rString );
     static bool CopyFile( const ByteString& source , const ByteString& dest );
 
@@ -452,6 +454,7 @@ public:
                     const ByteString &rTitle
                     )
         {
+
             sText[ nId ] = rText;
             bTextFirst[ nId ] = true;
             sQuickHelpText[ nId ] = rQuickHelpText;
@@ -511,7 +514,7 @@ class MergeDataFile
         sal_Bool bErrorLog;
         ByteString sErrorLog;
         SvFileStream aErrLog;
-        MergeDataHashMap aMap;
+    MergeDataHashMap aMap;
         std::set<ByteString> aLanguageSet;
 
         MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
@@ -527,6 +530,7 @@ class MergeDataFile
     public:
         MergeDataFile( const ByteString &rFileName, const ByteString& rFile , sal_Bool bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
         ~MergeDataFile();
+
 
         std::vector<ByteString> GetLanguages();
 
@@ -576,3 +580,4 @@ private:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

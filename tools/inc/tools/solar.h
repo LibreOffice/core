@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 #undef _SOLAR__PRIVATE
 #endif
 #define _SOLAR__PRIVATE 1
-#define __REFERENCED    0
 
 /************************************************************
  Intermediate type to solve type clash with Windows headers.
@@ -53,10 +53,6 @@ typedef sal_uIntPtr    sal_uLong; /* Replaces type ULONG */
 
 typedef int             FASTBOOL;
 #define DELETEZ( p )    ( delete p,p = 0 )
-
-#define __FAR_DATA
-#define __READONLY_DATA         const
-#define __EXPORT
 
 #ifdef WNT
 #if defined (_MSC_VER) && ( _MSC_VER < 1200 )
@@ -76,7 +72,6 @@ typedef int             FASTBOOL;
 
 /*** solar binary types **********************************************/
 
-#ifndef _SOLAR_NOSVBT
 /* Solar (portable) Binary (exchange) Type; OSI 6 subset
    always little endian;
    not necessarily aligned */
@@ -146,33 +141,6 @@ inline void     DoubleToSVBT64( double n, SVBT64 p ) { p[0] = ((sal_uInt8*)&n)[7
                                                        p[7] = ((sal_uInt8*)&n)[0]; }
 #endif
 #endif
-#endif
-
-
-/*** standard floating point definitions *******************************/
-
-#ifndef F_PI
-#define F_PI        3.14159265358979323846
-#endif
-#ifndef F_PI2
-#define F_PI2       1.57079632679489661923
-#endif
-#ifndef F_PI4
-#define F_PI4       0.785398163397448309616
-#endif
-#ifndef F_PI180
-#define F_PI180     0.01745329251994
-#endif
-#ifndef F_PI1800
-#define F_PI1800    0.001745329251994
-#endif
-#ifndef F_PI18000
-#define F_PI18000   0.0001745329251994
-#endif
-#ifndef F_2PI
-#define F_2PI       6.28318530717958647694
-#endif
-
 
 /*** standard macros *****************************************/
 
@@ -203,12 +171,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 /*** C / C++ - macros **************************************************/
 
 #ifdef __cplusplus
-#define BEGIN_C     extern "C" {
-#define END_C       }
 #define EXTERN_C    extern "C"
 #else
-#define BEGIN_C
-#define END_C
 #define EXTERN_C
 #endif
 
@@ -220,9 +184,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #else
 #define HACK( comment )
 #endif
-
-#define _MAKE_NUMSTR( n )           # n
-#define MAKE_NUMSTR( n )            _MAKE_NUMSTR( n )
 
 #define _LF     ((char)0x0A)
 #define _CR     ((char)0x0D)
@@ -243,128 +204,40 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 /* dll file extensions *******************************************************/
 
 #if defined WNT
-#if defined(__MINGW32__)
-  #define __DLLEXTENSION    "gi"
-#else
-  #define __DLLEXTENSION "mi"
-#endif
-#elif defined OS2
-  #define __DLLEXTENSION "go"
+  #define __DLLEXTENSION "lo"
+#elif defined MACOSX
+  #define __DLLEXTENSION "lo.dylib"
 #elif defined UNX
-#ifdef AIX
-  #define __DLLEXTENSION "ap.so"
-#elif defined HPUX
-  #define __DLLEXTENSION "hr.sl"
-#elif defined SOLARIS && defined SPARC && defined IS_LP64
-  #define __DLLEXTENSION "su.so"
-#elif defined SOLARIS && defined SPARC && !defined __GNUC__
-  #define __DLLEXTENSION "ss.so"
-#elif defined SOLARIS && defined SPARC && defined __GNUC__
-  #define __DLLEXTENSION "sogs.so"
-#elif defined SOLARIS && defined INTEL && !defined __GNUC__
-  #define __DLLEXTENSION "si.so"
-#elif defined SOLARIS && defined INTEL && defined __GNUC__
-  #define __DLLEXTENSION "sogi.so"
-#elif defined SCO
-  #define __DLLEXTENSION "ci.so"
-#elif defined NETBSD && defined X86
-  #define __DLLEXTENSION "bi.so"
-#elif defined NETBSD && defined ARM32
-  #define __DLLEXTENSION "ba.so"
-#elif defined NETBSD && defined SPARC
-  #define __DLLEXTENSION "bs.so"
-#elif defined NETBSD && defined POWERPC
-  #define __DLLEXTENSION "bp.so"
-#elif defined LINUX && defined X86
-  #define __DLLEXTENSION "li.so"
-#elif defined LINUX && defined POWERPC
-  #define __DLLEXTENSION "lp.so"
-#elif defined LINUX && defined S390
-  #define __DLLEXTENSION "l3.so"
-#elif defined LINUX && defined ARM32
-  #define __DLLEXTENSION "lr.so"
-#elif defined LINUX && defined SPARC
-  #define __DLLEXTENSION "ls.so"
-#elif defined LINUX && defined __x86_64__
-  #define __DLLEXTENSION "lx.so"
-#elif defined LINUX && defined MIPS
-  #define __DLLEXTENSION "lm.so"
-#elif defined LINUX && defined IA64
-  #define __DLLEXTENSION "la.so"
-#elif defined LINUX && defined M68K
-  #define __DLLEXTENSION "lm.so"
-#elif defined LINUX && defined HPPA
-  #define __DLLEXTENSION "lh.so"
-#elif defined LINUX && defined AXP
-  #define __DLLEXTENSION "ll.so"
-#elif defined LINUX
-  #error unknown plattform
-#elif defined FREEBSD && defined X86
-  #define __DLLEXTENSION "fi.so"
-#elif defined FREEBSD && defined X86_64
-  #define __DLLEXTENSION "fx.so"
-#elif defined MACOSX && defined POWERPC
-  #define __DLLEXTENSION "mxp.dylib"
-#elif defined MACOSX && defined X86
-  #define __DLLEXTENSION "mxi.dylib"
+  #define __DLLEXTENSION "lo.so"
 #else
-  #define __DLLEXTENSION ".so"
-#endif
+  #error unknown plattform
 #endif
 
 // -----------------------------------------------------------------------
 
-#ifndef NOREPLACESTRING
 #define UniString       String
 #define XubString       String
-#else
-#define XubString       UniString
-#endif
 #define xub_Unicode     sal_Unicode
-#define xub_uUnicode    sal_Unicode
-#ifdef STRING32
-#define xub_StrLen      sal_uInt32
-#else
 #define xub_StrLen      sal_uInt16
-#endif
 
 // -- moved here from libcall.hxx ----------------------------------------
 
-#define LIBRARY_STR(s)      # s
-#define LIBRARY_STRING(s)   LIBRARY_STR(s)
-
-#define GETFUNCTION( s ) GetFunction( s )
 #define LIBRARY_CONCAT3( s1, s2, s3 ) \
     s1 s2 s3
 #define LIBRARY_CONCAT4( s1, s2, s3, s4 ) \
     s1 s2 s3 s4
 
-#if defined WNT || defined OS2
+#if defined WNT
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT3( Base, __DLLEXTENSION, ".DLL" )
-#define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT3( Base, Lang, ".DLL" )
 #elif defined UNX
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT3( "lib", Base, __DLLEXTENSION )
-#define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT3( "lib", Base, Lang )
 #else
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT2( Base, __DLLEXTENSION )
-#define SVLIBRARYLANG( Base, Lang ) \
-    LIBRARY_CONCAT2( Base, Lang )
-#endif
-
-#if defined MACOSX
-#define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT2( str, __DLLEXTENSION )
-#elif defined UNX
-#define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT2( str, __DLLEXTENSION )
-#else
-#define SV_LIBFILENAME(str) \
-    LIBRARYFILENAME_CONCAT3( str, __DLLEXTENSION, ".dll" )
 #endif
 
 #endif  /* _SOLAR_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

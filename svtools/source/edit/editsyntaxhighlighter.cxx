@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -188,7 +189,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         String aLine( GetTextEngine()->GetText( nLine ) );
-        Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
+        aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
 
         GetTextEngine()->RemoveAttribs( nLine, sal_True );
         HighlightPortions aPortions;
@@ -202,3 +203,5 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     GetTextView()->ShowCursor( false, true );
     GetTextEngine()->SetModified(bTempModified);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #if defined UNX && defined ALPHA
 #include <fstream.hxx>
 #endif
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -61,9 +62,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
-#ifndef _COM_SUN_STAR_UNO_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -80,22 +79,10 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
-#if (defined OS2 && !defined ICC)
-
-#define IMPORT_FUNCTION_NAME    "_GraphicImport"
-#define EXPORT_FUNCTION_NAME    "_GraphicExport"
-#define IMPDLG_FUNCTION_NAME    "_DoImportDialog"
-#define EXPDLG_FUNCTION_NAME    "_DoExportDialog"
-
-#else
-
 #define IMPORT_FUNCTION_NAME    "GraphicImport"
 #define EXPORT_FUNCTION_NAME    "GraphicExport"
 #define IMPDLG_FUNCTION_NAME    "DoImportDialog"
 #define EXPDLG_FUNCTION_NAME    "DoExportDialog"
-
-#endif
-
 
 // -----------
 // - statics -
@@ -111,8 +98,6 @@ static ::osl::Mutex& getListMutex()
     static ::osl::Mutex s_aListProtection;
     return s_aListProtection;
 }
-
-static GraphicFilter* pGraphicFilter=0;
 
 // -------------------------
 // - ImpFilterOutputStream -
@@ -146,11 +131,11 @@ sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 
         bExists = aCnt.isDocument();
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch(const ::com::sun::star::ucb::CommandAbortedException&)
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ::com::sun::star::ucb::ContentCreationException& )
+    catch(const ::com::sun::star::ucb::ContentCreationException&)
     {
         DBG_ERRORFILE( "ContentCreationException" );
     }
@@ -170,10 +155,10 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
         ::ucbhelper::Content aCnt( rMainUrl,
                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-        aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+        aCnt.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )),
                              ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch(const ::com::sun::star::ucb::CommandAbortedException&)
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
@@ -243,9 +228,6 @@ inline String ImpGetExtension( const String &rPath )
 |*                                 sal_True, wenn die Datei WAHRSCHEINLICH von
 |*                                 dem Format ist, ODER WENN DAS FORMAT
 |*                                 DIESER FUNKTION NICHT BEKANNT IST!
-|*
-|*    Ersterstellung    OH 26.05.95
-|*    Letzte Aenderung  OH 07.08.95
 |*
 *************************************************************************/
 
@@ -1055,7 +1037,6 @@ GraphicFilter::~GraphicFilter()
         }
     }
 
-
     delete pErrorEx;
 }
 
@@ -1323,16 +1304,17 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject&
 }
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
-                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags )
+                                     sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags, WMF_APMFILEHEADER *pAPMHeader )
 {
-    return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL );
+    return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, NULL, pAPMHeader );
 }
 
 //-------------------------------------------------------------------------
 
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, sal_uInt32 nImportFlags,
-                                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
+                                     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
+                                     WMF_APMFILEHEADER *pAPMHeader )
 {
     String                  aFilterName;
     sal_uLong                   nStmBegin;
@@ -1354,7 +1336,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
         sal_Int32 i;
         for ( i = 0; i < pFilterData->getLength(); i++ )
         {
-            if ( (*pFilterData)[ i ].Name.equalsAscii( "PreviewSizeHint" ) )
+            if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PreviewSizeHint")) )
             {
                 awt::Size aSize;
                 if ( (*pFilterData)[ i ].Value >>= aSize )
@@ -1366,7 +1348,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                         nImportFlags &=~GRFILTER_I_FLAGS_FOR_PREVIEW;
                 }
             }
-            else if ( (*pFilterData)[ i ].Name.equalsAscii( "AllowPartialStreamRead" ) )
+            else if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AllowPartialStreamRead")) )
             {
                 (*pFilterData)[ i ].Value >>= bAllowPartialStreamRead;
                 if ( bAllowPartialStreamRead )
@@ -1374,7 +1356,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                 else
                     nImportFlags &=~GRFILTER_I_FLAGS_ALLOW_PARTIAL_STREAMREAD;
             }
-            else if ( (*pFilterData)[ i ].Name.equalsAscii( "CreateNativeLink" ) )
+            else if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CreateNativeLink")) )
             {
                 (*pFilterData)[ i ].Value >>= bCreateNativeLink;
             }
@@ -1470,7 +1452,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                             break;
                         }
                     }
-                    aIter++;
+                    ++aIter;
                 }
             }
 
@@ -1509,7 +1491,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             vcl::SVGReader  aSVGReader( rIStream );
             GDIMetaFile     aSVGMtf;
 
-            if( 0 == aSVGReader.Read( aSVGMtf ).GetActionCount() )
+            if( 0 == aSVGReader.Read( aSVGMtf ).GetActionSize() )
                 nStatus = GRFILTER_FILTERERROR;
             else
                 rGraphic = Graphic( aSVGMtf );
@@ -1550,7 +1532,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
                 aFilterName.EqualsIgnoreCaseAscii( IMP_EMF ) )
         {
             GDIMetaFile aMtf;
-            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, NULL ) )
+            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, NULL, pAPMHeader ) )
                 nStatus = GRFILTER_FORMATERROR;
             else
             {
@@ -1683,7 +1665,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             {
                 pBuf = new sal_uInt8[ nBufSize ];
             }
-                catch (std::bad_alloc)
+            catch (const std::bad_alloc&)
             {
                 nStatus = GRFILTER_TOOBIG;
             }
@@ -1932,7 +1914,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     sal_Int32 k, j, i = 0;
                     for ( i = 0; i < pFilterData->getLength(); i++ )
                     {
-                        if ( (*pFilterData)[ i ].Name.equalsAscii( "AdditionalChunks" ) )
+                        if ( (*pFilterData)[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AdditionalChunks")) )
                         {
                             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence;
                             if ( (*pFilterData)[ i ].Value >>= aAdditionalChunkSequence )
@@ -2010,10 +1992,10 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                         if( xMgr.is() )
                         {
                             ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), ::com::sun::star::uno::UNO_QUERY );
 
                             ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svg.SVGWriter" )) ), ::com::sun::star::uno::UNO_QUERY );
 
                             if( xSaxWriter.is() && xSVGWriter.is() )
                             {
@@ -2038,7 +2020,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                             }
                         }
                     }
-                    catch( ::com::sun::star::uno::Exception& )
+                    catch(const ::com::sun::star::uno::Exception&)
                     {
                         nStatus = GRFILTER_IOERROR;
                     }
@@ -2123,7 +2105,7 @@ sal_Bool GraphicFilter::DoExportDialog( Window*, sal_uInt16 nFormat, FieldUnit )
         xSMgr( ::comphelper::getProcessServiceFactory() );
 
     uno::Reference< com::sun::star::uno::XInterface > xFilterOptionsDialog
-        ( xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.svtools.SvFilterOptionsDialog" ) ),
+        ( xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.SvFilterOptionsDialog" )) ),
             com::sun::star::uno::UNO_QUERY );
     if ( xFilterOptionsDialog.is() )
     {
@@ -2209,16 +2191,24 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
     return nRet;
 }
 
-// ------------------------------------------------------------------------
-
-GraphicFilter* GraphicFilter::GetGraphicFilter()
+namespace
 {
-    if( !pGraphicFilter )
+    class StandardGraphicFilter
     {
-        pGraphicFilter = new GraphicFilter;
-        pGraphicFilter->GetImportFormatCount();
-    }
-    return pGraphicFilter;
+    public:
+        StandardGraphicFilter()
+        {
+            m_aFilter.GetImportFormatCount();
+        }
+        GraphicFilter m_aFilter;
+    };
+
+    class theGraphicFilter : public rtl::Static<StandardGraphicFilter, theGraphicFilter> {};
+}
+
+GraphicFilter& GraphicFilter::GetGraphicFilter()
+{
+    return theGraphicFilter::get().m_aFilter;
 }
 
 int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
@@ -2226,7 +2216,7 @@ int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
                  sal_uInt16* pDeterminedFormat )
 {
     if ( !pFilter )
-        pFilter = GetGraphicFilter();
+        pFilter = &GetGraphicFilter();
 
     const sal_uInt16 nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
                     ? pFilter->GetImportFormatNumber( rFilterName )
@@ -2258,3 +2248,5 @@ int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
 
     return nRes;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

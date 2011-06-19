@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,6 +26,8 @@
  *
  ************************************************************************/
 
+#define _WIN32_WINNT 0x0500
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_canvas.hxx"
 
@@ -32,10 +35,6 @@
 /************************************************************************
  * Win32 surface backend for OpenOffice.org Cairo Canvas                *
  ************************************************************************/
-
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
 
 #include <osl/diagnose.h>
 #include <vcl/bitmap.hxx>
@@ -170,7 +169,7 @@ namespace cairo
      **/
     void Win32Surface::Resize( int /*width*/, int /*height*/ )
     {
-        OSL_ENSURE(false,"not supposed to be called!");
+        OSL_FAIL("not supposed to be called!");
     }
 
     void Win32Surface::flush() const
@@ -323,3 +322,5 @@ namespace cairo
 #endif   // CAIRO_HAS_WIN32_SURFACE
 
 #endif   // WNT
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

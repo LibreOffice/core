@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,30 +32,34 @@
 /*************************************************************************
 *************************************************************************/
 
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 #include "sot/sotdllapi.h"
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <vector>
+#include <list>
 
 //==================class SotData_Impl====================================
 
-class List;
 class SotFactory;
-class SotFactoryList;
-class SotObjectList;
+class SotObject;
+
+typedef ::std::vector< SotFactory* > SotFactoryList;
+typedef ::std::vector< com::sun::star::datatransfer::DataFlavor* > tDataFlavorList;
 
 struct SotData_Impl
 {
-    sal_uInt32              nSvObjCount;
-    SotObjectList *     pObjectList;
+    sal_uInt32          nSvObjCount;
+    std::list<SotObject*> aObjectList;
     SotFactoryList *    pFactoryList;
     SotFactory *        pSotObjectFactory;
     SotFactory *        pSotStorageStreamFactory;
     SotFactory *        pSotStorageFactory;
-    List*               pDataFlavorList;
+    tDataFlavorList*    pDataFlavorList;
     SotData_Impl();
 };
 
 SOT_DLLPUBLIC SotData_Impl* SOTDATA();
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

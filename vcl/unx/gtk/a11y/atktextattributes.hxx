@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,10 +46,11 @@ attribute_set_map_to_property_values(
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rValueList );
 
 AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_set );
-// --> OD 2010-03-01 #i92232#
+// #i92232#
 AtkAttributeSet* attribute_set_prepend_tracked_change_insertion( AtkAttributeSet* attribute_set );
 AtkAttributeSet* attribute_set_prepend_tracked_change_deletion( AtkAttributeSet* attribute_set );
 AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange( AtkAttributeSet* attribute_set );
-// <--
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

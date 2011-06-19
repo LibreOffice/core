@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibletableprovider.hxx>
+#include <vector>
 
 #ifndef INCLUDED_LIMITS_H
 #include <limits.h>
@@ -47,10 +49,11 @@
 #endif
 
 class BrowserColumn;
-class BrowserColumns;
 class BrowserDataWin;
 class MultiSelection;
 class BrowserHeader;
+
+typedef ::std::vector< BrowserColumn* > BrowserColumns;
 
 namespace svt {
     class BrowseBoxImpl;
@@ -225,7 +228,6 @@ public:
 // whole class, which is planned for a long time :)
 //
 // sorry for the ranting. could not resist
-// 98483 - 11.04.2002 - fs@openoffice.org
 
 class SVT_DLLPUBLIC BrowseBox
         :public Control
@@ -239,10 +241,6 @@ class SVT_DLLPUBLIC BrowseBox
 
     friend class BrowserDataWin;
     friend class ::svt::BrowseBoxImpl;
-
-#ifdef DBG_MI
-    friend void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
-#endif
 
 #ifdef DBG_UTIL
     friend const char* BrowseBoxCheckInvariants( const void * pVoid );
@@ -309,7 +307,6 @@ class SVT_DLLPUBLIC BrowseBox
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
 private:
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void            ConstructImpl(BrowserMode nMode);
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
     SVT_DLLPRIVATE void            ToggleSelection( sal_Bool bForce = sal_False );
@@ -369,7 +366,7 @@ protected:
         @param nRow
             nRow starts at 0
     */
-    virtual sal_Bool    SeekRow( long nRow ) = 0;
+    virtual sal_Bool SeekRow( long nRow ) = 0;
     virtual void    DrawCursor();
     virtual void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
     virtual void    PaintData( Window& rWin, const Rectangle& rRect );
@@ -875,3 +872,4 @@ inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

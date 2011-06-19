@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ struct ImplCursorData
     short           mnOrientation;      // Pixel-Orientation
     unsigned char   mnDirection;        // indicates writing direction
     sal_uInt16          mnStyle;            // Cursor-Style
-    sal_Bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
+    bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
     Window*         mpWindow;           // Zugeordnetes Windows
 };
 
@@ -60,8 +61,8 @@ struct ImplCursorData
 static void ImplCursorInvert( ImplCursorData* pData )
 {
     Window* pWindow  = pData->mpWindow;
-    sal_Bool    bMapMode = pWindow->IsMapModeEnabled();
-    pWindow->EnableMapMode( sal_False );
+    bool    bMapMode = pWindow->IsMapModeEnabled();
+    pWindow->EnableMapMode( false );
     sal_uInt16 nInvertStyle;
     if ( pData->mnStyle & CURSOR_SHADOW )
         nInvertStyle = INVERT_50;
@@ -157,7 +158,7 @@ void Cursor::ImplDraw()
 
         // Ausgabeflaeche berechnen und ausgeben
         ImplCursorInvert( mpData );
-        mpData->mbCurVisible = sal_True;
+        mpData->mbCurVisible = true;
     }
 }
 
@@ -168,13 +169,11 @@ void Cursor::ImplRestore()
     if ( mpData && mpData->mbCurVisible )
     {
         ImplCursorInvert( mpData );
-        mpData->mbCurVisible = sal_False;
+        mpData->mbCurVisible = false;
     }
 }
 
-// -----------------------------------------------------------------------
-
-void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
+void Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
 {
     if ( mbVisible )
     {
@@ -196,7 +195,7 @@ void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
             if ( !mpData )
             {
                 mpData = new ImplCursorData;
-                mpData->mbCurVisible = sal_False;
+                mpData->mbCurVisible = false;
                 mpData->maTimer.SetTimeoutHdl( LINK( this, Cursor, ImplTimerHdl ) );
             }
 
@@ -217,9 +216,7 @@ void Cursor::ImplShow( bool bDrawDirect, bool bRestore )
     }
 }
 
-// -----------------------------------------------------------------------
-
-bool Cursor::ImplHide( bool i_bStopTimer )
+bool Cursor::ImplDoHide( bool bSuspend )
 {
     bool bWasCurVisible = false;
     if ( mpData && mpData->mpWindow )
@@ -227,18 +224,35 @@ bool Cursor::ImplHide( bool i_bStopTimer )
         bWasCurVisible = mpData->mbCurVisible;
         if ( mpData->mbCurVisible )
             ImplRestore();
-    }
 
-    if( mpData && i_bStopTimer )
-    {
-        mpData->maTimer.Stop();
-        mpData->mpWindow = NULL;
+        if ( !bSuspend )
+        {
+            mpData->maTimer.Stop();
+            mpData->mpWindow = NULL;
+        }
     }
-
     return bWasCurVisible;
 }
 
-// -----------------------------------------------------------------------
+void Cursor::ImplShow( bool bDrawDirect )
+{
+    ImplDoShow( bDrawDirect, false );
+}
+
+void Cursor::ImplHide()
+{
+    ImplDoHide( false );
+}
+
+void Cursor::ImplResume( bool bRestore )
+{
+    ImplDoShow( false, bRestore );
+}
+
+bool Cursor::ImplSuspend()
+{
+    return ImplDoHide( true );
+}
 
 void Cursor::ImplNew()
 {
@@ -278,7 +292,7 @@ Cursor::Cursor()
     mnOrientation   = 0;
     mnDirection     = 0;
     mnStyle         = 0;
-    mbVisible       = sal_False;
+    mbVisible       = false;
 }
 
 // -----------------------------------------------------------------------
@@ -326,7 +340,7 @@ void Cursor::Show()
 {
     if ( !mbVisible )
     {
-        mbVisible = sal_True;
+        mbVisible = true;
         ImplShow();
     }
 }
@@ -337,8 +351,8 @@ void Cursor::Hide()
 {
     if ( mbVisible )
     {
-        mbVisible = sal_False;
-        ImplHide( true );
+        mbVisible = false;
+        ImplHide();
     }
 }
 
@@ -458,15 +472,16 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
 
 // -----------------------------------------------------------------------
 
-sal_Bool Cursor::operator==( const Cursor& rCursor ) const
+bool Cursor::operator==( const Cursor& rCursor ) const
 {
-    if ( (maPos         == rCursor.maPos)           &&
+    return
+        ((maPos         == rCursor.maPos)           &&
          (maSize        == rCursor.maSize)          &&
          (mnSlant       == rCursor.mnSlant)         &&
          (mnOrientation == rCursor.mnOrientation)   &&
          (mnDirection   == rCursor.mnDirection)     &&
-         (mbVisible     == rCursor.mbVisible) )
-        return sal_True;
-    else
-        return sal_False;
+         (mbVisible     == rCursor.mbVisible))
+        ;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

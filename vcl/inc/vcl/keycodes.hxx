@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define _SV_KEYCODES_HXX
 
 #include <vcl/sv.h>
+#undef DELETE
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 
@@ -155,6 +157,13 @@
 #define KEY_DECIMAL     ((sal_uInt16)::com::sun::star::awt::Key::DECIMAL)
 #define KEY_TILDE       ((sal_uInt16)::com::sun::star::awt::Key::TILDE)
 #define KEY_QUOTELEFT   ((sal_uInt16)::com::sun::star::awt::Key::QUOTELEFT)
+#define KEY_BRACKETLEFT ((sal_uInt16)::com::sun::star::awt::Key::BRACKETLEFT)
+#define KEY_BRACKETRIGHT ((sal_uInt16)::com::sun::star::awt::Key::BRACKETRIGHT)
+#define KEY_SEMICOLON   ((sal_uInt16)::com::sun::star::awt::Key::SEMICOLON)
+
+#define KEY_CAPSLOCK    ((sal_uInt16)::com::sun::star::awt::Key::CAPSLOCK)
+#define KEY_NUMLOCK     ((sal_uInt16)::com::sun::star::awt::Key::NUMLOCK)
+#define KEY_SCROLLLOCK  ((sal_uInt16)::com::sun::star::awt::Key::SCROLLLOCK)
 
 #define KEY_CODE        ((sal_uInt16)0x0FFF)
 
@@ -188,4 +197,14 @@
 #define MOUSE_MIDDLE    ((sal_uInt16)0x0002)
 #define MOUSE_RIGHT     ((sal_uInt16)0x0004)
 
+// -------------------
+// - Indicator-Types -
+// -------------------
+
+#define INDICATOR_CAPSLOCK      0x0001
+#define INDICATOR_NUMLOCK       0x0002
+#define INDICATOR_SCROLLLOCK    0x0004
+
 #endif // _SV_KEYCODES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

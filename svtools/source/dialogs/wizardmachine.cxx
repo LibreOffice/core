@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <svtools/svtdata.hxx>
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 //.........................................................................
 namespace svt
@@ -523,7 +522,7 @@ namespace svt
             WizardState nNextState = determineNextState( nCurrentState );
             if ( WZS_INVALID_STATE == nNextState )
             {
-                DBG_ERROR( "OWizardMachine::skipUntil: the given target state does not exist!" );
+                OSL_FAIL( "OWizardMachine::skipUntil: the given target state does not exist!" );
                 return sal_False;
             }
 
@@ -539,7 +538,7 @@ namespace svt
         {
             // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
             // but ShowPage doesn't? Somebody behaves very strange here ....
-            DBG_ERROR( "OWizardMachine::skipUntil: very unpolite ...." );
+            OSL_FAIL( "OWizardMachine::skipUntil: very unpolite ...." );
             m_pImpl->aStateHistory = aOldStateHistory;
             return sal_False;
         }
@@ -575,7 +574,7 @@ namespace svt
         {
             // TODO: this leaves us in a state where we have no current page and an inconsistent state history.
             // Perhaps we should rollback the skipping here ....
-            DBG_ERROR("OWizardMachine::skip: very unpolite ....");
+            OSL_FAIL("OWizardMachine::skip: very unpolite ....");
                 // if somebody does a skip and then does not allow to leave ...
                 // (can't be a commit error, as we've already committed the current page. So if ShowPage fails here,
                 // somebody behaves really strange ...)
@@ -748,3 +747,5 @@ namespace svt
 //.........................................................................
 }   // namespace svt
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

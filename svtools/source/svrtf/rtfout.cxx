@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,13 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
 
 #if defined(UNX)
 const sal_Char RTFOutFuncs::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA RTFOutFuncs::sNewLine[] = "\015\012";
+const sal_Char RTFOutFuncs::sNewLine[] = "\015\012";
 #endif
 
 
@@ -207,3 +209,4 @@ SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLe
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

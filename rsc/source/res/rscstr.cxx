@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,10 +48,6 @@
 |*
 |*    RscString::RscString()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
-|*
 *************************************************************************/
 RscString::RscString( Atom nId, sal_uInt32 nTypeId )
                 : RscTop( nId, nTypeId )
@@ -63,10 +60,6 @@ RscString::RscString( Atom nId, sal_uInt32 nTypeId )
 |*
 |*    RscString::GetClassType()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
-|*
 *************************************************************************/
 RSCCLASS_TYPE RscString::GetClassType() const
 {
@@ -76,10 +69,6 @@ RSCCLASS_TYPE RscString::GetClassType() const
 /*************************************************************************
 |*
 |*    RscString::SetNumber()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
 ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
@@ -111,10 +100,6 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
 |*
 |*    RscString::GetString()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
-|*
 *************************************************************************/
 ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr ){
     *ppStr = ((RscStringInst *)rInst.pData)->pStr;
@@ -125,10 +110,6 @@ ERRTYPE RscString::GetString( const RSCINST & rInst, char ** ppStr ){
 |*
 |*    RscString::GetRef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.07.91
-|*    Letzte Aenderung  MM 22.07.91
-|*
 *************************************************************************/
 ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId ){
     *pRscId = ((RscStringInst *)rInst.pData)->aRefId;
@@ -138,10 +119,6 @@ ERRTYPE RscString::GetRef( const RSCINST & rInst, RscId * pRscId ){
 /*************************************************************************
 |*
 |*    RscString::SetRef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
 ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
@@ -158,10 +135,6 @@ ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId ){
 /*************************************************************************
 |*
 |*    RscString::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
 RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
@@ -198,10 +171,6 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
 |*
 |*    RscString::Destroy()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
-|*
 *************************************************************************/
 void RscString::Destroy( const RSCINST & rInst ){
     if( ((RscStringInst *)rInst.pData)->pStr )
@@ -212,10 +181,6 @@ void RscString::Destroy( const RSCINST & rInst ){
 /*************************************************************************
 |*
 |*    RscString::IsValueDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.01.92
-|*    Letzte Aenderung  MM 15.01.92
 |*
 *************************************************************************/
 sal_Bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
@@ -265,10 +230,6 @@ sal_Bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*
 |*    RscString::WriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
-|*
 *************************************************************************/
 void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont *, sal_uInt32, const char * )
@@ -312,10 +273,6 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscString::WriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.04.91
-|*    Letzte Aenderung  MM 15.04.91
 |*
 *************************************************************************/
 ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
@@ -399,3 +356,4 @@ void RscString::WriteRcAccess
     fprintf( fOutput, "\t\tnOffset += GetStringSizeRes( aStr );\n" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

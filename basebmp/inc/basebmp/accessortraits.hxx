@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,7 +91,7 @@ template< class Accessor > struct AccessorTraits
     typedef typename Accessor::value_type           value_type;
 
     /// Retrieve stand-alone color lookup function for given Accessor type
-    typedef std::project2nd< Accessor, value_type > color_lookup;
+    typedef project2nd< Accessor, value_type > color_lookup;
 
     /// Retrieve raw pixel data accessor for given Accessor type
     typedef Accessor                                raw_accessor;
@@ -128,3 +129,5 @@ template< class Accessor > struct AccessorTraits
 } // namespace basebmp
 
 #endif /* INCLUDED_BASEBMP_ACCESSORTRAITS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

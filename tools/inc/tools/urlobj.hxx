@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -141,7 +142,8 @@ enum INetProtocol
     INET_PROT_GENERIC = 30,
     INET_PROT_SMB = 31,
     INET_PROT_HID = 32,
-    INET_PROT_END = 33
+    INET_PROT_SFTP = 33,
+    INET_PROT_END = 34
 };
 
 //============================================================================
@@ -1534,6 +1536,9 @@ private:
 
     TOOLS_DLLPRIVATE static bool scanIPv6reference(
         sal_Unicode const *& rBegin, sal_Unicode const * pEnd);
+
+private:
+    void changeScheme(INetProtocol eTargetScheme);
 };
 
 // static
@@ -1920,3 +1925,5 @@ inline rtl::OUString INetURLObject::decode(rtl::OUStringBuffer const & rText,
 }
 
 #endif // _URLOBJ_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

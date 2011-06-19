@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: svtools.hrc,v $
- * $Revision: 1.7 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,15 +25,15 @@
  *
  ************************************************************************/
 #ifndef _SVTOOLS_HRC
-#define _SVTOOLS_HRC "$Revision:   1.0"
+#define _SVTOOLS_HRC
 
 #include <svl/solar.hrc>
 
 #define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
 #define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)
 
-#define ABOUT_STR_COPYRIGHT             (RID_SVTOOLS_START + 1)
-#define ABOUT_STR_DEVELOPER_ARY         (RID_SVTOOLS_START + 2)
+//#define ABOUT_STR_COPYRIGHT             (RID_SVTOOLS_START + 1)
+//#define ABOUT_STR_DEVELOPER_ARY         (RID_SVTOOLS_START + 2)
 
 //.............................................................................
 // various unsorted stuff
@@ -66,6 +63,7 @@
 #define RID_FILEOPEN_INVALIDFOLDER      (RID_SVTOOLS_START + 34)
 #define RID_FILEOPEN_NOTEXISTENTFILE    (RID_SVTOOLS_START + 35)
 #define STR_SVT_NOREMOVABLEDEVICE       (RID_SVTOOLS_START + 36)
+#define STR_SVT_ALLFORMATS              (RID_SVTOOLS_START + 37)
 
 // doc template dialog
 #define DLG_DOCTEMPLATE                 (RID_SVTOOLS_START+50)
@@ -148,7 +146,7 @@
 #define STR_SVT_PRNDLG_POWER_SAVE           (STR_SVT_PRNDLG_START+26)
 #define STR_SVT_PRNDLG_DEFPRINTER           (STR_SVT_PRNDLG_START+27)
 #define STR_SVT_PRNDLG_JOBCOUNT             (STR_SVT_PRNDLG_START+28)
-#define STR_SVT_PRNDLG_END                  (RID_IMG_PRNDLG_NOCOLLATE_HC)
+#define STR_SVT_PRNDLG_END              (RID_IMG_PRNDLG_NOCOLLATE)
 
 #define STR_SVT_CALENDAR_START              (STR_SVT_PRNDLG_END+1)
 #define STR_SVT_CALENDAR_DAY                (STR_SVT_CALENDAR_START+0)
@@ -286,6 +284,8 @@
 // String array to match UI language names to LanguageType values and vice versa
 #define STR_ARR_SVT_LANGUAGE_TABLE_START    (STR_SVT_JAVAERROR_END + 1)
 #define STR_ARR_SVT_LANGUAGE_TABLE          (STR_ARR_SVT_LANGUAGE_TABLE_START + 0)
+//due to some horror wizards/com/sun/star/wizards/letter/LocaleCodes.java needs to be kept
+//manually in sync with STR_ARR_SVT_LANGUAGE_TABLE
 #define STR_ARR_SVT_LANGUAGE_TABLE_END      (STR_ARR_SVT_LANGUAGE_TABLE)
 
 //.............................................................................
@@ -307,6 +307,7 @@
 #define BMP_HELP_AGENT_IMAGE            (RID_SVTOOLS_BITMAP_START +   1)
 #define BMP_HELP_AGENT_CLOSER           (RID_SVTOOLS_BITMAP_START +   2)
 #define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   3)
+#define BMP_LIST_ADD                    (RID_SVTOOLS_BITMAP_START +   4)
 
 //.............................................................................
 // image lists
@@ -315,11 +316,7 @@
 #define RID_SVTOOLS_IMAGELIST_BIG                   (RID_SVTOOLS_IMAGELIST_START +  1)
 #define RID_SVTOOLS_IMAGELIST_SMALL                 (RID_SVTOOLS_IMAGELIST_START +  2)
 #define RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX         (RID_SVTOOLS_IMAGELIST_START +  3)
-#define RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST      (RID_SVTOOLS_IMAGELIST_START +  4)
-#define RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST    (RID_SVTOOLS_IMAGELIST_START +  5)
-#define RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H         (RID_SVTOOLS_IMAGELIST_START +  6)
 #define RID_FILEPICKER_IMAGES                       (RID_SVTOOLS_IMAGELIST_START +  7)
-#define RID_FILEPICKER_IMAGES_HC                    (RID_SVTOOLS_IMAGELIST_START +  8)
 
 //.............................................................................
 // error boxes
@@ -340,20 +337,13 @@
 // images
 #define RID_IMG_TREENODE_COLLAPSED      (RID_SVTOOLS_START +  0)
 #define RID_IMG_TREENODE_EXPANDED       (RID_SVTOOLS_START +  1)
-#define RID_IMG_TREENODE_COLLAPSED_HC   (RID_SVTOOLS_START +  2)
-#define RID_IMG_TREENODE_EXPANDED_HC    (RID_SVTOOLS_START +  3)
 
 #define RID_IMG_PRINTERFONT             (RID_SVTOOLS_START + 12)
 #define RID_IMG_BITMAPFONT              (RID_SVTOOLS_START + 13)
 #define RID_IMG_SCALABLEFONT            (RID_SVTOOLS_START + 14)
-#define RID_IMG_PRINTERFONT_HC          (RID_SVTOOLS_START + 15)
-#define RID_IMG_BITMAPFONT_HC           (RID_SVTOOLS_START + 16)
-#define RID_IMG_SCALABLEFONT_HC         (RID_SVTOOLS_START + 17)
 
 #define IMG_TRIANGLE_RIGHT              (RID_SVTOOLS_START + 18)
-#define IMG_TRIANGLE_RIGHT_HC           (RID_SVTOOLS_START + 19)
 #define IMG_TRIANGLE_DOWN               (RID_SVTOOLS_START + 20)
-#define IMG_TRIANGLE_DOWN_HC            (RID_SVTOOLS_START + 21)
 
 #define IMG_SVT_FOLDER                  (RID_SVTOOLS_START + 40)
 
@@ -361,11 +351,6 @@
 #define IMG_SVT_MYDOCS                  (RID_SVTOOLS_START + 53)
 #define IMG_SVT_TEMPLATES               (RID_SVTOOLS_START + 54)
 #define IMG_SVT_SAMPLES                 (RID_SVTOOLS_START + 55)
-
-#define IMG_SVT_NEWDOC_HC               (RID_SVTOOLS_START + 59)
-#define IMG_SVT_MYDOCS_HC               (RID_SVTOOLS_START + 60)
-#define IMG_SVT_TEMPLATES_HC            (RID_SVTOOLS_START + 61)
-#define IMG_SVT_SAMPLES_HC              (RID_SVTOOLS_START + 62)
 
 #define IMG_SVT_DOCTEMPLATE_BACK_SMALL      (RID_SVTOOLS_START + 70)
 #define IMG_SVT_DOCTEMPLATE_BACK_LARGE      (RID_SVTOOLS_START + 71)
@@ -378,21 +363,8 @@
 #define IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL   (RID_SVTOOLS_START + 78)
 #define IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE   (RID_SVTOOLS_START + 79)
 
-#define IMG_SVT_DOCTEMPL_HC_BACK_SMALL      (RID_SVTOOLS_START + 80)
-#define IMG_SVT_DOCTEMPL_HC_BACK_LARGE      (RID_SVTOOLS_START + 81)
-#define IMG_SVT_DOCTEMPL_HC_PREV_SMALL      (RID_SVTOOLS_START + 82)
-#define IMG_SVT_DOCTEMPL_HC_PREV_LARGE      (RID_SVTOOLS_START + 83)
-#define IMG_SVT_DOCTEMPL_HC_PRINT_SMALL     (RID_SVTOOLS_START + 84)
-#define IMG_SVT_DOCTEMPL_HC_PRINT_LARGE     (RID_SVTOOLS_START + 85)
-#define IMG_SVT_DOCTEMPL_HC_DOCINFO_SMALL   (RID_SVTOOLS_START + 86)
-#define IMG_SVT_DOCTEMPL_HC_DOCINFO_LARGE   (RID_SVTOOLS_START + 87)
-#define IMG_SVT_DOCTEMPL_HC_PREVIEW_SMALL   (RID_SVTOOLS_START + 88)
-#define IMG_SVT_DOCTEMPL_HC_PREVIEW_LARGE   (RID_SVTOOLS_START + 89)
-
 #define RID_IMG_PRNDLG_COLLATE              (STR_SVT_PRNDLG_START + 29)
 #define RID_IMG_PRNDLG_NOCOLLATE            (STR_SVT_PRNDLG_START + 30)
-#define RID_IMG_PRNDLG_COLLATE_HC           (STR_SVT_PRNDLG_START + 31)
-#define RID_IMG_PRNDLG_NOCOLLATE_HC         (STR_SVT_PRNDLG_START + 32)
 
 // IAccessible2 implementation in 2009
 #define STR_PARAGRAPH_START                 (STR_SVT_PRNDLG_START + 50)
@@ -400,6 +372,4 @@
 #define STR_PARAGRAPH_END                   (STR_PARAGRAPH)
 
 #endif  // #ifndef _SVTOOLS_HRC
-
-// ******************************************************************* EOF
 

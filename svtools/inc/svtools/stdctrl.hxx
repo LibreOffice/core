@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 
 // -------------
 // - FixedInfo -
@@ -71,3 +68,4 @@ namespace svt
 
 #endif  // _STDCTRL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

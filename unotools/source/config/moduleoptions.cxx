@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -43,6 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <rtl/logfile.hxx>
+#include <rtl/instance.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -222,7 +218,6 @@ struct FactoryInfo
         ::rtl::OUString     getShortName        () const { return sShortName;         };
         ::rtl::OUString     getTemplateFile     () const { return sTemplateFile;      };
         ::rtl::OUString     getWindowAttributes () const { return sWindowAttributes;  };
-        ::rtl::OUString     getEmptyDocumentURL () const { return sEmptyDocumentURL;  };
         ::rtl::OUString     getDefaultFilter    () const { return sDefaultFilter;     };
         sal_Bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
@@ -255,24 +250,6 @@ struct FactoryInfo
         }
 
         //---------------------------------------------------------------------------------------------------------
-        void setInstalled( sal_Bool bNewInstalled )
-        {
-            bInstalled = bNewInstalled;
-        };
-
-        //---------------------------------------------------------------------------------------------------------
-        void setFactory( const ::rtl::OUString& sNewFactory )
-        {
-            sFactory = sNewFactory;
-        };
-
-        //---------------------------------------------------------------------------------------------------------
-        void setShortName( const ::rtl::OUString& sNewShortName )
-        {
-            sShortName = sNewShortName;
-        };
-
-        //---------------------------------------------------------------------------------------------------------
         void setTemplateFile( const ::rtl::OUString& sNewTemplateFile )
         {
             if( sTemplateFile != sNewTemplateFile )
@@ -293,32 +270,12 @@ struct FactoryInfo
         };
 
         //---------------------------------------------------------------------------------------------------------
-        void setEmptyDocumentURL( const ::rtl::OUString& sNewEmptyDocumentURL )
-        {
-            if( sEmptyDocumentURL != sNewEmptyDocumentURL )
-            {
-                sEmptyDocumentURL        = sNewEmptyDocumentURL;
-                bChangedEmptyDocumentURL = sal_True            ;
-            }
-        };
-
-        //---------------------------------------------------------------------------------------------------------
         void setDefaultFilter( const ::rtl::OUString& sNewDefaultFilter )
         {
             if( sDefaultFilter != sNewDefaultFilter )
             {
                 sDefaultFilter       = sNewDefaultFilter;
                 bChangedDefaultFilter = sal_True         ;
-            }
-        };
-
-        //---------------------------------------------------------------------------------------------------------
-        void setIcon( sal_Int32 nNewIcon )
-        {
-            if( nNewIcon != nNewIcon )
-            {
-                nNewIcon     = nNewIcon;
-                bChangedIcon = sal_True;
             }
         };
 
@@ -522,7 +479,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 *//*-*************************************************************************************************************/
 void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& )
 {
-    OSL_ENSURE( sal_False, "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
+    OSL_FAIL( "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
 }
 
 /*-****************************************************************************************************//**
@@ -724,7 +681,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdatabase"));
                                                   break;
         default:
-            OSL_ASSERT( "unknown factory" );
+            OSL_FAIL( "unknown factory" );
             break;
     }
 
@@ -789,7 +746,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase?Interactive"));
                                                   break;
         default:
-            OSL_ASSERT( "unknown factory" );
+            OSL_FAIL( "unknown factory" );
             break;
     }
     return sURL;
@@ -1322,6 +1279,10 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
     return nFeature;
 }
 
+namespace
+{
+    class theModuleOptionsMutex : public rtl::Static<osl::Mutex, theModuleOptionsMutex> {};
+}
 /*-****************************************************************************************************//**
     @short      return a reference to a static mutex
     @descr      These class is threadsafe.
@@ -1338,42 +1299,25 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 *//*-*****************************************************************************************************/
 ::osl::Mutex& SvtModuleOptions::impl_GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static ::osl::Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static ::osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theModuleOptionsMutex::get();
 }
 
 ::rtl::OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString::createFromAscii("Web"); }
-        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString::createFromAscii("Global"); }
-        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString::createFromAscii("Calc"); }
-        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString::createFromAscii("Draw"); }
-        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString::createFromAscii("Impress"); }
-        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString::createFromAscii("Math"); }
-        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString::createFromAscii("Chart"); }
-        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString::createFromAscii("Basic"); }
-        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString::createFromAscii("Database"); }
+        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Web")); }
+        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Global")); }
+        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
+        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
+        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
+        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
+        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
+        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
+        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
         default:
-            OSL_ASSERT( "unknown module" );
+            OSL_FAIL( "unknown module" );
             break;
     }
 
@@ -1384,18 +1328,18 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 {
     switch( eFactory )
     {
-        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString::createFromAscii("Writer"); }
-        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString::createFromAscii("Calc"); }
-        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString::createFromAscii("Draw"); }
-        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString::createFromAscii("Impress"); }
-        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); }
-        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); }
-        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); }
-        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString::createFromAscii("Database"); }
+        case SvtModuleOptions::E_WRITER         :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_WRITERWEB      :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_WRITERGLOBAL   :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")); }
+        case SvtModuleOptions::E_CALC           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Calc")); }
+        case SvtModuleOptions::E_DRAW           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Draw")); }
+        case SvtModuleOptions::E_IMPRESS        :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Impress")); }
+        case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Math")); }
+        case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Chart")); }
+        case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
+        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
         default:
-            OSL_ASSERT( "unknown factory" );
+            OSL_FAIL( "unknown factory" );
             break;
     }
 
@@ -1407,25 +1351,25 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
 -----------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::rtl::OUString& sName)
 {
-    if (sName.equalsAscii("swriter"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter")))
         return E_WRITER;
-    if (sName.equalsIgnoreAsciiCaseAscii("swriter/Web")) // sometimes they are registerd for swriter/web :-(
+    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/Web"))) // sometimes they are registerd for swriter/web :-(
         return E_WRITERWEB;
-    if (sName.equalsIgnoreAsciiCaseAscii("swriter/GlobalDocument")) // sometimes they are registerd for swriter/globaldocument :-(
+    if (sName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("swriter/GlobalDocument"))) // sometimes they are registerd for swriter/globaldocument :-(
         return E_WRITERGLOBAL;
-    if (sName.equalsAscii("scalc"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("scalc")))
         return E_CALC;
-    if (sName.equalsAscii("sdraw"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdraw")))
         return E_DRAW;
-    if (sName.equalsAscii("simpress"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("simpress")))
         return E_IMPRESS;
-    if (sName.equalsAscii("schart"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("schart")))
         return E_CHART;
-    if (sName.equalsAscii("smath"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("smath")))
         return E_MATH;
-    if (sName.equalsAscii("sbasic"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sbasic")))
         return E_BASIC;
-    if (sName.equalsAscii("sdatabase"))
+    if (sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("sdatabase")))
         return E_DATABASE;
 
     return E_UNKNOWN_FACTORY;
@@ -1473,9 +1417,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         xFilterCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory")), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"))), css::uno::UNO_QUERY);
         xTypeCfg = css::uno::Reference< css::container::XNameAccess >(
-            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), css::uno::UNO_QUERY);
+            xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"))), css::uno::UNO_QUERY);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -1485,13 +1429,13 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
 
     // is there already a filter inside the descriptor?
-    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("FilterName"), ::rtl::OUString());
+    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")), ::rtl::OUString());
     if (sFilterName.getLength())
     {
         try
         {
             ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
-            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
+            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
             SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
             if (eApp != E_UNKNOWN_FACTORY)
@@ -1504,7 +1448,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     }
 
     // is there already a type inside the descriptor?
-    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("TypeName"), ::rtl::OUString());
+    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")), ::rtl::OUString());
     if (!sTypeName.getLength())
     {
         // no :-(
@@ -1521,9 +1465,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         ::comphelper::SequenceAsHashMap stlTypeProps     (xTypeCfg->getByName(sTypeName));
-        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("PreferredFilter"), ::rtl::OUString());
+        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter")), ::rtl::OUString());
         ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sPreferredFilter));
-        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("DocumentService"), ::rtl::OUString());
+        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentService")), ::rtl::OUString());
         SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
         if (eApp != E_UNKNOWN_FACTORY)
@@ -1595,3 +1539,4 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     return aModule;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

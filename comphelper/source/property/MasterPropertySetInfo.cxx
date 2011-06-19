@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
-#ifndef _COMPHELPER_CHAINABLEPROPERTYSETINFO_HXX_
 #include <comphelper/MasterPropertySetInfo.hxx>
-#endif
 #include <comphelper/TypeGeneration.hxx>
 
 using ::rtl::OUString;
@@ -64,7 +63,7 @@ MasterPropertySetInfo::~MasterPropertySetInfo()
     while (aIter != aEnd )
     {
         delete (*aIter).second;
-        aIter++;
+        ++aIter;
     }
 }
 
@@ -84,7 +83,7 @@ void MasterPropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount, sal_uInt8
 #ifdef DBG_UTIL
         PropertyDataHash::iterator aIter = maMap.find( aName );
         if( aIter != maMap.end() )
-            OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");
+            OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
 #endif
         maMap[aName] = new PropertyData ( nMapId, pMap );
     }
@@ -102,10 +101,10 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
 #ifdef DBG_UTIL
         PropertyDataHash::iterator aDebugIter = maMap.find( (*aIter).first );
         if( aDebugIter != maMap.end() )
-            OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");
+            OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
 #endif
         maMap[(*aIter).first] = new PropertyData ( nMapId, (*aIter).second );
-        aIter++;
+        ++aIter;
     }
 }
 
@@ -168,3 +167,5 @@ sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const ::rtl::OUStrin
 {
     return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

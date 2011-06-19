@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ using namespace ::com::sun::star::util;
 // regular expression to validate complete numbers, plus every fragment which can occur during the input
 // of a complete number
 // [+/-][{digit}*.]*{digit}*[,{digit}*][e[+/-]{digit}*]
-const char __FAR_DATA szNumericInput[] = "_[-+]?([0-9]*\\,)*[0-9]*(\\.[0-9]*)?(e[-+]?[0-9]*)?_";
+const char szNumericInput[] = "_[-+]?([0-9]*\\,)*[0-9]*(\\.[0-9]*)?(e[-+]?[0-9]*)?_";
     // (the two _ are for normalizing it: With this, we can ensure that a to-be-checked text is always
     // matched as a _whole_)
 #else
@@ -293,7 +294,7 @@ namespace validation
             return sal_True;
 
         // normalize the string
-        String sNormalized( RTL_CONSTASCII_STRINGPARAM( "_") );
+        String sNormalized( RTL_CONSTASCII_USTRINGPARAM("_") );
         sNormalized.Append( _rText );
         sNormalized.AppendAscii( "_" );
 
@@ -812,7 +813,6 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 
     if ( ( 0 != ( _nWhat & FCT_FORMATTER ) ) && m_pFormatter )
         m_pFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
-        // 95845 - 03.04.2002 - fs@openoffice.org
 
     ReFormat();
 }
@@ -1292,7 +1292,7 @@ void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
             UpdateCurrencyFormat();
             break;
         case FCT_KEYONLY:
-            DBG_ERROR("DoubleCurrencyField::FormatChanged : somebody modified my key !");
+            OSL_FAIL("DoubleCurrencyField::FormatChanged : somebody modified my key !");
             // We always build our own format from the settings we get via special methods (setCurrencySymbol etc.).
             // Nobody but ourself should modifiy the format key directly !
             break;
@@ -1396,3 +1396,4 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     m_bChangingFormat = sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

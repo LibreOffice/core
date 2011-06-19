@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -190,7 +191,7 @@ WMSupportsFWS (Display *display, int screen)
  *
  * newHandler() -
  *
- * Handle X errors (temporarily) to record the occurance of BadWindow
+ * Handle X errors (temporarily) to record the occurrence of BadWindow
  * errors without crashing.  Used to detect the FWS_COMM_WINDOW root window
  * property containing an old or obsolete window id.
  *
@@ -278,3 +279,4 @@ AddFwsProtocols (Display *display, Window window)
             (unsigned char *) fwsProtocols, nProtos);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

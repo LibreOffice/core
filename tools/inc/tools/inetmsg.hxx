@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,9 @@
 #include "tools/toolsdllapi.h"
 #include <sal/types.h>
 
-#ifndef _RTL_TEXTENC_H_
 #include <rtl/textenc.h>
-#endif
 
-#ifndef _TOOLS_INETMIME_HXX
 #include <tools/inetmime.hxx>
-#endif
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 
@@ -445,14 +441,6 @@ public:
             INetMIME::HEADER_FIELD_TEXT);
     }
 
-    void      SetXMailer (const UniString& rXMailer);
-    UniString GetXMailer (void) const
-    {
-        return GetHeaderValue_Impl (
-            m_nIndex[INETMSG_RFC822_X_MAILER],
-            INetMIME::HEADER_FIELD_TEXT);
-    }
-
     /** Stream operators.
      */
     friend SvStream& operator<< (
@@ -621,3 +609,4 @@ public:
 
 #endif /* !_TOOLS_INETMSG_HXX */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

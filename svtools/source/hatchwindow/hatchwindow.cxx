@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include "ipwin.hxx"
 
 #include <toolkit/helper/convert.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -52,7 +53,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
                 const awt::Rectangle& aBounds,
                 const awt::Size& aSize )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pParent = NULL;
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( xParent );
@@ -87,7 +88,7 @@ void VCLXHatchWindow::QueryObjAreaPixel( Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can't adjust rectangle size!\n" );
+            OSL_FAIL( "Can't adjust rectangle size!\n" );
         }
     }
 }
@@ -103,7 +104,7 @@ void VCLXHatchWindow::RequestObjAreaPixel( const Rectangle & aRect )
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can't request resizing!\n" );
+            OSL_FAIL( "Can't request resizing!\n" );
         }
     }
 }
@@ -237,3 +238,5 @@ void VCLXHatchWindow::Deactivated()
     if ( m_xController.is() )
         m_xController->deactivated();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

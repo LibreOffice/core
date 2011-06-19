@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace rtl;
+using ::rtl::OUString;
 
 namespace ucbhelper_impl
 {
@@ -163,7 +164,7 @@ class PropertyValues : public PropertyValuesVector {};
     if ( ( columnIndex < 1 )                                                  \
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )                \
     {                                                                         \
-        OSL_ENSURE( sal_False, "PropertyValueSet - index out of range!" );    \
+        OSL_FAIL( "PropertyValueSet - index out of range!" );    \
     }                                                                         \
     else                                                                      \
     {                                                                         \
@@ -479,7 +480,7 @@ Any SAL_CALL PropertyValueSet::getObject(
     if ( ( columnIndex < 1 )
          || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
     {
-        OSL_ENSURE( sal_False, "PropertyValueSet - index out of range!" );
+        OSL_FAIL( "PropertyValueSet - index out of range!" );
     }
     else
     {
@@ -576,8 +577,7 @@ Any SAL_CALL PropertyValueSet::getObject(
                 case OBJECT_VALUE_SET:
                     // Fall-through is intended!
                 default:
-                    OSL_ENSURE( sal_False,
-                                "PropertyValueSet::getObject - "
+                    OSL_FAIL( "PropertyValueSet::getObject - "
                                 "Wrong original type" );
                     break;
             }
@@ -665,8 +665,8 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
         m_bTriedToGetTypeConverter = sal_True;
         m_xTypeConverter = Reference< XTypeConverter >(
                                 m_xSMgr->createInstance(
-                                    OUString::createFromAscii(
-                                        "com.sun.star.script.Converter" ) ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.script.Converter" )) ),
                                 UNO_QUERY );
 
         OSL_ENSURE( m_xTypeConverter.is(),
@@ -922,3 +922,5 @@ sal_Bool PropertyValueSet::appendPropertySetValue(
 }
 
 } // namespace ucbhelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

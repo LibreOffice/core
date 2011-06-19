@@ -29,6 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <sal/alloca.h>
+#include <sal/macros.h>
 
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
@@ -106,7 +107,7 @@ static sal_uInt16 ImplMapCharCode( sal_Unicode aCode )
     };
     
     sal_uInt16 nKeyCode = 0;
-    if( aCode < sizeof( aKeyCodeMap) / sizeof( aKeyCodeMap[0] ) )
+    if( aCode < SAL_N_ELEMENTS( aKeyCodeMap)  )
         nKeyCode = aKeyCodeMap[ aCode ];
     else if( aCode >= 0xf700 && aCode < 0xf780 )
         nKeyCode = aFunctionKeyCodeMap[ aCode - 0xf700 ]; 
@@ -169,7 +170,7 @@ static AquaSalFrame* getMouseContainerFrame()
 {
     if( GetSalData() && GetSalData()->mpFirstInstance )
     {
-        vos::IMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
+        osl::SolarMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
         if( pMutex )
         {
             pMutex->acquire();
@@ -440,7 +441,7 @@ static AquaSalFrame* getMouseContainerFrame()
     return mpFrame ? (mpFrame->getClipPath() != 0 ? NO : YES) : YES;
 }
 
-// helper class similar to a vos::OGuard for the SalYieldMutex
+// helper class similar to a osl::SolarGuard for the SalYieldMutex
 // the difference is that it only does tryToAcquire instead of aquire
 // so dreaded deadlocks like #i93512# are prevented
 class TryGuard
@@ -918,7 +919,7 @@ private:
         
         // Caution: should the table grow to more than 5 or 6 entries,
         // we must consider moving it to a kind of hash map
-        const unsigned int nExceptions = sizeof( aExceptionalKeys ) / sizeof( aExceptionalKeys[0] );
+        const unsigned int nExceptions = SAL_N_ELEMENTS( aExceptionalKeys );
         for( unsigned int i = 0; i < nExceptions; i++ )
         {
             if( nKeyCode == aExceptionalKeys[i].nKeyCode &&

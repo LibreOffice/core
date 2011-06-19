@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,16 +38,19 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 
 #include <toolkit/helper/listenermultiplexer.hxx>
+#include <vector>
 
 class Menu;
 class MenuBar;
 class VclSimpleEvent;
+class PopupMenu;
 
-DECLARE_LIST( PopupMenuRefList, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >* )
+typedef ::std::vector<
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >*
+> PopupMenuRefList;
 
 //  ----------------------------------------------------
 //  class VCLXMenu
@@ -181,6 +185,9 @@ class TOOLKIT_DLLPUBLIC VCLXPopupMenu : public VCLXMenu
 {
 public:
         VCLXPopupMenu();
+        VCLXPopupMenu( PopupMenu* pPopMenu );
 };
 
 #endif // _TOOLKIT_AWT_VCLXMENU_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

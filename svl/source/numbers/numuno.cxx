@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,16 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#ifndef GCC
-#endif
 
 #define _ZFORLIST_DECLARE_TABLE
 
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
-#include <vos/mutex.hxx>
-#include <osl/mutex.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <svl/numuno.hxx>
 #include "numfmuno.hxx"
@@ -132,21 +129,15 @@ sal_Int64 SAL_CALL SvNumberFormatsSupplierObj::getSomething(
     return 0;
 }
 
+namespace
+{
+    class theSvNumberFormatsSupplierObjUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvNumberFormatsSupplierObjUnoTunnelId > {};
+}
+
 // static
 const uno::Sequence<sal_Int8>& SvNumberFormatsSupplierObj::getUnoTunnelId()
 {
-    static uno::Sequence<sal_Int8> * pSeq = 0;
-    if( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSvNumberFormatsSupplierObjUnoTunnelId::get().getSeq();
 }
 
 // static
@@ -165,3 +156,4 @@ SvNumberFormatsSupplierObj* SvNumberFormatsSupplierObj::getImplementation(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

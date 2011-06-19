@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@ Flow::Flow()
     : Container()
     , mnSpacing( 0 )
     , mbHomogeneous( false )
+    , mnEachWidth( 0 )
 {
     addProp( RTL_CONSTASCII_USTRINGPARAM( "Homogeneous" ),
              ::getCppuType( static_cast< const sal_Bool* >( NULL ) ),
@@ -78,7 +80,7 @@ Flow::removeChild( const css::uno::Reference< css::awt::XLayoutConstrains >& xCh
     throw (css::uno::RuntimeException)
 {
     for ( std::list< ChildData * >::iterator it = maChildren.begin();
-          it != maChildren.end(); it++ )
+          it != maChildren.end(); ++it )
     {
         if ( (*it)->xChild == xChild )
         {
@@ -99,7 +101,7 @@ Flow::getChildren()
     uno::Sequence< uno::Reference< awt::XLayoutConstrains > > children( maChildren.size() );
     unsigned int i = 0;
     for ( std::list< ChildData * >::iterator it = maChildren.begin();
-          it != maChildren.end(); it++, i++ )
+          it != maChildren.end(); ++it, ++i )
         children[i] = (*it)->xChild;
 
     return children;
@@ -120,7 +122,7 @@ Flow::calculateSize( long nMaxWidth )
     std::list<ChildData *>::const_iterator it;
     mnEachWidth = 0;
     // first pass, for homogeneous property
-    for (it = maChildren.begin(); it != maChildren.end(); it++)
+    for (it = maChildren.begin(); it != maChildren.end(); ++it)
     {
         if ( !(*it)->isVisible() )
             continue;
@@ -130,7 +132,7 @@ Flow::calculateSize( long nMaxWidth )
     }
 
     long nRowWidth = 0, nRowHeight = 0;
-    for (it = maChildren.begin(); it != maChildren.end(); it++)
+    for (it = maChildren.begin(); it != maChildren.end(); ++it)
     {
         if ( !(*it)->isVisible() )
             continue;
@@ -181,7 +183,7 @@ Flow::allocateArea( const css::awt::Rectangle &rArea )
 
     std::list<ChildData *>::const_iterator it;
     long nX = 0, nY = 0, nRowHeight = 0;
-    for (it = maChildren.begin(); it != maChildren.end(); it++)
+    for (it = maChildren.begin(); it != maChildren.end(); ++it)
     {
         ChildData *child = *it;
         if ( !child->isVisible() )
@@ -207,3 +209,5 @@ Flow::allocateArea( const css::awt::Rectangle &rArea )
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

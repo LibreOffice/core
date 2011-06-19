@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _CAIROCANVAS_REPAINTTARGET_HXX
 #define _CAIROCANVAS_REPAINTTARGET_HXX
 
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
 
 #include "cairo_cairo.hxx"
 
@@ -58,3 +57,5 @@ namespace cairocanvas
 }
 
 #endif /* _CAIROCANVAS_REPAINTTARGET_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

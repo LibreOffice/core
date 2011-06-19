@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "osl/file.hxx"
 #include "osl/process.h"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 
 #include "rtl/bootstrap.h"
 #include "rtl/strbuf.hxx"
@@ -75,6 +76,7 @@ ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID 
 ,   mbHasOs2Table( false )
 ,   mbCmapEncodingRead( false )
 ,   mbHasCJKSupport( false )
+,   mbFontCapabilitiesRead( false )
 {}
 
 // -----------------------------------------------------------------------
@@ -150,15 +152,61 @@ const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     // parse the CMAP
     CmapResult aCmapResult;
-    if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
-    {
-        // create the matching charmap
-        mpCharMap->DeReference();
-        mpCharMap = new ImplFontCharMap( aCmapResult );
-        mpCharMap->AddReference();
-    }
+    if( !ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
+        return mpCharMap;
 
+    mpCharMap = new ImplFontCharMap( aCmapResult );
+    mpCharMap->AddReference();
     return mpCharMap;
+}
+
+bool ImplMacFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    // read this only once per font
+    if( mbFontCapabilitiesRead )
+    {
+        rFontCapabilities = maFontCapabilities;
+        return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
+    }
+    mbFontCapabilitiesRead = true;
+
+    // prepare to get the GSUB table raw data
+    ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
+    ByteCount nBufSize = 0;
+    OSStatus eStatus;
+    eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the GSUB raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pGSUBTable = &aBuffer[0];
+            vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pGSUBTable, nRawLength);
+        }
+    }
+    eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the OS/2 raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pOS2Table = &aBuffer[0];
+            vcl::getTTCoverage(
+                maFontCapabilities.maUnicodeRange,
+                maFontCapabilities.maCodePageRange,
+                pOS2Table, nRawLength);
+        }
+    }
+    rFontCapabilities = maFontCapabilities;
+    return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
 }
 
 // -----------------------------------------------------------------------
@@ -397,17 +445,17 @@ void AquaSalGraphics::initResolution( NSWindow* )
                 }
                 else
                 {
-                    DBG_ERROR( "no resolution found in device description" );
+                    OSL_FAIL( "no resolution found in device description" );
                 }
             }
             else
             {
-                DBG_ERROR( "no device description" );
+                OSL_FAIL( "no device description" );
             }
         }
         else
         {
-            DBG_ERROR( "no screen found" );
+            OSL_FAIL( "no screen found" );
         }
 
         // #i107076# maintaining size-WYSIWYG-ness causes many problems for
@@ -456,7 +504,7 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 AquaSalGraphics::GetBitCount()
+sal_uInt16 AquaSalGraphics::GetBitCount() const
 {
     sal_uInt16 nBits = mnBitmapDepth ? mnBitmapDepth : 32;//24;
     return nBits;
@@ -1152,23 +1200,6 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
 {
     ApplyXorContext();
 
-#if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
-    SalBitmap* pBitmap = getBitmap( nSrcX, nSrcY, nSrcWidth, nSrcHeight );
-    if( pBitmap )
-    {
-        SalTwoRect aPosAry;
-        aPosAry.mnSrcX = 0;
-        aPosAry.mnSrcY = 0;
-        aPosAry.mnSrcWidth = nSrcWidth;
-        aPosAry.mnSrcHeight = nSrcHeight;
-        aPosAry.mnDestX = nDstX;
-        aPosAry.mnDestY = nDstY;
-        aPosAry.mnDestWidth = nSrcWidth;
-        aPosAry.mnDestHeight = nSrcHeight;
-        drawBitmap( &aPosAry, *pBitmap );
-        delete pBitmap;
-    }
-#else
     DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" );
 
     // in XOR mode the drawing context is redirected to the XOR mask
@@ -1207,7 +1238,7 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
 
     // mark the destination rectangle as updated
     RefreshRect( nDstX, nDstY, nSrcWidth, nSrcHeight );
-#endif
+
 }
 
 // -----------------------------------------------------------------------
@@ -1232,7 +1263,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
 
 void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor )
 {
-    DBG_ERROR("not implemented for color masking!");
+    OSL_FAIL("not implemented for color masking!");
     drawBitmap( pPosAry, rSalBitmap );
 }
 
@@ -1780,15 +1811,16 @@ static OSStatus GgoMoveToProc( const Float32Point* pPoint, void* pData )
     return eStatus;
 }
 
-sal_Bool AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+sal_Bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rPolyPoly;
     rPolyPoly.clear();
 
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback when CWS pdffix02 is integrated
+    GlyphID aGlyphId = nGlyphId & GF_IDXMASK;
     OSStatus eGgoStatus = noErr;
-    OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, nGlyphId,
+    OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, aGlyphId,
         GgoMoveToProc, GgoLineToProc, GgoCurveToProc, GgoClosePathProc,
         &aGgoData, &eGgoStatus );
     if( (eStatus != noErr) ) // TODO: why is (eGgoStatus!=noErr) when curves are involved?
@@ -1822,10 +1854,10 @@ long AquaSalGraphics::GetGraphicsWidth() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
+sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect )
 {
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
-    GlyphID aGlyphId = nGlyphId;
+    GlyphID aGlyphId = nGlyphId & GF_IDXMASK;
     ATSGlyphScreenMetrics aGlyphMetrics;
     OSStatus eStatus = ATSUGlyphGetScreenMetrics( rATSUStyle,
         1, &aGlyphId, 0, FALSE, !mbNonAntialiasedText, &aGlyphMetrics );
@@ -1995,6 +2027,14 @@ const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
         return ImplFontCharMap::GetDefaultMap();
 
     return mpMacFontData->GetImplFontCharMap();
+}
+
+bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    if( !mpMacFontData )
+        return false;
+
+    return mpMacFontData->GetImplFontCapabilities(rFontCapabilities);
 }
 
 // -----------------------------------------------------------------------
@@ -2375,20 +2415,7 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
     else if( pFontData->IsEmbeddable() )
     {
         // get individual character widths
-#if 0 // FIXME
-        rWidths.reserve( 224 );
-        for( sal_Unicode i = 32; i < 256; ++i )
-        {
-            int nCharWidth = 0;
-            if( ::GetCharWidth32W( mhDC, i, i, &nCharWidth ) )
-            {
-                rUnicodeEnc[ i ] = rWidths.size();
-                rWidths.push_back( nCharWidth );
-            }
-        }
-#else
-        DBG_ERROR("not implemented for non-subsettable fonts!\n");
-#endif
+        OSL_FAIL("not implemented for non-subsettable fonts!\n");
     }
 }
 
@@ -2682,3 +2709,4 @@ bool XorEmulation::UpdateTarget()
 
 // =======================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "vcl/bitmap.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/salctype.hxx"
-#include "vos/mutex.hxx"
+#include <osl/mutex.hxx>
 #include "tools/stream.hxx"
 #include "com/sun/star/script/XInvocation.hpp"
 #include "com/sun/star/awt/XBitmap.hpp"
@@ -43,7 +44,8 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::awt;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace vcl {
 
@@ -118,7 +120,7 @@ Any SAL_CALL BmpConverter::getValue( const OUString& ) throw( UnknownPropertyExc
 
 sal_Bool SAL_CALL BmpConverter::hasMethod( const OUString& rName ) throw()
 {
-    return rName.equalsIgnoreAsciiCase( OUString::createFromAscii( "convert-bitmap-depth" ) );
+    return rName.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) );
 }
 
 sal_Bool SAL_CALL BmpConverter::hasProperty( const OUString& ) throw()
@@ -135,7 +137,7 @@ Any SAL_CALL BmpConverter::invoke(
 {
     Any aRet;
 
-    if( rFunction.equalsIgnoreAsciiCase( OUString::createFromAscii( "convert-bitmap-depth" ) ) )
+    if( rFunction.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) ) )
     {
         Reference< XBitmap > xBM;
         sal_uInt16 nTargetDepth = 0;
@@ -149,7 +151,7 @@ Any SAL_CALL BmpConverter::invoke(
         Sequence< sal_Int8 > aDIB = xBM->getDIB();
 
         // call into vcl not thread safe
-        vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         SvMemoryStream aStream( aDIB.getArray(), aDIB.getLength(), STREAM_READ | STREAM_WRITE );
         Bitmap aBM;
@@ -211,3 +213,5 @@ Sequence< sal_Int8 > SAL_CALL BmpTransporter::getMaskDIB() throw()
 {
     return Sequence< sal_Int8 >();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,15 +41,11 @@
 |*
 |*    RscTypCont::FillNameIdList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.05.91
-|*    Letzte Aenderung  MM 30.05.91
-|*
 *************************************************************************/
 REResourceList * InsertList( Atom nClassName, const RscId& rId,
-                             REResourceList * pList ){
+                             REResourceList * pList ) {
     REResourceList  *   pSubList;
-    const char *                pStrClass;
+    const char *        pStrClass;
     ByteString          aStrClass;
 
     pStrClass = pHS->getString( nClassName ).getStr();
@@ -59,8 +56,7 @@ REResourceList * InsertList( Atom nClassName, const RscId& rId,
 
     pSubList = new REResourceList( pList, aStrClass, rId );
 
-    pList->Insert( pSubList, 0xFFFFFFFF );
-    return( pSubList );
+    return pSubList;
 }
 
 void FillSubList( RSCINST & rInst, REResourceList * pList )
@@ -117,3 +113,5 @@ void FillList( RscTop * pRscTop, REResourceList * pList, sal_uLong lFileKey ){
 void RscTypCont::FillNameIdList( REResourceList * pList, sal_uLong lFileKey ){
     FillList( pRoot, pList, lFileKey );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,8 +32,6 @@
 #include "vcl/imgctrl.hxx"
 #include "vcl/timer.hxx"
 
-#include <vos/mutex.hxx>
-
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <vector>

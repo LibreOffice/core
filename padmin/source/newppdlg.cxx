@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,9 @@
 using namespace padmin;
 using namespace psp;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 PPDImportDialog::PPDImportDialog( Window* pParent ) :
         ModalDialog( pParent, PaResId( RID_PPDIMPORT_DLG ) ),
@@ -224,3 +227,5 @@ IMPL_LINK( PPDImportDialog, ModifyHdl, ComboBox*, pListBox )
     }
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

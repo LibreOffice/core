@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,11 +26,9 @@
  *
  ************************************************************************/
 
-#include "preextstl.h"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
-#include "postextstl.h"
 
 #include <o3tl/range.hxx>
 #include <vector>
@@ -234,3 +233,5 @@ public:
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(range_test);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

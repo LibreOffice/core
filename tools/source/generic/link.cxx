@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,6 @@
 |*
 |*    Link::operator==()
 |*
-|*    Beschreibung      LINK.SDW
-|*    Ersterstellung    AM 14.02.91
-|*    Letzte Aenderung  TH 07.11.95
-|*
 *************************************************************************/
 
 sal_Bool Link::operator==( const Link& rLink ) const
@@ -56,3 +53,5 @@ sal_Bool Link::operator==( const Link& rLink ) const
     else
         return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

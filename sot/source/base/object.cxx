@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <tools/debug.hxx>
 #include <sot/object.hxx>
 #include <sot/factory.hxx>
-#include <sot/agg.hxx>
 
 /************** class SotObject ******************************************/
 class SotObjectFactory : public SotFactory
@@ -92,10 +92,6 @@ SotObject::SotObject()
 /*************************************************************************
 |*
 |*    SotObject::~SotObject()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 05.06.94
-|*    Letzte Aenderung  MM 05.06.94
 |*
 *************************************************************************/
 SotObject::~SotObject()
@@ -182,7 +178,7 @@ void SotObject::RemoveOwnerLock()
         ReleaseRef();
     }
     else {
-        DBG_ERROR("OwnerLockCount underflow!");
+        OSL_FAIL("OwnerLockCount underflow!");
     }
 }
 
@@ -207,3 +203,4 @@ sal_Bool SotObject::Close()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

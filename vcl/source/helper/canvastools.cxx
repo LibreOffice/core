@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,7 @@
 
 #include <canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 using namespace ::com::sun::star;
@@ -186,8 +187,8 @@ namespace vcl
 
         const uno::Sequence< sal_Int8 > getTunnelIdentifier( TunnelIdentifierType eType )
         {
-            static std::hash_map< int, uno::Sequence< sal_Int8 > > aIds;
-            std::hash_map< int, uno::Sequence< sal_Int8 > >::iterator it =
+            static boost::unordered_map< int, uno::Sequence< sal_Int8 > > aIds;
+            boost::unordered_map< int, uno::Sequence< sal_Int8 > >::iterator it =
                 aIds.find( eType );
             if( it == aIds.end() )
             {
@@ -219,8 +220,8 @@ namespace vcl
                           sal_Int32                                                  nHeight,
                           const rendering::IntegerBitmapLayout&                      rLayout,
                           const uno::Reference< rendering::XIntegerReadOnlyBitmap >& xInputBitmap,
-                          ScopedBitmapWriteAccess&                                   rWriteAcc,
-                          ScopedBitmapWriteAccess&                                   rAlphaAcc )
+                          Bitmap::ScopedWriteAccess&                                   rWriteAcc,
+                          Bitmap::ScopedWriteAccess&                                   rAlphaAcc )
             {
                 rendering::IntegerBitmapLayout      aCurrLayout;
                 geometry::IntegerRectangle2D        aRect;
@@ -432,9 +433,8 @@ namespace vcl
                                            sal::static_int_cast<sal_uInt16>(1L << nAlphaDepth)) );
 
                 { // limit scoped access
-                    ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                                          aBitmap );
-                    ScopedBitmapWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : NULL,
+                    Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
+                    Bitmap::ScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : NULL,
                                                                aAlpha );
 
                     ENSURE_OR_THROW(pWriteAccess.get() != NULL,
@@ -819,13 +819,13 @@ namespace vcl
             const uno::Sequence< double >                   rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {
-            const rendering::ARGBColor& rARGBColor(
+            const rendering::ARGBColor aARGBColor(
                 xColorSpace->convertToARGB(rColor)[0]);
 
-            return Color( 255-toByteColor(rARGBColor.Alpha),
-                          toByteColor(rARGBColor.Red),
-                          toByteColor(rARGBColor.Green),
-                          toByteColor(rARGBColor.Blue) );
+            return Color( 255-toByteColor(aARGBColor.Alpha),
+                          toByteColor(aARGBColor.Red),
+                          toByteColor(aARGBColor.Green),
+                          toByteColor(aARGBColor.Blue) );
         }
 
         //---------------------------------------------------------------------------------------
@@ -835,3 +835,5 @@ namespace vcl
 } // namespace canvas
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

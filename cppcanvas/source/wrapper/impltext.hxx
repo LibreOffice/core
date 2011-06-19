@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 #ifndef _CANVAS_IMPLTEXT_HXX
 #define _CANVAS_IMPLTEXT_HXX
 
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
 #include <com/sun/star/rendering/RenderState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_STRINGCONTEXT_HPP__
 #include <com/sun/star/rendering/StringContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVASFONT_HPP__
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#endif
 
 #include <cppcanvas/text.hxx>
 #include <canvasgraphichelper.hxx>
@@ -76,3 +69,5 @@ namespace cppcanvas
 }
 
 #endif /* _CANVAS_IMPLTEXT_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

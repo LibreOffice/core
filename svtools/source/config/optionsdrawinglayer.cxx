@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <rtl/instance.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -1186,8 +1188,8 @@ sal_uInt16 SvtOptionsDrawinglayer_Impl::GetSelectionMaximumLuminancePercent() co
 //*****************************************************************************************************************
 Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_OVERLAYBUFFER      ,
         PROPERTYNAME_PAINTBUFFER        ,
@@ -1229,7 +1231,7 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
     };
 
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -1684,30 +1686,19 @@ void SvtOptionsDrawinglayer::SetSelectionMaximumLuminancePercent( sal_uInt16 nPe
     m_pDataContainer->SetSelectionMaximumLuminancePercent( nPercent );
 }
 
+namespace
+{
+    class theOptionsDrawinglayerMutex : public rtl::Static<osl::Mutex, theOptionsDrawinglayerMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtOptionsDrawinglayer::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theOptionsDrawinglayerMutex::get();
 }
 
 // eof
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

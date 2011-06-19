@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _JPEG_HXX
 #define _JPEG_HXX
 
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
 #include <svtools/fltcall.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -129,3 +128,5 @@ sal_Bool ExportJPEG( SvStream& rStream,
                 );
 
 #endif // _JPEG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

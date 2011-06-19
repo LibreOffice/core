@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,7 @@ enum SfxFieldUnit
 {
     SFX_FUNIT_NONE, SFX_FUNIT_MM, SFX_FUNIT_CM, SFX_FUNIT_M, SFX_FUNIT_KM,
     SFX_FUNIT_TWIP, SFX_FUNIT_POINT, SFX_FUNIT_PICA,
-    SFX_FUNIT_INCH, SFX_FUNIT_FOOT, SFX_FUNIT_MILE, SFX_FUNIT_CUSTOM
+    SFX_FUNIT_INCH, SFX_FUNIT_FOOT, SFX_FUNIT_MILE, SFX_FUNIT_CHAR, SFX_FUNIT_LINE, SFX_FUNIT_CUSTOM
 };
 
 enum SfxMapUnit
@@ -196,12 +197,6 @@ private:
     inline sal_uLong             ReleaseRef( sal_uLong n = 1 ) const;
     SVL_DLLPRIVATE long      Delete_Impl(void*);
 
-#if 0
-    // @@@ virtual, but private, and dummy impl. @@@
-    virtual void             Store( SvStream & ) const;
-    virtual void             GetVersion() const;
-#endif
-
 protected:
                              SfxPoolItem( sal_uInt16 nWhich = 0 );
                              SfxPoolItem( const SfxPoolItem& );
@@ -229,11 +224,11 @@ public:
                                     const IntlWrapper * pIntlWrapper = 0 ) const;
 
     virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const;
-    virtual int              ScaleMetrics( long lMult, long lDiv );
-    virtual int              HasMetrics() const;
+    virtual bool             ScaleMetrics( long lMult, long lDiv );
+    virtual bool             HasMetrics() const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
@@ -413,38 +408,6 @@ public:
 };
 
 // -----------------------------------------------------------------------
-
-#if 0  /* @@@ NOT USED @@@ */
-class SfxInvalidItem: public SfxPoolItem
-{
-friend class SfxItemSet;
-
-    const SfxPoolItem*      pDefaultItem;
-
-private:
-                            TYPEINFO();
-                            SfxInvalidItem( sal_uInt16 nWhich, const SfxPoolItem &rDefault );
-                            SfxInvalidItem( const SfxInvalidItem& );
-    virtual                 ~SfxInvalidItem();
-
-public:
-    virtual int             operator==( const SfxPoolItem& ) const;
-
-    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
-                                    SfxMapUnit eCoreMetric,
-                                    SfxMapUnit ePresMetric,
-                                    XubString &rText,
-                                    const IntlWrapper * = 0 ) const;
-    const SfxPoolItem*      GetDefaultItem() const { return pDefaultItem; }
-
-    // von sich selbst eine Kopie erzeugen
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const;
-    virtual SvStream&       Store(SvStream &, sal_uInt16 nVer ) const;
-};
-#endif /* @@@ NOT USED @@@ */
-
-// -----------------------------------------------------------------------
 // Handle Klasse fuer PoolItems
 
 class SVL_DLLPUBLIC SfxItemHandle
@@ -466,24 +429,6 @@ DECL_PTRHINT(SVL_DLLPUBLIC, SfxPoolItemHint, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-#if 0  /* @@@ NOT USED @@@ */
-class SfxItemChangedHint: public SfxHint
-{
-    const SfxPoolItem&  _rOld;
-    const SfxPoolItem&  _rNew;
-
-public:
-                        TYPEINFO(); \
-                        SfxItemChangedHint( const SfxPoolItem &rOld,
-                                            const SfxPoolItem &rNew )
-                        :   _rOld( rOld ),
-                            _rNew( rNew )
-                        {}
-
-    const SfxPoolItem&  GetOldItem() const { return _rOld; }
-    const SfxPoolItem&  GetNewItem() const { return _rNew; }
-};
-
-#endif /* @@@ NOT USED @@@ */
-
 #endif // #ifndef _SFXPOOLITEM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

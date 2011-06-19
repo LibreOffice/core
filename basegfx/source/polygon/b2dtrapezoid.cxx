@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolygontriangulator.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,7 +221,7 @@ namespace basegfx
                 // Loop while new entry is bigger, use operator<
                 while(aCurrent != maTrDeEdgeEntries.end() && (*aCurrent) < rNewEdge)
                 {
-                    aCurrent++;
+                    ++aCurrent;
                 }
 
                 // Insert before first which is smaller or equal or at end
@@ -624,7 +622,7 @@ namespace basegfx
                         // to not have an endless loop and start next. During development
                         // i constantly had breakpoints here, so i am sure enough to add an
                         // assertion here
-                        OSL_ENSURE(false, "Trapeziod decomposer in illegal state (!)");
+                        OSL_FAIL("Trapeziod decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
                         continue;
                     }
@@ -638,7 +636,7 @@ namespace basegfx
                         // line; consume the single edge to not have an endless loop and start
                         // next. During development i constantly had breakpoints here, so i am
                         // sure enough to add an assertion here
-                        OSL_ENSURE(false, "Trapeziod decomposer in illegal state (!)");
+                        OSL_FAIL("Trapeziod decomposer in illegal state (!)");
                         maTrDeEdgeEntries.pop_front();
                         continue;
                     }
@@ -1226,3 +1224,5 @@ namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

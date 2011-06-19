@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,8 @@
 #include <svtools/filedlg.hxx>
 #include <svtools/filedlg2.hrc>
 #include <vcl/msgbox.hxx>
-#include <vos/security.hxx>
-#include <com/sun/star/i18n/XCollator.hpp>
+#include <osl/security.hxx>
+#include <comphelper/string.hxx>
 
 #include <svtools/stdctrl.hxx>
 
@@ -51,8 +52,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-
-DECLARE_LIST( UniStringList, UniString* )
+typedef ::std::vector< UniString* > UniStringList;
 
 #define STD_BTN_WIDTH   80
 #define STD_BTN_HEIGHT  26
@@ -130,12 +130,6 @@ ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, sal_Bool bC
     }
 
     pDlg->SetHelpId( HID_FILEDLG_PATHDLG );
-
-    lang::Locale aLocale = Application::GetSettings().GetLocale();
-    xCollator = ::vcl::unohelper::CreateCollator();
-    if( xCollator.is() )
-        xCollator->loadDefaultCollator( aLocale, 1 );
-    DBG_ASSERT( xCollator.is(), "not collator service for path dialog" );
 }
 
 ImpPathDialog::~ImpPathDialog()
@@ -150,7 +144,7 @@ ImpPathDialog::~ImpPathDialog()
     delete pOkBtn;
     delete pCancelBtn;
     delete pNewDirBtn;
-#   if defined(UNX) || defined(OS2)
+#   if defined(UNX)
     delete pHomeBtn;
 #   endif
 }
@@ -213,7 +207,7 @@ void ImpPathDialog::InitControls()
     nTextWidth = pDlg->GetTextWidth( aNewDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
         aBtnSiz.Width() = nTextWidth;
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
     String aHomeDirStr( SvtResId( STR_FILEDLG_HOME ) );
     nTextWidth = pDlg->GetTextWidth( aHomeDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
@@ -230,7 +224,7 @@ void ImpPathDialog::InitControls()
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pHomeBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aHomeDirStr, HID_FILEDLG_HOME );
@@ -344,7 +338,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
     if ( pBtn == pHomeBtn )
     {
         ::rtl::OUString aHomeDir;
-        vos:: OSecurity  aSecurity;
+        osl::Security aSecurity;
         if ( aSecurity.getHomeDir( aHomeDir ) )
         {
             DirEntry aFile ( aHomeDir );
@@ -453,6 +447,8 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
     if( nEntries )
     {
         UniStringList aSortDirList;
+        const comphelper::string::NaturalStringSorter& rSorter =
+            ::vcl::unohelper::getNaturalStringSorterForAppLocale();
         for ( sal_uInt16 n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
@@ -461,24 +457,27 @@ void ImpPathDialog::UpdateEntries( const sal_Bool )
             {
                 if( FileStat( rEntry ).GetKind() & FSYS_KIND_DIR )
                 {
-                    sal_uLong l = 0;
-                    if( xCollator.is() )
-                    {
-                        for( l = 0; l < aSortDirList.Count(); l++ )
-                            if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
-                                break;
+                    size_t l = 0;
+                    for( l = 0; l < aSortDirList.size(); l++ )
+                        if( rSorter.compare( *aSortDirList[ l ], aName ) > 0 )
+                            break;
+                    if ( l < aSortDirList.size() ) {
+                        UniStringList::iterator it = aSortDirList.begin();
+                        ::std::advance( it, l );
+                        aSortDirList.insert( it, new UniString( aName ) );
+                    } else {
+                        aSortDirList.push_back( new UniString( aName ) );
                     }
-                    aSortDirList.Insert( new UniString( aName ), l );
                 }
             }
         }
 
-        for( sal_uLong l = 0; l < aSortDirList.Count(); l++ )
+        for( size_t l = 0; l < aSortDirList.size(); l++ )
         {
             UniString aEntryStr( aTabString );
-            aEntryStr += *aSortDirList.GetObject(l);
+            aEntryStr += *aSortDirList[ l ];
             pDirList->InsertEntry( aEntryStr );
-            delete aSortDirList.GetObject(l);
+            delete aSortDirList[ l ];
         }
     }
 
@@ -717,12 +716,10 @@ ImpFileDialog::ImpFileDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE 
 
 ImpFileDialog::~ImpFileDialog()
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
+        delete aFilterList[ i ];
     }
+    aFilterList.clear();
 
     delete pFileTitel;
     if (pFileList && ( pFileList != pDirList ) )
@@ -905,16 +902,13 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
     if( pBox == pTypeList )
     {
         // Neue Maske setzen, und Listboxen updaten
-        sal_uInt16 nCurPos = pTypeList->GetSelectEntryPos();
-        if( nCurPos+1 > (sal_uInt16)aFilterList.Count() )
+        size_t nCurPos = pTypeList->GetSelectEntryPos();
+        if( nCurPos+1 > aFilterList.size() )
             aMask = UniString::CreateFromAscii( ALLFILES );
         else
         {
-            UniString aFilterListMask = aFilterList.GetObject( nCurPos )->aMask;
-//                      if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
-//                              aMask = WildCard( aFilterListMask, '\0' );
-//                      else // ; muss beruecksichtigt werden
-                aMask = WildCard( aFilterListMask, ';' );
+            UniString aFilterListMask = aFilterList[ nCurPos ]->aMask;
+            aMask = WildCard( aFilterListMask, ';' );
         }
 
         pEdit->SetText( aMask() );
@@ -1015,7 +1009,9 @@ void ImpFileDialog::UpdateEntries( const sal_Bool bWithDirs )
     WildCard aTmpMask( aWildCard, ';' );
     if ( nEntries )
     {
-        UniStringList   aSortDirList;
+        UniStringList aSortDirList;
+        const comphelper::string::NaturalStringSorter& rSorter =
+            ::vcl::unohelper::getNaturalStringSorterForAppLocale();
         for ( sal_uInt16 n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
@@ -1045,25 +1041,28 @@ void ImpFileDialog::UpdateEntries( const sal_Bool bWithDirs )
                     }
                     else
                     {
-                        sal_uLong l = 0;
-                        if( xCollator.is() )
-                        {
-                            for( l = 0; l < aSortDirList.Count(); l++ )
-                                if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
-                                    break;
+                        size_t l = 0;
+                        for( l = 0; l < aSortDirList.size(); l++ )
+                            if( rSorter.compare( *aSortDirList[ l ], aName ) > 0 )
+                                break;
+                        if ( l < aSortDirList.size() ) {
+                            UniStringList::iterator it = aSortDirList.begin();
+                            ::std::advance( it, l );
+                            aSortDirList.insert( it, new UniString( aName ) );
+                        } else {
+                            aSortDirList.push_back( new UniString( aName ) );
                         }
-                        aSortDirList.Insert( new UniString( aName ), l );
+                    }
+                }
             }
         }
-        }
-    }
-    for( sal_uLong l = 0; l < aSortDirList.Count(); l++ )
+        for( size_t l = 0; l < aSortDirList.size(); l++ )
         {
             UniString aEntryStr( aTabString );
-            aEntryStr += *aSortDirList.GetObject(l);
-        pDirList->InsertEntry( aEntryStr );
-        delete aSortDirList.GetObject(l);
-    }
+            aEntryStr += *aSortDirList[ l ];
+            pDirList->InsertEntry( aEntryStr );
+            delete aSortDirList[ l ];
+        }
     }
 
     if( bWithDirs )
@@ -1177,7 +1176,7 @@ void ImpFileDialog::SetPath( Edit const& rEdit )
 
 void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask )
 {
-    aFilterList.Insert( new ImpFilterItem( rFilter, rMask ), LIST_APPEND );
+    aFilterList.push_back( new ImpFilterItem( rFilter, rMask ) );
     if( pTypeList )
         pTypeList->InsertEntry( rFilter, LISTBOX_APPEND );
 
@@ -1187,27 +1186,24 @@ void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask 
 
 void ImpFileDialog::RemoveFilter( const UniString& rFilter )
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem && pItem->aName != rFilter )
-        pItem = aFilterList.Next();
-
-    if( pItem )
-    {
-        delete aFilterList.Remove();
-        if( pTypeList )
-            pTypeList->RemoveEntry( rFilter );
+    for ( ImpFilterList::iterator it = aFilterList.begin(); it < aFilterList.end(); ++it ) {
+        if ( (*it)->aName == rFilter ) {
+            delete *it;
+            aFilterList.erase( it );
+            if ( pTypeList ) {
+                pTypeList->RemoveEntry( rFilter );
+            }
+            break;
+        }
     }
 }
 
 void ImpFileDialog::RemoveAllFilter()
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n ; ++i ) {
+        delete aFilterList[ i ];
     }
-    aFilterList.Clear();
+    aFilterList.clear();
 
     if( pTypeList )
         pTypeList->Clear();
@@ -1218,14 +1214,14 @@ void ImpFileDialog::SetCurFilter( const UniString& rFilter )
     if( !pTypeList )
         return;
 
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem && pItem->aName != rFilter )
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
+        if ( aFilterList[ i ]->aName == rFilter ) {
+            pTypeList->SelectEntryPos( sal_uInt16( i ) );
+            return;
+        }
+    }
 
-    if( pItem )
-        pTypeList->SelectEntryPos( (sal_uInt16)aFilterList.GetCurPos() );
-    else
-        pTypeList->SetNoSelection();
+    pTypeList->SetNoSelection();
 }
 
 UniString ImpFileDialog::GetCurFilter() const
@@ -1255,9 +1251,9 @@ void ImpFileDialog::PreExecute()
     if( pTypeList )
     {
         sal_uInt16 nCurType = pTypeList->GetSelectEntryPos();
-        if( nCurType < aFilterList.Count() )
+        if( nCurType < aFilterList.size() )
         {
-            UniString aFilterListMask = aFilterList.GetObject( nCurType )->aMask;
+            UniString aFilterListMask = aFilterList[ nCurType ]->aMask;
             if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
                 aMask = WildCard( aFilterListMask, '\0' );
             else // ; in der Maske, muss in der Wildcard beruecksichtigt werden
@@ -1357,3 +1353,4 @@ void ImpSvFileDlg::CreateDialog( PathDialog* pSvDlg, WinBits nStyle, RESOURCE_TY
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <tools/rc.h>
-
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
@@ -223,7 +223,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     }
     else
     {
-        DBG_ERROR( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
+        OSL_FAIL( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
         return aGreyPalette2;
     }
 }
@@ -1745,38 +1745,6 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 
 // ------------------------------------------------------------------
 
-Bitmap Bitmap::GetColorTransformedBitmap( BmpColorMode eColorMode ) const
-{
-    Bitmap  aRet;
-
-    if( BMP_COLOR_HIGHCONTRAST == eColorMode )
-    {
-        Color*  pSrcColors = NULL;
-        Color*  pDstColors = NULL;
-        sal_uLong   nColorCount = 0;
-
-        aRet = *this;
-
-        Image::GetColorTransformArrays( (ImageColorTransform) eColorMode, pSrcColors, pDstColors, nColorCount );
-
-        if( nColorCount && pSrcColors && pDstColors )
-               aRet.Replace( pSrcColors, pDstColors, nColorCount );
-
-        delete[] pSrcColors;
-        delete[] pDstColors;
-    }
-    else if( BMP_COLOR_MONOCHROME_BLACK == eColorMode ||
-             BMP_COLOR_MONOCHROME_WHITE == eColorMode )
-    {
-        aRet = *this;
-        aRet.MakeMono( BMP_COLOR_MONOCHROME_THRESHOLD );
-    }
-
-    return aRet;
-}
-
-// ------------------------------------------------------------------
-
 sal_Bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 {
     BitmapReadAccess*   pMaskAcc = ( (Bitmap&) rMask ).AcquireReadAccess();
@@ -1971,3 +1939,5 @@ bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

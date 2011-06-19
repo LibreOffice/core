@@ -39,7 +39,7 @@ ZIP1TARGET      = fontunxppds
 .IF "$(WITH_SYSTEM_PPD_DIR)" != ""
 ZIP1LIST = SGENPRT.PS SGENT42.PS GENERIC.PS
 .ELSE
-ZIP1LIST        = * -x makefile.* -x delzip
+ZIP1LIST        = * -x makefile.* -x delzip -x *.orig
 .ENDIF
 
 .INCLUDE : target.mk

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
-#ifndef _SV_VECTORIZ_HXX
 #include <impvect.hxx>
-#endif
 
 // -----------
 // - Defines -
@@ -364,7 +363,7 @@ public:
     inline void     ImplAdd( sal_uInt8 nCode );
     void            ImplEndAdd( sal_uLong nTypeFlag );
 
-    const Polygon&  ImplGetPoly() { return maPoly; }
+    const Polygon&  ImplGetPoly() const { return maPoly; }
 };
 
 // -----------------------------------------------------------------------------
@@ -821,7 +820,7 @@ sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rM
 
         delete[] (sal_uInt8*) pColorSet;
 
-        if( rMtf.GetActionCount() )
+        if( rMtf.GetActionSize() )
         {
             MapMode         aMap( MAP_100TH_MM );
             VirtualDevice   aVDev;
@@ -1202,3 +1201,5 @@ sal_Bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const
     else
         return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,8 +91,7 @@ namespace dxcanvas
             switch( nJoinType )
             {
                 case rendering::PathJoinType::NONE:
-                    OSL_ENSURE( false,
-                                "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
+                    OSL_FAIL( "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
                     // FALLTHROUGH intended
                 case rendering::PathJoinType::MITER:
                     return Gdiplus::LineJoinMiter;
@@ -812,3 +812,5 @@ namespace dxcanvas
             mpGraphicsProvider->getGraphics()->Flush( Gdiplus::FlushIntentionSync );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

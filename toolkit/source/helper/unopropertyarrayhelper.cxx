@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Seq
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs )
 {
     std::list< sal_uInt16 >::const_iterator iter;
-    for( iter = rIDs.begin(); iter != rIDs.end(); iter++)
+    for( iter = rIDs.begin(); iter != rIDs.end(); ++iter)
       maIDs.Insert( *iter, (void*)1L);
 }
 
@@ -83,13 +84,13 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
     {
         sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(
             maIDs.GetObjectKey( s ));
-        aSortedPropsIds.Insert( 1+GetPropertyOrderNr( nId ), (void*)(sal_uInt32)nId );
+        aSortedPropsIds.Insert( 1+GetPropertyOrderNr( nId ), (void*)(sal_uIntPtr)nId );
 
         if ( nId == BASEPROPERTY_FONTDESCRIPTOR )
         {
             // Einzelproperties...
             for ( sal_uInt16 i = BASEPROPERTY_FONTDESCRIPTORPART_START; i <= BASEPROPERTY_FONTDESCRIPTORPART_END; i++ )
-                aSortedPropsIds.Insert( 1+GetPropertyOrderNr( i ), (void*)(sal_uInt32)i );
+                aSortedPropsIds.Insert( 1+GetPropertyOrderNr( i ), (void*)(sal_uIntPtr)i );
         }
     }
 
@@ -158,3 +159,4 @@ sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const ::com:
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

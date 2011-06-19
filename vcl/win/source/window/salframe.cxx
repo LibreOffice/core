@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 
 #include <stdio.h>
 
-#include <tools/svwin.h>
+#include <svsys.h>
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
@@ -65,7 +66,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/impdel.hxx>
 
 // Warning in SDK header
 #if defined(_MSC_VER) && (_MSC_VER > 1400)
@@ -506,34 +506,31 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     }
 
     // create frame
-    if( true/*aSalShlData.mbWNT*/ )
+    LPCWSTR pClassName;
+    if ( bSubFrame )
     {
-        LPCWSTR pClassName;
-        if ( bSubFrame )
-        {
-            if ( nSalFrameStyle & (SAL_FRAME_STYLE_MOVEABLE|SAL_FRAME_STYLE_NOSHADOW) ) // check if shadow not wanted
-                pClassName = SAL_SUBFRAME_CLASSNAMEW;
-            else
-                pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;    // undecorated floaters will get shadow on XP
-        }
+        if ( nSalFrameStyle & (SAL_FRAME_STYLE_MOVEABLE|SAL_FRAME_STYLE_NOSHADOW) ) // check if shadow not wanted
+            pClassName = SAL_SUBFRAME_CLASSNAMEW;
         else
-        {
-            if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
-                pClassName = SAL_FRAME_CLASSNAMEW;
-            else
-                pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;
-        }
-        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, pInst->mhInst, (void*)pFrame );
-        if( !hWnd )
-            ImplWriteLastError( GetLastError(), "CreateWindowEx" );
-#if OSL_DEBUG_LEVEL > 1
-        // set transparency value
-        if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
-            lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
-#endif
+            pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;    // undecorated floaters will get shadow on XP
     }
+    else
+    {
+        if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+            pClassName = SAL_FRAME_CLASSNAMEW;
+        else
+            pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;
+    }
+    hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+                            CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                            hWndParent, 0, pInst->mhInst, (void*)pFrame );
+    if( !hWnd )
+        ImplWriteLastError( GetLastError(), "CreateWindowEx" );
+#if OSL_DEBUG_LEVEL > 1
+    // set transparency value
+    if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
+        lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
+#endif
     if ( !hWnd )
     {
         delete pFrame;
@@ -595,8 +592,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild )
 {
     HINSTANCE hInstance = GetSalData()->mhInst;
-    ULONG nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
-    ULONG nExSysStyle   = GetWindowLong( oldhWnd, GWL_EXSTYLE );
+    sal_uLong nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
+    sal_uLong nExSysStyle   = GetWindowLong( oldhWnd, GWL_EXSTYLE );
 
     if( bAsChild )
     {
@@ -605,10 +602,9 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, sal_Bool bAsChild )
     }
 
     LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
-    HWND hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
-    return hWnd;
+    return CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+                            CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                            hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
 }
 
 // =======================================================================
@@ -1326,37 +1322,7 @@ static void ImplSalShow( HWND hWnd, sal_Bool bVisible, sal_Bool bNoActivate )
     }
     else
     {
-        // See also Bug #91813# and #68467#
-        if ( pFrame->mbFullScreen &&
-             pFrame->mbPresentation &&
-             (aSalShlData.mnVersion < 500) &&
-             !::GetParent( hWnd ) )
-        {
-            // Damit im Impress-Player in der Taskleiste nicht durch
-            // einen Windows-Fehler hin- und wieder mal ein leerer
-            // Button stehen bleibt, muessen wir hier die Taskleiste
-            // etwas austricksen. Denn wenn wir im FullScreenMode sind
-            // und das Fenster hiden kommt Windows anscheinend etwas aus
-            // dem tritt und somit minimieren wir das Fenster damit es
-            // nicht flackert
-            ANIMATIONINFO aInfo;
-            aInfo.cbSize = sizeof( aInfo );
-            SystemParametersInfo( SPI_GETANIMATION, 0, &aInfo, 0 );
-            if ( aInfo.iMinAnimate )
-            {
-                int nOldAni = aInfo.iMinAnimate;
-                aInfo.iMinAnimate = 0;
-                SystemParametersInfo( SPI_SETANIMATION, 0, &aInfo, 0 );
-                ShowWindow( pFrame->mhWnd, SW_SHOWMINNOACTIVE );
-                aInfo.iMinAnimate = nOldAni;
-                SystemParametersInfo( SPI_SETANIMATION, 0, &aInfo, 0 );
-            }
-            else
-                ShowWindow( hWnd, SW_SHOWMINNOACTIVE );
-            ShowWindow( hWnd, SW_HIDE );
-        }
-        else
-            ShowWindow( hWnd, SW_HIDE );
+        ShowWindow( hWnd, SW_HIDE );
     }
 }
 
@@ -2020,6 +1986,10 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
+void WinSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+{
+}
+
 // -----------------------------------------------------------------------
 
 void WinSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
@@ -2324,17 +2294,15 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_TEXT_VERTICAL },      // POINTER_TEXT_VERTICAL
     { 0, 0, SAL_RESID_POINTER_PIVOT_DELETE },       // POINTER_PIVOT_DELETE
 
-    // --> FME 2004-07-30 #i32329# Enhanced table selection
+    // #i32329#
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_S },       // POINTER_TAB_SELECT_S
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_E },       // POINTER_TAB_SELECT_E
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SE },      // POINTER_TAB_SELECT_SE
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_W },       // POINTER_TAB_SELECT_W
     { 0, 0, SAL_RESID_POINTER_TAB_SELECT_SW },      // POINTER_TAB_SELECT_SW
-    // <--
 
-    // --> FME 2004-08-16 #i20119# Paintbrush tool
+    // #i20119#
     { 0, 0, SAL_RESID_POINTER_PAINTBRUSH }          // POINTER_PAINTBRUSH
-    // <--
 
     };
 
@@ -2507,26 +2475,23 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     int nKeyLen = 0;
     if ( lParam )
     {
-        if ( true/*aSalShlData.mbWNT*/ )
+        nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
+        // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
+        // fall back to the ANSI version instead
+        DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
+        if( nKeyLen > nMaxKeyLen )
+            nKeyLen = 0;
+        else if( nKeyLen > 0 )
         {
-            nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
-            // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
-            // fall back to the ANSI version instead
-            DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
-            if( nKeyLen > nMaxKeyLen )
-                nKeyLen = 0;
-            else if( nKeyLen > 0 )
-            {
-                // Capitalize just the first letter of key names
-                CharLowerBuffW( aKeyBuf, nKeyLen );
+            // Capitalize just the first letter of key names
+            CharLowerBuffW( aKeyBuf, nKeyLen );
 
-                bool bUpper = true;
-                for( WCHAR *pW=aKeyBuf, *pE=pW+nKeyLen; pW < pE; ++pW )
-                {
-                    if( bUpper )
-                        CharUpperBuffW( pW, 1 );
-                    bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
-                }
+            bool bUpper = true;
+            for( WCHAR *pW=aKeyBuf, *pE=pW+nKeyLen; pW < pE; ++pW )
+            {
+                if( bUpper )
+                    CharUpperBuffW( pW, 1 );
+                bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
             }
         }
     }
@@ -2726,6 +2691,15 @@ XubString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
             case KEY_EQUAL:
                 cSVCode  = '=';
                 break;
+            case KEY_SEMICOLON:
+                cSVCode = ';';
+                break;
+            case KEY_BRACKETLEFT:
+                cSVCode = '[';
+                break;
+            case KEY_BRACKETRIGHT:
+                cSVCode = ']';
+                break;
         }
     }
 
@@ -2897,11 +2871,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
     aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
     aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
-    if ( aSalShlData.mnVersion >= 410 )
-    {
-        aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
-        aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
-    }
+    aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
+    aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
     aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
     aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
     aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
@@ -2975,19 +2946,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         pSVData->maNWFData.maMenuBarHighlightTextColor = aStyleSettings.GetMenuTextColor();
         GetSalData()->mbThemeMenuSupport = TRUE;
     }
-    // Bei hellgrau geben wir die Farbe vor, damit es besser aussieht
-    if ( aStyleSettings.GetFaceColor() == COL_LIGHTGRAY )
-        aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-    else
-    {
-        // Checked-Color berechnen
-        Color   aColor1 = aStyleSettings.GetFaceColor();
-        Color   aColor2 = aStyleSettings.GetLightColor();
-        BYTE    nRed    = (BYTE)(((sal_uInt16)aColor1.GetRed()   + (sal_uInt16)aColor2.GetRed())/2);
-        BYTE    nGreen  = (BYTE)(((sal_uInt16)aColor1.GetGreen() + (sal_uInt16)aColor2.GetGreen())/2);
-        BYTE    nBlue   = (BYTE)(((sal_uInt16)aColor1.GetBlue()  + (sal_uInt16)aColor2.GetBlue())/2);
-        aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
-    }
+    aStyleSettings.SetCheckedColorSpecialCase( );
 
     // caret width
     DWORD nCaretWidth = 2;
@@ -2997,11 +2956,14 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     // High contrast
     HIGHCONTRAST hc;
     hc.cbSize = sizeof( HIGHCONTRAST );
-    if( SystemParametersInfo( SPI_GETHIGHCONTRAST, hc.cbSize, &hc, 0) && (hc.dwFlags & HCF_HIGHCONTRASTON) )
+    if(    SystemParametersInfo( SPI_GETHIGHCONTRAST, hc.cbSize, &hc, 0)
+        && (hc.dwFlags & HCF_HIGHCONTRASTON)
+    ) {
         aStyleSettings.SetHighContrastMode( 1 );
-    else
+        aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
+    } else {
         aStyleSettings.SetHighContrastMode( 0 );
-
+    }
 
     // Query Fonts
     Font    aMenuFont = aStyleSettings.GetMenuFont();
@@ -3011,22 +2973,19 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Font    aAppFont = aStyleSettings.GetAppFont();
     Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
-    if( true/*aSalShlData.mbWNT*/ )
+    NONCLIENTMETRICSW aNonClientMetrics;
+    aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
+    if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
     {
-        NONCLIENTMETRICSW aNonClientMetrics;
-        aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
-        if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
-        {
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
 
-            LOGFONTW aLogFont;
-            if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
-        }
+        LOGFONTW aLogFont;
+        if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
+            ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
     }
 
     // get screen font resolution to calculate toolbox item size
@@ -3190,6 +3149,41 @@ SalFrame::SalPointerState WinSalFrame::GetPointerState()
 
     aState.maPos = Point( pt.x - maGeometry.nX, pt.y - maGeometry.nY );
     return aState;
+}
+
+// -----------------------------------------------------------------------
+
+SalFrame::SalIndicatorState WinSalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = 0;
+    if (::GetKeyState(VK_CAPITAL))
+        aState.mnState |= INDICATOR_CAPSLOCK;
+
+    if (::GetKeyState(VK_NUMLOCK))
+        aState.mnState |= INDICATOR_NUMLOCK;
+
+    if (::GetKeyState(VK_SCROLL))
+        aState.mnState |= INDICATOR_SCROLLLOCK;
+
+    return aState;
+}
+
+void WinSalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
+{
+    BYTE nVKey = 0;
+    switch (nKeyCode)
+    {
+        case KEY_CAPSLOCK:
+            nVKey = VK_CAPITAL;
+        break;
+    }
+
+    if (nVKey > 0 && nVKey < 255)
+    {
+        ::keybd_event(nVKey, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
+        ::keybd_event(nVKey, 0x45, KEYEVENTF_EXTENDEDKEY|KEYEVENTF_KEYUP, 0);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -3540,6 +3534,10 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         {
             aWheelEvt.mnScrollLines = aSalShlData.mnWheelScrollChars;
             aWheelEvt.mbHorz        = TRUE;
+
+            // fdo#36380 - seems horiz scrolling has swapped direction
+            aWheelEvt.mnDelta *= -1;
+            aWheelEvt.mnNotchDelta *= -1;
         }
 
         if ( nWinModCode & MK_SHIFT )
@@ -3613,9 +3611,9 @@ static void ImplUpdateInputLang( WinSalFrame* pFrame )
         bLanguageChange = TRUE;
     }
 
-    // If we are on Windows NT we use Unicode FrameProcs and so we
-    // get Unicode charcodes directly from Windows
-    // no need to set up a code page
+    // We are on Windows NT so we use Unicode FrameProcs and get
+    // Unicode charcodes directly from Windows no need to set up a
+    // code page
     return;
 }
 
@@ -3624,7 +3622,7 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
 {
     ImplUpdateInputLang( pFrame );
 
-    // If we are on Windows NT we use Unicode FrameProcs and so we
+    // We are on Windows NT so we use Unicode FrameProcs and we
     // get Unicode charcodes directly from Windows
     return (sal_Unicode)nCharCode;
 }
@@ -4432,8 +4430,8 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     {
         if ( lParam )
         {
-                if ( ImplSalWICompareAscii( (const wchar_t*)lParam, "devices" ) == 0 )
-                    nSalEvent = SALEVENT_PRINTERCHANGED;
+            if ( ImplSalWICompareAscii( (const wchar_t*)lParam, "devices" ) == 0 )
+                nSalEvent = SALEVENT_PRINTERCHANGED;
         }
     }
 
@@ -4747,14 +4745,12 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
 // if bByPosition is FALSE then nPos denotes a menu id instead of a position
 static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, sal_Bool bByPosition=TRUE )
 {
-    DWORD err=0;
-
     MENUITEMINFOW mi;
     memset(&mi, 0, sizeof(mi));
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
     if( !GetMenuItemInfoW( hMenu, nPos, bByPosition, &mi) )
-        err = GetLastError();
+        ImplWriteLastError( GetLastError(), "ImplGetSalMenuItem" );
 
     return (WinSalMenuItem *) mi.dwItemData;
 }
@@ -4762,8 +4758,6 @@ static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, sal_Bool bByP
 // returns the index of the currently selected item if any or -1
 static int ImplGetSelectedIndex( HMENU hMenu )
 {
-    DWORD err=0;
-
     MENUITEMINFOW mi;
     memset(&mi, 0, sizeof(mi));
     mi.cbSize = sizeof( mi );
@@ -4774,7 +4768,7 @@ static int ImplGetSelectedIndex( HMENU hMenu )
         for(int i=0; i<n; i++ )
         {
             if( !GetMenuItemInfoW( hMenu, i, TRUE, &mi) )
-                err = GetLastError();
+                ImplWriteLastError( GetLastError(), "ImplGetSelectedIndex" );
             else
             {
                 if( mi.fState & MFS_HILITE )
@@ -4818,7 +4812,7 @@ static int ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
     if( nFound == 1 )
         nRet = MAKELRESULT( idxFound, MNC_EXECUTE );
     else
-        // duplicate mnemonics, just select the next occurence
+        // duplicate mnemonics, just select the next occurrence
         nRet = MAKELRESULT( idxFound, MNC_SELECT );
 
     return nRet;
@@ -4884,7 +4878,6 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
 static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 {
     int nRet = 0;
-    DWORD err = 0;
     if( !wParam )
     {
         // request was sent by a menu
@@ -4924,7 +4917,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         // Fill background
         if(!PatBlt( pDI->hDC, aRect.left, aRect.top, aRect.right-aRect.left, aRect.bottom-aRect.top, PATCOPY ))
-            err = GetLastError();
+            ImplWriteLastError(GetLastError(), "ImplDrawItem");
 
         int lineHeight = aRect.bottom-aRect.top;
 
@@ -5008,7 +5001,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             (LPARAM)(LPWSTR) aStr.GetBuffer(),
             (WPARAM)0, aRect.left, aRect.top + (lineHeight - strSize.cy)/2, 0, 0,
             DST_PREFIXTEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-            err = GetLastError();
+            ImplWriteLastError(GetLastError(), "ImplDrawItem");
 
         if( pSalMenuItem->mAccelText.Len() )
         {
@@ -5025,7 +5018,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
                 (LPARAM)(LPWSTR) aStr.GetBuffer(),
                 (WPARAM)0, aRect.right-strSizeA.cx-tm.tmMaxCharWidth, aRect.top + (lineHeight - strSizeA.cy)/2, 0, 0,
                 DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-                err = GetLastError();
+                ImplWriteLastError(GetLastError(), "ImplDrawItem");
         }
 
         // Restore the original font and colors.
@@ -5088,7 +5081,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     long nRet = 0;
     if ( hMenu && !pFrame->mLastActivatedhMenu )
     {
-        // we never activated a menu (ie, no WM_INITMENUPOPUP has occured yet)
+        // we never activated a menu (ie, no WM_INITMENUPOPUP has occurred yet)
         // which means this must be the menubar -> send activation/deactivation
         SalMenuEvent aMenuEvt;
         WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, nId, bByPosition );
@@ -6175,12 +6168,12 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 #if WINVER >= 0x0500
         case WM_IME_REQUEST:
-            if ( PtrToInt( wParam ) == IMR_RECONVERTSTRING )
+            if ( (sal_uIntPtr)( wParam ) == IMR_RECONVERTSTRING )
             {
                 nRet = ImplHandleIMEReconvertString( hWnd, lParam );
                 rDef = FALSE;
             }
-        else if( PtrToInt( wParam ) == IMR_CONFIRMRECONVERTSTRING )
+        else if( (sal_uIntPtr)( wParam ) == IMR_CONFIRMRECONVERTSTRING )
         {
         nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
         rDef = FALSE;
@@ -6386,3 +6379,4 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
 
 // -----------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

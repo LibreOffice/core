@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
 #ifdef DBG_UTIL
         PropertyInfoHash::iterator aIter = maMap.find( aName );
         if( aIter != maMap.end() )
-            OSL_ENSURE( sal_False, "Warning: PropertyInfo added twice, possible error!");
+            OSL_FAIL( "Warning: PropertyInfo added twice, possible error!");
 #endif
         maMap[aName] = pMap++;
     }
@@ -140,3 +141,5 @@ sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const ::rtl::OUSt
 {
     return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

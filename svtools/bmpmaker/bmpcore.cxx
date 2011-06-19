@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -161,7 +162,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
             Message( aInfo );
 
             // create bit vector to hold flags for valid bitmaps
-            ::std::bit_vector   aValidBmpBitVector( aNameVector.size(), false );
+            ::std::vector<bool, std::allocator<bool> >   aValidBmpBitVector( aNameVector.size(), false );
             BitmapEx            aBmpEx;
 
             for( sal_uInt32 n = 0; n < aNameVector.size(); n++ )
@@ -418,3 +419,5 @@ void BmpCreator::Create( const String& rSRSName,
 
     delete pSRS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

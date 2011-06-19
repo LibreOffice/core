@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
-namespace vos
-{
-    class IMutex;
-}
 
 namespace comphelper
 {
@@ -55,7 +52,7 @@ namespace comphelper
         public ComphelperBase
     {
     public:
-        SettingsHelperNoState ( ComphelperBaseInfo *pInfo, ::vos::IMutex *pMutex = NULL)
+        SettingsHelperNoState ( ComphelperBaseInfo *pInfo, ::osl::SolarMutex* pMutex = NULL)
         : ComphelperBase ( pInfo, pMutex )
         {}
         virtual ~SettingsHelperNoState () throw( ) {}
@@ -121,3 +118,5 @@ namespace comphelper
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

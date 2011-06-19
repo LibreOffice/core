@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,15 +62,17 @@ private:
     Point           maPos;              // Position
     short           mnOrientation;      // Rotation
     sal_uInt16          mnStyle;            // Style
-    sal_Bool            mbVisible;          // Ist Cursor sichtbar
+    bool            mbVisible;          // Ist Cursor sichtbar
     unsigned char   mnDirection;        // indicates direction
 
 public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, AutoTimer* );
-    SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true, bool bRestore = false );
-    SAL_DLLPRIVATE bool         ImplHide( bool bStopTimer );
+    SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true );
+    SAL_DLLPRIVATE void         ImplHide();
+    SAL_DLLPRIVATE void         ImplResume( bool bRestore = false );
+    SAL_DLLPRIVATE bool         ImplSuspend();
     SAL_DLLPRIVATE void         ImplNew();
 
 public:
@@ -82,7 +85,7 @@ public:
 
     void            Show();
     void            Hide();
-    sal_Bool            IsVisible() const { return mbVisible; }
+    bool            IsVisible() const { return mbVisible; }
 
     void            SetWindow( Window* pWindow );
     Window*         GetWindow() const { return mpWindow; }
@@ -109,9 +112,15 @@ public:
     unsigned char   GetDirection() const { return mnDirection; }
 
     Cursor&         operator=( const Cursor& rCursor );
-    sal_Bool            operator==( const Cursor& rCursor ) const;
-    sal_Bool            operator!=( const Cursor& rCursor ) const
+    bool            operator==( const Cursor& rCursor ) const;
+    bool            operator!=( const Cursor& rCursor ) const
                         { return !(Cursor::operator==( rCursor )); }
+
+private:
+    void ImplDoShow( bool bDrawDirect, bool bRestore );
+    bool ImplDoHide( bool bStop );
 };
 
 #endif  // _SV_CURSOR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

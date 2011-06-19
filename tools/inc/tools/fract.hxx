@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ public:
                     Fraction( long nN1, long nN2, long nD1, long nD2 );
                     Fraction( double dVal );
 
-    sal_Bool            IsValid() const;
+    bool            IsValid() const;
 
     long            GetNumerator() const { return nNumerator; }
     long            GetDenominator() const { return nDenominator; }
@@ -64,31 +65,19 @@ public:
     Fraction&       operator/=( const Fraction& rfrFrac );
 
     void            ReduceInaccurate( unsigned nSignificantBits );
-#ifdef __BORLANDC__
-    friend          Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
 
-    friend          sal_Bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          sal_Bool operator!=( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          sal_Bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          sal_Bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          sal_Bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
-    friend          sal_Bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
-#else
     friend inline   Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
     friend inline   Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
     friend inline   Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
     friend inline   Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
 
-    TOOLS_DLLPUBLIC friend          sal_Bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   sal_Bool operator!=( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend          sal_Bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend          sal_Bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   sal_Bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   sal_Bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
-#endif
+    TOOLS_DLLPUBLIC friend          bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
+    friend inline   bool operator!=( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend          bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend          bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
+    friend inline   bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
+    friend inline   bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
+
     TOOLS_DLLPUBLIC friend SvStream& operator>>( SvStream& rIStream, Fraction& rFract );
     TOOLS_DLLPUBLIC friend SvStream& operator<<( SvStream& rOStream, const Fraction& rFract );
 };
@@ -106,7 +95,7 @@ inline Fraction& Fraction::operator=( const Fraction& rFrac )
     return *this;
 }
 
-inline sal_Bool Fraction::IsValid() const
+inline bool Fraction::IsValid() const
 {
     return (nDenominator > 0);
 }
@@ -147,19 +136,21 @@ inline Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 )
     return aErg;
 }
 
-inline sal_Bool operator !=( const Fraction& rVal1, const Fraction& rVal2 )
+inline bool operator !=( const Fraction& rVal1, const Fraction& rVal2 )
 {
     return !(rVal1 == rVal2);
 }
 
-inline sal_Bool operator <=( const Fraction& rVal1, const Fraction& rVal2 )
+inline bool operator <=( const Fraction& rVal1, const Fraction& rVal2 )
 {
     return !(rVal1 > rVal2);
 }
 
-inline sal_Bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
+inline bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
 {
     return !(rVal1 < rVal2);
 }
 
 #endif // _FRACT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

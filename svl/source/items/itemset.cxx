@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,7 @@
 
 #include <string.h>
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
-
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 
@@ -51,7 +49,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 static const sal_uInt16 nInitCount = 10; // einzelne USHORTs => 5 Paare ohne '0'
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 static sal_uLong nRangesCopyCount = 0;   // wie oft wurden Ranges kopiert
 #endif
 
@@ -235,7 +233,9 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
 void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
 {
     DBG_CHKTHIS(SfxItemSet, 0);
-    DBG_TRACE1("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    #if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    #endif
 
     sal_uInt16 nCnt = 0;
     const sal_uInt16* pPtr = pWhichPairTable;
@@ -315,7 +315,9 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
             *ppDst = &_pPool->Put( **ppSrc );
 
     // dann noch die Which Ranges kopieren
-    DBG_TRACE1("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    #if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
+    #endif
     std::ptrdiff_t cnt = pPtr - rASet._pWhichRanges+1;
     _pWhichRanges = new sal_uInt16[ cnt ];
     memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( sal_uInt16 ) * cnt);
@@ -726,7 +728,7 @@ void SfxItemSet::PutExtended
                             break;
 
                         default:
-                            DBG_ERROR( "invalid Argument for eDontCareAs" );
+                            OSL_FAIL( "invalid Argument for eDontCareAs" );
                     }
                 }
                 else
@@ -751,7 +753,7 @@ void SfxItemSet::PutExtended
                         break;
 
                     default:
-                        DBG_ERROR( "invalid Argument for eDefaultAs" );
+                        OSL_FAIL( "invalid Argument for eDefaultAs" );
                 }
             }
         pPtr += 2;
@@ -973,7 +975,7 @@ const SfxPoolItem* SfxItemSet::GetItem
             return pItem;
 
         // sonst Fehler melden
-        DBG_ERROR( "invalid argument type" );
+        OSL_FAIL( "invalid argument type" );
     }
 
     // kein Item gefunden oder falschen Typ gefunden
@@ -1498,7 +1500,7 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
 SvStream &SfxItemSet::Store
 (
     SvStream&   rStream,        // Zielstream f"ur normale Items
-    FASTBOOL    bDirect         // sal_True: Items direkt speicher, sal_False: Surrogate
+    bool        bDirect         // TRUE: Items direkt speicher, FALSE: Surrogate
 )   const
 
 /*  [Beschreibung]
@@ -1565,7 +1567,7 @@ SvStream &SfxItemSet::Load
 (
     SvStream&           rStream,    //  Stream, aus dem geladen werden soll
 
-    FASTBOOL            bDirect,    /*  sal_True
+    bool                bDirect,    /*  TRUE
                                         Items werden direkt aus dem Stream
                                         gelesen, nicht "uber Surrogate
 
@@ -1874,12 +1876,12 @@ static SfxItemArray AddItem_Impl(SfxItemArray pItems, sal_uInt16 nOldSize, sal_u
     {
         // alte Items vor nPos kopieren
         if ( nPos )
-            memcpy( (void*) pNew, pItems, nPos * sizeof(SfxPoolItem **) );
+            memcpy( (void*) pNew, pItems, nPos * sizeof(SfxPoolItem *) );
 
         // alte Items hinter nPos kopieren
         if ( nPos < nOldSize )
             memcpy( (void*) (pNew + nPos + 1), pItems + nPos,
-                    (nOldSize-nPos) * sizeof(SfxPoolItem **) );
+                    (nOldSize-nPos) * sizeof(SfxPoolItem *) );
     }
 
     // neues Item initialisieren
@@ -2039,73 +2041,6 @@ void SfxItemSet::DisableItem(sal_uInt16 nWhich)
 
 // -----------------------------------------------------------------------
 
-#if 0
-sal_Bool SfxAllItemSet::Remove(sal_uInt16 nWhich)
-{
-    DBG_CHKTHIS(SfxAllItemSet, 0);
-    sal_uInt16 *pPtr = _pWhichRanges;
-    sal_uInt16 nPos = 0;
-    while( *pPtr )
-    {
-        if( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
-        {
-            sal_uInt16 *pTmp = pPtr;
-            sal_uInt16 nLeft = 0;
-            sal_uInt16 nRest = 0;
-            while(*++pTmp){
-                if( nLeft & 1 )
-                    nRest = *pTmp - *(pTmp-1) + 1;
-                ++nLeft;
-            }
-
-            // in diesem Bereich
-            nPos += nWhich - *pPtr;
-            nRest -= nWhich - *pPtr;
-            // 3,3
-            if(*pPtr == nWhich && *(pPtr+1) == nWhich) {
-                memmove(pPtr, pPtr + 2, nLeft * sizeof(sal_uInt16));
-                nFree += 2;
-            }
-                // Anfang
-            else if(*pPtr == nWhich)
-                (*pPtr)++;
-                // Ende
-            else if(*(pPtr+1) == nWhich)
-                (*(pPtr+1))--;
-            else {
-                if(nPos + nRest + 2 > nFree) {
-                    sal_uInt16 nOf = pPtr - _pWhichRanges;
-                    _pWhichRanges = IncrSize(_pWhichRanges, nPos + nRest, nInitCount);
-                    nFree += nInitCount;
-                    pPtr = _pWhichRanges + nOf;
-                }
-                memmove(pPtr +2, pPtr, (nLeft+2) * sizeof(sal_uInt16));
-                *++pPtr  = nWhich-1;
-                *++pPtr = nWhich+1;
-                nFree -= 2;
-            }
-            SfxPoolItem* pItem = *( _aItems + nPos );
-            if( pItem )
-            {
-                if(_pPool)
-                    _pPool->Remove(*pItem );
-                else
-                    delete pItem;
-                --_nCount;
-            }
-            memmove(_aItems + nPos +1, _aItems + nPos,
-                    sizeof(SfxPoolItem *) * (nRest - 1));
-            break;          // dann beim Parent suchen
-        }
-        nPos += *(pPtr+1) - *pPtr + 1;
-        pPtr += 2;
-    }
-    return *pPtr? sal_True: sal_False;
-}
-#endif
-
-// -----------------------------------------------------------------------
-
 SfxItemSet *SfxAllItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
 {
     DBG_CHKTHIS(SfxItemSet, DbgCheckItemSet);
@@ -2120,3 +2055,4 @@ SfxItemSet *SfxAllItemSet::Clone(sal_Bool bItems, SfxItemPool *pToPool ) const
         return bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*_pPool);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

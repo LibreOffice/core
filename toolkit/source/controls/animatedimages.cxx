@@ -289,7 +289,7 @@ namespace toolkit
     //------------------------------------------------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL AnimatedImagesControlModel::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.toolkit.AnimatedImagesControlModel" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.toolkit.AnimatedImagesControlModel"));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -297,7 +297,7 @@ namespace toolkit
     {
         Sequence< ::rtl::OUString > aServiceNames(2);
         aServiceNames[0] = ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
-        aServiceNames[1] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.UnoControlModel" );
+        aServiceNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlModel"));
         return aServiceNames;
     }
 

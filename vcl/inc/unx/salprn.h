@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 
 class PspGraphics;
 
-class PspSalInfoPrinter : public SalInfoPrinter
+class VCLPLUG_GEN_PUBLIC PspSalInfoPrinter : public SalInfoPrinter
 {
 public:
     PspGraphics*            m_pGraphics;
@@ -63,7 +64,7 @@ public:
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
-class PspSalPrinter : public SalPrinter
+class VCLPLUG_GEN_PUBLIC PspSalPrinter : public SalPrinter
 {
 public:
     String                  m_aFileName;
@@ -85,7 +86,6 @@ public:
     virtual ~PspSalPrinter();
 
     // overload all pure virtual methods
-    using SalPrinter::StartJob;
     virtual sal_Bool                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
@@ -105,23 +105,7 @@ public:
     virtual sal_uIntPtr                 GetErrorCode();
 };
 
-class Timer;
-
-namespace vcl_sal {
-class VCLPLUG_GEN_PUBLIC PrinterUpdate
-{
-    static Timer*           pPrinterUpdateTimer;
-    static int              nActiveJobs;
-
-    static void doUpdate();
-    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
-public:
-    static void update();
-    static void jobStarted() { nActiveJobs++; }
-    static void jobEnded();
-};
-}
-
 #endif // _SV_SALPRN_H
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,10 +44,7 @@ namespace comphelper
 // FmUnoIOStream,
 // stream zum schreiben un lesen von Daten, basieren  auf File
 //==================================================================
-struct InputStreamWrapper_Base : public ::cppu::WeakImplHelper1<stario::XInputStream>
-{};
-
-class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public InputStreamWrapper_Base
+class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XInputStream>
 {
     ::osl::Mutex    m_aMutex;
     ::osl::File*    m_pFile;
@@ -56,14 +54,6 @@ public:
     OSLInputStreamWrapper(::osl::File& _rStream);
     OSLInputStreamWrapper(::osl::File* pStream, sal_Bool bOwner=sal_False);
     virtual ~OSLInputStreamWrapper();
-
-// UNO Anbindung
-    virtual void            SAL_CALL acquire() throw()
-        { InputStreamWrapper_Base::acquire(); }
-    virtual void            SAL_CALL release() throw()
-        { InputStreamWrapper_Base::release(); }
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
-        { return InputStreamWrapper_Base::queryInterface(_rType); }
 
 // stario::XInputStream
     virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
@@ -77,23 +67,12 @@ public:
 // FmUnoOutStream,
 // Datensenke fuer Files
 //==================================================================
-struct OutputStreamWrapper_Base : public ::cppu::WeakImplHelper1<stario::XOutputStream>
-{};
-
-class COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper : public OutputStreamWrapper_Base
+class COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XOutputStream>
 {
     ::osl::File&        rFile;
 
 public:
     OSLOutputStreamWrapper(::osl::File& _rFile) :rFile(_rFile) { }
-
-// UNO Anbindung
-    virtual void            SAL_CALL acquire() throw()
-        { OutputStreamWrapper_Base::acquire(); }
-    virtual void            SAL_CALL release() throw()
-        { OutputStreamWrapper_Base::release(); }
-    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
-        { return OutputStreamWrapper_Base::queryInterface(_rType); }
 
 // stario::XOutputStream
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
@@ -106,3 +85,4 @@ public:
 
 #endif // _COMPHELPER_STREAM_OSLFILEWRAPPER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

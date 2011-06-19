@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include <com/sun/star/java/RestartRequiredException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/rcid.h>
 #include <jvmfwk/framework.h>
@@ -56,18 +57,6 @@ using namespace com::sun::star::task;
 
 namespace svt
 {
-
-JavaInteractionHandler::JavaInteractionHandler():
-    m_aRefCount(0),
-    m_bShowErrorsOnce(false),
-    m_bJavaDisabled_Handled(false),
-    m_bInvalidSettings_Handled(false),
-    m_bJavaNotFound_Handled(false),
-    m_bVMCreationFailure_Handled(false),
-    m_bRestartRequired_Handled(false),
-    m_nResult_JavaDisabled(RET_NO)
-{
-}
 
 JavaInteractionHandler::JavaInteractionHandler(bool bReportErrorOnce) :
     m_aRefCount(0),
@@ -145,7 +134,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         if( ! (m_bShowErrorsOnce && m_bJavaNotFound_Handled))
         {
            // No suitable JRE found
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_JAVANOTFOUND ) );
             String aTitle( SvtResId( STR_WARNING_JAVANOTFOUND ) );
@@ -162,7 +151,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         if( !(m_bShowErrorsOnce && m_bInvalidSettings_Handled))
         {
            // javavendors.xml was updated and Java has not been configured yet
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS ) );
             String aTitle( SvtResId(STR_WARNING_INVALIDJAVASETTINGS));
@@ -178,7 +167,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     {
         if( !(m_bShowErrorsOnce && m_bJavaDisabled_Handled))
         {
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bJavaDisabled_Handled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
             QueryBox aQueryBox( NULL, SvtResId( QBX_JAVADISABLED ) );
@@ -203,7 +192,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         if( !(m_bShowErrorsOnce && m_bVMCreationFailure_Handled))
         {
             // Java not correctly installed, or damaged
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bVMCreationFailure_Handled = true;
             ErrorBox aErrorBox( NULL, SvtResId( ERRORBOX_JVMCREATIONFAILED ) );
             String aTitle( SvtResId( STR_ERROR_JVMCREATIONFAILED ) );
@@ -221,7 +210,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         {
             // a new JRE was selected, but office needs to be restarted
             //before it can be used.
-            vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
             m_bRestartRequired_Handled = true;
             ErrorBox aErrorBox(NULL, SvtResId( ERRORBOX_RESTARTREQUIRED ) );
             String aTitle( SvtResId( STR_ERROR_RESTARTREQUIRED ) );
@@ -249,3 +238,5 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -179,6 +179,14 @@
 <FormatCode>#,###.00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
+ <FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER" formatindex="70">
+ <FormatCode>#,##0_);(#,##0)</FormatCode>
+ <DefaultName></DefaultName>
+ </FormatElement>
+ <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="71">
+ <FormatCode>#,##0.00_);(#,##0.00)</FormatCode>
+ <DefaultName></DefaultName>
+ </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
 <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
 <DefaultName></DefaultName>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -252,7 +253,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
 
             default:
             {
-                DBG_ERROR( "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported pixel format");
+                OSL_FAIL( "BitmapWriteAccess::ZeroInitUnusedBits: Unsupported pixel format");
                 nBits = 0;
                 bMsb = true;
             }
@@ -448,3 +449,5 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
         for( long nY = 0L, nHeight = Min( mpBuffer->mnHeight, rReadAcc.Height() ); nY < nHeight; nY++ )
             CopyScanline( nY, rReadAcc );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

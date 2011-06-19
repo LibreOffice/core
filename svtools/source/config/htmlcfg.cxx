@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,10 @@
 #include <svtools/parhtml.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <sal/macros.h>
+#include <rtl/instance.hxx>
+#include <list>
 
 // -----------------------------------------------------------------------
 #define HTMLCFG_UNKNOWN_TAGS            0x01
@@ -47,20 +50,15 @@
 #define HTMLCFG_NUMBERS_ENGLISH_US      0x100
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 
-static SvxHtmlOptions* pOptions = 0;
-
-DECLARE_LIST( LinkList, Link * )
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
-/* -----------------------------23.11.00 11:39--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct HtmlOptions_Impl
 {
-    LinkList    aList;
+    ::std::list<Link> aList;
     sal_Int32   nFlags;
     sal_Int32   nExportMode;
     sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
@@ -83,9 +81,6 @@ struct HtmlOptions_Impl
     }
 };
 
-/* -----------------------------23.11.00 11:39--------------------------------
-
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -110,7 +105,7 @@ const Sequence<OUString>& SvxHtmlOptions::GetPropertyNames()
             "Export/Encoding",                      // 14
             "Import/NumbersEnglishUS"               // 15
         };
-        const int nCount = sizeof(aPropNames) / sizeof(aPropNames[0]);
+        const int nCount = SAL_N_ELEMENTS(aPropNames);
         aNames.realloc(nCount);
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -164,13 +159,11 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                     case  9://"Export/Browser",
                         {
                             sal_Int32 nExpMode = 0;
-//                          pValues[nProp] >>= pImp->nExportMode;
                             pValues[nProp] >>= nExpMode;
                             switch( nExpMode )
                             {
                                 case 0:     nExpMode = HTML_CFG_HTML32;     break;
                                 case 1:     nExpMode = HTML_CFG_MSIE_40;    break;
-//                              case 2:     nExpMode = HTML_CFG_NS30;       break;  depricated
                                 case 3:     nExpMode = HTML_CFG_WRITER;     break;
                                 case 4:     nExpMode = HTML_CFG_NS40;       break;
                                 case 5:     nExpMode = HTML_CFG_MSIE_40_OLD;break;
@@ -216,11 +209,9 @@ void    SvxHtmlOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
 
-//  const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-//  const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bSet = sal_False;
@@ -243,7 +234,6 @@ void    SvxHtmlOptions::Commit()
                     {
                         case HTML_CFG_HTML32:       nExpMode = 0;   break;
                         case HTML_CFG_MSIE_40:      nExpMode = 1;   break;
-//                      case HTML_CFG_NS30:         nExpMode = 2;   break;  depricated
                         case HTML_CFG_WRITER:       nExpMode = 3;   break;
                         case HTML_CFG_NS40:         nExpMode = 4;   break;
                         case HTML_CFG_MSIE_40_OLD:  nExpMode = 5;   break;
@@ -271,16 +261,16 @@ void    SvxHtmlOptions::Commit()
 
 void SvxHtmlOptions::AddListenerLink( const Link& rLink )
 {
-    pImp->aList.Insert( new Link( rLink ) );
+    pImp->aList.push_back( rLink );
 }
 
 void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 {
-    for ( sal_uInt16 n=0; n<pImp->aList.Count(); n++ )
+    for ( ::std::list<Link>::iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
     {
-        if ( (*pImp->aList.GetObject(n) ) == rLink )
+        if ( *iter == rLink )
         {
-            delete pImp->aList.Remove(n);
+            pImp->aList.erase(iter);
             break;
         }
     }
@@ -288,8 +278,8 @@ void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 
 void SvxHtmlOptions::CallListeners()
 {
-    for ( sal_uInt16 n = 0; n < pImp->aList.Count(); ++n )
-        pImp->aList.GetObject(n)->Call( this );
+    for ( ::std::list<Link>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
+        iter->Call( this );
 }
 
 
@@ -379,17 +369,11 @@ void SvxHtmlOptions::SetStarBasic(sal_Bool bSet)
     SetModified();
 }
 
-/*-----------------14.02.97 08.34-------------------
-
---------------------------------------------------*/
-
 sal_Bool SvxHtmlOptions::IsSaveGraphicsLocal() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_LOCAL_GRF) ;
 }
-/*-----------------14.02.97 08.34-------------------
 
---------------------------------------------------*/
 void SvxHtmlOptions::SetSaveGraphicsLocal(sal_Bool bSet)
 {
     if(bSet)
@@ -398,10 +382,6 @@ void SvxHtmlOptions::SetSaveGraphicsLocal(sal_Bool bSet)
         pImp->nFlags &= ~HTMLCFG_LOCAL_GRF;
     SetModified();
 }
-
-/*-----------------10/21/97 08:34am-----------------
-
---------------------------------------------------*/
 
 sal_Bool    SvxHtmlOptions::IsPrintLayoutExtension() const
 {
@@ -417,9 +397,7 @@ sal_Bool    SvxHtmlOptions::IsPrintLayoutExtension() const
     }
     return bRet;
 }
-/*-----------------10/21/97 08:34am-----------------
 
---------------------------------------------------*/
 void    SvxHtmlOptions::SetPrintLayoutExtension(sal_Bool bSet)
 {
     if(bSet)
@@ -429,17 +407,11 @@ void    SvxHtmlOptions::SetPrintLayoutExtension(sal_Bool bSet)
     SetModified();
 }
 
-/*-----------------10.07.98 10.02-------------------
-
---------------------------------------------------*/
-
 sal_Bool SvxHtmlOptions::IsIgnoreFontFamily() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_IGNORE_FONT_FAMILY) ;
 }
-/*-----------------10.07.98 10.02-------------------
 
---------------------------------------------------*/
 void SvxHtmlOptions::SetIgnoreFontFamily(sal_Bool bSet)
 {
     if(bSet)
@@ -448,16 +420,12 @@ void SvxHtmlOptions::SetIgnoreFontFamily(sal_Bool bSet)
         pImp->nFlags &= ~HTMLCFG_IGNORE_FONT_FAMILY;
     SetModified();
 }
-/* -----------------05.02.99 09:03-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool SvxHtmlOptions::IsStarBasicWarning() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_IS_BASIC_WARNING) ;
 }
-/* -----------------05.02.99 09:03-------------------
- *
- * --------------------------------------------------*/
+
 void SvxHtmlOptions::SetStarBasicWarning(sal_Bool bSet)
 {
     if(bSet)
@@ -467,9 +435,6 @@ void SvxHtmlOptions::SetStarBasicWarning(sal_Bool bSet)
     SetModified();
 }
 
-/*-----------------19.02.2001 18:40-----------------
- *
- * --------------------------------------------------*/
 rtl_TextEncoding SvxHtmlOptions::GetTextEncoding() const
 {
     rtl_TextEncoding eRet;
@@ -480,39 +445,33 @@ rtl_TextEncoding SvxHtmlOptions::GetTextEncoding() const
     return eRet;
 }
 
-/*-----------------19.02.2001 18:40-----------------
- *
- * --------------------------------------------------*/
 void SvxHtmlOptions::SetTextEncoding( rtl_TextEncoding eEnc )
 {
     pImp->eEncoding = eEnc;
     pImp->bIsEncodingDefault = sal_False;
     SetModified();
 }
-/* -----------------------------15.08.2001 12:01------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SvxHtmlOptions::IsDefaultTextEncoding() const
 {
     return pImp->bIsEncodingDefault;
 }
 
-SvxHtmlOptions* SvxHtmlOptions::Get()
+namespace
 {
-    if ( !pOptions )
-        pOptions = new SvxHtmlOptions;
-    return pOptions;
+    class theSvxHtmlOptions : public rtl::Static<SvxHtmlOptions, theSvxHtmlOptions> {};
 }
 
+SvxHtmlOptions& SvxHtmlOptions::Get()
+{
+    return theSvxHtmlOptions::get();
+}
 
-/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
 sal_Bool SvxHtmlOptions::IsNumbersEnglishUS() const
 {
     return 0 != (pImp->nFlags & HTMLCFG_NUMBERS_ENGLISH_US) ;
 }
 
-
-/* ---------------------- 2006-06-07T21:02+0200 ---------------------- */
 void SvxHtmlOptions::SetNumbersEnglishUS(sal_Bool bSet)
 {
     if(bSet)
@@ -521,3 +480,5 @@ void SvxHtmlOptions::SetNumbersEnglishUS(sal_Bool bSet)
         pImp->nFlags &= ~HTMLCFG_NUMBERS_ENGLISH_US;
     SetModified();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

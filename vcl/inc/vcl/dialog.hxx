@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,11 +54,11 @@ private:
     sal_Bool            mbOldSaveBack;
     sal_Bool            mbInClose;
     sal_Bool            mbModalMode;
+    sal_Int8        mnCancelClose;  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
 
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         Dialog (const Dialog &);
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &);
@@ -71,7 +72,6 @@ protected:
 
 public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
-//#endif
 
 protected:
                     Dialog( WindowType nType );
@@ -90,6 +90,9 @@ public:
 
     virtual short   Execute();
     sal_Bool            IsInExecute() const { return mbInExecute; }
+
+    sal_Int8        GetCloseFlag() const { return mnCancelClose; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
+    void            SetCloseFlag( sal_Int8 nCancel ) { mnCancelClose = nCancel; }  //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
 
     ////////////////////////////////////////
     // Dialog::Execute replacement API
@@ -125,11 +128,9 @@ public:
 
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
 {
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         ModelessDialog (const ModelessDialog &);
     SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
-//#endif
 
 public:
                     ModelessDialog( Window* pParent, WinBits nStyle = WB_STDMODELESS );
@@ -152,11 +153,11 @@ private:
     using Window::Hide;
     void            Hide();
 
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         ModalDialog (const ModalDialog &);
     SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &);
-//#endif
 };
 
 #endif  // _SV_DIALOG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

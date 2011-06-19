@@ -1,0 +1,2 @@
+..\%__SRC%\lib\lib*.* %_DEST%\lib\lib*.*
+..\%__SRC%\misc\mtfrenderer.component %_DEST%\xml\mtfrenderer.component

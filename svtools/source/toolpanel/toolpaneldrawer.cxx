@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -158,25 +159,18 @@ namespace svt
         return aExpansionIndicatorArea;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     Image ToolPanelDrawer::impl_getExpansionIndicator() const
     {
-        const bool bHighContrastMode( GetSettings().GetStyleSettings().GetHighContrastMode() != 0 );
         sal_uInt16 nResourceId = 0;
         if ( m_bExpanded )
-            if ( bHighContrastMode )
-                nResourceId = IMG_TRIANGLE_DOWN_HC;
-            else
-                nResourceId = IMG_TRIANGLE_DOWN;
+            nResourceId = IMG_TRIANGLE_DOWN;
         else
-            if ( bHighContrastMode )
-                nResourceId = IMG_TRIANGLE_RIGHT_HC;
-            else
-                nResourceId = IMG_TRIANGLE_RIGHT;
+            nResourceId = IMG_TRIANGLE_RIGHT;
         return Image( SvtResId( nResourceId ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+
     sal_uInt16 ToolPanelDrawer::impl_getTextStyle() const
     {
         const sal_uInt16 nBasicStyle =  TEXT_DRAW_LEFT
@@ -371,3 +365,5 @@ namespace svt
 //......................................................................................................................
 } // namespace svt
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

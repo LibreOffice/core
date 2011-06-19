@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,14 +38,7 @@
 #include <sys\stat.h>
 #include <direct.h>
 
-#include <tools/svwin.h>
-#ifdef _MSC_VER
-#pragma warning (push,1)
-#endif
-#include <winbase.h>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+#include <windows.h>
 #include <tools/solar.h>
 
 #include <tools/string.hxx>
@@ -64,15 +58,6 @@
 #define dirent          _WIN32_FIND_DATAA
 #define d_name          cFileName
 #define d_type          dwFileAttributes
-
-#if defined (TCPP) || defined (tcpp)
-#define _mkdir          mkdir
-#define _rmdir          rmdir
-#define _chdir          chdir
-#define _unlink         unlink
-#define _getcwd         getcwd
-#define _access         access
-#endif
 
 typedef struct
 {
@@ -100,3 +85,5 @@ const char* TempDirImpl( char *pBuf );
 #define FSysFailOnErrorImpl()
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

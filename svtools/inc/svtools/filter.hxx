@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+struct WMF_APMFILEHEADER;
 // -----------------------
 // - GraphicFilter-Types -
 // -----------------------
@@ -181,7 +183,6 @@ class SVT_DLLPUBLIC GraphicDescriptor
     sal_Bool            ImpDetectSGV( SvStream& rStm, sal_Bool bExtendedInfo );
     sal_Bool            ImpDetectEMF( SvStream& rStm, sal_Bool bExtendedInfo );
     sal_Bool            ImpDetectSVG( SvStream& rStm, sal_Bool bExtendedInfo );
-
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );
 
@@ -345,13 +346,15 @@ public:
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                   sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0 );
+                                   sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0,
+                                   WMF_APMFILEHEADER *pAPMHeader = NULL );
 
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags,
-                                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData );
+                                   com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData,
+                                   WMF_APMFILEHEADER *pAPMHeader = NULL );
 
     sal_Bool            Setup( sal_uInt16 nFormat );
 
@@ -361,7 +364,7 @@ public:
     void                    ResetLastError();
 
     const Link      GetFilterCallback() const;
-    static          GraphicFilter* GetGraphicFilter();
+    static GraphicFilter& GetGraphicFilter();
     static int      LoadGraphic( const String& rPath, const String& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = NULL,
@@ -377,3 +380,5 @@ SVT_DLLPUBLIC sal_Bool WriteWindowMetafile( SvStream& rStream, const GDIMetaFile
 SVT_DLLPUBLIC sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
 
 #endif  //_FILTER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

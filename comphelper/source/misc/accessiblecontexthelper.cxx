@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -318,7 +319,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAccessibleContextHelper::getAccessibleIndexInParent: caught an exception!" );
+            OSL_FAIL( "OAccessibleContextHelper::getAccessibleIndexInParent: caught an exception!" );
         }
 
         return nRet;
@@ -354,3 +355,4 @@ namespace comphelper
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

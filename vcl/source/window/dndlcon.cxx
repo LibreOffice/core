@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,7 +194,7 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException )
             {
                 pContainer->removeInterface( xElement );
             }
@@ -253,7 +254,7 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException )
             {
                 pContainer->removeInterface( xElement );
             }
@@ -305,7 +306,7 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException )
             {
                 pContainer->removeInterface( xElement );
             }
@@ -373,7 +374,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException )
             {
                 pContainer->removeInterface( xElement );
             }
@@ -440,7 +441,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException )
             {
                 pContainer->removeInterface( xElement );
             }
@@ -502,7 +503,7 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
                 }
             }
 
-            catch( RuntimeException exc )
+            catch( RuntimeException )
             {
                 pContainer->removeInterface( xElement );
             }
@@ -565,3 +566,5 @@ void SAL_CALL DNDListenerContainer::dropComplete( sal_Bool success ) throw (Runt
         m_xDropTargetDropContext.clear();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -203,11 +204,4 @@ void TabPage::DeactivatePage()
 {
 }
 
-// -----------------------------------------------------------------------
-
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabPage::CreateAccessible()
-{
-    // TODO: remove this method (incompatible)
-
-    return Window::CreateAccessible();
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

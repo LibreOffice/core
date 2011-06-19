@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,16 +39,14 @@
 
 //-----------------------------------------------------------------------------
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-const sal_Char sStartEndCharacters[] = "StartEndCharacters";
-const sal_Char sStartCharacters[] = "StartCharacters";
-const sal_Char sEndCharacters[] = "EndCharacters";
+using ::rtl::OUString;
+
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 //-----------------------------------------------------------------------------
 struct SvxForbiddenStruct_Impl
@@ -72,9 +71,7 @@ struct SvxAsianConfig_Impl
         bKerningWesternTextOnly(sal_True),
         nCharDistanceCompression(0) {}
 };
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence<OUString> lcl_GetPropertyNames()
 {
     Sequence<OUString> aNames(2);
@@ -92,16 +89,12 @@ SvxAsianConfig::SvxAsianConfig(sal_Bool bEnableNotify) :
         EnableNotification(lcl_GetPropertyNames());
     Load();
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxAsianConfig::~SvxAsianConfig()
 {
     delete pImpl;
 }
-/* -----------------------------17.01.01 09:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxAsianConfig::Load()
 {
     Sequence<Any> aValues = GetProperties(lcl_GetPropertyNames());
@@ -111,7 +104,7 @@ void SvxAsianConfig::Load()
     pValues[1] >>= pImpl->nCharDistanceCompression;
 
     pImpl->aForbiddenArr.DeleteAndDestroy(0, pImpl->aForbiddenArr.Count());
-    OUString sPropPrefix(C2U(sStartEndCharacters));
+    OUString sPropPrefix(C2U("StartEndCharacters"));
     Sequence<OUString> aNodes = GetNodeNames(sPropPrefix);
 
     Sequence<OUString> aPropNames(aNodes.getLength() * 2);
@@ -143,16 +136,12 @@ void SvxAsianConfig::Load()
         pImpl->aForbiddenArr.Insert(pInsert, pImpl->aForbiddenArr.Count());
     }
 }
-/* -----------------------------17.01.01 09:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxAsianConfig::Notify( const Sequence<OUString>& )
 {
     Load();
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxAsianConfig::Commit()
 {
     Sequence<Any> aValues(2);
@@ -162,7 +151,7 @@ void SvxAsianConfig::Commit()
     PutProperties(lcl_GetPropertyNames(), aValues);
 
 
-    OUString sNode(C2U(sStartEndCharacters));
+    OUString sNode(C2U("StartEndCharacters"));
     if(!pImpl->aForbiddenArr.Count())
         ClearNodeSet(sNode);
     else
@@ -170,8 +159,8 @@ void SvxAsianConfig::Commit()
         Sequence<PropertyValue> aSetValues(2 * pImpl->aForbiddenArr.Count());
         PropertyValue* pSetValues = aSetValues.getArray();
         sal_Int32 nSetValue = 0;
-        const OUString sStartChars(C2U(sStartCharacters));
-        const OUString sEndChars(C2U(sEndCharacters));
+        const OUString sStartChars(C2U("StartCharacters"));
+        const OUString sEndChars(C2U("EndCharacters"));
         for(sal_uInt16 i = 0; i < pImpl->aForbiddenArr.Count(); i++)
         {
             OUString sPrefix(sNode);
@@ -189,40 +178,30 @@ void SvxAsianConfig::Commit()
         ReplaceSetProperties(sNode, aSetValues);
     }
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SvxAsianConfig::IsKerningWesternTextOnly() const
 {
     return pImpl->bKerningWesternTextOnly;
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 void        SvxAsianConfig::SetKerningWesternTextOnly(sal_Bool bSet)
 {
     pImpl->bKerningWesternTextOnly = bSet;
     SetModified();
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int16   SvxAsianConfig::GetCharDistanceCompression() const
 {
     return pImpl->nCharDistanceCompression;
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 void        SvxAsianConfig::SetCharDistanceCompression(sal_Int16 nSet)
 {
     DBG_ASSERT(nSet >= 0 && nSet < 3, "compression value illegal");
     SetModified();
     pImpl->nCharDistanceCompression = nSet;
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence<lang::Locale> SvxAsianConfig::GetStartEndCharLocales()
 {
     Sequence<Locale> aRet(pImpl->aForbiddenArr.Count());
@@ -233,9 +212,7 @@ uno::Sequence<lang::Locale> SvxAsianConfig::GetStartEndCharLocales()
     }
     return aRet;
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SvxAsianConfig::GetStartEndChars( const Locale& rLocale,
                                     OUString& rStartChars,
                                     OUString& rEndChars )
@@ -252,9 +229,7 @@ sal_Bool    SvxAsianConfig::GetStartEndChars( const Locale& rLocale,
     }
     return sal_False;
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxAsianConfig::SetStartEndChars( const Locale& rLocale,
                                     const OUString* pStartChars,
                                     const OUString* pEndChars )
@@ -285,7 +260,9 @@ void SvxAsianConfig::SetStartEndChars( const Locale& rLocale,
     }
 #ifdef DBG_UTIL
     else if(!bFound)
-        DBG_ERROR("attempt to clear unavailable data");
+        OSL_FAIL("attempt to clear unavailable data");
 #endif
     SetModified();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

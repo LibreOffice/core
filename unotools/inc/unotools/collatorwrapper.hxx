@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #define _UNOTOOLS_COLLATORWRAPPER_HXX
 
-#ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
 
 namespace com { namespace sun { namespace star { namespace lang {
         class XMultiServiceFactory;
@@ -95,3 +94,5 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
 };
 
 #endif /* _UNOTOOLS_COLLATORWRAPPER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -216,7 +217,7 @@ static void aDspFunc(const String &rErr, const String &rAction)
     aErr+= ByteString( rAction, RTL_TEXTENCODING_ASCII_US );
     aErr+=" Fehler: ";
     aErr+= ByteString( rErr, RTL_TEXTENCODING_ASCII_US );
-    DBG_ERROR(aErr.GetBuffer());
+    OSL_FAIL(aErr.GetBuffer());
 }
 
 
@@ -346,7 +347,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         aStr += ByteString( aAction, RTL_TEXTENCODING_ASCII_US );
         aStr += ByteString("\nFehler: ");
         aStr += ByteString( aErr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
         }
         else
         {
@@ -366,13 +367,13 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         }
     }
     }
-    DBG_ERROR("Error nicht behandelt");
+    OSL_FAIL("Error nicht behandelt");
     // Error 1 ist General Error im Sfx
     if(pInfo->GetErrorCode()!=1) {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
     }
     else {
-        DBG_ERROR("Error 1 nicht gehandeled");
+        OSL_FAIL("Error 1 nicht gehandeled");
     }
     delete pInfo;
     return 0;
@@ -460,3 +461,4 @@ SimpleErrorHandler::SimpleErrorHandler()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

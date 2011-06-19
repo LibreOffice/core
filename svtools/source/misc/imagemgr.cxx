@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,8 @@
 #include <svtools/svtools.hrc>
 #include <svtools/imagemgr.hrc>
 #include <svtools/svtdata.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
+#include <vcl/lazydelete.hxx>
 
 // globals *******************************************************************
 
@@ -68,7 +70,7 @@ struct SvtExtensionResIdMapping_Impl
     sal_uInt16  _nImgId;
 };
 
-static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
+static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
 {
     { "awk",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
     { "bas",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
@@ -184,36 +186,6 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { 0, sal_False, 0, 0 }
 };
 
-#ifdef OS2
-    SvtExtensionResIdMapping_Impl Mappings[] =
-    {
-    {"StarWriter 4.0",         sal_False,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
-    {"StarWriter 3.0",         sal_False,STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER},
-    {"StarCalc 4.0",           sal_False,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
-    {"StarCalc 3.0",           sal_False,STR_DESCRIPTION_SCALC_DOC,   IMG_CALC},
-    {"StarImpress 4.0",        sal_False,STR_DESCRIPTION_SIMPRESS_DOC,IMG_IMPRESS},
-    {"StarDraw 4.0",           sal_False,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
-    {"StarDraw 3.0",           sal_False,STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW},
-    {"StarChart 3.0",          sal_False,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
-    {"StarChart 4.0",          sal_False,STR_DESCRIPTION_SCHART_DOC,  IMG_CHART},
-    {"Bitmap",                 sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
-    {"AutoCAD",                sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"Gif-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_GIF},
-    {"JPEG-File",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_JPG},
-    {"Metafile ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"Photo-CD ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCD},
-    {"Mac Pict",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCT},
-    {"PCX-File ",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCX},
-    {"PNG-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"SV-Metafile",            sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM},
-    {"TIFF-File",              sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_TIFF},
-    {"MS-Metafile",            sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_WMF},
-    {"XBM-File",               sal_False,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
-    {"UniformResourceLocator", sal_False,STR_DESCRIPTION_LINK,        IMG_URL},
-    {NULL, 0}
-    };
-#endif
-
 struct SvtFactory2ExtensionMapping_Impl
 {
     const char*   _pFactory;
@@ -222,7 +194,7 @@ struct SvtFactory2ExtensionMapping_Impl
 
 // mapping from "private:factory" url to extension
 
-static SvtFactory2ExtensionMapping_Impl __READONLY_DATA Fac2ExtMap_Impl[] =
+static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
 {
     { "swriter",                "odt" },
     { "swriter/web",            "html" },
@@ -407,7 +379,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
     {
         String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
         String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-        if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
+        if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
         {
             // detect an image id for our "private:factory" urls
             aExt = GetImageExtensionByFactory_Impl( sURL );
@@ -415,7 +387,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
                 nImage = GetImageId_Impl( aExt );
             return nImage;
         }
-        else if ( aType == String( RTL_CONSTASCII_STRINGPARAM("image") ) )
+        else if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("image") ) )
             nImage = (sal_uInt16)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
     }
     else
@@ -493,7 +465,7 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
     String aRet;
     if ( nResId )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         aRet = String( SvtResId( nResId ) );
     }
     return aRet;
@@ -529,196 +501,42 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )
     return nRet;
 }
 
-/*
-static ResMgr* GetIsoResMgr_Impl()
+static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 {
-    static ResMgr* pIsoResMgr = NULL;
-
-    if ( !pIsoResMgr )
-    {
-        ByteString aResMgrName( "iso" );
-        pIsoResMgr = ResMgr::CreateResMgr(
-            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        if ( !pIsoResMgr )
-        {
-            // no "iso" resource -> search for "ooo" resource
-            aResMgrName = ByteString( "ooo" );
-            pIsoResMgr = ResMgr::CreateResMgr(
-                aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        }
-    }
-
-    return pIsoResMgr;
-}
-
-static ImageList* CreateImageList_Impl( sal_uInt16 nResId )
-{
-    ImageList* pList = NULL;
-    ResMgr* pResMgr = GetIsoResMgr_Impl();
-    DBG_ASSERT( pResMgr, "SvFileInformationManager::CreateImageList_Impl(): no resmgr" );
-    ResId aResId( nResId, *pResMgr );
-    aResId.SetRT( RSC_IMAGELIST );
-    if ( pResMgr->IsAvailable( aResId ) )
-        pList = new ImageList( aResId );
-    else
-        pList = new ImageList();
-    return pList;
-}
-
-static Image GetOfficeImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig, sal_Bool bHighContrast )
-{
-    ImageList* pList = NULL;
-
-    static ImageList* _pSmallOfficeImgList = NULL;
-    static ImageList* _pBigOfficeImgList = NULL;
-    static ImageList* _pSmallHCOfficeImgList = NULL;
-    static ImageList* _pBigHCOfficeImgList = NULL;
-    static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
-
-    // If the style has been changed, throw away our cache of the older images
-    if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
-    {
-        delete _pSmallOfficeImgList, _pSmallOfficeImgList = NULL;
-        delete _pBigOfficeImgList, _pBigOfficeImgList = NULL;
-        delete _pSmallHCOfficeImgList, _pSmallHCOfficeImgList = NULL;
-        delete _pBigHCOfficeImgList, _pBigHCOfficeImgList = NULL;
-        nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
-    }
-
-    // #i21242# MT: For B&W we need the HC Image and must transform.
-    // bHiContrast is sal_True for all dark backgrounds, but we need HC Images for HC White also,
-    // so we can't rely on bHighContrast.
-    sal_Bool bBlackAndWhite = Application::GetSettings().GetStyleSettings().IsHighContrastBlackAndWhite();
-    if ( bBlackAndWhite )
-        bHighContrast = sal_True;
-
-
-    if ( bBig )
-    {
-        if ( bHighContrast )
-        {
-            if ( !_pBigHCOfficeImgList )
-                _pBigHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST );
-            pList = _pBigHCOfficeImgList;
-        }
-        else
-        {
-            if ( !_pBigOfficeImgList )
-                _pBigOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_BIG );
-            pList = _pBigOfficeImgList;
-        }
-    }
-    else
-    {
-        if ( bHighContrast )
-        {
-            if ( !_pSmallHCOfficeImgList )
-                _pSmallHCOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST );
-            pList = _pSmallHCOfficeImgList;
-        }
-        else
-        {
-            if ( !_pSmallOfficeImgList )
-                _pSmallOfficeImgList = CreateImageList_Impl( RID_SVTOOLS_IMAGELIST_SMALL );
-            pList = _pSmallOfficeImgList;
-        }
-    }
-
-    Image aImage = pList->GetImage( nImageId );
-
-    if ( bBlackAndWhite )
-    {
-        // First invert the Image, because it's designed for black background, structures are bright
-        aImage.Invert();
-        // Now make monochrome...
-        ImageColorTransform eTrans = IMAGECOLORTRANSFORM_MONOCHROME_WHITE;
-        if ( Application::GetSettings().GetStyleSettings().GetFaceColor().GetColor() == COL_WHITE )
-            eTrans = IMAGECOLORTRANSFORM_MONOCHROME_BLACK;
-        aImage = aImage.GetColorTransformedImage( eTrans );
-    }
-
-    return aImage;
-}
-*/
-
-static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig, sal_Bool bHighContrast )
-{
-    if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
+    if ( !bBig && IMG_FOLDER == nImageId )
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
     ImageList* pList = NULL;
 
-    static ImageList* _pSmallImageList = NULL;
-    static ImageList* _pBigImageList = NULL;
-    static ImageList* _pSmallHCImageList = NULL;
-    static ImageList* _pBigHCImageList = NULL;
+    static vcl::DeleteOnDeinit< ImageList > xSmallImageList( NULL );
+    static vcl::DeleteOnDeinit< ImageList > xBigImageList( NULL );
     static sal_uLong nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 
     // If the style has been changed, throw away our cache of the older images
     if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
     {
-        delete _pSmallImageList, _pSmallImageList = NULL;
-        delete _pBigImageList, _pBigImageList = NULL;
-        delete _pSmallHCImageList, _pSmallHCImageList = NULL;
-        delete _pBigHCImageList, _pBigHCImageList = NULL;
+        xSmallImageList.reset();
+        xBigImageList.reset();
         nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
     }
 
     if ( bBig )
     {
-        if ( bHighContrast )
-        {
-            if ( !_pBigHCImageList )
-                _pBigHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST ) );
-            pList = _pBigHCImageList;
-        }
-        else
-        {
-            if ( !_pBigImageList )
-                _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
-            pList = _pBigImageList;
-        }
+        if ( !xBigImageList.get() )
+            xBigImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_BIG)));
+        pList = xBigImageList.get();
     }
     else
     {
-        if ( bHighContrast )
-        {
-            if ( !_pSmallHCImageList )
-                _pSmallHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST ) );
-            pList = _pSmallHCImageList;
-        }
-        else
-        {
-            if ( !_pSmallImageList )
-                _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
-            pList = _pSmallImageList;
-        }
+        if ( !xSmallImageList.get() )
+            xSmallImageList.reset(new ImageList(SvtResId(RID_SVTOOLS_IMAGELIST_SMALL)));
+        pList = xSmallImageList.get();
     }
 
     if ( pList->HasImageAtPos( nImageId ) )
         return pList->GetImage( nImageId );
-    else
-        return Image();
-        //return GetOfficeImageFromList_Impl( nImageId, bBig, bHighContrast );
-}
-
-//****************************************************************************
-
-void ReplaceStarOfficeVar( String& _rDescription )
-{
-    static String sVariable( RTL_CONSTASCII_STRINGPARAM( "%STAROFFICE" ) );
-    static String sProductName;
-    if ( sProductName.Len() == 0 )
-    {
-        ::rtl::OUString sTemp;
-        ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sTemp;
-        if ( sTemp.equalsAscii( "StarSuite" ) == sal_False )
-            sProductName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) );
-        else
-            sProductName = String( sTemp );
-    }
-    _rDescription.SearchAndReplace( sVariable, sProductName );
+    return Image();
 }
 
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
@@ -738,7 +556,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             {
                 String aURLPath = sURL.Copy( URL_PREFIX_PRIV_SOFFICE_LEN );
                 String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
-                if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
+                if ( aType == String( RTL_CONSTASCII_USTRINGPARAM("factory") ) )
                 {
                     sDescription = GetDescriptionByFactory_Impl( aURLPath.Copy( aURLPath.Search( INET_PATH_TOKEN ) + 1 ) );
                     bDetected = sal_True;
@@ -774,7 +592,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
             sDescription = sExtension;
             sDescription += '-';
         }
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         sDescription += String( SvtResId( nResId ) );
     }
 
@@ -782,50 +600,29 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
 
     if ( bShowExt )
     {
-        sDescription += String( RTL_CONSTASCII_STRINGPARAM(" (") );
+        sDescription += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
         sDescription += sExtension;
         sDescription += ')';
     }
 
-    ReplaceStarOfficeVar( sDescription );
     return sDescription;
 }
 
 Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig )
 {
-    return GetImage( rObject, bBig, sal_False );
+    sal_uInt16 nImage = GetImageId_Impl( rObject, sal_True );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
 Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig )
 {
-    return GetFileImage( rObject, bBig, sal_False );
+    sal_Int16 nImage = GetImageId_Impl( rObject, sal_False );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
 Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig )
-{
-    return GetImageNoDefault( rObject, bBig, sal_False );
-}
-
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
-{
-    return GetFolderImage( rInfo, bBig, sal_False );
-}
-
-Image SvFileInformationManager::GetImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
-{
-    sal_uInt16 nImage = GetImageId_Impl( rObject, sal_True );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
-}
-
-Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
-{
-    sal_uInt16 nImage = GetImageId_Impl( rObject, sal_False );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
-}
-
-Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, sal_Bool bBig, sal_Bool bHighContrast )
 {
     sal_uInt16 nImage = GetImageId_Impl( rObject, sal_True );
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -833,10 +630,10 @@ Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject,
     if ( nImage == IMG_FILE )
         return Image();
 
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig, sal_Bool bHighContrast )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig )
 {
     sal_uInt16 nImage = IMG_FOLDER;
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -850,7 +647,7 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
     else if ( rInfo.m_bIsVolume )
         nImage = IMG_FIXEDDEV;
 
-    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+    return GetImageFromList_Impl( nImage, bBig );
 }
 
 String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
@@ -879,3 +676,4 @@ String SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo
     return sDescription;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

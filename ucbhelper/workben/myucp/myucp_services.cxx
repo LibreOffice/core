@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,9 +44,9 @@ sal_Bool writeInfo( void * pRegistryKey,
                     const rtl::OUString & rImplementationName,
                     uno::Sequence< rtl::OUString > const & rServiceNames )
 {
-    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM("/") );
     aKeyName += rImplementationName;
-    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     uno::Reference< registry::XRegistryKey > xKey;
     try
@@ -80,7 +81,7 @@ sal_Bool writeInfo( void * pRegistryKey,
 }
 
 //=========================================================================
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
@@ -103,7 +104,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 }
 
 //=========================================================================
-extern "C" void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
@@ -134,3 +135,4 @@ extern "C" void * SAL_CALL component_getFactory(
     return pRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

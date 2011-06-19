@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ SVT_DLLPUBLIC int GetHTMLToken( const String& rName );
 int GetHTMLOption( const String& rName );
 
 // suche die 24-bit-Farbe zu einem Farbnamen (nicht gefunden = ULONG_MAX)
-SVT_DLLPUBLIC sal_uIntPtr GetHTMLColor( const String& rName );
+SVT_DLLPUBLIC sal_uInt32 GetHTMLColor( const String& rName );
 
 // beginnen immer ab 256, groesser als ein char
 const int HTML_TOKEN_START      = 0x100;
@@ -522,7 +523,7 @@ HTML_OPTION_ENUM_END,
 
 // Attribute mit Script-Code als Wert
 HTML_OPTION_SCRIPT_START        = HTML_OPTION_ENUM_END,
-    HTML_O_ONABORT              = HTML_OPTION_SCRIPT_START, // JavaScaript
+    HTML_O_ONABORT              = HTML_OPTION_SCRIPT_START, // JavaScript
     HTML_O_ONBLUR,      // JavaScript
     HTML_O_ONCHANGE,    // JavaScript
     HTML_O_ONCLICK,     // JavaScript
@@ -567,3 +568,5 @@ HTML_OPTION_END
 };
 
 #endif  // _HTMLTOKN_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

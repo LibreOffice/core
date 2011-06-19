@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,16 +30,7 @@
 #include "precompiled_tools.hxx"
 
 #if defined WNT
-#ifndef _SVWIN_H
-#include <io.h>
-#include <tools/svwin.h>
-#endif
-
-#elif defined(OS2)
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <share.h>
+#include <windows.h>
 #include <io.h>
 
 #elif defined UNX
@@ -64,10 +56,6 @@ using namespace ::osl;
 /*************************************************************************
 |*
 |*    FileCopier::FileCopier()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -114,10 +102,6 @@ FileCopier::FileCopier( const FileCopier& rCopier ) :
 |*
 |*    FileCopier::~FileCopier()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
-|*
 *************************************************************************/
 
 FileCopier::~FileCopier()
@@ -128,10 +112,6 @@ FileCopier::~FileCopier()
 /*************************************************************************
 |*
 |*    FileCopier::operator =()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -151,10 +131,6 @@ FileCopier& FileCopier::operator = ( const FileCopier &rCopier )
 /*************************************************************************
 |*
 |*    FileCopier::Progress()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -228,10 +204,6 @@ const Link& FileCopier::GetErrorHdl() const
 |*
 |*    FileCopier::Execute()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  PB 16.06.00
-|*
 *************************************************************************/
 
 FSysError FileCopier::DoCopy_Impl(
@@ -240,78 +212,14 @@ FSysError FileCopier::DoCopy_Impl(
     FSysError eRet = FSYS_ERR_OK;
     ErrCode eWarn = FSYS_ERR_OK;
 
-    // HPFS->FAT?
-    FSysPathStyle eSourceStyle = DirEntry::GetPathStyle( rSource.ImpGetTopPtr()->GetName() );
-    FSysPathStyle eTargetStyle = DirEntry::GetPathStyle( rTarget.ImpGetTopPtr()->GetName() );
-    sal_Bool bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
-
     // Zieldateiname ggf. kuerzen
     DirEntry aTgt;
-    if ( bMakeShortNames )
-    {
-        aTgt = rTarget.GetPath();
-        aTgt.MakeShortName( rTarget.GetName() );
-    }
-    else
-        aTgt = rTarget;
-
-    // kein Move wenn Namen gekuerzt werden muessten
-    if ( bMakeShortNames && FSYS_ACTION_MOVE == ( pImp->nActions & FSYS_ACTION_MOVE ) && aTgt != rTarget )
-        return ERRCODE_IO_NAMETOOLONG;
+    aTgt = rTarget;
 
     // source is directory?
     FileStat aSourceFileStat( rSource );
     if ( aSourceFileStat.IsKind( FSYS_KIND_DIR ) )
     {
-#ifdef OS2
-        CHAR szSource[CCHMAXPATHCOMP];
-        HOBJECT hSourceObject;
-
-        strcpy(szSource, ByteString(rSource.GetFull(), osl_getThreadTextEncoding()).GetBuffer());
-        hSourceObject = WinQueryObject(szSource);
-
-        if ( hSourceObject )
-        {
-            PSZ  pszSourceName;
-            PSZ  pszTargetName;
-            CHAR szTarget[CCHMAXPATHCOMP];
-            HOBJECT hTargetObject;
-            HOBJECT hReturn = NULLHANDLE;
-
-            strcpy(szTarget, ByteString(rTarget.GetFull(), osl_getThreadTextEncoding()).GetBuffer());
-            pszTargetName = strrchr(szTarget, '\\');
-            pszSourceName = strrchr(szSource, '\\');
-
-            hTargetObject = WinQueryObject(szTarget);
-
-            if ( hTargetObject )
-                WinDestroyObject(hTargetObject);
-
-            if ( pszTargetName && pszSourceName )
-            {
-                *pszTargetName = '\0';
-                pszSourceName++;
-                pszTargetName++;
-
-                if(strcmp(pszSourceName, pszTargetName) == 0)
-                {
-                    hTargetObject = WinQueryObject(szTarget);
-
-                    if(pImp->nActions & FSYS_ACTION_MOVE)
-                    {
-                        hReturn = WinMoveObject(hSourceObject, hTargetObject, 0);
-                    }
-                    else
-                    {
-                        hReturn = WinCopyObject(hSourceObject, hTargetObject, 0);
-                    }
-                    if ( bMakeShortNames && aTarget.Exists() )
-                        aTarget.Kill();
-                    return hReturn ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN;
-                }
-            }
-        }
-#endif
         // recursive copy
         eRet = Error( aTgt.MakeDir() ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN, 0, &aTgt );
         Dir aSourceDir( rSource, FSYS_KIND_DIR|FSYS_KIND_FILE );
@@ -484,3 +392,5 @@ FSysError FileCopier::ExecuteExact( FSysAction nActions, FSysExact eExact )
     // recursive copy
     return DoCopy_Impl( aAbsSource, aAbsTarget );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

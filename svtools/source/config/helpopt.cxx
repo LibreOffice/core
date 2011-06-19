@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,10 @@
 #include "itemholder2.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 static SvtHelpOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
@@ -165,7 +167,7 @@ Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
 // -----------------------------------------------------------------------
 
 SvtHelpOptions_Impl::SvtHelpOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Office.Common/Help") )
+    : ConfigItem( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Help" )) )
     , pList( 0 )
     , bExtendedHelp( sal_False )
     , bHelpTips( sal_True )
@@ -200,7 +202,9 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
     {
         for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
         {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ASSERT( pValues[nProp].hasValue(), "property value missing" );
+#endif
             if ( pValues[nProp].hasValue() )
             {
                 sal_Bool bTmp = sal_Bool();
@@ -262,8 +266,8 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
                 }
                 else
                 {
-            DBG_ERRORFILE( "Wrong Type!" );
-        }
+                    DBG_ERRORFILE( "Wrong Type!" );
+                }
             }
         }
         if ( IsHelpTips() != Help::IsQuickHelpEnabled() )
@@ -278,10 +282,10 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
 void SvtHelpOptions_Impl::implGetURLCounters( Sequence< ::rtl::OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounters )
 {
     // the ignore counters for the help agent URLs
-    const ::rtl::OUString sIgnoreListNodePath = ::rtl::OUString::createFromAscii("HelpAgent/IgnoreList");
-    const ::rtl::OUString sPathSeparator = ::rtl::OUString::createFromAscii("/");
-    const ::rtl::OUString sURLLocalPath = ::rtl::OUString::createFromAscii("/Name");
-    const ::rtl::OUString sCounterLocalPath = ::rtl::OUString::createFromAscii("/Counter");
+    const ::rtl::OUString sIgnoreListNodePath( RTL_CONSTASCII_USTRINGPARAM( "HelpAgent/IgnoreList" ));
+    const ::rtl::OUString sPathSeparator(      RTL_CONSTASCII_USTRINGPARAM( "/" ));
+    const ::rtl::OUString sURLLocalPath(       RTL_CONSTASCII_USTRINGPARAM( "/Name" ));
+    const ::rtl::OUString sCounterLocalPath(   RTL_CONSTASCII_USTRINGPARAM( "/Counter" ));
 
     // get the names of all the nodes containing ignore counters
     // collect the node names we have to ask
@@ -338,10 +342,10 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
 {
     ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
 
-    const ::rtl::OUString sIgnoreListNodePath = ::rtl::OUString::createFromAscii("HelpAgent/IgnoreList");
-    const ::rtl::OUString sPathSeparator = ::rtl::OUString::createFromAscii("/");
-    const ::rtl::OUString sURLLocalPath = ::rtl::OUString::createFromAscii("/Name");
-    const ::rtl::OUString sCounterLocalPath = ::rtl::OUString::createFromAscii("/Counter");
+    const ::rtl::OUString sIgnoreListNodePath( RTL_CONSTASCII_USTRINGPARAM( "HelpAgent/IgnoreList" ));
+    const ::rtl::OUString sPathSeparator(      RTL_CONSTASCII_USTRINGPARAM( "/" ));
+    const ::rtl::OUString sURLLocalPath(       RTL_CONSTASCII_USTRINGPARAM( "/Name" ));
+    const ::rtl::OUString sCounterLocalPath(   RTL_CONSTASCII_USTRINGPARAM( "/Counter" ));
 
     // get the current URL/counter pairs (as they're persistent at the moment)
     Sequence< ::rtl::OUString > aNodeNames;
@@ -425,7 +429,7 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
     ::rtl::OUString sNewNodeName;
     Sequence< ::rtl::OUString > aNewCounterDataNodeNames(2);
     Sequence< Any >             aNewCounterDataValues(2);
-    const ::rtl::OUString sNodeNameBase = ::rtl::OUString::createFromAscii("URL");
+    const ::rtl::OUString sNodeNameBase( RTL_CONSTASCII_USTRINGPARAM( "URL" ));
     for (   ConstMapString2IntIterator aCollectNew = aURLIgnoreCounters.begin();
             aCollectNew != aURLIgnoreCounters.end();
             ++aCollectNew
@@ -762,3 +766,4 @@ void  SvtHelpOptions::SetHelpStyleSheet(const String& rStyleSheet)
     pImp->SetHelpStyleSheet(rStyleSheet);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

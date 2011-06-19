@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,9 @@
 
 #define _SVT_WIZDLG_CXX
 #include <tools/debug.hxx>
-#ifndef _VCL_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _VCL_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _VCL_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
 #include <svtools/wizdlg.hxx>
 
 // =======================================================================
@@ -595,7 +590,7 @@ void WizardDialog::RemovePage( TabPage* pPage )
         pPageData = pPageData->mpNext;
     }
 
-    DBG_ERROR( "WizardDialog::RemovePage() - Page not in list" );
+    OSL_FAIL( "WizardDialog::RemovePage() - Page not in list" );
 }
 
 // -----------------------------------------------------------------------
@@ -681,7 +676,7 @@ void WizardDialog::RemoveButton( Button* pButton )
         pBtnData = pBtnData->mpNext;
     }
 
-    DBG_ERROR( "WizardDialog::RemoveButton() - Button not in list" );
+    OSL_FAIL( "WizardDialog::RemoveButton() - Button not in list" );
 }
 
 // -----------------------------------------------------------------------
@@ -705,3 +700,5 @@ sal_Bool WizardDialog::IsButtonFixedLineVisible()
 {
     return (mpFixedLine && mpFixedLine->IsVisible());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

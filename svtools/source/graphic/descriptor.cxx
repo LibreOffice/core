@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,11 +31,11 @@
 
 #include "descriptor.hxx"
 
-#include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
 #include <svl/itemprop.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -304,28 +305,22 @@ uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
     return aTypes;
 }
 
-// ------------------------------------------------------------------------------
+namespace
+{
+    class theGraphicDescriptorUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicDescriptorUnoTunnelId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     throw( uno::RuntimeException )
 {
-    vos::OGuard                         aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGraphicDescriptorUnoTunnelId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------
 
 ::comphelper::PropertySetInfo* GraphicDescriptor::createPropertySetInfo()
 {
-    vos::OGuard                     aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
 
     static ::comphelper::PropertyMapEntry aEntries[] =
@@ -364,7 +359,7 @@ void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry**
 void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     while( *ppEntries )
     {
@@ -409,7 +404,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                     }
 
                     if( !aMimeType.getLength() && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
-                        aMimeType = ::rtl::OUString::createFromAscii( MIMETYPE_VCLGRAPHIC );
+                        aMimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VCLGRAPHIC ));
                 }
                 else
                     aMimeType = maMimeType;
@@ -497,3 +492,5 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

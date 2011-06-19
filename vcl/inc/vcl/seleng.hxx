@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,8 @@ class CommandEvent;
 // Timerticks
 #define SELENG_DRAGDROP_TIMEOUT     400
 #define SELENG_AUTOREPEAT_INTERVAL  50
+#define SELENG_AUTOREPEAT_INTERVAL_MIN 25
+#define SELENG_AUTOREPEAT_INTERVAL_MAX 300
 
 enum SelectionMode { NO_SELECTION, SINGLE_SELECTION, RANGE_SELECTION, MULTIPLE_SELECTION };
 
@@ -87,20 +90,20 @@ private:
     Timer               aWTimer; // erzeugt kuenstliche Mouse-Moves
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
+    sal_uLong               nUpdateInterval;
     // Stufigkeit fuer Mausbewegungen waehrend einer Selektion
     sal_uInt16              nMouseSensitivity;
     sal_uInt16              nLockedMods;
     sal_uInt16              nFlags;
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( ImpWatchDog, Timer * );
-//#endif
 
     inline sal_Bool         ShouldDeselect( sal_Bool bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
 public:
 
                         SelectionEngine( Window* pWindow,
-                                         FunctionSet* pFunctions = NULL );
+                                         FunctionSet* pFunctions = NULL,
+                                         sal_uLong nAutoRepeatInterval = SELENG_AUTOREPEAT_INTERVAL );
                         ~SelectionEngine();
 
     // sal_True: Event wurde von Selection-Engine verarbeitet.
@@ -158,6 +161,8 @@ public:
 
     sal_Bool                HasAnchor() const;
     void                SetAnchor( sal_Bool bAnchor );
+
+    void                SetUpdateInterval( sal_uLong nInterval );
 
     // wird im Ctor eingeschaltet
     void                ExpandSelectionOnMouseMove( sal_Bool bExpand = sal_True )
@@ -251,3 +256,4 @@ inline void SelectionEngine::SetAnchor( sal_Bool bAnchor )
 
 #endif  // _SV_SELENG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

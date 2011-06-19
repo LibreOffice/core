@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,9 +66,14 @@
 #include "print.h"
 #include "salptype.hxx"
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 using namespace psp;
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OUStringToOString;
 
 /*
  *  static helpers
@@ -400,7 +406,7 @@ SalInfoPrinter* X11SalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
 
         // set/clear backwards compatibility flag
         bool bStrictSO52Compatibility = false;
-        std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
+        boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
             pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
 
         if( compat_it != pJobSetup->maValueMap.end() )
@@ -637,7 +643,7 @@ sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
     // set/clear backwards compatibility flag
     bool bStrictSO52Compatibility = false;
-    std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
+    boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
         pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
 
     if( compat_it != pJobSetup->maValueMap.end() )
@@ -676,17 +682,6 @@ sal_Bool PspSalInfoPrinter::SetData(
         // merge papersize if necessary
         if( nSetDataFlags & SAL_JOBSET_PAPERSIZE )
         {
-            int nWidth, nHeight;
-            if( pJobSetup->meOrientation == ORIENTATION_PORTRAIT )
-            {
-                nWidth  = pJobSetup->mnPaperWidth;
-                nHeight = pJobSetup->mnPaperHeight;
-            }
-            else
-            {
-                nWidth  = pJobSetup->mnPaperHeight;
-                nHeight = pJobSetup->mnPaperWidth;
-            }
             String aPaper;
 
             if( pJobSetup->mePaperFormat == PAPER_USER )
@@ -964,7 +959,7 @@ sal_Bool PspSalPrinter::StartJob(
     bool bDirect,
     ImplJobSetup* pJobSetup )
 {
-    vcl_sal::PrinterUpdate::jobStarted();
+    GetSalData()->m_pInstance->jobStartedPrinterUpdate();
 
     m_bFax      = false;
     m_bPdf      = false;
@@ -995,8 +990,8 @@ sal_Bool PspSalPrinter::StartJob(
             m_aTmpFile = getTmpName();
             nMode = S_IRUSR | S_IWUSR;
 
-            ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
-            it = pJobSetup->maValueMap.find( ::rtl::OUString::createFromAscii( "FAX#" ) );
+            ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
+            it = pJobSetup->maValueMap.find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAX#")) );
             if( it != pJobSetup->maValueMap.end() )
                 m_aFaxNr = it->second;
 
@@ -1025,7 +1020,7 @@ sal_Bool PspSalPrinter::StartJob(
 
     // set/clear backwards compatibility flag
     bool bStrictSO52Compatibility = false;
-    std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
+    boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
         pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
 
     if( compat_it != pJobSetup->maValueMap.end() )
@@ -1066,7 +1061,7 @@ sal_Bool PspSalPrinter::EndJob()
             }
         }
     }
-    vcl_sal::PrinterUpdate::jobEnded();
+    GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bSuccess;
 }
 
@@ -1075,7 +1070,7 @@ sal_Bool PspSalPrinter::EndJob()
 sal_Bool PspSalPrinter::AbortJob()
 {
     sal_Bool bAbort = m_aPrintJob.AbortJob() ? sal_True : sal_False;
-    vcl_sal::PrinterUpdate::jobEnded();
+    GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bAbort;
 }
 
@@ -1382,15 +1377,30 @@ sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJo
 }
 
 
+namespace x11
+{
+    class PrinterUpdate
+    {
+        static Timer*                       pPrinterUpdateTimer;
+        static int                          nActiveJobs;
+
+        static void doUpdate();
+        DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
+    public:
+        static void update(X11SalInstance &rInstance);
+        static void jobStarted() { nActiveJobs++; }
+        static void jobEnded();
+    };
+}
 
 /*
- *  vcl::PrinterUpdate
+ *  x11::PrinterUpdate
  */
 
-Timer* vcl_sal::PrinterUpdate::pPrinterUpdateTimer = NULL;
-int vcl_sal::PrinterUpdate::nActiveJobs = 0;
+Timer* x11::PrinterUpdate::pPrinterUpdateTimer = NULL;
+int x11::PrinterUpdate::nActiveJobs = 0;
 
-void vcl_sal::PrinterUpdate::doUpdate()
+void x11::PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
     if( rManager.checkPrintersChanged( false ) )
@@ -1405,7 +1415,7 @@ void vcl_sal::PrinterUpdate::doUpdate()
 
 // -----------------------------------------------------------------------
 
-IMPL_STATIC_LINK_NOINSTANCE( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOINSTANCE( x11::PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
 {
     if( nActiveJobs < 1 )
     {
@@ -1421,12 +1431,12 @@ IMPL_STATIC_LINK_NOINSTANCE( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, EMPT
 
 // -----------------------------------------------------------------------
 
-void vcl_sal::PrinterUpdate::update()
+void x11::PrinterUpdate::update(X11SalInstance &rInstance)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
 
-    if( ! static_cast< X11SalInstance* >(GetSalData()->m_pInstance)->isPrinterInit() )
+    if( ! rInstance.isPrinterInit() )
     {
         // #i45389# start background printer detection
         psp::PrinterInfoManager::get();
@@ -1439,14 +1449,24 @@ void vcl_sal::PrinterUpdate::update()
     {
         pPrinterUpdateTimer = new Timer();
         pPrinterUpdateTimer->SetTimeout( 500 );
-        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, vcl_sal::PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, x11::PrinterUpdate, UpdateTimerHdl ) );
         pPrinterUpdateTimer->Start();
     }
 }
 
+void X11SalInstance::updatePrinterUpdate()
+{
+    x11::PrinterUpdate::update(*this);
+}
+
+void X11SalInstance::jobStartedPrinterUpdate()
+{
+    x11::PrinterUpdate::jobStarted();
+}
+
 // -----------------------------------------------------------------------
 
-void vcl_sal::PrinterUpdate::jobEnded()
+void x11::PrinterUpdate::jobEnded()
 {
     nActiveJobs--;
     if( nActiveJobs < 1 )
@@ -1460,3 +1480,10 @@ void vcl_sal::PrinterUpdate::jobEnded()
         }
     }
 }
+
+void X11SalInstance::jobEndedPrinterUpdate()
+{
+    x11::PrinterUpdate::jobEnded();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

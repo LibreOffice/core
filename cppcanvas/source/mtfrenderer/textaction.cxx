@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -727,8 +728,7 @@ namespace cppcanvas
             bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "TextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "TextAction::render(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -759,8 +759,7 @@ namespace cppcanvas
             ::basegfx::B2DRange TextAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
                                                        const Subset&                    /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "TextAction::getBounds(): Subset not supported by this object" );
+                OSL_FAIL( "TextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -965,8 +964,7 @@ namespace cppcanvas
             bool EffectTextAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
                                            const Subset&                    /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "EffectTextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "EffectTextAction::render(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1002,8 +1000,7 @@ namespace cppcanvas
             ::basegfx::B2DRange EffectTextAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
                                                              const Subset&                  /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "EffectTextAction::getBounds(): Subset not supported by this object" );
+                OSL_FAIL( "EffectTextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1120,20 +1117,6 @@ namespace cppcanvas
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-
-#ifdef SPECIAL_DEBUG
-                aLocalState.Clip.clear();
-                aLocalState.DeviceColor =
-                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
-                                                            ::Color( 0x80FF0000 ) );
-
-                if( maState.Clip.is() )
-                    mpCanvas->getUNOCanvas()->drawPolyPolygon( maState.Clip,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
-
-                aLocalState.DeviceColor = maState.DeviceColor;
-#endif
 
                 mpCanvas->getUNOCanvas()->drawTextLayout( mxTextLayout,
                                                           mpCanvas->getViewState(),
@@ -1936,8 +1919,7 @@ namespace cppcanvas
             ::basegfx::B2DRange OutlineAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                           const Subset&                     /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "OutlineAction::getBounds(): Subset not yet supported by this object" );
+                OSL_FAIL( "OutlineAction::getBounds(): Subset not yet supported by this object" );
 
                 return getBounds( rTransformation );
             }
@@ -2313,3 +2295,5 @@ namespace cppcanvas
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

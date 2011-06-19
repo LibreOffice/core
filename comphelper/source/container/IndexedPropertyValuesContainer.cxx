@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 using namespace com::sun::star;
 
@@ -122,8 +121,8 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
                 sal_Int32 i(0);
                 while(i < nIndex)
                 {
-                    i++;
-                    aItr++;
+                    ++i;
+                    ++aItr;
                 }
             }
             else
@@ -132,8 +131,8 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
                 sal_Int32 i(nSize - 1);
                 while(i > nIndex)
                 {
-                    i--;
-                    aItr--;
+                    --i;
+                    --aItr;
                 }
             }
             maProperties.insert(aItr, aProps);
@@ -157,8 +156,8 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
             sal_Int32 i(0);
             while(i < nIndex)
             {
-                i++;
-                aItr++;
+                ++i;
+                ++aItr;
             }
         }
         else
@@ -167,8 +166,8 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
             sal_Int32 i(nSize - 1);
             while(i > nIndex)
             {
-                i--;
-                aItr--;
+                --i;
+                --aItr;
             }
         }
         maProperties.erase(aItr);
@@ -268,3 +267,5 @@ void createRegistryInfo_IndexedPropertyValuesContainer()
 {
     static ::comphelper::module::OAutoRegistration< IndexedPropertyValuesContainer > aAutoRegistration;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

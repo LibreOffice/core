@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include "comdep.hxx"
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 
 DBG_NAMEEX( DirEntry )
@@ -39,6 +39,6 @@ DBG_NAMEEX( DirEntry )
 #include "unx.cxx"
 #elif defined WNT
 #include "wntmsc.cxx"
-#elif defined OS2
-#include "os2.cxx"
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

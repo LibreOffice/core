@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <tools/table.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
-
 #include <vcl/decoview.hxx>
 #include <vcl/lstbox.h>
 #include <vcl/button.hxx>
@@ -44,7 +44,7 @@
 #include <controldata.hxx>
 
 // =======================================================================
-
+
 inline sal_uLong ImplCreateKey( sal_uInt16 nPos )
 {
     // Key = Pos+1, wegen Pos 0
@@ -66,7 +66,7 @@ static void lcl_GetSelectedEntries( Table& rSelectedPos, const XubString& rText,
 }
 
 // =======================================================================
-
+
 ComboBox::ComboBox( WindowType nType ) :
     Edit( nType )
 {
@@ -212,7 +212,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     Window* pLBParent = this;
     if ( mpFloatWin )
         pLBParent = mpFloatWin;
-    mpImplLB = new ImplListBox( pLBParent, nListStyle|WB_SIMPLEMODE );
+    mpImplLB = new ImplListBox( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->SetSelectHdl( LINK( this, ComboBox, ImplSelectHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ComboBox, ImplCancelHdl ) );
@@ -467,7 +467,10 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
         mbSyntheticModify = sal_True;
         Modify();
         mbSyntheticModify = sal_False;
-        Select();
+        if (ImplGetWindowImpl() != NULL) //liuchen 2009-7-28, resolve the problem that soffice get crashed if in ComboBox_Change event a Worksheets("SheetX").Activate sentence needs to be executed
+        {
+            Select();
+        }
     }
 
     return 0;
@@ -1587,3 +1590,5 @@ long ComboBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPos ) const
 
     return nIndex;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

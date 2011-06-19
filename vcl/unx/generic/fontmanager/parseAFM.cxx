@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * (C) 1988, 1989, 1990 by Adobe Systems Incorporated. All rights reserved.
  *
@@ -332,7 +333,7 @@ static char *linetoken( FileInputStream* stream )
  *
  *  The algorithm is a standard Knuth binary search.
  */
-#include "afm_hash.cpp"
+#include "afm_hash.hpp"
 
 static inline enum parseKey recognize( register char* ident, int len)
 {
@@ -547,95 +548,6 @@ static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
 
 } /* parseGlobals */
 
-
-#if 0
-/************************* initializeArray ************************/
-
-/*  Unmapped character codes are (at Adobe Systems) assigned the
- *  width of the space character (if one exists) else they get the
- *  value of 250 ems. This function initializes all entries in the
- *  char widths array to have this value. Then any mapped character
- *  codes will be replaced with the width of the appropriate character
- *  when parsing the character metric section.
-
- *  This function parses the Character Metrics Section looking
- *  for a space character (by comparing character names). If found,
- *  the width of the space character will be used to initialize the
- *  values in the array of character widths.
- *
- *  Before returning, the position of the read/write pointer of the
- *  FileInputStream is reset to be where it was upon entering this function.
- */
-
-static int initializeArray( FileInputStream* fp, register int* cwi)
-{
-    bool cont = true, found = false;
-    unsigned int opos = fp->tell();
-    int code = 0, width = 0, i = 0, error = 0, tokenlen;
-    register char *keyword;
-
-    while (cont)
-    {
-        keyword = token(fp,tokenlen);
-        if (keyword == NULL)
-        {
-            error = earlyEOF;
-            break; /* get out of loop */
-        }
-        switch(recognize(keyword,tokenlen))
-        {
-            case COMMENT:
-                keyword = linetoken(fp);
-                break;
-            case CODE:
-                if ((keyword = token(fp,tokenlen)) != NULL)
-                    code = atoi(keyword);
-                break;
-            case CODEHEX:
-                if ((keyword = token(fp,tokenlen)) != NULL)
-                    sscanf(keyword,"<%x>", &code);
-                break;
-            case XWIDTH:
-                if ((keyword = token(fp,tokenlen)) != NULL)
-                    width = atoi(keyword);
-                break;
-            case X0WIDTH:
-                (void) token(fp,tokenlen);
-                break;
-            case CHARNAME:
-                if ((keyword = token(fp,tokenlen)) != NULL)
-                    if (MATCH(keyword, Space))
-                    {
-                        cont = false;
-                        found = true;
-                    }
-                break;
-            case ENDCHARMETRICS:
-                cont = false;
-                break;
-            case ENDFONTMETRICS:
-                cont = false;
-                error = normalEOF;
-                break;
-            case NOPE:
-            default:
-                error = parseError;
-                break;
-        } /* switch */
-    } /* while */
-
-    if (!found)
-        width = 250;
-
-    for (i = 0; i < 256; ++i)
-        cwi[i] = width;
-
-    fp->seek(opos);
-
-    return(error);
-
-} /* initializeArray */
-#endif
 
 /************************* parseCharWidths **************************/
 
@@ -1509,7 +1421,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
 void
 freeFontInfo (FontInfo *fi)
 {
-    int i, j;
+    int i;
 
     if (fi->gfi)
     {
@@ -1563,6 +1475,7 @@ freeFontInfo (FontInfo *fi)
         for (i = 0; i < fi->numOfComps; i++)
         {
             free (fi->ccd[i].ccName);
+            int j;
             for (j = 0; j < fi->ccd[i].numOfPieces; j++)
                 free (fi->ccd[i].pieces[j].pccName);
 
@@ -1575,3 +1488,5 @@ freeFontInfo (FontInfo *fi)
 }
 
 } // namspace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #ifndef _STGELEM_HXX
 #define _STGELEM_HXX
 
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 
 #include <sot/stg.hxx>
 
@@ -164,3 +163,5 @@ public:
 #define STG_MASTER  -4L                 // page is master FAT page
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

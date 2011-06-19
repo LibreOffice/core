@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,13 +38,12 @@
 #include <tools/rc.h>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
-
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
-
+#include <vcl/imagerepository.hxx>
 #include <impimagetree.hxx>
 #include <image.h>
 
@@ -276,51 +276,6 @@ uno::Reference< graphic::XGraphic > Image::GetXGraphic() const
 
 // -----------------------------------------------------------------------
 
-Image Image::GetColorTransformedImage( ImageColorTransform eColorTransform ) const
-{
-    DBG_CHKTHIS( Image, NULL );
-
-    Image aRet;
-
-    if( IMAGECOLORTRANSFORM_HIGHCONTRAST == eColorTransform )
-    {
-        BitmapEx aBmpEx( GetBitmapEx() );
-
-        if( !aBmpEx.IsEmpty() )
-        {
-            Color*  pSrcColors = NULL;
-            Color*  pDstColors = NULL;
-            sal_uLong   nColorCount = 0;
-
-            Image::GetColorTransformArrays( eColorTransform, pSrcColors, pDstColors, nColorCount );
-
-            if( nColorCount && pSrcColors && pDstColors )
-            {
-                aBmpEx.Replace( pSrcColors, pDstColors, nColorCount );
-                aRet = Image( aBmpEx );
-            }
-
-            delete[] pSrcColors;
-            delete[] pDstColors;
-        }
-    }
-    else if( IMAGECOLORTRANSFORM_MONOCHROME_BLACK == eColorTransform ||
-             IMAGECOLORTRANSFORM_MONOCHROME_WHITE == eColorTransform  )
-    {
-        BitmapEx aBmpEx( GetBitmapEx() );
-
-        if( !aBmpEx.IsEmpty() )
-            aRet = Image( aBmpEx.GetColorTransformedBitmapEx( ( BmpColorMode )( eColorTransform ) ) );
-    }
-
-    if( !aRet )
-        aRet = *this;
-
-    return aRet;
-}
-
-// -----------------------------------------------------------------------
-
 void Image::Invert()
 {
     BitmapEx aInvertedBmp( GetBitmapEx() );
@@ -492,8 +447,6 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
     mpImplData->maPrefix = rPrefix;
     for( sal_uInt32 i = 0; i < rNameVector.size(); ++i )
     {
-//      fprintf (stderr, "List %p [%d]: '%s'\n",
-//               this, i, rtl::OUStringToOString( rNameVector[i], RTL_TEXTENCODING_UTF8 ).getStr() );
         mpImplData->AddImage( rNameVector[ i ], static_cast< sal_uInt16 >( i ) + 1, BitmapEx() );
     }
 }
@@ -539,9 +492,6 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 
     BitmapEx aBmpEx;
 
-//  fprintf (stderr, "Attempt load of '%s'\n",
-//           rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
     rtl::OUString aFileName = rPrefix;
     aFileName += maName;
 #if OSL_DEBUG_LEVEL > 0
@@ -555,7 +505,7 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
         aMessage.append( "ImageAryData::Load: failed to load image '" );
         aMessage.append( ::rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
         aMessage.append( "'" );
-        OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
     }
 #endif
 }
@@ -617,8 +567,6 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                            const std::vector< rtl::OUString > &rNameVector )
 {
     sal_uInt16 nItems = sal::static_int_cast< sal_uInt16 >( rNameVector.size() );
-
-//  fprintf (stderr, "InsertFromHorizontalStrip (1) [%d items]\n", nItems);
 
     if (!nItems)
             return;
@@ -791,15 +739,13 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
-//  fprintf (stderr, "GetImage %d\n", nId);
-
     Image aRet;
 
     if( mpImplData )
     {
         std::vector<ImageAryData *>::iterator aIter;
         for( aIter = mpImplData->maImages.begin();
-             aIter != mpImplData->maImages.end(); aIter++)
+             aIter != mpImplData->maImages.end(); ++aIter)
         {
             if ((*aIter)->mnId == nId)
             {
@@ -811,6 +757,14 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
         }
     }
 
+    if (!aRet)
+    {
+        BitmapEx rBitmap;
+        bool res = ::vcl::ImageRepository::loadDefaultImage(rBitmap);
+        if (res)
+            aRet =  Image(rBitmap);
+    }
+
     return aRet;
 }
 
@@ -818,9 +772,6 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
 
 Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
 {
-//  fprintf (stderr, "GetImage '%s'\n",
-//           rtl::OUStringToOString( rImageName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
     if( mpImplData )
     {
         ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
@@ -832,7 +783,6 @@ Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
             return Image( pImg->maBitmapEx );
         }
     }
-//  fprintf (stderr, "no such image\n");
 
     return Image();
 }
@@ -981,9 +931,6 @@ Size ImageList::GetImageSize() const
             aRet = mpImplData->maImageSize = aTmp.GetSizePixel();
         }
     }
-//  fprintf (stderr, "GetImageSize returns %d, %d\n",
-//           aRet.Width(), aRet.Height());
-
     return aRet;
 }
 
@@ -1024,3 +971,5 @@ sal_Bool ImageList::operator==( const ImageList& rImageList ) const
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

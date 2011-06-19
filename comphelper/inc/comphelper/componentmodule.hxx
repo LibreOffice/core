@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #define COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
 
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/legacysingletonfactory.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -271,29 +271,6 @@ namespace comphelper
     }
 
     //==========================================================================
-    //= OLegacySingletonRegistration
-    //==========================================================================
-    template <class TYPE>
-    class OLegacySingletonRegistration
-    {
-    public:
-        OLegacySingletonRegistration( OModule& _rModule );
-    };
-
-    //--------------------------------------------------------------------------
-    template <class TYPE>
-    OLegacySingletonRegistration<TYPE>::OLegacySingletonRegistration( OModule& _rModule )
-    {
-        _rModule.registerImplementation( ComponentDescription(
-            TYPE::getImplementationName_static(),
-            TYPE::getSupportedServiceNames_static(),
-            ::rtl::OUString(),
-            &TYPE::Create,
-            &::comphelper::createLegacySingletonFactory
-        ) );
-    }
-
-    //==========================================================================
     //= helpers
     //==========================================================================
 
@@ -304,7 +281,7 @@ namespace comphelper
     /* -------------------------------------------------------------------- */ \
     class ModuleClass : public ::comphelper::OModule \
     { \
-        friend struct CreateModuleClass; \
+        friend struct ModuleClass##Creator; \
         typedef ::comphelper::OModule BaseClass; \
     \
     public: \
@@ -349,32 +326,20 @@ namespace comphelper
         OSingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
         { \
         } \
-    }; \
-    /* -------------------------------------------------------------------- */ \
-    template < class TYPE > \
-    class OLegacySingletonRegistration : public ::comphelper::OLegacySingletonRegistration< TYPE > \
-    { \
-    private: \
-        typedef ::comphelper::OLegacySingletonRegistration< TYPE >  BaseClass; \
-    \
-    public: \
-        OLegacySingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
-    }; \
+    };
 
     //==========================================================================
     //= implementing a OModule for a component library
 
 #define IMPLEMENT_COMPONENT_MODULE( ModuleClass ) \
-    struct CreateModuleClass \
+    struct ModuleClass##Creator \
     { \
-        ModuleClass* operator()() \
-        { \
-            static ModuleClass* pModule = new ModuleClass; \
-            return pModule; \
-        } \
+        ModuleClass m_aModuleClass; \
     }; \
+    namespace \
+    { \
+        class the##ModuleClass##Instance : public rtl::Static<ModuleClass##Creator, the##ModuleClass##Instance> {}; \
+    } \
     \
     ModuleClass::ModuleClass() \
         :BaseClass() \
@@ -383,16 +348,14 @@ namespace comphelper
     \
     ModuleClass& ModuleClass::getInstance() \
     { \
-        return *rtl_Instance< ModuleClass, CreateModuleClass, ::osl::MutexGuard, ::osl::GetGlobalMutex >:: \
-            create( CreateModuleClass(), ::osl::GetGlobalMutex() ); \
+        return the##ModuleClass##Instance::get().m_aModuleClass; \
     } \
 
     //==========================================================================
     //= implementing the API of a component library (component_*)
 
 #define IMPLEMENT_COMPONENT_LIBRARY_API( module_class, initializer_function )   \
-    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL \
-    component_getImplementationEnvironment(    \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(    \
         const sal_Char **ppEnvTypeName, uno_Environment ** /*ppEnv*/ )  \
     {   \
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;    \
@@ -410,3 +373,4 @@ namespace comphelper
 
 #endif // COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

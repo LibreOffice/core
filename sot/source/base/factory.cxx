@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 #include <sot/sotdata.hxx>
 #include <sot/clsids.hxx>
 #include <rtl/instance.hxx>
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
 
 /************** class SotData_Impl *********************************************/
 /*************************************************************************
@@ -48,7 +48,6 @@
 *************************************************************************/
 SotData_Impl::SotData_Impl()
     : nSvObjCount( 0 )
-    , pObjectList( NULL )
     , pFactoryList( NULL )
     , pSotObjectFactory( NULL )
     , pSotStorageStreamFactory( NULL )
@@ -82,29 +81,6 @@ void SotFactory::DeInit()
         ByteString aStr( "Objects alive: " );
         aStr.Append( ByteString::CreateFromInt32( pSotData->nSvObjCount ) );
         DBG_WARNING(  aStr.GetBuffer()  );
-
-/*
-        SotObjectList *pObjList = pSotData->pObjectList;
-
-        if( pObjList )
-        {
-            SotObject * p = pObjList->First();
-            while( p )
-            {
-                String aStr( "Factory: " );
-                aStr += p->GetSvFactory()->GetClassName();
-                aStr += " Count: ";
-                aStr += p->GetRefCount();
-                DBG_TRACE( "\tReferences:" );
-                p->TestObjRef( sal_False );
-#ifdef TEST_INVARIANT
-                DBG_TRACE( "\tInvariant:" );
-                p->TestInvariant( sal_True );
-#endif
-                p = pObjList->Next();
-            }
-        }
-*/
 #endif
         return;
     }
@@ -114,28 +90,24 @@ void SotFactory::DeInit()
     SotFactoryList* pFactoryList = pSotData->pFactoryList;
     if( pFactoryList )
     {
-        SotFactory * pFact = pFactoryList->Last();
-        while( NULL != (pFact = pFactoryList->Remove()) )
-        {
-            delete pFact;
-            pFact = pFactoryList->Last();
-        }
+        for ( size_t i = pFactoryList->size(); i > 0 ; )
+            delete (*pFactoryList)[ --i ];
+        pFactoryList->clear();
         delete pFactoryList;
         pSotData->pFactoryList = NULL;
+
     }
 
-    delete pSotData->pObjectList;
-    pSotData->pObjectList = NULL;
+    pSotData->aObjectList.clear();
+
     if( pSotData->pDataFlavorList )
     {
 
-        for( sal_uLong i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
-            delete (::com::sun::star::datatransfer::DataFlavor*) pSotData->pDataFlavorList->GetObject( i );
+        for( size_t i = 0, nMax = pSotData->pDataFlavorList->size(); i < nMax; i++ )
+            delete (*pSotData->pDataFlavorList)[ i ];
         delete pSotData->pDataFlavorList;
         pSotData->pDataFlavorList = NULL;
     }
-    //delete pSOTDATA();
-    //SOTDATA() = NULL;
 }
 
 
@@ -163,14 +135,7 @@ SotFactory::SotFactory( const SvGlobalName & rName,
     DBG_ASSERT( aEmptyName != *this, "create factory without SvGlobalName" );
     if( Find( *this ) )
     {
-        /*
-        String aStr( GetClassName() );
-        aStr += ", UniqueName: ";
-        aStr += GetHexName();
-        aStr += ", create factories with the same unique name";
-        DBG_ERROR( aStr );
-        */
-        DBG_ERROR( "create factories with the same unique name" );
+        OSL_FAIL( "create factories with the same unique name" );
     }
     }
 #endif
@@ -178,7 +143,7 @@ SotFactory::SotFactory( const SvGlobalName & rName,
     if( !pSotData->pFactoryList )
         pSotData->pFactoryList = new SotFactoryList();
     // muss nach hinten, wegen Reihenfolge beim zerstoeren
-    pSotData->pFactoryList->Insert( this, LIST_APPEND );
+    pSotData->pFactoryList->push_back( this );
 }
 
 
@@ -216,12 +181,10 @@ const SotFactory* SotFactory::Find( const SvGlobalName & rFactName )
     SotData_Impl * pSotData = SOTDATA();
     if( rFactName != aEmpty && pSotData->pFactoryList )
     {
-        SotFactory * pFact = pSotData->pFactoryList->First();
-        while( pFact )
-        {
+        for ( size_t i = 0, n = pSotData->pFactoryList->size(); i < n; ++i ) {
+            SotFactory* pFact = (*pSotData->pFactoryList)[ i ];
             if( *pFact == rFactName )
                 return pFact;
-            pFact = pSotData->pFactoryList->Next();
         }
     }
 
@@ -259,10 +222,9 @@ void SotFactory::IncSvObjectCount( SotObject * pObj )
 {
     SotData_Impl * pSotData = SOTDATA();
     pSotData->nSvObjCount++;
-    if( !pSotData->pObjectList )
-        pSotData->pObjectList = new SotObjectList();
+
     if( pObj )
-        pSotData->pObjectList->Insert( pObj );
+        pSotData->aObjectList.push_back( pObj );
 }
 
 
@@ -276,7 +238,7 @@ void SotFactory::DecSvObjectCount( SotObject * pObj )
     SotData_Impl * pSotData = SOTDATA();
     pSotData->nSvObjCount--;
     if( pObj )
-        pSotData->pObjectList->Remove( pObj );
+        pSotData->aObjectList.remove( pObj );
     if( !pSotData->nSvObjCount )
     {
         //keine internen und externen Referenzen mehr
@@ -293,14 +255,10 @@ void SotFactory::TestInvariant()
 {
 #ifdef TEST_INVARIANT
     SotData_Impl * pSotData = SOTDATA();
-    if( pSotData->pObjectList )
-    {
-        sal_uLong nCount = pSotData->pObjectList->Count();
-        for( sal_uLong i = 0; i < nCount ; i++ )
-        {
-            pSotData->pObjectList->GetObject( i )->TestInvariant( sal_False );
-        }
-    }
+
+    std::list<SotObject*>::iterator it;
+    for( it = pSotData->aObjectList.begin(); it != pSotData->aObjectList.end(); ++it )
+        (*it)->TestInvariant( sal_False );
 #endif
 }
 
@@ -365,3 +323,4 @@ sal_Bool SotFactory::Is( const SotFactory * pSuperCl ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -383,6 +384,8 @@ sal_uLong StgIo::ValidateFATs()
 //      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
         return nErr;
     }
-//  DBG_ERROR("Validiere nicht (kein FileStorage)");
+//  OSL_FAIL("Validiere nicht (kein FileStorage)");
     return FAT_OK;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

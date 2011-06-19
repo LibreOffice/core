@@ -1,4 +1,5 @@
-#/*************************************************************************
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -40,6 +41,7 @@
 #include <outfont.hxx>
 #include <glyphcache.hxx>
 #include <impfont.hxx>
+#include <rtl/instance.hxx>
 
 #include "svpgdi.hxx"
 #include "svpbmp.hxx"
@@ -76,19 +78,49 @@ protected:
 class SvpGlyphCache : public GlyphCache
 {
 public:
-    SvpGlyphPeer&       GetPeer() { return reinterpret_cast<SvpGlyphPeer&>( mrPeer ); }
-static SvpGlyphCache&   GetInstance();
-private:
     SvpGlyphCache( SvpGlyphPeer& rPeer ) : GlyphCache( rPeer) {}
+    SvpGlyphPeer& GetPeer() { return reinterpret_cast<SvpGlyphPeer&>( mrPeer ); }
+    static SvpGlyphCache& GetInstance();
 };
 
-//--------------------------------------------------------------------------
+namespace
+{
+    struct GlyphCacheHolder
+    {
+    private:
+        SvpGlyphPeer* m_pSvpGlyphPeer;
+        SvpGlyphCache* m_pSvpGlyphCache;
+    public:
+        GlyphCacheHolder()
+        {
+            m_pSvpGlyphPeer = new SvpGlyphPeer();
+            m_pSvpGlyphCache = new SvpGlyphCache( *m_pSvpGlyphPeer );
+        }
+        void release()
+        {
+            delete m_pSvpGlyphCache;
+            delete m_pSvpGlyphPeer;
+            m_pSvpGlyphCache = NULL;
+            m_pSvpGlyphPeer = NULL;
+        }
+        SvpGlyphCache& getGlyphCache()
+        {
+            return *m_pSvpGlyphCache;
+        }
+        ~GlyphCacheHolder()
+        {
+            release();
+        }
+    };
+
+    struct theGlyphCacheHolder :
+        public rtl::Static<GlyphCacheHolder, theGlyphCacheHolder>
+    {};
+}
 
 SvpGlyphCache& SvpGlyphCache::GetInstance()
 {
-    static SvpGlyphPeer aSvpGlyphPeer;
-    static SvpGlyphCache aGC( aSvpGlyphPeer );
-    return aGC;
+    return theGlyphCacheHolder::get().getGlyphCache();
 }
 
 // ===========================================================================
@@ -117,7 +149,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
                 bFound = rServerFont.GetGlyphBitmap8( nGlyphIndex, pGcpHelper->maRawBitmap );
                 break;
             default:
-                DBG_ERROR( "SVP GCP::GetGlyphBmp(): illegal scanline format");
+                OSL_FAIL( "SVP GCP::GetGlyphBmp(): illegal scanline format");
                 // fall back to black&white mask
                 nBmpFormat = Format::ONE_BIT_LSB_GREY;
                 bFound = false;
@@ -192,8 +224,6 @@ void PspKernInfo::Initialize() const
     if( rKernPairs.empty() )
         return;
 
-    // feed psprint's kerning list into a lookup-friendly container
-    maUnicodeKernPairs.resize( rKernPairs.size() );
     PspKernPairs::const_iterator it = rKernPairs.begin();
     for(; it != rKernPairs.end(); ++it )
     {
@@ -279,6 +309,14 @@ const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 
     const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
     return pIFCMap;
+}
+
+bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    if (!m_pServerFont[0])
+        return false;
+
+    return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 // ---------------------------------------------------------------------------
@@ -422,7 +460,7 @@ void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+sal_Bool SvpSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -432,7 +470,7 @@ sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
     return sal_True;
@@ -440,7 +478,7 @@ sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 
 // ---------------------------------------------------------------------------
 
-sal_Bool SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPolyPoly )
+sal_Bool SvpSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex, B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -450,7 +488,7 @@ sal_Bool SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPol
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
         return sal_True;
 
@@ -486,7 +524,7 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
             continue;
 
         // get the glyph's alpha mask and adjust the drawing position
-        nGlyphIndex &= ~GF_FONTMASK;
+        nGlyphIndex &= GF_IDXMASK;
         B2IPoint aDstPoint( aPos.X(), aPos.Y() );
         BitmapDeviceSharedPtr aAlphaMask
             = rGlyphPeer.GetGlyphBmp( *pSF, nGlyphIndex, m_eTextFmt, aDstPoint );
@@ -500,3 +538,5 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
 }
 
 // ===========================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

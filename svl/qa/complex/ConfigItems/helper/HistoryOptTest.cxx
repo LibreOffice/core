@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,14 +42,14 @@
 namespace css = ::com::sun::star;
 
 //=============================================================================
-static const ::rtl::OUString MESSAGE_CLEAR_FAILED       = ::rtl::OUString::createFromAscii("Clearing the list failed.");
-static const ::rtl::OUString MESSAGE_SETSIZE_FAILED     = ::rtl::OUString::createFromAscii("Setting a new size for a list failed.");
-static const ::rtl::OUString MESSAGE_MISS_HISTORY       = ::rtl::OUString::createFromAscii("Could not get config access to history list inside config.");
-static const ::rtl::OUString MESSAGE_MISS_ITEMLIST      = ::rtl::OUString::createFromAscii("Could not get config access to item list inside config.");
-static const ::rtl::OUString MESSAGE_MISS_ORDERLIST     = ::rtl::OUString::createFromAscii("Could not get config access to order list inside config.");
-static const ::rtl::OUString MESSAGE_MISS_ITEM          = ::rtl::OUString::createFromAscii("Could not locate item.");
-static const ::rtl::OUString MESSAGE_UNEXPECTED_ITEM    = ::rtl::OUString::createFromAscii("Found an unexpected item.");
-static const ::rtl::OUString MESSAGE_WRONG_ORDER        = ::rtl::OUString::createFromAscii("Wrong order in history list.");
+static const ::rtl::OUString MESSAGE_CLEAR_FAILED       (RTL_CONSTASCII_USTRINGPARAM("Clearing the list failed."));
+static const ::rtl::OUString MESSAGE_SETSIZE_FAILED     (RTL_CONSTASCII_USTRINGPARAM("Setting a new size for a list failed."));
+static const ::rtl::OUString MESSAGE_MISS_HISTORY       (RTL_CONSTASCII_USTRINGPARAM("Could not get config access to history list inside config."));
+static const ::rtl::OUString MESSAGE_MISS_ITEMLIST      (RTL_CONSTASCII_USTRINGPARAM("Could not get config access to item list inside config."));
+static const ::rtl::OUString MESSAGE_MISS_ORDERLIST     (RTL_CONSTASCII_USTRINGPARAM("Could not get config access to order list inside config."));
+static const ::rtl::OUString MESSAGE_MISS_ITEM          (RTL_CONSTASCII_USTRINGPARAM("Could not locate item."));
+static const ::rtl::OUString MESSAGE_UNEXPECTED_ITEM    (RTL_CONSTASCII_USTRINGPARAM("Found an unexpected item."));
+static const ::rtl::OUString MESSAGE_WRONG_ORDER        (RTL_CONSTASCII_USTRINGPARAM("Wrong order in history list."));
 
 //=============================================================================
 HistoryOptTest::HistoryOptTest()
@@ -464,13 +465,13 @@ void HistoryOptTest::impl_clearList(const ::rtl::OUString& sList)
     css::uno::Reference< css::beans::XPropertySet >       xFirstItem;
     css::uno::Sequence< ::rtl::OUString >                 sFileList;
 
-    if (sList.equalsAscii("PickList"))
+    if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PickList")))
         m_xCfg->getByName(s_sPickList) >>= xListAccess;
 
-    else if (sList.equalsAscii("URLHistory"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLHistory")))
         m_xCfg->getByName(s_sURLHistory) >>= xListAccess;
 
-    else if (sList.equalsAscii("HelpBookmarks"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpBookmarks")))
         m_xCfg->getByName(s_sHelpBookmarks) >>= xListAccess;
 
     if (xListAccess.is())
@@ -501,13 +502,13 @@ sal_Bool HistoryOptTest::impl_isListEmpty(const ::rtl::OUString& sList)
     css::uno::Reference< css::container::XNameAccess > xOrderList;
     sal_Bool bRet = sal_True;
 
-    if (sList.equalsAscii("PickList"))
+    if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PickList")))
         m_xCfg->getByName(s_sPickList) >>= xListAccess;
 
-    else if (sList.equalsAscii("URLHistory"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLHistory")))
         m_xCfg->getByName(s_sURLHistory) >>= xListAccess;
 
-    else if (sList.equalsAscii("HelpBookmarks"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpBookmarks")))
         m_xCfg->getByName(s_sHelpBookmarks) >>= xListAccess;
 
     if (xListAccess.is())
@@ -539,7 +540,7 @@ void HistoryOptTest::impl_checkGetSize(const ::rtl::OUString& sList)
     sal_uInt32 nSize  = 0;
     sal_uInt32 nSize_ = 0;
 
-    if (sList.equalsAscii("PickList"))
+    if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PickList")))
     {
         nSize  = aHistoryOpt.GetSize(ePICKLIST);
 
@@ -552,7 +553,7 @@ void HistoryOptTest::impl_checkGetSize(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetSize(ePICKLIST) error!")), 0);
     }
 
-    else if (sList.equalsAscii("URLHistory"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLHistory")))
     {
         nSize  = aHistoryOpt.GetSize(eHISTORY);
 
@@ -566,7 +567,7 @@ void HistoryOptTest::impl_checkGetSize(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetSize(eHISTORY) error!")), 0);
     }
 
-    else if (sList.equalsAscii("HelpBookmarks"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpBookmarks")))
     {
         nSize  = aHistoryOpt.GetSize(eHELPBOOKMARKS);
 
@@ -590,7 +591,7 @@ void HistoryOptTest::impl_checkSetSize(const ::rtl::OUString& sList)
     sal_uInt32 nSize  = 0;
     sal_uInt32 nSize_ = 0;
 
-    if (sList.equalsAscii("PickList"))
+    if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PickList")))
     {
         xSet->getPropertyValue(s_sPickListSize) >>= nSize;
         aHistoryOpt.SetSize(ePICKLIST, (nSize+1));
@@ -601,7 +602,7 @@ void HistoryOptTest::impl_checkSetSize(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetSize(ePICKLIST) error!")), 0);
     }
 
-    else if (sList.equalsAscii("URLHistory"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLHistory")))
     {
         xSet->getPropertyValue(s_sURLHistorySize) >>= nSize;
         aHistoryOpt.SetSize(eHISTORY, (nSize+1));
@@ -612,7 +613,7 @@ void HistoryOptTest::impl_checkSetSize(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SetSize(eHISTORY) error!")), 0);
     }
 
-    else if (sList.equalsAscii("HelpBookmarks"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpBookmarks")))
     {
         xSet->getPropertyValue(s_sHelpBookmarksSize) >>= nSize;
         aHistoryOpt.SetSize(eHELPBOOKMARKS, (nSize+1));
@@ -628,7 +629,7 @@ void HistoryOptTest::impl_checkSetSize(const ::rtl::OUString& sList)
 // test SvtHistoryOptions::Clear()
 void HistoryOptTest::impl_checkClear(const ::rtl::OUString& sList)
 {
-    if (sList.equalsAscii("PickList"))
+    if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PickList")))
     {
         aHistoryOpt.Clear(ePICKLIST);
         if ( !impl_isListEmpty(s_sPickList) )
@@ -636,7 +637,7 @@ void HistoryOptTest::impl_checkClear(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Clear(ePICKLIST) error!")), 0);
     }
 
-    else if (sList.equalsAscii("URLHistory"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLHistory")))
     {
         aHistoryOpt.Clear(eHISTORY);
         if ( !impl_isListEmpty(s_sURLHistory) )
@@ -644,7 +645,7 @@ void HistoryOptTest::impl_checkClear(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Clear(eHISTORY) error!")), 0);
     }
 
-    else if (sList.equalsAscii("HelpBookmarks"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpBookmarks")))
     {
         aHistoryOpt.Clear(eHELPBOOKMARKS);
         if ( !impl_isListEmpty(s_sHelpBookmarks) )
@@ -657,14 +658,14 @@ void HistoryOptTest::impl_checkClear(const ::rtl::OUString& sList)
 // test SvtHistoryOptions::GetList()
 void HistoryOptTest::impl_checkGetList(const ::rtl::OUString& sList)
 {
-    if (sList.equalsAscii("PickList"))
+    if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PickList")))
     {
         impl_clearList(s_sPickList);
         aHistoryOpt.AppendItem( ePICKLIST  ,
-            ::rtl::OUString::createFromAscii("file:///c/test1"),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii("") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///c/test1")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aHistoryList = aHistoryOpt.GetList( ePICKLIST );
 
         if ( aHistoryList.getLength()==0 )
@@ -672,14 +673,14 @@ void HistoryOptTest::impl_checkGetList(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetList(ePICKLIST) error!")), 0);
     }
 
-    else if (sList.equalsAscii("URLHistory"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLHistory")))
     {
         impl_clearList(s_sURLHistory);
         aHistoryOpt.AppendItem( eHISTORY  ,
-            ::rtl::OUString::createFromAscii("file:///c/test1"),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii("") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///c/test1")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aHistoryList = aHistoryOpt.GetList( eHISTORY );
 
         if ( aHistoryList.getLength()==0 )
@@ -687,14 +688,14 @@ void HistoryOptTest::impl_checkGetList(const ::rtl::OUString& sList)
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GetList(eHISTORY) error!")), 0);
     }
 
-    else if (sList.equalsAscii("HelpBookmarks"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpBookmarks")))
     {
         impl_clearList(s_sHelpBookmarks);
         aHistoryOpt.AppendItem( eHELPBOOKMARKS  ,
-            ::rtl::OUString::createFromAscii("file:///c/test1"),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii("") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///c/test1")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aHistoryList = aHistoryOpt.GetList( eHELPBOOKMARKS );
 
         if ( aHistoryList.getLength()==0 )
@@ -705,7 +706,7 @@ void HistoryOptTest::impl_checkGetList(const ::rtl::OUString& sList)
 
 void HistoryOptTest::impl_checkAppendItem(const ::rtl::OUString& sList)
 {
-    if (sList.equalsAscii("PickList"))
+    if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PickList")))
     {
         impl_clearList(s_sPickList);
         sal_Int32 nListSize = aHistoryOpt.GetSize(ePICKLIST);
@@ -713,18 +714,18 @@ void HistoryOptTest::impl_checkAppendItem(const ::rtl::OUString& sList)
         for (sal_Int32 i=0; i<nListSize; ++i)
             aHistoryOpt.AppendItem( ePICKLIST  ,
             ::rtl::OUString::valueOf(i),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii("") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
 
         aHistoryOpt.AppendItem( ePICKLIST  ,
             ::rtl::OUString::valueOf(nListSize),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii("") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
     }
 
-    else if (sList.equalsAscii("URLHistory"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URLHistory")))
     {
         impl_clearList(s_sURLHistory);
         sal_Int32 nListSize = aHistoryOpt.GetSize(eHISTORY);
@@ -732,18 +733,18 @@ void HistoryOptTest::impl_checkAppendItem(const ::rtl::OUString& sList)
         for (sal_Int32 i=0; i<nListSize; ++i)
             aHistoryOpt.AppendItem( eHISTORY  ,
             ::rtl::OUString::valueOf(i),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii("") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
 
         aHistoryOpt.AppendItem( eHISTORY  ,
             ::rtl::OUString::valueOf(nListSize),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii(""),
-            ::rtl::OUString::createFromAscii("") );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
     }
 
-    else if (sList.equalsAscii("HelpBookmarks"))
+    else if (sList.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HelpBookmarks")))
     {
         //impl_clearList(s_sHelpBookmarks);
         //sal_Int32 nListSize = aHistoryOpt.GetSize(eHELPBOOKMARKS);
@@ -751,15 +752,15 @@ void HistoryOptTest::impl_checkAppendItem(const ::rtl::OUString& sList)
         //for (sal_Int32 i=0; i<nListSize; ++i)
         //  aHistoryOpt.AppendItem( eHELPBOOKMARKS  ,
         //  ::rtl::OUString::valueOf(i),
-        //  ::rtl::OUString::createFromAscii(""),
-        //  ::rtl::OUString::createFromAscii(""),
-        //  ::rtl::OUString::createFromAscii("") );
+        //  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+        //  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+        //  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
 
         //aHistoryOpt.AppendItem( eHELPBOOKMARKS  ,
         //  ::rtl::OUString::valueOf(nListSize),
-        //  ::rtl::OUString::createFromAscii(""),
-        //  ::rtl::OUString::createFromAscii(""),
-        //  ::rtl::OUString::createFromAscii("") );
+        //  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+        //  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+        //  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
     }
 }
 
@@ -796,3 +797,5 @@ void HistoryOptTest::impl_checkHelpBookmarks()
     impl_checkAppendItem(s_sHelpBookmarks);
 }
 */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

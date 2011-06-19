@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,10 +75,10 @@ rtl::OUString getParentName( const rtl::OUString& aFileName )
     rtl::OUString aParent = aFileName.copy( 0,lastIndex );
 
     if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-        aParent += rtl::OUString::createFromAscii( "/" );
+        aParent += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     if( 0 == aParent.compareToAscii( "file://" ) )
-        aParent = rtl::OUString::createFromAscii( "file:///" );
+        aParent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
 
     return aParent;
 }
@@ -202,7 +203,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     unsigned const nRadix = 36;
     unsigned long const nMax = (nRadix*nRadix*nRadix*nRadix*nRadix*nRadix);
     String aName( rName );
-    aName += String::CreateFromAscii( "sv" );
+    aName += String::CreateFromAscii( "lu" );
 
     rName.Erase();
     unsigned long nSeed = Time::GetSystemTicks() % nMax;
@@ -215,8 +216,14 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
 
         if ( bDir )
         {
+#ifdef UNX /* RW permission for the user only! */
+            mode_t old_mode = umask(077);
+#endif
             FileBase::RC err = Directory::create( aTmp );
-            if (  err == FileBase::E_None )
+#ifdef UNX
+            umask(old_mode);
+#endif
+            if ( err == FileBase::E_None )
             {
                 // !bKeep: only for creating a name, not a file or directory
                 if ( bKeep || Directory::remove( aTmp ) == FileBase::E_None )
@@ -233,13 +240,12 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
         {
             DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
             File aFile( aTmp );
-#ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
+#ifdef UNX /* RW permission for the user only! */
+            mode_t old_mode = umask(077);
 #endif
             FileBase::RC err = aFile.open( osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 #ifdef UNX
-umask(old_mode);
+            umask(old_mode);
 #endif
             if (  err == FileBase::E_None )
             {
@@ -253,7 +259,7 @@ umask(old_mode);
                  // but if there is a folder with such name proceed further
 
                  DirectoryItem aTmpItem;
-                 FileStatus aTmpStatus( FileStatusMask_Type );
+                 FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
                  if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
                    || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
                    || aTmpStatus.getFileType() != FileStatus::Directory )
@@ -306,7 +312,7 @@ void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _
 #ifdef UNX
 umask(old_mode);
 #endif
-            if ( err == FileBase::E_None )
+            if ( err == FileBase::E_None || err == FileBase::E_NOLCK )
             {
                 _rImpl.aName = aTmp;
                 aFile.close();
@@ -318,7 +324,7 @@ umask(old_mode);
                 // but if there is a folder with such name proceed further
 
                 DirectoryItem aTmpItem;
-                FileStatus aTmpStatus( FileStatusMask_Type );
+                FileStatus aTmpStatus( osl_FileStatus_Mask_Type );
                 if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
                   || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
                   || aTmpStatus.getFileType() != FileStatus::Directory )
@@ -491,3 +497,5 @@ String TempFile::GetTempNameBaseDirectory()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

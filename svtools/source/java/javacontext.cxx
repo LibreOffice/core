@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,14 +38,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
 namespace svt
 {
-
-JavaContext::JavaContext( const Reference< XCurrentContext > & ctx )
-    :
-    m_aRefCount(0),
-    m_xNextContext( ctx ),
-    m_bShowErrorsOnce(false)
-{
-}
 
 JavaContext::JavaContext( const Reference< XCurrentContext > & ctx,
                           bool bShowErrorsOnce)
@@ -104,3 +97,5 @@ Any SAL_CALL JavaContext::getValueByName( const ::rtl::OUString& Name) throw (Ru
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

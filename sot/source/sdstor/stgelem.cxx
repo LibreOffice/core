@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -268,11 +269,11 @@ static String ToUpperUnicode( const String & rStr )
     // I don't know the locale, so en_US is hopefully fine
     /*
     com.sun.star.lang.Locale aLocale;
-    aLocale.Language = OUString::createFromAscii( "en" );
-    aLocale.Country  = OUString::createFromAscii( "US" );
+    aLocale.Language = OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+    aLocale.Country  = OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
     */
-    static rtl::OUString aEN=rtl::OUString::createFromAscii( "en" );
-    static rtl::OUString aUS=rtl::OUString::createFromAscii( "US" );
+    static rtl::OUString aEN(RTL_CONSTASCII_USTRINGPARAM("en"));
+    static rtl::OUString aUS(RTL_CONSTASCII_USTRINGPARAM("US"));
     static CharClass aCC( com::sun::star::lang::Locale( aEN, aUS, rtl::OUString() ) );
     return aCC.toUpper( rStr, 0, rStr.Len() );
 }
@@ -423,3 +424,4 @@ void StgEntry::Store( void* pTo )
       << nUnknown;                  // 7C unknown
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

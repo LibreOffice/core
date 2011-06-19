@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include "com/sun/star/view/PrintableState.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 
 struct SalPrinterInfoQueue;
@@ -553,7 +554,7 @@ public:
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {
     protected:
-    std::hash_map< rtl::OUString, com::sun::star::uno::Any, rtl::OUStringHash >        m_aPropertyMap;
+    boost::unordered_map< rtl::OUString, com::sun::star::uno::Any, rtl::OUStringHash >        m_aPropertyMap;
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >              m_aUIProperties;
 
     public:
@@ -565,7 +566,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     {}
 
     /* process a new set of properties
-     * merges changed properties and returns "true" if any occured
+     * merges changed properties and returns "true" if any occurred
      * if the optional output set is not NULL then the names of the changed properties are returned
     **/
     bool processProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp,
@@ -699,3 +700,5 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
 
 #endif  // _SV_PRINT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

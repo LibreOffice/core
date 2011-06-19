@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <vcl/graph.hxx>
 #include "graphic.hxx"
+#include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
 
@@ -113,19 +114,15 @@ void SAL_CALL Graphic::release() throw()
 
 // ------------------------------------------------------------------------------
 
+namespace
+{
+    class theGraphicUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicUnoTunnelId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
     throw(uno::RuntimeException)
 {
-    vos::OGuard                         aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGraphicUnoTunnelId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------
@@ -235,7 +232,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
 
 awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     ::Size aVclSize;
     if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
@@ -248,7 +245,7 @@ awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
 
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
     {
@@ -266,7 +263,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
 
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
     {
@@ -298,3 +295,5 @@ sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,10 @@
 #ifndef _SV_SALINST_H
 #define _SV_SALINST_H
 
-#include "vos/mutex.hxx"
-#include "vos/thread.hxx"
+#include "osl/mutex.hxx"
+#include "osl/thread.hxx"
 #include "osl/conditn.h"
+#include <vcl/solarmutex.hxx>
 
 #include "aqua/aquavcltypes.h"
 
@@ -46,10 +48,10 @@ class Image;
 // - SalYieldMutex -
 // -----------------
 
-class SalYieldMutex : public vos::OMutex
+class SalYieldMutex : public vcl::SolarMutexObject
 {
     sal_uLong                                       mnCount;
-    vos::OThread::TThreadIdentifier             mnThreadId;
+    oslThreadIdentifier                         mnThreadId;
 
 public:
                                                 SalYieldMutex();
@@ -57,10 +59,10 @@ public:
     virtual void                                release();
     virtual sal_Bool                            tryToAcquire();
     sal_uLong                                       GetAcquireCount() const { return mnCount; }
-    vos::OThread::TThreadIdentifier             GetThreadId() const { return mnThreadId; }
+    oslThreadIdentifier                         GetThreadId() const { return mnThreadId; }
 };
 
-#define YIELD_GUARD vos::OGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
+#define YIELD_GUARD osl::SolarGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
 
 
 // -------------------
@@ -92,7 +94,7 @@ class AquaSalInstance : public SalInstance
 public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     rtl::OUString                           maDefaultPrinter;
-    vos::OThread::TThreadIdentifier         maMainThread;
+    oslThreadIdentifier                     maMainThread;
     bool                                    mbWaitingYield;
     int                                     mnActivePrintJobs;
     std::list< SalUserEvent >               maUserEvents;
@@ -131,7 +133,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
-    virtual vos::IMutex*        GetYieldMutex();
+    virtual osl::SolarMutex*    GetYieldMutex();
     virtual sal_uLong               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( sal_uLong nCount );
     virtual bool                CheckYieldMutex();
@@ -201,3 +203,5 @@ CGImageRef CreateCGImage( const Image& );
 NSImage*   CreateNSImage( const Image& );
 
 #endif // _SV_SALINST_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

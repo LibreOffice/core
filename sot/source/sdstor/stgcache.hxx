@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #define _STGCACHE_HXX
 
 #include <osl/endian.h>
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 #include <stgelem.hxx>
 
 class UCBStorageStream;
@@ -130,3 +127,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

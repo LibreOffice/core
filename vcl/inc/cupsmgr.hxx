@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,13 +49,13 @@ struct FPtrHash
 class CUPSManager : public PrinterInfoManager
 {
     CUPSWrapper*                                                m_pCUPSWrapper;
-    std::hash_map< FILE*, rtl::OString, FPtrHash >              m_aSpoolFiles;
+    boost::unordered_map< FILE*, rtl::OString, FPtrHash >               m_aSpoolFiles;
     int                                                         m_nDests;
     void*                                                       m_pDests;
     bool                                                        m_bNewDests;
-    std::hash_map< rtl::OUString, int, rtl::OUStringHash >      m_aCUPSDestMap;
+    boost::unordered_map< rtl::OUString, int, rtl::OUStringHash >       m_aCUPSDestMap;
 
-    std::hash_map< rtl::OUString, PPDContext, rtl::OUStringHash > m_aDefaultContexts;
+    boost::unordered_map< rtl::OUString, PPDContext, rtl::OUStringHash > m_aDefaultContexts;
 
     rtl::OString                                                m_aUser;
     // this is a security risk, but the CUPS API demands
@@ -106,3 +107,5 @@ public:
 } // namespace psp
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

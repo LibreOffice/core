@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,7 +121,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
             if ( pTabs )
             {
                 // opt: String fuer TabStop als Konstante
-                static const ::rtl::OUString aTabStopName( ::rtl::OUString::createFromAscii( "Tabstop" ) );
+                static const ::rtl::OUString aTabStopName( RTL_CONSTASCII_USTRINGPARAM("Tabstop") );
 
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
                 Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
@@ -132,7 +133,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
         }
         else
         {
-            DBG_TRACE( "ImplCreateComponentSequence: Control not found" );
+            OSL_TRACE( "ImplCreateComponentSequence: Control not found" );
             bOK = sal_False;
         }
     }
@@ -262,7 +263,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
     Reference< XWindow > * pComponents = aCompSeq.getArray();
 
     ComponentEntryList aCtrls;
-    sal_uInt32 n;
+    size_t n;
     for ( n = 0; n < nCtrls; n++ )
     {
         XWindow* pC = (XWindow*)pComponents[n].get();
@@ -273,31 +274,37 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
         pE->aPos.Y() = aPosSize.Y;
 
         sal_uInt16 nPos;
-        for ( nPos = 0; nPos < aCtrls.Count(); nPos++ )
+        for ( nPos = 0; nPos < aCtrls.size(); nPos++ )
         {
-            ComponentEntry* pEntry = aCtrls.GetObject( nPos );
+            ComponentEntry* pEntry = aCtrls[ nPos ];
             if ( pEntry->aPos.Y() >= pE->aPos.Y() )
             {
                 while ( pEntry && ( pEntry->aPos.Y() == pE->aPos.Y() )
                                 && ( pEntry->aPos.X() < pE->aPos.X() ) )
                 {
-                    pEntry = aCtrls.GetObject( ++nPos );
+                    pEntry = aCtrls[ ++nPos ];
                 }
                 break;
             }
         }
-        aCtrls.Insert( pE, nPos );
+        if ( nPos < aCtrls.size() ) {
+            ComponentEntryList::iterator it = aCtrls.begin();
+            ::std::advance( it, nPos );
+            aCtrls.insert( it, pE );
+        } else {
+            aCtrls.push_back( pE );
+        }
     }
 
     Sequence< Reference< XControlModel > > aNewSeq( nCtrls );
     for ( n = 0; n < nCtrls; n++ )
     {
-        ComponentEntry* pE = aCtrls.GetObject( n );
+        ComponentEntry* pE = aCtrls[ n ];
         Reference< XControl >  xUC( pE->pComponent, UNO_QUERY );
         aNewSeq.getArray()[n] = xUC->getModel();
         delete pE;
     }
-    aCtrls.Clear();
+    aCtrls.clear();
 
     mxModel->setControlModels( aNewSeq );
 }
@@ -426,3 +433,5 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
     }
     return Reference< XControl > ();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

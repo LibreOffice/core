@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 
-#ifndef _DFLVCONT_HXX_
 #include "ftransl.hxx"
-#endif
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include "..\misc\ImplHelper.hxx"
 
@@ -59,12 +58,10 @@
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
 #define CPPUTYPE_OUSTR            getCppuType( (const ::rtl::OUString*) 0 )
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
-#define OUSTR( str )              OUString::createFromAscii( #str )
-#define OUSTR_( str )             OUString::createFromAscii( str )
-#define EMPTY_OUSTR               OUString::createFromAscii( "" )
-//#define PRIVATE_OO                  OUString::createFromAscii( "application/x-openoffice;" "windows_formatname=" )
+#define OUSTR( str )              OUString(RTL_CONSTASCII_USTRINGPARAM( #str ))
+#define EMPTY_OUSTR               OUString()
 
-const rtl::OUString Windows_FormatName = rtl::OUString::createFromAscii("windows_formatname");
+const rtl::OUString Windows_FormatName (RTL_CONSTASCII_USTRINGPARAM("windows_formatname"));
 const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
 const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const ::rtl::OUString*)0);
 
@@ -72,7 +69,7 @@ const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const ::r
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace osl;
 using namespace cppu;
 using namespace std;
@@ -90,7 +87,7 @@ namespace MODULE_PRIVATE
     Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.DataFormatTranslator");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.DataFormatTranslator"));
         return aRet;
     }
 }
@@ -184,15 +181,15 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content-type detected!" );
+        OSL_FAIL( "Invalid content-type detected!" );
     }
     catch( NoSuchElementException& )
     {
-        OSL_ENSURE( sal_False, "Illegal content-type parameter" );
+        OSL_FAIL( "Illegal content-type parameter" );
     }
     catch( ... )
     {
-        OSL_ENSURE( sal_False, "Unexpected error" );
+        OSL_FAIL( "Unexpected error" );
         throw;
     }
 
@@ -225,7 +222,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
         findDataFlavorForNativeFormatName( nativeFormatName, aFlavor );
     }
     else
-        OSL_ENSURE( sal_False, "Invalid data type received" );
+        OSL_FAIL( "Invalid data type received" );
 
     return aFlavor;
 }
@@ -237,7 +234,7 @@ DataFlavor SAL_CALL CDataFormatTranslator::getDataFlavorFromSystemDataType( cons
 OUString SAL_CALL CDataFormatTranslator::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ));
 }
 
 // -------------------------------------------------
@@ -647,3 +644,5 @@ DataFlavor SAL_CALL CDataFormatTranslator::mkDataFlv(const OUString& cnttype, co
     dflv.DataType             = dtype;
     return dflv;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

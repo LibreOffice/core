@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 
 
 
@@ -274,3 +273,4 @@ void TabDialog::AdjustLayout()
     ImplPosControls();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

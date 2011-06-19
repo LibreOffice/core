@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,10 @@
 #include "vcl/sv.h"
 #include "vcl/dllapi.h"
 #include "vcl/salgtype.hxx"
-#include "vos/thread.hxx"
+#include "osl/thread.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/salnativewidgets.hxx"
+#include "sallayout.hxx"
 
 #include <map>
 
@@ -197,7 +199,7 @@ public:
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) = 0;
     // get the depth of the device
-    virtual sal_uInt16          GetBitCount() = 0;
+    virtual sal_uInt16          GetBitCount() const = 0;
     // get the width of the device
     virtual long            GetGraphicsWidth() const = 0;
 
@@ -233,6 +235,8 @@ public:
     virtual sal_uLong           GetKernPairs( sal_uLong nMaxPairCount, ImplKernPairData* ) = 0;
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
+    // get the layout capabilities of the current font
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* ) = 0;
     // graphics should call ImplAddDevFontSubstitute on supplied
@@ -295,8 +299,8 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) = 0;
 
-    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& ) = 0;
-    virtual sal_Bool                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& ) = 0;
+    virtual sal_Bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;
+    virtual sal_Bool                    GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& ) = 0;
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) = 0;
     virtual void                     DrawServerFontLayout( const ServerFontLayout& ) = 0;
@@ -484,3 +488,5 @@ public:
 };
 
 #endif // _SV_SALGDI_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -467,10 +467,12 @@ ModalDialog RID_FONTNAMEDIALOG
     };
     Text [ en-US ] = "Fonts";
 };
+
 String RID_BXT_TESTPAGE
 {
     Text [ en-US ] = "Test page";
 };
+
 String RID_BXT_ENVIRONMENT
 {
     Text [ en-US ] = "Wrong environment";
@@ -506,59 +508,46 @@ Bitmap RID_BMP_PRINTER
     File = "source/printer_large.png";
 };
 
-Bitmap RID_BMP_SMALL_PRINTER_HC
-{
-    File = "source/printer_16_h.png";
-};
-
-Bitmap RID_BMP_SMALL_FAX_HC
-{
-    File = "source/fax_16_h.png";
-};
-
-Bitmap RID_BMP_SMALL_PDF_HC
-{
-    File = "source/printpdf_16_h.png";
-};
-
-Bitmap RID_BMP_PRINTER_HC
-{
-    File = "source/printer_40x48_h.png";
-};
-
-
 String RID_AFMERROR_OK
 {
     Text [ en-US ] = "No error";
 };
+
 String RID_AFMERROR_NO_FONT_NAME
 {
     Text [ en-US ] = "The metric does not contain a 'FontName' entry.";
 };
+
 String RID_AFMERROR_NO_FULL_NAME
 {
     Text [ en-US ] = "The metric does not contain a 'FullName' entry.";
 };
+
 String RID_AFMERROR_NO_FAMILY_NAME
 {
     Text [ en-US ] = "The metric does not contain a 'FamilyName' entry.";
 };
+
 String RID_AFMERROR_MOVETO_FAILED
 {
     Text [ en-US ] = "The converted metric could not be written.";
 };
+
 String RID_AFMERROR_STREAM_READ_FAILED
 {
     Text [ en-US ] = "The metric could not be read.";
 };
+
 String RID_AFMERROR_STREAM_WRITE_FAILED
 {
     Text [ en-US ] = "A temporary file could not be created.";
 };
+
 STRING RID_AFMERROR_NOT_A_METRIC
 {
     Text [ en-US ] = "The file does not contain a metric.";
 };
+
 String RID_AFMERROR_BOX_TXT
 {
     Text [ en-US ] = "The metric\n\n%s\n\ncould not be converted for the following reason:\n\n";

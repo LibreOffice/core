@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
         // to a defined value
         if (FAILED(hr_marshal))
         {
-            OSL_ENSURE(sal_False, "marshalling failed");
+            OSL_FAIL("marshalling failed");
 
             #if OSL_DEBUG_LEVEL > 0
             HGLOBAL hGlobal =
@@ -376,3 +377,5 @@ HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** pp
     }
     return hr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

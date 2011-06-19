@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,7 @@
 #include <subedit.hxx>
 #include <controldata.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -56,15 +57,11 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#endif
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
-#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-#endif
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -77,6 +74,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <rtl/memory.h>
+#include <sal/macros.h>
 
 #include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
@@ -514,7 +512,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -801,7 +799,7 @@ uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 //    if ( !xBI.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        uno::Reference < XInterface > xI = xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
@@ -821,7 +819,7 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenc
 //    if ( !xISC.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        uno::Reference < XInterface > xI = xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.InputSequenceChecker")) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
@@ -883,12 +881,12 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
 
         // determine if input-sequence-checking should be applied or not
         //
-        static OUString sModule( OUString::createFromAscii( "/org.openoffice.Office.Common/I18N" ) );
-        static OUString sRelNode( OUString::createFromAscii( "CTL" ) );
-        static OUString sCTLSequenceChecking( OUString::createFromAscii( "CTLSequenceChecking" ) );
-        static OUString sCTLSequenceCheckingRestricted( OUString::createFromAscii( "CTLSequenceCheckingRestricted" ) );
-        static OUString sCTLSequenceCheckingTypeAndReplace( OUString::createFromAscii( "CTLSequenceCheckingTypeAndReplace" ) );
-        static OUString sCTLFont( OUString::createFromAscii( "CTLFont" ) );
+        static OUString sModule( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Common/I18N") );
+        static OUString sRelNode( RTL_CONSTASCII_USTRINGPARAM("CTL") );
+        static OUString sCTLSequenceChecking( RTL_CONSTASCII_USTRINGPARAM("CTLSequenceChecking") );
+        static OUString sCTLSequenceCheckingRestricted( RTL_CONSTASCII_USTRINGPARAM("CTLSequenceCheckingRestricted") );
+        static OUString sCTLSequenceCheckingTypeAndReplace( RTL_CONSTASCII_USTRINGPARAM("CTLSequenceCheckingTypeAndReplace") );
+        static OUString sCTLFont( RTL_CONSTASCII_USTRINGPARAM("CTLFont") );
         //
         sal_Bool bCTLSequenceChecking               = sal_False;
         sal_Bool bCTLSequenceCheckingRestricted     = sal_False;
@@ -1178,7 +1176,7 @@ void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
 
     if( aText.Len() )
     {
-        if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+        if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
         {
             pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
@@ -1302,7 +1300,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32   nDXBuffer[256];
     sal_Int32*  pDXBuffer = NULL;
     sal_Int32*  pDX = nDXBuffer;
-    if( 2*aText.Len() > xub_StrLen(sizeof(nDXBuffer)/sizeof(nDXBuffer[0])) )
+    if( 2*aText.Len() > xub_StrLen(SAL_N_ELEMENTS(nDXBuffer)) )
     {
         pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
         pDX = pDXBuffer;
@@ -2097,9 +2095,6 @@ void Edit::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_HIDEDISABLED )
-            pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
 
         if ( !maSelection.Len() )
         {
@@ -2936,13 +2931,21 @@ PopupMenu* Edit::CreatePopupMenu()
         return new PopupMenu();
 
     PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, *pResMgr ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, KeyCode( KEYFUNC_UNDO ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_CUT, KeyCode( KEYFUNC_CUT ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, KeyCode( KEYFUNC_PASTE ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, KeyCode( KEYFUNC_DELETE ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, sal_False, sal_True, sal_False, sal_False ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, sal_True, sal_True, sal_False, sal_False ) );
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    if ( rStyleSettings.GetHideDisabledMenuItems() )
+        pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
+    else
+        pPopup->SetMenuFlags ( MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
+    if ( rStyleSettings.GetAcceleratorsInContextMenus() )
+    {
+        pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, KeyCode( KEYFUNC_UNDO ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_CUT, KeyCode( KEYFUNC_CUT ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, KeyCode( KEYFUNC_PASTE ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, KeyCode( KEYFUNC_DELETE ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, sal_False, sal_True, sal_False, sal_False ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, sal_True, sal_True, sal_False, sal_False ) );
+    }
     return pPopup;
 }
 
@@ -2956,7 +2959,7 @@ void Edit::DeletePopupMenu( PopupMenu* pMenu )
 // ::com::sun::star::datatransfer::dnd::XDragGestureListener
 void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( !IsTracking() && maSelection.Len() &&
          !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == sal_False) ) // Kein Mehrfach D&D
@@ -2994,7 +2997,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
 // ::com::sun::star::datatransfer::dnd::XDragSourceListener
 void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( rDSDE.DropSuccess && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
     {
@@ -3020,7 +3023,7 @@ void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDro
 // ::com::sun::star::datatransfer::dnd::XDropTargetListener
 void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     sal_Bool bChanges = sal_False;
     if ( !mbReadOnly && mpDDInfo )
@@ -3089,14 +3092,14 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
 
 void Edit::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     ImplHideDDCursor();
 }
 
 void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
 
@@ -3158,3 +3161,5 @@ Selection Edit::GetSurroundingTextSelection() const
 {
   return GetSelection();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,30 +39,18 @@
 #define INCLUDED_VECTOR
 #endif
 
-#ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
 
-#ifndef __com_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#endif
 
-#ifndef __COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
 #include <com/sun/star/util/URL.hpp>
 
-#ifndef __COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
 #include <vcl/keycod.hxx>
 #include <vcl/evntpost.hxx>
 #include <osl/mutex.h>
@@ -285,3 +274,5 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 #undef css
 
 #endif // INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define HELPCOMPILER_HXX
 
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <list>
 #include <fstream>
@@ -37,8 +38,8 @@
 #include <sstream>
 #include <algorithm>
 #include <ctype.h>
-#ifdef SYSTEM_DB
-#include <db.h>
+#ifdef SYSTEM_DB_HEADER
+#include SYSTEM_DB_HEADER
 #else
 #include <berkeleydb/db.h>
 #endif
@@ -222,11 +223,11 @@ struct SuperFastHash
 
 #define pref_hash joaat_hash
 
-typedef std::hash_map<std::string, std::string, pref_hash> Stringtable;
+typedef boost::unordered_map<std::string, std::string, pref_hash> Stringtable;
 typedef std::list<std::string> LinkedList;
 typedef std::vector<std::string> HashSet;
 
-typedef std::hash_map<std::string, LinkedList, pref_hash> Hashtable;
+typedef boost::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
 
 class StreamTable
 {
@@ -281,6 +282,7 @@ struct HelpProcessingException
     HelpProcessingException( HelpProcessingErrorClass eErrorClass, const std::string& aErrorMsg )
         : m_eErrorClass( eErrorClass )
         , m_aErrorMsg( aErrorMsg )
+        , m_nXMLParsingLine( 0 )
     {}
     HelpProcessingException( const std::string& aErrorMsg, const std::string& aXMLParsingFile, int nXMLParsingLine )
         : m_eErrorClass( HELPPROCESSING_XMLPARSING_ERROR )
@@ -322,4 +324,4 @@ private:
 
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

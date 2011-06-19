@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#define WINVER 0x0500
+
 #include <string.h>
+
+#include <svsys.h>
 
 #include <osl/module.h>
 
 #include <tools/urlobj.hxx>
-#include <tools/svwin.h>
+
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
@@ -81,14 +86,14 @@
     }                                                                       \
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))\
     {                                                                       \
-        DBG_ERROR( mes );                                                   \
+        OSL_FAIL( mes );                                                   \
         p->markInvalid();                                                   \
     }
 #define CATCH_DRIVER_EX_END_2(mes)                                         \
     }                                                                       \
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))\
     {                                                                       \
-        DBG_ERROR( mes );                                                   \
+        OSL_FAIL( mes );                                                   \
     }
 #endif
 
@@ -97,7 +102,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
-using namespace rtl;
+using ::rtl::OUString;
 
 // =======================================================================
 
@@ -1715,15 +1720,12 @@ sal_uLong WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, sa
                 return nRet;
             return 0;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
-            if ( aSalShlData.mbW40 )
+            nRet = ImplDeviceCaps( this, DC_COLLATE, NULL, pSetupData );
+            if ( nRet && (nRet != GDI_ERROR) )
             {
-                nRet = ImplDeviceCaps( this, DC_COLLATE, NULL, pSetupData );
+                nRet = ImplDeviceCaps( this, DC_COPIES, NULL, pSetupData );
                 if ( nRet && (nRet != GDI_ERROR) )
-                {
-                    nRet = ImplDeviceCaps( this, DC_COPIES, NULL, pSetupData );
-                    if ( nRet && (nRet != GDI_ERROR) )
-                         return nRet;
-                }
+                    return nRet;
             }
             return 0;
 
@@ -1843,14 +1845,11 @@ static LPDEVMODEA ImplSalSetCopies( LPDEVMODEA pDevMode, sal_uLong nCopies, sal_
         pDevMode = pNewDevMode;
         pDevMode->dmFields |= DM_COPIES;
         pDevMode->dmCopies  = (short)(sal_uInt16)nCopies;
-        if ( aSalShlData.mbW40 )
-        {
-            pDevMode->dmFields |= DM_COLLATE;
-            if ( bCollate )
-                pDevMode->dmCollate = DMCOLLATE_TRUE;
-            else
-                pDevMode->dmCollate = DMCOLLATE_FALSE;
-        }
+        pDevMode->dmFields |= DM_COLLATE;
+        if ( bCollate )
+            pDevMode->dmCollate = DMCOLLATE_TRUE;
+        else
+            pDevMode->dmCollate = DMCOLLATE_FALSE;
     }
 
     return pNewDevMode;
@@ -1869,14 +1868,11 @@ static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, sal_
         pDevMode = pNewDevMode;
         pDevMode->dmFields |= DM_COPIES;
         pDevMode->dmCopies  = (short)(sal_uInt16)nCopies;
-        if ( aSalShlData.mbW40 )
-        {
-            pDevMode->dmFields |= DM_COLLATE;
-            if ( bCollate )
-                pDevMode->dmCollate = DMCOLLATE_TRUE;
-            else
-                pDevMode->dmCollate = DMCOLLATE_FALSE;
-        }
+        pDevMode->dmFields |= DM_COLLATE;
+        if ( bCollate )
+            pDevMode->dmCollate = DMCOLLATE_TRUE;
+        else
+            pDevMode->dmCollate = DMCOLLATE_FALSE;
     }
 
     return pNewDevMode;
@@ -2370,3 +2366,5 @@ sal_uLong WinSalPrinter::GetErrorCode()
 {
     return mnError;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

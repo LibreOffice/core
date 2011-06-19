@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "unostorageholder.hxx"
-#include <sot/storinfo.hxx>
+#include "sot/storinfo.hxx"
 
 
 using namespace ::com::sun::star;
@@ -109,7 +110,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                   ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory")) ),
             uno::UNO_QUERY );
 
     OSL_ENSURE( xStorageFactory.is(), "Can't create storage factory!\n" );
@@ -139,7 +140,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
 
     SvStorageInfoList aSubStorInfoList;
     m_rSotStorage->FillInfoList( &aSubStorInfoList );
-    for ( sal_uInt32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
+    for ( sal_uInt32 nInd = 0; nInd < aSubStorInfoList.size(); nInd++ )
     {
         m_rSotStorage->Remove( aSubStorInfoList[nInd].GetName() );
         if ( m_rSotStorage->GetError() )
@@ -154,8 +155,8 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
     // CopyTo does not transport unknown media type
     // just workaround it
     uno::Any aMediaType;
-    if ( rTempStorage->GetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType ) )
-        m_rSotStorage->SetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType );
+    if ( rTempStorage->GetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType ) )
+        m_rSotStorage->SetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType );
 
     m_rSotStorage->Commit();
 }
@@ -195,3 +196,4 @@ void SAL_CALL UNOStorageHolder::disposing( const lang::EventObject& /*Source*/ )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

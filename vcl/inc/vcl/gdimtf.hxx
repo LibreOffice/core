@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,15 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <vcl/mapmod.hxx>
+#include <vector>
 
 class OutputDevice;
 class ImpLabelList;
 class MetaAction;
+class MetaCommentAction;
 class SvStream;
 class Color;
 class BitmapEx;
@@ -49,8 +51,8 @@ class Gradient;
 // - GDIMetaFile-Types -
 // ---------------------
 
-#define GDI_METAFILE_END                ((sal_uLong)0xFFFFFFFF)
-#define GDI_METAFILE_LABEL_NOTFOUND     ((sal_uLong)0xFFFFFFFF)
+#define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
+#define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
 
 #ifndef METAFILE_END
 #define METAFILE_END                    GDI_METAFILE_END
@@ -92,20 +94,19 @@ enum MtfConversion
 // - Color conversion routines -
 // -----------------------------
 
-//#if 0 // _SOLAR__PRIVATE
-
 typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-//#endif // __PRIVATE
 
 // ---------------
 // - GDIMetaFile -
 // ---------------
 
-class VCL_DLLPUBLIC GDIMetaFile : protected List
+class VCL_DLLPUBLIC GDIMetaFile
 {
 private:
+    ::std::vector< MetaAction* > aList;
+    size_t          nCurrentActionElement;
 
     MapMode         aPrefMapMode;
     Size            aPrefSize;
@@ -116,8 +117,8 @@ private:
     ImpLabelList*   pLabelList;
     sal_Bool            bPause;
     sal_Bool            bRecord;
+    sal_Bool            bUseCanvas;
 
-//#if 0 // _SOLAR__PRIVATE
 
     SAL_DLLPRIVATE static Color    ImplColAdjustFnc( const Color& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
@@ -144,8 +145,9 @@ private:
                                                       const OutputDevice&   rMapDev,
                                                       const PolyPolygon&    rPolyPoly,
                                                       const Gradient&       rGrad       );
+    SAL_DLLPRIVATE bool          ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rDestSize );
+    SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
 
-//#endif // __PRIVATE
 
 protected:
 
@@ -157,15 +159,13 @@ public:
                     GDIMetaFile( const GDIMetaFile& rMtf );
     virtual         ~GDIMetaFile();
 
-    using List::operator==;
-    using List::operator!=;
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
-    sal_Bool            operator==( const GDIMetaFile& rMtf ) const;
-    sal_Bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
+    sal_Bool        operator==( const GDIMetaFile& rMtf ) const;
+    sal_Bool        operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
     sal_Bool        IsEqual( const GDIMetaFile& rMtf ) const;
-    sal_Bool            Mirror( sal_uLong nMirrorFlags );
+    sal_Bool        Mirror( sal_uLong nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
@@ -183,53 +183,59 @@ public:
     Rectangle       GetBoundRect( OutputDevice& i_rReference );
 
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
-                            short nChannelRPercent = 0, short nChannelGPercent = 0,
-                            short nChannelBPercent = 0, double fGamma = 1.0, sal_Bool bInvert = sal_False );
+                            short nChannelRPercent = 0,  short nChannelGPercent = 0,
+                            short nChannelBPercent = 0,  double fGamma = 1.0,
+                            sal_Bool bInvert = sal_False
+                    );
+
     void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
+    void            ReplaceColors( const Color& rSearchColor,  const Color& rReplaceColor, sal_uLong nTol = 0 );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
                                    sal_uLong nColorCount, sal_uLong* pTols = NULL );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
-    sal_Bool            IsRecord() const { return bRecord; }
+    sal_Bool        IsRecord() const { return bRecord; }
 
-    void            Play( GDIMetaFile& rMtf, sal_uLong nPos = GDI_METAFILE_END );
-    void            Play( OutputDevice* pOutDev, sal_uLong nPos = GDI_METAFILE_END );
+    void            Play( GDIMetaFile& rMtf, size_t nPos = GDI_METAFILE_END );
+    void            Play( OutputDevice* pOutDev, size_t nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, const Point& rPos,
-                          const Size& rSize, sal_uLong nPos = GDI_METAFILE_END );
+                          const Size& rSize, size_t nPos = GDI_METAFILE_END );
 
     void            Pause( sal_Bool bPause );
-    sal_Bool            IsPause() const { return bPause; }
+    sal_Bool        IsPause() const { return bPause; }
 
     void            Stop();
 
     void            WindStart();
     void            WindEnd();
-    void            Wind( sal_uLong nAction );
+    void            Wind( size_t nAction );
     void            WindPrev();
     void            WindNext();
 
-    sal_uLong           GetActionCount() const { return Count(); }
-    void            AddAction( MetaAction* pAction );
-    void            AddAction( MetaAction* pAction, sal_uLong nPos );
-    void            RemoveAction( sal_uLong nPos );
-    MetaAction*     CopyAction( sal_uLong nPos ) const;
-    MetaAction*     GetCurAction() const { return (MetaAction*) GetCurObject(); }
-    MetaAction*     GetAction( sal_uLong nAction ) const { return (MetaAction*) GetObject( nAction ); }
-    MetaAction*     FirstAction() { return (MetaAction*) First(); }
-    MetaAction*     NextAction() {  return (MetaAction*) Next(); }
-    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uLong nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
+    size_t          GetActionSize() const;
+    size_t          GetActionPos( const String& rLabel );
 
-    sal_uLong           GetActionPos( const String& rLabel );
-    sal_Bool            InsertLabel( const String& rLabel, sal_uLong nActionPos );
+    void            AddAction( MetaAction* pAction );
+    void            AddAction( MetaAction* pAction, size_t nPos );
+    void            RemoveAction( size_t nPos );
+    void            push_back( MetaAction* pAction );
+
+    MetaAction*     FirstAction();
+    MetaAction*     NextAction();
+    MetaAction*     GetAction( size_t nAction ) const;
+    MetaAction*     CopyAction( size_t nPos ) const;
+    MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
+    MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
+
+    sal_Bool        InsertLabel( const String& rLabel, size_t nActionPos );
     void            RemoveLabel( const String& rLabel );
     void            RenameLabel( const String& rLabel, const String& rNewLabel );
-    sal_uLong           GetLabelCount() const;
-    String          GetLabel( sal_uLong nLabel );
+    size_t          GetLabelCount() const;
+    String          GetLabel( size_t nLabel );
 
-    sal_Bool            SaveStatus();
+    sal_Bool        SaveStatus();
 
     const Size&     GetPrefSize() const { return aPrefSize; }
     void            SetPrefSize( const Size& rSize ) { aPrefSize = rSize; }
@@ -240,8 +246,8 @@ public:
     void            SetHookHdl( const Link& rLink ) { aHookHdlLink = rLink; }
     const Link&     GetHookHdl() const { return aHookHdlLink; }
 
-    sal_uLong           GetChecksum() const;
-    sal_uLong           GetSizeBytes() const;
+    sal_uLong       GetChecksum() const;
+    sal_uLong       GetSizeBytes() const;
 
     // Methoden zum Lesen und Schreiben des neuen Formats;
     // die Read-Methode kann auch das alte Format lesen
@@ -253,7 +259,36 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
-    sal_Bool           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
+    sal_Bool        CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
+
+    void            UseCanvas( sal_Bool _bUseCanvas );
+    sal_Bool        GetUseCanvas() const { return bUseCanvas; }
 };
 
+/** Create a special metaaction that delegates rendering to specified
+    service.
+
+    This factory function creates a MetaCommentAction that delegates
+    rendering to the specified services, once played back in the
+    metafile.
+
+    @param rRendererServiceName
+    Renderer service. Gets an awt::XGraphic on instantiation
+
+    @param rGraphicServiceName
+    Graphic service. Gets the raw data on instantiation
+
+    @param pData
+    Raw data. Gets copied
+
+    @param nDataSize
+    Length, in byte, of raw data
+ */
+MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererServiceName,
+                                                const rtl::OUString& rGraphicServiceName,
+                                                const void* pData,
+                                                sal_uInt32 nDataSize );
+
 #endif // _SV_GDIMTF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

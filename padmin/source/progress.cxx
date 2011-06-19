@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,11 @@
 #include <stdio.h>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <progress.hxx>
 #include <helper.hxx>
-#ifndef _PAD_PADIALOG_HRC_
 #include <padialog.hrc>
-#endif
 
 using namespace padmin;
 
@@ -101,3 +99,5 @@ IMPL_LINK( ProgressDialog, ClickBtnHdl, Button*, pButton )
     }
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

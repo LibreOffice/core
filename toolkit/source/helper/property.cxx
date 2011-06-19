@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,6 +55,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/types.hxx>
 #include <functional>
 #include <algorithm>
@@ -119,7 +121,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pPropertyInfos )
         {
-            static ImplPropertyInfo __FAR_DATA aImplPropertyInfos [] =
+            static ImplPropertyInfo aImplPropertyInfos [] =
             {
             DECL_PROP_2     ( "AccessibleName",         ACCESSIBLENAME,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "Align",                  ALIGN,              sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
@@ -182,6 +184,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "FormatsSupplier",        FORMATSSUPPLIER,    Reference< ::com::sun::star::util::XNumberFormatsSupplier >, BOUND, MAYBEVOID, TRANSIENT ),
 
             DECL_PROP_2     ( "Graphic",                GRAPHIC,            Reference< XGraphic >, BOUND, TRANSIENT ),
+            DECL_PROP_2     ( "GroupName",              GROUPNAME,          ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HelpText",               HELPTEXT,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HelpURL",                HELPURL,            ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HideInactiveSelection",  HIDEINACTIVESELECTION, bool,            BOUND, MAYBEDEFAULT ),
@@ -292,6 +295,8 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "GridLineColor",          GRID_LINE_COLOR,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "RowBackgroundColors",    GRID_ROW_BACKGROUND_COLORS, Sequence< sal_Int32 >,  BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "UseGridLines",           USE_GRID_LINES,             sal_Bool,               BOUND, MAYBEDEFAULT ),
+            DECL_DEP_PROP_3 ( "MultiPageValue",          MULTIPAGEVALUE,      sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_3     ( "AllDialogChildren",                USERFORMCONTAINEES,                Reference< ::com::sun::star::container::XNameContainer >,           BOUND, MAYBEDEFAULT, MAYBEVOID ),
     };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
@@ -407,3 +412,4 @@ sal_Bool CompareProperties( const ::com::sun::star::uno::Any& r1, const ::com::s
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

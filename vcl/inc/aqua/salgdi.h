@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include "postmac.h"
 
 #include "aqua/aquavcltypes.h"
+#include <vcl/fontcapabilities.hxx>
 
 #include "outfont.hxx"
 #include "salgdi.hxx"
@@ -60,6 +62,7 @@ public:
     virtual sal_IntPtr      GetFontId() const;
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
+    bool                    GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                    HasChar( sal_uInt32 cChar ) const;
 
     void                    ReadOs2Table() const;
@@ -69,10 +72,12 @@ public:
 private:
     const ATSUFontID            mnFontId;
     mutable const ImplFontCharMap*  mpCharMap;
+    mutable vcl::FontCapabilities maFontCapabilities;
     mutable bool                mbOs2Read;       // true if OS2-table related info is valid
     mutable bool                mbHasOs2Table;
     mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
     mutable bool                mbHasCJKSupport; // #i78970# CJK fonts need extra leading
+    mutable bool                mbFontCapabilitiesRead;
 };
 
 // abstracting quartz color instead of having to use an CGFloat[] array
@@ -243,7 +248,7 @@ public:
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
     // get the depth of the device
-    virtual sal_uInt16          GetBitCount();
+    virtual sal_uInt16          GetBitCount() const;
     // get the width of the device
     virtual long            GetGraphicsWidth() const;
 
@@ -276,6 +281,7 @@ public:
     virtual sal_uLong           GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
@@ -332,8 +338,8 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
 
-    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual sal_Bool                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& );
+    virtual sal_Bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
+    virtual sal_Bool                    GetGlyphOutline( sal_GlyphId nIndex, basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );
@@ -409,3 +415,5 @@ inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha
 {}
 
 #endif // _SV_SALGDI_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

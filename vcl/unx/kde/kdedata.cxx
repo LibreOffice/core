@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALDATA_CXX
-#include <shell/kde_headers.h>
+#include <unx/kde/kde_headers.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -49,11 +50,9 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/module.h>
+#include <osl/mutex.hxx>
 
 #include <tools/debug.hxx>
-
-#include <vos/process.hxx>
-#include <vos/mutex.hxx>
 
 #include "unx/kde/kdedata.hxx"
 #include "unx/i18n_im.hxx"
@@ -101,7 +100,7 @@ SalKDEDisplay::~SalKDEDisplay()
 
 KDEXLib::~KDEXLib()
 {
-    // #158056# on 64 bit linux using libXRandr.so.2 will crash in
+    // on 64 bit linux using libXRandr.so.2 will crash in
     // XCloseDisplay when freeing extension data
     // no known work around, therefor currently leak. Hopefully
     // this does not make problems since we're shutting down anyway
@@ -125,15 +124,15 @@ void KDEXLib::Init()
     pInputMethod->SetLocale();
     XrmInitialize();
 
-    KAboutData *kAboutData = new KAboutData( "OpenOffice.org",
-            I18N_NOOP( "OpenOffice.org" ),
+    KAboutData *kAboutData = new KAboutData( "LibreOffice",
+            I18N_NOOP( "LibreOffice" ),
             "1.1.0",
-            I18N_NOOP( "OpenOffice.org with KDE Native Widget Support." ),
+            I18N_NOOP( "LibreOffice with KDE Native Widget Support." ),
             KAboutData::License_LGPL,
             "(c) 2003, 2004 Novell, Inc",
-            I18N_NOOP( "OpenOffice.org is an office suite.\n" ),
-            "http://kde.openoffice.org/index.html",
-            "dev@kde.openoffice.org");
+            I18N_NOOP( "LibreOffice is an office suite.\n" ),
+            "http://libreoffice.org",
+            "libreoffice@lists.freedesktop.org");
     kAboutData->addAuthor( "Jan Holesovsky",
             I18N_NOOP( "Original author and maintainer of the KDE NWF." ),
             "kendy@artax.karlin.mff.cuni.cz",
@@ -141,17 +140,16 @@ void KDEXLib::Init()
 
     m_nFakeCmdLineArgs = 1;
     sal_uInt16 nIdx;
-    vos::OExtCommandLine aCommandLine;
-    int nParams = aCommandLine.getCommandArgCount();
+    int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
     rtl::OUString aParam, aBin;
 
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
-        aCommandLine.getCommandArg( nIdx, aParam );
-        if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
+        osl_getCommandArg( nIdx, &aParam.pData );
+        if ( !m_pFreeCmdLineArgs && aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) && nIdx + 1 < nParams )
         {
-            aCommandLine.getCommandArg( nIdx + 1, aParam );
+            osl_getCommandArg( nIdx + 1, &aParam.pData );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
             m_nFakeCmdLineArgs = 3;
@@ -193,7 +191,7 @@ void KDEXLib::Init()
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
     PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
@@ -275,3 +273,5 @@ extern "C" {
         return pInstance;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

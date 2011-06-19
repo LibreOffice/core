@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ namespace comphelper
 
     //-------------------------------------------------------------------------
     /** search the given string within the given sequence, return the positions where it was found.
-        if _bOnlyFirst is sal_True, only the first occurence will be returned.
+        if _bOnlyFirst is sal_True, only the first occurrence will be returned.
     */
     COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString >& _rList, const ::rtl::OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
 
@@ -178,13 +179,9 @@ namespace comphelper
         ,m_pCurrent(NULL)
     {
         ::com::sun::star::uno::Sequence< TYPE > aContainer;
-    #ifdef DBG_UTIL
-        sal_Bool bSuccess =
-    #endif
-        _rSequenceAny >>= aContainer;
-    #ifdef DBG_UTIL
+        sal_Bool bSuccess = _rSequenceAny >>= aContainer;
         OSL_ENSURE(bSuccess, "OSequenceIterator::OSequenceIterator: invalid Any!");
-    #endif
+        (void)bSuccess;
         construct(aContainer);
     }
 
@@ -387,3 +384,4 @@ namespace comphelper
 
 #endif // _COMPHELPER_SEQUENCE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@ struct WriteRcContext
 
 /****************** R s c T y p C o n ************************************/
 // Liste die alle Basistypen enthaelt
-DECLARE_LIST( RscBaseList, RscTop * )
+typedef ::std::vector< RscTop* > RscBaseList;
 
 // Tabelle fuer Systemabhaengige Resourcen
 struct RscSysEntry
@@ -67,7 +68,8 @@ struct RscSysEntry
     sal_uInt32      nTyp;
     sal_uInt32      nRefId;
 };
-DECLARE_LIST( RscSysList, RscSysEntry * )
+
+typedef ::std::vector< RscSysEntry* > RscSysList;
 
 class RscTypCont
 {
@@ -97,6 +99,7 @@ class RscTypCont
     Atom                nMinimizeId;
     Atom                nMaximizeId;
     Atom                nCloseableId;
+    Atom                nStdPopupId;
     Atom                nAppId;
     Atom                nTabstopId;
     Atom                nGroupId;
@@ -330,7 +333,7 @@ public:
     ByteString      GetSysSearchPath() const { return aSysSearchPath; }
     void        InsertType( RscTop * pType )
                 {
-                    aBaseLst.Insert( pType, LIST_APPEND );
+                    aBaseLst.push_back( pType );
                 }
     RscTop  *   SearchType( Atom nTypId );
     RscTop  *   Search( Atom typ );
@@ -351,9 +354,11 @@ public:
     void        WriteSyntax( FILE * fOutput );
     void        WriteRcCtor( FILE * fOutput );
     void        FillNameIdList( REResourceList * pList, sal_uLong lFileKey );
-    sal_Bool        MakeConsistent( RscInconsList * pList );
+    sal_Bool        MakeConsistent();
     sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
     void        IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

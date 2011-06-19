@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
-#include "vos/mutex.hxx"
 
 #include "osl/mutex.hxx"
 
@@ -147,7 +146,7 @@ rtl::OUString GenericClipboard::getImplementationName_static()
 Sequence< rtl::OUString > GenericClipboard::getSupportedServiceNames_static()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
     return aRet;
 }
 
@@ -274,7 +273,7 @@ Reference< XInterface > ClipboardFactory::createInstance() throw()
 
 Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw()
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateClipboard( arguments );
     return xResult;
 }
@@ -284,7 +283,7 @@ Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Seq
 Sequence< OUString > SAL_CALL Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
     return aRet;
 }
 
@@ -337,13 +336,13 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.GenericDragSource" );
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.GenericDragSource"));
         return aRet;
     }
 
     static OUString getImplementationName_static()
     {
-        return OUString::createFromAscii( "com.sun.star.datatransfer.dnd.VclGenericDragSource" );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.VclGenericDragSource"));
     }
 };
 
@@ -381,15 +380,14 @@ void GenericDragSource::initialize( const Sequence< Any >& ) throw( Exception )
 Sequence< OUString > SAL_CALL DragSource_getSupportedServiceNames()
 {
     #if defined UNX
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
+    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.X11DragSource"
     #else
     "com.sun.star.datatransfer.dnd.OleDragSource"
     #endif
                                                               ) );
-    static Sequence< OUString > aServiceNames( &aServiceName, 1 );
-    return aServiceNames;
+    return Sequence< OUString >(&aServiceName, 1);
     #else
     return GenericDragSource::getSupportedServiceNames_static();
     #endif
@@ -412,7 +410,7 @@ OUString SAL_CALL DragSource_getImplementationName()
 
 Reference< XInterface > SAL_CALL DragSource_createInstance( const Reference< XMultiServiceFactory >&  )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDragSource();
     return xResult;
 }
@@ -449,13 +447,13 @@ public:
     static Sequence< OUString > getSupportedServiceNames_static()
     {
         Sequence< OUString > aRet( 1 );
-        aRet[0] = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.GenericDropTarget" );
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.GenericDropTarget"));
         return aRet;
     }
 
     static OUString getImplementationName_static()
     {
-        return OUString::createFromAscii( "com.sun.star.datatransfer.dnd.VclGenericDropTarget" );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.VclGenericDropTarget"));
     }
 };
 
@@ -496,15 +494,14 @@ void GenericDropTarget::setDefaultActions( sal_Int8) throw()
 Sequence< OUString > SAL_CALL DropTarget_getSupportedServiceNames()
 {
     #if defined UNX
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
+    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM(
     #if ! defined QUARTZ
     "com.sun.star.datatransfer.dnd.X11DropTarget"
     #else
     "com.sun.star.datatransfer.dnd.OleDropTarget"
     #endif
                                                               ) );
-    static Sequence< OUString > aServiceNames( &aServiceName, 1 );
-    return aServiceNames;
+    return Sequence< OUString >(&aServiceName, 1);
     #else
     return GenericDropTarget::getSupportedServiceNames_static();
     #endif
@@ -527,7 +524,7 @@ OUString SAL_CALL DropTarget_getImplementationName()
 
 Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMultiServiceFactory >&  )
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     Reference< XInterface > xResult = ImplGetSVData()->mpDefInst->CreateDropTarget();
     return xResult;
 }
@@ -553,3 +550,4 @@ Reference< XInterface > SalInstance::CreateDropTarget()
     return Reference< XInterface >( ( cppu::OWeakObject * )new vcl::GenericDropTarget() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

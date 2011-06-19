@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,vclplug_svp,\
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
@@ -43,6 +42,7 @@ $(eval $(call gb_Library_add_defs,vclplug_svp,\
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     vcl \
+    vclplug_gen \
     tl \
     utl \
     sot \
@@ -55,10 +55,8 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     i18npaper \
     i18nutil \
     jvmaccess \
-    stl \
     cppu \
     sal \
-    vos3 \
     X11 \
     Xext \
     SM \
@@ -72,12 +70,6 @@ $(call gb_Library_use_externals,vclplug_svp,\
 )
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
-    vcl/unx/generic/printergfx/bitmap_gfx \
-    vcl/unx/generic/printergfx/common_gfx \
-    vcl/unx/generic/printergfx/glyphset \
-    vcl/unx/generic/printergfx/printerjob \
-    vcl/unx/generic/printergfx/psputil \
-    vcl/unx/generic/printergfx/text_gfx \
     vcl/unx/headless/svpbmp \
     vcl/unx/headless/svpdummies \
     vcl/unx/headless/svpelement \

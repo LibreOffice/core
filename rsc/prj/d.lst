@@ -1,9 +1,9 @@
-..\%__SRC%\bin\rsc.exe %_DEST%\bin%_EXT%\rsc.exe
-..\%__SRC%\bin\rsc2.exe %_DEST%\bin%_EXT%\rsc2.exe
-..\%__SRC%\bin\rsc %_DEST%\bin%_EXT%\rsc
-..\%__SRC%\bin\rsc2 %_DEST%\bin%_EXT%\rsc2
-..\%__SRC%\bin\rscpp.exe %_DEST%\bin%_EXT%\rscpp.exe
-..\%__SRC%\bin\rscpp %_DEST%\bin%_EXT%\rscpp
+..\%__SRC%\bin\rsc.exe %_DEST%\bin\rsc.exe
+..\%__SRC%\bin\rsc2.exe %_DEST%\bin\rsc2.exe
+..\%__SRC%\bin\rsc %_DEST%\bin\rsc
+..\%__SRC%\bin\rsc2 %_DEST%\bin\rsc2
+..\%__SRC%\bin\rscpp.exe %_DEST%\bin\rscpp.exe
+..\%__SRC%\bin\rscpp %_DEST%\bin\rscpp
 
-mkdir: %_DEST%\inc%_EXT%\rsc
-..\inc\rsc/rscsfx.hxx %_DEST%\inc%_EXT%\rsc\rscsfx.hxx
+mkdir: %_DEST%\inc\rsc
+..\inc\rsc/rscsfx.hxx %_DEST%\inc\rsc\rscsfx.hxx

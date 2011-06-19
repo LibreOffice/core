@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,6 @@ namespace vcl
             FixedLine           maHorzDim;
             FixedLine           maVertDim;
 
-            bool useHCColorReplacement() const;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
@@ -174,9 +174,7 @@ namespace vcl
             CheckBox                                maReverseOrderBox;
 
             Image                                   maCollateImg;
-            Image                                   maCollateHCImg;
             Image                                   maNoCollateImg;
-            Image                                   maNoCollateHCImg;
 
             long                                    mnCollateUIMode;
 
@@ -335,3 +333,5 @@ namespace vcl
 
 
 #endif // _SV_PRNDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

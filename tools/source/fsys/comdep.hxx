@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,29 +31,19 @@
 
 #include <tools/fsys.hxx>
 
-#define ACCESSDELIM(e)  ( (e == FSYS_STYLE_MAC) ? ":" : \
-                        ( ( e == FSYS_STYLE_VFAT || e == FSYS_STYLE_HPFS || \
-                            e == FSYS_STYLE_FAT ) || e == FSYS_STYLE_NTFS ) \
-                          ? "\\" : "/" )
+#define ACCESSDELIM(e)  ( ( e == FSYS_STYLE_NTFS ) ? "\\" : "/" )
 #define ACCESSDELIM_C(e)(char)\
-                        ( (e == FSYS_STYLE_MAC) ? ':' : \
-                        ( ( e == FSYS_STYLE_VFAT || e == FSYS_STYLE_HPFS || \
-                            e == FSYS_STYLE_FAT ) || e == FSYS_STYLE_NTFS ) \
-                          ? '\\' : '/' )
-#define SEARCHDELIM(e)  ( (e == FSYS_STYLE_SYSV || e == FSYS_STYLE_BSD) ? ":" \
-                        : ";" )
+                        ( ( e == FSYS_STYLE_NTFS ) ? '\\' : '/' )
+#define SEARCHDELIM(e)  ( (e == FSYS_STYLE_BSD) ? ":" : ";" )
 #define SEARCHDELIM_C(e)(char)\
-                        ( (e == FSYS_STYLE_SYSV || e == FSYS_STYLE_BSD) ? ':' \
-                        : ';' )
-#define ACTPARENT(e)    ( (e == FSYS_STYLE_MAC) ? ":" : ".." )
-#define ACTCURRENT(e)   ( (e == FSYS_STYLE_MAC) ? "" : "." )
+                        ( (e == FSYS_STYLE_BSD) ? ':' : ';' )
+#define ACTPARENT(e)    ".."
+#define ACTCURRENT(e)   "."
 
 #if defined UNX
 #include "unx.hxx"
 #elif defined WNT
 #include "wntmsc.hxx"
-#elif defined OS2
-#include "os2.hxx"
 #endif
 
 //--------------------------------------------------------------------
@@ -92,7 +83,7 @@ struct DirReader_Impl
 
                     // nur den String der Memer-Var nehmen!
 
-#if defined(UNX) || defined(OS2) //for further exlpanation see DirReader_Impl::Read() in unx.cxx
+#if defined(UNX)    //for further eplanation see DirReader_Impl::Read() in unx.cxx
                     pDosDir = NULL;
 #else
                     aBypass = ByteString(aPath, osl_getThreadTextEncoding());
@@ -144,7 +135,7 @@ struct FileCopier_Impl
 
 //--------------------------------------------------------------------
 
-#if defined WNT || defined OS2
+#if defined WNT
 sal_Bool IsRedirectable_Impl( const ByteString &rPath );
 #else
 #define IsRedirectable_Impl( rPath )    sal_True
@@ -154,3 +145,5 @@ sal_Bool IsRedirectable_Impl( const ByteString &rPath );
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef _SVTOOLS_SVDDE_DDEWRAP_HXX_
 #define _SVTOOLS_SVDDE_DDEWRAP_HXX_
 
@@ -22,3 +23,5 @@ DECLARE_WAPI_FUNC( DdeInitializeW );
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

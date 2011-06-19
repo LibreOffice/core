@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,10 +154,9 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_ROADMAP_ITEMSELECTED       1171
 #define VCLEVENT_TOOLBOX_FORMATCHANGED      1172        // request new layout
 #define VCLEVENT_COMBOBOX_SETTEXT           1173
-// --> OD 2009-04-01 #i92103#
+// #i92103#
 #define VCLEVENT_ITEM_EXPANDED              1174
 #define VCLEVENT_ITEM_COLLAPSED             1175
-// <--
 #define VCLEVENT_DROPDOWN_PRE_OPEN          1176
 
 // VclMenuEvent
@@ -259,7 +259,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
 };
 
-class VCL_DLLPUBLIC VclEventListeners : public std::list<Link>
+class VCL_DLLPUBLIC VclEventListeners
 {
 public:
     void Call( VclSimpleEvent* pEvent ) const;
@@ -268,6 +268,10 @@ public:
     // and returns sal_True in that case
     // a handler must return sal_True to signal that it has processed the event
     sal_Bool Process( VclSimpleEvent* pEvent ) const;
+    void addListener( const Link& rListener );
+    void removeListener( const Link& rListener );
+private:
+    std::list<Link> m_aListeners;
 };
 
 class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
@@ -299,3 +303,5 @@ public:
 };
 
 #endif // _VCL_VCLEVENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,3 +92,5 @@ void ImplSetHelpWindowPos( Window* pHelpWindow, sal_uInt16 nHelpWinStyle, sal_uI
                             const Point& rPos, const Rectangle* pHelpArea );
 
 #endif // _SV_HELPWIN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

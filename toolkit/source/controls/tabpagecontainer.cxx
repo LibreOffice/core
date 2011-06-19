@@ -38,7 +38,6 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -105,7 +104,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlTabPageContaine
 
 void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex, const com::sun::star::uno::Any& aElement) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     uno::Reference < ::awt::tab::XTabPageModel > xTabPageModel;
     if(aElement >>= xTabPageModel)
     {
@@ -186,7 +185,7 @@ UnoControlTabPageContainer::UnoControlTabPageContainer( const Reference< XMultiS
 
 OUString UnoControlTabPageContainer::GetComponentServiceName()
 {
-    return OUString::createFromAscii( "TabPageContainer" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("TabPageContainer"));
 }
 
 void SAL_CALL UnoControlTabPageContainer::dispose(  ) throw(RuntimeException)
@@ -211,37 +210,37 @@ void UnoControlTabPageContainer::createPeer( const uno::Reference< awt::XToolkit
 
 ::sal_Int16 SAL_CALL UnoControlTabPageContainer::getActiveTabPageID() throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getActiveTabPageID();
 }
 void SAL_CALL UnoControlTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpageid ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     xTPContainer->setActiveTabPageID(_activetabpageid);
 }
 ::sal_Int32 SAL_CALL UnoControlTabPageContainer::getTabPageCount(  ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPageCount();
 }
 ::sal_Bool SAL_CALL UnoControlTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->isTabPageActive(tabPageIndex);
 }
 Reference< ::com::sun::star::awt::tab::XTabPage > SAL_CALL UnoControlTabPageContainer::getTabPage( ::sal_Int16 tabPageIndex ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPage(tabPageIndex);
 }
 Reference< ::com::sun::star::awt::tab::XTabPage > SAL_CALL UnoControlTabPageContainer::getTabPageByID( ::sal_Int16 tabPageID ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     Reference< XTabPageContainer >  xTPContainer( getPeer(), UNO_QUERY_THROW );
     return xTPContainer->getTabPageByID(tabPageID);
 }
@@ -284,7 +283,7 @@ void UnoControlTabPageContainer::updateFromModel()
 }
 void SAL_CALL UnoControlTabPageContainer::addControl( const ::rtl::OUString& Name, const Reference< ::com::sun::star::awt::XControl >& Control ) throw (RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ControlContainerBase::addControl(Name,Control);
     Reference< XContainerListener > xContainerListener( getPeer(), UNO_QUERY );
     ContainerEvent aEvent;

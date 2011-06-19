@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,13 +99,13 @@ namespace cairocanvas
 
     ::sal_Bool SpriteDeviceHelper::showBuffer( bool, ::sal_Bool )
     {
-        OSL_ENSURE(false,"Not supposed to be called, handled by SpriteCanvas");
+        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
         return sal_False;
     }
 
     ::sal_Bool SpriteDeviceHelper::switchBuffer( bool, ::sal_Bool )
     {
-        OSL_ENSURE(false,"Not supposed to be called, handled by SpriteCanvas");
+        OSL_FAIL("Not supposed to be called, handled by SpriteCanvas");
         return sal_False;
     }
 
@@ -199,3 +200,5 @@ namespace cairocanvas
             pWinSurface->flush();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

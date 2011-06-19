@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,8 @@
 #include <tools/vcompat.hxx>
 #include <poly.h>
 #include <tools/line.hxx>
-#ifndef _VECTOR2D_H
 #include <tools/vector2d.hxx>
-#endif
-#ifndef _POLY_HXX
 #include <tools/poly.hxx>
-#endif
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -2176,6 +2173,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
 
                 // assert invalid polygons
                 OSL_ENSURE(bControlA == bControlB, "Polygon::getB2DPolygon: Invalid source polygon (!)");
+                (void)bControlB;
 
                 if(a < nCount)
                 {
@@ -2250,7 +2248,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
         // #127979# Reduce source point count hard to the limit of the tools Polygon
         if(nB2DLocalCount > ((0x0000ffff / 3L) - 1L))
         {
-            DBG_ERROR("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
+            OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
             nB2DLocalCount = ((0x0000ffff / 3L) - 1L);
         }
 
@@ -2344,7 +2342,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
         // #127979# Reduce source point count hard to the limit of the tools Polygon
         if(nB2DLocalCount > (0x0000ffff - 1L))
         {
-            DBG_ERROR("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
+            OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
             nB2DLocalCount = (0x0000ffff - 1L);
         }
 
@@ -2378,3 +2376,5 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

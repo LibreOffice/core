@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,10 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {
     FuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( CUI_DLL_NAME ) ) ) )
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( CUI_DLL_NAME ) ),
+                                                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( VclAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
     if ( fp )
         return fp();
     return 0;
@@ -61,3 +63,5 @@ VclAbstractDialog2::~VclAbstractDialog2()
 VclAbstractDialogFactory::~VclAbstractDialogFactory()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

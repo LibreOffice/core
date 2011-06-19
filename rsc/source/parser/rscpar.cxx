@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,10 +40,6 @@
 |*
 |*    RscFileInst::Init()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 05.11.91
-|*    Letzte Aenderung  MM 17.02.93
-|*
 *************************************************************************/
 void RscFileInst::Init()
 {
@@ -58,10 +55,6 @@ void RscFileInst::Init()
 /*************************************************************************
 |*
 |*    RscFileInst::RscFileInst()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.06.91
-|*    Letzte Aenderung  MM 06.06.91
 |*
 *************************************************************************/
 RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
@@ -100,10 +93,6 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
 |*
 |*    RscFileInst::~RscFileInst()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.06.91
-|*    Letzte Aenderung  MM 06.06.91
-|*
 *************************************************************************/
 RscFileInst::~RscFileInst(){
     if( pInput )
@@ -115,10 +104,6 @@ RscFileInst::~RscFileInst(){
 /*************************************************************************
 |*
 |*    RscFileInst::GetChar()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 01.06.91
-|*    Letzte Aenderung  MM 09.08.91
 |*
 *************************************************************************/
 int RscFileInst::GetChar()
@@ -141,10 +126,6 @@ int RscFileInst::GetChar()
 /*************************************************************************
 |*
 |*    RscFileInst::GetNewLine()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.06.91
-|*    Letzte Aenderung  MM 06.06.91
 |*
 *************************************************************************/
 void RscFileInst::GetNewLine()
@@ -223,10 +204,6 @@ END:
 |*
 |*    RscFileInst::SetError()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 05.11.91
-|*    Letzte Aenderung  MM 05.11.91
-|*
 *************************************************************************/
 void RscFileInst::SetError( ERRTYPE aError )
 {
@@ -237,3 +214,5 @@ void RscFileInst::SetError( ERRTYPE aError )
         nErrorPos   = GetScanPos() -1;
     };
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

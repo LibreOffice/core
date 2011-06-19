@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <vector>
 
 namespace com {
@@ -85,18 +86,18 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         mutable com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xAccess;
     };
 
-    std::hash_map< com::sun::star::lang::Locale,
+    boost::unordered_map< com::sun::star::lang::Locale,
                    LocaleAccess,
                    utl::LocaleHash >
             m_aConfig;
 
     rtl::OUString tryLocale( const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rType ) const;
 
-    DefaultFontConfiguration();
     public:
+    DefaultFontConfiguration();
     ~DefaultFontConfiguration();
 
-    static DefaultFontConfiguration* get();
+    static DefaultFontConfiguration& get();
 
     rtl::OUString getDefaultFont( const com::sun::star::lang::Locale& rLocale, int nType ) const;
     rtl::OUString getUserInterfaceFont( const com::sun::star::lang::Locale& rLocale ) const;
@@ -191,8 +192,8 @@ private:
 
         LocaleSubst() : bConfigRead( false ) {}
     };
-    std::hash_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
-    typedef std::hash_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
+    boost::unordered_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
+    typedef boost::unordered_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
 
@@ -206,11 +207,11 @@ private:
     unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
                                 const rtl::OUString& rType ) const;
     void readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const;
-    FontSubstConfiguration();
 public:
+    FontSubstConfiguration();
     ~FontSubstConfiguration();
 
-    static FontSubstConfiguration* get();
+    static FontSubstConfiguration& get();
 
     const FontNameAttr* getSubstInfo(
                                      const String& rFontName,
@@ -225,3 +226,5 @@ public:
 } // namespace utl
 
 #endif // _UNOTOOLS_FONTCFG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

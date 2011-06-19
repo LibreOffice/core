@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,19 +32,10 @@
 #define _SV_HEADBAR_CXX
 #include <svtools/headbar.hxx>
 #include <tools/debug.hxx>
-#ifndef _TOOLS_LIST_HXX
-#include <tools/list.hxx>
-#endif
 
-#ifndef _VCL_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VCL_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _VCL_IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 // =======================================================================
@@ -60,8 +52,6 @@ struct ImplHeadItem
     XubString           maHelpText;
     void*               mpUserData;
 };
-
-DECLARE_LIST( ImplHeadItemList, ImplHeadItem* )
 
 // =======================================================================
 
@@ -144,13 +134,10 @@ HeaderBar::HeaderBar( Window* pParent, const ResId& rResId ) :
 HeaderBar::~HeaderBar()
 {
     // Alle Items loeschen
-    ImplHeadItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        delete (*mpItemList)[ i ];
     }
-
+    mpItemList->clear();
     delete mpItemList;
 }
 
@@ -197,8 +184,8 @@ void HeaderBar::ImplInitSettings( sal_Bool bFont,
 long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
 {
     long nX = -mnOffset;
-    for ( sal_uInt16 i = 0; i < nPos; i++ )
-        nX += mpItemList->GetObject( i )->mnSize;
+    for ( size_t i = 0; i < nPos; i++ )
+        nX += (*mpItemList)[ i ]->mnSize;
     return nX;
 }
 
@@ -207,7 +194,7 @@ long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
 Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 {
     Rectangle aRect( ImplGetItemPos( nPos ), 0, 0, mnDY-1 );
-    aRect.Right() = aRect.Left() + mpItemList->GetObject( nPos )->mnSize - 1;
+    aRect.Right() = aRect.Left() + (*mpItemList)[ nPos ]->mnSize - 1;
     // Gegen Ueberlauf auf einigen Systemen testen
     if ( aRect.Right() > 16000 )
         aRect.Right() = 16000;
@@ -220,13 +207,13 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
                                long& nMouseOff, sal_uInt16& nPos ) const
 {
     ImplHeadItem*   pItem;
-    sal_uInt16          nCount = (sal_uInt16)mpItemList->Count();
+    size_t          nCount = (sal_uInt16)mpItemList->size();
     sal_Bool            bLastFixed = sal_True;
     long            nX = -mnOffset;
 
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    for ( size_t i = 0; i < nCount; i++ )
     {
-        pItem = mpItemList->GetObject( i );
+        pItem = (*mpItemList)[ i ];
 
         if ( rPos.X() < (nX+pItem->mnSize) )
         {
@@ -267,7 +254,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
 
     if ( !bLastFixed )
     {
-        pItem = mpItemList->GetObject( nCount-1 );
+        pItem = (*mpItemList)[ nCount-1 ];
         if ( (pItem->mnSize < 4)  && (rPos.X() < (nX+HEADERBAR_SPLITOFF)) )
         {
             nPos = nCount-1;
@@ -357,7 +344,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             return;
     }
 
-    ImplHeadItem*           pItem  = mpItemList->GetObject( nPos );
+    ImplHeadItem*           pItem  = (*mpItemList)[ nPos ];
     HeaderBarItemBits       nBits = pItem->mnBits;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -659,7 +646,7 @@ void HeaderBar::ImplUpdate( sal_uInt16 nPos, sal_Bool bEnd, sal_Bool bDirect )
         if ( !bDirect )
         {
             Rectangle   aRect;
-            sal_uInt16      nItemCount = (sal_uInt16)(mpItemList->Count());
+            size_t      nItemCount = mpItemList->size();
             if ( nPos < nItemCount )
                 aRect = ImplGetItemRect( nPos );
             else
@@ -676,11 +663,11 @@ void HeaderBar::ImplUpdate( sal_uInt16 nPos, sal_Bool bEnd, sal_Bool bDirect )
         }
         else
         {
-            for ( sal_uInt16 i = nPos; i < mpItemList->Count(); i++ )
+            for ( size_t i = nPos; i < mpItemList->size(); i++ )
                 ImplDrawItem( i );
             if ( bEnd )
             {
-                Rectangle aRect = ImplGetItemRect( (sal_uInt16)mpItemList->Count() );
+                Rectangle aRect = ImplGetItemRect( (sal_uInt16)mpItemList->size() );
                 aRect.Left()  = aRect.Right();
                 aRect.Right() = mnDX-1;
                 if ( aRect.Left() < aRect.Right() )
@@ -703,7 +690,7 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, sal_Bool bCommand )
     if ( nHitTest )
     {
         mbDrag = sal_False;
-        ImplHeadItem* pItem = mpItemList->GetObject( nPos );
+        ImplHeadItem* pItem = (*mpItemList)[ nPos ];
         if ( nHitTest & HEAD_HITTEST_DIVIDER )
             mbDrag = sal_True;
         else
@@ -775,7 +762,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
 
         // Evt. ItemDrag anschalten
         if ( bNewOutDrag && mbDragable && !mbItemDrag &&
-             !(mpItemList->GetObject(nPos)->mnBits & HIB_FIXEDPOS) )
+             !((*mpItemList)[ nPos ]->mnBits & HIB_FIXEDPOS) )
         {
             if ( (rMousePos.Y() >= aItemRect.Top()) && (rMousePos.Y() <= aItemRect.Bottom()) )
             {
@@ -810,13 +797,13 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
                 // Nicht verschiebbare Items aussparen
                 if ( mnItemDragPos < nPos )
                 {
-                    while ( (mpItemList->GetObject(mnItemDragPos)->mnBits & HIB_FIXEDPOS) &&
+                    while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HIB_FIXEDPOS) &&
                             (mnItemDragPos < nPos) )
                         mnItemDragPos++;
                 }
                 else if ( mnItemDragPos > nPos )
                 {
-                    while ( (mpItemList->GetObject(mnItemDragPos)->mnBits & HIB_FIXEDPOS) &&
+                    while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HIB_FIXEDPOS) &&
                             (mnItemDragPos > nPos) )
                         mnItemDragPos--;
                 }
@@ -909,7 +896,7 @@ void HeaderBar::ImplEndDrag( sal_Bool bCancel )
             long nDelta = mnDragPos - mnStartPos;
             if ( nDelta )
             {
-                ImplHeadItem* pItem = mpItemList->GetObject( nPos );
+                ImplHeadItem* pItem = (*mpItemList)[ nPos ];
                 pItem->mnSize += nDelta;
                 ImplUpdate( nPos, sal_True );
             }
@@ -938,7 +925,7 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
             sal_uInt16  nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp, nPos );
             if ( nHitTest )
             {
-                ImplHeadItem* pItem = mpItemList->GetObject( nPos );
+                ImplHeadItem* pItem = (*mpItemList)[ nPos ];
                 if ( nHitTest & HEAD_HITTEST_DIVIDER )
                     mbItemMode = sal_False;
                 else
@@ -1005,7 +992,7 @@ void HeaderBar::Paint( const Rectangle& rRect )
         nCurItemPos = GetItemPos( mnCurItemId );
     else
         nCurItemPos = HEADERBAR_ITEM_NOTFOUND;
-    sal_uInt16 nItemCount = (sal_uInt16)mpItemList->Count();
+    sal_uInt16 nItemCount = (sal_uInt16)mpItemList->size();
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
         ImplDrawItem( i, (i == nCurItemPos) ? sal_True : sal_False, sal_False, &rRect );
 }
@@ -1049,12 +1036,11 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     }
 
     Rectangle aItemRect( aRect );
-//    aItemRect.Bottom()--;
-    sal_uInt16 nItemCount = (sal_uInt16)mpItemList->Count();
-    for ( sal_uInt16 i = 0; i < nItemCount; i++ )
+    size_t nItemCount = mpItemList->size();
+    for ( size_t i = 0; i < nItemCount; i++ )
     {
         aItemRect.Left() = aRect.Left()+ImplGetItemPos( i );
-        aItemRect.Right() = aItemRect.Left() + mpItemList->GetObject( i )->mnSize - 1;
+        aItemRect.Right() = aItemRect.Left() + (*mpItemList)[ i ]->mnSize - 1;
         // Gegen Ueberlauf auf einigen Systemen testen
         if ( aItemRect.Right() > 16000 )
             aItemRect.Right() = 16000;
@@ -1111,7 +1097,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
             XubString aStr = GetHelpText( nItemId );
             if ( !aStr.Len() || !(rHEvt.GetMode() & HELPMODE_BALLOON) )
             {
-                ImplHeadItem* pItem = mpItemList->GetObject( GetItemPos( nItemId ) );
+                ImplHeadItem* pItem = (*mpItemList)[ GetItemPos( nItemId ) ];
                 // Wir zeigen die Quick-Hilfe nur an, wenn Text nicht
                 // vollstaendig sichtbar, ansonsten zeigen wir den Hilfetext
                 // an, wenn das Item keinen Text besitzt
@@ -1246,7 +1232,13 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->mnSize       = nSize;
     pItem->maImage      = rImage;
     pItem->mpUserData   = 0;
-    mpItemList->Insert( pItem, nPos );
+    if ( nPos < mpItemList->size() ) {
+        ImplHeadItemList::iterator it = mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpItemList->insert( it, pItem );
+    } else {
+        mpItemList->push_back( pItem );
+    }
 
     // Ausgabe updaten
     ImplUpdate( nPos, sal_True );
@@ -1268,7 +1260,13 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const XubString& rText,
     pItem->mnSize       = nSize;
     pItem->maText       = rText;
     pItem->mpUserData   = 0;
-    mpItemList->Insert( pItem, nPos );
+    if ( nPos < mpItemList->size() ) {
+        ImplHeadItemList::iterator it = mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpItemList->insert( it, pItem );
+    } else {
+        mpItemList->push_back( pItem );
+    }
 
     // Ausgabe updaten
     ImplUpdate( nPos, sal_True );
@@ -1293,7 +1291,13 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId,
     pItem->maImage      = rImage;
     pItem->maText       = rText;
     pItem->mpUserData   = 0;
-    mpItemList->Insert( pItem, nPos );
+    if ( nPos < mpItemList->size() ) {
+        ImplHeadItemList::iterator it = mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpItemList->insert( it, pItem );
+    } else {
+        mpItemList->push_back( pItem );
+    }
 
     // Ausgabe updaten
     ImplUpdate( nPos, sal_True );
@@ -1306,9 +1310,12 @@ void HeaderBar::RemoveItem( sal_uInt16 nItemId )
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
-        ImplHeadItem* pItem = mpItemList->Remove( nPos );
-        delete pItem;
-        ImplUpdate( nPos, sal_True );
+        if ( nPos < mpItemList->size() ) {
+            ImplHeadItemList::iterator it = mpItemList->begin();
+            ::std::advance( it, nPos );
+            delete *it;
+            mpItemList->erase( it );
+        }
     }
 }
 
@@ -1321,11 +1328,15 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
     {
         if ( nPos != nNewPos )
         {
-            ImplHeadItem* pItem = mpItemList->Remove( nPos );
+            ImplHeadItemList::iterator it = mpItemList->begin();
+            ::std::advance( it, nPos );
+            ImplHeadItem* pItem = *it;
+            mpItemList->erase( it );
             if ( nNewPos < nPos )
                 nPos = nNewPos;
-            mpItemList->Insert( pItem, nNewPos );
-            ImplUpdate( nPos, sal_True );
+            it = mpItemList->begin();
+            ::std::advance( it, nPos );
+            mpItemList->insert( it, pItem );
         }
     }
 }
@@ -1335,13 +1346,10 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
 void HeaderBar::Clear()
 {
     // Alle Items loeschen
-    ImplHeadItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        delete (*mpItemList)[ i ];
     }
-    mpItemList->Clear();
+    mpItemList->clear();
 
     ImplUpdate( 0, sal_True );
 }
@@ -1350,10 +1358,6 @@ void HeaderBar::Clear()
 
 void HeaderBar::SetOffset( long nNewOffset )
 {
-    // Hier erstmal neu zeichnen, damit mit alten Offset noch das
-    // richtige gemalt wird
-    //Update();
-
     // Bereich verschieben
     Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2-1 );
     long nDelta = mnOffset-nNewOffset;
@@ -1365,21 +1369,18 @@ void HeaderBar::SetOffset( long nNewOffset )
 
 sal_uInt16 HeaderBar::GetItemCount() const
 {
-    return (sal_uInt16)mpItemList->Count();
+    return (sal_uInt16)mpItemList->size();
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
 {
-    ImplHeadItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        ImplHeadItem* pItem = (*mpItemList)[ i ];
         if ( pItem->mnId == nItemId )
-            return (sal_uInt16)mpItemList->GetCurPos();
-        pItem = mpItemList->Next();
+            return (sal_uInt16)i;
     }
-
     return HEADERBAR_ITEM_NOTFOUND;
 }
 
@@ -1387,7 +1388,7 @@ sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
 
 sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
 {
-    ImplHeadItem* pItem = mpItemList->GetObject( nPos );
+    ImplHeadItem* pItem = (nPos < mpItemList->size() ) ? (*mpItemList)[ nPos ] : NULL;
     if ( pItem )
         return pItem->mnId;
     else
@@ -1398,15 +1399,11 @@ sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
 
 sal_uInt16 HeaderBar::GetItemId( const Point& rPos ) const
 {
-    sal_uInt16 nPos = 0;
-    while ( nPos < mpItemList->Count() )
-    {
-        if ( ImplGetItemRect( nPos ).IsInside( rPos ) )
-            return GetItemId( nPos );
-
-        nPos++;
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        if ( ImplGetItemRect( i ).IsInside( rPos ) ) {
+            return GetItemId( i );
+        }
     }
-
     return 0;
 }
 
@@ -1428,7 +1425,7 @@ void HeaderBar::SetItemSize( sal_uInt16 nItemId, long nNewSize )
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
-        ImplHeadItem* pItem = mpItemList->GetObject( nPos );
+        ImplHeadItem* pItem = (*mpItemList)[ nPos ];
         if ( pItem->mnSize != nNewSize )
         {
             pItem->mnSize = nNewSize;
@@ -1443,7 +1440,7 @@ long HeaderBar::GetItemSize( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mnSize;
+        return (*mpItemList)[ nPos ]->mnSize;
     else
         return 0;
 }
@@ -1455,7 +1452,7 @@ void HeaderBar::SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits )
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
-        ImplHeadItem* pItem = mpItemList->GetObject( nPos );
+        ImplHeadItem* pItem = (*mpItemList)[ nPos ];
         if ( pItem->mnBits != nNewBits )
         {
             pItem->mnBits = nNewBits;
@@ -1470,7 +1467,7 @@ HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mnBits;
+        return (*mpItemList)[ nPos ]->mnBits;
     else
         return 0;
 }
@@ -1482,7 +1479,7 @@ void HeaderBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
-        mpItemList->GetObject( nPos )->mpUserData = pNewData;
+        (*mpItemList)[ nPos ]->mpUserData = pNewData;
         ImplUpdate( nPos );
     }
 }
@@ -1493,7 +1490,7 @@ void* HeaderBar::GetItemData( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mpUserData;
+        return (*mpItemList)[ nPos ]->mpUserData;
     else
         return NULL;
 }
@@ -1505,7 +1502,7 @@ void HeaderBar::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
-        mpItemList->GetObject( nPos )->maImage = rImage;
+        (*mpItemList)[ nPos ]->maImage = rImage;
         ImplUpdate( nPos );
     }
 }
@@ -1516,7 +1513,7 @@ Image HeaderBar::GetItemImage( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->maImage;
+        return (*mpItemList)[ nPos ]->maImage;
     else
         return Image();
 }
@@ -1528,7 +1525,7 @@ void HeaderBar::SetItemText( sal_uInt16 nItemId, const XubString& rText )
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
-        mpItemList->GetObject( nPos )->maText = rText;
+        (*mpItemList)[ nPos ]->maText = rText;
         ImplUpdate( nPos );
     }
 }
@@ -1539,7 +1536,7 @@ XubString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->maText;
+        return (*mpItemList)[ nPos ]->maText;
     else
         return String();
 }
@@ -1550,7 +1547,7 @@ void HeaderBar::SetHelpText( sal_uInt16 nItemId, const XubString& rText )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        mpItemList->GetObject( nPos )->maHelpText = rText;
+        (*mpItemList)[ nPos ]->maHelpText = rText;
 }
 
 // -----------------------------------------------------------------------
@@ -1560,7 +1557,7 @@ XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
     {
-        ImplHeadItem* pItem = mpItemList->GetObject( nPos );
+        ImplHeadItem* pItem = (*mpItemList)[ nPos ];
         if ( !pItem->maHelpText.Len() && pItem->maHelpId.getLength() )
         {
             Help* pHelp = Application::GetHelp();
@@ -1580,7 +1577,7 @@ void HeaderBar::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        mpItemList->GetObject( nPos )->maHelpId = rHelpId;
+        (*mpItemList)[ nPos ]->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
@@ -1590,7 +1587,7 @@ rtl::OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
     rtl::OString aRet;
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-        aRet = mpItemList->GetObject( nPos )->maHelpId;
+        return (*mpItemList)[ nPos ]->maHelpId;
     return aRet;
 }
 
@@ -1601,9 +1598,9 @@ Size HeaderBar::CalcWindowSizePixel() const
     long nMaxImageSize = 0;
     Size aSize( 0, GetTextHeight() );
 
-    ImplHeadItem* pItem = mpItemList->First();
-    while ( pItem )
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
     {
+        ImplHeadItem* pItem = (*mpItemList)[ i ];
         // Image-Groessen beruecksichtigen
         long nImageHeight = pItem->maImage.GetSizePixel().Height();
         if ( !(pItem->mnBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && pItem->maText.Len() )
@@ -1613,8 +1610,6 @@ Size HeaderBar::CalcWindowSizePixel() const
 
         // Breite aufaddieren
         aSize.Width() += pItem->mnSize;
-
-        pItem = mpItemList->Next();
     }
 
     if ( nMaxImageSize > aSize.Height() )
@@ -1649,3 +1644,4 @@ void HeaderBar::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::sta
     mxAccessible = _xAccessible;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

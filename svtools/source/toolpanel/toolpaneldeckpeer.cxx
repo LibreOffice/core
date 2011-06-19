@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -34,6 +35,7 @@
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
+#include <vcl/svapp.hxx>
 
 //......................................................................................................................
 namespace svt
@@ -74,7 +76,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > ToolPanelDeckPeer::CreateAccessibleContext()
     {
-        ::vos::OGuard aSolarGuard( GetMutex() );
+        SolarMutexGuard aSolarGuard;
         if ( m_pDeck == NULL )
             throw DisposedException( ::rtl::OUString(), *this );
 
@@ -88,7 +90,7 @@ namespace svt
     void SAL_CALL ToolPanelDeckPeer::dispose() throw(RuntimeException)
     {
         {
-            ::vos::OGuard aSolarGuard( GetMutex() );
+            SolarMutexGuard aSolarGuard;
             m_pDeck = NULL;
         }
         VCLXWindow::dispose();
@@ -97,3 +99,5 @@ namespace svt
 //......................................................................................................................
 } // namespace svt
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

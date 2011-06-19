@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 #include <unistd.h>
 #include <helper.hxx>
-#ifndef _PAD_PADIALOG_HRC_
 #include <padialog.hrc>
-#endif
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
@@ -48,11 +47,13 @@
 
 
 using namespace osl;
-using namespace rtl;
 using namespace padmin;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 #define MAX_PATH 1024
 
@@ -66,21 +67,17 @@ ResId padmin::PaResId( sal_uInt32 nId )
     if( ! pPaResMgr )
     {
         ::com::sun::star::lang::Locale aLocale;
-//      LanguageType nLang = LANGUAGE_SYSTEM;
 
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                     vcl::unohelper::GetMultiServiceFactory(),
-                    OUString::createFromAscii( "org.openoffice.Setup/L10N" ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/L10N")) );
         if ( aNode.isValid() )
         {
             rtl::OUString aLoc;
-            Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ooLocale" ) );
+            Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")) );
             if( aValue >>= aLoc )
             {
-//                LanguageType nTmpLang = MsLangId::convertIsoStringToLanguage( aLoc );
-//                if( nTmpLang != LANGUAGE_DONTKNOW )
-//                    nLang = nTmpLang;
                 sal_Int32 nIndex = 0;
                 aLocale.Language = aLoc.getToken( 0, '-', nIndex );
                 aLocale.Country = aLoc.getToken( 0, '-', nIndex );
@@ -89,7 +86,6 @@ ResId padmin::PaResId( sal_uInt32 nId )
         }
         pPaResMgr = ResMgr::SearchCreateResMgr( "spa", aLocale );
         AllSettings aSettings = Application::GetSettings();
-//        aSettings.SetUILanguage( nLang );
         aSettings.SetUILocale( aLocale );
         Application::SetSettings( aSettings );
     }
@@ -112,8 +108,8 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
     DirectoryItem aItem;
     while( aDir.getNextItem( aItem ) == FileBase::E_None )
     {
-        FileStatus aStatus( FileStatusMask_FileName         |
-                            FileStatusMask_Type
+        FileStatus aStatus( osl_FileStatus_Mask_FileName            |
+                            osl_FileStatus_Mask_Type
                             );
         if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
         {
@@ -325,3 +321,5 @@ bool padmin::chooseDirectory( String& rInOutPath )
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

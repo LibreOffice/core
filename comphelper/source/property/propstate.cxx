@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include <com/sun/star/uno/genfunc.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/instance.hxx>
 
 //.........................................................................
 namespace comphelper
@@ -66,18 +68,14 @@ namespace comphelper
     //---------------------------------------------------------------------
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> OPropertyStateHelper::getTypes() throw( ::com::sun::star::uno::RuntimeException)
     {
-        static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes;
-        if (!aTypes.getLength())
-        {
-            aTypes.realloc(4);
-            ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
-            // base class types
-            pTypes[0] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)NULL);
-            pTypes[1] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>*)NULL);
-            pTypes[2] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>*)NULL);
-            // my own type
-            pTypes[3] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>*)NULL);
-        }
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> aTypes(4);
+        ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
+        // base class types
+        pTypes[0] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)NULL);
+        pTypes[1] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>*)NULL);
+        pTypes[2] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>*)NULL);
+        // my own type
+        pTypes[3] = getCppuType(( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>*)NULL);
         return aTypes;
     }
 
@@ -216,20 +214,13 @@ namespace comphelper
         );
     }
 
+    namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
     //---------------------------------------------------------------------
     Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId() throw(RuntimeException)
     {
-        static ::cppu::OImplementationId * pId = NULL;
-        if ( !pId )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pId )
-            {
-                static ::cppu::OImplementationId aId;
-                pId = &aId;
-            }
-        }
-        return pId->getImplementationId();
+        ::cppu::OImplementationId &rID = lcl_ImplId::get();
+        return rID.getImplementationId();
     }
 
     //---------------------------------------------------------------------
@@ -259,3 +250,4 @@ namespace comphelper
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

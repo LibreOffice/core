@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -372,12 +373,11 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            pOutput->Insert(new INetContentTypeParameter(p->m_aAttribute,
+            pOutput->Append(new INetContentTypeParameter(p->m_aAttribute,
                                                              p->m_aCharset,
                                                              p->m_aLanguage,
                                                              aValue,
-                                                             !bBadEncoding),
-                                LIST_APPEND);
+                                                             !bBadEncoding));
             p = pNext;
         }
     return true;
@@ -1144,8 +1144,6 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
 
         bool bPresent;
         Parameter ** pPos = aList.find(aAttribute, nSection, bPresent);
-        if (bPresent)
-            break;
 
         bool bExtended = false;
         if (p != pEnd && *p == '*')
@@ -1302,7 +1300,8 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin));
         }
 
-        *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
+        if (!bPresent)
+            *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
                               nSection, bExtended);
     }
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
@@ -1549,7 +1548,7 @@ const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
                 return "ISO-10646-UCS-2";
 
             default:
-                DBG_ERROR("INetMIME::getCharsetName(): Unsupported encoding");
+                OSL_FAIL("INetMIME::getCharsetName(): Unsupported encoding");
                 return 0;
         }
 }
@@ -2039,7 +2038,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             break;
 
         default: //@@@ more cases are missing!
-            DBG_ERROR("INetMIME::createPreferredCharsetList():"
+            OSL_FAIL("INetMIME::createPreferredCharsetList():"
                           " Unsupported encoding");
             break;
     }
@@ -3057,25 +3056,6 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
 
 //============================================================================
 // static
-ByteString INetMIME::decodeUTF8(const ByteString & rText,
-                                rtl_TextEncoding eEncoding)
-{
-    const sal_Char * p = rText.GetBuffer();
-    const sal_Char * pEnd = p + rText.Len();
-    ByteString sDecoded;
-    while (p != pEnd)
-    {
-        sal_uInt32 nCharacter;
-        if (translateUTF8Char(p, pEnd, eEncoding, nCharacter))
-            sDecoded += sal_Char(nCharacter);
-        else
-            sDecoded += sal_Char(*p++);
-    }
-    return sDecoded;
-}
-
-//============================================================================
-// static
 UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                           const ByteString & rBody)
 {
@@ -3498,7 +3478,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             {
                 const sal_Char * pUTF8Begin = p - 1;
                 const sal_Char * pUTF8End = pUTF8Begin;
-                sal_uInt32 nCharacter;
+                sal_uInt32 nCharacter = 0;
                 if (translateUTF8Char(pUTF8End, pEnd, RTL_TEXTENCODING_UCS4,
                                       nCharacter))
                 {
@@ -3612,68 +3592,6 @@ void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
 //============================================================================
 // virtual
 ErrCode INetMIMEStringOutputSink::getError() const
-{
-    return m_bOverflow ? ERRCODE_IO_OUTOFMEMORY : ERRCODE_NONE;
-}
-
-//============================================================================
-//
-//  INetMIMEUnicodeOutputSink
-//
-//============================================================================
-
-// virtual
-void INetMIMEUnicodeOutputSink::writeSequence(const sal_Char * pBegin,
-                                              const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEUnicodeOutputSink::writeSequence(): Bad sequence");
-
-    sal_Unicode * pBufferBegin = new sal_Unicode[pEnd - pBegin];
-    sal_Unicode * pBufferEnd = pBufferBegin;
-    while (pBegin != pEnd)
-        *pBufferEnd++ = sal_uChar(*pBegin++);
-    writeSequence(pBufferBegin, pBufferEnd);
-    delete[] pBufferBegin;
-}
-
-//============================================================================
-// virtual
-void INetMIMEUnicodeOutputSink::writeSequence(const sal_uInt32 * pBegin,
-                                              const sal_uInt32 * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEUnicodeOutputSink::writeSequence(): Bad sequence");
-
-    sal_Unicode * pBufferBegin = new sal_Unicode[pEnd - pBegin];
-    sal_Unicode * pBufferEnd = pBufferBegin;
-    while (pBegin != pEnd)
-    {
-        DBG_ASSERT(*pBegin < 256,
-                   "INetMIMEOutputSink::writeSequence(): Bad octet");
-        *pBufferEnd++ = sal_Unicode(*pBegin++);
-    }
-    writeSequence(pBufferBegin, pBufferEnd);
-    delete[] pBufferBegin;
-}
-
-//============================================================================
-// virtual
-void INetMIMEUnicodeOutputSink::writeSequence(const sal_Unicode * pBegin,
-                                              const sal_Unicode * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEUnicodeOutputSink::writeSequence(): Bad sequence");
-
-    m_bOverflow = m_bOverflow
-                  || pEnd - pBegin > STRING_MAXLEN - m_aBuffer.Len();
-    if (!m_bOverflow)
-        m_aBuffer.Append(pBegin, static_cast< xub_StrLen >(pEnd - pBegin));
-}
-
-//============================================================================
-// virtual
-ErrCode INetMIMEUnicodeOutputSink::getError() const
 {
     return m_bOverflow ? ERRCODE_IO_OUTOFMEMORY : ERRCODE_NONE;
 }
@@ -4544,20 +4462,21 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
 
 void INetContentTypeParameterList::Clear()
 {
-    while (Count() > 0)
-        delete static_cast< INetContentTypeParameter * >(Remove(Count() - 1));
+    maEntries.clear();
 }
 
 //============================================================================
 const INetContentTypeParameter *
 INetContentTypeParameterList::find(const ByteString & rAttribute) const
 {
-    for (sal_uIntPtr i = 0; i < Count(); ++i)
+    boost::ptr_vector<INetContentTypeParameter>::const_iterator iter;
+    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
-        const INetContentTypeParameter * pParameter = GetObject(i);
-        if (pParameter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
-            return pParameter;
+        if (iter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
+            return &(*iter);
     }
-    return 0;
+
+    return NULL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

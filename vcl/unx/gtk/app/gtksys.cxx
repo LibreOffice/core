@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <unx/svunx.h>
 #include <svdata.hxx>
+
 #include <vcl/window.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <cstdio>
@@ -44,6 +52,14 @@ SalSystem *GtkInstance::CreateSalSystem()
 
 GtkSalSystem::~GtkSalSystem()
 {
+}
+
+// convert ~ to indicate mnemonic to '_'
+static ByteString MapToGtkAccelerator (const String &rStr)
+{
+    String aRet( rStr );
+    aRet.SearchAndReplaceAscii("~", String::CreateFromAscii("_"));
+    return ByteString( aRet, RTL_TEXTENCODING_UTF8 );
 }
 
 int GtkSalSystem::ShowNativeDialog( const String& rTitle,
@@ -74,15 +90,16 @@ int GtkSalSystem::ShowNativeDialog( const String& rTitle,
     int nButton = 0;
     for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
-        ByteString aLabel( *it, RTL_TEXTENCODING_UTF8 );
-
         if( nButton == nDefButton )
         {
-            gtk_dialog_add_button( GTK_DIALOG( mainwin ), aLabel.GetBuffer(), nButtons );
+            gtk_dialog_add_button( GTK_DIALOG( mainwin ), MapToGtkAccelerator(*it).GetBuffer(), nButtons );
             gtk_dialog_set_default_response( GTK_DIALOG( mainwin ), nButtons );
         }
         else
+        {
+            ByteString aLabel( *it, RTL_TEXTENCODING_UTF8 );
             gtk_dialog_add_button( GTK_DIALOG( mainwin ), aLabel.GetBuffer(), nButtons );
+        }
         nButtons++;
     }
 
@@ -94,3 +111,5 @@ int GtkSalSystem::ShowNativeDialog( const String& rTitle,
 
     return nResponse;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

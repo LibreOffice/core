@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_vcl.hxx"
 
 #include <limits.h>
-
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 
@@ -338,14 +338,6 @@ Bitmap Window::SnapShot( sal_Bool bBorder ) const
     }
 
     return aBmp;
-}
-
-// -----------------------------------------------------------------------
-
-Bitmap Window::SnapShot() const
-{
-    // Should be merged in the next top level build !!!
-    return SnapShot( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -1306,110 +1298,6 @@ void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
     }
 }
 
-// support for docking
-// this is currently handled in ImplDockingWindowWrapper
-/*
-void Window::ImplSetFloatingMode( sal_Bool bFloatMode )
-{
-    // if the window is docked, put it into a flaoting window
-    // if it is floating put it back in the old frame
-
-    ImplDockingWindowWrapper *pWrapper = pDockingMgr->GetDockingWindowWrapper( this );
-    if( !pDockingData )
-        return;
-
-    if ( pWrapper->IsFloatingMode() != bFloatMode )
-    {
-        if ( pWrapper->PrepareToggleFloatingMode() )
-        {
-            sal_Bool bVisible = IsVisible();
-
-            if ( bFloatMode )
-            {
-                Show( sal_False, SHOW_NOFOCUSCHANGE );
-
-                pWrapper->maDockPos = GetPosPixel();
-
-                Window* pRealParent = mpWindowImpl->mpRealParent;
-                pWrapper->mpOldBorderWin = mpWindowImpl->mpBorderWindow;
-
-                ImplDockFloatWin* pWin =
-                    new ImplDockFloatWin2(
-                                         mpWindowImpl->mpParent,
-                                         mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
-                                         pWrapper );
-                pWrapper->mpFloatWin = pWin;
-                mpWindowImpl->mpBorderWindow  = NULL;
-                mpWindowImpl->mnLeftBorder    = 0;
-                mpWindowImpl->mnTopBorder     = 0;
-                mpWindowImpl->mnRightBorder   = 0;
-                mpWindowImpl->mnBottomBorder  = 0;
-                // Falls Parent zerstoert wird, muessen wir auch vom
-                // BorderWindow den Parent umsetzen
-                if ( pWrapper->mpOldBorderWin )
-                    pWrapper->mpOldBorderWin->SetParent( pWin );
-                SetParent( pWin );
-                pWin->SetPosPixel( Point() );
-                mpWindowImpl->mpBorderWindow = pWin;
-                pWin->mpWindowImpl->mpClientWindow = this;
-                mpWindowImpl->mpRealParent = pRealParent;
-                pWin->SetText( GetText() );
-                pWin->SetOutputSizePixel( GetSizePixel() );
-                pWin->SetPosPixel( pWrapper->maFloatPos );
-                // DockingDaten ans FloatingWindow weiterreichen
-                pWin->ShowTitleButton( TITLE_BUTTON_DOCKING, pWrapper->mbDockBtn );
-                pWin->ShowTitleButton( TITLE_BUTTON_HIDE, pWrapper->mbHideBtn );
-                pWin->SetPin( pWrapper->mbPined );
-                if ( pWrapper->mbRollUp )
-                    pWin->RollUp();
-                else
-                    pWin->RollDown();
-                pWin->SetRollUpOutputSizePixel( pWrapper->maRollUpOutSize );
-                pWin->SetMinOutputSizePixel( pWrapper->maMinOutSize );
-
-                pWrapper->ToggleFloatingMode();
-
-                if ( bVisible )
-                    Show();
-            }
-            else
-            {
-                Show( sal_False, SHOW_NOFOCUSCHANGE );
-
-                // FloatingDaten wird im FloatingWindow speichern
-                pWrapper->maFloatPos      = mpFloatWin->GetPosPixel();
-                pWrapper->mbDockBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_DOCKING );
-                pWrapper->mbHideBtn       = mpFloatWin->IsTitleButtonVisible( TITLE_BUTTON_HIDE );
-                pWrapper->mbPined         = mpFloatWin->IsPined();
-                pWrapper->mbRollUp        = mpFloatWin->IsRollUp();
-                pWrapper->maRollUpOutSize = mpFloatWin->GetRollUpOutputSizePixel();
-                pWrapper->maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
-
-                Window* pRealParent = mpWindowImpl->mpRealParent;
-                mpWindowImpl->mpBorderWindow = NULL;
-                if ( pWrapper->mpOldBorderWin )
-                {
-                    SetParent( pWrapper->mpOldBorderWin );
-                    ((ImplBorderWindow*)pWrapper->mpOldBorderWin)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
-                    pWrapper->mpOldBorderWin->Resize();
-                }
-                mpWindowImpl->mpBorderWindow = pWrapper->mpOldBorderWin;
-                SetParent( pRealParent );
-                mpWindowImpl->mpRealParent = pRealParent;
-                delete static_cast<ImplDockFloatWin*>(mpFloatWin);
-                pWrapper->mpFloatWin = NULL;
-                SetPosPixel( maDockPos );
-
-                pWrapper->ToggleFloatingMode();
-
-                if ( bVisible )
-                    Show();
-            }
-        }
-    }
-}
-*/
-
 DockingManager* Window::GetDockingManager()
 {
     return ImplGetDockingManager();
@@ -1976,3 +1864,4 @@ void Window::SetOutputSizePixel( const Size& rNewSize )
                         rNewSize.Height()+mpWindowImpl->mnTopBorder+mpWindowImpl->mnBottomBorder ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

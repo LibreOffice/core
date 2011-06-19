@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,10 +72,11 @@ public:
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, const RscId & rId );
-    sal_Bool            IsConsistent( const RSCINST & rInst,
-                                  RscInconsList * pList = NULL );
+    sal_Bool        IsConsistent( const RSCINST & rInst );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 };
 
 #endif //_RSCMGR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -90,7 +91,9 @@
 #define CONTENT_TYPE_STR_AUDIO_AIFF "audio/aiff"
 #define CONTENT_TYPE_STR_AUDIO_BASIC "audio/basic"
 #define CONTENT_TYPE_STR_AUDIO_MIDI "audio/midi"
+#define CONTENT_TYPE_STR_AUDIO_VORBIS "audio/vorbis"
 #define CONTENT_TYPE_STR_AUDIO_WAV "audio/wav"
+#define CONTENT_TYPE_STR_AUDIO_WEBM "audio/webm"
 #define CONTENT_TYPE_STR_X_CNT_DOCUMENT ".chaos/document"
 #define CONTENT_TYPE_STR_X_CNT_FSYSBOX ".chaos/fsys-box"
 #define CONTENT_TYPE_STR_X_CNT_CDROM_VOLUME ".chaos/fsys-cdrom-volume"
@@ -155,8 +158,10 @@
 #define CONTENT_TYPE_STR_TEXT_URL "text/x-url"
 #define CONTENT_TYPE_STR_TEXT_VCALENDAR "text/x-vCalendar"
 #define CONTENT_TYPE_STR_TEXT_VCARD "text/x-vCard"
-#define CONTENT_TYPE_STR_VIDEO_VDO "video/vdo"
 #define CONTENT_TYPE_STR_VIDEO_MSVIDEO "video/x-msvideo"
+#define CONTENT_TYPE_STR_VIDEO_THEORA "video/theora"
+#define CONTENT_TYPE_STR_VIDEO_VDO "video/vdo"
+#define CONTENT_TYPE_STR_VIDEO_WEBM "audio/webm"
 #define CONTENT_TYPE_STR_X_STARMAIL "x-starmail"
 #define CONTENT_TYPE_STR_X_VRML "x-world/x-vrml"
 #define CONTENT_TYPE_STR_APP_VND_SUN_XML_WRITER "application/vnd.sun.xml.writer"
@@ -228,7 +233,9 @@ enum INetContentType
     CONTENT_TYPE_AUDIO_AIFF,
     CONTENT_TYPE_AUDIO_BASIC,
     CONTENT_TYPE_AUDIO_MIDI,
+    CONTENT_TYPE_AUDIO_VORBIS,
     CONTENT_TYPE_AUDIO_WAV,
+    CONTENT_TYPE_AUDIO_WEBM,
     CONTENT_TYPE_IMAGE_GIF,
     CONTENT_TYPE_IMAGE_JPEG,
     CONTENT_TYPE_IMAGE_PCX,
@@ -239,8 +246,10 @@ enum INetContentType
     CONTENT_TYPE_TEXT_PLAIN,
     CONTENT_TYPE_TEXT_URL,
     CONTENT_TYPE_TEXT_VCARD,
-    CONTENT_TYPE_VIDEO_VDO,
     CONTENT_TYPE_VIDEO_MSVIDEO,
+    CONTENT_TYPE_VIDEO_THEORA,
+    CONTENT_TYPE_VIDEO_VDO,
+    CONTENT_TYPE_VIDEO_WEBM,
     CONTENT_TYPE_X_CNT_MESSAGE,
     CONTENT_TYPE_X_CNT_DOCUMENT,
     CONTENT_TYPE_X_CNT_POP3BOX,
@@ -474,3 +483,4 @@ public:
 
 #endif // _INETTYPE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

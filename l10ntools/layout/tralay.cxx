@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,9 +27,11 @@
  ************************************************************************/
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <l10ntools/vosapp.hxx>
 
 #include <osl/file.hxx>
+#include <osl/process.h>
+
+#include <l10ntools/vosapp.hxx>
 
 #include "export.hxx"
 #include "layoutparse.hxx"
@@ -163,9 +166,9 @@ void TranslateLayout::ParseCommandLine()
 static XMLAttribute*
 findAttribute( XMLAttributeList* lst, String const& name )
 {
-    for ( sal_uLong i = 0; i < lst->Count(); i++ )
-        if ( lst->GetObject( i )->Equals( name ) )
-            return lst->GetObject( i );
+    for ( size_t i = 0; i < lst->size(); i++ )
+        if ( (*lst)[ i ]->Equals( name ) )
+            return (*lst)[ i ];
     return 0;
 }
 
@@ -174,7 +177,17 @@ translateAttribute( XMLAttributeList* lst,
                     String const& name, String const& translation )
 {
     if ( XMLAttribute* a = findAttribute( lst, name ) )
-        return lst->Replace ( new XMLAttribute( name.Copy( 1 ), translation ), a );
+    {
+        for ( XMLAttributeList::iterator it = lst->begin(); it < lst->end(); ++it )
+        {
+            if ( *it == a )
+            {
+                delete *it;
+                *it = new XMLAttribute( name.Copy( 1 ), translation );
+                return *it;
+            }
+        }
+    }
     return 0;
 }
 
@@ -201,13 +214,8 @@ translateElement( XMLElement* element, ByteString const& lang,
             {
                 ByteString translation;
                 entry->GetText( translation, STRING_TYP_TEXT, lang, true );
-    //            ByteString original = removeContent( element );
                 if ( !translation.Len() )
-#if 0
-                    translation = original;
-#else
                     translation = BSTRING( ( *i )->GetValue() );
-#endif
                 delete translateAttribute( attributes, **i , STRING( translation ) );
             }
         }
@@ -221,7 +229,7 @@ static bool is_dir( ByteString const& name )
     FileBase::getFileURLFromSystemPath( sFileURL, sFileURL );
     if( DirectoryItem::get( sFileURL, aItem ) == FileBase::E_None )
     {
-        FileStatus aStatus(FileStatusMask_Type);
+        FileStatus aStatus(osl_FileStatus_Mask_Type);
         if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
         {
             if( aStatus.getFileType() == FileStatus::Directory )
@@ -241,17 +249,23 @@ static void make_directory( ByteString const& name )
 static void insertMarker( XMLParentNode *p, ByteString const& file )
 {
     if ( XMLChildNodeList* lst = p->GetChildList() )
-        if ( lst->Count() )
+        if ( !lst->empty() )
         {
-            sal_uLong i = 1;
+            size_t i = 1;
             // Skip newline, if possible.
-            if ( lst->Count() > 1
-                 && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )
+            if ( lst->size() > 2
+                 && (*lst)[ 2 ]->GetNodeType() == XML_NODE_TYPE_DEFAULT )
                 i++;
-            OUString marker = OUString::createFromAscii( "\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: " )
+            OUString marker = OUString(RTL_CONSTASCII_USTRINGPARAM("\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: "))
                 + STRING( file )
-                + OUString::createFromAscii( ".\n          Do not edit, changes will be lost.\n" );
-            lst->Insert( new XMLComment( marker, 0 ), i );
+                + OUString(RTL_CONSTASCII_USTRINGPARAM(".\n          Do not edit, changes will be lost.\n"));
+            if ( i < lst->size() ) {
+                XMLChildNodeList::iterator it = lst->begin();
+                ::std::advance( it, i );
+                lst->insert( it, new XMLComment( marker, 0 ) );
+            } else {
+                lst->push_back( new XMLComment( marker, 0 ) );
+            }
         }
 }
 
@@ -362,14 +376,14 @@ void TranslateLayout::Main()
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
         fprintf( stderr, "error: parsing: '%s'\n", aStr.getStr() );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
     catch ( uno::Exception& rExc )
     {
         OString aStr( OUStringToOString( rExc.Message,
                                          RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "error: UNO: '%s'\n", aStr.getStr() );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 }
 
@@ -397,3 +411,5 @@ SAL_IMPLEMENT_MAIN()
     t.Main();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

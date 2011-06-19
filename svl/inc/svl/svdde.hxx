@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <vector>
 
 class DdeString;
 class DdeData;
@@ -47,35 +49,19 @@ class DdeExecute;
 class DdeItem;
 class DdeTopic;
 class DdeService;
-class ConvList;
 struct DdeDataImp;
 struct DdeImp;
 class DdeItemImp;
+struct Conversation;
 
 #ifndef _SVDDE_NOLISTS
-DECLARE_LIST( DdeConnections, DdeConnection* )
 DECLARE_LIST( DdeServices, DdeService* )
-DECLARE_LIST( DdeTopics, DdeTopic* )
-DECLARE_LIST( DdeItems, DdeItem* )
 #else
-typedef List DdeConnections;
 typedef List DdeServices;
-typedef List DdeTopics;
-typedef List DdeItems;
 #endif
 
-//#if 0 // _SOLAR__PRIVATE
-DECLARE_LIST( DdeTransactions, DdeTransaction* )
-DECLARE_LIST( DdeFormats, long )
-//#else
-//typedef List DdeTransactions;
-//typedef List DdeFormats;
-//#endif
-
-#ifndef STRING_LIST
-#define STRING_LIST
-DECLARE_LIST( StringList, String * )
-#endif
+typedef ::std::vector< long > DdeFormats;
+typedef ::std::vector< Conversation* > ConvList;
 
 // -----------
 // - DdeData -
@@ -89,9 +75,8 @@ class SVL_DLLPUBLIC DdeData
     friend class    DdeTransaction;
     DdeDataImp*     pImp;
 
-//#if 0 // _SOLAR__PRIVATE
     SVL_DLLPRIVATE void            Lock();
-//#endif
+
     void            SetFormat( sal_uLong nFmt );
 
 public:
@@ -110,42 +95,6 @@ public:
 
     static sal_uLong GetExternalFormat( sal_uLong nFmt );
     static sal_uLong GetInternalFormat( sal_uLong nFmt );
-};
-// ------------------
-// - DdeServiceList -
-// ------------------
-
-class DdeServiceList
-{
-    StringList      aServices;
-
-public:
-                    DdeServiceList( const String* = NULL );
-                    ~DdeServiceList();
-
-    StringList&     GetServices() { return aServices; }
-
-private:
-                            DdeServiceList( const DdeServiceList& );
-    const DdeServiceList&   operator= ( const DdeServiceList& );
-};
-
-// ----------------
-// - DdeTopicList -
-// ----------------
-
-class DdeTopicList
-{
-    StringList      aTopics;
-
-//#if 0 // _SOLAR__PRIVATE
-                    DECL_LINK( Data, DdeData* );
-//#endif
-public:
-                    DdeTopicList( const String& );
-                    ~DdeTopicList();
-
-    StringList&     GetTopics() { return aTopics; }
 };
 
 // ------------------
@@ -276,7 +225,7 @@ class SVL_DLLPUBLIC DdeConnection
 {
     friend class    DdeInternal;
     friend class    DdeTransaction;
-    DdeTransactions aTransactions;
+    std::vector<DdeTransaction*> aTransactions;
     DdeString*      pService;
     DdeString*      pTopic;
     DdeImp*         pImp;
@@ -288,7 +237,7 @@ public:
     long            GetError();
     long            GetConvId();
 
-    static const DdeConnections& GetConnections();
+    static const std::vector<DdeConnection*>& GetConnections();
 
     sal_Bool            IsConnected();
 
@@ -375,7 +324,7 @@ private:
 private:
     DdeString*      pName;
     String          aItem;
-    DdeItems        aItems;
+    std::vector<DdeItem*> aItems;
     Link            aConnectLink;
     Link            aDisconnectLink;
     Link            aGetLink;
@@ -407,7 +356,7 @@ public:
     DdeItem*        AddItem( const DdeItem& );  // werden kopiert !
     void            RemoveItem( const DdeItem& );
     const String&   GetCurItem() { return aItem;  }
-    const DdeItems& GetItems()   { return aItems; }
+    const std::vector<DdeItem*>& GetItems() const  { return aItems; }
 
 private:
                     DdeTopic( const DdeTopic& );
@@ -438,7 +387,7 @@ protected:
 
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
-    DdeTopics       aTopics;
+    std::vector<DdeTopic*> aTopics;
     DdeFormats      aFormats;
     DdeTopic*       pSysTopic;
     DdeString*      pName;
@@ -455,7 +404,7 @@ public:
     short           GetError()              { return nStatus; }
 
     static DdeServices& GetServices();
-    DdeTopics&      GetTopics()             { return aTopics; }
+    std::vector<DdeTopic*>& GetTopics() { return aTopics; }
 
     void            AddTopic( const DdeTopic& );
     void            RemoveTopic( const DdeTopic& );
@@ -478,3 +427,5 @@ inline long DdeTransaction::GetError()
     return rDde.GetError();
 }
 #endif // _SVDDE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

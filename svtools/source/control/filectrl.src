@@ -47,4 +47,3 @@ String STR_TABBAR_PUSHBUTTON_MOVETOEND
 {
     Text [ en-US ] = "Move To End" ;
 };
-

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,9 @@
 #include <textToPronounce_zh.hxx>
 
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -148,9 +151,9 @@ extern "C" { static void SAL_CALL thisModule() {} }
 TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
 {
 #ifdef SAL_DLLPREFIX
-    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION);
+    OUString lib(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX"index_data"SAL_DLLEXTENSION));
 #else
-    OUString lib=OUString::createFromAscii("index_data"SAL_DLLEXTENSION);
+    OUString lib(RTL_CONSTASCII_USTRINGPARAM("index_data"SAL_DLLEXTENSION));
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
@@ -166,3 +169,5 @@ TextToPronounce_zh::~TextToPronounce_zh()
     if (hModule) osl_unloadModule(hModule);
 }
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
 
 extern "C" {
 struct VersionInfo
@@ -65,7 +66,7 @@ int __LOADONCALLAPI main( int argc, char **argv )
     oslModule aLibrary = osl_loadModule( aLib.pData, SAL_LOADMODULE_DEFAULT );
     if ( aLibrary )
     {
-        void* pFunc = osl_getSymbol( aLibrary, OUString::createFromAscii( "GetVersionInfo" ).pData );
+        void* pFunc = osl_getSymbol( aLibrary, OUString( RTL_CONSTASCII_USTRINGPARAM( "GetVersionInfo" )).pData );
         if ( pFunc )
             pInfo = (*(GetVersionInfo)pFunc)();
     }
@@ -87,3 +88,4 @@ int __LOADONCALLAPI main( int argc, char **argv )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

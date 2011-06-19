@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,6 +154,8 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
         void Clear();
 
+        void SetDefault( ::rtl::OUString sName, bool bValue );
+
         /*-****************************************************************************************************//**
             @short      return complete specified list
             @descr      Call it to get all entries of compatibility options.
@@ -251,3 +254,4 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
 
 #endif  // #ifndef INCLUDED_unotools_COMPATIBILITY_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

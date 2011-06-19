@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #define _TEXTDAT2_HXX
 
 #include <svl/svarray.hxx>
-#include <tools/list.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>
@@ -304,3 +304,5 @@ struct TextDDInfo
 };
 
 #endif // _TEXTDAT2_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

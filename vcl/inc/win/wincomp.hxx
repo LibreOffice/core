@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _SV_WINCOMP_HXX
 #define _SV_WINCOMP_HXX
 
-#ifndef _STRING_H
 #include <string.h>
-#endif
 
 // ----------
 // - Strict -
@@ -150,37 +149,37 @@ inline HFONT GetWindowFont( HWND hWnd )
 
 inline void SetClassCursor( HWND hWnd, HCURSOR hCursor )
 {
-    SetClassLong( hWnd, GCL_HCURSOR, (DWORD)hCursor );
+    SetClassLongPtr( hWnd, GCLP_HCURSOR, (LONG_PTR)hCursor );
 }
 
 inline HCURSOR GetClassCursor( HWND hWnd )
 {
-    return (HCURSOR)GetClassLong( hWnd, GCL_HCURSOR );
+    return (HCURSOR)GetClassLongPtr( hWnd, GCLP_HCURSOR );
 }
 
 inline void SetClassIcon( HWND hWnd, HICON hIcon )
 {
-    SetClassLong( hWnd, GCL_HICON, (DWORD)hIcon );
+    SetClassLongPtr( hWnd, GCLP_HICON, (LONG_PTR)hIcon );
 }
 
 inline HICON GetClassIcon( HWND hWnd )
 {
-    return (HICON)GetClassLong( hWnd, GCL_HICON );
+    return (HICON)GetClassLongPtr( hWnd, GCLP_HICON );
 }
 
 inline HBRUSH SetClassBrush( HWND hWnd, HBRUSH hBrush )
 {
-    return (HBRUSH)SetClassLong( hWnd, GCL_HBRBACKGROUND, (DWORD)hBrush );
+    return (HBRUSH)SetClassLongPtr( hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrush );
 }
 
 inline HBRUSH GetClassBrush( HWND hWnd )
 {
-    return (HBRUSH)GetClassLong( hWnd, GCL_HBRBACKGROUND );
+    return (HBRUSH)GetClassLongPtr( hWnd, GCLP_HBRBACKGROUND );
 }
 
 inline HINSTANCE GetWindowInstance( HWND hWnd )
 {
-    return (HINSTANCE)GetWindowLong( hWnd, GWL_HINSTANCE );
+    return (HINSTANCE)GetWindowLongPtr( hWnd, GWLP_HINSTANCE );
 }
 
 // ------------------------
@@ -261,3 +260,5 @@ typedef int (APIENTRY* SysAgt_Enable_PROC)( int );
 #endif
 
 #endif // _SV_WINCOMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

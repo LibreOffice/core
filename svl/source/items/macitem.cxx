@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 #include <tools/stream.hxx>
-
-#ifndef GCC
-#endif
 
 #include <svl/macitem.hxx>
 
@@ -293,3 +291,4 @@ sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
                 ? 0 : aMacroTable.GetVersion();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

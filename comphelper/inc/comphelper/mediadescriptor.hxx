@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@ namespace comphelper{
 /** @short  can be used to work with a <type scope="::com::sun::star::document">MediaDescriptor</type>
             struct.
 
-    @descr  It wraps a ::std::hash_map around the Sequence< css::beans::PropertyValue >, which
+    @descr  It wraps a ::boost::unordered_map around the Sequence< css::beans::PropertyValue >, which
             represent the MediaDescriptor item.
             Further this helper defines often used functions (as e.g. open of the required streams,
             consistent checks etcpp.) and it defines all useable property names.
@@ -337,3 +338,5 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
 } // namespace comphelper
 
 #endif // _COMPHELPER_MEDIADESCRIPTOR_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

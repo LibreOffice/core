@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,8 @@
 #include "widthfolding_data.h"
 
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -299,3 +301,5 @@ oneToOneMapping& widthfolding::gethalfKana2fullKanaTable()
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

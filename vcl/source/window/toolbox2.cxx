@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 
@@ -50,7 +50,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 // =======================================================================
 
@@ -504,12 +505,6 @@ void ToolBox::Deactivate()
     mnActivateCount--;
     ImplCallEventListeners( VCLEVENT_TOOLBOX_DEACTIVATE );
     maDeactivateHdl.Call( this );
-
-    if ( mbHideStatusText )
-    {
-        GetpApp()->HideHelpStatusText();
-        mbHideStatusText = sal_False;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -518,13 +513,6 @@ void ToolBox::Highlight()
 {
     ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHT );
     maHighlightHdl.Call( this );
-
-    XubString aStr = GetHelpText( mnCurItemId );
-    if ( aStr.Len() || mbHideStatusText )
-    {
-        GetpApp()->ShowHelpStatusText( aStr );
-        mbHideStatusText = sal_True;
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -2182,12 +2170,12 @@ sal_Bool ToolBox::ImplHasClippedItems()
     {
         if( it->IsClipped() )
             return sal_True;
-        it++;
+        ++it;
     }
     return sal_False;
 }
 
-void ToolBox::ImplUpdateCustomMenu()
+void ToolBox::UpdateCustomMenu()
 {
     // fill clipped items into menu
     if( !IsMenuEnabled() )
@@ -2308,7 +2296,7 @@ void ToolBox::ExecuteCustomMenu()
     {
         // handle custom menu asynchronously
         // to avoid problems if the toolbox is closed during menu execute
-        ImplUpdateCustomMenu();
+        UpdateCustomMenu();
         Application::PostUserEvent( mpData->mnEventId, LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
     }
 }
@@ -2375,12 +2363,12 @@ sal_Bool ToolBox::AlwaysLocked()
 
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
             vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars" ) );    // note: case sensisitive !
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.UI.GlobalSettings/Toolbars")) );    // note: case sensisitive !
         if ( aNode.isValid() )
         {
             // feature enabled ?
             sal_Bool bStatesEnabled = sal_Bool();
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "StatesEnabled" ) );
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("StatesEnabled")) );
             if( aValue >>= bStatesEnabled )
             {
                 if( bStatesEnabled == sal_True )
@@ -2388,10 +2376,10 @@ sal_Bool ToolBox::AlwaysLocked()
                     // now read the locking state
                     utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                         vcl::unohelper::GetMultiServiceFactory(),
-                        OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" ) );    // note: case sensisitive !
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.UI.GlobalSettings/Toolbars/States")) );    // note: case sensisitive !
 
                     sal_Bool bLocked = sal_Bool();
-                    ::com::sun::star::uno::Any aValue2 = aNode2.getNodeValue( OUString::createFromAscii( "Locked" ) );
+                    ::com::sun::star::uno::Any aValue2 = aNode2.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Locked")) );
                     if( aValue2 >>= bLocked )
                         nAlwaysLocked = (bLocked == sal_True) ? 1 : 0;
                 }
@@ -2416,11 +2404,9 @@ void ToolBox::ImplUpdateImageList()
 {
     if (mpData->mpImageListProvider != NULL)
     {
-        sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
         try
         {
-            ImageListType eType = bHC ? vcl::HIGHCONTRAST_YES : vcl::HIGHCONTRAST_NO;
-
+            ImageListType eType = vcl::HIGHCONTRAST_NO;
             if (eType != mpData->meImageListType)
             {
                 vcl::IImageListProvider* pImageListProvider = mpData->mpImageListProvider;
@@ -2438,3 +2424,5 @@ void ToolBox::SetImageListProvider(vcl::IImageListProvider* _pProvider)
     ImplUpdateImageList();
 }
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,10 +39,6 @@
 #include "sgvmain.hxx"
 #include "sgvspln.hxx"
 #include <unotools/ucbstreamhelper.hxx>
-
-//#if OSL_DEBUG_LEVEL > 1
-//#include "Debug.c"
-//#endif
 
 #define SWAPPOINT(p) {  \
     p.x=SWAPSHORT(p.x); \
@@ -326,10 +323,6 @@ SvStream& operator>>(SvStream& rInp, GrupType& rGrup)
 |*
 |*    Sgv2SvFarbe()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 Color Sgv2SvFarbe(sal_uInt8 nFrb1, sal_uInt8 nFrb2, sal_uInt8 nInts)
 {
@@ -422,10 +415,6 @@ void SetArea(ObjAreaType& rArea, OutputDevice& rOut)
 |*
 |*    ObjkType::DrawObjekt()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 void ObjkType::Draw(OutputDevice&)
 {
@@ -438,10 +427,6 @@ void Obj0Type::Draw(OutputDevice&) {}
 |*
 |*    StrkType::DrawObjekt()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 void StrkType::Draw(OutputDevice& rOut)
 {
@@ -452,10 +437,6 @@ void StrkType::Draw(OutputDevice& rOut)
 /*************************************************************************
 |*
 |*    RectType::DrawObjekt()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 void SgfAreaColorIntens(sal_uInt16 Muster, sal_uInt8 Col1, sal_uInt8 Col2, sal_uInt8 Int, OutputDevice& rOut)
@@ -598,10 +579,6 @@ void RectType::Draw(OutputDevice& rOut)
 |*
 |*    PolyType::Draw()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 void PolyType::Draw(OutputDevice& rOut)
 {
@@ -620,10 +597,6 @@ void PolyType::Draw(OutputDevice& rOut)
 /*************************************************************************
 |*
 |*    SplnType::Draw()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 void SplnType::Draw(OutputDevice& rOut)
@@ -646,10 +619,6 @@ void SplnType::Draw(OutputDevice& rOut)
 /*************************************************************************
 |*
 |*    CircType::Draw()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAreaType& F, OutputDevice& rOut)
@@ -794,16 +763,11 @@ void CircType::Draw(OutputDevice& rOut)
 |*
 |*    BmapType::Draw()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 
 void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
-    unsigned char   nSgfTyp;
     sal_uInt16          nVersion;
     String          aStr(
         reinterpret_cast< char const * >(&Filename[ 1 ]),
@@ -813,13 +777,12 @@ void BmapType::Draw(OutputDevice& rOut)
     SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
     if ( pInp )
     {
-        nSgfTyp=CheckSgfTyp( *pInp,nVersion);
+        unsigned char nSgfTyp=CheckSgfTyp( *pInp,nVersion);
         switch(nSgfTyp) {
             case SGF_BITIMAGE: {
                 GraphicFilter aFlt;
                 Graphic aGrf;
-                sal_uInt16 nRet;
-                nRet=aFlt.ImportGraphic(aGrf,aFNam);
+                aFlt.ImportGraphic(aGrf,aFNam);
                 aGrf.Draw(&rOut,Point(Pos1.x,Pos1.y),Size(Pos2.x-Pos1.x,Pos2.y-Pos1.y));
             } break;
             case SGF_SIMPVECT: {
@@ -851,10 +814,6 @@ void BmapType::Draw(OutputDevice& rOut)
 |*
 |*    GrupType::...
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 sal_uInt32 GrupType::GetSubPtr()
 {
@@ -864,10 +823,6 @@ sal_uInt32 GrupType::GetSubPtr()
 /*************************************************************************
 |*
 |*    DrawObjkList()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
@@ -954,10 +909,6 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
 |*
 |*    SkipObjkList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 void SkipObjkList(SvStream& rInp)
 {
@@ -979,10 +930,6 @@ void SkipObjkList(SvStream& rInp)
 /*************************************************************************
 |*
 |*    SgfFilterSDrw()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 sal_Bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
@@ -1039,10 +986,6 @@ sal_Bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf
 /*************************************************************************
 |*
 |*    SgfSDrwFilter()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
@@ -1128,3 +1071,4 @@ for n:=0 to 63 do
 end;
 */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

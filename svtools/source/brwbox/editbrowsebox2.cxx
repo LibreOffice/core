@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -132,7 +133,7 @@ void EditBrowseBoxImpl::clearActiveCell()
     }
     catch(const Exception&)
     {
-        OSL_ENSURE( sal_False, "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
+        OSL_FAIL( "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
     }
 
     m_xActiveCell = NULL;
@@ -220,3 +221,4 @@ sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumn
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

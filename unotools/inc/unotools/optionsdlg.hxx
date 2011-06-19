@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef INCLUDED_unotools_OPTIONSDLG_HXX
 #define INCLUDED_unotools_OPTIONSDLG_HXX
 
-#ifndef INCLUDED_unotoolsdllapi_H
 #include "unotools/unotoolsdllapi.h"
-#endif
 #include <tools/string.hxx>
 #include <unotools/options.hxx>
 
@@ -54,3 +53,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

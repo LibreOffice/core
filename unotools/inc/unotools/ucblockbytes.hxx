@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,9 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "unotools/unotoolsdllapi.h"
 
-#include <vos/thread.hxx>
-#include <vos/conditn.hxx>
-#include <vos/mutex.hxx>
+#include <osl/thread.hxx>
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
 #include <tools/errcode.hxx>
@@ -104,9 +105,9 @@ SV_DECL_IMPL_REF( UcbLockBytesHandler )
 
 class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
 {
-    vos::OCondition         m_aInitialized;
-    vos::OCondition         m_aTerminated;
-    vos::OMutex             m_aMutex;
+    osl::Condition          m_aInitialized;
+    osl::Condition          m_aTerminated;
+    osl::Mutex              m_aMutex;
 
     String                  m_aContentType;
     String                  m_aRealURL;
@@ -183,25 +184,25 @@ public:
 
     NS_UNO::Reference < NS_IO::XInputStream > getInputStream_Impl() const
                             {
-                                vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xInputStream;
                             }
 
     NS_UNO::Reference < NS_IO::XOutputStream > getOutputStream_Impl() const
                             {
-                                vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xOutputStream;
                             }
 
     NS_UNO::Reference < NS_IO::XSeekable > getSeekable_Impl() const
                             {
-                                vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xSeekable;
                             }
 
     sal_Bool                hasInputStream_Impl() const
                             {
-                                vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
+                                osl::MutexGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xInputStream.is();
                             }
 
@@ -220,3 +221,5 @@ SV_IMPL_REF( UcbLockBytes );
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

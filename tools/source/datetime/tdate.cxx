@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,17 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#if defined( OS2 )
-#define INCL_DOSDATETIME
-#include <svpm.h>
-#elif defined( WNT )
-#ifdef _MSC_VER
-#pragma warning (push,1)
-#endif
-#include <tools/svwin.h>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+#if defined( WNT )
+#include <windows.h>
 #else
 #include <time.h>
 #endif
@@ -145,15 +137,7 @@ static void DaysToDate( long nDays,
 
 Date::Date()
 {
-#if defined( OS2 )
-    DATETIME aDateTime;
-    DosGetDateTime( &aDateTime );
-
-    // Datum zusammenbauen
-    nDate = ((sal_uIntPtr)aDateTime.day) +
-            (((sal_uIntPtr)aDateTime.month)*100) +
-            (((sal_uIntPtr)aDateTime.year)*10000);
-#elif defined WNT
+#if defined WNT
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
@@ -492,3 +476,5 @@ long operator -( const Date& rDate1, const Date& rDate2 )
                                     rDate2.GetYear() );
     return nTempDays1 - nTempDays2;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

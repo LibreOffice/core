@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
 sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
 {
         Reference < XInterface > xI = xMSF->createInstance(
-            OUString::createFromAscii("com.sun.star.i18n.IndexEntrySupplier_") + name);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.IndexEntrySupplier_")) + name);
 
         if ( xI.is() ) {
             xI->queryInterface( ::getCppuType((const Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
@@ -167,7 +168,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
                         // load service with name <base>_<algorithm>
                 (a > 0 && createLocaleSpecificIndexEntrySupplier(aSortAlgorithm)) ||
                         // load default service with name <base>_Unicode
-                        createLocaleSpecificIndexEntrySupplier(OUString::createFromAscii("Unicode"))) {
+                        createLocaleSpecificIndexEntrySupplier(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")))) {
                 return xIES;
             }
         }
@@ -207,3 +208,5 @@ IndexEntrySupplier::getSupportedServiceNames() throw( RuntimeException )
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

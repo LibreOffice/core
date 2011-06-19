@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,7 +98,7 @@ namespace vclcanvas
 
     void SAL_CALL CanvasFont::disposing()
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         mpOutDevProvider.reset();
         mpRefDevice.clear();
@@ -105,7 +106,7 @@ namespace vclcanvas
 
     uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         if( !mpRefDevice.is() )
             return uno::Reference< rendering::XTextLayout >(); // we're disposed
@@ -120,14 +121,14 @@ namespace vclcanvas
 
     rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         return maFontRequest;
     }
 
     rendering::FontMetrics SAL_CALL  CanvasFont::getFontMetrics(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
         VirtualDevice aVDev( rOutDev );
@@ -146,7 +147,7 @@ namespace vclcanvas
 
     uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // TODO(F1)
         return uno::Sequence< double >();
@@ -154,7 +155,7 @@ namespace vclcanvas
 
     uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  ) throw (uno::RuntimeException)
     {
-        tools::LocalGuard aGuard;
+        SolarMutexGuard aGuard;
 
         // TODO(F1)
         return uno::Sequence< beans::PropertyValue >();
@@ -186,3 +187,5 @@ namespace vclcanvas
         return *maFont;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

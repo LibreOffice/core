@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,8 +59,8 @@ class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
     void CallListeners();
 
 public:
-                    SvxHtmlOptions();
-                    ~SvxHtmlOptions();
+    SvxHtmlOptions();
+    ~SvxHtmlOptions();
 
     virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
@@ -91,7 +92,7 @@ public:
     sal_Bool    IsDefaultTextEncoding() const;
     rtl_TextEncoding GetTextEncoding() const;
     void        SetTextEncoding( rtl_TextEncoding );
-    static SvxHtmlOptions* Get();
+    static SvxHtmlOptions& Get();
 
     sal_Bool        IsNumbersEnglishUS() const;
     void        SetNumbersEnglishUS(sal_Bool bSet);
@@ -105,3 +106,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

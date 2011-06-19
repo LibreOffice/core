@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _GLOBALS_HXX_
 #define _GLOBALS_HXX_
 
-#ifndef _OSL_MUTEX_H_
 #include <osl/mutex.hxx>
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -92,3 +91,5 @@ struct MutexDummy
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

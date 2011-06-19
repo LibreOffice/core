@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _WALLITEM_HXX
 #define _WALLITEM_HXX
 
-#ifndef SHL_HXX
 #include <tools/shl.hxx>
-#endif
 
 // -----------------------------------------------------------------------------------------
 // Hilfsklasse, um die Download-Funktionalitaet des SvxBrushItems unterhalb
@@ -63,3 +62,4 @@ public:
 
 #endif // _WALLITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

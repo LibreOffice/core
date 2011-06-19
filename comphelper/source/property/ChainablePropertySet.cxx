@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_comphelper.hxx"
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/ChainablePropertySetInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>       // STL auto_ptr
 
@@ -40,9 +41,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using ::vos::IMutex;
 
-ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, vos::IMutex *pMutex )
+ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, osl::SolarMutex* pMutex )
     throw()
 : mpInfo ( pInfo )
 , mpMutex ( pMutex )
@@ -78,9 +78,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPr
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -96,9 +96,9 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -142,9 +142,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OU
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -176,9 +176,9 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -290,32 +290,34 @@ Any SAL_CALL ChainablePropertySet::getPropertyDefault( const ::rtl::OUString& rP
 void ChainablePropertySet::_preGetPropertyState ()
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void ChainablePropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
     throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void ChainablePropertySet::_postGetPropertyState ()
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void ChainablePropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 Any ChainablePropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException, WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 
     Any aAny;
     return aAny;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

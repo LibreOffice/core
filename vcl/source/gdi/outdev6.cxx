@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ DBG_NAMEEX( OutputDevice )
 
 void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags )
 {
-    DBG_TRACE( "OutputDevice::DrawGrid()" );
+    OSL_TRACE( "OutputDevice::DrawGrid()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Rectangle aDstRect( PixelToLogic( Point() ), GetOutputSize() );
@@ -161,7 +162,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
 
 void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency)
 {
-    DBG_TRACE( "OutputDevice::DrawTransparent(B2D&,transparency)" );
+    OSL_TRACE( "OutputDevice::DrawTransparent(B2D&,transparency)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // AW: Do NOT paint empty PolyPolygons
@@ -211,17 +212,8 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
         if( bDrawnOk )
         {
-#if 0
-            // MetaB2DPolyPolygonAction is not implemented yet:
-            // according to AW adding it is very dangerous since there is a lot
-            // of code that uses the metafile actions directly and unless every
-            // place that does this knows about the new action we need to fallback
-            if( mpMetaFile )
-                mpMetaFile->AddAction( new MetaB2DPolyPolygonAction( rB2DPolyPoly ) );
-#else
             if( mpMetaFile )
                 mpMetaFile->AddAction( new MetaTransparentAction( PolyPolygon( rB2DPolyPoly ), static_cast< sal_uInt16 >(fTransparency * 100.0)));
-#endif
             return;
         }
     }
@@ -236,7 +228,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent )
 {
-    DBG_TRACE( "OutputDevice::DrawTransparent()" );
+    OSL_TRACE( "OutputDevice::DrawTransparent()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     // short circuit for drawing an opaque polygon
@@ -633,7 +625,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
 {
-    DBG_TRACE( "OutputDevice::DrawTransparent()" );
+    OSL_TRACE( "OutputDevice::DrawTransparent()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     const Color aBlack( COL_BLACK );
@@ -721,6 +713,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     pVDev->SetDrawMode(DRAWMODE_DEFAULT);
                     pVDev->EnableMapMode(false);
                     const AlphaMask aAlpha(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
+
+                    delete pVDev;
 
                     // draw masked content to target and restore MapMode
                     DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint, aAlpha));
@@ -1195,7 +1189,7 @@ void OutputDevice::ImplDraw2ColorFrame( const Rectangle& rRect,
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
-    DBG_TRACE( "OutputDevice::DrawEPS()" );
+    OSL_TRACE( "OutputDevice::DrawEPS()" );
 
     bool bDrawn(true);
 
@@ -1255,7 +1249,7 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
 void OutputDevice::DrawRenderGraphic( const Point& rPoint, const Size& rSize,
                                       const ::vcl::RenderGraphic& rRenderGraphic )
 {
-    DBG_TRACE( "OutputDevice::DrawRenderGraphic()" );
+    OSL_TRACE( "OutputDevice::DrawRenderGraphic()" );
 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaRenderGraphicAction( rPoint, rSize, rRenderGraphic ) );
@@ -1272,3 +1266,5 @@ void OutputDevice::DrawRenderGraphic( const Point& rPoint, const Size& rSize,
         mpMetaFile = pOldMetaFile;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

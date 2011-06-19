@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -237,7 +238,7 @@ namespace comphelper
     //=========================================================================
     //= OAccessibleContextWrapper
     //=========================================================================
-    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    typedef ::cppu::PartialWeakComponentImplHelper2<    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
                                             ,   ::com::sun::star::accessibility::XAccessibleContext
                                             >   OAccessibleContextWrapper_CBase;
 
@@ -292,16 +293,18 @@ namespace comphelper
         virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
         // XAccessibleEventBroadcaster
-        using WeakComponentImplHelperBase::addEventListener;
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-        using WeakComponentImplHelperBase::removeEventListener;
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // OAccessibleContextWrapper
         virtual void notifyTranslatedEvent( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XComponent/OComponentProxyAggregationHelper
+        // XComponent
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+            { WeakComponentImplHelperBase::addEventListener(xListener); }
+        virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+            { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
         // OComponentHelper
         using OAccessibleContextWrapperHelper::disposing;
@@ -409,3 +412,5 @@ namespace comphelper
 //.............................................................................
 
 #endif // COMPHELPER_ACCESSIBLE_WRAPPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

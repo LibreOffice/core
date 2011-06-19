@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>
-
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/event.hxx>
@@ -1298,7 +1298,7 @@ static sal_Bool ImplDateGetValue( const XubString& rStr, Date& rDate, ExtDateFie
 
             default:
             {
-                DBG_ERROR( "DateFormat???" );
+                OSL_FAIL( "DateFormat???" );
             }
         }
     }
@@ -1434,7 +1434,7 @@ XubString DateFormatter::ImplGetDateAsText( const Date& rDate,
         break;
         default:
         {
-            DBG_ERROR( "DateFormat???" );
+            OSL_FAIL( "DateFormat???" );
         }
     }
 
@@ -1607,7 +1607,7 @@ void DateField::ImplDateSpinArea( sal_Bool bUp )
                 }
                 break;
                 default:
-                    DBG_ERROR( "invalid conversion" );
+                    OSL_FAIL( "invalid conversion" );
                     break;
             }
         }
@@ -3300,7 +3300,7 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
             SetFormat( TIMEF_SEC );
         }
         break;
-        default:    DBG_ERROR( "ExtTimeFieldFormat unknown!" );
+        default:    OSL_FAIL( "ExtTimeFieldFormat unknown!" );
     }
 
     if ( GetField() && GetField()->GetText().Len() )
@@ -3464,3 +3464,5 @@ sal_uInt16 TimeBox::GetTimePos( const Time& rTime ) const
         bSec = b100Sec = sal_True;
     return ComboBox::GetEntryPos( ImplGetLocaleDataWrapper().getTime( rTime, bSec, b100Sec ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

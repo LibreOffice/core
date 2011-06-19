@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -292,7 +293,6 @@
 #include "toolkit/helper/mutexhelper.hxx"
 #include "toolkit/helper/property.hxx"
 #include "toolkit/helper/servicenames.hxx"
-#include "toolkit/helper/solarrelease.hxx"
 #include "toolkit/helper/tkresmgr.hxx"
 #include "toolkit/helper/unomemorystream.hxx"
 #include "toolkit/helper/unopropertyarrayhelper.hxx"
@@ -303,7 +303,6 @@
 #include "tools/diagnose_ex.h"
 #include "tools/gen.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/poly.hxx"
 #include "tools/simplerm.hxx"
 #include "tools/solar.h"
@@ -340,7 +339,8 @@
 #include "vcl/vclenum.hxx"
 #include "vcl/virdev.hxx"
 
-#include "vos/mutex.hxx"
+#include "osl/mutex.hxx"
 //---MARKER---
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

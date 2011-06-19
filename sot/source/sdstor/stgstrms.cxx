@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -823,12 +824,12 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
     while( n )
     {
         short nBytes = nPageSize - nOffset;
-        short nRes;
         StgPage* pPg;
         if( (sal_Int32) nBytes > n )
             nBytes = (short) n;
         if( nBytes )
         {
+            short nRes;
             void *p = (sal_uInt8 *) pBuf + nDone;
             if( nBytes == nPageSize )
             {
@@ -881,12 +882,12 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
     while( n )
     {
         short nBytes = nPageSize - nOffset;
-        short nRes;
         StgPage* pPg;
         if( (sal_Int32) nBytes > n )
             nBytes = (short) n;
         if( nBytes )
         {
+            short nRes;
             const void *p = (const sal_uInt8 *) pBuf + nDone;
             if( nBytes == nPageSize )
             {
@@ -1239,3 +1240,4 @@ void StgTmpStrm::FlushData()
         SvMemoryStream::FlushData();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

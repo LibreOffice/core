@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,10 @@
 #ifndef _SVP_SALINST_HXX
 #define _SVP_SALINST_HXX
 
-#include <vos/mutex.hxx>
-#include <vos/thread.hxx>
+#include <vcl/solarmutex.hxx>
 
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 #include <salinst.hxx>
 #include <salwtype.hxx>
 #include <saltimer.hxx>
@@ -47,11 +49,11 @@
 // SalYieldMutex
 // -------------------------------------------------------------------------
 
-class SvpSalYieldMutex : public vos::OMutex
+class SvpSalYieldMutex : public ::vcl::SolarMutexObject
 {
 protected:
     sal_uLong                                       mnCount;
-    vos::OThread::TThreadIdentifier mnThreadId;
+    oslThreadIdentifier mnThreadId;
 
 public:
                                                 SvpSalYieldMutex();
@@ -61,7 +63,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     sal_uLong                                       GetAcquireCount() const { return mnCount; }
-    vos::OThread::TThreadIdentifier GetThreadId() const { return mnThreadId; }
+    oslThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // ---------------
@@ -174,7 +176,7 @@ public:
     virtual SalBitmap*      CreateSalBitmap();
 
     // YieldMutex
-    virtual vos::IMutex*    GetYieldMutex();
+    virtual osl::SolarMutex* GetYieldMutex();
     virtual sal_uLong           ReleaseYieldMutex();
     virtual void            AcquireYieldMutex( sal_uLong nCount );
     virtual bool            CheckYieldMutex();
@@ -191,6 +193,12 @@ public:
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
 
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+
+    virtual void updatePrinterUpdate();
+    virtual void jobStartedPrinterUpdate();
+    virtual void jobEndedPrinterUpdate();
 };
 
 #endif // _SV_SALINST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

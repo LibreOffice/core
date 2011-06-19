@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,6 +73,8 @@
 
 #include <vector>
 
+#include "vcl/fontcapabilities.hxx"
+
 namespace vcl
 {
 
@@ -113,7 +116,6 @@ namespace vcl
     };
 
 /** Value of the width member of the TTGlobalFontInfo struct */
-#ifndef OS2
     enum WidthClass {
         FWIDTH_ULTRA_CONDENSED = 1,         /**< 50% of normal                      */
         FWIDTH_EXTRA_CONDENSED = 2,         /**< 62.5% of normal                    */
@@ -125,7 +127,6 @@ namespace vcl
         FWIDTH_EXTRA_EXPANDED = 8,          /**< 150% of normal                     */
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
-#endif // OS2
 #endif /* FW_THIN */
 
 /** Type of the 'kern' table, stored in _TrueTypeFont::kerntype */
@@ -289,7 +290,7 @@ namespace vcl
  * @ingroup sft
  */
     int VCL_DLLPUBLIC OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
-#if !defined(WIN32) && !defined(OS2)
+#if !defined(WIN32)
 /**
  * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.
@@ -301,6 +302,12 @@ namespace vcl
  */
     int VCL_DLLPUBLIC OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
+
+    void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* pTable, size_t nLength);
+    bool getTTCoverage(
+        boost::dynamic_bitset<sal_uInt32> &rUnicodeCoverage,
+        boost::dynamic_bitset<sal_uInt32> &rCodePageCoverage,
+        const unsigned char* pTable, size_t nLength);
 
 /**
  * TrueTypeFont destructor. Deallocates the memory.
@@ -540,24 +547,6 @@ namespace vcl
  */
     void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info);
 
-#ifdef TEST5
-/**
- * Returns kerning information for an array of glyphs.
- * Kerning is not cumulative.
- * kern[i] contains kerning information for a pair of glyphs at positions i and i+1
- *
- * @param ttf         pointer to a TrueTypeFont structure
- * @param glyphs      array of source glyphs
- * @param nglyphs     number of glyphs in the array
- * @param wmode       writing mode: 0 - horizontal, 1 - vertical
- * @param kern        array of KernData structures. It should contain nglyphs-1 elements
- * @see KernData
- * @ingroup sft
- *
- */
-    void KernGlyphs(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern);
-#endif
-
 /**
  * Returns nonzero if font is a symbol encoded font
  */
@@ -630,3 +619,5 @@ namespace vcl
 } // namespace vcl
 
 #endif /* __SUBFONT_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

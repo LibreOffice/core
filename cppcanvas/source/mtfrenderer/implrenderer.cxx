@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/sequence.hxx>
@@ -94,6 +95,8 @@
 #include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#define EMFP_DEBUG(x)
+//#define EMFP_DEBUG(x) x
 
 using namespace ::com::sun::star;
 
@@ -679,7 +682,7 @@ namespace cppcanvas
                             // map odf to svg gradient orientation - x
                             // instead of y direction
                             aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
-                            aGradientService = rtl::OUString::createFromAscii("LinearGradient");
+                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LinearGradient"));
                             break;
 
                         case GRADIENT_AXIAL:
@@ -712,7 +715,7 @@ namespace cppcanvas
                             aShift.translate(-0.5,0);
                             aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aShift;
 
-                            aGradientService = rtl::OUString::createFromAscii("LinearGradient");
+                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LinearGradient"));
                             break;
                         }
 
@@ -722,7 +725,7 @@ namespace cppcanvas
                                                                         aOffset,
                                                                         nSteps,
                                                                         fBorder);
-                            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
+                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EllipticalGradient"));
                             break;
 
                         case GRADIENT_ELLIPTICAL:
@@ -732,7 +735,7 @@ namespace cppcanvas
                                                                             nSteps,
                                                                             fBorder,
                                                                             fRotation);
-                            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
+                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EllipticalGradient"));
                             break;
 
                         case GRADIENT_SQUARE:
@@ -742,7 +745,7 @@ namespace cppcanvas
                                                                         nSteps,
                                                                         fBorder,
                                                                         fRotation);
-                            aGradientService = rtl::OUString::createFromAscii("RectangularGradient");
+                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RectangularGradient"));
                             break;
 
                         case GRADIENT_RECT:
@@ -752,7 +755,7 @@ namespace cppcanvas
                                                                              nSteps,
                                                                              fBorder,
                                                                              fRotation);
-                            aGradientService = rtl::OUString::createFromAscii("RectangularGradient");
+                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RectangularGradient"));
                             break;
 
                         default:
@@ -775,13 +778,13 @@ namespace cppcanvas
 
                     uno::Sequence<uno::Any> args(3);
                     beans::PropertyValue aProp;
-                    aProp.Name = rtl::OUString::createFromAscii("Colors");
+                    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Colors"));
                     aProp.Value <<= aColors;
                     args[0] <<= aProp;
-                    aProp.Name = rtl::OUString::createFromAscii("Stops");
+                    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Stops"));
                     aProp.Value <<= aStops;
                     args[1] <<= aProp;
-                    aProp.Name = rtl::OUString::createFromAscii("AspectRatio");
+                    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AspectRatio"));
                     aProp.Value <<= aGradInfo.mfAspectRatio;
                     args[2] <<= aProp;
 
@@ -1074,7 +1077,6 @@ namespace cppcanvas
                     aStrikeoutText += pChars[0];
 
 
-                sal_Int32 nStartPos = 0;
                 xub_StrLen nLen = aStrikeoutText.Len();
 
                 if( nLen )
@@ -1092,6 +1094,8 @@ namespace cppcanvas
                     {
                         pStrikeoutCharWidths[ i ] += pStrikeoutCharWidths[ i-1 ];
                     }
+
+                    sal_Int32 nStartPos = 0;
 
                     pStrikeoutTextAction =
                         TextActionFactory::createTextAction(
@@ -1829,6 +1833,33 @@ namespace cppcanvas
                                 }
                             }
                         }
+                        // Handle drawing layer fills
+                        else if( pAct->GetComment().Equals( "EMF_PLUS" ) ) {
+                            static int count = -1, limit = 0x7fffffff;
+                            if (count == -1) {
+                                count = 0;
+                                if (char *env = getenv ("EMF_PLUS_LIMIT")) {
+                                    limit = atoi (env);
+                                    EMFP_DEBUG (printf ("EMF+ records limit: %d\n", limit));
+                                }
+                            }
+                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer, size: %d\n", pAct->GetDataSize ()));
+                            if (count < limit)
+                            processEMFPlus( pAct, rFactoryParms, getState( rStates ), rCanvas );
+                            count ++;
+                        } else if( pAct->GetComment().Equals( "EMF_PLUS_HEADER_INFO" ) ) {
+                            EMFP_DEBUG (printf ("EMF+ passed to canvas mtf renderer - header info, size: %d\n", pAct->GetDataSize ()));
+
+                            SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);
+
+                            rMF >> nFrameLeft >> nFrameTop >> nFrameRight >> nFrameBottom;
+                            EMFP_DEBUG (printf ("EMF+ picture frame: %d,%d - %d,%d\n", nFrameLeft, nFrameTop, nFrameRight, nFrameBottom));
+                            rMF >> nPixX >> nPixY >> nMmX >> nMmY;
+                            EMFP_DEBUG (printf ("EMF+ ref device pixel size: %dx%d mm size: %dx%d\n", nPixX, nPixY, nMmX, nMmY));
+
+                            rMF >> aBaseTransform;
+                            //aWorldTransform.Set (aBaseTransform);
+                        }
                     }
                     break;
 
@@ -2004,8 +2035,8 @@ namespace cppcanvas
                                     ::vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
                                     ::vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
                                     ::basegfx::B2DPoint(1,1) ),
-                                static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound(),
-                                static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ));
+                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetHorzRound() ) / rRect.GetWidth(),
+                                ( (double) static_cast<MetaRoundRectAction*>(pCurrAct)->GetVertRound() ) / rRect.GetHeight() ) );
                         aPoly.transform( getState( rStates ).mapModeTransform );
 
                         createFillAndStroke( aPoly,
@@ -2681,8 +2712,7 @@ namespace cppcanvas
                     break;
 
                     default:
-                        OSL_ENSURE( false,
-                                    "Unknown meta action type encountered" );
+                        OSL_FAIL( "Unknown meta action type encountered" );
                         break;
                 }
 
@@ -2709,7 +2739,7 @@ namespace cppcanvas
                 {
                 }
 
-                bool result()
+                bool result() const
                 {
                     return mbRet;
                 }
@@ -2744,7 +2774,7 @@ namespace cppcanvas
                 {
                 }
 
-                bool result()
+                bool result() const
                 {
                     return true; // nothing can fail here
                 }
@@ -3014,7 +3044,7 @@ namespace cppcanvas
             if( rParams.maFontName.is_initialized() ||
                 rParams.maFontWeight.is_initialized() ||
                 rParams.maFontLetterForm.is_initialized() ||
-                rParams.maFontUnderline.is_initialized()  ||
+                rParams.maFontUnderline.is_initialized() ||
                 rParams.maFontProportion.is_initialized() )
             {
                 ::cppcanvas::internal::OutDevState& rState = getState( aStateStack );
@@ -3023,6 +3053,10 @@ namespace cppcanvas
                                            ::Font(), // default font
                                            aParms );
             }
+
+            /* EMF+ */
+            memset (aObjects, 0, sizeof (aObjects));
+            mbMultipart = false;
 
             createActions( const_cast<GDIMetaFile&>(rMtf), // HACK(Q2):
                                                            // we're
@@ -3129,8 +3163,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -3191,8 +3224,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -3201,3 +3233,5 @@ namespace cppcanvas
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,10 +46,6 @@
 |*
 |*    BiNode::BiNode()
 |*
-|*    Beschreibung      NAME.DOC
-|*    Ersterstellung    MM 07.02.91
-|*    Letzte Aenderung  MM 07.02.91
-|*
 *************************************************************************/
 BiNode::BiNode(){
     pLeft = pRight = NULL;
@@ -58,10 +55,6 @@ BiNode::BiNode(){
 |*
 |*    BiNode::~BiNode()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.02.91
-|*    Letzte Aenderung  MM 07.02.91
-|*
 *************************************************************************/
 BiNode::~BiNode(){
 }
@@ -69,10 +62,6 @@ BiNode::~BiNode(){
 /*************************************************************************
 |*
 |*    BiNode::EnumNodes()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.02.91
-|*    Letzte Aenderung  MM 07.02.91
 |*
 *************************************************************************/
 void BiNode::EnumNodes( Link aLink ) const{
@@ -86,10 +75,6 @@ void BiNode::EnumNodes( Link aLink ) const{
 /*************************************************************************
 |*
 |*    BiNode::ChangeDLListBTree()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 11.01.91
-|*    Letzte Aenderung  MM 11.01.91
 |*
 *************************************************************************/
 BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
@@ -130,10 +115,6 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList ){
 |*
 |*    BiNode::ChangeBTreeDLList()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 11.01.91
-|*    Letzte Aenderung  MM 11.01.91
-|*
 *************************************************************************/
 BiNode * BiNode::ChangeBTreeDLList(){
     BiNode * pList;
@@ -159,10 +140,6 @@ BiNode * BiNode::ChangeBTreeDLList(){
 /*************************************************************************
 |*
 |*    NameNode::Remove()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 10.07.91
-|*    Letzte Aenderung  MM 10.07.91
 |*
 *************************************************************************/
 NameNode * NameNode::Remove( NameNode * pRemove ){
@@ -203,10 +180,6 @@ NameNode * NameNode::Remove( NameNode * pRemove ){
 |*
 |*    NameNode::Compare
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 10.07.91
-|*    Letzte Aenderung  MM 13.07.91
-|*
 *************************************************************************/
 COMPARE NameNode::Compare( const NameNode * pCompare ) const{
     if( (long)this < (long)pCompare )
@@ -229,10 +202,6 @@ COMPARE NameNode::Compare( const void * pCompare ) const{
 /*************************************************************************
 |*
 |*    NameNode::SearchParent
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 10.07.91
-|*    Letzte Aenderung  MM 10.07.91
 |*
 *************************************************************************/
 NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
@@ -261,10 +230,6 @@ NameNode* NameNode::SearchParent( const NameNode * pSearch ) const{
 /*************************************************************************
 |*
 |*    NameNode::Search
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 21.03.90
-|*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
 NameNode* NameNode::Search( const NameNode * pSearch ) const{
@@ -311,10 +276,6 @@ NameNode* NameNode::Search( const void * pSearch ) const{
 |*
 |*    NameNode::Insert()
 |*
-|*    Beschreibung      NAME.DOC
-|*    Ersterstellung    MM 11.01.91
-|*    Letzte Aenderung  MM 11.01.91
-|*
 *************************************************************************/
 sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 // Ein Knoten wird in den Baum eingefuegt
@@ -346,10 +307,6 @@ sal_Bool NameNode::Insert( NameNode * pTN, sal_uInt32* pnDepth ){
 |*
 |*    NameNode::Insert()
 |*
-|*    Beschreibung      NAME.DOC
-|*    Ersterstellung    MM 21.03.90
-|*    Letzte Aenderung  MM 11.01.91
-|*
 *************************************************************************/
 sal_Bool NameNode::Insert( NameNode * pTN ){
 // insert a node in the tree.
@@ -374,10 +331,6 @@ sal_Bool NameNode::Insert( NameNode * pTN ){
 /*************************************************************************
 |*
 |*    NameNode::OrderTree()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.09.91
-|*    Letzte Aenderung  MM 23.09.91
 |*
 *************************************************************************/
 void NameNode::OrderTree(){
@@ -405,10 +358,6 @@ void NameNode::SubOrderTree( NameNode * pOrderNode ){
 /*************************************************************************
 |*
 |*    NameNode::IdOrderTree()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.11.91
-|*    Letzte Aenderung  MM 15.11.91
 |*
 *************************************************************************/
 class OrderCtrl {
@@ -445,10 +394,6 @@ sal_Bool NameNode::IsOrderTree() const{
 |*
 |*    IdNode::Search()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.11.91
-|*    Letzte Aenderung  MM 06.11.91
-|*
 *************************************************************************/
 IdNode * IdNode::Search( sal_uInt32 nTypeName ) const{
     return( (IdNode *)NameNode::Search( (const void *)&nTypeName ) );
@@ -457,10 +402,6 @@ IdNode * IdNode::Search( sal_uInt32 nTypeName ) const{
 /*************************************************************************
 |*
 |*    IdNode::Compare()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.11.91
-|*    Letzte Aenderung  MM 06.11.91
 |*
 *************************************************************************/
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
@@ -488,10 +429,6 @@ COMPARE IdNode::Compare( const void * pSearch ) const{
 |*
 |*    IdNode::GetId()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.09.91
-|*    Letzte Aenderung  MM 23.09.91
-|*
 *************************************************************************/
 sal_uInt32 IdNode::GetId() const
 {
@@ -502,10 +439,6 @@ sal_uInt32 IdNode::GetId() const
 |*
 |*    StringNode::Search()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.11.91
-|*    Letzte Aenderung  MM 06.11.91
-|*
 *************************************************************************/
 StringNode * StringNode::Search( const char * pSearch ) const{
     return (StringNode *)NameNode::Search( (const void *)pSearch );
@@ -514,10 +447,6 @@ StringNode * StringNode::Search( const char * pSearch ) const{
 /*************************************************************************
 |*
 |*    StringNode::Compare()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.11.91
-|*    Letzte Aenderung  MM 06.11.91
 |*
 *************************************************************************/
 COMPARE StringNode::Compare( const NameNode * pSearch ) const
@@ -544,3 +473,5 @@ COMPARE StringNode::Compare( const void * pSearch ) const
     else
         return EQUAL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

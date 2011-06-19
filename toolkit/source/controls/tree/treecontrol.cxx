@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
-#ifndef _TOOLKIT_TREE_CONTROL_HXX
 #include <treecontrol.hxx>
-#endif
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
@@ -151,7 +150,7 @@ UnoTreeControl::UnoTreeControl( const Reference< XMultiServiceFactory >& i_facto
 
 OUString UnoTreeControl::GetComponentServiceName()
 {
-    return OUString::createFromAscii( "Tree" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("Tree"));
 }
 
 // -------------------------------------------------------------------
@@ -511,3 +510,5 @@ void SAL_CALL TreeEditListenerMultiplexer::nodeEdited( const Reference< XTreeNod
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

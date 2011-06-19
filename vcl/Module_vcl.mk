@@ -40,11 +40,17 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gen \
     Library_vclplug_svp \
     Library_desktop_detector \
+	Package_afmhash \
 ))
 
 ifneq ($(ENABLE_GTK),)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gtk \
+))
+endif
+ifneq ($(ENABLE_GTK3),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    Library_vclplug_gtk3 \
 ))
 endif
 ifneq ($(ENABLE_KDE),)
@@ -55,6 +61,7 @@ endif
 ifneq ($(ENABLE_KDE4),)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_kde4 \
+    Package_kde4moc \
 ))
 endif
 endif

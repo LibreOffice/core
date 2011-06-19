@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 
 #ifndef MACOSX
 
-sal_Bool ImplSVMainHook( sal_Bool * )
+sal_Bool ImplSVMainHook( int * )
 {
     return sal_False;   // indicate that ImplSVMainHook is not implemented
 }
@@ -56,7 +57,7 @@ static void SourceContextCallBack( void *pInfo )
 
 struct ThreadContext
 {
-    sal_Bool* pRet;
+    int* pRet;
     CFRunLoopRef* pRunLoopRef;
 };
 
@@ -75,7 +76,7 @@ static void RunSVMain(void *pData)
     _exit( 0 );
 }
 
-sal_Bool ImplSVMainHook( sal_Bool *pbInit )
+sal_Bool ImplSVMainHook( int *pnInit )
 {
     // Mac OS X requires that any Cocoa code have a CFRunLoop started in the
     // primordial thread. Since all of the AWT classes in Java 1.4 and higher
@@ -86,7 +87,7 @@ sal_Bool ImplSVMainHook( sal_Bool *pbInit )
 
     CFRunLoopRef runLoopRef = CFRunLoopGetCurrent();
     ThreadContext tcx;
-    tcx.pRet = pbInit;  // the return value
+    tcx.pRet = pnInit;  // the return value
     tcx.pRunLoopRef = &runLoopRef;
     oslThread hThreadID = osl_createThread(RunSVMain, &tcx);
 
@@ -114,3 +115,5 @@ sal_Bool ImplSVMainHook( sal_Bool *pbInit )
 
 #endif // MACOSX
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

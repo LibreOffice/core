@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,9 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <vector>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -171,7 +172,7 @@ sal_Bool LocalFileHelper::IsFileContent( const String& rName )
     return ConvertURLToSystemPath( rName, aTmp );
 }
 
-DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
+typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
 
 ::com::sun::star::uno::Sequence < ::rtl::OUString > LocalFileHelper::GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder )
 {
@@ -182,7 +183,7 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
         ::rtl::OUString* pProps = aProps.getArray();
-        pProps[0] = ::rtl::OUString::createFromAscii( "Url" );
+        pProps[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Url"));
 
         try
         {
@@ -206,7 +207,7 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
                 {
                     ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
                     ::rtl::OUString* pFile = new ::rtl::OUString( aId );
-                    pFiles->Insert( pFile, LIST_APPEND );
+                    pFiles->push_back( pFile );
                 }
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -223,12 +224,12 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
 
     if ( pFiles )
     {
-        sal_uLong nCount = pFiles->Count();
+        size_t nCount = pFiles->size();
         Sequence < ::rtl::OUString > aRet( nCount );
         ::rtl::OUString* pRet = aRet.getArray();
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            ::rtl::OUString* pFile = pFiles->GetObject(i);
+            ::rtl::OUString* pFile = (*pFiles)[ i ];
             pRet[i] = *( pFile );
             delete pFile;
         }
@@ -240,3 +241,5 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

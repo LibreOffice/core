@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,10 @@
 #include "precompiled_vcl.hxx"
 #include <sal/types.h>
 
-#ifndef _TRANSFERABLE_HXX_
 #include "OSXTransferable.hxx"
-#endif
 
 #include "DataFlavorMapping.hxx"
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -44,6 +42,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
 const Type CPPUTYPE_OUSTRING = getCppuType((OUString*)0);
@@ -172,7 +172,7 @@ bool OSXTransferable::compareDataFlavors(const DataFlavor& lhs, const DataFlavor
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content type detected" );
+        OSL_FAIL( "Invalid content type detected" );
         return false;
     }
 
@@ -213,3 +213,5 @@ bool OSXTransferable::cmpAllContentTypeParameter(const Reference<XMimeContentTyp
 
   return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 
 #ifdef __cplusplus
 
-#ifndef _SV_PTRSTYLE_HXX
 #include <vcl/ptrstyle.hxx>
-#endif
 #include <vcl/sndstyle.hxx>
 
 #endif // __cplusplus
@@ -44,9 +43,7 @@
 #include <tools/gen.hxx>
 #include <vcl/region.hxx>
 
-#ifndef _VCL_IMPDEL_HXX
 #include <vcl/impdel.hxx>
-#endif
 #include <rtl/ustring.hxx>
 #include <vcl/keycod.hxx>
 
@@ -135,7 +132,8 @@ typedef sal_uInt64 SalExtStyle;
 
 #ifdef __cplusplus
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
 
 // ------------
 // - SalFrame -
@@ -250,6 +248,15 @@ public:
 
     virtual SalPointerState     GetPointerState() = 0;
 
+    struct SalIndicatorState
+    {
+        sal_uInt16  mnState;
+    };
+
+    virtual SalIndicatorState   GetIndicatorState() = 0;
+
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode ) = 0;
+
     // set new parent window
     virtual void                SetParent( SalFrame* pNewParent ) = 0;
     // reparent window to act as a plugin; implementation
@@ -259,6 +266,8 @@ public:
 
     // move the frame to a new screen
     virtual void                SetScreenNumber( unsigned int nScreen ) = 0;
+
+    virtual void                SetApplicationID( const rtl::OUString &rApplicationID) = 0;
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
@@ -290,3 +299,5 @@ public:
 #endif // __cplusplus
 
 #endif // _SV_SALFRAME_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

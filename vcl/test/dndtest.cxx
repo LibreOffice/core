@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,12 +45,11 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
-#include <vos/process.hxx>
+#include <osl/process.h>
 
 #include <stdio.h>
 
 using namespace ::rtl;
-using namespace ::vos;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -139,7 +139,7 @@ public:
     {
         DataFlavor df;
 
-        df.MimeType = OUString::createFromAscii( "text/plain;charset=utf-16" );
+        df.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16"));
         df.DataType = getCppuType( static_cast < OUString * > ( 0 ) );
 
          m_aFlavorList[0] = df;
@@ -156,18 +156,17 @@ public:
 void MyApp::Main()
 {
     OUString aRegistry;
-    OStartupInfo aInfo;
 
-    for( sal_Int32 n = 0, nmax = aInfo.getCommandArgCount(); n < nmax; n++ )
+    for( sal_Int32 n = 0, nmax = osl_getCommandArgCount(); n < nmax; n++ )
     {
         OUString aArg;
 
-        aInfo.getCommandArg( n, aArg );
+        osl_getCommandArg( n, &aArg.pData );
 
-        if( aArg.compareTo( OUString::createFromAscii( "-r" ), 2 ) == 0 )
+        if( aArg.compareTo( OUString(RTL_CONSTASCII_USTRINGPARAM("-r")), 2 ) == 0 )
         {
             if ( n + 1 < nmax )
-                aInfo.getCommandArg( ++n, aRegistry );
+                osl_getCommandArg( ++n, &aRegistry.pData );
         }
     }
 
@@ -211,7 +210,7 @@ void MyApp::Main()
 
     MyListBox aListBox( &aMainWin );
     aListBox.SetPosSizePixel( 10, 10, 100, 100 );
-    aListBox.InsertEntry( OUString::createFromAscii( "TestItem" ));
+    aListBox.InsertEntry( OUString(RTL_CONSTASCII_USTRINGPARAM("TestItem")));
     aListBox.Show();
 
     Execute();
@@ -297,7 +296,7 @@ void SAL_CALL MyDragAndDropListener::dragGestureRecognized( const DragGestureEve
     printf( "XDragGestureListener::dragGestureRecognized called ( Window: %p, %"SAL_PRIdINT32", %"SAL_PRIdINT32" ).\n", m_pWindow, dge.DragOriginX, dge.DragOriginY );
 
     Reference< XDragSource > xDragSource( dge.DragSource, UNO_QUERY );
-    xDragSource->startDrag( dge, -1, 0, 0, new StringTransferable( OUString::createFromAscii( "TestString" ) ), this );
+    xDragSource->startDrag( dge, -1, 0, 0, new StringTransferable( OUString(RTL_CONSTASCII_USTRINGPARAM("TestString")) ), this );
     printf( "XDragSource::startDrag returned.\n" );
 }
 
@@ -386,7 +385,7 @@ void SAL_CALL MyDragAndDropListener::disposing( const EventObject& ) throw(Runti
 // -----------------------------------------------------------------------
 
 MyInfoBox::MyInfoBox( Window* pParent ) : InfoBox( pParent,
-    OUString::createFromAscii( "dragging over this box should result in another window id in the drag log." ) )
+    OUString(RTL_CONSTASCII_USTRINGPARAM("dragging over this box should result in another window id in the drag log.")) )
 {
     Reference< XDropTargetListener > xListener = new MyDragAndDropListener( this );
 
@@ -445,3 +444,4 @@ sal_Bool SAL_CALL StringTransferable::isDataFlavorSupported( const DataFlavor& )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

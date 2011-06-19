@@ -31,7 +31,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wall.hxx>
-#include <vos/mutex.hxx>
 #include <toolkit/controls/tabpagemodel.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
@@ -41,7 +40,6 @@
 #include <com/sun/star/awt/UnoControlDialogModelProvider.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <tools/list.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -249,14 +247,13 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
 //===== Service ===============================================================
 ::rtl::OUString UnoControlTabPageModel_getImplementationName (void) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.awt.tab.UnoControlTabPageModel");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tab.UnoControlTabPageModel"));
 }
 
 Sequence<rtl::OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames (void)
      throw (RuntimeException)
 {
-     static const ::rtl::OUString sServiceName(
-         ::rtl::OUString::createFromAscii("com.sun.star.awt.tab.UnoControlTabPageModel"));
+     const ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tab.UnoControlTabPageModel"));
      return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 //=============================================================================
@@ -276,12 +273,12 @@ UnoControlTabPage::~UnoControlTabPage()
 
 ::rtl::OUString UnoControlTabPage::GetComponentServiceName()
 {
-    return ::rtl::OUString::createFromAscii( "TabPageModel" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabPageModel"));
 }
 
 void UnoControlTabPage::dispose() throw(RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
@@ -295,7 +292,7 @@ void SAL_CALL UnoControlTabPage::disposing(    const EventObject& Source )throw(
 
 void UnoControlTabPage::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ImplUpdateResourceResolver();
 
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );

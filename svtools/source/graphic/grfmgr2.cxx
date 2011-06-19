@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <vos/macros.hxx>
 #include <vcl/bmpacc.hxx>
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
@@ -1355,14 +1355,16 @@ sal_Bool GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
     // create horizontal mapping table
     for( nX = 0L, nTmpX = aNewBound.Left() + nStartX; nX < nDstW; nX++ )
     {
-        pCosX[ nX ] = FRound( fCosAngle * ( fTmp = nTmpX++ << 8 ) );
+        fTmp = nTmpX++ << 8;
+        pCosX[ nX ] = FRound( fCosAngle * fTmp );
         pSinX[ nX ] = FRound( fSinAngle * fTmp );
     }
 
     // create vertical mapping table
     for( nY = 0L, nTmpY = aNewBound.Top() + nStartY; nY < nDstH; nY++ )
     {
-        pCosY[ nY ] = FRound( fCosAngle * ( fTmp = nTmpY++ << 8 ) );
+        fTmp = nTmpY++ << 8;
+        pCosY[ nY ] = FRound( fCosAngle * fTmp );
         pSinY[ nY ] = FRound( fSinAngle * fTmp );
     }
 
@@ -1806,7 +1808,7 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sa
 
     if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        DBG_ERROR( "Missing implementation: Mtf-Transparency" );
+        OSL_FAIL( "Missing implementation: Mtf-Transparency" );
     }
 }
 
@@ -1854,12 +1856,12 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
 
     if( ( nAdjustmentFlags & ADJUSTMENT_ROTATE ) && aAttr.IsRotated() )
     {
-        DBG_ERROR( "Missing implementation: Animation-Rotation" );
+        OSL_FAIL( "Missing implementation: Animation-Rotation" );
     }
 
     if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
     {
-        DBG_ERROR( "Missing implementation: Animation-Transparency" );
+        OSL_FAIL( "Missing implementation: Animation-Transparency" );
     }
 }
 
@@ -2381,3 +2383,5 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

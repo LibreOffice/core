@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <rtl/ustring.hxx>
 #include <comphelper/TypeGeneration.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 namespace comphelper
 {
     struct PropertyInfo
@@ -60,12 +61,14 @@ namespace comphelper
     };
 }
 
-typedef std::hash_map < ::rtl::OUString,
+typedef boost::unordered_map < ::rtl::OUString,
                         ::comphelper::PropertyInfo*,
                         ::rtl::OUStringHash,
                         ::comphelper::eqFunc > PropertyInfoHash;
-typedef std::hash_map < ::rtl::OUString,
+typedef boost::unordered_map < ::rtl::OUString,
                         ::comphelper::PropertyData*,
                         ::rtl::OUStringHash,
                         ::comphelper::eqFunc > PropertyDataHash;
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

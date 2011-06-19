@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ class OrdinalSuffix : public cppu::WeakImplHelper2
         virtual ~OrdinalSuffix();
 
         // XOrdinalSuffix
-        virtual rtl::OUString SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const com::sun::star::lang::Locale &rLocale) throw(com::sun::star::uno::RuntimeException);
+        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const com::sun::star::lang::Locale &rLocale ) throw(com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         virtual rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
@@ -55,3 +56,5 @@ class OrdinalSuffix : public cppu::WeakImplHelper2
         com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > _xServiceManager;
 };
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

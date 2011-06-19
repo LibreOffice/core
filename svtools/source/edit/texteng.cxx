@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,21 +45,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_TEXT_CHARACTERITERATORMODE_HPP_
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-#endif
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -712,7 +705,7 @@ uno::Reference < i18n::XExtendedInputSequenceChecker > TextEngine::GetInputSeque
 //    if ( !xISC.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference< uno::XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        uno::Reference< uno::XInterface > xI = xMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.InputSequenceChecker" )) );
         if ( xI.is() )
         {
             Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
@@ -2098,7 +2091,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             return;
 
         sal_uLong nParaHeight = CalcParaHeight( nPara );
-        sal_uInt16 nIndex = 0;
         if ( ( !pPaintArea || ( ( nY + (long)nParaHeight ) > pPaintArea->Top() ) )
                 && ( !pPaintRange || ( ( nPara >= pPaintRange->GetStart().GetPara() ) && ( nPara <= pPaintRange->GetEnd().GetPara() ) ) ) )
         {
@@ -2106,6 +2098,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             // Ueber die Zeilen des Absatzes...
             // --------------------------------------------------
             sal_uInt16 nLines = pPortion->GetLines().Count();
+            sal_uInt16 nIndex = 0;
             for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
             {
                 TextLine* pLine = pPortion->GetLines().GetObject(nLine);
@@ -2258,7 +2251,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
 #endif
                                 }
                                 break;
-                                default:    DBG_ERROR( "ImpPaint: Unknown Portion-Type !" );
+                                default:    OSL_FAIL( "ImpPaint: Unknown Portion-Type !" );
                             }
                         }
 
@@ -2397,7 +2390,6 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
     while ( nIndex < pNode->GetText().Len() )
     {
         sal_Bool bEOL = sal_False;
-        sal_Bool bEOC = sal_False;
         sal_uInt16 nPortionStart = 0;
         sal_uInt16 nPortionEnd = 0;
 
@@ -2462,7 +2454,6 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
             nPortionStart = nTmpPos;
             nTmpPortion--;
             bEOL = sal_False;
-            bEOC = sal_False;
 
             nTmpWidth -= pPortion->GetWidth();
             if ( pPortion->GetKind() == PORTIONKIND_TAB )
@@ -2474,7 +2465,6 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         else
         {
             bEOL = sal_True;
-            bEOC = sal_True;
             pLine->SetEnd( nPortionEnd );
             DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine TextPortions?" );
             pLine->SetEndPortion( (sal_uInt16)pTEParaPortion->GetTextPortions().Count() - 1 );
@@ -2489,7 +2479,6 @@ sal_Bool TextEngine::CreateLines( sal_uLong nPara )
         {
             pLine->SetEnd( nPortionStart+1 );
             pLine->SetEndPortion( nTmpPortion-1 );
-            bEOC = sal_False; // wurde oben gesetzt, vielleich mal die if's umstellen?
         }
         else if ( !bEOL )
         {
@@ -3301,3 +3290,5 @@ long TextEngine::ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt1
 
     return nX;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

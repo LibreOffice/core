@@ -403,16 +403,6 @@ ModalDialog SV_DLG_PRINT
             ImageBitmap = Bitmap { File = "ncollate.png" ; };
         };
 
-        Image SV_PRINT_COLLATE_HC_IMG
-        {
-            ImageBitmap = Bitmap { File = "collate_h.png" ; };
-        };
-
-        Image SV_PRINT_NOCOLLATE_HC_IMG
-        {
-            ImageBitmap = Bitmap { File = "ncollate_h.png" ; };
-        };
-
         CheckBox SV_PRINT_OPT_REVERSE
         {
             HelpID = ".HelpID:vcl:PrintDialog:OptPage:ToReverse";

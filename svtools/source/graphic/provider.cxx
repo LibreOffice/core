@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
@@ -45,6 +45,7 @@
 #include <vcl/virdev.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <comphelper/servicehelper.hxx>
 
 #include "descriptor.hxx"
 #include "graphic.hxx"
@@ -142,21 +143,15 @@ uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
     return aTypes;
 }
 
-// ------------------------------------------------------------------------------
+namespace
+{
+    class theGraphicProviderUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicProviderUnoTunnelId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
     throw(uno::RuntimeException)
 {
-    vos::OGuard                         aGuard( Application::GetSolarMutex() );
-    static uno::Sequence< sal_Int8 >    aId;
-
-    if( aId.getLength() == 0 )
-    {
-        aId.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aId.getArray() ), 0, sal_True );
-    }
-
-    return aId;
+    return theGraphicProviderUnoTunnelId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------
@@ -231,19 +226,19 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
     if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:standardimage" ) ) )
     {
         rtl::OUString sImageName( rResourceURL.copy( nIndex ) );
-        if ( sImageName.equalsAscii( "info" ) )
+        if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("info")) )
         {
             xRet = InfoBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.equalsAscii( "warning" ) )
+        else if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("warning")) )
         {
             xRet = WarningBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.equalsAscii( "error" ) )
+        else if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("error")) )
         {
             xRet = ErrorBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.equalsAscii( "query" ) )
+        else if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("query")) )
         {
             xRet = QueryBox::GetStandardImage().GetXGraphic();
         }
@@ -497,13 +492,12 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     if( pIStm )
     {
-        ::GraphicFilter* pFilter = ::GraphicFilter::GetGraphicFilter();
+        ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
 
-        if( pFilter )
         {
             ::Graphic aVCLGraphic;
 
-            if( ( pFilter->ImportGraphic( aVCLGraphic, aPath, *pIStm ) == GRFILTER_OK ) &&
+            if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm ) == GRFILTER_OK ) &&
                 ( aVCLGraphic.GetType() != GRAPHIC_NONE ) )
             {
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
@@ -657,7 +651,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             aDummyVDev.EnableOutput( sal_False );
             aDummyVDev.SetMapMode( aNewMapMode );
 
-            for( sal_uInt32 i = 0, nObjCount = aMtf.GetActionCount(); i < nObjCount; i++ )
+            for( size_t i = 0, nObjCount = aMtf.GetActionSize(); i < nObjCount; i++ )
             {
                 MetaAction* pAction = aMtf.GetAction( i );
                 switch( pAction->GetType() )
@@ -825,9 +819,8 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
         if( pFilterShortName )
         {
-            ::GraphicFilter* pFilter = ::GraphicFilter::GetGraphicFilter();
+            ::GraphicFilter& rFilter = ::GraphicFilter::GetGraphicFilter();
 
-            if( pFilter )
             {
                 const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
                 const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
@@ -845,8 +838,8 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                         aMemStrm << aGraphic;
                     else
                     {
-                        pFilter->ExportGraphic( aGraphic, aPath, aMemStrm,
-                                                pFilter->GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
+                        rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
+                                                rFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
                                                     ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
                     }
                     aMemStrm.Seek( STREAM_SEEK_TO_END );
@@ -859,3 +852,5 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <vector>
 #include <stack>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
@@ -56,7 +57,7 @@ struct SaxContextImpl;
 typedef ::boost::shared_ptr< SaxContextImpl > SaxContextImplPtr;
 typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
 
-typedef ::std::hash_map< ::rtl::OUString, sal_Int32,
+typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32,
         ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NamespaceMap;
 
 // --------------------------------------------------------------------
@@ -111,6 +112,7 @@ public:
     virtual void SAL_CALL setFastDocumentHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastDocumentHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL registerNamespace( const ::rtl::OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getNamespaceURL( const ::rtl::OUString& rPrefix ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setErrorHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XErrorHandler >& Handler ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setEntityResolver( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XEntityResolver >& Resolver ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setLocale( const ::com::sun::star::lang::Locale& rLocale ) throw (::com::sun::star::uno::RuntimeException);
@@ -162,3 +164,5 @@ private:
 }
 
 #endif // _SAX_FASTPARSER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

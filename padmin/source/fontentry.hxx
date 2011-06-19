@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ namespace padmin {
         String                              m_aNoWritableFontsDirText;
         String                              m_aFontsImportedText;
 
-        ::std::hash_map< ::rtl::OString, ::std::list< ::psp::FastPrintFontInfo >, ::rtl::OStringHash >
+        ::boost::unordered_map< ::rtl::OString, ::std::list< ::psp::FastPrintFontInfo >, ::rtl::OStringHash >
                                             m_aNewFonts;
 
         Timer                               m_aRefreshTimer;
@@ -118,7 +119,7 @@ namespace padmin {
         ::psp::PrintFontManager&    m_rFontManager;
 
         // maps fontID to XLFD
-        ::std::hash_map< ::psp::fontID, String >
+        ::boost::unordered_map< ::psp::fontID, String >
                                     m_aFonts;
         void init();
     public:
@@ -135,3 +136,5 @@ namespace padmin {
 } // namespace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -177,3 +178,5 @@
     // #define STR_FORMAT_ID_BIFF_8                 (STR_FORMAT_START + 118)
 #define STR_FORMAT_ID_HTML_NO_COMMENT           (STR_FORMAT_START + 119)
 #define STR_FORMAT_END                          (STR_FORMAT_ID_HTML_NO_COMMENT)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

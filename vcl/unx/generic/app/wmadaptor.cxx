@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 
 #include "osl/thread.h"
 #include "osl/process.h"
-
+#include <sal/macros.h>
 #include "vcl/configsettings.hxx"
 
 #include "unx/wmadaptor.hxx"
@@ -500,7 +501,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
                         bsearch( &aSearch,
                                  aProtocolTab,
-                                 sizeof( aProtocolTab )/sizeof( aProtocolTab[0] ),
+                                 SAL_N_ELEMENTS( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
                                  compareProtocol );
                     if( pMatch )
@@ -675,7 +676,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 && aRealType == XA_CARDINAL
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;
@@ -756,7 +757,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     WMAdaptorProtocol* pMatch = (WMAdaptorProtocol*)
                         bsearch( &aSearch,
                                  aProtocolTab,
-                                 sizeof( aProtocolTab )/sizeof( aProtocolTab[0] ),
+                                 SAL_N_ELEMENTS( aProtocolTab ),
                                  sizeof( struct WMAdaptorProtocol ),
                                  compareProtocol );
                     if( pMatch )
@@ -878,7 +879,7 @@ bool WMAdaptor::getNetWmName()
                 && aRealType == XA_WINDOW
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;
@@ -1037,7 +1038,7 @@ bool GnomeWMAdaptor::isValid() const
 void WMAdaptor::initAtoms()
 {
     // get basic atoms
-    for( unsigned int i = 0; i < sizeof( aAtomTab )/sizeof( aAtomTab[0] ); i++ )
+    for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAtomTab ); i++ )
         m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
     m_aWMAtoms[ NET_WM_NAME ]               = XInternAtom( m_pDisplay, "_NET_WM_NAME", True );
@@ -1090,7 +1091,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 
         if( aCountry.getLength() )
         {
-            aLocaleString += ::rtl::OUString::createFromAscii( "_" );
+            aLocaleString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
             aLocaleString += aCountry;
         }
         if( aVariant.getLength() )
@@ -2546,3 +2547,5 @@ void WMAdaptor::answerPing( X11SalFrame* i_pFrame, XClientMessageEvent* i_pEvent
         XFlush( m_pDisplay );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,8 +103,8 @@ X11SalGraphics::X11SalGraphics()
     m_pVDev             = NULL;
     m_pDeleteColormap   = NULL;
     hDrawable_          = None;
-    m_aRenderPicture    = 0;
-    m_pRenderFormat     = NULL;
+    m_aXRenderPicture    = 0;
+    m_pXRenderFormat     = NULL;
 
     mpClipRegion            = NULL;
     pPaintRegion_       = NULL;
@@ -184,8 +185,8 @@ void X11SalGraphics::freeResources()
     if( m_pDeleteColormap )
         delete m_pDeleteColormap, m_pColormap = m_pDeleteColormap = NULL;
 
-    if( m_aRenderPicture )
-        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture ), m_aRenderPicture = 0;
+    if( m_aXRenderPicture )
+        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture ), m_aXRenderPicture = 0;
 
     bPenGC_ = bFontGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = bTrackingGC_ = false;
 }
@@ -206,10 +207,10 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
 
     hDrawable_ = aDrawable;
     SetXRenderFormat( NULL );
-    if( m_aRenderPicture )
+    if( m_aXRenderPicture )
     {
-        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture );
-        m_aRenderPicture = 0;
+        XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture );
+        m_aXRenderPicture = 0;
     }
 
     if( hDrawable_ )
@@ -222,22 +223,10 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, int nScreen )
 
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget, int nScreen )
 {
-#if 0 // TODO: use SetDrawable() instead
-    m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
-    hDrawable_      = aTarget;
-    m_nScreen       = nScreen;
-    SetXRenderFormat( NULL );
-    if( m_aRenderPicture )
-        XRenderPeer::GetInstance().FreePicture( m_aRenderPicture ), m_aRenderPicture = 0;
 
-    nPenPixel_      = GetPixel( nPenColor_ );
-    nTextPixel_     = GetPixel( nTextColor_ );
-    nBrushPixel_    = GetPixel( nBrushColor_ );
-#else
     m_pColormap     = &GetX11SalData()->GetDisplay()->GetColormap(nScreen);
     m_nScreen = nScreen;
     SetDrawable( aTarget, nScreen );
-#endif
 
     bWindow_        = sal_True;
     m_pFrame        = pFrame;
@@ -258,10 +247,8 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
     int n = 0;
     XLIB_Region Regions[3];
 
-    if( mpClipRegion /* && !XEmptyRegion( mpClipRegion ) */ )
+    if( mpClipRegion )
         Regions[n++] = mpClipRegion;
-//  if( pPaintRegion_ /* && !XEmptyRegion( pPaintRegion_ ) */ )
-//      Regions[n++] = pPaintRegion_;
 
     if( pXReg && !XEmptyRegion( pXReg ) )
         Regions[n++] = pXReg;
@@ -274,8 +261,7 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
     {
         XLIB_Region pTmpRegion = XCreateRegion();
         XIntersectRegion( Regions[0], Regions[1], pTmpRegion );
-//      if( 3 == n )
-//          XIntersectRegion( Regions[2], pTmpRegion, pTmpRegion );
+
         XSetRegion( pDisplay, pGC, pTmpRegion );
         XDestroyRegion( pTmpRegion );
     }
@@ -320,7 +306,6 @@ GC X11SalGraphics::SelectBrush()
     if( !pBrushGC_ )
     {
         XGCValues values;
-        // values.subwindow_mode        = IncludeInferiors;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = False;
@@ -530,19 +515,16 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
     {
         // different x- and y- resolutions are usually artifacts of
         // a wrongly calculated screen size.
-        //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
-        {
 #ifdef DEBUG
-            printf("Forcing Resolution from %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 " to %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 "\n",
-                    rDPIX,rDPIY,rDPIY,rDPIY);
+        printf("Forcing Resolution from %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 " to %" SAL_PRIdINT32 "x%" SAL_PRIdINT32 "\n",
+                rDPIX,rDPIY,rDPIY,rDPIY);
 #endif
-            rDPIX = rDPIY; // y-resolution is more trustworthy
-        }
+        rDPIX = rDPIY; // y-resolution is more trustworthy
     }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-sal_uInt16 X11SalGraphics::GetBitCount() // const
+sal_uInt16 X11SalGraphics::GetBitCount() const
 {
     return GetVisual().GetDepth();
 }
@@ -1017,41 +999,32 @@ XID X11SalGraphics::GetXRenderPicture()
 {
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
 
-    if( !m_aRenderPicture )
+    if( !m_aXRenderPicture )
     {
         // check xrender support for matching visual
-        // find a XRenderPictFormat compatible with the Drawable
-        XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
-        if( !pVisualFormat )
-        {
-            Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
-            pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
-            if( !pVisualFormat )
-                return 0;
-            // cache the XRenderPictFormat
-            SetXRenderFormat( static_cast<void*>(pVisualFormat) );
-        }
-
+        XRenderPictFormat* pXRenderFormat = GetXRenderFormat();
+        if( !pXRenderFormat )
+            return 0;
         // get the matching xrender target for drawable
-        m_aRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
+        m_aXRenderPicture = rRenderPeer.CreatePicture( hDrawable_, pXRenderFormat, 0, NULL );
     }
 
-#if 0
-    // setup clipping so the callers don't have to do it themselves
-    // TODO: avoid clipping if already set correctly
-    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
-    else
-#endif
     {
         // reset clip region
         // TODO: avoid clip reset if already done
         XRenderPictureAttributes aAttr;
         aAttr.clip_mask = None;
-        rRenderPeer.ChangePicture( m_aRenderPicture, CPClipMask, &aAttr );
+        rRenderPeer.ChangePicture( m_aXRenderPicture, CPClipMask, &aAttr );
     }
 
-    return m_aRenderPicture;
+    return m_aXRenderPicture;
+}
+
+XRenderPictFormat* X11SalGraphics::GetXRenderFormat() const
+{
+    if( m_pXRenderFormat == NULL )
+        m_pXRenderFormat = XRenderPeer::GetInstance().FindVisualFormat( GetVisual().visual );
+    return m_pXRenderFormat;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1063,11 +1036,11 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     aRes.nSize = sizeof(aRes);
     aRes.pDisplay  = GetXDisplay();
     aRes.hDrawable = hDrawable_;
-    aRes.pVisual   = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
+    aRes.pVisual   = GetVisual().visual;
     aRes.nScreen   = m_nScreen;
-    aRes.nDepth    = GetDisplay()->GetVisual( m_nScreen ).GetDepth();
-    aRes.aColormap = GetDisplay()->GetColormap( m_nScreen ).GetXColormap();
-    aRes.pRenderFormat = m_pRenderFormat;
+    aRes.nDepth    = GetBitCount();
+    aRes.aColormap = GetColormap().GetXColormap();
+    aRes.pXRenderFormat = m_pXRenderFormat;
     return aRes;
 }
 
@@ -1271,3 +1244,4 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

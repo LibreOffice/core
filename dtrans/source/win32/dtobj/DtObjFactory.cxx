@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,13 +34,9 @@
 //------------------------------------------------------------------------
 #include "..\..\inc\DtObjFactory.hxx"
 
-#ifndef _TWRAPPERDATAOBJECT_HXX_
 #include "XTDataObject.hxx"
-#endif
 
-#ifndef _DOWRAPPERTRANSFERABLE_HXX_
 #include "DOTransferable.hxx"
-#endif
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -72,3 +69,4 @@ Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDat
     return refDOTransf;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,7 +112,7 @@ sal_uInt16 TETextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPor
             }
         }
     }
-    DBG_ERROR( "FindPortion: Nicht gefunden!" );
+    OSL_FAIL( "FindPortion: Nicht gefunden!" );
     return ( Count() - 1 );
 }
 
@@ -359,3 +360,4 @@ void TEIMEInfos::DestroyAttribs()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

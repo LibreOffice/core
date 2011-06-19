@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 // include ---------------------------------------------------------------
 
 #include <svl/srchitem.hxx>
+#include <sal/macros.h>
 
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/util/XReplaceable.hpp>
@@ -51,7 +53,7 @@ using namespace com::sun::star::util;
 
 #define CFG_ROOT_NODE       "Office.Common/SearchOptions"
 
-#define SRCH_PARAMS         11
+#define SRCH_PARAMS         12
 #define SRCH_PARA_OPTIONS   "Options"
 #define SRCH_PARA_FAMILY    "Family"
 #define SRCH_PARA_COMMAND   "Command"
@@ -59,6 +61,7 @@ using namespace com::sun::star::util;
 #define SRCH_PARA_APPFLAG   "AppFlag"
 #define SRCH_PARA_ROWDIR    "RowDirection"
 #define SRCH_PARA_ALLTABLES "AllTables"
+#define SRCH_PARA_SEARCHFILTERED "SearchFiltered"
 #define SRCH_PARA_BACKWARD  "Backward"
 #define SRCH_PARA_PATTERN   "Pattern"
 #define SRCH_PARA_CONTENT   "Content"
@@ -96,7 +99,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
         "Japanese/IsIgnoreMiddleDot"            // 18
     };
 
-    const int nCount = sizeof( aTranslitNames ) / sizeof( aTranslitNames[0] );
+    const int nCount = SAL_N_ELEMENTS( aTranslitNames );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
@@ -109,7 +112,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
-    ConfigItem( ::rtl::OUString::createFromAscii( CFG_ROOT_NODE ) ),
+    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
 
     aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
                         SearchFlags::LEV_RELAXED,
@@ -124,6 +127,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     nAppFlag        ( SVX_SEARCHAPP_WRITER ),
     bRowDirection   ( sal_True ),
     bAllTables      ( sal_False ),
+    bSearchFiltered   ( sal_False ),
     bNotes          ( sal_False),
     bBackward       ( sal_False ),
     bPattern        ( sal_False ),
@@ -196,7 +200,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
-    ConfigItem( ::rtl::OUString::createFromAscii( CFG_ROOT_NODE ) ),
+    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
 
     aSearchOpt      ( rItem.aSearchOpt ),
     eFamily         ( rItem.eFamily ),
@@ -205,6 +209,7 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     nAppFlag        ( rItem.nAppFlag ),
     bRowDirection   ( rItem.bRowDirection ),
     bAllTables      ( rItem.bAllTables ),
+    bSearchFiltered   ( rItem.bSearchFiltered ),
     bNotes          ( rItem.bNotes),
     bBackward       ( rItem.bBackward ),
     bPattern        ( rItem.bPattern ),
@@ -254,6 +259,7 @@ int SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( eFamily        == rSItem.eFamily )         &&
            ( bRowDirection  == rSItem.bRowDirection )   &&
            ( bAllTables     == rSItem.bAllTables )      &&
+           ( bSearchFiltered  == rSItem.bSearchFiltered )   &&
            ( nCellType      == rSItem.nCellType )       &&
            ( nAppFlag       == rSItem.nAppFlag )        &&
            ( bAsianOptions  == rSItem.bAsianOptions )   &&
@@ -425,7 +431,7 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
     aSearchOpt.transliterateFlags = nFlags;
 }
 
-sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -447,6 +453,8 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
             aSeq[5].Value <<= bRowDirection;
             aSeq[6].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_ALLTABLES ));
             aSeq[6].Value <<= bAllTables;
+            aSeq[6].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_SEARCHFILTERED ));
+            aSeq[6].Value <<= bSearchFiltered;
             aSeq[7].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_BACKWARD ));
             aSeq[7].Value <<= bBackward;
             aSeq[8].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SRCH_PARA_PATTERN ));
@@ -468,6 +476,8 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
             rVal <<= (sal_Bool) bRowDirection; break;
         case MID_SEARCH_ALLTABLES:
             rVal <<= (sal_Bool) bAllTables; break;
+        case MID_SEARCH_SEARCHFILTERED:
+            rVal <<= (sal_Bool) bSearchFiltered; break;
         case MID_SEARCH_BACKWARD:
             rVal <<= (sal_Bool) bBackward; break;
         case MID_SEARCH_PATTERN:
@@ -505,18 +515,18 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
 
         default:
             DBG_ERRORFILE( "SvxSearchItem::QueryValue(): Unknown MemberId" );
-            return sal_False;
+            return false;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_Int32 nInt = 0;
     switch ( nMemberId )
     {
@@ -528,12 +538,12 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
                 {
-                    if ( aSeq[i].Name.equalsAscii( SRCH_PARA_OPTIONS ) )
+                    if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_OPTIONS ) ) )
                     {
                         if ( ( aSeq[i].Value >>= aSearchOpt ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_FAMILY ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_FAMILY ) ) )
                     {
                         sal_uInt16 nTemp( 0 );
                         if ( ( aSeq[i].Value >>= nTemp ) == sal_True )
@@ -542,47 +552,52 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_COMMAND ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_COMMAND ) ) )
                     {
                         if ( ( aSeq[i].Value >>= nCommand ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_CELLTYPE ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_CELLTYPE ) ) )
                     {
                         if ( ( aSeq[i].Value >>= nCellType ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_APPFLAG ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_APPFLAG ) ) )
                     {
                         if ( ( aSeq[i].Value >>= nAppFlag ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ROWDIR ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ROWDIR ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bRowDirection ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ALLTABLES ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ALLTABLES ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bAllTables ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_BACKWARD ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_SEARCHFILTERED ) ) )
+                    {
+                        if ( ( aSeq[i].Value >>= bSearchFiltered ) == sal_True )
+                            ++nConvertedCount;
+                    }
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_BACKWARD ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bBackward ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_PATTERN ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_PATTERN ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bPattern ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_CONTENT ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_CONTENT ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bContent ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ASIANOPT ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ASIANOPT ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bAsianOptions ) == sal_True )
                             ++nConvertedCount;
@@ -603,6 +618,8 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
             bRet = (rVal >>= bRowDirection); break;
         case MID_SEARCH_ALLTABLES:
             bRet = (rVal >>= bAllTables); break;
+        case MID_SEARCH_SEARCHFILTERED:
+            bRet = (rVal >>= bSearchFiltered); break;
         case MID_SEARCH_BACKWARD:
             bRet = (rVal >>= bBackward); break;
         case MID_SEARCH_PATTERN:
@@ -644,10 +661,11 @@ sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
             break;
         }
         default:
-            DBG_ERROR( "Unknown MemberId" );
+            OSL_FAIL( "Unknown MemberId" );
     }
 
     return bRet;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

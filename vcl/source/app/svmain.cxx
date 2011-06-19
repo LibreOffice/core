@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,8 @@
 
 #include "rtl/logfile.hxx"
 
-#include "osl/file.hxx"
-
-#include "vos/signal.hxx"
-#include "vos/process.hxx"
+#include <osl/file.hxx>
+#include <osl/signal.h>
 
 #include "tools/tools.h"
 #include "tools/debug.hxx"
@@ -55,10 +54,9 @@
 #include "vcl/lazydelete.hxx"
 
 #ifdef WNT
-#include <tools/prewin.h>
+#include <svsys.h>
 #include <process.h>    // for _beginthreadex
 #include <ole2.h>   // for _beginthreadex
-#include <tools/postwin.h>
 #endif
 
 // [ed 5/14/02 Add in explicit check for quartz graphics.  OS X will define
@@ -86,6 +84,7 @@
 #include "impimagetree.hxx"
 #include "xconnection.hxx"
 
+#include "osl/process.h"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 
@@ -97,31 +96,14 @@
 #include "rtl/strbuf.hxx"
 #endif
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
-using namespace ::rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
-
+using ::rtl::OUString;
+using namespace ::com::sun::star;
 
 // =======================================================================
 
-class ImplVCLExceptionHandler : public ::vos::OSignalHandler
+oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
-public:
-    virtual ::vos::OSignalHandler::TSignalAction SAL_CALL signal( ::vos::OSignalHandler::TSignalInfo* pInfo );
-};
-
-// -----------------------------------------------------------------------
-
-::vos::OSignalHandler::TSignalAction SAL_CALL ImplVCLExceptionHandler::signal( ::vos::OSignalHandler::TSignalInfo* pInfo )
-{
-    static sal_Bool bIn = sal_False;
+    static bool bIn = false;
 
     // Wenn wir nocheinmal abstuerzen, verabschieden wir uns gleich
     if ( !bIn )
@@ -152,9 +134,9 @@ public:
 
         if ( nVCLException )
         {
-            bIn = sal_True;
+            bIn = true;
 
-            ::vos::OGuard aLock(&Application::GetSolarMutex());
+            SolarMutexGuard aLock;
 
             // Timer nicht mehr anhalten, da ansonsten die UAE-Box
             // auch nicht mehr gepaintet wird
@@ -166,17 +148,18 @@ public:
                 pSVData->mpApp->Exception( nVCLException );
                 Application::SetSystemWindowMode( nOldMode );
             }
-            bIn = sal_False;
+            bIn = false;
 
-            return vos::OSignalHandler::TAction_CallNextHandler;
+            return osl_Signal_ActCallNextHdl;
         }
     }
 
-    return vos::OSignalHandler::TAction_CallNextHandler;
+    return osl_Signal_ActCallNextHdl;
+
 }
 
 // =======================================================================
-sal_Bool ImplSVMain()
+int ImplSVMain()
 {
     // The 'real' SVMain()
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
@@ -185,8 +168,9 @@ sal_Bool ImplSVMain()
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
 
-    css::uno::Reference<XMultiServiceFactory> xMS;
+    uno::Reference<lang::XMultiServiceFactory> xMS;
 
+    int nReturn = EXIT_FAILURE;
 
     sal_Bool bInit = InitVCL( xMS );
 
@@ -194,7 +178,7 @@ sal_Bool ImplSVMain()
     {
         // Application-Main rufen
         pSVData->maAppData.mbInAppMain = sal_True;
-        pSVData->mpApp->Main();
+        nReturn = pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = sal_False;
     }
 
@@ -209,7 +193,7 @@ sal_Bool ImplSVMain()
     // be some events in the AWT EventQueue, which need the SolarMutex which
     // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
     // here ..
-    css::uno::Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
+    uno::Reference< lang::XComponent > xComponent(pSVData->mxAccessBridge, uno::UNO_QUERY);
     if( xComponent.is() )
     {
       sal_uLong nCount = Application::ReleaseSolarMutex();
@@ -219,17 +203,17 @@ sal_Bool ImplSVMain()
     }
 
     DeInitVCL();
-    return bInit;
+    return nReturn;
 }
 
-sal_Bool SVMain()
+int SVMain()
 {
     // #i47888# allow for alternative initialization as required for e.g. MacOSX
-    extern sal_Bool ImplSVMainHook( sal_Bool* );
+    extern sal_Bool ImplSVMainHook( int* );
 
-    sal_Bool bInit;
-    if( ImplSVMainHook( &bInit ) )
-        return bInit;
+    int nRet;
+    if( ImplSVMainHook( &nRet ) )
+        return nRet;
     else
         return ImplSVMain();
 }
@@ -237,12 +221,12 @@ sal_Bool SVMain()
 // before SVInit is called
 static Application *        pOwnSvApp = NULL;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
-ImplVCLExceptionHandler *   pExceptionHandler = NULL;
+oslSignalHandler   pExceptionHandler = NULL;
 
 class Application_Impl : public Application
 {
 public:
-    void                Main(){};
+    int                Main() { return EXIT_SUCCESS; };
 };
 
 class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
@@ -259,13 +243,13 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
 };
 
-Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (RuntimeException)
+uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (uno::RuntimeException)
 {
-    Any retVal;
+    uno::Any retVal;
 
-    if ( 0 == Name.compareToAscii( "system.desktop-environment" ) )
+    if (Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("system.desktop-environment")))
     {
-        retVal = makeAny( Application::GetDesktopEnvironment() );
+        retVal = uno::makeAny( Application::GetDesktopEnvironment() );
     }
     else if( m_xNextContext.is() )
     {
@@ -303,11 +287,7 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
     pSVData->maAppData.mxMSF = rSMgr;
 
     // Main-Thread-Id merken
-    pSVData->mnMainThreadId = ::vos::OThread::getCurrentIdentifier();
-
-    vos::OStartupInfo   aStartInfo;
-    rtl::OUString       aExeFileName;
-
+    pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
     // Sal initialisieren
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
@@ -328,7 +308,8 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
 
     // Den AppFileName gleich holen und absolut machen, bevor das
     // WorkingDirectory sich aendert...
-    aStartInfo.getExecutableFile( aExeFileName );
+    rtl::OUString aExeFileName;
+    osl_getExecutableFile( &aExeFileName.pData );
 
     // convert path to native file format
     rtl::OUString aNativeFileName;
@@ -341,12 +322,39 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
-    pExceptionHandler = new ImplVCLExceptionHandler();
+    pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
 
     // Debug-Daten initialisieren
     DBGGUI_INIT();
 
     return sal_True;
+}
+
+namespace
+{
+
+/** Serves for destroying the VCL UNO wrapper as late as possible. This avoids
+  crash at exit in some special cases when a11y is enabled (e.g., when
+  a bundled extension is registered/deregistered during startup, forcing exit
+  while the app is still in splash screen.)
+ */
+class VCLUnoWrapperDeleter : public cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
+{
+    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException);
+};
+
+void
+VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
+    throw(uno::RuntimeException)
+{
+    ImplSVData* const pSVData = ImplGetSVData();
+    if (pSVData && pSVData->mpUnoWrapper)
+    {
+        pSVData->mpUnoWrapper->Destroy();
+        pSVData->mpUnoWrapper = NULL;
+    }
+}
+
 }
 
 void DeInitVCL()
@@ -388,7 +396,7 @@ void DeInitVCL()
 
     ImplImageTreeSingletonRef()->shutDown();
 
-    delete pExceptionHandler;
+    osl_removeSignalHandler( pExceptionHandler);
     pExceptionHandler = NULL;
 
     // Debug Daten zuruecksetzen
@@ -412,11 +420,6 @@ void DeInitVCL()
     {
         delete pSVData->maWinData.mpMsgBoxImgList;
         pSVData->maWinData.mpMsgBoxImgList = NULL;
-    }
-    if ( pSVData->maWinData.mpMsgBoxHCImgList )
-    {
-        delete pSVData->maWinData.mpMsgBoxHCImgList;
-        pSVData->maWinData.mpMsgBoxHCImgList = NULL;
     }
     if ( pSVData->maCtrlData.mpCheckImgList )
     {
@@ -458,20 +461,10 @@ void DeInitVCL()
         delete pSVData->maCtrlData.mpDisclosurePlus;
         pSVData->maCtrlData.mpDisclosurePlus = NULL;
     }
-    if ( pSVData->maCtrlData.mpDisclosurePlusHC )
-    {
-        delete pSVData->maCtrlData.mpDisclosurePlusHC;
-        pSVData->maCtrlData.mpDisclosurePlusHC = NULL;
-    }
     if ( pSVData->maCtrlData.mpDisclosureMinus )
     {
         delete pSVData->maCtrlData.mpDisclosureMinus;
         pSVData->maCtrlData.mpDisclosureMinus = NULL;
-    }
-    if ( pSVData->maCtrlData.mpDisclosureMinusHC )
-    {
-        delete pSVData->maCtrlData.mpDisclosureMinusHC;
-        pSVData->maCtrlData.mpDisclosureMinusHC = NULL;
     }
     if ( pSVData->mpDefaultWin )
     {
@@ -479,11 +472,21 @@ void DeInitVCL()
         pSVData->mpDefaultWin = NULL;
     }
 
-    // #114285# Moved here from ImplDeInitSVData...
     if ( pSVData->mpUnoWrapper )
     {
-        pSVData->mpUnoWrapper->Destroy();
-        pSVData->mpUnoWrapper = NULL;
+        try
+        {
+            uno::Reference<lang::XComponent> const xDesktop(
+                    comphelper::createProcessComponent(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
+                    uno::UNO_QUERY_THROW)
+                ;
+            xDesktop->addEventListener(new VCLUnoWrapperDeleter());
+        }
+        catch (uno::Exception const&)
+        {
+            // ignore
+        }
     }
 
     pSVData->maAppData.mxMSF.clear();
@@ -648,3 +651,5 @@ void JoinMainLoopThread()
 #endif
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

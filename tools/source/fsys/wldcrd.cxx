@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,10 +33,6 @@
 /*************************************************************************
 |*
 |*    WildCard::Match()
-|*
-|*    Beschreibung      WLDCRD.SDW
-|*    Ersterstellung    MA 19.06.91
-|*    Letzte Aenderung  MA 03.07.91
 |*
 *************************************************************************/
 
@@ -111,10 +108,6 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 |*
 |*    WildCard::Matches()
 |*
-|*    Beschreibung      WLDCRD.SDW
-|*    Ersterstellung    MA 19.06.91
-|*    Letzte Aenderung  TH 02.02.96
-|*
 *************************************************************************/
 
 sal_Bool WildCard::Matches( const String& rString ) const
@@ -141,3 +134,5 @@ sal_Bool WildCard::Matches( const String& rString ) const
     else
         return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

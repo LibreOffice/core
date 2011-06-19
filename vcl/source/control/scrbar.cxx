@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,8 @@
 #include "rtl/string.hxx"
 #include "tools/rc.h"
 
+using ::rtl::OUString;
 
-
-using namespace rtl;
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
@@ -245,7 +245,6 @@ void ScrollBar::ImplUpdateRects( sal_Bool bUpdate )
     }
     else
     {
-        Size aScrBarSize = GetOutputSizePixel();
         if ( GetStyle() & WB_HORZ )
         {
             const long nSpace = maTrackRect.Right() - maTrackRect.Left();
@@ -1590,3 +1589,5 @@ void ScrollBarBox::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,7 +107,7 @@ SAL_THROW (())
     } // DEBUG:
     else if ( pParent == NULL )
     {
-        DBG_ERROR( "Fatal error: top node isn't a dialog" );
+        OSL_FAIL( "Fatal error: top node isn't a dialog" );
     }
 
     OUString aOrdering;
@@ -128,7 +129,7 @@ SAL_THROW (())
     if ( xRadio.is() )
     {
         if (!bSetRadioGroup)
-            aRadioGroup = OUString::createFromAscii ("default");
+            aRadioGroup = OUString(RTL_CONSTASCII_USTRINGPARAM ("default"));
         pImport->mxRadioGroups.addItem( aRadioGroup, xRadio );
     }
 }
@@ -149,7 +150,7 @@ WidgetElement::startChildElement ( sal_Int32 nUid, OUString const &name,
 
     if ( !mpWidget->addChild( pChild->mpWidget ) )
     {
-        DBG_ERROR2( "ERROR: cannot add %s to container %s, container full", OUSTRING_CSTR( name ), OUSTRING_CSTR( getLocalName() ) );
+        OSL_TRACE( "ERROR: cannot add %s to container %s, container full", OUSTRING_CSTR( name ), OUSTRING_CSTR( getLocalName() ) );
         throw xml::sax::SAXException();
     }
 
@@ -173,9 +174,9 @@ WidgetElement::characters( OUString const& rChars )
         if ( xDialog.is() )
             xDialog->setTitle( rChars );
         else if ( xButton.is() )
-            mpWidget->setProperty( OUString::createFromAscii( "label" ), rChars );
+            mpWidget->setProperty( OUString(RTL_CONSTASCII_USTRINGPARAM("label")), rChars );
         else
-            mpWidget->setProperty( OUString::createFromAscii( "text" ), rChars );
+            mpWidget->setProperty( OUString(RTL_CONSTASCII_USTRINGPARAM("text")), rChars );
     }
 }
 // ---- ElementBase ----
@@ -287,7 +288,7 @@ void RadioGroups::RadioGroup::handleSelected ()
     throw (uno::RuntimeException)
 {
     for ( RadioButtonsList::iterator it = mxRadios.begin();
-          it != mxRadios.end(); it++ )
+          it != mxRadios.end(); ++it )
         if ( *it != mxSelectedRadio && (*it)->getState() )
         {
             mxSelectedRadio->setState( false );
@@ -323,3 +324,5 @@ void SAL_CALL RadioGroups::RadioGroup::disposing( const lang::EventObject& )
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 
-#ifndef _RTL_TEXTENC_H_
 #include <rtl/textenc.h>
-#endif
 
 class String;
 class SvStream;
@@ -44,7 +43,7 @@ public:
 #if defined(UNX)
     static const sal_Char sNewLine;     // nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char sNewLine[];   // \015\012
 #endif
 
     static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
@@ -65,3 +64,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

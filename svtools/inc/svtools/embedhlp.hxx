@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,9 +110,6 @@ namespace svt
         // no conversion is done if no target mode is provided
         Size            GetSize( MapMode* pTargetMapMode = NULL ) const;
 
-        // the following method tries to get the HC graphic if it is possible, otherwise returns NULL
-        Graphic*        GetHCGraphic() const;
-
         void            SetGraphic( const Graphic& rGraphic, const ::rtl::OUString& rMediaType );
         void            SetGraphicStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInGrStream,
@@ -138,3 +136,5 @@ namespace svt
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

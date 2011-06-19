@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,16 +38,12 @@ class   SalXLib;
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <unx/salunx.h>
 #include <vcl/salgtype.hxx>
-#ifndef _SV_PTRSTYLE_HXX
 #include <vcl/ptrstyle.hxx>
-#endif
 #include <sal/types.h>
-#ifndef _OSL_MUTEX_H
 #include <osl/mutex.h>
-#endif
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <tools/gen.hxx>
 #include <salwtype.hxx>
 
@@ -249,9 +246,9 @@ public:
     virtual void    Remove( int fd );
 
     void            XError( Display *pDisp, XErrorEvent *pEvent );
-    bool            HasXErrorOccured() const { return m_aXErrorHandlerStack.back().m_bWas; }
+    bool            HasXErrorOccurred() const { return m_aXErrorHandlerStack.back().m_bWas; }
     unsigned int    GetLastXErrorRequestCode() const { return m_aXErrorHandlerStack.back().m_nLastErrorRequest; }
-    void            ResetXErrorOccured() { m_aXErrorHandlerStack.back().m_bWas = false; }
+    void            ResetXErrorOccurred() { m_aXErrorHandlerStack.back().m_bWas = false; }
     void PushXErrorLevel( bool bIgnore );
     void PopXErrorLevel();
 
@@ -291,7 +288,7 @@ public:
         RenderEntry() : m_aPixmap( 0 ), m_aPicture( 0 ) {}
     };
 
-    typedef std::hash_map<int,RenderEntry> RenderEntryMap;
+    typedef boost::unordered_map<int,RenderEntry> RenderEntryMap;
 
     struct ScreenData
     {
@@ -382,6 +379,7 @@ protected:
 
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
+    std::vector< int > m_aXineramaScreenIndexMap;
     std::list<SalFrame*> m_aFrames;
     std::list<SalObject*> m_aSalObjects;
 
@@ -396,7 +394,7 @@ protected:
     int             processRandREvent( XEvent* );
 
     void            doDestruct();
-    int             addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight );
+    void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
     static  SalDisplay     *GetSalDisplay( Display* display );
     static  sal_Bool            BestVisual( Display     *pDisp,
@@ -428,6 +426,8 @@ public:
     void            Beep() const;
 
     void            ModifierMapping();
+    void            SimulateKeyPress( sal_uInt16 nKeyCode );
+    sal_uInt16          GetIndicatorState() const;
     String          GetKeyNameFromKeySym( KeySym keysym ) const;
     XubString       GetKeyName( sal_uInt16 nKeyCode ) const;
     sal_uInt16          GetKeyCode( KeySym keysym, char*pcPrintable ) const;
@@ -494,7 +494,7 @@ public:
     { mpInputMethod = pInputMethod; }
     void            SetKbdExtension(SalI18N_KeyboardExtension *pKbdExtension)
     { mpKbdExtension = pKbdExtension; }
-    const char* GetKeyboardName( sal_Bool bRefresh = sal_False );
+    const char* GetKeyboardName( bool bRefresh = false );
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
     DtIntegrator* getDtIntegrator() const { return m_pDtIntegrator; }
     bool            IsXinerama() const { return m_bXinerama; }
@@ -549,3 +549,5 @@ namespace vcl_sal {
 
 
 #endif // _SV_SALDISP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include "srciter.hxx"
 #include "export.hxx"
-#include "treeconfig.hxx"
 #include <string>
 #include <vector>
 #include <stdio.h>
@@ -43,6 +43,8 @@
 #include <l10ntools/file.hxx>
 #endif
 
+using namespace std;
+
 namespace transex3
 {
 
@@ -53,18 +55,12 @@ namespace transex3
 const char *ExeTable[][5] = {
     { "src", "transex3", "  -UTF8 -e", "negative", "noiso" },
     { "hrc", "transex3", "  -UTF8 -e", "positive", "noiso" },
-    { "tree", "xhtex", "", "negative", "noiso" },
-    { "xtx", "xtxex", "", "negative", "noiso" },
     { "ulf", "ulfex", " -e", "negative", "noiso" },
-    { "xrb", "xmlex", "-UTF8 -e", "negative", "iso" },
-    { "xxl", "xmlex", "-UTF8 -e", "negative", "iso" },
-    { "xgf", "xmlex", "-UTF8 -e -t:xgf", "negative", "iso" },
     { "xcd", "cfgex", "-UTF8 -e", "negative", "iso" },
     { "xcu", "cfgex", "-UTF8 -e", "negative", "iso" },
     { "xcs", "cfgex", "-UTF8 -e -f", "negative", "iso" },
     { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
     { "xhp", "helpex", " -e", "negative", "noiso" },
-       { "properties", "jpropex", " -e", "negative", "noiso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 
@@ -115,6 +111,56 @@ const char *PositiveList[] = {
     "chart2.link/source/controller/dialogs/res_ErrorBar_tmpl.hrc",
     "chart2.link/source/controller/dialogs/res_Trendline_tmpl.hrc",
     "NULL"
+};
+
+const char *ModuleList[] = {
+    "accessibility",
+    "avmedia",
+    "basctl",
+    "basic",
+    "chart2",
+    "connectivity",
+    "crashrep",
+    "cui",
+    "dbaccess",
+    "desktop",
+    "editeng",
+    "extensions",
+    "filter",
+    "forms",
+    "formula",
+    "fpicker",
+    "framework",
+    "helpcontent2",
+    "instsetoo_native",
+    "mysqlc",
+    "officecfg",
+    "padmin",
+    "readlicense_oo",
+    "reportbuilder",
+    "reportdesign",
+    "sc",
+    "scaddins",
+    "sccomp",
+    "scp2",
+    "sd",
+    "sdext",
+    "setup_native",
+    "sfx2",
+    "shell",
+    "starmath",
+    "svl",
+    "svtools",
+    "svx",
+    "sw",
+    "swext",
+    "sysui",
+    "ucbhelper",
+    "uui",
+    "vcl",
+    "wizards",
+    "xmlsecurity",
+    "NULL",
 };
 
 
@@ -258,8 +304,16 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 
 bool skipProject( ByteString sPrj )
 {
-    static const ByteString READLICENSE( "readlicense" );
-    return sPrj.EqualsIgnoreCaseAscii( READLICENSE );
+    int nIndex = 0;
+    bool bReturn = true;
+    ByteString sModule( ModuleList[ nIndex ] );
+    while( !sModule.Equals( "NULL" ) && bReturn ) {
+        if( sPrj.Equals ( sModule ) )
+            bReturn = false;
+        nIndex++;
+        sModule = ModuleList[ nIndex ];
+    }
+    return bReturn;
 }
 
 /*****************************************************************************/
@@ -286,7 +340,7 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
             ByteString sDel;
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             sDel=ByteString("\\");
 #else
             sDel=ByteString("/");
@@ -294,13 +348,14 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sPath1( Export::GetEnv("SOLARVER") );
             ByteString sPath2( Export::GetEnv("INPATH") );
             ByteString sPath3( "bin" );
-            ByteString sPath4( Export::GetEnv("UPDMINOREXT") );
             ByteString sExecutable( sPath1 );
+#if defined(WNT)
+            sExecutable.SearchAndReplaceAll( "/", sDel );
+#endif
             sExecutable += sDel ;
             sExecutable += sPath2 ;
             sExecutable += sDel;
             sExecutable += sPath3 ;
-            sExecutable += sPath4 ;
             sExecutable += sDel ;
             sExecutable += rExecutable ;
 
@@ -753,7 +808,6 @@ sal_Bool SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteS
     sal_Bool bReturn = aSDF.IsOpen();
     if ( bReturn ) {
         bReturn = ExecuteMerge();
-//      aSDF.Close();
     }
     aSDF.Close();
     nMode = LOCALIZE_NONE;
@@ -780,7 +834,8 @@ void Help()
         "====================================\n" );
     fprintf( stdout,
         "As part of the L10N framework, localize extracts and merges translations\n"
-        "out of and into the whole source tree.\n\n"
+        "out of and into the toplevel modules defined in ModuleList array in\n"
+        "l10ntools/source/localize.cxx.\n\n"
         "Syntax: localize -e -l en-US -f FileName \n"
         "Parameter:\n"
         "\t-e: Extract mode\n"
@@ -794,7 +849,7 @@ void Help()
         "\nExample 1:\n"
         "==========\n"
         "localize -e -l en-US -f MyFile\n\n"
-        "All strings will be extracted for language de and language en-US.\n"
+        "All strings will be extracted for language en-US.\n"
     );
 }
 
@@ -815,7 +870,7 @@ sal_Bool CheckLanguages( ByteString &rLanguages )
 }
 
 /*****************************************************************************/
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
@@ -909,62 +964,17 @@ int _cdecl main( int argc, char *argv[] )
     //printf("B %s\nA %s\n",rDestinationFile.GetBuffer(), sFile.GetBuffer());
     sFileName = sFileABS;
 
-    Treeconfig treeconfig;
-    vector<string> repos;
-    bool hasPwd = treeconfig.getActiveRepositories( repos );
-    if( hasPwd ) cout << "Found special path!\n";
-
-    string minor_ext;
-    bool has_minor_ext;
-
-    if( Export::GetEnv("UPDMINOREXT") != NULL )
-    {
-        minor_ext     = string( Export::GetEnv("UPDMINOREXT") );
-        has_minor_ext = minor_ext.size();
+    string pwd;
+    Export::getCurrentDir( pwd );
+    cout << "Localizing directory " << pwd << "\n";
+    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
+    aIter.SetLanguageRestriction( sLanguages );
+    if ( bExport ){
+        fflush( stdout );
+        aIter.Extract( sFileName );
+        printf("\n%d files found!\n",aIter.GetFileCnt());
     }
-    else
-        has_minor_ext = false;
-
-    // localize through all repositories
-    for( vector<string>::iterator iter = repos.begin(); iter != repos.end() ; ++iter )
-    {
-        string curRepository;
-        if( has_minor_ext )
-            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter + minor_ext;
-        else
-            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter;
-        cout << "Localizing repository " << curRepository << "\n";
-        SourceTreeLocalizer aIter( ByteString( curRepository.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
-        aIter.SetLanguageRestriction( sLanguages );
-        if ( bExport ){
-            fflush( stdout );
-            if( *iter == "ooo" )
-                aIter.Extract( sFileName );
-            else
-            {
-                ByteString sFileNameWithExt( sFileName );
-                sFileNameWithExt += ByteString( "." );
-                sFileNameWithExt += ByteString( (*iter).c_str() );
-                aIter.Extract( sFileNameWithExt );
-            }
-            printf("\n%d files found!\n",aIter.GetFileCnt());
-        }
-    }
-    if( hasPwd )
-    {
-        string pwd;
-        Export::getCurrentDir( pwd );
-        cout << "Localizing repository " << pwd << "\n";
-        SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
-        aIter.SetLanguageRestriction( sLanguages );
-        if ( bExport ){
-            fflush( stdout );
-            aIter.Extract( sFileName );
-            printf("\n%d files found!\n",aIter.GetFileCnt());
-        }
-
-    }
-
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

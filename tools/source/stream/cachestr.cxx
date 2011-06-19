@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,10 +38,6 @@
 |*
 |*    SvCacheStream::SvCacheStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
@@ -58,10 +55,6 @@ SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
 /*************************************************************************
 |*
 |*    SvCacheStream::SvCacheStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -90,10 +83,6 @@ SvCacheStream::SvCacheStream( const String &rFileName,
 |*
 |*    SvCacheStream::~SvCacheStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 SvCacheStream::~SvCacheStream()
@@ -114,10 +103,6 @@ SvCacheStream::~SvCacheStream()
 /*************************************************************************
 |*
 |*    SvCacheStream::SwapOut()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -161,10 +146,6 @@ void SvCacheStream::SwapOut()
 |*
 |*    SvCacheStream::GetData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 sal_uIntPtr SvCacheStream::GetData( void* pData, sal_uIntPtr nSize )
@@ -175,10 +156,6 @@ sal_uIntPtr SvCacheStream::GetData( void* pData, sal_uIntPtr nSize )
 /*************************************************************************
 |*
 |*    SvCacheStream::PutData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -195,10 +172,6 @@ sal_uIntPtr SvCacheStream::PutData( const void* pData, sal_uIntPtr nSize )
 |*
 |*    SvCacheStream::SeekPos()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 sal_uIntPtr SvCacheStream::SeekPos( sal_uIntPtr nPos )
@@ -209,10 +182,6 @@ sal_uIntPtr SvCacheStream::SeekPos( sal_uIntPtr nPos )
 /*************************************************************************
 |*
 |*    SvCacheStream::FlushData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -227,10 +196,6 @@ void SvCacheStream::FlushData()
 /*************************************************************************
 |*
 |*    SvCacheStream::GetStr()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -247,10 +212,6 @@ const void* SvCacheStream::GetBuffer()
 |*
 |*    SvCacheStream::SetSize()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
-|*
 *************************************************************************/
 
 void SvCacheStream::SetSize( sal_uIntPtr nSize )
@@ -261,10 +222,6 @@ void SvCacheStream::SetSize( sal_uIntPtr nSize )
 /*************************************************************************
 |*
 |*    SvCacheStream::GetSize()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 27.09.94
-|*    Letzte Aenderung  OV 27.09.94
 |*
 *************************************************************************/
 
@@ -288,3 +245,5 @@ const Link& SvCacheStream::GetFilenameHdl() const
 {
     return aFilenameLinkHdl;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

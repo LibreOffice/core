@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,7 +128,7 @@ sal_Bool getBOOL(const Any& _rAny)
     if (_rAny.getValueType() == ::getCppuBooleanType())
         nReturn = *(sal_Bool*)_rAny.getValue();
     else
-        OSL_ENSURE(sal_False, "comphelper::getBOOL : invalid argument !");
+        OSL_FAIL("comphelper::getBOOL : invalid argument !");
     return nReturn;
 }
 
@@ -475,3 +476,4 @@ Type getSequenceElementType(const Type& _rSequenceType)
 }   // namespace comphelper
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #define _TASKBAR_CXX
 
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <vcl/help.hxx>
 #include <svtools/taskbar.hxx>
@@ -375,3 +375,4 @@ void WindowArrange::Arrange( sal_uInt16 nType, const Rectangle& rRect )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

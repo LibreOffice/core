@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,9 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <tools/link.hxx>
+#include <osl/mutex.hxx>
 
 class Timer;
-
-namespace vos
-{
-    class OMutex;
-}
 
 namespace svtools {
 
@@ -49,7 +46,7 @@ class SVT_DLLPUBLIC AsynchronLink
     sal_Bool   _bInCall;
     sal_Bool*  _pDeleted;
     void*  _pArg;
-    vos::OMutex* _pMutex;
+    ::osl::Mutex* _pMutex;
 
     DECL_DLLPRIVATE_STATIC_LINK( AsynchronLink, HandleCall, void* );
     SVT_DLLPRIVATE void Call_Impl( void* pArg );
@@ -75,3 +72,5 @@ public:
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

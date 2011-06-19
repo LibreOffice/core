@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,7 @@ getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
             case '5' : pBuffer[0] = 'D'; break;
             case '6' : pBuffer[0] = 'E'; break;
             case '7' : pBuffer[0] = 'F'; break;
-            default: DBG_ERROR("Already a signed value");
+            default: OSL_FAIL("Already a signed value");
         }
     }
 
@@ -266,3 +267,5 @@ GetConverterFactory ()
 
 
 } /* namespace psp */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

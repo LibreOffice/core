@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,10 +42,6 @@
 |*
 |*    operator>>( SvStream&, SgfHeader& )
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
 {
@@ -70,10 +67,6 @@ SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
 |*
 |*    SgfHeader::ChkMagic()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 sal_Bool SgfHeader::ChkMagic()
 { return Magic=='J'*256+'J'; }
@@ -85,10 +78,6 @@ sal_uInt32 SgfHeader::GetOffset()
 /*************************************************************************
 |*
 |*    operator>>( SvStream&, SgfEntry& )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
@@ -113,10 +102,6 @@ sal_uInt32 SgfEntry::GetOffset()
 |*
 |*    operator>>( SvStream&, SgfVector& )
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 {
@@ -135,10 +120,6 @@ SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 /*************************************************************************
 |*
 |*    operator<<( SvStream&, BmpFileHeader& )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
@@ -186,10 +167,6 @@ sal_uInt32 BmpFileHeader::GetOfs()
 |*
 |*    operator<<( SvStream&, BmpInfoHeader& )
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
 {
@@ -227,10 +204,6 @@ SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
 /*************************************************************************
 |*
 |*    operator<<( SvStream&, RGBQuad& )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, const RGBQuad& rQuad)
@@ -277,10 +250,6 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
 |*
 |*    SgfFilterBmp()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 {
@@ -292,7 +261,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
     sal_uInt16         nColBits;           // Anzahl der Bits/Pixel (2, 4,  8)
     sal_uInt16         i,j,k;              // Spaltenzaehler, Zeilenzaehler, Planezaehler
     sal_uInt16         a,b;                // Hilfsvariable
-    sal_uInt8           pl1 = 0,pl2= 0;     // Masken fuer die Planes
+    sal_uInt8           pl1 = 0;            // Masken fuer die Planes
     sal_uInt8*          pBuf=NULL;          // Buffer fuer eine Pixelzeile
     PcxExpand      aPcx;
     sal_uLong          nOfs;
@@ -339,6 +308,8 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==16) {
+        sal_uInt8 pl2= 0;     // Masken fuer die Planes
+
         rOut<<RGBQuad(0x00,0x00,0x00); // Schwarz
         rOut<<RGBQuad(0x24,0x24,0x24); // Grau 80%
         rOut<<RGBQuad(0x49,0x49,0x49); // Grau 60%
@@ -414,10 +385,6 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
 |*
 |*    SgfBMapFilter()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 {
@@ -492,10 +459,6 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
 |*
 |*    SgfFilterVect()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
 {
@@ -569,10 +532,6 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
 |*
 |*    SgfVectFilter()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 {
@@ -607,10 +566,6 @@ sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 |*
 |*    SgfFilterPScr()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
-|*
 *************************************************************************/
 sal_Bool SgfFilterPScr(SvStream&, SgfHeader&, SgfEntry&)
 {
@@ -623,8 +578,6 @@ sal_Bool SgfFilterPScr(SvStream&, SgfHeader&, SgfEntry&)
 |*    CheckSgfTyp()
 |*
 |*    Beschreibung      Feststellen, um was fuer ein SGF/SGV es sich handelt.
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
 sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
@@ -660,3 +613,5 @@ sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion)
         return SGF_DONTKNOW;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

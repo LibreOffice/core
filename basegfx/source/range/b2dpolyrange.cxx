@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dmultirange.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -421,3 +419,5 @@ namespace basegfx
 } // end of namespace basegfx
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

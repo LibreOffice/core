@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#ifndef _CPPUHELER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -48,9 +47,9 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace std;
 
+using ::rtl::OUString;
 
 namespace toolkit
 {
@@ -212,3 +211,4 @@ ScriptEventContainer::ScriptEventContainer( void )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

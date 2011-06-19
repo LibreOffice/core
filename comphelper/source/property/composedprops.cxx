@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -299,13 +300,13 @@ namespace comphelper
     //------------------------------------------------------------------------------
     void SAL_CALL OComposedPropertySet::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
-        OSL_ENSURE(sal_False, "OComposedPropertySet::addVetoableChangeListener: no implemented (yet)!");
+        OSL_FAIL("OComposedPropertySet::addVetoableChangeListener: no implemented (yet)!");
     }
 
     //------------------------------------------------------------------------------
     void SAL_CALL OComposedPropertySet::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
-        OSL_ENSURE(sal_False, "OComposedPropertySet::removeVetoableChangeListener: no implemented (yet)!");
+        OSL_FAIL("OComposedPropertySet::removeVetoableChangeListener: no implemented (yet)!");
     }
 
     //------------------------------------------------------------------------------
@@ -355,3 +356,4 @@ namespace comphelper
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,7 +85,9 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         pUpperMonthText( NULL ),
         pUpperAbbrevMonthText( NULL ),
         pUpperDayText( NULL ),
-        pUpperAbbrevDayText( NULL )
+        pUpperAbbrevDayText( NULL ),
+        eScannedType( NUMBERFORMAT_UNDEFINED ),
+        eSetType( NUMBERFORMAT_UNDEFINED )
 {
     pFormatter = pFormatterP;
     pNullDate = new Date(30,12,1899);
@@ -113,17 +116,6 @@ ImpSvNumberInputScan::~ImpSvNumberInputScan()
 
 void ImpSvNumberInputScan::Reset()
 {
-#if 0
-// ER 16.06.97 18:56 Vorbelegung erfolgt jetzt in NumberStringDivision,
-// wozu immer alles loeschen wenn einiges wieder benutzt oder gar nicht
-// gebraucht wird..
-    for (sal_uInt16 i = 0; i < SV_MAX_ANZ_INPUT_STRINGS; i++)
-    {
-        sStrArray[i].Erase();
-        nNums[i] = SV_MAX_ANZ_INPUT_STRINGS-1;
-        IsNum[i] = sal_False;
-    }
-#endif
     nMonth       = 0;
     nMonthPos    = 0;
     nTimePos     = 0;
@@ -151,19 +143,7 @@ void ImpSvNumberInputScan::Reset()
 // static
 inline sal_Bool ImpSvNumberInputScan::MyIsdigit( sal_Unicode c )
 {
-    // If the input string wouldn't be converted using TransformInput() we'd
-    // to use something similar to the following and to adapt many places.
-#if 0
-    // use faster isdigit() if possible
-    if ( c < 128 )
-        return isdigit( (unsigned char) c ) != 0;
-    if ( c < 256 )
-        return sal_False;
-    String aTmp( c );
-    return pFormatter->GetCharClass()->isDigit( aTmp, 0 );
-#else
     return c < 128 && isdigit( (unsigned char) c );
-#endif
 }
 
 
@@ -1042,7 +1022,7 @@ sal_Bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
                 }
             break;
             default:
-                DBG_ERROR( "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
+                OSL_FAIL( "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
                 DateFmt = YMD;
                 bFormatTurn = sal_False;
         }
@@ -1109,9 +1089,16 @@ input for the following reasons:
                         switch (DateFmt)
                         {
                             case MDY:
-                            case YMD:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
+                            case YMD: {
+                                sal_uInt16 nDay = ImplGetDay(0);
+                                sal_uInt16 nYear = ImplGetYear(0);
+                                if (nDay == 0 || nDay > 32) {
+                                    pCal->setValue( CalendarFieldIndex::YEAR, nYear);
+                                }
+                                else
+                                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 break;
+                            }
                             case DMY:
                                 pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
@@ -1470,7 +1457,6 @@ sal_Bool ImpSvNumberInputScan::ScanStartString( const String& rString,
         const SvNumberformat* pFormat )
 {
     xub_StrLen nPos = 0;
-    int nDayOfWeek;
 
     // First of all, eat leading blanks
     SkipBlanks(rString, nPos);
@@ -1520,7 +1506,7 @@ sal_Bool ImpSvNumberInputScan::ScanStartString( const String& rString,
         }
         else
         {
-            nDayOfWeek = GetDayOfWeek( rString, nPos );
+            int nDayOfWeek = GetDayOfWeek( rString, nPos );
             if ( nDayOfWeek )
             {   // day of week is just parsed away
                 eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
@@ -1550,6 +1536,13 @@ sal_Bool ImpSvNumberInputScan::ScanStartString( const String& rString,
         }
     }
 
+    // skip any trailing '-' or '/' chars
+    if (nPos < rString.Len())
+    {
+        while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos)) {
+            // do nothing
+        }
+    }
     if (nPos < rString.Len())                       // not everything consumed
     {
         // Does input StartString equal StartString of format?
@@ -2814,3 +2807,4 @@ sal_Bool ImpSvNumberInputScan::IsNumberFormat(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

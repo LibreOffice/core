@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,6 +194,7 @@ typedef sal_Int64 WinBits;
 #define WB_OWNERDRAWDECORATION  ((WinBits)SAL_CONST_INT64(0x2000000000))
 #define WB_DEFAULTWIN           ((WinBits)SAL_CONST_INT64(0x4000000000))
 #define WB_NEEDSFOCUS           ((WinBits)SAL_CONST_INT64(0x1000000000))
+#define WB_POPUP                ((WinBits)SAL_CONST_INT64(0x20000000))
 
 #define WB_HSCROLL              WB_HORZ
 #define WB_VSCROLL              WB_VERT
@@ -269,6 +271,7 @@ typedef sal_Int64 WinBits;
 #define WB_STDMODAL             (WB_STDDIALOG)
 #define WB_STDTABDIALOG         (WB_STDDIALOG)
 #define WB_STDTABCONTROL        0
+#define WB_STDPOPUP             (WB_BORDER | WB_POPUP | WB_SYSTEMWINDOW | WB_3DLOOK | WB_DIALOGCONTROL)
 
 // For TreeListBox
 #define WB_HASBUTTONS           ((WinBits)SAL_CONST_INT64(0x000100000000))
@@ -342,3 +345,4 @@ enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
 
 #endif // _TOOLS_WINTYPES_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,11 +57,18 @@ namespace basebmp
         }
     };
 
+    //Current c++0x draft (apparently) has std::identity, but not operator()
+    template<typename T> struct SGI_identity : public std::unary_function<T,T>
+    {
+        T& operator()(T& x) const { return x; }
+        const T& operator()(const T& x) const { return x; }
+    };
+
     /// Get converter from given data type to sal_uInt32
     template< typename DataType > struct uInt32Converter
     {
-        typedef std::identity<DataType> to;
-        typedef std::identity<DataType> from;
+        typedef SGI_identity<DataType> to;
+        typedef SGI_identity<DataType> from;
     };
     template< unsigned int RedIndex,
               unsigned int GreenIndex,
@@ -86,3 +94,5 @@ namespace basebmp
 }
 
 #endif /* INCLUDED_BASEBMP_INTCONVERSION_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

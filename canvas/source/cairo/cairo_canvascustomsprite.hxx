@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/canvascustomspritebase.hxx>
 
 #include "cairo_sprite.hxx"
@@ -75,7 +76,7 @@ namespace cairocanvas
         remain a base class that provides implementation, not to
         enforce any specific interface on its derivees.
      */
-    class CanvasCustomSpriteSpriteBase_Base : public ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
+    class CanvasCustomSpriteSpriteBase_Base : public ::canvas::DisambiguationHelper< CanvasCustomSpriteBase_Base >,
                                                  public Sprite,
                                               public SurfaceProvider
     {
@@ -110,7 +111,7 @@ namespace cairocanvas
         CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice );
 
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
@@ -154,3 +155,5 @@ namespace cairocanvas
 }
 
 #endif /* _CAIROCANVAS_CANVASCUSTOMSPRITE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

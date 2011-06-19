@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,32 +37,20 @@
 #include <direct.h>
 #endif
 
+#include <errno.h>
 #include <time.h>
 #include <cstdarg>  // combinations
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 
-#ifdef OS2
-#define INCL_DOSSEMAPHORES
-#define INCL_DOSMISC
-#define INCL_WINDIALOGS
-#define INCL_WINSHELLDATA
-#include <svpm.h>
-#endif
-
 #if defined ( WNT )
-#ifdef _MSC_VER
-#pragma warning (push,1)
-#endif
-#include <tools/svwin.h>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+#include <windows.h>
 #endif
 
 #include <tools/debug.hxx>
 #include <rtl/string.h>
+#include <sal/macros.h>
 
 #include <vector>
 
@@ -178,7 +167,11 @@ struct DebugData
         aDbgData.bOverwrite = sal_True;
         aDbgData.nTraceOut = DBG_OUT_NULL;
         aDbgData.nWarningOut = DBG_OUT_NULL;
+#ifdef UNX
+        aDbgData.nErrorOut = DBG_OUT_SHELL;
+#else
         aDbgData.nErrorOut = DBG_OUT_MSGBOX;
+#endif
         aDbgData.bMemInit = 0x77;
         aDbgData.bMemBound = 0x55;
         aDbgData.bMemFree = 0x33;
@@ -209,8 +202,6 @@ static int bDbgImplInMain = sal_False;
 
 #if defined( WNT )
 static CRITICAL_SECTION aImplCritDbgSection;
-#elif defined( OS2 )
-static HMTX             hImplCritDbgSection = 0;
 #endif
 static sal_Bool             bImplCritDbgSectionInit = sal_False;
 
@@ -220,8 +211,6 @@ void ImplDbgInitLock()
 {
 #if defined( WNT )
     InitializeCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosCreateMutexSem( NULL, &hImplCritDbgSection, 0, sal_False );
 #endif
     bImplCritDbgSectionInit = sal_True;
 }
@@ -232,8 +221,6 @@ void ImplDbgDeInitLock()
 {
 #if defined( WNT )
     DeleteCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosCloseMutexSem( hImplCritDbgSection );
 #endif
     bImplCritDbgSectionInit = sal_False;
 }
@@ -247,8 +234,6 @@ void ImplDbgLock()
 
 #if defined( WNT )
     EnterCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosRequestMutexSem( hImplCritDbgSection, SEM_INDEFINITE_WAIT );
 #endif
 }
 
@@ -261,14 +246,12 @@ void ImplDbgUnlock()
 
 #if defined( WNT )
     LeaveCriticalSection( &aImplCritDbgSection );
-#elif defined( OS2 )
-    DosReleaseMutexSem( hImplCritDbgSection );
 #endif
 }
 
 // =======================================================================
 
-#if (defined WNT || defined OS2) && !defined SVX_LIGHT
+#if defined WNT
 //#define SV_MEMMGR //
 #endif
 #ifdef SV_MEMMGR
@@ -315,10 +298,6 @@ static sal_uIntPtr ImplGetPerfTime()
 {
 #if defined( WNT )
     return (sal_uIntPtr)GetTickCount();
-#elif defined( OS2 )
-    sal_uIntPtr nClock;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (sal_uIntPtr)nClock;
 #else
     static sal_uIntPtr    nImplTicksPerSecond = 0;
     static double   dImplTicksPerSecond;
@@ -481,7 +460,7 @@ namespace
         {
             "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "abort"
         };
-        for ( sal_uIntPtr name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
+        for ( size_t name = 0; name < SAL_N_ELEMENTS( names ); ++name )
         {
             if ( strcmp( i_buffer, names[ name ] ) == 0 )
             {
@@ -502,10 +481,12 @@ namespace
         sal_Char aBuf[2];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
+        {
             if ( strcmp( aBuf, "1" ) == 0 )
                 *_out_pnAllFlags |= _nCheckFlag;
             else
                 *_out_pnAllFlags &= ~_nCheckFlag;
+        }
     }
     void lcl_tryReadHexByte( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uInt8* _out_pnValue )
     {
@@ -680,9 +661,6 @@ static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
         strncpy( pStr, pName, nMaxLen );
     else
         GetProfileStringA( "sv", "dbgsv", "dbgsv.ini", pStr, nMaxLen );
-#elif defined( OS2 )
-    PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSV",
-                           "dbgsv.ini", (PSZ)pStr, nMaxLen );
 #else
     strncpy( pStr, "dbgsv.ini", nMaxLen );
 #endif
@@ -704,9 +682,6 @@ static void DbgGetLogFileName( sal_Char* pStr )
         strcpy( pStr, pName );
     else
         GetProfileStringA( "sv", "dbgsvlog", "dbgsv.log", pStr, 200 );
-#elif defined( OS2 )
-    PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSVLOG",
-                           "dbgsv.log", (PSZ)pStr, 200 );
 #else
     strcpy( pStr, "dbgsv.log" );
 #endif
@@ -718,8 +693,6 @@ static void DbgDebugBeep()
 {
 #if defined( WNT )
     MessageBeep( MB_ICONHAND );
-#elif defined( OS2 )
-    WinAlarm( HWND_DESKTOP, WA_ERROR );
 #endif
 }
 
@@ -825,7 +798,11 @@ static DebugData* GetDebugData()
 
         }
 
-        getcwd( aCurPath, sizeof( aCurPath ) );
+        sal_Char* getcwdResult = getcwd( aCurPath, sizeof( aCurPath ) );
+        if ( !getcwdResult )
+        {
+            OSL_TRACE( "getcwd failed with error %s", strerror(errno) );
+        }
 
         // Daten initialisieren
         if ( aDebugData.aDbgData.nTestFlags & DBG_TEST_XTOR )
@@ -854,8 +831,17 @@ static FILETYPE ImplDbgInitFile()
     static sal_Bool bFileInit = sal_False;
 
     sal_Char aBuf[4096];
-    getcwd( aBuf, sizeof( aBuf ) );
-    chdir( aCurPath );
+    sal_Char* getcwdResult = getcwd( aBuf, sizeof( aBuf ) );
+    if ( !getcwdResult ) {
+        OSL_TRACE( "getcwd failed with error = %s", strerror(errno) );
+        return NULL;
+    }
+
+    int chdirResult = chdir( aCurPath );
+    if ( !chdirResult ) {
+        OSL_TRACE ( "chdir failed with error = %s", strerror(errno) );
+        return NULL;
+    }
 
     DebugData*  pData = GetDebugData();
     FILETYPE    pDebugFile;
@@ -890,7 +876,11 @@ static FILETYPE ImplDbgInitFile()
     else
         pDebugFile = FileOpen( pData->aDbgData.aDebugName, "a" );
 
-    chdir( aBuf );
+    chdirResult = chdir( aBuf );
+    if ( !chdirResult )
+    {
+        OSL_TRACE( "chdir failed with error = %s", strerror(errno) );
+    }
 
     return pDebugFile;
 }
@@ -1681,7 +1671,7 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
     int nMsgLen = strlen( pMsg );
     if ( nBufLen+nMsgLen > DBG_BUF_MAXLEN )
     {
-        int nCopyLen = DBG_BUF_MAXLEN-nBufLen-3;
+        int nCopyLen = DBG_BUF_MAXLEN-nBufLen-4;
         strncpy( &(aBufOut[nBufLen]), pMsg, nCopyLen );
         strcpy( &(aBufOut[nBufLen+nCopyLen]), "..." );
     }
@@ -1824,3 +1814,5 @@ void DbgOutTypef( sal_uInt16, const sal_Char*, ... ) {}
 void DbgOutf( const sal_Char*, ... ) {}
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

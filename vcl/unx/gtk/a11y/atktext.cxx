@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -454,7 +455,7 @@ text_wrapper_set_caret_offset (AtkText *text,
     return FALSE;
 }
 
-// --> OD 2010-03-04 #i92232#
+// #i92232#
 AtkAttributeSet*
 handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pTextMarkup,
                                      const gint nTextMarkupType,
@@ -530,7 +531,6 @@ handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pText
 
     return pSet;
 }
-// <--
 
 static AtkAttributeSet *
 text_wrapper_get_run_attributes( AtkText        *text,
@@ -551,26 +551,22 @@ text_wrapper_get_run_attributes( AtkText        *text,
                 pTextAttributes->getRunAttributes( offset, uno::Sequence< rtl::OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
-            // --> OD 2009-06-22 #i100938#
+            //  #i100938#
             // - always provide start_offset and end_offset
-//            if( pSet )
-            // <--
             {
                 accessibility::TextSegment aTextSegment =
                     pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
 
                 *start_offset = aTextSegment.SegmentStart;
-                // --> OD 2009-06-22 #i100938#
+                // #i100938#
                 // Do _not_ increment the end_offset provide by <accessibility::TextSegment> instance
-//                *end_offset = aTextSegment.SegmentEnd + 1; // FIXME: TESTME
                 *end_offset = aTextSegment.SegmentEnd;
-                // <--
                 bOffsetsAreValid = true;
             }
         }
 
         // Special handling for misspelled text
-        // --> OD 2010-03-01 #i92232#
+        // #i92232#
         // - add special handling for tracked changes and refactor the
         //   corresponding code for handling misspelled text.
         accessibility::XAccessibleTextMarkup* pTextMarkup = getTextMarkup( text );
@@ -603,7 +599,6 @@ text_wrapper_get_run_attributes( AtkText        *text,
                     com::sun::star::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE,
                     offset, pSet, start_offset, end_offset );
         }
-        // <--
     }
     catch(const uno::Exception& e){
 
@@ -874,3 +869,5 @@ textIfaceInit (AtkTextIface *iface)
   iface->get_character_extents = text_wrapper_get_character_extents;
   iface->get_offset_at_point = text_wrapper_get_offset_at_point;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

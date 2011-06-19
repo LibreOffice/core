@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -160,8 +161,7 @@ namespace comphelper
                 if (!m_aChildrenMap.insert(
                         AccessibleMap::value_type( _rxKey, xValue ) ).second)
                 {
-                    OSL_ENSURE(
-                        false,
+                    OSL_FAIL(
                         "OWrappedAccessibleChildrenManager::"
                             "getAccessibleWrapperFor: element was already"
                             " inserted!" );
@@ -241,15 +241,14 @@ namespace comphelper
             case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
             case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
             case AccessibleEventId::TABLE_SUMMARY_CHANGED:
-            // --> PB 2006-03-21 #130798# EventId TEXT_SELECTION_CHANGED was missed
+            // #130798#
             // these Ids are also missed: SUB_WINDOW_OF_RELATION_CHANGED & TEXT_ATTRIBUTE_CHANGED
             case AccessibleEventId::TEXT_SELECTION_CHANGED:
-            // <--
                 // nothing to translate
                 break;
 
             default:
-                OSL_ENSURE( sal_False, "OWrappedAccessibleChildrenManager::translateAccessibleEvent: unknown (or unexpected) event id!" );
+                OSL_FAIL( "OWrappedAccessibleChildrenManager::translateAccessibleEvent: unknown (or unexpected) event id!" );
                 break;
         }
     }
@@ -279,8 +278,7 @@ namespace comphelper
 #if OSL_DEBUG_LEVEL > 0
         if ( m_aChildrenMap.end() == aDisposedPos )
         {
-               OSL_ENSURE( sal_False,
-                "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
+               OSL_FAIL( "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
             // helper for dignostics
             Reference< XAccessible > xOwningAccessible( m_aOwningAccessible );
             Reference< XAccessibleContext > xContext;
@@ -681,3 +679,5 @@ namespace comphelper
 //.............................................................................
 }   // namespace accessibility
 //.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

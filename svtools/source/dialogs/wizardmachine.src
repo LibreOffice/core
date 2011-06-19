@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 String STR_WIZDLG_FINISH
 {

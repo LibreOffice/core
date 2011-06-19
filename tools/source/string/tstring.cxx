@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,15 +34,9 @@
 #include "boost/static_assert.hpp"
 
 #include "osl/diagnose.h"
-#ifndef _OSL_INTERLCK_H
 #include <osl/interlck.h>
-#endif
-#ifndef _RTL_ALLOC_H
 #include <rtl/alloc.h>
-#endif
-#ifndef _RTL_MEMORY_H
 #include <rtl/memory.h>
-#endif
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>
 
@@ -49,9 +44,7 @@
 #include <impstrg.hxx>
 
 // For shared byte convert tables
-#ifndef _TOOLS_TOOLSIN_HXX
 #include <toolsin.hxx>
-#endif
 
 #include <tools/debug.hxx>
 
@@ -172,7 +165,7 @@ float ByteString::ToFloat() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_ENSURE(false, "ByteString::ToFloat unusable");
+    OSL_FAIL("ByteString::ToFloat unusable");
     return 0;
 }
 
@@ -182,7 +175,7 @@ double ByteString::ToDouble() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_ENSURE(false, "ByteString::ToDouble unusable");
+    OSL_FAIL("ByteString::ToDouble unusable");
     return 0;
 }
 
@@ -293,3 +286,5 @@ sal_Bool ByteString::IsAlphaNumericAscii() const
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -226,9 +227,9 @@ static void ensureContentProviderForURL( const ContentBroker & rBroker,
     if ( !xMgr.is() )
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "UCB does not implement mandatory interface "
-                "XContentProviderManager!" ),
+                "XContentProviderManager!" )),
             Reference< XInterface >() );
     }
     else
@@ -238,8 +239,8 @@ static void ensureContentProviderForURL( const ContentBroker & rBroker,
         if ( !xProv.is() )
         {
             throw ContentCreationException(
-                rtl::OUString::createFromAscii(
-                    "No Content Provider available for given URL!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "No Content Provider available for given URL!" )),
                 Reference< XInterface >(),
                 ContentCreationError_NO_CONTENT_PROVIDER );
         }
@@ -256,7 +257,7 @@ static ContentBroker* getContentBroker( bool bThrow )
     {
         if ( bThrow )
             throw RuntimeException(
-                    rtl::OUString::createFromAscii( "No Content Broker!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No Content Broker!")),
                     Reference< XInterface >() );
     }
     else
@@ -268,9 +269,9 @@ static ContentBroker* getContentBroker( bool bThrow )
         {
             if ( bThrow )
                 throw RuntimeException(
-                        rtl::OUString::createFromAscii(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "UCB does not implement mandatory interface "
-                            "XContentProviderManager!" ),
+                            "XContentProviderManager!" )),
                         Reference< XInterface >() );
         }
         else
@@ -306,8 +307,8 @@ static Reference< XContentIdentifier > getContentIdentifier(
             ensureContentProviderForURL( rBroker, rURL );
 
             throw ContentCreationException(
-                rtl::OUString::createFromAscii(
-                    "Unable to create Content Identifier!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Unable to create Content Identifier!" )),
                 Reference< XInterface >(),
                 ContentCreationError_IDENTIFIER_CREATION_FAILED );
         }
@@ -316,9 +317,9 @@ static Reference< XContentIdentifier > getContentIdentifier(
     {
         if ( bThrow )
             throw RuntimeException(
-                    rtl::OUString::createFromAscii(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "UCB does not implement mandatory interface "
-                        "XContentIdentifierFactory!" ),
+                        "XContentIdentifierFactory!" )),
                     Reference< XInterface >() );
     }
 
@@ -356,8 +357,8 @@ static Reference< XContent > getContent(
             ensureContentProviderForURL( rBroker, xId->getContentIdentifier() );
 
             throw ContentCreationException(
-                    rtl::OUString::createFromAscii(
-                        "Unable to create Content! " ) + msg,
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to create Content! " )) + msg,
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
         }
@@ -366,9 +367,9 @@ static Reference< XContent > getContent(
     {
         if ( bThrow )
             throw RuntimeException(
-                    rtl::OUString::createFromAscii(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "UCB does not implement mandatory interface "
-                        "XContentProvider!" ),
+                        "XContentProvider!" )),
                     Reference< XInterface >() );
     }
 
@@ -534,7 +535,7 @@ Reference< XCommandInfo > Content::getCommands()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getCommandInfo" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -550,7 +551,7 @@ Reference< XPropertySetInfo > Content::getProperties()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertySetInfo" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument = Any();
 
@@ -677,7 +678,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -710,7 +711,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "getPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -731,9 +732,9 @@ Sequence< Any > Content::setPropertyValues(
     {
         ucbhelper::cancelCommandExecution(
             makeAny( IllegalArgumentException(
-                        rtl::OUString::createFromAscii(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "Length of property names sequence and value "
-                            "sequence are unequal!" ),
+                            "sequence are unequal!" )),
                         get(),
                         -1 ) ),
             m_xImpl->getEnvironment() );
@@ -758,7 +759,7 @@ Sequence< Any > Content::setPropertyValues(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "setPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -779,9 +780,9 @@ Sequence< Any > Content::setPropertyValues(
     {
         ucbhelper::cancelCommandExecution(
             makeAny( IllegalArgumentException(
-                        rtl::OUString::createFromAscii(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "Length of property handles sequence and value "
-                            "sequence are unequal!" ),
+                            "sequence are unequal!" )),
                         get(),
                         -1 ) ),
             m_xImpl->getEnvironment() );
@@ -806,7 +807,7 @@ Sequence< Any > Content::setPropertyValues(
     }
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "setPropertyValues" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aProps;
 
@@ -875,7 +876,7 @@ Any Content::createCursorAny( const Sequence< rtl::OUString >& rPropertyNames,
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -908,7 +909,7 @@ Any Content::createCursorAny( const Sequence< sal_Int32 >& rPropertyHandles,
     aArg.Properties = aProps;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1021,7 +1022,7 @@ Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
@@ -1056,7 +1057,7 @@ Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
@@ -1096,7 +1097,7 @@ Reference< XResultSet > Content::createSortedCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
@@ -1150,7 +1151,7 @@ Reference< XResultSet > Content::createSortedCursor(
         if( aServiceManager.is() )
         {
             Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
-                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory"))),
                                 UNO_QUERY );
 
             aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
@@ -1197,7 +1198,7 @@ Reference< XInputStream > Content::openStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1222,7 +1223,7 @@ Reference< XInputStream > Content::openStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1247,7 +1248,7 @@ Reference< XStream > Content::openWriteableStream()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1272,7 +1273,7 @@ Reference< XStream > Content::openWriteableStreamNoLock()
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1295,7 +1296,7 @@ sal_Bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1318,7 +1319,7 @@ sal_Bool Content::openStream( const Reference< XOutputStream >& rStream )
     aArg.Properties = Sequence< Property >( 0 ); // unused
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1337,7 +1338,7 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     aArg.ReplaceExisting = bReplaceExisting;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "insert" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
@@ -1353,7 +1354,7 @@ Sequence< ContentInfo > Content::queryCreatableContentsInfo()
     // First, try it using "CreatableContentsInfo" property -> the "new" way.
     Sequence< ContentInfo > aInfo;
     if ( getPropertyValue(
-             rtl::OUString::createFromAscii( "CreatableContentsInfo" ) )
+             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo")) )
          >>= aInfo )
         return aInfo;
 
@@ -1414,7 +1415,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     aInfo.Attributes = 0;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "createNewContent" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aInfo;
 
@@ -1448,7 +1449,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
-    aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
+    aNewContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
                                 makeAny(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
@@ -1477,7 +1478,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
     aInfo.Attributes = 0;
 
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "createNewContent" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aInfo;
 
@@ -1511,7 +1512,7 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 
     Content aNewContent( xNew, m_xImpl->getEnvironment() );
     aNewContent.setPropertyValues( nPropertyHandles, rPropertyValues );
-    aNewContent.executeCommand( rtl::OUString::createFromAscii( "insert" ),
+    aNewContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
                                 makeAny(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
@@ -1532,8 +1533,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
     ContentBroker* pBroker = ContentBroker::get();
     if ( !pBroker )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::transferContent - No Content Broker!" );
+        OSL_FAIL( "Content::transferContent - No Content Broker!" );
         return sal_False;
     }
 
@@ -1541,8 +1541,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                     pBroker->getCommandProcessorInterface() );
     if ( !xCmdProc.is() )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::transferContent - No XCommandProcessor!" );
+        OSL_FAIL( "Content::transferContent - No XCommandProcessor!" );
         return sal_False;
     }
 
@@ -1566,8 +1565,8 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
         default:
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                            rtl::OUString::createFromAscii(
-                                "Unknown transfer operation!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Unknown transfer operation!" )),
                             get(),
                             -1 ) ),
                          m_xImpl->getEnvironment() );
@@ -1581,7 +1580,7 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
                                         rTitle,
                                         nNameClashAction );
     Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "globalTransfer" );
+    aCommand.Name     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("globalTransfer"));
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aTransferArg;
 
@@ -1594,14 +1593,14 @@ sal_Bool Content::isFolder()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bFolder = sal_False;
-    if ( getPropertyValue( rtl::OUString::createFromAscii( "IsFolder" ) )
+    if ( getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")) )
         >>= bFolder )
         return bFolder;
 
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
-                    rtl::OUString::createFromAscii(
-                        "Unable to retreive value of property 'IsFolder'!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to retreive value of property 'IsFolder'!" )),
                     get() ) ),
          m_xImpl->getEnvironment() );
 
@@ -1615,14 +1614,14 @@ sal_Bool Content::isDocument()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Bool bDoc = sal_False;
-    if ( getPropertyValue( rtl::OUString::createFromAscii( "IsDocument" ) )
+    if ( getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")) )
         >>= bDoc )
         return bDoc;
 
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
-                    rtl::OUString::createFromAscii(
-                        "Unable to retreive value of property 'IsDocument'!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to retreive value of property 'IsDocument'!" )),
                     get() ) ),
          m_xImpl->getEnvironment() );
 
@@ -1970,3 +1969,4 @@ void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
 
 } /* namespace ucbhelper */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

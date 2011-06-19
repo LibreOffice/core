@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,7 +46,6 @@
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -75,7 +75,7 @@ static VCLRegServiceInfo aVCLComponentsArray[] =
     {"dtransX11", sal_True},
 #endif
 #endif
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     {"sysdtrans", sal_False},
 #endif
     {"dtrans", sal_False},
@@ -103,7 +103,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
         {
             pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
             uno::Reference < registry::XImplementationRegistration > xReg(
-                pSVData->maAppData.mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )), uno::UNO_QUERY );
+                pSVData->maAppData.mxMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))), uno::UNO_QUERY );
 
             if( xReg.is() )
             {
@@ -116,7 +116,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
                         try
                         {
                             xReg->registerImplementation(
-                                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),aComponentPathString, NULL );
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),aComponentPathString, NULL );
                         }
                         catch( ::com::sun::star::uno::Exception & )
                         {
@@ -142,7 +142,7 @@ uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
     uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) );
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
@@ -158,26 +158,10 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")) );
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
-            x >>= xB;
-        }
-    }
-    return xB;
-}
-
-uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
-{
-    uno::Reference < i18n::XCollator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
-    if ( xMSF.is() )
-    {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) );
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
             x >>= xB;
         }
     }
@@ -191,7 +175,7 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 
     OUString aLibName;
 
-#if defined( WNT) || defined(OS2)
+#if defined( WNT)
     aLibName = OUString::createFromAscii( pModName );
     if ( bSUPD )
     {
@@ -234,3 +218,5 @@ void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::com::sun::star:
 
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

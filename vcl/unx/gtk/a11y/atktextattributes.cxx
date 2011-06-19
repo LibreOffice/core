@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,12 +75,10 @@ static AtkTextAttribute atk_text_attribute_tab_stops = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_writing_mode = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_vertical_align = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_misspelled = ATK_TEXT_ATTR_INVALID;
-// --> OD 2010-03-01 #i92232#
+// #i92232#
 static AtkTextAttribute atk_text_attribute_tracked_change = ATK_TEXT_ATTR_INVALID;
-// <--
-// --> OD 2010-03-05 #i92233#
+// #i92233#
 static AtkTextAttribute atk_text_attribute_mm_to_pixel_ratio = ATK_TEXT_ATTR_INVALID;
-// <--
 
 /*****************************************************************************/
 
@@ -109,9 +108,8 @@ enum ExportedAttribute
     TEXT_ATTRIBUTE_STRIKETHROUGH,
     TEXT_ATTRIBUTE_UNDERLINE,
     TEXT_ATTRIBUTE_WEIGHT,
-    // --> OD 2010-03-05 #i92233#
+    // #i92233#
     TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO,
-    // <--
     TEXT_ATTRIBUTE_JUSTIFICATION,
     TEXT_ATTRIBUTE_BOTTOM_MARGIN,
     TEXT_ATTRIBUTE_FIRST_LINE_INDENT,
@@ -146,9 +144,8 @@ static const char * ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
     "CharStrikeout",        // TEXT_ATTRIBUTE_STRIKETHROUGH
     "CharUnderline",        // TEXT_ATTRIBUTE_UNDERLINE
     "CharWeight",           // TEXT_ATTRIBUTE_WEIGHT
-    // --> OD 2010-03-05 #i92233#
+    // #i92233#
     "MMToPixelRatio",       // TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO
-    // <--
     "ParaAdjust",           // TEXT_ATTRIBUTE_JUSTIFICATION
     "ParaBottomMargin",     // TEXT_ATTRIBUTE_BOTTOM_MARGIN
     "ParaFirstLineIndent",  // TEXT_ATTRIBUTE_FIRST_LINE_INDENT
@@ -176,7 +173,6 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
 #define get_bool_value( list, index ) get_value( list, index, Bool2String )
 #define get_short_value( list, index ) get_value( list, index, Short2String )
-//#define get_long_value( list, index ) get_value( list, index, Long2String ) pb: not used (warning on linux)
 #define get_height_value( list, index ) get_value( list, index, Float2String )
 #define get_justification_value( list, index ) get_value( list, index, Adjust2Justification )
 #define get_cmm_value( list, index ) get_value( list, index, CMM2UnitString )
@@ -189,36 +185,6 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 #define get_weight_value( list, index ) get_value( list, index, Weight2String )
 #define get_language_string( list, index ) get_value( list, index, Locale2String )
 
-/*
-static gchar*
-dump_value( const uno::Sequence< beans::PropertyValue >& rAttributeList, sal_Int32 nIndex )
-{
-    if( nIndex != -1 )
-    {
-        rtl::OString aName = rtl::OUStringToOString(rAttributeList[nIndex].Name, RTL_TEXTENCODING_UTF8);
-
-        if( rAttributeList[nIndex].Value.has<sal_Int16> () )
-            OSL_TRACE( "%s = %d (short value)", aName.getStr(),
-                rAttributeList[nIndex].Value.get<sal_Int16> () );
-
-        else if( rAttributeList[nIndex].Value.has<sal_Int8> () )
-            OSL_TRACE( "%s = %d (byte value)", aName.getStr(),
-                rAttributeList[nIndex].Value.get<sal_Int8> () );
-
-        else if( rAttributeList[nIndex].Value.has<sal_Bool> () )
-            OSL_TRACE( "%s = %s (bool value)", aName.getStr(),
-                rAttributeList[nIndex].Value.get<sal_Bool> () ? "true" : "false" );
-
-        else if( rAttributeList[nIndex].Value.has<rtl::OUString> () )
-            OSL_TRACE( "%s = %s", aName.getStr(),
-                rtl::OUStringToOString(rAttributeList[nIndex].Value.get<rtl::OUString> (),
-                    RTL_TEXTENCODING_UTF8).getStr() );
-    }
-
-    return NULL;
-}
-*/
-
 static inline
 double toPoint(sal_Int16 n)
 {
@@ -228,14 +194,6 @@ double toPoint(sal_Int16 n)
 
 
 /*****************************************************************************/
-
-/*
-static gchar*
-NullString(const uno::Any&)
-{
-    return NULL;
-}
-*/
 
 static bool
 InvalidValue( uno::Any&, const gchar * )
@@ -263,48 +221,6 @@ String2Float( uno::Any& rAny, const gchar * value )
     return true;
 }
 
-/*****************************************************************************/
-
-/*
-static gchar*
-Short2String(const uno::Any& rAny)
-{
-    return g_strdup_printf( "%d", rAny.get<sal_Int16>() );
-}
-
-static bool
-String2Short( uno::Any& rAny, const gchar * value )
-{
-    sal_Int32 lval;
-
-    if( 1 != sscanf( value, "%d", &lval ) )
-        return false;
-
-    rAny = uno::makeAny( (sal_Int16) lval );
-    return true;
-}
-*/
-
-/*****************************************************************************/
-/* pb: not used (warning on linux)
-static gchar*
-Long2String(const uno::Any& rAny)
-{
-    return g_strdup_printf( "%ld", rAny.get<sal_Int32>() );
-}
-
-static bool
-String2Long( uno::Any& rAny, const gchar * value )
-{
-    sal_Int32 lval;
-
-    if( 1 != sscanf( value, "%ld", &lval ) )
-        return false;
-
-    rAny = uno::makeAny( lval );
-    return true;
-}
-*/
 /*****************************************************************************/
 
 static accessibility::XAccessibleComponent*
@@ -1092,7 +1008,7 @@ TabStopList2String( const uno::Any& rAny, bool default_tabs )
             if( ret )
             {
                 gchar * old_tab_str = ret;
-                ret = g_strconcat(old_tab_str, " ", tab_str, NULL /* terminated */);
+                ret = g_strconcat(old_tab_str, " ", tab_str, (const char*)NULL);
                 g_free( old_tab_str );
             }
             else
@@ -1305,13 +1221,12 @@ attribute_set_new_from_property_values(
     attribute_set = attribute_set_prepend(attribute_set, atk_text_attribute_tab_stops,
         get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TAB_STOPS], TabStops2String));
 
-    // --> OD 2010-03-05 #i92233#
+    // #i92233#
     if( ATK_TEXT_ATTR_INVALID == atk_text_attribute_mm_to_pixel_ratio )
         atk_text_attribute_mm_to_pixel_ratio = atk_text_attribute_register("mm-to-pixel-ratio");
 
     attribute_set = attribute_set_prepend( attribute_set, atk_text_attribute_mm_to_pixel_ratio,
         get_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_MM_TO_PIXEL_RATIO], Float2String));
-    // <--
 
     return attribute_set;
 }
@@ -1328,7 +1243,7 @@ AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_se
     return attribute_set;
 }
 
-// --> OD 2010-03-01 #i92232#
+// #i92232#
 AtkAttributeSet* attribute_set_prepend_tracked_change_insertion( AtkAttributeSet* attribute_set )
 {
     if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
@@ -1370,7 +1285,6 @@ AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange( AtkAttribute
 
     return attribute_set;
 }
-// <--
 
 /*****************************************************************************/
 
@@ -1454,3 +1368,4 @@ attribute_set_map_to_property_values(
     return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

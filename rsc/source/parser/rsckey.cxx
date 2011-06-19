@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,22 +45,11 @@
 /****************** C o d e **********************************************/
 /****************** keyword sort function ********************************/
 extern "C" {
-#if defined( ZTC ) && defined( PM2 )
-    int __CLIB KeyCompare( const void * pFirst, const void * pSecond );
-#else
-#if defined( WNT ) && !defined( WTC ) && !defined (ICC)
-    int _cdecl KeyCompare( const void * pFirst, const void * pSecond );
-#else
-    int KeyCompare( const void * pFirst, const void * pSecond );
-#endif
-#endif
+    int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond );
 }
 
-#if defined( WNT ) && !defined( WTC ) && !defined(ICC)
-int _cdecl KeyCompare( const void * pFirst, const void * pSecond ){
-#else
-int KeyCompare( const void * pFirst, const void * pSecond ){
-#endif
+int SAL_CALL KeyCompare( const void * pFirst, const void * pSecond )
+{
     if( ((KEY_STRUCT *)pFirst)->nName > ((KEY_STRUCT *)pSecond)->nName )
         return( 1 );
     else if( ((KEY_STRUCT *)pFirst)->nName < ((KEY_STRUCT *)pSecond)->nName )
@@ -72,10 +62,6 @@ int KeyCompare( const void * pFirst, const void * pSecond ){
 |*
 |*    RscNameTable::RscNameTable()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
-|*
 *************************************************************************/
 RscNameTable::RscNameTable() {
     bSort    = sal_True;
@@ -87,10 +73,6 @@ RscNameTable::RscNameTable() {
 |*
 |*    RscNameTable::~RscNameTable()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
-|*
 *************************************************************************/
 RscNameTable::~RscNameTable() {
     if( pTable )
@@ -101,10 +83,6 @@ RscNameTable::~RscNameTable() {
 /*************************************************************************
 |*
 |*    RscNameTable::SetSort()
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
 void RscNameTable::SetSort( sal_Bool bSorted ){
@@ -119,10 +97,6 @@ void RscNameTable::SetSort( sal_Bool bSorted ){
 /*************************************************************************
 |*
 |*    RscNameTable::Put()
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue ){
@@ -175,10 +149,6 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass )
 |*
 |*    RscNameTable::Get()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
-|*
 *************************************************************************/
 sal_Bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
     KEY_STRUCT * pKey = NULL;
@@ -212,3 +182,4 @@ sal_Bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
     return( sal_False );
 };
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

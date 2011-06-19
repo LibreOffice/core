@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,13 +58,13 @@
     static sal_uInt16 nElements = 0;
     if( !pProperties )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pProperties )
         {
-            static ::com::sun::star::beans::Property __FAR_DATA aPropTable[] =
+            static ::com::sun::star::beans::Property aPropTable[] =
             {
-                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Orientation" ), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
-                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Horizontal" ), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
+                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
+                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Horizontal")), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
             };
             pProperties = aPropTable;
             nElements = sizeof( aPropTable ) / sizeof( ::com::sun::star::beans::Property );
@@ -101,7 +102,7 @@ VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
     , mpPrinter( new Printer( rPrinterName ) )
 {
-    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
 
     mnOrientation = 0;
     mbHorizontal = sal_False;
@@ -109,7 +110,7 @@ VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
 
 VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 {
-    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     mpPrinter.reset();
 }
 
@@ -135,7 +136,7 @@ VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
     static ::cppu::OPropertyArrayHelper* pPropertyArrayHelper = NULL;
     if ( !pPropertyArrayHelper )
     {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pPropertyArrayHelper )
         {
             sal_uInt16 nElements;
@@ -148,7 +149,7 @@ VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 
 sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno::Any & rConvertedValue, ::com::sun::star::uno::Any & rOldValue, sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     sal_Bool bDifferent = sal_False;
     switch ( nHandle )
@@ -177,7 +178,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
     return bDifferent;
@@ -185,7 +186,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
 
 void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     switch( nHandle )
     {
@@ -201,14 +202,14 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }
 
 void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( ((VCLXPrinterPropertySet*)this)->Mutex );
+    ::osl::MutexGuard aGuard( ((VCLXPrinterPropertySet*)this)->Mutex );
 
     switch( nHandle )
     {
@@ -220,7 +221,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& r
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }
@@ -228,7 +229,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& r
 // ::com::sun::star::awt::XPrinterPropertySet
 void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     ::com::sun::star::uno::Any aValue;
     aValue <<= bHorizontal;
@@ -237,7 +238,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXPrinterPropertySet::getFormDescriptions(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aDescriptions( nPaperBinCount );
@@ -257,7 +258,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
 
 void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     sal_Int32 nIndex = 0;
     sal_uInt16 nPaperBin = sal::static_int_cast< sal_uInt16 >(
@@ -267,7 +268,7 @@ void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription
 
 ::com::sun::star::uno::Sequence< sal_Int8 > VCLXPrinterPropertySet::getBinarySetup(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     SvMemoryStream aMem;
     aMem << BINARYSETUPMARKER;
@@ -277,7 +278,7 @@ void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription
 
 void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequence< sal_Int8 >& data ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     SvMemoryStream aMem( (char*) data.getConstArray(), data.getLength(), STREAM_READ );
     sal_uInt32 nMarker;
@@ -324,7 +325,7 @@ IMPL_XTYPEPROVIDER_END
 
 sal_Bool VCLXPrinter::start( const ::rtl::OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     sal_Bool bDone = sal_True;
     if ( mpListener.get() )
@@ -338,7 +339,7 @@ sal_Bool VCLXPrinter::start( const ::rtl::OUString& /*rJobName*/, sal_Int16 /*nC
 
 void VCLXPrinter::end(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     if ( mpListener.get() )
     {
@@ -349,14 +350,14 @@ void VCLXPrinter::end(  ) throw(::com::sun::star::awt::PrinterException, ::com::
 
 void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     mpListener.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXPrinter::startPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     if ( mpListener.get() )
     {
@@ -367,7 +368,7 @@ void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     if ( mpListener.get() )
     {
@@ -410,7 +411,7 @@ IMPL_XTYPEPROVIDER_END
 // ::com::sun::star::awt::XInfoPrinter
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXInfoPrinter::createDevice(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
+    ::osl::MutexGuard aGuard( Mutex );
 
     return GetDevice();
 }
@@ -461,3 +462,4 @@ IMPL_XTYPEPROVIDER_END
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

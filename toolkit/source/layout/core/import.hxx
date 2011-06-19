@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <map>
 #include <list>
 #define _BACKWARD_BACKWARD_WARNING_H 1
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 #include <com/sun/star/xml/input/XRoot.hpp>
@@ -87,54 +88,6 @@ private:
     typedef std::map< rtl::OUString, css::uno::Reference< RadioGroup > > RadioGroupsMap;
     RadioGroupsMap mxRadioGroups;
 };
-
-#if 0
-// generator
-class Widget
-{
-public:
-    Widget( css::uno::Reference< css::awt::XToolkit > xToolkit,
-            css::uno::Reference< css::awt::XWindow > xToplevel,
-            rtl::OUString unoName, long attrbs );
-    virtual ~Widget();
-
-    virtual void setProperties( const PropList &rProps );
-
-    virtual bool addChild( Widget *pChild );
-    virtual void setChildProperties( Widget *pChild, const PropList &rProps );
-
-    inline css::uno::Reference< css::awt::XLayoutConstrains > getPeer()
-    { return mxWidget; }
-
-    inline css::uno::Reference< css::awt::XLayoutConstrains > getContainer()
-    { return mxContainer; }
-
-protected:
-    css::uno::Reference< css::awt::XLayoutConstrains > mxWidget;
-    css::uno::Reference< css::awt::XLayoutContainer > mxContainer;
-};
-
-class Root
-{
-public:
-    Root( css::uno::Reference< css::awt::XToolkit > xToolkit )
-        : mxToolkit( xToolkit ) {}
-    ~Root();
-
-    virtual Widget *create( rtl::OUString id, const rtl::OUString unoName, long attrbs );
-
-    css::uno::Reference< css::awt::XLayoutConstrains > getById( rtl::OUString id );
-    inline css::uno::Reference< css::awt::XLayoutConstrains > getToplevel();
-
-protected:
-    css::uno::Reference< css::awt::XToolkit > mxToolkit;
-    Widget *mpToplevel;
-
-    typedef std::hash_map< rtl::OUString, css::uno::Reference< css::awt::XLayoutConstrains >,
-                           rtl::OUStringHash > ItemHash;
-    ItemHash maItems;
-};
-#endif
 
 // parser
 class ImportContext : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
@@ -257,3 +210,5 @@ public:
 } // namespace layoutimpl
 
 #endif /* LAYOUT_CORE_IMPORT_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

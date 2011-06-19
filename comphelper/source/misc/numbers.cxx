@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>
         {
             staruno::Reference<starbeans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
-                xFormat->getPropertyValue(rtl::OUString::createFromAscii("Type")) >>= nReturn;
+                xFormat->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ))) >>= nReturn;
         }
         catch(...)
         {
@@ -82,7 +83,7 @@ staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberF
             staruno::Reference<starbeans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
-                static ::rtl::OUString PROPERTY_DECIMALS = ::rtl::OUString::createFromAscii("Decimals");
+                static ::rtl::OUString PROPERTY_DECIMALS( RTL_CONSTASCII_USTRINGPARAM( "Decimals" ));
                 return xFormat->getPropertyValue(PROPERTY_DECIMALS);
             }
         }
@@ -138,7 +139,7 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "::getNumberFormatProperty: caught an exception (did you create the key with another formatter?)!" );
+        OSL_FAIL( "::getNumberFormatProperty: caught an exception (did you create the key with another formatter?)!" );
     }
 
     return aReturn;
@@ -148,3 +149,4 @@ Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, 
 }   // namespace comphelper
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

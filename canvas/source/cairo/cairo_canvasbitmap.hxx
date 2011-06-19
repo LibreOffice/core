@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ namespace cairocanvas
                                               ::com::sun::star::lang::XServiceInfo,
                                               ::com::sun::star::beans::XFastPropertySet >   CanvasBitmapBase_Base;
     class CanvasBitmapSpriteSurface_Base :
-        public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
+        public ::canvas::DisambiguationHelper<CanvasBitmapBase_Base>,
         public SurfaceProvider
     {
     };
@@ -86,7 +87,7 @@ namespace cairocanvas
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
@@ -136,3 +137,5 @@ namespace cairocanvas
 }
 
 #endif /* _CAIROCANVAS_CANVASBITMAP_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

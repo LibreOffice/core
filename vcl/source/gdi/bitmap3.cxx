@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -355,7 +356,7 @@ sal_Bool Bitmap::Convert( BmpConversion eConversion )
         break;
 
         default:
-            DBG_ERROR( "Bitmap::Convert(): Unsupported conversion" );
+            OSL_FAIL( "Bitmap::Convert(): Unsupported conversion" );
         break;
     }
 
@@ -967,10 +968,11 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
             const long  nHeight = pReadAcc->Height();
             long*       pLutX = new long[ nNewWidth ];
             long*       pLutY = new long[ nNewHeight ];
-            long        nX, nY, nMapY, nActY = 0L;
 
             if( nNewWidth1 && nNewHeight1 )
             {
+                long        nX, nY, nMapY, nActY = 0L;
+
                 for( nX = 0L; nX < nNewWidth; nX++ )
                     pLutX[ nX ] = nX * nWidth / nNewWidth;
 
@@ -1841,7 +1843,7 @@ sal_Bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
         nBitCount = 8;
     else
     {
-        DBG_ERROR( "Bitmap::ImplReduceMedian(): invalid color count!" );
+        OSL_FAIL( "Bitmap::ImplReduceMedian(): invalid color count!" );
         nBitCount = 8;
         nColCount = 256;
     }
@@ -2203,3 +2205,5 @@ sal_Bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

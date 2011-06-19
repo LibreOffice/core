@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,10 +81,10 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Reference < com::sun::star::script::XTypeConverter > xConverter
-            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
             com::sun::star::uno::UNO_QUERY );
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     com::sun::star::uno::Any aNew;
@@ -94,21 +95,22 @@ sal_Bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_
     if ( aSeq.getLength() == 16 )
     {
         m_aName.MakeFromMemory( (void*) aSeq.getConstArray() );
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "SfxGlobalNameItem::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "SfxGlobalNameItem::PutValue - Wrong type!" );
+    return true;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
        com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
     void* pData = ( void* ) &m_aName.GetCLSID();
     memcpy( aSeq.getArray(), pData, 16 );
     rVal <<= aSeq;
-    return sal_True;
+    return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

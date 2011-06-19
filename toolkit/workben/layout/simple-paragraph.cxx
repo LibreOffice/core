@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -151,10 +152,11 @@ namespace SVX {
 
 
 
-SvxSimpleParagraphDialog::SvxSimpleParagraphDialog( Window* pParent ) :
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
-    Dialog( pParent, "simple-paragraph.xml", "dialog" ),
-    aLineSpacingList( this, "line-spacing-list" )
+SvxSimpleParagraphDialog::SvxSimpleParagraphDialog( Window* pParent )
+    : SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr )
+    , Dialog( pParent, "simple-paragraph.xml", "dialog" )
+    , aLineSpacingList( this, "line-spacing-list" )
+    , pPrevWin(NULL)
 {
 fprintf(stderr, "creating res mgr\n");
     pMgr = ResMgr::CreateResMgr("SOME_NAME");
@@ -177,3 +179,5 @@ fprintf(stderr, "done\n");
 SvxSimpleParagraphDialog::~SvxSimpleParagraphDialog()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

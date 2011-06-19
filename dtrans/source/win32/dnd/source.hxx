@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,8 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#ifndef _OSL_MUTEX_H_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase3.hxx>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "../../inc/DtObjFactory.hxx"
 #include "globals.hxx"
@@ -48,10 +45,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
+using ::rtl::OUString;
 
 
 class SourceContext;
@@ -149,3 +146,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

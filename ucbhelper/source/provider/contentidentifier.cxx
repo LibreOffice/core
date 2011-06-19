@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,10 +39,11 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
+
+using ::rtl::OUString;
 
 namespace ucbhelper
 {
@@ -219,3 +221,4 @@ OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
 
 } /* namespace ucbhelper */
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

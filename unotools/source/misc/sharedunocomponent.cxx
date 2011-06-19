@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@ namespace utl
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "DisposableComponent::~DisposableComponent: caught an exception!" );
+                OSL_FAIL( "DisposableComponent::~DisposableComponent: caught an exception!" );
             }
             m_xComponent.clear();
         }
@@ -156,7 +157,7 @@ namespace utl
         catch( const CloseVetoException& ) { /* fine */ }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
+            OSL_FAIL( "CloseableComponentImpl::nf_closeComponent: caught an unexpected exception!" );
         }
 
         // reset
@@ -178,7 +179,7 @@ namespace utl
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CloseableComponentImpl::impl_nf_switchListening: caught an exception!" );
+            OSL_FAIL( "CloseableComponentImpl::impl_nf_switchListening: caught an exception!" );
         }
     }
 
@@ -207,7 +208,7 @@ namespace utl
         // this should be unreachable: As long as we're a CloseListener, we veto the closing. If we're going
         // to close the component ourself, then we revoke ourself as listener *before* the close call. So,
         // if this here fires, something went definately wrong.
-        DBG_ERROR( "CloseableComponentImpl::notifyClosing: unreachable!" );
+        OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
 
     //--------------------------------------------------------------------
@@ -218,7 +219,7 @@ namespace utl
     ) throw (RuntimeException)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::disposing: where did this come from?" );
-        DBG_ERROR( "CloseableComponentImpl::disposing: unreachable!" );
+        OSL_FAIL( "CloseableComponentImpl::disposing: unreachable!" );
             // same reasoning for this assertion as in ->notifyClosing
     }
 
@@ -244,3 +245,5 @@ namespace utl
 //............................................................................
 }   // namespace utl
 //............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

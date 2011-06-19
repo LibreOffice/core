@@ -27,7 +27,6 @@
 
 $(eval $(call gb_Package_Package,sot_inc,$(SRCDIR)/sot/inc))
 $(eval $(call gb_Package_add_file,sot_inc,inc/sot/absdev.hxx,sot/absdev.hxx))
-$(eval $(call gb_Package_add_file,sot_inc,inc/sot/agg.hxx,sot/agg.hxx))
 $(eval $(call gb_Package_add_file,sot_inc,inc/sot/clsids.hxx,sot/clsids.hxx))
 $(eval $(call gb_Package_add_file,sot_inc,inc/sot/exchange.hxx,sot/exchange.hxx))
 $(eval $(call gb_Package_add_file,sot_inc,inc/sot/factory.hxx,sot/factory.hxx))

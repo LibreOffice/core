@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,13 +26,11 @@
  *
  ************************************************************************/
 
-#include "preextstl.h"
 #include <sal/cppunit.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "postextstl.h"
 
 #include <rtl/ustrbuf.hxx>
 
@@ -245,3 +244,4 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,19 +34,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <utime.h>
-#if defined HPUX || defined LINUX
+#if defined LINUX || defined ANDROID
 #include <mntent.h>
 #define mnttab mntent
-#elif defined SCO
-#include <mnttab.h>
 #elif defined AIX
 #include <sys/mntctl.h>
 #include <sys/vmount.h>
 extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
-#elif defined(FREEBSD) || defined(MACOSX)
-#elif defined DECUNIX
+#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+      defined(DRAGONFLY)
 struct mnttab
 {
   char *mnt_dir;
@@ -60,24 +59,15 @@ struct mnttab
 #endif
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"
 #include <rtl/instance.hxx>
 
-DECLARE_LIST( DirEntryList, DirEntry* )
-DECLARE_LIST( FSysSortList, FSysSort* )
-DECLARE_LIST( FileStatList, FileStat* )
-
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
 #define MOUNTSPECIAL mnt_special
 #define MOUNTPOINT   mnt_mountp
 #define MOUNTOPTS    mnt_mntopts
 #define MOUNTFS      mnt_fstype
-#elif defined SCO
-#define MNTTAB       "/etc/mnttab"
-#define MOUNTSPECIAL mt_dev
-#define MOUNTPOINT   mt_filsys
 #else
 #define MOUNTSPECIAL mnt_fsname
 #define MOUNTPOINT   mnt_dir
@@ -94,7 +84,8 @@ struct mymnttab
 };
 
 
-#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX)
+#if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
+    defined(OPENBSD) || defined(DRAGONFLY)
 sal_Bool GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
@@ -139,19 +130,13 @@ sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 
 static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
     FILE *fp = fopen (MNTTAB, "r");
     if (! fp)
         return sal_False;
     struct mnttab mnt[1];
     while (getmntent (fp, mnt) != -1)
-#elif defined SCO
-    FILE *fp = fopen (MNTTAB, "r");
-    if (! fp)
-        return sal_False;
-    struct mnttab mnt[1];
-    while (fread (&mnt, sizeof mnt, 1, fp) > 0)
-#elif defined DECUNIX || defined AIX
+#elif defined AIX || defined ANDROID
     FILE *fp = NULL;
     if (! fp)
         return sal_False;
@@ -191,11 +176,8 @@ static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
         mytab->mountspecial = mnt->MOUNTSPECIAL;
         mytab->mountpoint   = mnt->MOUNTPOINT;
         mytab->mountdevice  = dev;
-#ifndef SCO
         mytab->mymnttab_filesystem = mnt->MOUNTFS;
-#else
-        mytab->mymnttab_filesystem = "ext2";        //default ist case sensitiv unter unix
-#endif
+
         return sal_True;
     }
 #   ifdef LINUX
@@ -209,93 +191,10 @@ static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 
 #endif
 
-/************************************************************************
-|*
-|*    DirEntry::IsCaseSensitive()
-|*
-|*    Beschreibung
-|*    Ersterstellung    TPF 25.02.1999
-|*    Letzte Aenderung  TPF 25.02.1999
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
-{
-
-    if (eFormatter==FSYS_STYLE_HOST)
-    {
-#ifdef NETBSD
-        return sal_True;
-#else
-        struct stat buf;
-        DirEntry aPath(*this);
-        aPath.ToAbs();
-
-        while (stat (ByteString(aPath.GetFull(), osl_getThreadTextEncoding()).GetBuffer(), &buf))
-        {
-            if (aPath.Level() == 1)
-            {
-                return sal_True;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
-            }
-            aPath = aPath [1];
-        }
-
-        struct mymnttab fsmnt;
-        GetMountEntry(buf.st_dev, &fsmnt);
-        if ((fsmnt.mymnttab_filesystem.CompareTo("msdos")==COMPARE_EQUAL) ||
-            (fsmnt.mymnttab_filesystem.CompareTo("umsdos")==COMPARE_EQUAL) ||
-            (fsmnt.mymnttab_filesystem.CompareTo("vfat")==COMPARE_EQUAL) ||
-            (fsmnt.mymnttab_filesystem.CompareTo("hpfs")==COMPARE_EQUAL) ||
-            (fsmnt.mymnttab_filesystem.CompareTo("smb") ==COMPARE_EQUAL) ||
-            (fsmnt.mymnttab_filesystem.CompareTo("ncpfs")==COMPARE_EQUAL))
-        {
-            return sal_False;
-        }
-        else
-        {
-            return sal_True;
-        }
-#endif
-    }
-    else
-    {
-        sal_Bool isCaseSensitive = sal_True;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
-        switch ( eFormatter )
-        {
-            case FSYS_STYLE_MAC:
-            case FSYS_STYLE_FAT:
-            case FSYS_STYLE_VFAT:
-            case FSYS_STYLE_NTFS:
-            case FSYS_STYLE_NWFS:
-            case FSYS_STYLE_HPFS:
-                {
-                    isCaseSensitive = sal_False;
-                    break;
-                }
-            case FSYS_STYLE_SYSV:
-            case FSYS_STYLE_BSD:
-            case FSYS_STYLE_DETECT:
-                {
-                    isCaseSensitive = sal_True;
-                    break;
-                }
-            default:
-                {
-                    isCaseSensitive = sal_True; // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
-                    break;
-                }
-        }
-        return isCaseSensitive;
-    }
-}
 
 /************************************************************************
 |*
 |*    DirEntry::ToAbs()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91 13:30
 |*
 *************************************************************************/
 
@@ -318,10 +217,6 @@ sal_Bool DirEntry::ToAbs()
 /*************************************************************************
 |*
 |*    DirEntry::GetVolume()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 04.03.92
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -372,10 +267,6 @@ DirEntry DirEntry::GetDevice() const
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  DV 04.11.92
 |*
 *************************************************************************/
 
@@ -465,10 +356,6 @@ sal_uInt16 DirReader_Impl::Read()
 |*
 |*    FileStat::FileStat()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 05.11.91
-|*    Letzte Aenderung  MA 07.11.91
-|*
 *************************************************************************/
 
 FileStat::FileStat( const void *, const void * ):
@@ -484,10 +371,6 @@ FileStat::FileStat( const void *, const void * ):
 /*************************************************************************
 |*
 |*    FileStat::Update()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
 sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool )
@@ -593,10 +476,6 @@ const char *TempDirImpl( char *pBuf )
 |*
 |*    DirEntry::GetPathStyle() const
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI 11.05.95
-|*    Letzte Aenderung  MI 11.05.95
-|*
 *************************************************************************/
 
 FSysPathStyle DirEntry::GetPathStyle( const String & )
@@ -607,9 +486,6 @@ FSysPathStyle DirEntry::GetPathStyle( const String & )
 /*************************************************************************
 |*
 |*    FileStat::SetDateTime
-|*
-|*    Ersterstellung    PB  27.06.97
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -658,3 +534,4 @@ void FSysEnableSysErrorBox( sal_Bool )
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

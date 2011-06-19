@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -858,9 +859,6 @@ void TextWindow::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if ( rStyleSettings.GetOptions() & STYLE_OPTION_HIDEDISABLED )
-            pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
         if ( !mpExtTextView->HasSelection() )
         {
             pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );
@@ -1647,10 +1645,10 @@ MultiLineEdit::GetComponentInterface(sal_Bool bCreate)
     }
     return xPeer;
 }
-/*-- 11.08.2004 11:29:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void MultiLineEdit::DisableSelectionOnFocus()
 {
     pImpSvMEdit->GetTextWindow()->DisableSelectionOnFocus();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

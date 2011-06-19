@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,8 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -363,3 +365,5 @@ ignoreProlongedSoundMark_ja_JP::folding( const OUString& inStr, sal_Int32 startP
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

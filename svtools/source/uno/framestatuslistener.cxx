@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 #include <svtools/framestatuslistener.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::cppu;
@@ -61,13 +62,13 @@ FrameStatusListener::~FrameStatusListener()
 
 Reference< XFrame > FrameStatusListener::getFrameInterface() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xFrame;
 }
 
 Reference< XMultiServiceFactory > FrameStatusListener::getServiceManager() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xServiceManager;
 }
 
@@ -105,7 +106,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
         throw DisposedException();
 
@@ -155,7 +156,7 @@ throw ( RuntimeException )
 {
     Reference< XInterface > xSource( Source.Source );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     while ( pIter != m_aListenerMap.end() )
@@ -192,7 +193,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
     com::sun::star::util::URL    aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
 
         // Already in the list of status listener. Do nothing.
@@ -203,7 +204,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
         // intialize is called.
         if ( !m_bInitialized )
         {
-            // Put into the hash_map of status listener. Will be activated when initialized is called
+            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
@@ -255,7 +256,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
 
 void FrameStatusListener::removeStatusListener( const rtl::OUString& aCommandURL )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
     if ( pIter != m_aListenerMap.end() )
@@ -288,7 +289,7 @@ void FrameStatusListener::bindListener()
     Reference< XStatusListener > xStatusListener;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;
@@ -359,7 +360,7 @@ void FrameStatusListener::bindListener()
 
 void FrameStatusListener::unbindListener()
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( !m_bInitialized )
         return;
@@ -405,7 +406,7 @@ void FrameStatusListener::updateStatus( const rtl::OUString aCommandURL )
     com::sun::star::util::URL aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;
@@ -442,3 +443,5 @@ void FrameStatusListener::updateStatus( const rtl::OUString aCommandURL )
 }
 
 } // svt
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 
 #include "tools/string.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace psp
 {
@@ -51,7 +52,7 @@ class VCL_PLUGIN_PUBLIC FontCache
         FontCacheEntry      m_aEntry;
     };
 
-    typedef std::hash_map< ::rtl::OString, FontFile, ::rtl::OStringHash > FontDirMap;
+    typedef boost::unordered_map< ::rtl::OString, FontFile, ::rtl::OStringHash > FontDirMap;
     struct FontDir
     {
         sal_Int64   m_nTimestamp;
@@ -62,7 +63,7 @@ class VCL_PLUGIN_PUBLIC FontCache
         FontDir() : m_nTimestamp(0), m_bNoFiles(false), m_bUserOverrideOnly( false ) {}
     };
 
-    typedef std::hash_map< int, FontDir > FontCacheData;
+    typedef boost::unordered_map< int, FontDir > FontCacheData;
     FontCacheData   m_aCache;
     String          m_aCacheFile;
     bool            m_bDoFlush;
@@ -97,3 +98,5 @@ public:
 } // namespace psp
 
 #endif // _PSPRINT_FONTCACHE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

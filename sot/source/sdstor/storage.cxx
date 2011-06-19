@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,7 @@
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#ifndef _TOOLS_FSYS_HXX
 #include <tools/fsys.hxx>
-#endif
 #include <tools/cachestr.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -170,11 +169,10 @@ SotStorageStream::~SotStorageStream()
 *************************************************************************/
 void SotStorageStream::SyncSvStream()
 {
-    sal_uLong nPos = 0;
     if( pOwnStm )
     {
         pOwnStm->Flush();
-        nPos = pOwnStm->Tell();
+        sal_uLong nPos = pOwnStm->Tell();
         SetError( pOwnStm->GetError() );
         SvStream::SyncSvStream( nPos );
     }
@@ -392,7 +390,7 @@ sal_Bool SotStorageStream::SetProperty( const String& rName, const ::com::sun::s
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
         return sal_False;
     }
 }
@@ -406,7 +404,7 @@ sal_Bool SotStorageStream::GetProperty( const String& rName, ::com::sun::star::u
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
         return sal_False;
     }
 }
@@ -420,7 +418,7 @@ sal_Bool SotStorageStream::GetProperty( const String& rName, ::com::sun::star::u
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
         return ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >();
     }
 }
@@ -483,8 +481,6 @@ void SotStorage::TestMemberInvariant( sal_Bool /*bPrint*/ )
 |*                      der RefCounter schon um 1 erhoet.
 |*                      Die Uebergabe erfolgt in pStorageCTor. Die Variable
 |*                      ist NULL, wenn es nicht geklappt hat.
-|*    Ersterstellung    MM 23.06.94
-|*    Letzte Aenderung  MM 23.06.94
 |*
 *************************************************************************/
 #define INIT_SotStorage()                   \
@@ -743,7 +739,7 @@ void SotStorage::RemoveUNOStorageHolder( UNOStorageHolder* pHolder )
     }
     else
     {
-        DBG_ERROR("Not implemented!");
+        OSL_FAIL("Not implemented!");
     }
 }
 
@@ -769,7 +765,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
         return xResult;
 
     for ( UNOStorageHolderList::iterator aIter = pUNOStorageHolderList->begin();
-          aIter != pUNOStorageHolderList->end(); aIter++ )
+          aIter != pUNOStorageHolderList->end(); ++aIter )
         if ( (*aIter) && (*aIter)->GetStorageName().Equals( rEleName ) )
         {
             // the storage is already in use
@@ -808,8 +804,8 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                                 uno::Any aMediaType;
 
                                 if ( pChildUCBStg->GetProperty(
-                                                    ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType ) )
-                                    pTempStorage->SetProperty( ::rtl::OUString::createFromAscii( "MediaType" ), aMediaType );
+                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType ) )
+                                    pTempStorage->SetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aMediaType );
 
                                 bStorageReady = !pChildUCBStg->GetError() && !pTempStorage->GetError()
                                             && pTempStorage->Commit();
@@ -827,7 +823,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                         try {
                             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
                                     ::comphelper::getProcessServiceFactory()->createInstance(
-                                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory")) ),
                                     uno::UNO_QUERY );
 
                             OSL_ENSURE( xStorageFactory.is(), "Can't create storage factory!\n" );
@@ -855,7 +851,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                         catch( uno::Exception& e )
                         {
                                                     (void)e;
-                                                    OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
+                                                    OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
                         }
                     }
             }
@@ -1467,7 +1463,7 @@ void SotStorage::SetKey( const ByteString& rKey )
             ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
             ::com::sun::star::uno::Any aAny;
             aAny <<= aSequ;
-            SetProperty( ::rtl::OUString::createFromAscii("EncryptionKey"), aAny );
+            SetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EncryptionKey")), aAny );
         }
     }
 }
@@ -1516,7 +1512,7 @@ sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::s
         return 0;
 
     ::rtl::OUString aMediaType;
-    xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+    xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= aMediaType;
     if ( aMediaType.getLength() )
     {
         ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
@@ -1561,3 +1557,4 @@ sal_Int32 SotStorage::GetVersion( const com::sun::star::uno::Reference < com::su
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

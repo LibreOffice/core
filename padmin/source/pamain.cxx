@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,20 +46,22 @@
 #include "unotools/configmgr.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
 
 using namespace padmin;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace comphelper;
+
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
 class MyApp : public Application
 {
 public:
-    void            Main();
+    int Main();
     virtual sal_uInt16  Exception( sal_uInt16 nError );
 
     static void ReadStringHook( String& );
@@ -93,7 +96,7 @@ sal_uInt16 MyApp::Exception( sal_uInt16 nError )
     return 0;
 }
 
-void MyApp::Main()
+int MyApp::Main()
 {
     PADialog* pPADialog;
 
@@ -102,10 +105,11 @@ void MyApp::Main()
     //-------------------------------------------------
     // create the global service-manager
     //-------------------------------------------------
+    Reference< XComponentContext > xCtx;
     Reference< XMultiServiceFactory > xFactory;
     try
     {
-        Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
+        xCtx = defaultBootstrap_InitialComponentContext();
         xFactory = Reference< XMultiServiceFactory >(  xCtx->getServiceManager(), UNO_QUERY );
         if( xFactory.is() )
             setProcessServiceFactory( xFactory );
@@ -128,8 +132,8 @@ void MyApp::Main()
      *  Create UCB.
      */
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
@@ -152,7 +156,7 @@ void MyApp::Main()
         sal_Bool bQuitApp;
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
-                return;
+                return EXIT_FAILURE;
     }
 
     // initialize test-tool library (if available)
@@ -173,4 +177,19 @@ void MyApp::Main()
      */
     ::ucbhelper::ContentBroker::deinitialize();
 
+    /*
+     *  clean up UNO
+     */
+    try
+    {
+        Reference<XComponent> xComp(xCtx, UNO_QUERY_THROW);
+        xComp->dispose();
+    }
+    catch(...)
+    {
+    }
+
+    return EXIT_SUCCESS;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

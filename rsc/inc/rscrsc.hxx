@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 #ifndef _RSCRSC_HXX
 #define _RSCRSC_HXX
 
-#ifndef RSCALL_H
 #include <rscall.h>
-#endif
-#ifndef RSCERROR_H
 #include <rscerror.h>
-#endif
-#ifndef RSCTOOLS_HXX
 #include <rsctools.hxx>
-#endif
 
 #include <list>
 
@@ -56,7 +51,6 @@ class RscCmdLine
 public:
 
     RscStrList          aInputList;     // Liste der Quelldateien
-    RscStrList          aSymbolList;    // Liste der Symbole
     ByteString          aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     unsigned short      nCommands;      // Steuerbits
@@ -96,7 +90,6 @@ struct WriteRcContext;
 class RscCompiler
 {
 private:
-    RscStrList      aTmpFileList;   // Liste der Tmp-Dateien
     ByteString      aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
     ByteString      aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
     ByteString      aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei
@@ -136,3 +129,5 @@ public:
 };
 
 #endif //_RSCRSC_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,11 +30,7 @@
 
 #include "svl/svldllapi.h"
 
-#if STLPORT_VERSION<321
-#include <stdarg.h>
-#else
 #include <cstdarg>  // std::va_list and friends
-#endif
 #include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
@@ -168,9 +165,9 @@ public:
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return _pParent; }
 
-    virtual SvStream &          Load( SvStream &, FASTBOOL bDirect = sal_False,
+    virtual SvStream &          Load( SvStream &, bool bDirect = false,
                                       const SfxItemPool *pRefPool = 0 );
-    virtual SvStream &          Store( SvStream &, FASTBOOL bDirect = sal_False ) const;
+    virtual SvStream &          Store( SvStream &, bool bDirect = false ) const;
 
     virtual int                 operator==(const SfxItemSet &) const;
 };
@@ -211,3 +208,4 @@ public:
 
 #endif // #ifndef _SFXITEMSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

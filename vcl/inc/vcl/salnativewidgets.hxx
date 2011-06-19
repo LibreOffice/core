@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,26 +157,28 @@ typedef sal_uInt32      ControlType;
 
 typedef sal_uInt32      ControlPart;
 
-#define PART_ENTIRE_CONTROL     1
-#define PART_WINDOW             5       // the static listbox window containing the list
-#define PART_BUTTON             100
-#define PART_BUTTON_UP          101
+#define PART_ENTIRE_CONTROL         1
+#define PART_WINDOW                 5       // the static listbox window containing the list
+#define PART_BUTTON                 100
+#define PART_BUTTON_UP              101
 #define PART_BUTTON_DOWN            102 // Also for ComboBoxes/ListBoxes
 #define PART_BUTTON_LEFT            103
-#define PART_BUTTON_RIGHT       104
+#define PART_BUTTON_RIGHT           104
 #define PART_ALL_BUTTONS            105
+#define PART_SEPARATOR              106
 #define PART_TRACK_HORZ_LEFT        200
 #define PART_TRACK_VERT_UPPER       201
 #define PART_TRACK_HORZ_RIGHT       202
 #define PART_TRACK_VERT_LOWER       203
 #define PART_TRACK_HORZ_AREA        204
 #define PART_TRACK_VERT_AREA        205
-#define PART_THUMB_HORZ         210 // Also used as toolbar grip
-#define PART_THUMB_VERT         211 // Also used as toolbar grip
+#define PART_THUMB_HORZ             210 // Also used as toolbar grip
+#define PART_THUMB_VERT             211 // Also used as toolbar grip
 #define PART_MENU_ITEM              250
 #define PART_MENU_ITEM_CHECK_MARK   251
 #define PART_MENU_ITEM_RADIO_MARK   252
 #define PART_MENU_SEPARATOR         253
+#define PART_MENU_SUBMENU_ARROW     254
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
@@ -470,3 +473,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

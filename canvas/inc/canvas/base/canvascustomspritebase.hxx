@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,14 +103,14 @@ namespace canvas
             @derive when overriding this method in derived classes,
             <em>always</em> call the base class' method!
          */
-        virtual void SAL_CALL disposing()
+        virtual void disposeThis()
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.disposing();
 
             // pass on to base class
-            BaseType::disposing();
+            BaseType::disposeThis();
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
@@ -275,3 +276,5 @@ namespace canvas
 }
 
 #endif /* INCLUDED_CANVAS_CANVASCUSTOMSPRITEBASE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

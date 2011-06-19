@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 
-#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
-#endif
 #include <unotools/processfactory.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,10 +49,9 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
-#ifndef _COM_SUN_STAR_I18N_NUMBERFORMATINDEX_HPP_
 #include <com/sun/star/i18n/NumberFormatIndex.hdl>
-#endif
 #include <rtl/instance.hxx>
+#include <sal/macros.h>
 
 #define LOCALEDATA_LIBRARYNAME "i18npool"
 #define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
@@ -1402,18 +1400,14 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
     sal_Unicode* pNumBuf;
     sal_uInt16  nNumLen;
     sal_uInt16  i = 0;
-    sal_Bool    bNeg;
 
     // negative number
     if ( nNumber < 0 )
     {
         nNumber *= -1;
-        bNeg = sal_True;
         *pBuf = '-';
         pBuf++;
     }
-    else
-        bNeg = sal_False;
 
     // convert number
     pNumBuf = ImplAddUNum( aNumBuf, (sal_uInt64)nNumber );
@@ -1598,11 +1592,6 @@ String LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool b1
         else
             aStr += getTimeAM();
     }
-#if 0
-//!TODO: do we need a time string? like "o'clock" or "Uhr" or similar
-    else
-        aStr += getTimeStr();
-#endif
 
     return aStr;
 }
@@ -1744,7 +1733,7 @@ String LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
         new sal_Unicode[nGuess + 16]);
 
     sal_Unicode* const pBuffer =
-        ((size_t(rCurrencySymbol.Len()) + nGuess + 20) < sizeof(aBuf)/sizeof(aBuf[0]) ? aBuf :
+        ((size_t(rCurrencySymbol.Len()) + nGuess + 20) < SAL_N_ELEMENTS(aBuf) ? aBuf :
         new sal_Unicode[ rCurrencySymbol.Len() + nGuess + 20 ]);
     sal_Unicode* pBuf = pBuffer;
 
@@ -1970,7 +1959,7 @@ void LocaleDataWrapper::outputCheckMessage( const char* pStr )
 {
     fprintf( stderr, "\n%s\n", pStr);
     fflush( stderr);
-    DBG_ERROR( pStr);
+    OSL_TRACE("%s", pStr);
 }
 
 
@@ -2005,3 +1994,5 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

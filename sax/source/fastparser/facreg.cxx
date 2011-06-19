@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -76,3 +77,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImp
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

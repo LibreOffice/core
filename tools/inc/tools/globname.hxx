@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,11 @@
 #ifndef _GLOBNAME_HXX
 #define _GLOBNAME_HXX
 
+#include <vector>
+
 #include "tools/toolsdllapi.h"
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 
 /*************************************************************************
 *************************************************************************/
@@ -119,7 +121,7 @@ public:
 
 class SvGlobalNameList
 {
-    List aList;
+    std::vector<ImpSvGlobalName*> aList;
 public:
                     SvGlobalNameList();
                     ~SvGlobalNameList();
@@ -127,7 +129,7 @@ public:
     void            Append( const SvGlobalName & );
     SvGlobalName    GetObject( sal_uLong );
     sal_Bool            IsEntry( const SvGlobalName & rName );
-    sal_uInt32           Count() const { return aList.Count(); }
+    size_t          Count() const { return aList.size(); }
 private:
                 // nicht erlaubt
                 SvGlobalNameList( const SvGlobalNameList & );
@@ -136,3 +138,4 @@ private:
 
 #endif // _GLOBNAME_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,6 @@ enum SvxIconChoiceCtrlPositionMode
 class SvxIconChoiceCtrlEntry
 {
     Image aImage;
-    Image aImageHC;
 
     String aText;
     String aQuickHelpText;
@@ -122,16 +122,13 @@ class SvxIconChoiceCtrlEntry
 public:
                             SvxIconChoiceCtrlEntry( sal_uInt16 nFlags = 0 );
                             SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, sal_uInt16 nFlags = 0 );
-                            SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, const Image& rImageHC, sal_uInt16 nFlags = 0 );
                             ~SvxIconChoiceCtrlEntry () {}
 
     void                    SetImage ( const Image& rImage ) { aImage = rImage; }
-    void                    SetImageHC ( const Image& rImage ) { aImageHC = rImage; }
     Image                   GetImage () const { return aImage; }
-    Image                   GetImageHC () const { return aImageHC; }
     void                    SetText ( const String& rText ) { aText = rText; }
     String                  GetText () const { return aText; }
-    String SVT_DLLPUBLIC                    GetDisplayText() const;
+    String SVT_DLLPUBLIC    GetDisplayText() const;
     void                    SetQuickHelpText( const String& rText ) { aQuickHelpText = rText; }
     String                  GetQuickHelpText() const { return aQuickHelpText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
@@ -302,14 +299,12 @@ public:
     SvxIconChoiceCtrlEntry* InsertEntry( sal_uLong nPos = LIST_APPEND,
                                      const Point* pPos = 0,
                                      sal_uInt16 nFlags = 0 );
-    SvxIconChoiceCtrlEntry* InsertEntry( const String& rText, const Image& rImage,
-                                     sal_uLong nPos = LIST_APPEND,
-                                     const Point* pPos = 0,
-                                     sal_uInt16 nFlags = 0 );
-    SvxIconChoiceCtrlEntry* InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC,
-                                     sal_uLong nPos = LIST_APPEND,
-                                     const Point* pPos = 0,
-                                     sal_uInt16 nFlags = 0 );
+    SvxIconChoiceCtrlEntry* InsertEntry( const String& rText,
+                                         const Image& rImage,
+                                         sal_uLong nPos = LIST_APPEND,
+                                         const Point* pPos = 0,
+                                         sal_uInt16 nFlags = 0
+                                       );
 
     /** creates automatic mnemonics for all icon texts in the control
     */
@@ -388,3 +383,4 @@ public:
 
 #endif // _ICNVW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

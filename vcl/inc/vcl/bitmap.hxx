@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <vcl/mapmod.hxx>
 #include <tools/rc.hxx>
 #include <vcl/region.hxx>
+#include <vcl/scopedbitmapaccess.hxx>
 
 // -----------
 // - Defines -
@@ -144,14 +146,6 @@ enum BmpFilter
 
 // ------------------------------------------------------------------------
 
-enum BmpColorMode
-{
-    BMP_COLOR_NORMAL = 0,
-    BMP_COLOR_HIGHCONTRAST = 1,
-    BMP_COLOR_MONOCHROME_BLACK = 2,
-    BMP_COLOR_MONOCHROME_WHITE = 3
-};
-
 // --------------------
 // - FilterParameters -
 // --------------------
@@ -237,7 +231,7 @@ class   SalBitmap;
 
 struct BitmapSystemData
 {
-    #if defined( WNT ) || defined( OS2 )
+    #if defined( WNT )
     void* pDIB; // device independent byte buffer
     void* pDDB; // if not NULL then this is actually an HBITMAP
     #elif defined( QUARTZ )
@@ -257,7 +251,6 @@ private:
     MapMode                 maPrefMapMode;
     Size                    maPrefSize;
 
-//#if 0 // _SOLAR__PRIVATE
 
 public:
 
@@ -267,9 +260,9 @@ public:
     SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
     SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
 
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset );
+    SAL_DLLPRIVATE static sal_Bool          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset, sal_Bool bMSOFormat = sal_False );
     SAL_DLLPRIVATE static sal_Bool          ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown );
+    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, sal_Bool bMSOFormat = sal_False );
     SAL_DLLPRIVATE static sal_Bool          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad );
     SAL_DLLPRIVATE static sal_Bool          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
     SAL_DLLPRIVATE sal_Bool                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bCompressed ) const;
@@ -307,8 +300,6 @@ public:
     SAL_DLLPRIVATE sal_Bool                 ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE sal_Bool                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
     SAL_DLLPRIVATE sal_Bool                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
-
-//#endif // PRIVATE
 
 public:
 
@@ -364,7 +355,7 @@ public:
     sal_uLong                   GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
-    Bitmap                  GetColorTransformedBitmap( BmpColorMode eColorMode ) const;
+    Bitmap                  GetColorTransformedBitmap() const;
 
     static const BitmapPalette& GetGreyPalette( int nEntries );
 
@@ -762,9 +753,14 @@ public:
     BitmapWriteAccess*      AcquireWriteAccess();
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
 
+    typedef vcl::ScopedBitmapAccess< BitmapReadAccess, Bitmap, &Bitmap::AcquireReadAccess >
+        ScopedReadAccess;
+    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, Bitmap, &Bitmap::AcquireWriteAccess >
+        ScopedWriteAccess;
+
 public:
 
-    sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True );
+    sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True, sal_Bool bMSOFormat = sal_False );
     sal_Bool                    Write( SvStream& rOStm, sal_Bool bCompressed = sal_True, sal_Bool bFileHeader = sal_True ) const;
 
     friend VCL_DLLPUBLIC SvStream&        operator>>( SvStream& rIStm, Bitmap& rBitmap );
@@ -852,3 +848,5 @@ inline sal_uLong Bitmap::GetSizeBytes() const
 }
 
 #endif // _SV_BITMAP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

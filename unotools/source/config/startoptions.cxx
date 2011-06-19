@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/startoptions.hxx>
 #include <unotools/configmgr.hxx>
@@ -339,14 +334,14 @@ void SvtStartOptions_Impl::SetConnectionURL( const OUString& sURL )
 //*****************************************************************************************************************
 Sequence< OUString > SvtStartOptions_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // Build list of configuration key names.
+    const OUString pProperties[] =
     {
         PROPERTYNAME_SHOWINTRO      ,
         PROPERTYNAME_CONNECTIONURL  ,
     };
     // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
+    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
     return seqPropertyNames;
 }
@@ -432,27 +427,17 @@ void SvtStartOptions::SetConnectionURL( const OUString& sURL )
     m_pDataContainer->SetConnectionURL( sURL );
 }
 
+namespace
+{
+    class theStartOptionsMutex : public rtl::Static<osl::Mutex, theStartOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtStartOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theStartOptionsMutex::get();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

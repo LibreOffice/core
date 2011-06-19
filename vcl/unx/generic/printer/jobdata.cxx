@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include "sal/alloca.h"
 
 using namespace psp;
-using namespace rtl;
 
 JobData& JobData::operator=(const JobData& rRight)
 {
@@ -168,9 +168,10 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     // now append the PPDContext stream buffer
     aStream.WriteLine( "PPDContexData" );
     sal_uLong nBytes;
-    void* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
+    char* pContextBuffer = m_aContext.getStreamableBuffer( nBytes );
     if( nBytes )
         aStream.Write( pContextBuffer, nBytes );
+    delete [] pContextBuffer;
 
     // success
     pData = rtl_allocateMemory( bytes = aStream.Tell() );
@@ -252,7 +253,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
                 {
                     rJobData.m_aContext.setParser( rJobData.m_pParser );
                     int nBytes = bytes - aStream.Tell();
-                    void* pRemain = alloca( bytes - aStream.Tell() );
+                    char* pRemain = (char*)alloca( bytes - aStream.Tell() );
                     aStream.Read( pRemain, nBytes );
                     rJobData.m_aContext.rebuildFromStreamBuffer( pRemain, nBytes );
                     bContext = true;
@@ -263,3 +264,5 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
 
     return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bPDFDevice && bColorDevice && bColorDepth;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

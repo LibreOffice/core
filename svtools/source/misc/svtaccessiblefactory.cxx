@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -283,14 +284,13 @@ namespace svt
             // load the library implementing the factory
             if ( !s_pFactory.get() )
             {
-                const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
+                const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(
                     SVLIBRARY( "acc" )
-                );
+                ));
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
-                    const ::rtl::OUString sFactoryCreationFunc =
-                        ::rtl::OUString::createFromAscii( "getSvtAccessibilityComponentFactory" );
+                    const ::rtl::OUString sFactoryCreationFunc( RTL_CONSTASCII_USTRINGPARAM( "getSvtAccessibilityComponentFactory" ));
                     s_pAccessibleFactoryFunc = (GetSvtAccessibilityComponentFactory)
                         osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 
@@ -353,3 +353,5 @@ namespace svt
 //........................................................................
 }   // namespace svt
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

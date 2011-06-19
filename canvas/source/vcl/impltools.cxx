@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,6 +60,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include <canvas/canvastools.hxx>
+#include <o3tl/compat_functional.hxx>
 
 #include "impltools.hxx"
 #include "canvasbitmap.hxx"
@@ -275,9 +277,8 @@ namespace vclcanvas
                     aSrcAlpha = rBitmap.GetMask();
             }
 
-            ScopedBitmapReadAccess pReadAccess( aSrcBitmap.AcquireReadAccess(),
-                                                aSrcBitmap );
-            ScopedBitmapReadAccess pAlphaReadAccess( rBitmap.IsTransparent() ?
+            Bitmap::ScopedReadAccess pReadAccess( aSrcBitmap );
+            Bitmap::ScopedReadAccess pAlphaReadAccess( rBitmap.IsTransparent() ?
                                                      aSrcAlpha.AcquireReadAccess() :
                                                      (BitmapReadAccess*)NULL,
                                                      aSrcAlpha );
@@ -301,7 +302,7 @@ namespace vclcanvas
                 {
                     // source already has alpha channel - 1:1 mapping,
                     // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
-                    ::std::iota( aAlphaMap, &aAlphaMap[256], 0 );
+                    ::o3tl::iota( aAlphaMap, &aAlphaMap[256], 0 );
                 }
                 else
                 {
@@ -332,10 +333,8 @@ namespace vclcanvas
                 // copy-constructing the resulting bitmap. This will
                 // rule out the possibility that cached accessor data
                 // is not yet written back.
-                ScopedBitmapWriteAccess pWriteAccess( aDstBitmap.AcquireWriteAccess(),
-                                                      aDstBitmap );
-                ScopedBitmapWriteAccess pAlphaWriteAccess( aDstAlpha.AcquireWriteAccess(),
-                                                           aDstAlpha );
+                Bitmap::ScopedWriteAccess pWriteAccess( aDstBitmap );
+                Bitmap::ScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
 
 
                 if( pWriteAccess.get() != NULL &&
@@ -542,3 +541,5 @@ namespace vclcanvas
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

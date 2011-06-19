@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@ struct HTMLOutFuncs
 #if defined(UNX)
     static const sal_Char sNewLine;     // nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char sNewLine[];   // \015\012
 #endif
 
     SVT_DLLPUBLIC static void ConvertStringToHTML( const String& sSrc, ByteString& rDest,
@@ -123,3 +124,4 @@ struct HTMLOutFuncs
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

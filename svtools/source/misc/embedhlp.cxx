@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYiBLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
@@ -55,7 +54,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 using namespace com::sun::star;
 
@@ -134,7 +133,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
                                                     ::sal_Int32 nNewState )
     throw ( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     nState = nNewState;
     if ( !pObject )
         return;
@@ -170,7 +169,7 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
 
 void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) throw (uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     if ( pObject && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
     {
         if ( nState == embed::EmbedStates::RUNNING )
@@ -181,7 +180,9 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
             else
                 pObject->UpdateReplacement();
         }
-        else if ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE )
+        else if ( nState == embed::EmbedStates::ACTIVE ||
+                  nState == embed::EmbedStates::UI_ACTIVE ||
+                  nState == embed::EmbedStates::INPLACE_ACTIVE )
         {
             // in case the object is inplace or UI active the replacement image should be updated on demand
             pObject->UpdateReplacementOnDemand();
@@ -191,18 +192,9 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
 
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
-#if 0
-    if ( pObject && aEvent.EventName.equalsAscii("OnSaveDone") || aEvent.EventName.equalsAscii("OnSaveAsDone") )
-    {
-        // TODO/LATER: container must be set before!
-        // When is this event created? Who sets the new container when it changed?
-        pObject->UpdateReplacement();
-    }
-    else
-#endif
-    if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
+    if ( pObject && aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnVisAreaChanged")) && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
     {
         pObject->UpdateReplacement();
     }
@@ -243,7 +235,6 @@ struct EmbeddedObjectRef_Impl
     ::rtl::OUString                             aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
     Graphic*                                    pGraphic;
-    Graphic*                                    pHCGraphic;
     sal_Int64                                   nViewAspect;
     sal_Bool                                        bIsLocked;
     sal_Bool                                    bNeedUpdate;
@@ -258,7 +249,6 @@ void EmbeddedObjectRef::Construct_Impl()
     mpImp = new EmbeddedObjectRef_Impl;
     mpImp->pContainer = 0;
     mpImp->pGraphic = 0;
-    mpImp->pHCGraphic = 0;
     mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
     mpImp->bIsLocked = sal_False;
     mpImp->bNeedUpdate = sal_False;
@@ -297,42 +287,16 @@ EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj )
     else
         mpImp->pGraphic = 0;
 
-    mpImp->pHCGraphic = 0;
     mpImp->mnGraphicVersion = 0;
 }
 
 EmbeddedObjectRef::~EmbeddedObjectRef()
 {
     delete mpImp->pGraphic;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     Clear();
+    delete mpImp;
 }
-/*
-EmbeddedObjectRef& EmbeddedObjectRef::operator = ( const EmbeddedObjectRef& rObj )
-{
-    DBG_ASSERT( !mxObj.is(), "Never assign an already assigned object!" );
 
-    delete mpImp->pGraphic;
-    if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
-    Clear();
-
-    mpImp->nViewAspect = rObj.mpImp->nViewAspect;
-    mpImp->bIsLocked = rObj.mpImp->bIsLocked;
-    mxObj = rObj.mxObj;
-    mpImp->xListener = EmbedEventListener_Impl::Create( this );
-    mpImp->pContainer = rObj.mpImp->pContainer;
-    mpImp->aPersistName = rObj.mpImp->aPersistName;
-    mpImp->aMediaType = rObj.mpImp->aMediaType;
-    mpImp->bNeedUpdate = rObj.mpImp->bNeedUpdate;
-
-    if ( rObj.mpImp->pGraphic && !rObj.mpImp->bNeedUpdate )
-        mpImp->pGraphic = new Graphic( *rObj.mpImp->pGraphic );
-    else
-        mpImp->pGraphic = 0;
-    return *this;
-}
-*/
 void EmbeddedObjectRef::Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     DBG_ASSERT( !mxObj.is(), "Never assign an already assigned object!" );
@@ -375,13 +339,13 @@ void EmbeddedObjectRef::Clear()
                     mxObj->changeState( embed::EmbedStates::LOADED );
                     xClose->close( sal_True );
                 }
-                catch ( util::CloseVetoException& )
+                catch (const util::CloseVetoException&)
                 {
                     // there's still someone who needs the object!
                 }
-                catch ( uno::Exception& )
+                catch (const uno::Exception&)
                 {
-                    OSL_ENSURE( sal_False, "Error on switching of the object to loaded state and closing!\n" );
+                    OSL_FAIL( "Error on switching of the object to loaded state and closing!\n" );
                 }
             }
         }
@@ -457,8 +421,6 @@ void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
         DELETEZ( mpImp->pGraphic );
         mpImp->aMediaType = ::rtl::OUString();
         mpImp->pGraphic = new Graphic;
-        if ( mpImp->pHCGraphic )
-            DELETEZ( mpImp->pHCGraphic );
         mpImp->mnGraphicVersion++;
     }
     else if ( !mpImp->pGraphic )
@@ -468,16 +430,16 @@ void EmbeddedObjectRef::GetReplacement( sal_Bool bUpdate )
     }
     else
     {
-        DBG_ERROR("No update, but replacement exists already!");
+        OSL_FAIL("No update, but replacement exists already!");
         return;
     }
 
     SvStream* pGraphicStream = GetGraphicStream( bUpdate );
     if ( pGraphicStream )
     {
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
         if( mpImp->pGraphic )
-            pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+            rGF.ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImp->mnGraphicVersion++;
         delete pGraphicStream;
     }
@@ -522,21 +484,21 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
             {
                 aSize = mxObj->getVisualAreaSize( mpImp->nViewAspect );
             }
-            catch( embed::NoVisualAreaSizeException& )
+            catch(const embed::NoVisualAreaSizeException&)
             {
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
-                OSL_ENSURE( sal_False, "Something went wrong on getting of the size of the object!" );
+                OSL_FAIL( "Something went wrong on getting of the size of the object!" );
             }
 
             try
             {
                 aSourceMapMode = VCLUnoHelper::UnoEmbed2VCLMapUnit( mxObj->getMapUnit( mpImp->nViewAspect ) );
             }
-            catch( uno::Exception )
+            catch(const uno::Exception&)
             {
-                OSL_ENSURE( sal_False, "Can not get the map mode!" );
+                OSL_FAIL( "Can not get the map mode!" );
             }
         }
 
@@ -555,70 +517,6 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
     return aResult;
 }
 
-Graphic* EmbeddedObjectRef::GetHCGraphic() const
-{
-    if ( !mpImp->pHCGraphic )
-    {
-        uno::Reference< io::XInputStream > xInStream;
-        try
-        {
-            // if the object needs size on load, that means that it is not our object
-            // currently the HC mode is supported only for OOo own objects so the following
-            // check is used as an optimization
-            // TODO/LATER: shouldn't there be a special status flag to detect alien implementation?
-            if ( mpImp->nViewAspect == embed::Aspects::MSOLE_CONTENT
-              && mxObj.is() && !( mxObj->getStatus( mpImp->nViewAspect ) & embed::EmbedMisc::EMBED_NEEDSSIZEONLOAD ) )
-            {
-                // TODO/LATER: optimization, it makes no sence to do it for OLE objects
-                if ( mxObj->getCurrentState() == embed::EmbedStates::LOADED )
-                    mxObj->changeState( embed::EmbedStates::RUNNING );
-
-                // TODO: return for the aspect of the document
-                embed::VisualRepresentation aVisualRepresentation;
-                uno::Reference< datatransfer::XTransferable > xTransferable( mxObj->getComponent(), uno::UNO_QUERY );
-                if ( !xTransferable.is() )
-                    throw uno::RuntimeException();
-
-                datatransfer::DataFlavor aDataFlavor(
-                        ::rtl::OUString::createFromAscii(
-                                "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-                        ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
-                        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
-
-                uno::Sequence < sal_Int8 > aSeq;
-                if ( ( xTransferable->getTransferData( aDataFlavor ) >>= aSeq ) && aSeq.getLength() )
-                    xInStream = new ::comphelper::SequenceInputStream( aSeq );
-            }
-        }
-        catch ( uno::Exception& )
-        {
-        }
-
-        if ( xInStream.is() )
-        {
-            SvStream* pStream = NULL;
-            pStream = ::utl::UcbStreamHelper::CreateStream( xInStream );
-            if ( pStream )
-            {
-                if ( !pStream->GetError() )
-                {
-                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    Graphic* pGraphic = new Graphic();
-                    if ( pGF->ImportGraphic( *pGraphic, String(), *pStream, GRFILTER_FORMAT_DONTKNOW ) == 0 )
-                        mpImp->pHCGraphic = pGraphic;
-                    else
-                        delete pGraphic;
-                    mpImp->mnGraphicVersion++;
-                }
-
-                delete pStream;
-            }
-        }
-    }
-
-    return mpImp->pHCGraphic;
-}
-
 void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
                                             const ::rtl::OUString& rMediaType )
 {
@@ -626,16 +524,14 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic();
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
     SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xInGrStream );
 
     if ( pGraphicStream )
     {
-        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-        pGF->ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+        rGF.ImportGraphic( *mpImp->pGraphic, String(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
         mpImp->mnGraphicVersion++;
 
         if ( mpImp->pContainer )
@@ -659,8 +555,6 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
         delete mpImp->pGraphic;
     mpImp->pGraphic = new Graphic( rGraphic );
     mpImp->aMediaType = rMediaType;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
     if ( mpImp->pContainer )
@@ -839,7 +733,7 @@ sal_Bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbe
         if ( xEmbObj->getCurrentState() == embed::EmbedStates::LOADED )
             xEmbObj->changeState( embed::EmbedStates::RUNNING );
     }
-    catch ( uno::Exception& )
+    catch (const uno::Exception&)
     {
         return sal_False;
     }
@@ -862,7 +756,7 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
            aContainer.InsertGraphicStream( xStream, aName, aMediaType );
     }
     else
-        OSL_ENSURE( sal_False, "Export of graphic is failed!\n" );
+        OSL_FAIL( "Export of graphic is failed!\n" );
 }
 
 sal_Bool EmbeddedObjectRef::ObjectIsModified( const uno::Reference< embed::XEmbeddedObject >& xObj )
@@ -896,8 +790,6 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
     DELETEZ( mpImp->pGraphic );
     mpImp->bNeedUpdate = sal_True;
-    if ( mpImp->pHCGraphic )
-        DELETEZ( mpImp->pHCGraphic );
     mpImp->mnGraphicVersion++;
 
     if( mpImp->pContainer )
@@ -954,3 +846,4 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
 
 } // namespace svt
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

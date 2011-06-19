@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 
-#ifndef _DATAFORMATTRANSLATOR_HXX_
 #include "DataFmtTransl.hxx"
-#endif
 #include "..\misc\ImplHelper.hxx"
 #include "..\misc\WinClip.hxx"
 
@@ -55,8 +54,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 //
@@ -284,7 +284,7 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
                 aFormatEtcContainer.addFormatEtc( fetc );
 
                 // and HTML Format
-                OUString htmlFormat( OUString::createFromAscii( "HTML Format" ) );
+                OUString htmlFormat( RTL_CONSTASCII_USTRINGPARAM("HTML Format") );
                 aFormatEtcContainer.addFormatEtc(
                     m_DataFormatTranslator.getFormatEtcForClipformatName( htmlFormat ) );
             }
@@ -362,8 +362,8 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
     try
     {
         Reference< XMimeContentTypeFactory > xMimeFac(
-            m_SrvMgr->createInstance( OUString::createFromAscii( \
-                "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
+            m_SrvMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( \
+                "com.sun.star.datatransfer.MimeContentTypeFactory" )) ), UNO_QUERY );
 
         if( xMimeFac.is( ) )
         {
@@ -376,11 +376,11 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
     }
     catch(NoSuchElementException&)
     {
-        OSL_ENSURE( sal_False, "Unexpected" );
+        OSL_FAIL( "Unexpected" );
     }
     catch(...)
     {
-        OSL_ENSURE( sal_False, "Invalid data flavor" );
+        OSL_FAIL( "Invalid data flavor" );
     }
 
     return charset;
@@ -478,3 +478,4 @@ BOOL CALLBACK CFormatRegistrar::EnumLocalesProc( LPSTR lpLocaleStr )
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

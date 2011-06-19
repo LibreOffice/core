@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ transliteration_commonclass::compareString( const OUString& str1, const OUString
 OUString SAL_CALL
 transliteration_commonclass::transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount ) throw(RuntimeException)
 {
-    static Sequence < sal_Int32 > dummy_offset;
+    Sequence < sal_Int32 > dummy_offset;
     useOffset = sal_False;
     OUString tmpStr = transliterate(inStr, startPos, nCount, dummy_offset);
     useOffset = sal_True;
@@ -162,3 +163,5 @@ Sequence< OUString > SAL_CALL transliteration_commonclass::getSupportedServiceNa
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,35 +34,39 @@
 // -----------------------------------------------------------------------
 
 // Return true if valid fallback found
-sal_Bool GetIsoFallback( ByteString& rLanguage )
+bool GetIsoFallback(rtl::OString& rLanguage)
 {
-    rLanguage.EraseLeadingAndTrailingChars();
-    if( rLanguage.Len() ){
-        xub_StrLen nSepPos = rLanguage.Search( '-' );
-        if ( nSepPos == STRING_NOTFOUND ){
-            if ( rLanguage.Equals("en"))
+    rLanguage = rLanguage.trim();
+    if (!rLanguage.isEmpty())
+    {
+        sal_Int32 nSepPos = rLanguage.indexOf('-');
+        if (nSepPos == -1)
+        {
+            if (rLanguage == rtl::OString(RTL_CONSTASCII_STRINGPARAM("en")))
             {
                 // en -> ""
-                rLanguage.Erase();
+                rLanguage = rtl::OString();
                 return false;
             }
             else
             {
                 // de -> en-US ;
-                rLanguage = ByteString("en-US");
+                rLanguage = rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"));
                 return true;
             }
         }
-        else if( !( nSepPos == 1 && ( rLanguage.GetChar(0) == 'x' || rLanguage.GetChar(0) == 'X' ) ) )
+        else if( !(nSepPos == 1 && (rLanguage.toChar() == 'x' || rLanguage.toChar() == 'X')) )
         {
             // de-CH -> de ;
             // try erase from -
-            rLanguage = rLanguage.GetToken( 0, '-');
+            sal_Int32 nIndex = 0;
+            rLanguage = rLanguage.getToken(0, '-', nIndex);
             return true;
         }
     }
     // "" -> ""; x-no-translate -> ""
-    rLanguage.Erase();
+    rLanguage = rtl::OString();
     return false;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

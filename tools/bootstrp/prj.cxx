@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,19 +30,12 @@
 #include "precompiled_tools.hxx"
 #include <stdlib.h>
 #include <stdio.h>
-//#include "bootstrp/sstring.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <tools/stream.hxx>
-#include <tools/geninfo.hxx>
 #include "bootstrp/prj.hxx"
-#include "bootstrp/inimgr.hxx"
 
-DECLARE_LIST( UniStringList, UniString* )
-
-//#define TEST  1
-
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 #define LIST_DELIMETER ';'
 #define PATH_DELIMETER '\\'
 #elif defined UNX
@@ -49,49 +43,24 @@ DECLARE_LIST( UniStringList, UniString* )
 #define PATH_DELIMETER '/'
 #endif
 
-//Link Star::aDBNotFoundHdl;
-
-//
-//  class SimpleConfig
-//
-
-/*****************************************************************************/
-SimpleConfig::SimpleConfig( String aSimpleConfigFileName )
-/*****************************************************************************/
+SimpleConfig::SimpleConfig(const String &rSimpleConfigFileName)
 {
-    nLine = 0;
-    aFileName = aSimpleConfigFileName;
-    aFileStream.Open ( aFileName, STREAM_READ );
+    aFileStream.Open(rSimpleConfigFileName, STREAM_READ);
 }
 
-/*****************************************************************************/
-SimpleConfig::SimpleConfig( DirEntry& rDirEntry )
-/*****************************************************************************/
-{
-    nLine = 0;
-    aFileName = rDirEntry.GetFull();
-    aFileStream.Open ( aFileName, STREAM_READ );
-}
-
-/*****************************************************************************/
 SimpleConfig::~SimpleConfig()
-/*****************************************************************************/
 {
     aFileStream.Close ();
 }
 
-/*****************************************************************************/
 ByteString SimpleConfig::GetNext()
-/*****************************************************************************/
 {
-    ByteString aString;
-
     if ( aStringBuffer =="" )
       while ((aStringBuffer = GetNextLine()) == "\t") ; //solange bis != "\t"
     if ( aStringBuffer =="" )
         return ByteString();
 
-    aString = aStringBuffer.GetToken(0,'\t');
+    ByteString aString = aStringBuffer.GetToken(0,'\t');
     aStringBuffer.Erase(0, aString.Len()+1);
 
     aStringBuffer.EraseLeadingChars( '\t' );
@@ -99,13 +68,8 @@ ByteString SimpleConfig::GetNext()
     return aString;
 }
 
-/*****************************************************************************/
 ByteString  SimpleConfig::GetNextLine()
-/*****************************************************************************/
 {
-    ByteString aSecStr;
-    nLine++;
-
     aFileStream.ReadLine ( aTmpStr );
     if ( aTmpStr.Search( "#" ) == 0 )
         return "\t";
@@ -114,7 +78,6 @@ ByteString  SimpleConfig::GetNextLine()
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
     int nLength = aTmpStr.Len();
     sal_Bool bFound = sal_False;
-    ByteString aEraseString;
     for ( sal_uInt16 i = 0; i<= nLength; i++)
     {
         if ( aTmpStr.GetChar( i ) == 0x20  && !bFound )
@@ -123,49 +86,4 @@ ByteString  SimpleConfig::GetNextLine()
     return aTmpStr;
 }
 
-/*****************************************************************************/
-ByteString SimpleConfig::GetCleanedNextLine( sal_Bool bReadComments )
-/*****************************************************************************/
-{
-
-    aFileStream.ReadLine ( aTmpStr );
-    if ( aTmpStr.Search( "#" ) == 0 )
-        {
-        if (bReadComments )
-            return aTmpStr;
-        else
-            while ( aTmpStr.Search( "#" ) == 0 )
-            {
-                aFileStream.ReadLine ( aTmpStr );
-            }
-        }
-
-    aTmpStr = aTmpStr.EraseLeadingChars();
-    aTmpStr = aTmpStr.EraseTrailingChars();
-//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (sal_uInt16)-1 );
-    int nLength = aTmpStr.Len();
-    ByteString aEraseString;
-    sal_Bool bFirstTab = sal_True;
-    for ( sal_uInt16 i = 0; i<= nLength; i++)
-    {
-        if ( aTmpStr.GetChar( i ) == 0x20 )
-            aTmpStr.SetChar( i, 0x09 );
-
-        if ( aTmpStr.GetChar( i ) ==  0x09 )
-        {
-            if ( bFirstTab )
-                bFirstTab = sal_False;
-            else
-            {
-                aTmpStr.SetChar( i, 0x20 );
-            }
-        }
-        else
-            bFirstTab = sal_True;
-
-    }
-    aTmpStr.EraseAllChars(' ');
-    return aTmpStr;
-
-}
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

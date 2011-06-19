@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,10 @@
 #ifndef _SFXSLSTITM_HXX
 #define _SFXSLSTITM_HXX
 
+#include <vector>
+
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
-#include <tools/list.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -44,15 +46,14 @@ public:
     TYPEINFO();
 
     SfxStringListItem();
-    SfxStringListItem( sal_uInt16 nWhich, const List* pList=NULL );
+    SfxStringListItem( sal_uInt16 nWhich, const std::vector<String> *pList=NULL );
     SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );
     SfxStringListItem( const SfxStringListItem& rItem );
     ~SfxStringListItem();
 
-    List *                  GetList();
+    std::vector<String>&    GetList();
 
-    const List *            GetList() const
-    { return SAL_CONST_CAST(SfxStringListItem *, this)->GetList(); }
+    const std::vector<String>& GetList() const;
 
 #ifndef TF_POOLABLE
     virtual int             IsPoolable() const;
@@ -74,11 +75,13 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream &, sal_uInt16 nVersion ) const;
     virtual SvStream&       Store( SvStream &, sal_uInt16 nItemVersion ) const;
-    void                    Sort( sal_Bool bAscending = sal_True, List* pParallelList = 0 );
+    void                    Sort( sal_Bool bAscending = sal_True);
 
-    virtual sal_Bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 );
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 ) const;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

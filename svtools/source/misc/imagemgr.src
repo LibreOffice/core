@@ -32,89 +32,73 @@
  // images ********************************************************************
 
 #define X_IMAGE_LIST \
-        IMG_IMPRESS ;           \
-        IMG_CALC ;              \
-        IMG_CALCTEMPLATE ;      \
-        IMG_CHART ;             \
-        IMG_IMPRESSTEMPLATE ;   \
-        IMG_HTML ;              \
-        IMG_MATH ;              \
-        IMG_WRITER ;            \
-        IMG_WRITERTEMPLATE ;    \
-        IMG_MACROLIB ;          \
-        IMG_GLOBAL_DOC ;        \
-        IMG_DRAW ;              \
-        IMG_DRAWTEMPLATE ;      \
-        IMG_NEWFROMTEMPLATE ;   \
-        IMG_DATABASE;           \
-        IMG_WORKPLACE ; \
-        IMG_BITMAP ; \
-        IMG_EXCEL ; \
-        IMG_EXCELTEMPLATE ; \
-        IMG_FTPSERVER ; \
-        IMG_GALLERY ; \
-        IMG_GALLERYTHEME ; \
-        IMG_GIF ; \
-        IMG_HELP ; \
-        IMG_HTML ; \
-        IMG_JPG ; \
-        IMG_LINK ; \
-        IMG_LOTUS ; \
-        IMG_MATHTEMPLATE ; \
-        IMG_FILE ; \
-        IMG_APP ; \
-        IMG_PCD ; \
-        IMG_PCT ; \
-        IMG_PCX ; \
-        IMG_SIM ; \
-        IMG_TEXTFILE ; \
-        IMG_SVHELP ; \
-        IMG_TIFF ; \
-        IMG_URL ; \
-        IMG_WMF ; \
-        IMG_WORD ; \
-        IMG_FIXEDDEV ; \
-        IMG_REMOVEABLEDEV ; \
-        IMG_CDROMDEV ; \
-        IMG_NETWORKDEV ; \
-        IMG_RAMDEV ; \
-        IMG_TABLEFOLDER ; \
-        IMG_TABLE ; \
-        IMG_FOLDER ; \
-        IMG_EXPANDEDFOLDER ; \
-        IMG_XXX ; \
-        IMG_GALLERYIMPORT ; \
-        IMG_QUERYFOLDER ; \
-        IMG_QUERY ; \
-        IMG_FORM ; \
-        IMG_FORMFOLDER ; \
-        IMG_REPORT ; \
-        IMG_REPORTFOLDER ; \
-        IMG_OTHERS ; \
-        IMG_DXF ; \
-        IMG_MET ; \
-        IMG_PNG ; \
-        IMG_SGF ; \
-        IMG_SGV ; \
-        IMG_SVM ; \
-        IMG_TASK ; \
-        IMG_APPOINTMENT ; \
-        IMG_RELATION ; \
-        IMG_IMPRESSPACKED ; \
-        IMG_POWERPOINT ; \
-        IMG_POWERPOINTTEMPLATE ; \
-        IMG_OO_DATABASE_DOC ; \
-        IMG_OO_DRAW_DOC ; \
-        IMG_OO_MATH_DOC ; \
-        IMG_OO_GLOBAL_DOC ; \
-        IMG_OO_IMPRESS_DOC ; \
-        IMG_OO_CALC_DOC ; \
-        IMG_OO_WRITER_DOC ; \
-        IMG_OO_DRAW_TEMPLATE ; \
-        IMG_OO_IMPRESS_TEMPLATE ; \
-        IMG_OO_CALC_TEMPLATE ; \
-        IMG_OO_WRITER_TEMPLATE ; \
-        IMG_EXTENSION ;
+    IMG_IMPRESS ;           \
+    IMG_CALC ;              \
+    IMG_CALCTEMPLATE ;      \
+    IMG_CHART ;             \
+    IMG_IMPRESSTEMPLATE ;   \
+    IMG_HTML ;              \
+    IMG_MATH ;              \
+    IMG_WRITER ;            \
+    IMG_WRITERTEMPLATE ;    \
+    IMG_MACROLIB ;          \
+    IMG_GLOBAL_DOC ;        \
+    IMG_DRAW ;              \
+    IMG_DRAWTEMPLATE ;      \
+    IMG_NEWFROMTEMPLATE ;   \
+    IMG_DATABASE;           \
+    IMG_BITMAP ; \
+    IMG_CALC ; \
+    IMG_CALCTEMPLATE ; \
+    IMG_CDROMDEV ; \
+    IMG_CHART ; \
+    IMG_DATABASE ; \
+    IMG_DRAW ; \
+    IMG_DRAWTEMPLATE ; \
+    IMG_DXF ; \
+    IMG_EXTENSION ; \
+    IMG_FILE ; \
+    IMG_FIXEDDEV ; \
+    IMG_FOLDER ; \
+    IMG_GIF ; \
+    IMG_GLOBAL_DOC ; \
+    IMG_HTML ; \
+    IMG_IMPRESS ; \
+    IMG_IMPRESSTEMPLATE ; \
+    IMG_JPG ; \
+    IMG_MATH ; \
+    IMG_MATHTEMPLATE ; \
+    IMG_MET ; \
+    IMG_NETWORKDEV ; \
+    IMG_OO_CALC_DOC ; \
+    IMG_OO_CALC_TEMPLATE ; \
+    IMG_OO_DATABASE_DOC ; \
+    IMG_OO_DRAW_DOC ; \
+    IMG_OO_DRAW_TEMPLATE ; \
+    IMG_OO_GLOBAL_DOC ; \
+    IMG_OO_IMPRESS_DOC ; \
+    IMG_OO_IMPRESS_TEMPLATE ; \
+    IMG_OO_MATH_DOC ; \
+    IMG_OO_WRITER_DOC ; \
+    IMG_OO_WRITER_TEMPLATE ; \
+    IMG_PCD ; \
+    IMG_PCT ; \
+    IMG_PCX ; \
+    IMG_PNG ; \
+    IMG_REMOVEABLEDEV ; \
+    IMG_SGF ; \
+    IMG_SGV ; \
+    IMG_SIM ; \
+    IMG_SVM ; \
+    IMG_TABLE ; \
+    IMG_TEXTFILE ; \
+    IMG_TIFF ; \
+    IMG_WMF ; \
+    IMG_WRITER ; \
+    IMG_WRITERTEMPLATE ; \
+    /* svx */ \
+    IMG_MACROLIB ; \
+    IMG_NEWFROMTEMPLATE ;
 
 ImageList RID_SVTOOLS_IMAGELIST_BIG
 {
@@ -126,7 +110,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
     };
     IdCount =
     {
-        83 ;
+        66 ;
     };
 };
 
@@ -140,41 +124,22 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
     IdCount =
     {
-        83;
-    };
-};
-
-ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
-{
-    Prefix = "lxh";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-    IdList =
-    {
-        X_IMAGE_LIST
-    };
-    IdCount =
-    {
-        83 ;
-    };
-};
-
-ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
-{
-    Prefix = "sxh";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-    IdList =
-    {
-        X_IMAGE_LIST
-    };
-    IdCount =
-    {
-        83;
+        66;
     };
 };
 
 Bitmap BMP_PLUGIN
 {
     File = "plugin.png" ;
+};
+
+Image BMP_LIST_ADD
+{
+    ImageBitmap = Bitmap
+    {
+        File = "list_add.png" ;
+    };
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
 };
 
 // description strings
@@ -242,7 +207,7 @@ String STR_DESCRIPTION_SDRAW_DOC
 
 String STR_DESCRIPTION_SDATABASE_DOC
 {
-    Text [ en-US ] = "%STAROFFICE Database" ;
+    Text [ en-US ] = "StarOffice Database" ;
 };
 
 String STR_DESCRIPTION_SCALC_DOC
@@ -263,7 +228,7 @@ String STR_DESCRIPTION_GLOBALDOC
 };
 String STR_DESCRIPTION_SIMAGE_DOC
 {
-    Text [ en-US ] = "%STAROFFICE Image" ;
+    Text [ en-US ] = "StarOffice Image" ;
 };
 String STR_DESCRIPTION_TEXTFILE
 {
@@ -275,7 +240,7 @@ String STR_DESCRIPTION_LINK
 };
 String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
 {
-    Text [ en-US ] = "%STAROFFICE 3.0 - 5.0 Template" ;
+    Text [ en-US ] = "StarOffice 3.0 - 5.0 Template" ;
 };
 String STR_DESCRIPTION_EXCEL_DOC
 {
@@ -459,7 +424,6 @@ String STR_DESCRIPTION_OO_WRITER_TEMPLATE
 {
     Text [ en-US ] = "OpenDocument Text Template" ;
 };
-
 String STR_DESCRIPTION_EXTENSION
 {
     Text [ en-US ] = "%PRODUCTNAME Extension" ;

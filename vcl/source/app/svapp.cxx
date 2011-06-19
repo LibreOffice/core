@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,8 +40,6 @@
 #include "rtl/tencinfo.h"
 #include "rtl/instance.hxx"
 
-#include "vos/process.hxx"
-#include "vos/mutex.hxx"
 
 #include "tools/tools.h"
 #include "tools/debug.hxx"
@@ -78,6 +77,8 @@
 #include "com/sun/star/awt/XToolkit.hpp"
 #include "com/sun/star/uno/XNamingService.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "osl/mutex.hxx"
+#include "osl/process.h"
 
 #include <utility>
 
@@ -145,7 +146,6 @@ namespace
 }
 
 
-// #include <usr/refl.hxx>
 class Reflection;
 
 
@@ -272,12 +272,6 @@ void Application::ShowStatusText( const XubString& )
 
 // -----------------------------------------------------------------------
 
-void Application::ShowHelpStatusText( const XubString& )
-{
-}
-
-// -----------------------------------------------------------------------
-
 void Application::ActivateExtHelp()
 {
 }
@@ -291,12 +285,6 @@ void Application::DeactivateExtHelp()
 // -----------------------------------------------------------------------
 
 void Application::HideStatusText()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void Application::HideHelpStatusText()
 {
 }
 
@@ -318,6 +306,11 @@ void Application::Init()
 }
 
 // -----------------------------------------------------------------------
+void Application::InitFinished()
+{
+}
+
+// -----------------------------------------------------------------------
 
 void Application::DeInit()
 {
@@ -327,18 +320,16 @@ void Application::DeInit()
 
 sal_uInt16 Application::GetCommandLineParamCount()
 {
-    vos::OStartupInfo aStartInfo;
-    return (sal_uInt16)aStartInfo.getCommandArgCount();
+    return (sal_uInt16)osl_getCommandArgCount();
 }
 
 // -----------------------------------------------------------------------
 
 XubString Application::GetCommandLineParam( sal_uInt16 nParam )
 {
-    vos::OStartupInfo   aStartInfo;
-    rtl::OUString       aParam;
-    aStartInfo.getCommandArg( nParam, aParam );
-    return XubString( aParam );
+    rtl::OUString aParam;
+    osl_getCommandArg( nParam, &aParam.pData );
+    return aParam;
 }
 
 // -----------------------------------------------------------------------
@@ -357,10 +348,8 @@ const XubString& Application::GetAppFileName()
     static String aAppFileName;
     if( !aAppFileName.Len() )
     {
-        vos::OStartupInfo   aStartInfo;
-        ::rtl::OUString     aExeFileName;
-
-        aStartInfo.getExecutableFile( aExeFileName );
+        rtl::OUString aExeFileName;
+        osl_getExecutableFile( &aExeFileName.pData );
 
         // convert path to native file format
         rtl::OUString aNativeFileName;
@@ -527,7 +516,7 @@ void Application::Quit()
 
 // -----------------------------------------------------------------------
 
-vos::IMutex& Application::GetSolarMutex()
+osl::SolarMutex& Application::GetSolarMutex()
 {
     ImplSVData* pSVData = ImplGetSVData();
     return *(pSVData->mpDefInst->GetYieldMutex());
@@ -535,7 +524,7 @@ vos::IMutex& Application::GetSolarMutex()
 
 // -----------------------------------------------------------------------
 
-vos::OThread::TThreadIdentifier Application::GetMainThreadIdentifier()
+oslThreadIdentifier Application::GetMainThreadIdentifier()
 {
     return ImplGetSVData()->mnMainThreadId;
 }
@@ -850,8 +839,7 @@ void Application::ImplCallEventListeners( sal_uLong nEvent, Window *pWin, void* 
     VclWindowEvent aEvent( pWin, nEvent, pData );
 
     if ( pSVData->maAppData.mpEventListeners )
-        if ( !pSVData->maAppData.mpEventListeners->empty() )
-            pSVData->maAppData.mpEventListeners->Call( &aEvent );
+        pSVData->maAppData.mpEventListeners->Call( &aEvent );
 }
 
 // -----------------------------------------------------------------------
@@ -861,8 +849,7 @@ void Application::ImplCallEventListeners( VclSimpleEvent* pEvent )
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maAppData.mpEventListeners )
-        if ( !pSVData->maAppData.mpEventListeners->empty() )
-            pSVData->maAppData.mpEventListeners->Call( pEvent );
+        pSVData->maAppData.mpEventListeners->Call( pEvent );
 }
 
 // -----------------------------------------------------------------------
@@ -872,7 +859,7 @@ void Application::AddEventListener( const Link& rEventListener )
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpEventListeners )
         pSVData->maAppData.mpEventListeners = new VclEventListeners;
-    pSVData->maAppData.mpEventListeners->push_back( rEventListener );
+    pSVData->maAppData.mpEventListeners->addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -881,7 +868,7 @@ void Application::RemoveEventListener( const Link& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->remove( rEventListener );
+        pSVData->maAppData.mpEventListeners->removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -890,7 +877,7 @@ void Application::AddKeyListener( const Link& rKeyListener )
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpKeyListeners )
         pSVData->maAppData.mpKeyListeners = new VclEventListeners;
-    pSVData->maAppData.mpKeyListeners->push_back( rKeyListener );
+    pSVData->maAppData.mpKeyListeners->addListener( rKeyListener );
 }
 
 // -----------------------------------------------------------------------
@@ -899,7 +886,7 @@ void Application::RemoveKeyListener( const Link& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpKeyListeners )
-        pSVData->maAppData.mpKeyListeners->remove( rKeyListener );
+        pSVData->maAppData.mpKeyListeners->removeListener( rKeyListener );
 }
 
 // -----------------------------------------------------------------------
@@ -913,8 +900,7 @@ sal_Bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyE
     sal_Bool bProcessed = sal_False;
 
     if ( pSVData->maAppData.mpKeyListeners )
-        if ( !pSVData->maAppData.mpKeyListeners->empty() )
-            bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
+        bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
 
     return bProcessed;
 }
@@ -923,7 +909,7 @@ sal_Bool Application::HandleKey( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyE
 
 sal_uLong Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     sal_uLong               nEventId = 0;
 
     if( pWin && pKeyEvent )
@@ -950,7 +936,7 @@ sal_uLong Application::PostKeyEvent( sal_uLong nEvent, Window *pWin, KeyEvent* p
 
 sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEvent* pMouseEvent )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     sal_uLong               nEventId = 0;
 
     if( pWin && pMouseEvent )
@@ -985,7 +971,7 @@ sal_uLong Application::PostMouseEvent( sal_uLong nEvent, Window *pWin, MouseEven
 
 IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
     sal_uLong               nEvent;
@@ -1048,7 +1034,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
 
 void Application::RemoveMouseAndKeyEvents( Window* pWin )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     // remove all events for specific window, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1072,7 +1058,7 @@ void Application::RemoveMouseAndKeyEvents( Window* pWin )
 
 sal_Bool Application::IsProcessedMouseOrKeyEvent( sal_uLong nEventId )
 {
-    const ::vos::OGuard aGuard( GetSolarMutex() );
+    const SolarMutexGuard aGuard;
 
     // find event
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
@@ -1601,7 +1587,7 @@ Window* Application::GetDefDialogParent()
                 // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
                 if( !pWin->mpWindowImpl )
                 {
-                    DBG_ERROR( "Window hierarchy corrupted!" );
+                    OSL_FAIL( "Window hierarchy corrupted!" );
                     pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
                     return NULL;
                 }
@@ -2091,3 +2077,5 @@ void Application::SetPropertyHandler( PropertyHandler* p )
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

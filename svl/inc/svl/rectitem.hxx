@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,11 +68,12 @@ public:
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  aVal = rNewVal;
                              }
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 );
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

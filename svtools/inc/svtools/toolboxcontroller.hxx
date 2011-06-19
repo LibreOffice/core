@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,10 +50,8 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 //end
-#ifndef INCLUDED_HASH_MAP
-#include <hash_map>
-#define INCLUDED_HASH_MAP
-#endif
+
+#include <boost/unordered_map.hpp>
 
 class ToolBox;
 
@@ -144,7 +143,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
 
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
                                  ::rtl::OUStringHash,
                                  ::std::equal_to< ::rtl::OUString > > URLToDispatchMap;
@@ -156,7 +155,6 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         void unbindListener();
         sal_Bool isBound() const;
         sal_Bool hasBigImages() const;
-        sal_Bool isHighContrast() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getParent() const;
 
@@ -173,3 +171,5 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
 }
 
 #endif // _SVTOOLS_TOOLBOXCONTROLLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

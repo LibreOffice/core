@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,12 @@
 #include "precompiled_vcl.hxx"
 #include <vcl/morebtn.hxx>
 
-#ifndef _SV_RD_H
 #include <tools/rc.h>
-#endif
-
-
+#include <vector>
 
 // =======================================================================
 
-DECLARE_LIST( ImplMoreWindowList, Window* )
+typedef ::std::vector< Window* > ImplMoreWindowList;
 
 struct ImplMoreButtonData
 {
@@ -150,7 +148,6 @@ void MoreButton::Click()
 {
     Window*     pParent = GetParent();
     Size        aSize( pParent->GetSizePixel() );
-    Window*     pWindow = (mpMBData->mpItemList) ? mpMBData->mpItemList->First() : NULL;
     long        nDeltaPixel = LogicToPixel( Size( 0, mnDelta ), meUnit ).Height();
 
     // Status aendern
@@ -165,10 +162,10 @@ void MoreButton::Click()
     if ( mbState )
     {
         // Fenster anzeigen
-        while ( pWindow )
-        {
-            pWindow->Show();
-            pWindow = mpMBData->mpItemList->Next();
+        if ( mpMBData->mpItemList ) {
+            for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
+                (*mpMBData->mpItemList)[ i ]->Show();
+            }
         }
 
         // Dialogbox anpassen
@@ -195,10 +192,10 @@ void MoreButton::Click()
         pParent->SetSizePixel( aSize );
 
         // Fenster nicht mehr anzeigen
-        while ( pWindow )
-        {
-            pWindow->Hide();
-            pWindow = mpMBData->mpItemList->Next();
+        if ( mpMBData->mpItemList ) {
+            for ( size_t i = 0, n = mpMBData->mpItemList->size(); i < n; ++i ) {
+                (*mpMBData->mpItemList)[ i ]->Hide();
+            }
         }
     }
 }
@@ -208,9 +205,9 @@ void MoreButton::Click()
 void MoreButton::AddWindow( Window* pWindow )
 {
     if ( !mpMBData->mpItemList )
-        mpMBData->mpItemList = new ImplMoreWindowList( 1024, 16, 16 );
+        mpMBData->mpItemList = new ImplMoreWindowList();
 
-    mpMBData->mpItemList->Insert( pWindow, LIST_APPEND );
+    mpMBData->mpItemList->push_back( pWindow );
 
     if ( mbState )
         pWindow->Show();
@@ -222,8 +219,17 @@ void MoreButton::AddWindow( Window* pWindow )
 
 void MoreButton::RemoveWindow( Window* pWindow )
 {
-    if ( mpMBData->mpItemList )
-        mpMBData->mpItemList->Remove( pWindow );
+    if ( mpMBData->mpItemList ) {
+        for ( ImplMoreWindowList::iterator it = mpMBData->mpItemList->begin();
+              it < mpMBData->mpItemList->end();
+              ++it
+        ) {
+            if ( *it == pWindow ) {
+                mpMBData->mpItemList->erase( it );
+                break;
+            }
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -278,3 +284,4 @@ XubString MoreButton::GetLessText() const
         return PushButton::GetText();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

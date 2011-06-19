@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <sal/types.h>
 #include <rtl/process.h>
 
-#ifndef _DOWRAPPERTRANSFERABLE_HXX_
 #include "DOTransferable.hxx"
-#endif
 #include "..\misc\ImplHelper.hxx"
 #include "..\misc\WinClip.hxx"
 #include "DTransHelper.hxx"
@@ -59,7 +58,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -68,6 +66,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 //
@@ -512,7 +512,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     if ( !m_rXMimeCntFactory.is( ) )
     {
         m_rXMimeCntFactory = Reference< XMimeContentTypeFactory >( m_SrvMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")) ), UNO_QUERY );
     }
     OSL_ASSERT( m_rXMimeCntFactory.is( ) );
 
@@ -530,7 +530,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content type detected" );
+        OSL_FAIL( "Invalid content type detected" );
         bRet = sal_False;
     }
 
@@ -612,3 +612,5 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
     return retVal;
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_vcl.hxx"
 
 #include <stdlib.h>
-#include <vos/macros.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmap.hxx>
 
@@ -98,7 +98,7 @@ sal_Bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, 
         break;
 
         default:
-            DBG_ERROR( "Bitmap::Convert(): Unsupported filter" );
+            OSL_FAIL( "Bitmap::Convert(): Unsupported filter" );
         break;
     }
 
@@ -474,7 +474,7 @@ sal_Bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Li
                         nSum2 += nMask332 * nGrey33;
 
                         nSum1 = (long) sqrt( (double)( nSum1 * nSum1 + nSum2 * nSum2 ) );
-                        aGrey.SetIndex( ~(sal_uInt8) VOS_BOUND( nSum1, 0, 255 ) );
+                        aGrey.SetIndex( ~(sal_uInt8) SAL_BOUND( nSum1, 0, 255 ) );
                         pWriteAcc->SetPixel( nY, nX, aGrey );
 
                         if( nX < ( nWidth - 1 ) )
@@ -549,7 +549,7 @@ sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link*
                 const long  nLz = FRound( sin( fElev ) * 255.0 );
                 const long  nZ2 = ( ( 6 * 255 ) / 4 ) * ( ( 6 * 255 ) / 4 );
                 const long  nNzLz = ( ( 6 * 255 ) / 4 ) * nLz;
-                const sal_uInt8 cLz = (sal_uInt8) VOS_BOUND( nLz, 0, 255 );
+                const sal_uInt8 cLz = (sal_uInt8) SAL_BOUND( nLz, 0, 255 );
 
                 // fill mapping tables
                 pHMap[ 0 ] = 0;
@@ -586,7 +586,7 @@ sal_Bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link*
                         else
                         {
                             const double fGrey = nDotL / sqrt( (double)(nNx * nNx + nNy * nNy + nZ2) );
-                            aGrey.SetIndex( (sal_uInt8) VOS_BOUND( fGrey, 0, 255 ) );
+                            aGrey.SetIndex( (sal_uInt8) SAL_BOUND( fGrey, 0, 255 ) );
                         }
 
                         pWriteAcc->SetPixel( nY, nX, aGrey );
@@ -687,7 +687,7 @@ sal_Bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link* /*pP
     {
         long            nSepiaPercent = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_SEPIA ) ?
                                         pFilterParam->mcSolarGreyThreshold : 10;
-        const long      nSepia = 10000 - 100 * VOS_BOUND( nSepiaPercent, 0, 100 );
+        const long      nSepia = 10000 - 100 * SAL_BOUND( nSepiaPercent, 0, 100 );
         BitmapPalette   aSepiaPal( 256 );
 
         DBG_ASSERT( nSepiaPercent <= 100, "Bitmap::ImplSepia(): sepia value out of range; defaulting to 100%" );
@@ -1007,3 +1007,5 @@ sal_Bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link*
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

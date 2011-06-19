@@ -523,7 +523,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     else
     {
-        DBG_ERROR( "unsupported class" );
+        OSL_FAIL( "unsupported class" );
     }
     mpController->updateEnableState();
 }
@@ -555,7 +555,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     else
     {
-        DBG_ERROR( "unsupported class" );
+        OSL_FAIL( "unsupported class" );
     }
     mpController->updateEnableState();
 }
@@ -1033,7 +1033,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     aFieldRect.origin.y = rCurY - aFieldRect.size.height;
     [pFieldView setFrame: aFieldRect];
 
-    if( rCtrlType.equalsAscii( "Range" ) )
+    if( rCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) ) )
     {
         // add a stepper control
         NSRect aStepFrame = { { aFieldRect.origin.x + aFieldRect.size.width + 5,
@@ -1352,7 +1352,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
         }
         else
         {
-            DBG_ERROR( "Unsupported UI option" );
+            OSL_FAIL( "Unsupported UI option" );
         }
     }
         

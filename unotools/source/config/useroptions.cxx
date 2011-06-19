@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -54,9 +55,9 @@
 #include <unotools/loghelper.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using ::rtl::OUString;
 
 namespace css = ::com::sun::star;
 
@@ -145,30 +146,21 @@ static sal_Int32            nRefCount = 0;
 
 #define READONLY_DEFAULT    sal_False
 
-/*-- 16.06.2009 14:22:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SvtUserConfigChangeListener_Impl::SvtUserConfigChangeListener_Impl(SvtUserOptions_Impl& rParent) :
     m_rParent( rParent )
 {
 }
-/*-- 16.06.2009 14:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvtUserConfigChangeListener_Impl::~SvtUserConfigChangeListener_Impl()
 {
 }
-/*-- 16.06.2009 14:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtUserConfigChangeListener_Impl::changesOccurred( const util::ChangesEvent& rEvent ) throw(RuntimeException)
 {
     if(rEvent.Changes.getLength())
         m_rParent.Notify();
 }
-/*-- 16.06.2009 14:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtUserConfigChangeListener_Impl::disposing( const lang::EventObject& rSource ) throw(RuntimeException)
 {
     try
@@ -212,7 +204,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
         LogHelper::logIt(ex);
     }
 
-    Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    Any aAny = ConfigManager::GetConfigManager().GetDirectConfigProperty( ConfigManager::LOCALE );
     ::rtl::OUString aLocale;
     if ( aAny >>= aLocale )
         m_aLocale = aLocale;
@@ -234,7 +226,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_so) >>= sCompany;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_so) >>= sCompany;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -250,7 +243,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sgivenname) >>= sFirstName;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sgivenname) >>= sFirstName;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -266,7 +260,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_ssn) >>= sLastName;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_ssn) >>= sLastName;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -282,7 +277,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sinitials) >>= sID;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sinitials) >>= sID;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -298,7 +294,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sstreet) >>= sStreet;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sstreet) >>= sStreet;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -314,7 +311,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sl) >>= sCity;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sl) >>= sCity;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -330,7 +328,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sst) >>= sState;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sst) >>= sState;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -346,7 +345,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_spostalcode) >>= sZip;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_spostalcode) >>= sZip;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -362,7 +362,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sc) >>= sCountry;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sc) >>= sCountry;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -378,7 +379,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sposition) >>= sPosition;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sposition) >>= sPosition;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -394,7 +396,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_stitle) >>= sTitle;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_stitle) >>= sTitle;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -410,7 +413,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_shomephone) >>= sTelephoneHome;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_shomephone) >>= sTelephoneHome;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -426,7 +430,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_stelephonenumber) >>= sTelephoneWork;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_stelephonenumber) >>= sTelephoneWork;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -442,7 +447,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sfacsimiletelephonenumber) >>= sFax;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sfacsimiletelephonenumber) >>= sFax;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -458,7 +464,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_smail) >>= sEmail;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_smail) >>= sEmail;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -474,7 +481,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_scustomernumber) >>= sCustomerNumber;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_scustomernumber) >>= sCustomerNumber;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -490,7 +498,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sfathersname) >>= sFathersName;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sfathersname) >>= sFathersName;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -506,7 +515,8 @@ SvtUserOptions_Impl::~SvtUserOptions_Impl()
 
     try
     {
-        m_xData->getPropertyValue(s_sapartment) >>= sApartment;
+        if (m_xData.is())
+            m_xData->getPropertyValue(s_sapartment) >>= sApartment;
     }
     catch ( const css::uno::Exception& ex )
     {
@@ -520,7 +530,8 @@ void SvtUserOptions_Impl::SetCompany( const ::rtl::OUString& sCompany )
 {
     try
     {
-        m_xData->setPropertyValue(s_so, css::uno::makeAny(::rtl::OUString(sCompany)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_so, css::uno::makeAny(::rtl::OUString(sCompany)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -533,7 +544,8 @@ void SvtUserOptions_Impl::SetFirstName( const ::rtl::OUString& sFirstName )
 {
     try
     {
-        m_xData->setPropertyValue(s_sgivenname, css::uno::makeAny(::rtl::OUString(sFirstName)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sgivenname, css::uno::makeAny(::rtl::OUString(sFirstName)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -546,7 +558,8 @@ void SvtUserOptions_Impl::SetLastName( const ::rtl::OUString& sLastName )
 {
     try
     {
-        m_xData->setPropertyValue(s_ssn, css::uno::makeAny(::rtl::OUString(sLastName)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_ssn, css::uno::makeAny(::rtl::OUString(sLastName)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -558,7 +571,8 @@ void SvtUserOptions_Impl::SetID( const ::rtl::OUString& sID )
 {
     try
     {
-        m_xData->setPropertyValue(s_sinitials, css::uno::makeAny(::rtl::OUString(sID)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sinitials, css::uno::makeAny(::rtl::OUString(sID)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -571,7 +585,8 @@ void SvtUserOptions_Impl::SetStreet( const ::rtl::OUString& sStreet )
 {
     try
     {
-        m_xData->setPropertyValue(s_sstreet, css::uno::makeAny(::rtl::OUString(sStreet)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sstreet, css::uno::makeAny(::rtl::OUString(sStreet)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -584,7 +599,8 @@ void SvtUserOptions_Impl::SetCity( const ::rtl::OUString& sCity )
 {
     try
     {
-        m_xData->setPropertyValue(s_sl, css::uno::makeAny(::rtl::OUString(sCity)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sl, css::uno::makeAny(::rtl::OUString(sCity)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -597,7 +613,8 @@ void SvtUserOptions_Impl::SetState( const ::rtl::OUString& sState )
 {
     try
     {
-        m_xData->setPropertyValue(s_sst, css::uno::makeAny(::rtl::OUString(sState)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sst, css::uno::makeAny(::rtl::OUString(sState)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -610,7 +627,8 @@ void SvtUserOptions_Impl::SetZip( const ::rtl::OUString& sZip )
 {
     try
     {
-        m_xData->setPropertyValue(s_spostalcode, css::uno::makeAny(::rtl::OUString(sZip)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_spostalcode, css::uno::makeAny(::rtl::OUString(sZip)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -623,7 +641,8 @@ void SvtUserOptions_Impl::SetCountry( const ::rtl::OUString& sCountry )
 {
     try
     {
-        m_xData->setPropertyValue(s_sc, css::uno::makeAny(::rtl::OUString(sCountry)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sc, css::uno::makeAny(::rtl::OUString(sCountry)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -636,7 +655,8 @@ void SvtUserOptions_Impl::SetPosition( const ::rtl::OUString& sPosition )
 {
     try
     {
-        m_xData->setPropertyValue(s_sposition, css::uno::makeAny(::rtl::OUString(sPosition)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sposition, css::uno::makeAny(::rtl::OUString(sPosition)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -649,7 +669,8 @@ void SvtUserOptions_Impl::SetTitle( const ::rtl::OUString& sTitle )
 {
     try
     {
-        m_xData->setPropertyValue(s_stitle, css::uno::makeAny(::rtl::OUString(sTitle)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_stitle, css::uno::makeAny(::rtl::OUString(sTitle)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -662,7 +683,8 @@ void SvtUserOptions_Impl::SetTelephoneHome( const ::rtl::OUString& sTelephoneHom
 {
     try
     {
-        m_xData->setPropertyValue(s_shomephone, css::uno::makeAny(::rtl::OUString(sTelephoneHome)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_shomephone, css::uno::makeAny(::rtl::OUString(sTelephoneHome)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -675,7 +697,8 @@ void SvtUserOptions_Impl::SetTelephoneWork( const ::rtl::OUString& sTelephoneWor
 {
     try
     {
-        m_xData->setPropertyValue(s_stelephonenumber, css::uno::makeAny(::rtl::OUString(sTelephoneWork)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_stelephonenumber, css::uno::makeAny(::rtl::OUString(sTelephoneWork)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -688,7 +711,8 @@ void SvtUserOptions_Impl::SetFax( const ::rtl::OUString& sFax )
 {
     try
     {
-        m_xData->setPropertyValue(s_sfacsimiletelephonenumber, css::uno::makeAny(::rtl::OUString(sFax)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sfacsimiletelephonenumber, css::uno::makeAny(::rtl::OUString(sFax)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -701,7 +725,8 @@ void SvtUserOptions_Impl::SetEmail( const ::rtl::OUString& sEmail )
 {
     try
     {
-        m_xData->setPropertyValue(s_smail, css::uno::makeAny(::rtl::OUString(sEmail)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_smail, css::uno::makeAny(::rtl::OUString(sEmail)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -714,7 +739,8 @@ void SvtUserOptions_Impl::SetCustomerNumber( const ::rtl::OUString& sCustomerNum
 {
     try
     {
-        m_xData->setPropertyValue(s_scustomernumber, css::uno::makeAny(::rtl::OUString(sCustomerNumber)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_scustomernumber, css::uno::makeAny(::rtl::OUString(sCustomerNumber)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -727,7 +753,8 @@ void SvtUserOptions_Impl::SetFathersName( const ::rtl::OUString& sFathersName )
 {
     try
     {
-        m_xData->setPropertyValue(s_sfathersname, css::uno::makeAny(::rtl::OUString(sFathersName)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sfathersname, css::uno::makeAny(::rtl::OUString(sFathersName)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -740,7 +767,8 @@ void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
 {
     try
     {
-        m_xData->setPropertyValue(s_sapartment, css::uno::makeAny(::rtl::OUString(sApartment)));
+        if (m_xData.is())
+            m_xData->setPropertyValue(s_sapartment, css::uno::makeAny(::rtl::OUString(sApartment)));
         ::comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch ( const css::uno::Exception& ex)
@@ -758,7 +786,7 @@ void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
     sFullName = GetFirstName();
     sFullName.trim();
     if ( sFullName.getLength() )
-        sFullName += ::rtl::OUString::createFromAscii(" ");
+        sFullName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
     sFullName += GetLastName();
     sFullName.trim();
 
@@ -957,27 +985,14 @@ SvtUserOptions::~SvtUserOptions()
 
 // -----------------------------------------------------------------------
 
+namespace
+{
+    class theUserOptionsMutex : public rtl::Static<osl::Mutex, theUserOptionsMutex>{};
+}
+
 ::osl::Mutex& SvtUserOptions::GetInitMutex()
 {
-    // Initialize static mutex only for one time!
-    static ::osl::Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if ( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        // We must check our pointer again -
-        // because another instance of our class will be faster then this instance!
-        if ( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static ::osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theUserOptionsMutex::get();
 }
 
 // -----------------------------------------------------------------------
@@ -1295,3 +1310,5 @@ sal_Bool SvtUserOptions::IsTokenReadonly( sal_uInt16 nToken ) const
     ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetToken( nToken );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

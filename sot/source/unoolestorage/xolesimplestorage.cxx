@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -83,14 +84,14 @@ OLESimpleStorage::~OLESimpleStorage()
 uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.OLESimpleStorage");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OLESimpleStorage"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OLESimpleStorage::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OLESimpleStorage");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.OLESimpleStorage"));
 }
 
 //-------------------------------------------------------------------------
@@ -266,7 +267,7 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
     else
     {
         uno::Reference < io::XStream > xTempFile(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
                 uno::UNO_QUERY_THROW );
         uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
         uno::Reference< io::XOutputStream > xTempOut = xTempFile->getOutputStream();
@@ -425,7 +426,7 @@ void SAL_CALL OLESimpleStorage::replaceByName( const ::rtl::OUString& aName, con
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
 
-        throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+        throw lang::WrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can't copy raw stream")),
                                             uno::Reference< uno::XInterface >(),
                                             aCaught );
     }
@@ -451,7 +452,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const ::rtl::OUString& aName )
     uno::Any aResult;
 
     uno::Reference< io::XStream > xTempFile(
-        m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+        m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
         uno::UNO_QUERY );
     uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
     uno::Reference< io::XOutputStream > xOutputStream = xTempFile->getOutputStream();
@@ -487,7 +488,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const ::rtl::OUString& aName )
 
         uno::Reference< container::XNameContainer > xResultNameContainer(
             m_xFactory->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OLESimpleStorage")),
                     aArgs ),
             uno::UNO_QUERY_THROW );
 
@@ -565,8 +566,8 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::getElementNames()
         throw uno::RuntimeException(); // TODO:
     }
 
-    uno::Sequence< ::rtl::OUString > aSeq( aList.Count() );
-    for ( sal_uInt32 nInd = 0; nInd < aList.Count(); nInd++ )
+    uno::Sequence< ::rtl::OUString > aSeq( aList.size() );
+    for ( sal_uInt32 nInd = 0; nInd < aList.size(); nInd++ )
         aSeq[nInd] = aList[nInd].GetName();
 
     return aSeq;
@@ -628,7 +629,7 @@ sal_Bool SAL_CALL OLESimpleStorage::hasElements()
         throw uno::RuntimeException(); // TODO:
     }
 
-    return ( aList.Count() != 0 );
+    return ( aList.size() != 0 );
 }
 
 //____________________________________________________________________________________________________
@@ -809,3 +810,4 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::getSupportedServiceN
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

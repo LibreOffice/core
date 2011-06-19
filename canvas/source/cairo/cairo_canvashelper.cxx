@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -787,7 +788,12 @@ namespace cairocanvas
             else if ( aTexture.RepeatModeX == rendering::TexturingMode::CLAMP &&
                       aTexture.RepeatModeY == rendering::TexturingMode::CLAMP )
             {
+#if CAIRO_VERSION >= 10200
                 cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_PAD );
+#else
+#warning "fallback for cairo before version 1.2"
+                cairo_pattern_set_extend( pPattern, CAIRO_EXTEND_NONE );
+#endif
             }
 
             aScaledTextureMatrix.x0 = basegfx::fround( aScaledTextureMatrix.x0 );
@@ -1064,7 +1070,7 @@ namespace cairocanvas
 
                 if(nPointCount)
                 {
-                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount + 1: nPointCount);
+                    const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount: nPointCount - 1);
                     basegfx::B2DPolygon aEdge;
                     aEdge.append(aCandidate.getB2DPoint(0));
                     aEdge.append(basegfx::B2DPoint(0.0, 0.0));
@@ -1073,7 +1079,7 @@ namespace cairocanvas
                     {
                         const sal_uInt32 nNextIndex((b + 1) % nPointCount);
                         aEdge.setB2DPoint(1, aCandidate.getB2DPoint(nNextIndex));
-                        aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(b));
+                        aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(b % nPointCount));
                         aEdge.setPrevControlPoint(1, aCandidate.getPrevControlPoint(nNextIndex));
 
                         doPolyPolygonImplementation( basegfx::B2DPolyPolygon(aEdge),
@@ -1395,7 +1401,9 @@ namespace cairocanvas
                 ::rtl::math::approxEqual( aMatrix.x0, 0 ) &&
                 ::rtl::math::approxEqual( aMatrix.y0, 0 ) )
                  cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
+#if CAIRO_VERSION >= 10200
             cairo_pattern_set_extend( cairo_get_source(mpCairo.get()), CAIRO_EXTEND_PAD );
+#endif
             cairo_rectangle( mpCairo.get(), 0, 0, aBitmapSize.Width, aBitmapSize.Height );
             cairo_clip( mpCairo.get() );
 
@@ -1994,3 +2002,5 @@ namespace cairocanvas
         return true;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

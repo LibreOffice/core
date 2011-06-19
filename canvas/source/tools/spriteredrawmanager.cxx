@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <basegfx/range/rangeexpander.hxx>
 
 #include <algorithm>
-#include <functional>
+#include <o3tl/compat_functional.hxx>
 #include <boost/bind.hpp>
 
 
@@ -425,7 +426,7 @@ namespace canvas
                          aEnd,
                          ::boost::bind( ::basegfx::B2DRangeExpander(aTrueArea),
                                         ::boost::bind( &SpriteInfo::getUpdateArea,
-                                                       ::boost::bind( ::std::select2nd<AreaComponent>(),
+                                                       ::boost::bind( ::o3tl::select2nd<AreaComponent>(),
                                                                       _1 ) ) ) );
 
         // and check whether _any_ of the sprites tells that its area
@@ -451,7 +452,7 @@ namespace canvas
                                 aEnd,
                                 ::boost::bind( &SpriteInfo::needsUpdate,
                                                ::boost::bind(
-                                                   ::std::select2nd<SpriteConnectedRanges::ComponentType>(),
+                                                   ::o3tl::select2nd<SpriteConnectedRanges::ComponentType>(),
                                                    _1 ) ) ) != aEnd );
     }
 
@@ -518,3 +519,5 @@ namespace canvas
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,14 +50,12 @@ inline sal_Bool SelectionEngine::ShouldDeselect( sal_Bool bModifierKey1 ) const
 |*
 |*    SelectionEngine::SelectionEngine()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
-SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet ) :
-                    pWin( pWindow )
+SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
+                                  sal_uLong nAutoRepeatInterval ) :
+    pWin( pWindow ),
+    nUpdateInterval( nAutoRepeatInterval )
 {
     eSelMode = SINGLE_SELECTION;
     pFunctionSet = pFuncSet;
@@ -64,16 +63,12 @@ SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet ) :
     nLockedMods = 0;
 
     aWTimer.SetTimeoutHdl( LINK( this, SelectionEngine, ImpWatchDog ) );
-    aWTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
+    aWTimer.SetTimeout( nUpdateInterval );
 }
 
 /*************************************************************************
 |*
 |*    SelectionEngine::~SelectionEngine()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
 |*
 *************************************************************************/
 
@@ -85,10 +80,6 @@ SelectionEngine::~SelectionEngine()
 /*************************************************************************
 |*
 |*    SelectionEngine::ImpWatchDog()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
 |*
 *************************************************************************/
 
@@ -103,10 +94,6 @@ IMPL_LINK( SelectionEngine, ImpWatchDog, Timer*, EMPTYARG )
 |*
 |*    SelectionEngine::SetSelectionMode()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 void SelectionEngine::SetSelectionMode( SelectionMode eMode )
@@ -118,10 +105,6 @@ void SelectionEngine::SetSelectionMode( SelectionMode eMode )
 |*
 |*    SelectionEngine::ActivateDragMode()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 void SelectionEngine::ActivateDragMode()
@@ -132,10 +115,6 @@ void SelectionEngine::ActivateDragMode()
 /*************************************************************************
 |*
 |*    SelectionEngine::CursorPosChanging()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  GT 2002-04-04
 |*
 *************************************************************************/
 
@@ -190,10 +169,6 @@ void SelectionEngine::CursorPosChanging( sal_Bool bShift, sal_Bool bMod1 )
 /*************************************************************************
 |*
 |*    SelectionEngine::SelMouseButtonDown()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 07.06.95
 |*
 *************************************************************************/
 
@@ -324,10 +299,6 @@ sal_Bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
 |*
 |*    SelectionEngine::SelMouseButtonUp()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
@@ -378,10 +349,6 @@ sal_Bool SelectionEngine::SelMouseButtonUp( const MouseEvent& rMEvt )
 |*
 |*    SelectionEngine::SelMouseMove()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 sal_Bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
@@ -400,7 +367,7 @@ sal_Bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     if( aWTimer.IsActive() && !aArea.IsInside( rMEvt.GetPosPixel() ))
         return sal_True;
 
-
+    aWTimer.SetTimeout( nUpdateInterval );
     aWTimer.Start();
     if ( eSelMode != SINGLE_SELECTION )
     {
@@ -422,10 +389,6 @@ sal_Bool SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
 |*
 |*    SelectionEngine::SetWindow()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 10.10.94
-|*    Letzte Aenderung  OV 10.10.94
-|*
 *************************************************************************/
 
 void SelectionEngine::SetWindow( Window* pNewWin )
@@ -444,10 +407,6 @@ void SelectionEngine::SetWindow( Window* pNewWin )
 |*
 |*    SelectionEngine::Reset()
 |*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 07.07.95
-|*    Letzte Aenderung  OV 07.07.95
-|*
 *************************************************************************/
 
 void SelectionEngine::Reset()
@@ -462,10 +421,6 @@ void SelectionEngine::Reset()
 /*************************************************************************
 |*
 |*    SelectionEngine::Command()
-|*
-|*    Beschreibung      SELENG.SDW
-|*    Ersterstellung    OV 07.07.95
-|*    Letzte Aenderung  OV 07.07.95
 |*
 *************************************************************************/
 
@@ -496,3 +451,29 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
             nFlags &= ~SELENG_CMDEVT;
     }
 }
+
+void SelectionEngine::SetUpdateInterval( sal_uLong nInterval )
+{
+    if (nInterval < SELENG_AUTOREPEAT_INTERVAL_MIN)
+        // Set a lower threshold.  On Windows, setting this value too low
+        // would cause selection to get updated indefinitely.
+        nInterval = SELENG_AUTOREPEAT_INTERVAL_MIN;
+
+    if (nUpdateInterval == nInterval)
+        // no update needed.
+        return;
+
+    if (aWTimer.IsActive())
+    {
+        // reset the timer right away on interval change.
+        aWTimer.Stop();
+        aWTimer.SetTimeout(nInterval);
+        aWTimer.Start();
+    }
+    else
+        aWTimer.SetTimeout(nInterval);
+
+    nUpdateInterval = nInterval;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

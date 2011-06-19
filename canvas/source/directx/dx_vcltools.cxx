@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -177,8 +178,7 @@ namespace dxcanvas
 
                 Bitmap aBitmap( rBmpEx.GetBitmap() );
 
-                ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
-                                                    aBitmap );
+                Bitmap::ScopedReadAccess pReadAccess( aBitmap );
 
                 const sal_Int32 nWidth( aBmpSize.Width() );
                 const sal_Int32 nHeight( aBmpSize.Height() );
@@ -191,8 +191,7 @@ namespace dxcanvas
                 {
                     Bitmap aAlpha( rBmpEx.GetAlpha().GetBitmap() );
 
-                    ScopedBitmapReadAccess pAlphaReadAccess( aAlpha.AcquireReadAccess(),
-                                                             aAlpha );
+                    Bitmap::ScopedReadAccess pAlphaReadAccess( aAlpha );
 
                     // By convention, the access buffer always has
                     // one of the following formats:
@@ -334,8 +333,7 @@ namespace dxcanvas
                 {
                     Bitmap aMask( rBmpEx.GetMask() );
 
-                    ScopedBitmapReadAccess pMaskReadAccess( aMask.AcquireReadAccess(),
-                                                            aMask );
+                    Bitmap::ScopedReadAccess pMaskReadAccess( aMask );
 
                     // By convention, the access buffer always has
                     // one of the following formats:
@@ -521,3 +519,5 @@ namespace dxcanvas
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

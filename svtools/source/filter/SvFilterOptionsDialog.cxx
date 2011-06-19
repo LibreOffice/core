@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -143,7 +144,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if ( maMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterData")) )
             break;
     }
     if ( i == nCount )
@@ -165,7 +166,7 @@ void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::Prope
     sal_Int32 i, nCount;
     for ( i = 0, nCount = maMediaDescriptor.getLength(); i < nCount; i++ )
     {
-        if ( maMediaDescriptor[ i ].Name.equalsAscii( "FilterData" ) )
+        if ( maMediaDescriptor[ i ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FilterData")) )
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
         }
@@ -268,3 +269,4 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

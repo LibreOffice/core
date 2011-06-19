@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <map>
 #include <tools/resmgr.hxx>
 #include <tools/shl.hxx>
-#include <vos/process.hxx>
 #include <svtools/svtdata.hxx>
 #include <vcl/svapp.hxx>
 
@@ -76,3 +76,4 @@ SvtResId::SvtResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale)
 
 SvtResId::SvtResId(sal_uInt16 nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

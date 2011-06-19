@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,6 +40,7 @@
 class KDESalGraphics : public X11SalGraphics
 {
     QImage* m_image;
+    QRect lastPopupRect;
 
     public:
         KDESalGraphics();
@@ -111,3 +113,5 @@ class KDESalGraphics : public X11SalGraphics
                                             const rtl::OUString& aCaption,
                                             Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

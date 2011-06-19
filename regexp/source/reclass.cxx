@@ -1215,14 +1215,14 @@ Regexpr::regex_compile()
       if (c == (sal_Unicode)':' && *p == (sal_Unicode)']') {
         sal_Int32 ch;
         // no support for GRAPH, PUNCT, or XDIGIT yet
-        sal_Bool is_alnum = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"alnum").getStr());
-        sal_Bool is_alpha = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"alpha").getStr());
-        sal_Bool is_cntrl = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"cntrl").getStr());
-        sal_Bool is_digit = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"digit").getStr());
-        sal_Bool is_lower = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"lower").getStr());
-        sal_Bool is_print = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"print").getStr());
-        sal_Bool is_space = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"space").getStr());
-        sal_Bool is_upper = STREQ(str, ::rtl::OUString::createFromAscii((const sal_Char*)"upper").getStr());
+        sal_Bool is_alnum = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("alnum")).getStr());
+        sal_Bool is_alpha = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("alpha")).getStr());
+        sal_Bool is_cntrl = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cntrl")).getStr());
+        sal_Bool is_digit = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("digit")).getStr());
+        sal_Bool is_lower = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lower")).getStr());
+        sal_Bool is_print = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("print")).getStr());
+        sal_Bool is_space = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("space")).getStr());
+        sal_Bool is_upper = STREQ(str, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("upper")).getStr());
 
         if (!(is_alnum || is_alpha || is_cntrl ||
           is_digit || is_lower || is_print || is_space || is_upper) )
@@ -1684,7 +1684,7 @@ Regexpr::regex_compile()
             sal_Unicode tmp = translit->transliterateChar2Char(c);
             BUF_PUSH(tmp);
             (*pending_exact)++;
-        } catch (::com::sun::star::i18n::MultipleCharsOutputException e) {
+        } catch (const ::com::sun::star::i18n::MultipleCharsOutputException&) {
             ::rtl::OUString o2( translit->transliterateChar2String( c));
             sal_Int32 len2 = o2.getLength();
             const sal_Unicode * k2 = o2.getStr();
@@ -2768,6 +2768,9 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
     POP_FAILURE_POINT(sdummy, pdummy,
               dummy_low_reg, dummy_high_reg,
               reg_dummy, reg_dummy, reg_info_dummy);
+
+    (void)sdummy;
+    (void)pdummy;
       }
       /* Note fall through.  */
 
@@ -2926,7 +2929,7 @@ Regexpr::set_list_bit(sal_Unicode c, sal_Unicode *b)
     try {
         sal_Unicode tmp = translit->transliterateChar2Char(c);
         b[tmp / BYTEWIDTH] |= 1 << (tmp % BYTEWIDTH);
-    } catch (::com::sun::star::i18n::MultipleCharsOutputException e) {
+    } catch (const ::com::sun::star::i18n::MultipleCharsOutputException&) {
         ::rtl::OUString o2( translit->transliterateChar2String( c));
         sal_Int32 len2 = o2.getLength();
         const sal_Unicode * k2 = o2.getStr();
@@ -2939,4 +2942,4 @@ Regexpr::set_list_bit(sal_Unicode c, sal_Unicode *b)
   }
 }
 
-/* vim: set ts=8 sw=2 noexpandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

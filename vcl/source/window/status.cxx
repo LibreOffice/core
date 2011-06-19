@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 
@@ -95,8 +95,6 @@ struct ImplStatusItem
     XubString           maAccessibleName;
     XubString           maCommand;
 };
-
-DECLARE_LIST( ImplStatusItemList, ImplStatusItem* )
 
 // =======================================================================
 
@@ -197,18 +195,13 @@ StatusBar::StatusBar( Window* pParent, const ResId& rResId ) :
 StatusBar::~StatusBar()
 {
     // Alle Items loeschen
-    ImplStatusItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        delete (*mpItemList)[ i ];
     }
-
     delete mpItemList;
 
     // VirtualDevice loeschen
     delete mpImplData->mpVirDev;
-
     delete mpImplData;
 }
 
@@ -280,19 +273,17 @@ void StatusBar::ImplFormat()
     // Breiten zusammenrechnen
     mnItemsWidth = STATUSBAR_OFFSET_X;
     long nOffset = 0;
-    pItem = mpItemList->First();
-    while ( pItem )
-    {
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        pItem = (*mpItemList)[ i ];
         if ( pItem->mbVisible )
         {
-            if ( pItem->mnBits & SIB_AUTOSIZE )
+            if ( pItem->mnBits & SIB_AUTOSIZE ) {
                 nAutoSizeItems++;
+            }
 
             mnItemsWidth += pItem->mnWidth + nOffset;
             nOffset = pItem->mnOffset;
         }
-
-        pItem = mpItemList->Next();
     }
 
     if ( GetStyle() & WB_RIGHT )
@@ -324,28 +315,22 @@ void StatusBar::ImplFormat()
             nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
-    pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mbVisible )
-        {
-            if ( pItem->mnBits & SIB_AUTOSIZE )
-            {
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        pItem = (*mpItemList)[ i ];
+        if ( pItem->mbVisible ) {
+            if ( pItem->mnBits & SIB_AUTOSIZE ) {
                 pItem->mnExtraWidth = nExtraWidth;
-                if ( nExtraWidth2 )
-                {
+                if ( nExtraWidth2 ) {
                     pItem->mnExtraWidth++;
                     nExtraWidth2--;
                 }
-            }
-            else
+            } else {
                 pItem->mnExtraWidth = 0;
+            }
 
             pItem->mnX = nX;
             nX += pItem->mnWidth + pItem->mnExtraWidth + pItem->mnOffset;
         }
-
-        pItem = mpItemList->Next();
     }
 
     mbFormat = sal_False;
@@ -357,7 +342,7 @@ Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
 {
     Rectangle       aRect;
     ImplStatusItem* pItem;
-    pItem = mpItemList->GetObject( nPos );
+    pItem = ( nPos < mpItemList->size() ) ? (*mpItemList)[ nPos ] : NULL;
     if ( pItem )
     {
         if ( pItem->mbVisible )
@@ -380,13 +365,13 @@ sal_uInt16 StatusBar::ImplGetFirstVisiblePos() const
 {
     ImplStatusItem* pItem;
 
-    for( sal_uInt16 nPos = 0; nPos < mpItemList->Count(); nPos++ )
+    for( size_t nPos = 0; nPos < mpItemList->size(); nPos++ )
     {
-        pItem = mpItemList->GetObject( nPos );
+        pItem = (*mpItemList)[ nPos ];
         if ( pItem )
         {
             if ( pItem->mbVisible )
-                return nPos;
+                return sal_uInt16(nPos);
         }
     }
 
@@ -440,7 +425,7 @@ void StatusBar::ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDr
         return;
 
     // Ausgabebereich berechnen
-    ImplStatusItem*     pItem = mpItemList->GetObject( nPos );
+    ImplStatusItem*     pItem = (*mpItemList)[ nPos ];
     long nW = mpImplData->mnItemBorderWidth + 1;
     Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
                                    aRect.Right()-nW, aRect.Bottom()-nW );
@@ -743,14 +728,13 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
         if ( mbVisibleItems )
         {
             Point  aMousePos = rMEvt.GetPosPixel();
-            sal_uInt16 i = 0;
 
             // Item suchen, das geklickt wurde
-            ImplStatusItem* pItem = mpItemList->First();
-            while ( pItem )
+            for ( size_t i = 0; i < mpItemList->size(); ++i )
             {
+                ImplStatusItem* pItem = (*mpItemList)[ i ];
                 // Ist es dieses Item
-                if ( ImplGetItemRectPos( i ).IsInside( aMousePos ) )
+                if ( ImplGetItemRectPos( sal_uInt16(i) ).IsInside( aMousePos ) )
                 {
                     mnCurItemId = pItem->mnId;
                     if ( rMEvt.GetClicks() == 2 )
@@ -762,9 +746,6 @@ void StatusBar::MouseButtonDown( const MouseEvent& rMEvt )
                     // Item wurde gefunden
                     return;
                 }
-
-                i++;
-                pItem = mpItemList->Next();
             }
         }
 
@@ -783,7 +764,7 @@ void StatusBar::Paint( const Rectangle& )
     if ( mbFormat )
         ImplFormat();
 
-    sal_uInt16 nItemCount = (sal_uInt16)mpItemList->Count();
+    sal_uInt16 nItemCount = sal_uInt16( mpItemList->size() );
 
     if ( mbProgressMode )
         ImplDrawProgress( sal_True, 0, mnPercent );
@@ -962,22 +943,23 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
-         (rDCEvt.GetType() == DATACHANGED_FONTS) ||
-         (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
-         ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-          (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+    if (  (rDCEvt.GetType() == DATACHANGED_DISPLAY         )
+       || (rDCEvt.GetType() == DATACHANGED_FONTS           )
+       || (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION)
+       || (  (rDCEvt.GetType() == DATACHANGED_SETTINGS)
+          && (rDCEvt.GetFlags() & SETTINGS_STYLE )
+          )
+       )
     {
         mbFormat = sal_True;
         ImplInitSettings( sal_True, sal_True, sal_True );
-        ImplStatusItem* pItem = mpItemList->First();
         long nFudge = GetTextHeight() / 4;
-        while ( pItem )
+        for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
         {
+            ImplStatusItem* pItem = (*mpItemList)[ i ];
             long nWidth = GetTextWidth( pItem->maText ) + nFudge;
             if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
-            pItem = mpItemList->Next();
         }
         Size aSize = GetSizePixel();
         // do not disturb current width, since
@@ -1037,7 +1019,11 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     pItem->mbVisible        = sal_True;
 
     // Item in die Liste einfuegen
-    mpItemList->Insert( pItem, nPos );
+    if ( nPos < mpItemList->size() ) {
+        mpItemList->insert( mpItemList->begin() + nPos, pItem );
+    } else {
+        mpItemList->push_back( pItem );
+    }
 
     mbFormat = sal_True;
     if ( ImplIsItemUpdate() )
@@ -1053,8 +1039,8 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->Remove( nPos );
-        delete pItem;
+        delete (*mpItemList)[ nPos ];
+        mpItemList->erase( mpItemList->begin() + nPos );
 
         mbFormat = sal_True;
         if ( ImplIsItemUpdate() )
@@ -1072,7 +1058,7 @@ void StatusBar::ShowItem( sal_uInt16 nItemId )
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         if ( !pItem->mbVisible )
         {
             pItem->mbVisible = sal_True;
@@ -1094,7 +1080,7 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         if ( pItem->mbVisible )
         {
             pItem->mbVisible = sal_False;
@@ -1115,7 +1101,7 @@ sal_Bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mbVisible;
+        return (*mpItemList)[ nPos ]->mbVisible;
     else
         return sal_False;
 }
@@ -1153,24 +1139,14 @@ void StatusBar::HideItems()
 void StatusBar::CopyItems( const StatusBar& rStatusBar )
 {
     // Alle Items entfernen
-    ImplStatusItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        delete (*mpItemList)[ i ];
     }
-
-    // Items aus der Liste loeschen
-    mpItemList->Clear();
+    mpItemList->clear();
 
     // Items kopieren
-    sal_uLong i = 0;
-    pItem = rStatusBar.mpItemList->GetObject( i );
-    while ( pItem )
-    {
-        mpItemList->Insert( new ImplStatusItem( *pItem ), LIST_APPEND );
-        i++;
-        pItem = rStatusBar.mpItemList->GetObject( i );
+    for ( size_t i = 0, n = rStatusBar.mpItemList->size(); i < n; ++i ) {
+        mpItemList->push_back( new ImplStatusItem( *(*rStatusBar.mpItemList)[ i ] ) );
     }
 
     mbFormat = sal_True;
@@ -1183,15 +1159,10 @@ void StatusBar::CopyItems( const StatusBar& rStatusBar )
 void StatusBar::Clear()
 {
     // Alle Item loeschen
-    ImplStatusItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        delete (*mpItemList)[ i ];
     }
-
-    // Items aus der Liste loeschen
-    mpItemList->Clear();
+    mpItemList->clear();
 
     mbFormat = sal_True;
     if ( ImplIsItemUpdate() )
@@ -1204,31 +1175,26 @@ void StatusBar::Clear()
 
 sal_uInt16 StatusBar::GetItemCount() const
 {
-    return (sal_uInt16)mpItemList->Count();
+    return (sal_uInt16)mpItemList->size();
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt16 StatusBar::GetItemId( sal_uInt16 nPos ) const
 {
-    ImplStatusItem* pItem = mpItemList->GetObject( nPos );
-    if ( pItem )
-        return pItem->mnId;
-    else
-        return 0;
+    if ( nPos < mpItemList->size() )
+        return (*mpItemList)[ nPos ]->mnId;
+    return 0;
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt16 StatusBar::GetItemPos( sal_uInt16 nItemId ) const
 {
-    ImplStatusItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mnId == nItemId )
-            return (sal_uInt16)mpItemList->GetCurPos();
-
-        pItem = mpItemList->Next();
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        if ( (*mpItemList)[ i ]->mnId == nItemId ) {
+            return sal_uInt16( i );
+        }
     }
 
     return STATUSBAR_ITEM_NOTFOUND;
@@ -1247,7 +1213,7 @@ sal_uInt16 StatusBar::GetItemId( const Point& rPos ) const
             // Rechteck holen
             Rectangle aRect = ImplGetItemRectPos( nPos );
             if ( aRect.IsInside( rPos ) )
-                return mpItemList->GetObject( nPos )->mnId;
+                return (*mpItemList)[ nPos ]->mnId;
         }
     }
 
@@ -1289,7 +1255,7 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
         if ( nPos != STATUSBAR_ITEM_NOTFOUND )
         {
             // Rechteck holen
-            ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+            ImplStatusItem* pItem = (*mpItemList)[ nPos ];
             Rectangle aRect = ImplGetItemRectPos( nPos );
             long nW = mpImplData->mnItemBorderWidth + 1;
             Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
@@ -1316,9 +1282,9 @@ sal_uLong StatusBar::GetItemWidth( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mnWidth;
-    else
-        return 0;
+        return (*mpItemList)[ nPos ]->mnWidth;
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1328,9 +1294,9 @@ StatusBarItemBits StatusBar::GetItemBits( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mnBits;
-    else
-        return 0;
+        return (*mpItemList)[ nPos ]->mnBits;
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1340,9 +1306,9 @@ long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mnOffset;
-    else
-        return 0;
+        return (*mpItemList)[ nPos ]->mnOffset;
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1353,7 +1319,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const XubString& rText )
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
 
         if ( pItem->maText != rText )
         {
@@ -1389,9 +1355,9 @@ const XubString& StatusBar::GetItemText( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->maText;
-    else
-        return ImplGetSVEmptyStr();
+        return (*mpItemList)[ nPos ]->maText;
+
+    return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------
@@ -1402,7 +1368,7 @@ void StatusBar::SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand )
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
 
         if ( pItem->maCommand != rCommand )
             pItem->maCommand = rCommand;
@@ -1416,9 +1382,9 @@ const XubString& StatusBar::GetItemCommand( sal_uInt16 nItemId )
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->maCommand;
-    else
-        return ImplGetSVEmptyStr();
+        return (*mpItemList)[ nPos ]->maCommand;
+
+    return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------
@@ -1429,7 +1395,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         pItem->mpUserData = pNewData;
 
         // Wenn es ein User-Item ist, DrawItem-Aufrufen
@@ -1450,9 +1416,9 @@ void* StatusBar::GetItemData( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->mpUserData;
-    else
-        return NULL;
+        return (*mpItemList)[ nPos ]->mpUserData;
+
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1462,7 +1428,7 @@ void StatusBar::SetHelpText( sal_uInt16 nItemId, const XubString& rText )
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        mpItemList->GetObject( nPos )->maHelpText = rText;
+        (*mpItemList)[ nPos ]->maHelpText = rText;
 }
 
 // -----------------------------------------------------------------------
@@ -1473,7 +1439,7 @@ const XubString& StatusBar::GetHelpText( sal_uInt16 nItemId ) const
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         if ( !pItem->maHelpText.Len() && ( pItem->maHelpId.getLength() || pItem->maCommand.Len() ))
         {
             Help* pHelp = Application::GetHelp();
@@ -1499,7 +1465,7 @@ void StatusBar::SetQuickHelpText( sal_uInt16 nItemId, const XubString& rText )
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        mpItemList->GetObject( nPos )->maQuickHelpText = rText;
+        (*mpItemList)[ nPos ]->maQuickHelpText = rText;
 }
 
 // -----------------------------------------------------------------------
@@ -1510,11 +1476,11 @@ const XubString& StatusBar::GetQuickHelpText( sal_uInt16 nItemId ) const
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         return pItem->maQuickHelpText;
     }
-    else
-        return ImplGetSVEmptyStr();
+
+    return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------
@@ -1524,7 +1490,7 @@ void StatusBar::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        mpItemList->GetObject( nPos )->maHelpId = rHelpId;
+        (*mpItemList)[ nPos ]->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
@@ -1536,7 +1502,7 @@ rtl::OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
     rtl::OString aRet;
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
         if ( pItem->maHelpId.getLength() )
             aRet = pItem->maHelpId;
         else
@@ -1709,15 +1675,15 @@ void StatusBar::SetText( const XubString& rText )
 
 Size StatusBar::CalcWindowSizePixel() const
 {
-    sal_uLong   i = 0;
-    sal_uLong   nCount = mpItemList->Count();
+    size_t  i = 0;
+    size_t  nCount = mpItemList->size();
     long    nOffset = 0;
     long    nCalcWidth = (STATUSBAR_OFFSET_X*2);
     long    nCalcHeight;
 
     while ( i < nCount )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( i );
+        ImplStatusItem* pItem = (*mpItemList)[ i ];
         nCalcWidth += pItem->mnWidth + nOffset;
         nOffset = pItem->mnOffset;
         i++;
@@ -1777,7 +1743,7 @@ void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const XubString& rName )
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
-        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        ImplStatusItem* pItem = (*mpItemList)[ nPos ];
 
         if ( pItem->maAccessibleName != rName )
         {
@@ -1794,9 +1760,11 @@ const XubString& StatusBar::GetAccessibleName( sal_uInt16 nItemId ) const
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        return mpItemList->GetObject( nPos )->maAccessibleName;
-    else
-        return ImplGetSVEmptyStr();
+        return (*mpItemList)[ nPos ]->maAccessibleName;
+
+    return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

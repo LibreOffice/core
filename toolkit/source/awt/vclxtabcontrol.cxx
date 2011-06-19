@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "vclxtabcontrol.hxx"
+#include <vclxtabcontrol.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <sal/macros.h>
@@ -33,6 +34,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -99,7 +101,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXTabControl, VCLXWindow, VCLXTabControl_Bas
 void SAL_CALL VCLXTabControl::dispose( ) throw(uno::RuntimeException)
 {
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -109,19 +111,6 @@ void SAL_CALL VCLXTabControl::dispose( ) throw(uno::RuntimeException)
     VCLXWindow::dispose();
 }
 
-#if 0
-void SAL_CALL VCLXTabControl::addTabListener( const Reference< XTabListener >& listener ) throw (uno::RuntimeException)
-{
-    if ( listener.is() )
-        maTabListeners.addInterface( listener );
-}
-
-void SAL_CALL VCLXTabControl::removeTabListener( const Reference< XTabListener >& listener ) throw (uno::RuntimeException)
-{
-    if ( listener.is() )
-        maTabListeners.removeInterface( listener );
-}
-#endif
 
 TabControl *VCLXTabControl::getTabControl() const throw (uno::RuntimeException)
 {
@@ -166,7 +155,7 @@ void SAL_CALL VCLXTabControl::addTabListener( const uno::Reference< awt::XTabLis
 {
     for ( std::list< uno::Reference
               < awt::XTabListener > >::const_iterator it
-              = mxTabListeners.begin(); it != mxTabListeners.end(); it++ )
+              = mxTabListeners.begin(); it != mxTabListeners.end(); ++it )
     {
         if ( *it == xListener )
             // already added
@@ -179,7 +168,7 @@ void SAL_CALL VCLXTabControl::removeTabListener( const uno::Reference< awt::XTab
 {
     for ( std::list< uno::Reference
               < awt::XTabListener > >::iterator it
-              = mxTabListeners.begin(); it != mxTabListeners.end(); it++ )
+              = mxTabListeners.begin(); it != mxTabListeners.end(); ++it )
     {
         if ( *it == xListener )
         {
@@ -232,7 +221,7 @@ uno::Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
 // TODO: draw tab border here
 void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TabControl *pTabControl = getTabControl();
     TabPage *pTabPage = pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >(  getActiveTabID() ) );
@@ -317,9 +306,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
 // LATER: Nah, the proper fix is to get the XWindow hierarchy
 // straight.
 
-#if 0
-    setPosSize( area.X, area.Y, area.Width, area.Height, awt::PosSize::POSSIZE );
-#else
     awt::Size currentSize = getSize();
     awt::Size requestedSize (area.Width, area.Height);
 //    requestedSize.Height = getHeightForWidth( area.Width );
@@ -345,7 +331,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
     if (requestedSize.Height < pageBasedSize.Height)
         requestedSize.Height = pageBasedSize.Height + hc;
 
-    Size windowSize = GetWindow()->GetSizePixel();
     Window *parent = GetWindow()->GetParent();
     Size parentSize = parent->GetSizePixel();
 
@@ -358,9 +343,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
     OSL_TRACE ("%s: minimum: %d, %d", __FUNCTION__, minimumSize.Width, minimumSize.Height );
     OSL_TRACE ("%s: requestedSize: %d, %d", __FUNCTION__, requestedSize.Width, requestedSize.Height );
     OSL_TRACE ("%s: pageBasedSize: %d, %d", __FUNCTION__, pageBasedSize.Width, pageBasedSize.Height );
-
-    //OSL_TRACE ("%s: parent: %d, %d", __FUNCTION__, parentSize.Width(), parentSize.Height() );
-    //OSL_TRACE ("%s: window: %d, %d", __FUNCTION__, windowSize.Width(), windowSize.Height() );
 #endif
 
     //bRealized = false;
@@ -376,7 +358,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
         if ( requestedSize.Height > currentSize.Height + 10)
             setPosSize( 0, 0, 0, requestedSize.Height, awt::PosSize::HEIGHT );
     }
-#endif
 
     if (pageBasedSize.Width > parentSize.Width ()
         || pageBasedSize.Height > parentSize.Height ())
@@ -388,7 +369,7 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
     // it here does makes it easier when changing tabs (just needs a recalc())
     unsigned i = 0;
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++, i++ )
+              = maChildren.begin(); it != maChildren.end(); ++it, ++i )
     {
         ChildData *child = static_cast<VCLXTabControl::ChildData*> ( *it );
         uno::Reference
@@ -400,12 +381,7 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
 
             // HACK: since our layout:: container don't implement XWindow, we have no easy
             // way to set them invisible; lets just set all their children as such :P
-#if 0
-            if ( xWin.is() )
-                xWin->setVisible( active );
-#else
             setChildrenVisible( xChild, active );
-#endif
 
             if ( active )
             {
@@ -437,7 +413,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
     // calculate size to accomodate all children
     unsigned i = 0;
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++, i++ )
+              = maChildren.begin(); it != maChildren.end(); ++it, ++i )
     {
         ChildData *child = static_cast<VCLXTabControl::ChildData*> ( *it );
         if ( child->mxChild.is() )
@@ -468,7 +444,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
 
 void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 {
-    ::vos::OClearableGuard aGuard( GetMutex() );
+    SolarMutexClearableGuard aGuard;
     TabControl* pTabControl = static_cast< TabControl* >( GetWindow() );
     if ( !pTabControl )
         return;
@@ -486,7 +462,7 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
             sal_uLong page = (sal_uLong) _rVclWindowEvent.GetData();
             for ( std::list< uno::Reference
                       < awt::XTabListener > >::iterator it
-                      = mxTabListeners.begin(); it != mxTabListeners.end(); it++)
+                      = mxTabListeners.begin(); it != mxTabListeners.end(); ++it )
             {
                 uno::Reference
                     < awt::XTabListener > listener = *it;
@@ -538,3 +514,5 @@ uno::Any SAL_CALL VCLXTabControl::getProperty( const ::rtl::OUString& PropertyNa
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

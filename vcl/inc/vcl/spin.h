@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,3 +50,5 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
                          sal_Bool bHorz = sal_False, sal_Bool bMirrorHorz = sal_False );
 
 #endif  // _SV_SPIN_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

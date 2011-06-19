@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,10 +93,9 @@ private:
     SAL_DLLPRIVATE void           ImplMakeUnique( sal_Bool bReleaseCache = sal_True );
     SAL_DLLPRIVATE Gradient       ImplGetApplicationGradient() const;
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE ImplWallpaper* ImplGetImpWallpaper() const { return mpImplWallpaper; }
-//#endif
+
 
 public:
                     Wallpaper();
@@ -141,3 +141,5 @@ public:
 };
 
 #endif  // _SV_WALL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

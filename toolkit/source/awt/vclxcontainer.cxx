@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,6 +37,7 @@
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
 
@@ -76,21 +78,21 @@ IMPL_XTYPEPROVIDER_END
 // ::com::sun::star::awt::XVclContainer
 void VCLXContainer::addVclContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     GetContainerListeners().addInterface( rxListener );
 }
 
 void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     GetContainerListeners().removeInterface( rxListener );
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > VCLXContainer::getWindows(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     // Bei allen Childs das Container-Interface abfragen...
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aSeq;
@@ -118,7 +120,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
 // ::com::sun::star::awt::XVclContainerPeer
 void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -134,7 +136,7 @@ void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(::com::sun::st
 
 void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& Components, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Tabs, sal_Bool bGroupControl ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nCount = Components.getLength();
     DBG_ASSERT( nCount == (sal_uInt32)Tabs.getLength(), "setTabOrder: TabCount != ComponentCount" );
@@ -179,7 +181,7 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
 
 void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > >& Components ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_uInt32 nCount = Components.getLength();
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > * pComps = Components.getConstArray();
@@ -233,7 +235,4 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
     }
 }
 
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

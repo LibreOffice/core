@@ -43,6 +43,21 @@ fi
 sd_prog=`pwd`
 cd "$sd_cwd"
 
+case "`uname -s`" in
+    FreeBSD)
+        sd_prog1="$sd_prog/../basis-link/program"
+        sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+        LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+        export LD_LIBRARY_PATH
+        ;;
+    AIX)
+        sd_prog1="$sd_prog/../basis-link/program"
+        sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+        LIBPATH=$sd_prog1:$sd_prog2${LIBPATH:+:$LIBPATH}
+        export LIBPATH
+        ;;
+esac
+
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on
 for arg in $@
@@ -57,8 +72,17 @@ if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
     my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
-        LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-        export LD_LIBRARY_PATH
+        sd_platform=`uname -s`
+        case $sd_platform in
+          AIX)
+            LIBPATH=$my_path${LIBPATH:+:$LIBPATH}
+            export LIBPATH
+            ;;
+          *)
+            LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+            export LD_LIBRARY_PATH
+            ;;
+        esac
     fi
 fi
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,17 +28,11 @@
 
 #include "documentfocuslistener.hxx"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
@@ -251,3 +246,5 @@ void DocumentFocusListener::detachRecursive(
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

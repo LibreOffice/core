@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,10 +43,6 @@
 |*
 |*    FileStat::FileStat()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MI 11.06.91
-|*
 *************************************************************************/
 
 FileStat::FileStat()
@@ -65,10 +62,6 @@ FileStat::FileStat()
 /*************************************************************************
 |*
 |*    FileStat::FileStat()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MI 11.06.91
 |*
 *************************************************************************/
 
@@ -109,10 +102,6 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 |*
 |*    FileStat::IsYounger()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 11.11.91
-|*    Letzte Aenderung  MA 11.11.91
-|*
 *************************************************************************/
 
 // sal_True  wenn die Instanz j"unger als rIsOlder ist.
@@ -133,9 +122,6 @@ sal_Bool FileStat::IsYounger( const FileStat& rIsOlder ) const
 |*
 |*    FileStat::IsKind()
 |*
-|*    Ersterstellung    MA 11.11.91 (?)
-|*    Letzte Aenderung  KH 16.01.95
-|*
 *************************************************************************/
 
 sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
@@ -148,28 +134,7 @@ sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
 
 /*************************************************************************
 |*
-|*    FileStat::HasReadOnlyFlag()
-|*
-|*    Ersterstellung    MI 06.03.97
-|*    Letzte Aenderung  UT 01.07.98
-|*
-*************************************************************************/
-
-sal_Bool FileStat::HasReadOnlyFlag()
-{
-#if defined WNT || defined UNX || defined OS2
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-/*************************************************************************
-|*
 |*    FileStat::GetReadOnlyFlag()
-|*
-|*    Ersterstellung    MI 06.03.97
-|*    Letzte Aenderung  UT 02.07.98
 |*
 *************************************************************************/
 
@@ -181,16 +146,6 @@ sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
     DWORD nRes = GetFileAttributes( (LPCTSTR) aFPath.GetBuffer() );
     return ULONG_MAX != nRes &&
            ( FILE_ATTRIBUTE_READONLY & nRes ) == FILE_ATTRIBUTE_READONLY;
-#elif defined OS2
-    FILESTATUS3 aFileStat;
-    APIRET nRet = DosQueryPathInfo( (PSZ)aFPath.GetBuffer(), 1, &aFileStat, sizeof(aFileStat) );
-    switch ( nRet )
-    {
-        case NO_ERROR:
-            return FILE_READONLY == ( aFileStat.attrFile & FILE_READONLY );
-        default:
-            return sal_False;
-    }
 #elif defined UNX
     /* could we stat the object? */
     struct stat aBuf;
@@ -207,9 +162,6 @@ sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 |*
 |*    FileStat::SetReadOnlyFlag()
 |*
-|*    Ersterstellung    MI 06.03.97
-|*    Letzte Aenderung  UT 01.07.98
-|*
 *************************************************************************/
 
 sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
@@ -224,26 +176,6 @@ sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
                     ( nRes & ~FILE_ATTRIBUTE_READONLY ) |
                     ( bRO ? FILE_ATTRIBUTE_READONLY : 0 ) );
     return ( ULONG_MAX == nRes ) ? ERRCODE_IO_UNKNOWN : 0;
-#elif defined OS2
-    FILESTATUS3 aFileStat;
-    APIRET nRet = DosQueryPathInfo( (PSZ)aFPath.GetBuffer(), 1, &aFileStat, sizeof(aFileStat) );
-    if ( !nRet )
-    {
-        aFileStat.attrFile = ( aFileStat.attrFile & ~FILE_READONLY ) |
-                             ( bRO ? FILE_READONLY : 0 );
-        nRet = DosSetPathInfo( (PSZ)aFPath.GetBuffer(), 1, &aFileStat, sizeof(aFileStat), 0 );
-    }
-    switch ( nRet )
-    {
-        case NO_ERROR:
-            return ERRCODE_NONE;
-
-        case ERROR_SHARING_VIOLATION:
-            return ERRCODE_IO_LOCKVIOLATION;
-
-        default:
-            return ERRCODE_IO_NOTEXISTS;
-    }
 #elif defined UNX
     /* first, stat the object to get permissions */
     struct stat aBuf;
@@ -282,11 +214,8 @@ sal_uIntPtr FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
 |*
 |*    FileStat::SetDateTime
 |*
-|*    Ersterstellung    PB  27.06.97
-|*    Letzte Aenderung
-|*
 *************************************************************************/
-#if defined WNT || defined OS2
+#if defined WNT
 
 void FileStat::SetDateTime( const String& rFileName,
                             const DateTime& rNewDateTime )
@@ -296,7 +225,6 @@ void FileStat::SetDateTime( const String& rFileName,
     Date aNewDate = rNewDateTime;
     Time aNewTime = rNewDateTime;
 
-#if defined WNT
     TIME_ZONE_INFORMATION aTZI;
     DWORD dwTZI = GetTimeZoneInformation( &aTZI );
 
@@ -361,54 +289,7 @@ void FileStat::SetDateTime( const String& rFileName,
         SetFileTime( hFile, &aFileTime, &aFileTime, &aFileTime );
         CloseHandle( hFile );
     }
-#elif defined OS2
-
-    // open file
-    ULONG nAction = FILE_EXISTED;
-    HFILE hFile = 0;
-    ULONG nFlags = OPEN_FLAGS_WRITE_THROUGH |
-                   OPEN_FLAGS_FAIL_ON_ERROR | OPEN_FLAGS_NO_CACHE   |
-                   OPEN_FLAGS_RANDOM        | OPEN_FLAGS_NOINHERIT  |
-                   OPEN_SHARE_DENYNONE      | OPEN_ACCESS_READWRITE;
-
-    APIRET nRet = DosOpen((PSZ)aFileName.GetBuffer(), &hFile, (PULONG)&nAction,
-                          0/*size*/, FILE_NORMAL,
-                          OPEN_ACTION_FAIL_IF_NEW | OPEN_ACTION_OPEN_IF_EXISTS,
-                          nFlags, 0/*ea*/);
-
-    if ( nRet == 0 )
-    {
-        FILESTATUS3 FileInfoBuffer;
-
-        nRet = DosQueryFileInfo(
-            hFile, 1, &FileInfoBuffer, sizeof(FileInfoBuffer));
-
-        if ( nRet == 0 )
-        {
-            FDATE aNewDate;
-            FTIME aNewTime;
-
-             // create date and time words
-            aNewDate.day     = rNewDateTime.GetDay();
-            aNewDate.month   = rNewDateTime.GetMonth();
-            aNewDate.year    = rNewDateTime.GetYear() - 1980;
-            aNewTime.twosecs = rNewDateTime.GetSec() / 2;
-            aNewTime.minutes = rNewDateTime.GetMin();
-            aNewTime.hours   = rNewDateTime.GetHour();
-
-            // set file date and time
-            FileInfoBuffer.fdateCreation   = aNewDate;
-            FileInfoBuffer.ftimeCreation   = aNewTime;
-            FileInfoBuffer.fdateLastAccess = aNewDate;
-            FileInfoBuffer.ftimeLastAccess = aNewTime;
-            FileInfoBuffer.fdateLastWrite  = aNewDate;
-            FileInfoBuffer.ftimeLastWrite  = aNewTime;
-
-            DosSetFileInfo(hFile, 1, &FileInfoBuffer, sizeof(FileInfoBuffer));
-        }
-        DosClose(hFile);
-    }
-#endif
-
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

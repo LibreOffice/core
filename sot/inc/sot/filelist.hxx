@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,31 +32,31 @@
 #include <tools/stream.hxx>
 #include "sot/sotdllapi.h"
 
-class FileStringList;
+#include <vector>
+typedef ::std::vector< String* > FileStringList;
 
 class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 {
-    FileStringList*     pStrList;
+    FileStringList  aStrList;
 
 protected:
 
     // SvData-Methoden
-    virtual void        Load( SvStream& );
-    virtual void        Save( SvStream& );
-    virtual void        Assign( const SvDataCopyStream& );
+    virtual void    Load( SvStream& );
+    virtual void    Save( SvStream& );
+    virtual void    Assign( const SvDataCopyStream& );
 
     // Liste loeschen;
-    void ClearAll( void );
+    void            ClearAll( void );
 
 public:
 
     TYPEINFO();
-                        FileList();
-                        ~FileList();
+    FileList() {};
+    ~FileList();
 
     // Zuweisungsoperator
     FileList&           operator=( const FileList& rFileList );
-
 
     // Im-/Export
     SOT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const FileList& rFileList );
@@ -67,10 +68,11 @@ public:
 
     // Liste fuellen/abfragen
     void AppendFile( const String& rStr );
-    String GetFile( sal_uLong i ) const;
-    sal_uLong Count( void ) const;
+    String GetFile( size_t i ) const;
+    size_t Count( void ) const;
 
 };
 
 #endif // _FILELIST_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

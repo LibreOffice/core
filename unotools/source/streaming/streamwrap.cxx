@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,16 +116,8 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( star
     ::osl::MutexGuard aGuard( m_aMutex );
     checkError();
 
-#ifdef DBG_UTIL
-    sal_uInt32 nCurrentPos = m_pSvStream->Tell();
-#endif
-
     m_pSvStream->SeekRel(nBytesToSkip);
     checkError();
-
-#ifdef DBG_UTIL
-    nCurrentPos = m_pSvStream->Tell();
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -377,3 +370,4 @@ void SAL_CALL OStreamWrapper::truncate() throw(::com::sun::star::io::IOException
 
 } // namespace utl
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,7 @@ namespace cairocanvas
         maCanvasHelper.clear();
     }
 
-    void SAL_CALL CanvasBitmap::disposing()
+    void CanvasBitmap::disposeThis()
     {
         mpSurfaceProvider.clear();
 
@@ -109,7 +110,7 @@ namespace cairocanvas
         mpBufferSurface.reset();
 
         // forward to parent
-        CanvasBitmap_Base::disposing();
+        CanvasBitmap_Base::disposeThis();
     }
 
     SurfaceSharedPtr CanvasBitmap::getSurface()
@@ -284,3 +285,5 @@ namespace cairocanvas
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

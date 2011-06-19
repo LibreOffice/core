@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -746,7 +747,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
             aMessage.append( "\n(implementation " );
             aMessage.append( typeid( *this ).name() );
             aMessage.append( ")" );
-            OSL_ENSURE( false, aMessage.getStr() );
+            OSL_FAIL( aMessage.getStr() );
         #endif
         }
     }
@@ -766,7 +767,6 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                 throw WrappedTargetException( ::rtl::OUString(), static_cast< XMultiPropertySet* >( this ), makeAny( UnknownPropertyException( ) ) );
                 // due to a flaw in the API design, this method is not allowed to throw an UnknownPropertyException
                 // so we wrap it into a WrappedTargetException
-                // #107545# - 2002-02-20 - fs@openoffice.org
 
             if ( OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY == ePropOrg )
                 ++nAggCount;
@@ -959,7 +959,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const ::rtl::O
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OPropertySetAggregationHelper::setPropertyToDefault: caught an exception which is not allowed to leave here!" );
+            OSL_FAIL( "OPropertySetAggregationHelper::setPropertyToDefault: caught an exception which is not allowed to leave here!" );
         }
     }
 }
@@ -1045,3 +1045,4 @@ bool OPropertySetAggregationHelper::isCurrentlyForwardingProperty( sal_Int32 _nH
 }   // namespace comphelper
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

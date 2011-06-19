@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ uno::Reference< io::XInputStream > getFileAsStream( const rtl::OUString &rName )
         sFileURL = rName; // maybe it already was a file url
 
     File * blobFile = new File(sFileURL);
-    File::RC errorCode = blobFile->open(OpenFlag_Read);
+    File::RC errorCode = blobFile->open(osl_File_OpenFlag_Read);
 
     uno::Reference<io::XInputStream> xResult;
     switch (errorCode)
@@ -74,3 +75,5 @@ uno::Reference< io::XInputStream > getFileAsStream( const rtl::OUString &rName )
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

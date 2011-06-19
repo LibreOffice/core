@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -27,9 +28,7 @@
 #ifndef SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
 #define SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <vcl/seleng.hxx>
 
 //........................................................................
@@ -89,3 +88,5 @@ namespace svt { namespace table
 //........................................................................
 
 #endif // SVTOOLS_SOURCE_TABLE_TABLEDATAWINDOW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

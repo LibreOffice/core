@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -186,7 +187,9 @@ nicht HIB_CLICKABLE setzen und dafuer HIB_FIXEDPOS.
 *************************************************************************/
 
 class Accelerator;
-class ImplHeadItemList;
+class ImplHeadItem;
+
+typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 
 // -----------
 // - WinBits -
@@ -393,3 +396,4 @@ public:
 
 #endif  // _HEADBAR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

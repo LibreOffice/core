@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,7 +116,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                         if ( xPers.is() )
                         {
                             uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetTemporaryStorage();
-                            ::rtl::OUString aName = ::rtl::OUString::createFromAscii("Dummy");
+                            ::rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "Dummy" ));
                             SvStream* pStream = NULL;
                             sal_Bool bDeleteStream = sal_False;
                             uno::Sequence < beans::PropertyValue > aEmpty;
@@ -240,7 +241,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
         }
         catch( embed::NoVisualAreaSizeException& )
         {
-            OSL_ENSURE( sal_False, "Can not get visual area size!\n" );
+            OSL_FAIL( "Can not get visual area size!\n" );
             aSize = Size( 5000, 5000 );
         }
 
@@ -254,3 +255,4 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.mbCanLink = sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

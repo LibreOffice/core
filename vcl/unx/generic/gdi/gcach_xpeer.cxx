@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -649,27 +650,51 @@ X11GlyphCache::X11GlyphCache( X11GlyphPeer& rPeer )
 
 // ---------------------------------------------------------------------------
 
-static X11GlyphPeer* pX11GlyphPeer = NULL;
-static X11GlyphCache* pX11GlyphCache = NULL;
+namespace
+{
+    struct GlyphCacheHolder
+    {
+    private:
+        X11GlyphPeer* m_pX11GlyphPeer;
+        X11GlyphCache* m_pX11GlyphCache;
+    public:
+        GlyphCacheHolder()
+        {
+            m_pX11GlyphPeer = new X11GlyphPeer();
+            m_pX11GlyphCache = new X11GlyphCache( *m_pX11GlyphPeer );
+        }
+        void release()
+        {
+            delete m_pX11GlyphCache;
+            delete m_pX11GlyphPeer;
+            m_pX11GlyphCache = NULL;
+            m_pX11GlyphPeer = NULL;
+        }
+        X11GlyphCache& getGlyphCache()
+        {
+            return *m_pX11GlyphCache;
+        }
+        ~GlyphCacheHolder()
+        {
+            release();
+        }
+    };
+
+    struct theGlyphCacheHolder :
+        public rtl::Static<GlyphCacheHolder, theGlyphCacheHolder>
+    {};
+}
 
 X11GlyphCache& X11GlyphCache::GetInstance()
 {
-    if( !pX11GlyphCache )
-    {
-        pX11GlyphPeer = new X11GlyphPeer();
-        pX11GlyphCache = new X11GlyphCache( *pX11GlyphPeer );
-    }
-    return *pX11GlyphCache;
+    return theGlyphCacheHolder::get().getGlyphCache();
 }
 
 // ---------------------------------------------------------------------------
 
 void X11GlyphCache::KillInstance()
 {
-    delete pX11GlyphCache;
-    delete pX11GlyphPeer;
-    pX11GlyphCache = NULL;
-    pX11GlyphPeer = NULL;
+    return theGlyphCacheHolder::get().release();
 }
 
 // ===========================================================================
@@ -681,3 +706,4 @@ void X11SalGraphics::releaseGlyphPeer()
 
 // ===========================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

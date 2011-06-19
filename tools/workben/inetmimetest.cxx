@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,14 +55,12 @@ bool testDecode(char const * input, char const * expected) {
 
 }
 
-int
-#if defined WNT
-__cdecl
-#endif
-main() {
+int SAL_CALL main() {
     bool success = true;
     success &= testDecode("=?iso-8859-1?B?QQ==?=", "A");
     success &= testDecode("=?iso-8859-1?B?QUI=?=", "AB");
     success &= testDecode("=?iso-8859-1?B?QUJD?=", "ABC");
     return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

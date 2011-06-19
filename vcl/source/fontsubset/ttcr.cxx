@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -398,16 +399,19 @@ int StreamToFile(TrueTypeCreator *_this, const char* fname)
     FILE* fd;
 
     if ((r = StreamToMemory(_this, &ptr, &length)) != SF_OK) return r;
-    if (!fname) return SF_BADFILE;
-    if ((fd = fopen(fname, "wb")) == NULL) return SF_BADFILE;
-
-    if (fwrite(ptr, 1, length, fd) != length) {
-        r = SF_FILEIO;
-    } else {
-        r = SF_OK;
+    if (fname && (fd = fopen(fname, "wb")) != NULL)
+    {
+        if (fwrite(ptr, 1, length, fd) != length) {
+            r = SF_FILEIO;
+        } else {
+            r = SF_OK;
+        }
+        fclose(fd);
     }
-
-    fclose(fd);
+    else
+    {
+        r = SF_BADFILE;
+    }
     free(ptr);
     return r;
 }
@@ -1543,19 +1547,6 @@ static void ProcessTables(TrueTypeCreator *tt)
     PutUInt16(maxCompositePoints, pMaxpData, 10, 1);
     PutUInt16(maxCompositeContours, pMaxpData, 12, 1);
 
-#if 0
-    /* XXX do not overwrite the existing data. Fix: re-calculate these numbers here */
-    PutUInt16(2, maxp->data, 14, 1);                        /* maxZones is always 2       */
-    PutUInt16(0, maxp->data, 16, 1);                        /* maxTwilightPoints          */
-    PutUInt16(0, maxp->data, 18, 1);                        /* maxStorage                 */
-    PutUInt16(0, maxp->data, 20, 1);                        /* maxFunctionDefs            */
-    PutUint16(0, maxp->data, 22, 1);                        /* maxInstructionDefs         */
-    PutUint16(0, maxp->data, 24, 1);                        /* maxStackElements           */
-    PutUint16(0, maxp->data, 26, 1);                        /* maxSizeOfInstructions      */
-    PutUint16(0, maxp->data, 28, 1);                        /* maxComponentElements       */
-    PutUint16(0, maxp->data, 30, 1);                        /* maxComponentDepth          */
-#endif
-
     /*
      * Generate an htmx table and update hhea table
      */
@@ -1664,3 +1655,5 @@ int main(void)
     return 0;
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

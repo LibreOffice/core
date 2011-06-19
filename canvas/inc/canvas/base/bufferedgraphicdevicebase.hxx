@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,22 +29,12 @@
 #ifndef INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
 #define INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX
 
-#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
 #include <com/sun/star/awt/XWindow2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
 #include <com/sun/star/awt/XWindowListener.hpp>
-#endif
 
-#ifndef INCLUDED_CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
-#ifndef INCLUDED_CANVAS_GRAPHICDEVICEBASE_HXX
 #include <canvas/base/graphicdevicebase.hxx>
-#endif
 
 
 /* Definition of BufferedGraphicDeviceBase class */
@@ -192,10 +183,7 @@ namespace canvas
             return ::com::sun::star::uno::makeAny(mxWindow);
         }
 
-#if defined __SUNPRO_CC
-        using Base::disposing;
-#endif
-        virtual void SAL_CALL disposing()
+        virtual void disposeThis()
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -206,7 +194,7 @@ namespace canvas
             }
 
             // pass on to base class
-            BaseType::disposing();
+            BaseType::disposeThis();
         }
 
         ::com::sun::star::awt::Rectangle transformBounds( const ::com::sun::star::awt::Rectangle& rBounds )
@@ -243,12 +231,14 @@ namespace canvas
         }
 
         // XWindowListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+        virtual void disposeEventSource( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             if( Source.Source == mxWindow )
                 mxWindow.clear();
+
+            BaseType::disposeEventSource(Source);
         }
 
         virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException)
@@ -291,3 +281,5 @@ namespace canvas
 }
 
 #endif /* INCLUDED_CANVAS_BUFFEREDGRAPHICDEVICEBASE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

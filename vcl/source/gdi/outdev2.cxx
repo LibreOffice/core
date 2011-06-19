@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -243,7 +244,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
 void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPt,  const Size& rSrcSize )
 {
-    DBG_TRACE( "OutputDevice::DrawOutDev()" );
+    OSL_TRACE( "OutputDevice::DrawOutDev()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 
@@ -317,7 +318,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPt,  const Size& rSrcSize,
                                const OutputDevice& rOutDev )
 {
-    DBG_TRACE( "OutputDevice::DrawOutDev()" );
+    OSL_TRACE( "OutputDevice::DrawOutDev()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rOutDev, OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
@@ -390,7 +391,7 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                              const Point& rSrcPt,  const Size& rSrcSize,
                              sal_uInt16 nFlags )
 {
-    DBG_TRACE( "OutputDevice::CopyArea()" );
+    OSL_TRACE( "OutputDevice::CopyArea()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_ASSERT( meOutDevType != OUTDEV_PRINTER, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 
@@ -520,7 +521,7 @@ void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
-    DBG_TRACE( "OutputDevice::DrawBitmap()" );
+    OSL_TRACE( "OutputDevice::DrawBitmap()" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -539,7 +540,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
-    DBG_TRACE( "OutputDevice::DrawBitmap( Size )" );
+    OSL_TRACE( "OutputDevice::DrawBitmap( Size )" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -559,7 +560,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                const Bitmap& rBitmap )
 {
-    DBG_TRACE( "OutputDevice::DrawBitmap( Point, Size )" );
+    OSL_TRACE( "OutputDevice::DrawBitmap( Point, Size )" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -737,7 +738,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
 void OutputDevice::DrawBitmapEx( const Point& rDestPt,
                                  const BitmapEx& rBitmapEx )
 {
-    DBG_TRACE( "OutputDevice::DrawBitmapEx()" );
+    OSL_TRACE( "OutputDevice::DrawBitmapEx()" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -756,7 +757,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
 void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const BitmapEx& rBitmapEx )
 {
-    DBG_TRACE( "OutputDevice::DrawBitmapEx( Size )" );
+    OSL_TRACE( "OutputDevice::DrawBitmapEx( Size )" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -773,7 +774,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                  const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                  const BitmapEx& rBitmapEx )
 {
-    DBG_TRACE( "OutputDevice::DrawBitmapEx( Point, Size )" );
+    OSL_TRACE( "OutputDevice::DrawBitmapEx( Point, Size )" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -1008,7 +1009,7 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
-    DBG_TRACE( "OutputDevice::DrawMask()" );
+    OSL_TRACE( "OutputDevice::DrawMask()" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -1036,7 +1037,7 @@ void OutputDevice::DrawMask( const Point& rDestPt,
 void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
-    DBG_TRACE( "OutputDevice::DrawMask( Size )" );
+    OSL_TRACE( "OutputDevice::DrawMask( Size )" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -1065,7 +1066,7 @@ void OutputDevice::DrawMask( const Point& rDestPt, const Size& rDestSize,
                              const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {
-    DBG_TRACE( "OutputDevice::DrawMask( Point, Size )" );
+    OSL_TRACE( "OutputDevice::DrawMask( Point, Size )" );
 
     if( ImplIsRecordLayout() )
         return;
@@ -1446,7 +1447,7 @@ Color* OutputDevice::GetPixel( const Polygon& rPts ) const
 
 void OutputDevice::DrawPixel( const Point& rPt )
 {
-    DBG_TRACE( "OutputDevice::DrawPixel()" );
+    OSL_TRACE( "OutputDevice::DrawPixel()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
@@ -1482,7 +1483,7 @@ void OutputDevice::DrawPixel( const Point& rPt )
 
 void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
 {
-    DBG_TRACE( "OutputDevice::DrawPixel()" );
+    OSL_TRACE( "OutputDevice::DrawPixel()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Color aColor( rColor );
@@ -1554,7 +1555,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
         DrawPixel( rPts, GetLineColor() );
     else
     {
-        DBG_TRACE( "OutputDevice::DrawPixel()" );
+        OSL_TRACE( "OutputDevice::DrawPixel()" );
         DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
         DBG_ASSERT( pColors, "OutputDevice::DrawPixel: No color array specified" );
 
@@ -2267,3 +2268,5 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         mpMetaFile = pOldMetaFile;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

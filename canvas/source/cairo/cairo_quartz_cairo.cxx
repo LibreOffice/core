@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -187,7 +188,7 @@ namespace cairo
      **/
     void QuartzSurface::Resize( int width, int height )
     {
-        OSL_ENSURE(false,"not supposed to be called!");
+        OSL_FAIL("not supposed to be called!");
     }
 
 
@@ -345,3 +346,5 @@ namespace cairo
 #endif   // CAIRO_HAS_QUARTZ_SURFACE
 
 #endif   // QUARTZ
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,8 +121,6 @@ private:
 
     TOOLS_DLLPRIVATE inline void ImplMakeUnique();
 
-//#if 0 // _SOLAR__PRIVATE
-
 public:
 
     Point*              ImplGetPointAry();
@@ -130,8 +129,6 @@ public:
     static void         ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
     void                ImplRead( SvStream& rIStream );
     void                ImplWrite( SvStream& rOStream ) const;
-
-//#endif // __PRIVATE
 
 public:
                         Polygon();
@@ -255,11 +252,9 @@ private:
 
     ImplPolyPolygon*    mpImplPolyPolygon;
 
-//#if 0 // _SOLAR__PRIVATE
     TOOLS_DLLPRIVATE void  ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, sal_uIntPtr nOperation ) const;
     TOOLS_DLLPRIVATE void *ImplCreateArtVpath() const;
     TOOLS_DLLPRIVATE void  ImplSetFromArtVpath( void *pVpath );
-//#endif // __PRIVATE
 
 public:
 
@@ -345,3 +340,5 @@ public:
 typedef std::vector< PolyPolygon > PolyPolyVector;
 
 #endif  // _SV_POLY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

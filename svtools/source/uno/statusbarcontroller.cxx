@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/status.hxx>
@@ -84,19 +85,19 @@ StatusbarController::~StatusbarController()
 
 Reference< XFrame > StatusbarController::getFrameInterface() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xFrame;
 }
 
 Reference< XMultiServiceFactory > StatusbarController::getServiceManager() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     return m_xServiceManager;
 }
 
 Reference< XLayoutManager > StatusbarController::getLayoutManager() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     Reference< XLayoutManager > xLayoutManager;
     Reference< XPropertySet > xPropSet( m_xFrame, UNO_QUERY );
     if ( xPropSet.is() )
@@ -117,7 +118,7 @@ Reference< XLayoutManager > StatusbarController::getLayoutManager() const
 
 Reference< XURLTransformer > StatusbarController::getURLTransformer() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     if ( !m_xURLTransformer.is() && m_xServiceManager.is() )
     {
         m_xURLTransformer = Reference< XURLTransformer >(
@@ -170,7 +171,7 @@ throw ( Exception, RuntimeException )
     bool bInitialized( true );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -180,7 +181,7 @@ throw ( Exception, RuntimeException )
 
     if ( !bInitialized )
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         m_bInitialized = sal_True;
 
         PropertyValue aPropValue;
@@ -188,15 +189,15 @@ throw ( Exception, RuntimeException )
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
+                if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame")) )
                     aPropValue.Value >>= m_xFrame;
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CommandURL")) )
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ServiceManager")) )
                     aPropValue.Value >>= m_xServiceManager;
-                else if ( aPropValue.Name.equalsAscii( "ParentWindow" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ParentWindow")) )
                     aPropValue.Value >>= m_xParentWindow;
-                else if ( aPropValue.Name.equalsAscii( "Identifier" ))
+                else if ( aPropValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Identifier")) )
                     aPropValue.Value >>= m_nID;
             }
         }
@@ -210,7 +211,7 @@ void SAL_CALL StatusbarController::update()
 throw ( RuntimeException )
 {
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
     }
@@ -226,7 +227,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         if ( m_bDisposed )
             throw DisposedException();
     }
@@ -234,7 +235,7 @@ throw (::com::sun::star::uno::RuntimeException)
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XURLTransformer > xURLTransformer = getURLTransformer();
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
@@ -287,7 +288,7 @@ throw ( RuntimeException )
 {
     Reference< XInterface > xSource( Source.Source );
 
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -299,7 +300,7 @@ throw ( RuntimeException )
         Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
         if ( xSource == xIfac )
             pIter->second.clear();
-        pIter++;
+        ++pIter;
     }
 
     Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
@@ -311,7 +312,7 @@ throw ( RuntimeException )
 void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -376,7 +377,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 void SAL_CALL StatusbarController::doubleClick() throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( m_bDisposed )
         return;
@@ -392,7 +393,7 @@ void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
     com::sun::star::util::URL    aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
 
         // Already in the list of status listener. Do nothing.
@@ -403,7 +404,7 @@ void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
         // intialize is called.
         if ( !m_bInitialized )
         {
-            // Put into the hash_map of status listener. Will be activated when initialized is called
+            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
@@ -453,7 +454,7 @@ void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
 
 void StatusbarController::removeStatusListener( const rtl::OUString& aCommandURL )
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
     if ( pIter != m_aListenerMap.end() )
@@ -484,7 +485,7 @@ void StatusbarController::bindListener()
     Reference< XStatusListener > xStatusListener;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;
@@ -573,7 +574,7 @@ void StatusbarController::bindListener()
 
 void StatusbarController::unbindListener()
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( !m_bInitialized )
         return;
@@ -612,7 +613,7 @@ void StatusbarController::unbindListener()
 
 sal_Bool StatusbarController::isBound() const
 {
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
 
     if ( !m_bInitialized )
         return sal_False;
@@ -636,7 +637,7 @@ void StatusbarController::updateStatus( const rtl::OUString aCommandURL )
     com::sun::star::util::URL aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( !m_bInitialized )
             return;
@@ -675,7 +676,7 @@ void StatusbarController::updateStatus( const rtl::OUString aCommandURL )
     ::Rectangle aRect;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -698,7 +699,7 @@ void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com:
     rtl::OUString                aCommandURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -740,7 +741,7 @@ void StatusbarController::execute(
     com::sun::star::util::URL   aTargetURL;
 
     {
-        vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarMutexGuard;
 
         if ( m_bDisposed )
             throw DisposedException();
@@ -780,3 +781,5 @@ void StatusbarController::execute(
 }
 
 } // svt
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

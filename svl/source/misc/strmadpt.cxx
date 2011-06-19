@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,7 +96,6 @@ public:
     inline bool isEOF() const;
 
     bool addMark(sal_uInt32 nPosition);
-
     bool removeMark(sal_uInt32 nPosition);
 
     inline sal_uInt32 getReadPosition() const;
@@ -1043,3 +1043,4 @@ SvDataPipe_Impl::SeekResult SvDataPipe_Impl::setReadPosition(sal_uInt32
     return SEEK_OK;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

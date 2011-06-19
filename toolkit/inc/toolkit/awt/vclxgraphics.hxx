@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/font.hxx>
 #include <tools/color.hxx>
@@ -60,7 +61,6 @@ class VCLXGraphics :    public ::com::sun::star::awt::XGraphics,
                         public ::cppu::OWeakObject
 {
 private:
-    vos::IMutex&    mrMutex;    // Reference to SolarMutex
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice; // nur um bei getDevice() immer das gleiche zurueckzugeben
 
     OutputDevice*   mpOutputDevice;
@@ -71,9 +71,6 @@ private:
     Color           maFillColor;
     RasterOp        meRasterOp;
     Region*         mpClipRegion;
-
-protected:
-    vos::IMutex&    GetMutex() { return mrMutex; }
 
 public:
                     VCLXGraphics();
@@ -138,3 +135,4 @@ public:
 
 #endif // _TOOLKIT_AWT_VCLXGRAPHICS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

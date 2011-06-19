@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -130,7 +131,7 @@ namespace svt { namespace table
         }
         virtual PColumnModel        getColumnModel( ColPos column )
         {
-            DBG_ERROR( "EmptyTableModel::getColumnModel: invalid call!" );
+            OSL_FAIL( "EmptyTableModel::getColumnModel: invalid call!" );
             (void)column;
             return PColumnModel();
         }
@@ -300,7 +301,7 @@ namespace svt { namespace table
         if ( m_pModel->getRowCount() != m_nRowCount )
             return "row counts are inconsistent!";
 
-        if ( ( m_nCurColumn != COL_INVALID ) && !m_aColumnWidths.empty() && ( m_nCurColumn < 0 ) || ( m_nCurColumn >= (ColPos)m_aColumnWidths.size() ) )
+        if ( ( ( m_nCurColumn != COL_INVALID ) && !m_aColumnWidths.empty() && ( m_nCurColumn < 0 ) ) || ( m_nCurColumn >= (ColPos)m_aColumnWidths.size() ) )
             return "current column is invalid!";
 
         if ( !lcl_checkLimitsExclusive_OrDefault_OrFallback( m_nTopRow, (RowPos)-1, m_nRowCount, getModel(), (RowPos)0 ) )
@@ -1840,7 +1841,7 @@ namespace svt { namespace table
         }
         break;
         default:
-            DBG_ERROR( "TableControl_Impl::dispatchAction: unsupported action!" );
+            OSL_FAIL( "TableControl_Impl::dispatchAction: unsupported action!" );
             break;
         }
 
@@ -2740,3 +2741,5 @@ namespace svt { namespace table
 //......................................................................................................................
 } } // namespace svt::table
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,15 +32,14 @@
 #include "tools/testtoolloader.hxx"
 #include <osl/module.h>
 #include <rtl/logfile.hxx>
-#include <vos/process.hxx>
+#include <osl/process.h>
 #include "tools/solar.h"
 #include "tools/string.hxx"
 #include "tools/debug.hxx"
 
 #include <comphelper/uieventslogger.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace tools
 {
     typedef void ( *pfunc_CreateRemoteControl)();
@@ -56,20 +56,18 @@ static bool bLoggerStarted = false;
 
 sal_uInt32 GetCommandLineParamCount()
 {
-    vos:: OStartupInfo  aStartInfo;
-    return aStartInfo.getCommandArgCount();
+    return osl_getCommandArgCount();
 }
 
 String GetCommandLineParam( sal_uInt32 nParam )
 {
-    vos:: OStartupInfo  aStartInfo;
     ::rtl::OUString aParam;
-    vos:: OStartupInfo ::TStartupError eError = aStartInfo.getCommandArg( nParam, aParam );
-    if ( eError == vos:: OStartupInfo ::E_None )
+    oslProcessError eError = osl_getCommandArg( nParam, &aParam.pData );
+    if ( eError == osl_Process_E_None )
         return String( aParam );
     else
     {
-        DBG_ERROR( "Unable to get CommandLineParam" );
+        OSL_FAIL( "Unable to get CommandLineParam" );
         return String();
     }
 }
@@ -116,12 +114,12 @@ void InitTestToolLib()
                 (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
             else
             {
-                DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                OSL_TRACE( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 
@@ -141,12 +139,12 @@ void InitTestToolLib()
             }
             else
             {
-                DBG_ERROR1( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                OSL_TRACE( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 }
@@ -183,3 +181,5 @@ void DeInitTestToolLib()
 }
 
 } // namespace tools
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

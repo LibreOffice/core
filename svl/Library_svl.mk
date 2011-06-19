@@ -35,8 +35,8 @@ $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 
 $(eval $(call gb_Library_set_include,svl,\
     $$(SOLARINC) \
-    -I$(SRCDIR)/svl/source/inc \
-    -I$(SRCDIR)/svl/inc/pch \
+    -I$(realpath $(SRCDIR)/svl/source/inc) \
+    -I$(realpath $(SRCDIR)/svl/inc/pch) \
     -I$(OUTDIR)/inc/offuh \
 ))
 
@@ -54,11 +54,9 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
     jvmfwk \
     sal \
     sot \
-    stl \
     tl \
     ucbhelper \
     utl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 

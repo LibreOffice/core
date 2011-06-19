@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -389,6 +390,9 @@ static bool lcl_CharIsJoiner(sal_Unicode cChar)
     return ((cChar == 0x200C) || (cChar == 0x200D));
 }
 
+//See https://bugs.freedesktop.org/show_bug.cgi?id=31016
+#define ARABIC_BANDAID
+
 bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
 {
     LEUnicode* pIcuChars;
@@ -522,17 +526,6 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             if( nCharPos >= 0 )
             {
                 sal_UCS4 aChar = rArgs.mpStr[ nCharPos ];
-#if 0 // TODO: enable if some unicodes>0xFFFF should need glyph flags!=0
-                if( (aChar >= 0xD800) && (aChar <= 0xDFFF) )
-                {
-                    if( cChar >= 0xDC00 ) // this part of a surrogate pair was already processed
-                        continue;
-                    // calculate unicode scalar value of surrogate pair
-                    aChar = 0x10000 + ((aChar - 0xD800) << 10);
-                    sal_UCS4 aLow = rArgs.mpStr[ nCharPos+1 ];
-                    aChar += aLow & 0x03FF;
-                }
-#endif
                 nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
 
                 // #i99367# HACK: try to detect all diacritics
@@ -544,12 +537,40 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
+            int nNewWidth = nGlyphWidth;
             if( nGlyphWidth <= 0 )
                 bDiacritic |= true;
             // #i99367# force all diacritics to zero width
             // TODO: we need mnOrigWidth/mnLogicWidth/mnNewWidth
             else if( bDiacritic )
-                nGlyphWidth = 0;
+                nGlyphWidth = nNewWidth = 0;
+            else
+            {
+                // Hack, find next +ve width glyph and calculate current
+                // glyph width by substracting the two posituons
+                const IcuPosition* pNextPos = pPos+1;
+                for ( int j = i + 1; j <= nRawRunGlyphCount; ++j, ++pNextPos )
+                {
+                    if ( j == nRawRunGlyphCount )
+                    {
+                        nNewWidth = static_cast<int>(pNextPos->fX - pPos->fX);
+                        break;
+                    }
+
+                    LEGlyphID nNextGlyphIndex = pIcuGlyphs[j];
+                    if( (nNextGlyphIndex == ICU_MARKED_GLYPH)
+                    ||  (nNextGlyphIndex == ICU_DELETED_GLYPH) )
+                        continue;
+
+                    const GlyphMetric& rNextGM = rFont.GetGlyphMetric( nNextGlyphIndex );
+                    int nNextGlyphWidth = rNextGM.GetCharWidth();
+                    if ( nNextGlyphWidth > 0 )
+                    {
+                        nNewWidth = static_cast<int>(pNextPos->fX - pPos->fX);
+                        break;
+                    }
+                }
+            }
 
             // heuristic to detect glyph clusters
             bool bInCluster = true;
@@ -603,7 +624,10 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
             // add resulting glyph item to layout
-            const GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+            GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+#ifdef ARABIC_BANDAID
+            aGI.mnNewWidth = nNewWidth;
+#endif
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
             nLastCharPos = nCharPos;
@@ -642,3 +666,4 @@ ServerFontLayoutEngine* FreetypeServerFont::GetLayoutEngine()
 
 // =======================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

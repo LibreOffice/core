@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 #ifndef _CAIROCANVAS_WIN32_CAIRO_HXX
 #define _CAIROCANVAS_WIN32_CAIRO_HXX
 
-#ifdef WNT
-# include <tools/prewin.h>
-# include <windows.h>
-# include <tools/postwin.h>
-#endif
-
 #include "cairo_cairo.hxx"
+#include <prewin.h>
+#include <postwin.h>
 
 namespace cairo {
 
@@ -68,3 +65,5 @@ namespace cairo {
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

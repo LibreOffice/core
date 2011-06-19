@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,9 +54,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/regpathhelper.hxx>
-#endif
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -165,7 +164,7 @@ void TestApplication::Main()
     #endif
 
 //  Execute();
-    OSL_ENSURE( sal_False, "Test was successful!\n" );
+    OSL_FAIL( "Test was successful!\n" );
 }
 
 //*****************************************************************************************************************
@@ -250,7 +249,7 @@ void TestApplication::impl_testDynamicMenuOptions()
         }
     }
 
-    OSL_ENSURE( sal_False, OUStringToOString( sOut.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_FAIL( OUStringToOString( sOut.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 //*****************************************************************************************************************
@@ -268,3 +267,5 @@ Reference< XMultiServiceFactory > TestApplication::getUNOServiceManager()
     }
     return smgr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

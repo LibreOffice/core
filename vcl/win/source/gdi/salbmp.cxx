@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <tools/svwin.h>
+#include <svsys.h>
 
 #include <vcl/bitmap.hxx> // for BitmapSystemData
 #include <vcl/salbtype.hxx>
@@ -264,6 +265,13 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
     }
 
     return bRet;
+}
+
+// ------------------------------------------------------------------
+
+bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+{
+    return false;
 }
 
 // ------------------------------------------------------------------
@@ -634,3 +642,5 @@ bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

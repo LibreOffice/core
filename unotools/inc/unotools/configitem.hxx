@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,7 +115,7 @@ namespace utl
                                         GetTree();
 
         protected:
-            ConfigItem(const rtl::OUString rSubTree,
+            ConfigItem(const rtl::OUString &rSubTree,
                         sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
             ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
@@ -210,3 +211,5 @@ namespace utl
     };
 }//namespace utl
 #endif //_UTL_CONFIGITEM_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

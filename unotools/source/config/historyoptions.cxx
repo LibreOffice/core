@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
-#ifndef GCC
-#endif
-
-//_________________________________________________________________________________________________________________
-// includes
-//_________________________________________________________________________________________________________________
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/historyoptions_const.hxx>
@@ -42,44 +37,25 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
-
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
-#endif
 
-#ifndef _SVT_LOGHELPER_HXX
 #include <unotools/loghelper.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 // namespaces
@@ -126,7 +102,7 @@ struct IMPL_THistoryItem
         sPassword = sNewPassword ;
     }
 
-    sal_Bool operator==( const OUString& sSearchedURL )
+    sal_Bool operator==( const OUString& sSearchedURL ) const
     {
         return( sURL == sSearchedURL );
     }
@@ -208,8 +184,12 @@ SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 //*****************************************************************************************************************
 sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
 {
-    sal_uInt32                                       nSize = 0  ;
     css::uno::Reference< css::beans::XPropertySet >  xListAccess(m_xCommonXCU, css::uno::UNO_QUERY);
+
+    if (!xListAccess.is())
+        return 0;
+
+    sal_uInt32 nSize = 0  ;
 
     try
     {
@@ -719,27 +699,17 @@ void SvtHistoryOptions::AppendItem(   EHistoryType eHistory ,
     m_pDataContainer->AppendItem( eHistory, sURL, sFilter, sTitle, sPassword );
 }
 
+namespace
+{
+    class theHistoryOptionsMutex : public rtl::Static<osl::Mutex, theHistoryOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 // private method
 //*****************************************************************************************************************
 Mutex& SvtHistoryOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theHistoryOptionsMutex::get();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

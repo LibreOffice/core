@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,10 +101,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                            "com.sun.star.comp.myucp.ContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                             MYUCP_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.myucp.ContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                             MYUCP_CONTENT_PROVIDER_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -126,25 +127,11 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 {
     // Check URL scheme...
 
-    rtl::OUString aScheme( rtl::OUString::createFromAscii( MYUCP_URL_SCHEME ) );
+    rtl::OUString aScheme( RTL_CONSTASCII_USTRINGPARAM( MYUCP_URL_SCHEME ) );
     if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
         throw ucb::IllegalIdentifierException();
 
-    // @@@ Further id checks may go here...
-#if 0
-    if ( id-check-failes )
-        throw ucb::IllegalIdentifierException();
-#endif
-
-    // @@@ Id normalization may go here...
-#if 0
-    // Normalize URL and create new Id.
-    rtl::OUString aCanonicURL = xxxxx( Identifier->getContentIdentifier() );
-    uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucbhelper::ContentIdentifier( m_xSMgr, aCanonicURL );
-#else
     uno::Reference< ucb::XContentIdentifier > xCanonicId = Identifier;
-#endif
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -169,3 +156,5 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 }
 
 } // namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

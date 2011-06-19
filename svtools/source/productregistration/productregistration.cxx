@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "productregistration.hxx"
 #include "unotools/regoptions.hxx"
 #include "registrationdlg.hxx"
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 #include "cppuhelper/factory.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -105,14 +104,14 @@ namespace svt
     //--------------------------------------------------------------------
     OUString SAL_CALL OProductRegistration::getImplementationName_Static( )
     {
-        return OUString::createFromAscii( PRODREG_IMPLNAME );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM( PRODREG_IMPLNAME ));
     }
 
     //--------------------------------------------------------------------
     Sequence< OUString > SAL_CALL OProductRegistration::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aServiceNames( 1 );
-        aServiceNames[ 0 ] = OUString::createFromAscii( PRODREG_SERVNAME );
+        aServiceNames[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( PRODREG_SERVNAME ));
         return aServiceNames;
     }
 
@@ -164,7 +163,7 @@ namespace svt
         }
         catch(const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_getActiveFrame: caught an exception!" );
+            OSL_FAIL( "lcl_getActiveFrame: caught an exception!" );
             return Reference< XFrame >();
         }
     }
@@ -185,7 +184,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_getPreferredDialogParent: caught an exception!" );
+            OSL_FAIL( "lcl_getPreferredDialogParent: caught an exception!" );
         }
 
         return pReturn;
@@ -217,7 +216,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "lcl_isEvalVersion: caught an exception!" );
+            OSL_FAIL( "lcl_isEvalVersion: caught an exception!" );
         }
 
         return bIsEvaluationVersion;
@@ -267,7 +266,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "lcl_getOnlineRegistrationDispatch: caught an exception!" );
+            OSL_FAIL( "lcl_getOnlineRegistrationDispatch: caught an exception!" );
             return false;
         }
     }
@@ -334,7 +333,6 @@ namespace svt
                         // thus, there is no help during the lifetime of the dialog.
                         // To fake this, we explicitly load the necessary services when the user
                         // really requests help herein.
-                        // #110791# - 2003-06-11 - fs@openoffice.org
                         Reference < XInitialization > xOfficeWrapper(
                                 m_xORB->createInstance(
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.OfficeWrapper" ) )
@@ -377,7 +375,7 @@ namespace svt
                             break;
 
                         default:
-                            OSL_ENSURE( sal_False, "OProductRegistration::execute: invalid response from the dialog!" );
+                            OSL_FAIL( "OProductRegistration::execute: invalid response from the dialog!" );
                     }
 
                     // prefer new style registration
@@ -387,7 +385,7 @@ namespace svt
             }
 
             Sequence< NamedValue > aJobResponse( 1 );
-            aJobResponse[0].Name = OUString::createFromAscii( "Deactivate" );
+            aJobResponse[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Deactivate" ));
             aJobResponse[0].Value <<= bDeactivateJob;
             aReturn <<= aJobResponse;
         }
@@ -403,7 +401,7 @@ namespace svt
         {
             // create the Desktop component which can load components
             Reference< XSystemShellExecute > xSystemShell(
-                m_xORB->createInstance( OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ) ),
+                m_xORB->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" )) ),
                 UNO_QUERY
             );
             OSL_ENSURE( xSystemShell.is(), "OProductRegistration::doOnlineRegistration: invalid SystemExecute component!" );
@@ -442,7 +440,7 @@ namespace svt
     OProductRegistration::EventType OProductRegistration::classify( const OUString& _rEventDesc )
     {
         EventType eReturn = etUnknown;
-        if ( _rEventDesc.equalsAscii( "RegistrationRequired" ) )
+        if ( _rEventDesc.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RegistrationRequired")) )
         {
             eReturn = etRegistrationRequired;
         }
@@ -486,3 +484,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

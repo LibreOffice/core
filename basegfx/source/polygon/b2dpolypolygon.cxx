@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,7 +105,7 @@ public:
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
                 aIndex = maPolygons.insert(aIndex, rPolyPolygon.getB2DPolygon(a));
-                aIndex++;
+                ++aIndex;
             }
         }
     }
@@ -430,3 +431,5 @@ namespace basegfx
 } // end of namespace basegfx
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

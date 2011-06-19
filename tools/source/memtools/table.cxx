@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -122,7 +123,6 @@ sal_Bool Table::Insert( sal_uIntPtr nKey, void* p )
         {
             sal_uInt16 n = 0;
             sal_uInt16 nTempCount = (sal_uInt16)nCount * 2;
-            //<!--Modified by PengYunQuan for resolving a NULL pointer access
 
             if( void** pNodes = Container::ImpGetOnlyNodes() )
             {
@@ -152,7 +152,6 @@ sal_Bool Table::Insert( sal_uIntPtr nKey, void* p )
                 if ( ImplGetIndex( nKey, &i ) != TABLE_ENTRY_NOTFOUND )
                     return sal_False;
             }
-            //-->Modified by PengYunQuan for resolving a NULL pointer access
         }
         else
         {
@@ -411,3 +410,5 @@ void* Table::Prev()
     // Pointer vom vorherigen Key zurueckgeben
     return p;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

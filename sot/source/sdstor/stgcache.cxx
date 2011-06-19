@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,10 @@
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/presys.h>
 #endif
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/postsys.h>
 #endif
-#include <vos/macros.hxx>
 
 #include <string.h>
 #include <osl/endian.h>
@@ -50,12 +50,12 @@
 
 /*************************************************************************/
 //-----------------------------------------------------------------------------
-typedef std::hash_map
+typedef boost::unordered_map
 <
     sal_Int32,
     StgPage *,
-    std::hash< sal_Int32 >,
-    NAMESPACE_STD(equal_to)< sal_Int32 >
+    boost::hash< sal_Int32 >,
+    std::equal_to< sal_Int32 >
 > UsrStgPagePtr_Impl;
 #ifdef _MSC_VER
 #pragma warning( disable: 4786 )
@@ -544,3 +544,4 @@ sal_Int32 StgCache::Pos2Page( sal_Int32 nPos )
     return ( ( nPos + nPageSize - 1 ) / nPageSize ) * nPageSize - 1;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

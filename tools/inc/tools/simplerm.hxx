@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
 #define _TOOLS_SIMPLERESMGR_HXX_
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/resid.hxx>
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
@@ -46,7 +47,7 @@ class InternalResMgr;
 class TOOLS_DLLPUBLIC SimpleResMgr
 {
 protected:
-    vos::OMutex m_aAccessSafety;
+    osl::Mutex              m_aAccessSafety;
     InternalResMgr*         m_pResImpl;
 
 public:
@@ -115,3 +116,5 @@ public:
 };
 
 #endif // _TOOLS_SIMPLERESMGR_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,4 +41,3 @@ String STR_REPEAT
 {
     Text [ en-US ] = "~Repeat: " ;
 };
-

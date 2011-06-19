@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,9 @@ struct ImplKernPairData;
 class ImplFontOptions;
 
 #include <tools/gen.hxx>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace basegfx { class B2DPolyPolygon; }
 
@@ -54,6 +56,11 @@ class RawBitmap;
 
 class ServerFontLayout;
 #include <sallayout.hxx>
+
+namespace vcl
+{
+    struct FontCapabilities;
+}
 
 // =======================================================================
 
@@ -96,7 +103,7 @@ private:
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const ImplFontSelectData&, const ImplFontSelectData& ) const; };
     struct IFSD_Hash{ size_t operator()( const ImplFontSelectData& ) const; };
-    typedef ::std::hash_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
+    typedef ::boost::unordered_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
     sal_uLong                       mnMaxSize;      // max overall cache size in bytes
     mutable sal_uLong               mnBytesUsed;
@@ -180,7 +187,9 @@ public:
     virtual bool                TestFont() const            { return true; }
     virtual void*               GetFtFace() const { return 0; }
     virtual int                 GetLoadFlags() const { return 0; }
-    virtual void                SetFontOptions( const ImplFontOptions&) {}
+    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> ) {}
+    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const
+        { return boost::shared_ptr<ImplFontOptions>(); }
     virtual bool                NeedsArtificialBold() const { return false; }
     virtual bool                NeedsArtificialItalic() const { return false; }
 
@@ -190,6 +199,7 @@ public:
     virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const      { return 0; }
     virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
     virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
+    virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const { return false; }
     Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );
@@ -225,7 +235,7 @@ protected:
     virtual ServerFontLayoutEngine* GetLayoutEngine() { return NULL; }
 
 private:
-    typedef ::std::hash_map<int,GlyphData> GlyphList;
+    typedef ::boost::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
 
     const ImplFontSelectData    maFontSelData;
@@ -258,9 +268,8 @@ class VCL_PLUGIN_PUBLIC ImplServerFontEntry : public ImplFontEntry
 {
 private:
     ServerFont*    mpServerFont;
-    ImplFontOptions maFontOptions;
+    boost::shared_ptr<ImplFontOptions> mpFontOptions;
     bool           mbGotFontOptions;
-    bool           mbValidFontOptions;
 
 public:
                    ImplServerFontEntry( ImplFontSelectData& );
@@ -371,10 +380,12 @@ protected:
                           { return (rA.mnChar1 == rB.mnChar1) && (rA.mnChar2 == rB.mnChar2); } };
     struct PairHash{ int operator()(const ImplKernPairData& rA) const
                          { return (rA.mnChar1) * 256 ^ rA.mnChar2; } };
-    typedef std::hash_set< ImplKernPairData, PairHash, PairEqual > UnicodeKernPairs;
+    typedef boost::unordered_set< ImplKernPairData, PairHash, PairEqual > UnicodeKernPairs;
     mutable UnicodeKernPairs maUnicodeKernPairs;
 };
 
 // =======================================================================
 
 #endif // _SV_GLYPHCACHE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -176,7 +176,12 @@
       <FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
-  <LC_COLLATION ref="en_US" />
+  <LC_COLLATION>
+    <Collator unoid="charset" default="true"/>
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="en_US"/>
   <LC_CALENDAR>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,20 +34,6 @@
 
 //=========================================================================
 
-#define PRV_SV_DECL_REF_SIGNATURE( ClassName, Ref )                     \
-    inline               ClassName##Ref() { pObj = 0; }                 \
-    inline               ClassName##Ref( const ClassName##Ref & rObj ); \
-    inline               ClassName##Ref( ClassName * pObjP );           \
-    inline void          Clear();                                       \
-    inline               ~ClassName##Ref();                             \
-    inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
-    inline ClassName##Ref & operator = ( ClassName * pObj );            \
-    inline sal_Bool            Is() const { return pObj != NULL; }          \
-    inline ClassName *     operator &  () const { return pObj; }        \
-    inline ClassName *     operator -> () const { return pObj; }        \
-    inline ClassName &     operator *  () const { return *pObj; }       \
-    inline operator ClassName * () const { return pObj; }
-
 #define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, Init, pRefbase ) \
 inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
     { pObj = rObj.pObj; if( pObj ) { Init pRefbase->AddNextRef; } }         \
@@ -79,13 +66,21 @@ inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )    \
 protected:                                      \
     ClassName * pObj;                           \
 public:                                         \
-PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)
+    inline               ClassName##Ref() { pObj = 0; }                 \
+    inline               ClassName##Ref( const ClassName##Ref & rObj ); \
+    inline               ClassName##Ref( ClassName * pObjP );           \
+    inline void          Clear();                                       \
+    inline               ~ClassName##Ref();                             \
+    inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
+    inline ClassName##Ref & operator = ( ClassName * pObj );            \
+    inline sal_Bool            Is() const { return pObj != NULL; }          \
+    inline ClassName *     operator &  () const { return pObj; }        \
+    inline ClassName *     operator -> () const { return pObj; }        \
+    inline ClassName &     operator *  () const { return *pObj; }       \
+    inline operator ClassName * () const { return pObj; }
 
 #define PRV_SV_DECL_REF( ClassName )            \
 PRV_SV_DECL_REF_LOCK( ClassName, Ref )
-
-#define PRV_SV_DECL_LOCK( ClassName )           \
-PRV_SV_DECL_REF_LOCK( ClassName, Lock )
 
 #define SV_DECL_REF( ClassName )                \
 class ClassName;                                \
@@ -98,7 +93,7 @@ class ClassName##Ref                            \
 class ClassName;                                \
 class ClassName##Lock                           \
 {                                               \
-    PRV_SV_DECL_LOCK( ClassName )               \
+    PRV_SV_DECL_REF_LOCK( ClassName, Lock )     \
 };
 
 #define SV_IMPL_REF( ClassName )                                \
@@ -113,10 +108,6 @@ PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( sal_True ),       \
 #define SV_DECL_IMPL_REF(ClassName)             \
     SV_DECL_REF(ClassName)                      \
     SV_IMPL_REF(ClassName)
-
-#define SV_DECL_IMPL_LOCK( ClassName )          \
-    SV_DECL_LOCK(ClassName)                     \
-    SV_IMPL_LOCK(ClassName)
 
 
 /************************** S v R e f L i s t ****************************/
@@ -151,6 +142,7 @@ inline void Append( const CN##MemberList & );\
 
 #define SV_DECL_REF_LIST(CN,EN) \
 PRV_SV_DECL_REF_LIST(CN,EN,/* empty */)
+
 #define SV_DECL_REF_LIST_VISIBILITY(CN,EN,vis) \
 PRV_SV_DECL_REF_LIST(CN,EN,vis)
 
@@ -313,13 +305,6 @@ public:\
     PRV_SV_DECL_MEMBER_LIST(ClassName,EntryName)\
 };
 
-#define SV_IMPL_MEMBER_LIST(ClassName,EntryName)\
-    PRV_SV_IMPL_MEMBER_LIST(ClassName,EntryName,SvRefBaseMemberList)
-
-#define SV_DECL_IMPL_MEMBER_LIST(ClassName,EntryName)\
-SV_DECL_MEMBER_LIST(ClassName,EntryName)\
-SV_IMPL_MEMBER_LIST(ClassName,EntryName)
-
 /************************** S v R e f B a s e ****************************/
 #define SV_NO_DELETE_REFCOUNT  0x80000000
 class TOOLS_DLLPUBLIC SvRefBase
@@ -366,11 +351,9 @@ public:
     sal_uIntPtr          GetRefCount() const { return nRefCount; }
 };
 
-//#if 0 // _SOLAR__PRIVATE
 #ifndef EMPTYARG
 #define EMPTYARG
 #endif
-//#endif
 
 SV_DECL_IMPL_REF(SvRefBase)
 
@@ -454,3 +437,5 @@ public:                                                             \
 SV_DECL_WEAK( SvWeakBase )
 
 #endif // _Weak_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

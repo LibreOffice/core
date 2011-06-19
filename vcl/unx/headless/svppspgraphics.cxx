@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,10 +59,10 @@
 #include "region.h"
 
 using namespace psp;
-using namespace rtl;
 using namespace basebmp;
 using namespace basegfx;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 // ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
 
 class SalPrinterBmp : public psp::PrinterBmp
@@ -206,7 +207,7 @@ void PspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
     }
 }
 
-sal_uInt16 PspGraphics::GetBitCount()
+sal_uInt16 PspGraphics::GetBitCount() const
 {
     return m_pPrinterGfx->GetBitCount();
 }
@@ -372,7 +373,7 @@ sal_Bool PspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void
 void PspGraphics::copyBits( const SalTwoRect* /*pPosAry*/,
                             SalGraphics* /*pSSrcGraphics*/ )
 {
-    DBG_ERROR( "Error: PrinterGfx::CopyBits() not implemented" );
+    OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
 }
 
 void PspGraphics::copyArea ( long /*nDestX*/,    long /*nDestY*/,
@@ -380,7 +381,7 @@ void PspGraphics::copyArea ( long /*nDestX*/,    long /*nDestY*/,
                              long /*nSrcWidth*/, long /*nSrcHeight*/,
                              sal_uInt16 /*nFlags*/ )
 {
-    DBG_ERROR( "Error: PrinterGfx::CopyArea() not implemented" );
+    OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
 }
 
 void PspGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
@@ -402,21 +403,21 @@ void PspGraphics::drawBitmap( const SalTwoRect* /*pPosAry*/,
                               const SalBitmap& /*rSalBitmap*/,
                               const SalBitmap& /*rTransBitmap*/ )
 {
-    DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
+    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
 }
 
 void PspGraphics::drawBitmap( const SalTwoRect* /*pPosAry*/,
                               const SalBitmap& /*rSalBitmap*/,
                               SalColor /*nTransparentColor*/ )
 {
-    DBG_ERROR("Error: no PrinterGfx::DrawBitmap() for transparent color");
+    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent color");
 }
 
 void PspGraphics::drawMask( const SalTwoRect* /*pPosAry*/,
                             const SalBitmap& /*rSalBitmap*/,
                             SalColor /*nMaskColor*/ )
 {
-    DBG_ERROR("Error: PrinterGfx::DrawMask() not implemented");
+    OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
 }
 
 SalBitmap* PspGraphics::getBitmap( long /*nX*/, long /*nY*/, long /*nDX*/, long /*nDY*/ )
@@ -427,7 +428,7 @@ SalBitmap* PspGraphics::getBitmap( long /*nX*/, long /*nY*/, long /*nDX*/, long 
 
 SalColor PspGraphics::getPixel( long /*nX*/, long /*nY*/ )
 {
-    DBG_ERROR ("Warning: PrinterGfx::GetPixel() not implemented");
+    OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
     return 0;
 }
 
@@ -438,7 +439,7 @@ void PspGraphics::invert(
                          long       /*nDY*/,
                          SalInvert  /*nFlags*/ )
 {
-    DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
+    OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
 
 //==========================================================================
@@ -693,6 +694,13 @@ const ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
     return pIFCMap;
 }
 
+bool PspGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    if (!m_pServerFont[0])
+        return false;
+    return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
+}
+
 sal_uInt16 PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 {
     // release all fonts that are to be overridden
@@ -717,13 +725,13 @@ sal_uInt16 PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel 
     bool bArtBold = false;
     if( pEntry->meItalic == ITALIC_OBLIQUE || pEntry->meItalic == ITALIC_NORMAL )
     {
-        psp::italic::type eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
-        if( eItalic != psp::italic::Italic && eItalic != psp::italic::Oblique )
+        FontItalic eItalic = m_pPrinterGfx->GetFontMgr().getFontItalic( nID );
+        if( eItalic != ITALIC_NORMAL && eItalic != ITALIC_OBLIQUE )
             bArtItalic = true;
     }
     int nWeight = (int)pEntry->meWeight;
     int nRealWeight = (int)m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
-    if( nRealWeight <= (int)psp::weight::Medium && nWeight > (int)WEIGHT_MEDIUM )
+    if( nRealWeight <= (int)WEIGHT_MEDIUM && nWeight > (int)WEIGHT_MEDIUM )
     {
         bArtBold = true;
     }
@@ -785,7 +793,7 @@ void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
     const psp::PrinterInfo& rInfo = psp::PrinterInfoManager::get().getPrinterInfo( m_pJobData->m_aPrinterName );
     if( rInfo.m_bPerformFontSubstitution )
     {
-        for( std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator it = rInfo.m_aFontSubstitutes.begin(); it != rInfo.m_aFontSubstitutes.end(); ++it )
+        for( boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator it = rInfo.m_aFontSubstitutes.begin(); it != rInfo.m_aFontSubstitutes.end(); ++it )
             AddDevFontSubstitute( pOutDev, it->first, it->second, FONT_SUBSTITUTE_ALWAYS );
     }
 }
@@ -840,7 +848,7 @@ sal_uLong PspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPa
     return nHavePairs;
 }
 
-sal_Bool PspGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+sal_Bool PspGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -850,13 +858,13 @@ sal_Bool PspGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
     return sal_True;
 }
 
-sal_Bool PspGraphics::GetGlyphOutline( long nGlyphIndex,
+sal_Bool PspGraphics::GetGlyphOutline( sal_GlyphId nGlyphIndex,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
@@ -867,7 +875,7 @@ sal_Bool PspGraphics::GetGlyphOutline( long nGlyphIndex,
     if( !pSF )
         return sal_False;
 
-    nGlyphIndex &= ~GF_FONTMASK;
+    nGlyphIndex &= GF_IDXMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rB2DPolyPoly ) )
         return sal_True;
 
@@ -1071,91 +1079,16 @@ void PspGraphics::DoGetGlyphWidths( psp::fontID aFont,
 
 // ----------------------------------------------------------------------------
 
-FontWidth PspGraphics::ToFontWidth (psp::width::type eWidth)
-{
-    switch (eWidth)
-    {
-        case psp::width::UltraCondensed: return WIDTH_ULTRA_CONDENSED;
-        case psp::width::ExtraCondensed: return WIDTH_EXTRA_CONDENSED;
-        case psp::width::Condensed:      return WIDTH_CONDENSED;
-        case psp::width::SemiCondensed:  return WIDTH_SEMI_CONDENSED;
-        case psp::width::Normal:         return WIDTH_NORMAL;
-        case psp::width::SemiExpanded:   return WIDTH_SEMI_EXPANDED;
-        case psp::width::Expanded:       return WIDTH_EXPANDED;
-        case psp::width::ExtraExpanded:  return WIDTH_EXTRA_EXPANDED;
-        case psp::width::UltraExpanded:  return WIDTH_ULTRA_EXPANDED;
-        default: break;
-    }
-    return WIDTH_DONTKNOW;
-}
-
-FontWeight PspGraphics::ToFontWeight (psp::weight::type eWeight)
-{
-    switch (eWeight)
-    {
-        case psp::weight::Thin:       return WEIGHT_THIN;
-        case psp::weight::UltraLight: return WEIGHT_ULTRALIGHT;
-        case psp::weight::Light:      return WEIGHT_LIGHT;
-        case psp::weight::SemiLight:  return WEIGHT_SEMILIGHT;
-        case psp::weight::Normal:     return WEIGHT_NORMAL;
-        case psp::weight::Medium:     return WEIGHT_MEDIUM;
-        case psp::weight::SemiBold:   return WEIGHT_SEMIBOLD;
-        case psp::weight::Bold:       return WEIGHT_BOLD;
-        case psp::weight::UltraBold:  return WEIGHT_ULTRABOLD;
-        case psp::weight::Black:      return WEIGHT_BLACK;
-        default: break;
-    }
-    return WEIGHT_DONTKNOW;
-}
-
-FontPitch PspGraphics::ToFontPitch (psp::pitch::type ePitch)
-{
-    switch (ePitch)
-    {
-        case psp::pitch::Fixed:     return PITCH_FIXED;
-        case psp::pitch::Variable:  return PITCH_VARIABLE;
-        default: break;
-    }
-    return PITCH_DONTKNOW;
-}
-
-FontItalic PspGraphics::ToFontItalic (psp::italic::type eItalic)
-{
-    switch (eItalic)
-    {
-        case psp::italic::Upright:  return ITALIC_NONE;
-        case psp::italic::Oblique:  return ITALIC_OBLIQUE;
-        case psp::italic::Italic:   return ITALIC_NORMAL;
-        default: break;
-    }
-    return ITALIC_DONTKNOW;
-}
-
-FontFamily PspGraphics::ToFontFamily (psp::family::type eFamily)
-{
-    switch (eFamily)
-    {
-        case psp::family::Decorative: return FAMILY_DECORATIVE;
-        case psp::family::Modern:     return FAMILY_MODERN;
-        case psp::family::Roman:      return FAMILY_ROMAN;
-        case psp::family::Script:     return FAMILY_SCRIPT;
-        case psp::family::Swiss:      return FAMILY_SWISS;
-        case psp::family::System:     return FAMILY_SYSTEM;
-        default: break;
-    }
-    return FAMILY_DONTKNOW;
-}
-
 ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintFontInfo& rInfo )
 {
     ImplDevFontAttributes aDFA;
     aDFA.maName         = rInfo.m_aFamilyName;
     aDFA.maStyleName    = rInfo.m_aStyleName;
-    aDFA.meFamily       = ToFontFamily (rInfo.m_eFamilyStyle);
-    aDFA.meWeight       = ToFontWeight (rInfo.m_eWeight);
-    aDFA.meItalic       = ToFontItalic (rInfo.m_eItalic);
-    aDFA.meWidthType    = ToFontWidth (rInfo.m_eWidth);
-    aDFA.mePitch        = ToFontPitch (rInfo.m_ePitch);
+    aDFA.meFamily       = rInfo.m_eFamilyStyle;
+    aDFA.meWeight       = rInfo.m_eWeight;
+    aDFA.meItalic       = rInfo.m_eItalic;
+    aDFA.meWidthType    = rInfo.m_eWidth;
+    aDFA.mePitch        = rInfo.m_ePitch;
     aDFA.mbSymbolFlag   = (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL);
 
     switch( rInfo.m_eType )
@@ -1360,7 +1293,8 @@ SystemGraphicsData PspGraphics::GetGraphicsData() const
     SystemGraphicsData aRes;
     aRes.nSize = sizeof(aRes);
         aRes.hDrawable = 0;
-        aRes.pRenderFormat = 0;
+        aRes.pXRenderFormat = 0;
     return aRes;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,7 +158,7 @@ public:
 
     sal_uInt16          GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
-    sal_Bool            IsShift() const
+    bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
     sal_Bool            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }
@@ -278,7 +279,7 @@ public:
                     CommandModKeyData();
                     CommandModKeyData( sal_uInt16 nCode );
 
-    sal_Bool            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? sal_True : sal_False; }
+    bool            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? true : false; }
     sal_Bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) ? sal_True : sal_False; }
     sal_Bool            IsMod2()    const { return (mnCode & MODKEY_MOD2) ? sal_True : sal_False; }
     sal_Bool            IsMod3()    const { return (mnCode & MODKEY_MOD3) ? sal_True : sal_False; }
@@ -524,3 +525,5 @@ inline const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() 
 
 
 #endif // _VCL_CMDEVT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

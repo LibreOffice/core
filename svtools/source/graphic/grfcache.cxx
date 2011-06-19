@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <vos/timer.hxx>
+#include <salhelper/timer.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/poly.hxx>
@@ -117,7 +118,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
         {
             const GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
 
-            mnID1 |= ( aMtf.GetActionCount() & 0x0fffffff );
+            mnID1 |= ( aMtf.GetActionSize() & 0x0fffffff );
             mnID2 = aMtf.GetPrefSize().Width();
             mnID3 = aMtf.GetPrefSize().Height();
             mnID4 = rGraphic.GetChecksum();
@@ -170,7 +171,6 @@ private:
     sal_Bool                mbSwappedAll;
 
     sal_Bool                ImplInit( const GraphicObject& rObj );
-    sal_Bool                ImplMatches( const GraphicObject& rObj ) const { return( GraphicID( rObj ) == maID ); }
     void                ImplFillSubstitute( Graphic& rSubstitute );
 
 public:
@@ -409,7 +409,7 @@ class GraphicDisplayCacheEntry
 {
 private:
 
-    ::vos::TTimeValue           maReleaseTime;
+    ::salhelper::TTimeValue     maReleaseTime;
     const GraphicCacheEntry*    mpRefCacheEntry;
     GDIMetaFile*                mpMtf;
     BitmapEx*                   mpBmpEx;
@@ -462,8 +462,8 @@ public:
     sal_uLong                   GetOutDevDrawMode() const { return mnOutDevDrawMode; }
     sal_uInt16              GetOutDevBitCount() const { return mnOutDevBitCount; }
 
-    void                        SetReleaseTime( const ::vos::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
-    const ::vos::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
+    void                        SetReleaseTime( const ::salhelper::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
+    const ::salhelper::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
 
     sal_Bool                        Matches( OutputDevice* pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
                                          const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
@@ -512,7 +512,7 @@ sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Poi
         }
         else
         {
-             DBG_ERROR( "GraphicDisplayCacheEntry::GetNeededSize(): pOut->GetBitCount() == 0" );
+             OSL_FAIL( "GraphicDisplayCacheEntry::GetNeededSize(): pOut->GetBitCount() == 0" );
             nNeededSize = 256000;
         }
     }
@@ -801,12 +801,12 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
     if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
     {
         GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
-        ::vos::TTimeValue           aReleaseTime;
+        ::salhelper::TTimeValue           aReleaseTime;
 
         if( ( mnReleaseTimeoutSeconds = nTimeoutSeconds ) != 0 )
         {
             osl_getSystemTime( &aReleaseTime );
-            aReleaseTime.addTime( ::vos::TTimeValue( nTimeoutSeconds, 0 ) );
+            aReleaseTime.addTime( ::salhelper::TTimeValue( nTimeoutSeconds, 0 ) );
         }
 
         while( pDisplayEntry )
@@ -897,10 +897,10 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
 
         if( GetCacheTimeout() )
         {
-            ::vos::TTimeValue aReleaseTime;
+            ::salhelper::TTimeValue aReleaseTime;
 
             osl_getSystemTime( &aReleaseTime );
-            aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+            aReleaseTime.addTime( ::salhelper::TTimeValue( GetCacheTimeout(), 0 ) );
             pNewEntry->SetReleaseTime( aReleaseTime );
         }
 
@@ -931,10 +931,10 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
 
         if( GetCacheTimeout() )
         {
-            ::vos::TTimeValue aReleaseTime;
+            ::salhelper::TTimeValue aReleaseTime;
 
             osl_getSystemTime( &aReleaseTime );
-            aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+            aReleaseTime.addTime( ::salhelper::TTimeValue( GetCacheTimeout(), 0 ) );
             pNewEntry->SetReleaseTime( aReleaseTime );
         }
 
@@ -961,7 +961,7 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
     {
         if( pDisplayCacheEntry->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
         {
-            ::vos::TTimeValue aReleaseTime;
+            ::salhelper::TTimeValue aReleaseTime;
 
             // put found object at last used position
             maDisplayCache.Insert( maDisplayCache.Remove( pDisplayCacheEntry ), LIST_APPEND );
@@ -969,7 +969,7 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
             if( GetCacheTimeout() )
             {
                 osl_getSystemTime( &aReleaseTime );
-                aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+                aReleaseTime.addTime( ::salhelper::TTimeValue( GetCacheTimeout(), 0 ) );
             }
 
             pDisplayCacheEntry->SetReleaseTime( aReleaseTime );
@@ -1036,14 +1036,14 @@ IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
 {
     pTimer->Stop();
 
-    ::vos::TTimeValue           aCurTime;
+    ::salhelper::TTimeValue           aCurTime;
     GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
 
     osl_getSystemTime( &aCurTime );
 
     while( pDisplayEntry )
     {
-        const ::vos::TTimeValue& rReleaseTime = pDisplayEntry->GetReleaseTime();
+        const ::salhelper::TTimeValue& rReleaseTime = pDisplayEntry->GetReleaseTime();
 
         if( !rReleaseTime.isEmpty() && ( rReleaseTime < aCurTime ) )
         {
@@ -1060,3 +1060,5 @@ IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
 
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

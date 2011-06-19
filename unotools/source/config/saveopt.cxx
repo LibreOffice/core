@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_unotools.hxx"
 
-#ifndef GCC
-#endif
-
 #include <unotools/saveopt.hxx>
 #include "rtl/instance.hxx"
 #include <unotools/configmgr.hxx>
@@ -46,8 +44,10 @@
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+
 namespace css = ::com::sun::star;
 
 class SvtSaveOptions_Impl;
@@ -421,7 +421,7 @@ Sequence< OUString > GetPropertyNames()
 // -----------------------------------------------------------------------
 
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Office.Common/Save") )
+    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Save")) )
     , nAutoSaveTime( 0 )
     , bUseUserData( sal_False )
     , bBackup( sal_False )
@@ -483,7 +483,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         if ( pValues[nProp] >>= nTemp )
                             nAutoSaveTime = nTemp;
                         else {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         };
                         bROAutoSaveTime = pROStates[nProp];
                         break;
@@ -584,7 +584,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         }
                         else
                         {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         }
                     }
                 }
@@ -596,21 +596,21 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     {
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::utl::getProcessServiceFactory(),
-        ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
         ::comphelper::ConfigurationHelper::E_READONLY);
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("Enabled")) >>= bAutoSave;
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled"))) >>= bAutoSave;
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("TimeIntervall")) >>= nAutoSaveTime;
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeIntervall"))) >>= nAutoSaveTime;
     }
     catch(const css::uno::Exception&)
-        { DBG_ERROR("Could not find needed informations for AutoSave feature."); }
+        { OSL_FAIL("Could not find needed informations for AutoSave feature."); }
 }
 
 SvtSaveOptions_Impl::~SvtSaveOptions_Impl()
@@ -783,19 +783,19 @@ void SvtSaveOptions_Impl::Commit()
 
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::utl::getProcessServiceFactory(),
-        ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("TimeIntervall"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeIntervall")),
         css::uno::makeAny(nAutoSaveTime));
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("Enabled"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
         css::uno::makeAny(bAutoSave));
 
     ::comphelper::ConfigurationHelper::flush(xCFG);
@@ -827,7 +827,7 @@ public:
 const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Office.Common/Load") )
+    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Load")) )
     , bLoadUserDefinedSettings( sal_False )
 {
     Sequence< OUString > aNames(1);
@@ -1088,3 +1088,4 @@ sal_Bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
     return pImp->pSaveOpt->IsReadOnly(eOption);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

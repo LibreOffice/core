@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>
 
@@ -191,18 +192,18 @@ namespace svt
             Reference< XResultSet > xResultSet;
             Sequence< OUString > aProps(12);
 
-            aProps[0] = OUString::createFromAscii( "Title" );
-            aProps[1] = OUString::createFromAscii( "Size" );
-            aProps[2] = OUString::createFromAscii( "DateModified" );
-            aProps[3] = OUString::createFromAscii( "DateCreated" );
-            aProps[4] = OUString::createFromAscii( "IsFolder" );
-            aProps[5] = OUString::createFromAscii( "TargetURL" );
-            aProps[6] = OUString::createFromAscii( "IsHidden" );
-            aProps[7] = OUString::createFromAscii( "IsVolume" );
-            aProps[8] = OUString::createFromAscii( "IsRemote" );
-            aProps[9] = OUString::createFromAscii( "IsRemoveable" );
-            aProps[10] = OUString::createFromAscii( "IsFloppy" );
-            aProps[11] = OUString::createFromAscii( "IsCompactDisc" );
+            aProps[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+            aProps[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ));
+            aProps[2] = OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ));
+            aProps[3] = OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ));
+            aProps[4] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
+            aProps[5] = OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ));
+            aProps[6] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ));
+            aProps[7] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ));
+            aProps[8] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsRemote" ));
+            aProps[9] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ));
+            aProps[10] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFloppy" ));
+            aProps[11] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsCompactDisc" ));
 
             Reference< XCommandEnvironment > xEnvironment;
             try
@@ -298,8 +299,8 @@ namespace svt
                                 ::ucbhelper::Content aCnt( aTargetURL, xEnvironment );
                                 try
                                 {
-                                aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
-                                aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
+                                aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" )) ) >>= pData->maSize;
+                                aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDT;
                                 }
                                 catch (...) {}
                             }
@@ -311,7 +312,7 @@ namespace svt
 
                             if ( pData->mbIsFolder )
                             {
-                                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                                SolarMutexGuard aGuard;
                                 ::svtools::VolumeInfo aVolInfo( pData->mbIsVolume, pData->mbIsRemote,
                                                                 pData->mbIsRemoveable, pData->mbIsFloppy,
                                                                 pData->mbIsCompactDisc );
@@ -395,7 +396,7 @@ namespace svt
 
     sal_Bool FileViewContentEnumerator::URLOnBlackList ( const ::rtl::OUString& sRealURL )
     {
-        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( rtl::OUString::createFromAscii("/")) +1 );
+        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ))) +1 );
 
         for (int i = 0; i < m_rBlackList.getLength() ; i++)
         {
@@ -430,7 +431,7 @@ namespace svt
             m_xDocInfo->loadFromURL( _rTargetURL );
             Reference< XPropertySet > xPropSet( m_xDocInfo, UNO_QUERY );
 
-            Any aAny = xPropSet->getPropertyValue( OUString::createFromAscii( "Title" ) );
+            Any aAny = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) );
 
             OUString sTitle;
             if ( ( aAny >>= sTitle ) && sTitle.getLength() > 0 )
@@ -462,3 +463,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

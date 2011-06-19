@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/valueset.hxx>
 #include "valueimp.hxx"
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -44,12 +46,13 @@ using namespace ::com::sun::star;
 // - ValueSetItem -
 // ----------------
 
-ValueSetItem::ValueSetItem( ValueSet& rParent ) :
-    mrParent( rParent ),
-    mnId( 0 ),
-    mnBits( 0 ),
-    mpData( NULL ),
-    mpxAcc( NULL )
+ValueSetItem::ValueSetItem( ValueSet& rParent )
+    : mrParent(rParent)
+    , mnId(0)
+    , mnBits(0)
+    , meType(VALUESETITEM_NONE)
+    , mpData(NULL)
+    , mpxAcc(NULL)
 {
 }
 
@@ -122,7 +125,7 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
             {
                 (*aIter)->notifyEvent( aEvtObject );
             }
-            catch( uno::Exception& )
+            catch(const uno::Exception&)
             {
             }
 
@@ -131,22 +134,14 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
     }
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theValueSetAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theValueSetAccUnoTunnelId > {};
+}
 
 const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theValueSetAccUnoTunnelId::get().getSeq();
 }
 
 // -----------------------------------------------------------------------------
@@ -159,7 +154,7 @@ ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterfa
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
         return( xUnoTunnel.is() ? reinterpret_cast<ValueSetAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueSetAcc::getUnoTunnelId() ))) : NULL );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch(const ::com::sun::star::uno::Exception&)
     {
         return NULL;
     }
@@ -208,7 +203,7 @@ uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueSetAcc::getAcc
 sal_Int32 SAL_CALL ValueSetAcc::getAccessibleChildCount()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
 
     sal_Int32 nCount = mpParent->ImplGetVisibleItemCount();
@@ -223,7 +218,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xRet;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(i));
 
@@ -241,7 +236,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     Window*                                         pParent = mpParent->GetParent();
     uno::Reference< accessibility::XAccessible >    xRet;
 
@@ -257,7 +252,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     Window*                 pParent = mpParent->GetParent();
     sal_Int32               nRet = 0;
 
@@ -297,7 +292,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     String              aRet( RTL_CONSTASCII_USTRINGPARAM( "ValueSet" ) );
 
     return aRet;
@@ -309,7 +304,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     String              aRet;
 
     if ( mpParent )
@@ -362,7 +357,7 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
     throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const ::rtl::OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
     lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
@@ -449,17 +444,17 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const sal_uInt16                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    if( VALUESET_ITEM_NOTFOUND != nItemId )
+    if( ((sal_uInt16)-1) != nItemId )
     {
-        const sal_uInt16 nItemPos = mpParent->GetItemPos( nItemId );
+        const size_t nItemPos = mpParent->GetItemPos( nItemId );
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem* pItem = mpParent->mpImpl->mpItemList->GetObject( nItemPos );
+            ValueSetItem* pItem = (*mpParent->mpImpl->mpItemList)[ nItemPos ];
 
             if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() )
                xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
@@ -475,7 +470,7 @@ awt::Rectangle SAL_CALL ValueSetAcc::getBounds()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const Point         aOutPos( mpParent->GetPosPixel() );
     const Size          aOutSize( mpParent->GetOutputSizePixel() );
     awt::Rectangle      aRet;
@@ -509,7 +504,7 @@ awt::Point SAL_CALL ValueSetAcc::getLocationOnScreen()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const Point         aScreenPos( mpParent->OutputToAbsoluteScreenPixel( Point() ) );
     awt::Point          aRet;
 
@@ -540,7 +535,7 @@ void SAL_CALL ValueSetAcc::grabFocus()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     mpParent->GrabFocus();
 }
 
@@ -579,7 +574,7 @@ void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
 
     if(pItem != NULL)
@@ -597,7 +592,7 @@ sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int32 nChildIndex 
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
     sal_Bool            bRet = sal_False;
 
@@ -615,7 +610,7 @@ void SAL_CALL ValueSetAcc::clearAccessibleSelection()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     mpParent->SetNoSelection();
 }
 
@@ -634,7 +629,7 @@ sal_Int32 SAL_CALL ValueSetAcc::getSelectedAccessibleChildCount()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     sal_Int32           nRet = 0;
 
     for( sal_uInt16 i = 0, nCount = getItemCount(); i < nCount; i++ )
@@ -654,7 +649,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAc
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xRet;
 
     for( sal_uInt16 i = 0, nCount = getItemCount(), nSel = 0; ( i < nCount ) && !xRet.is(); i++ )
@@ -674,7 +669,7 @@ void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ThrowIfDisposed();
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     // Because of the single selection we can reset the whole selection when
     // the specified child is currently selected.
     if (isAccessibleChildSelected(nChildIndex))
@@ -704,7 +699,7 @@ void SAL_CALL ValueSetAcc::disposing (void)
 
     {
         // Make a copy of the list and clear the original.
-        const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (m_aMutex);
         aListenerListCopy = mxEventListeners;
         mxEventListeners.clear();
@@ -724,7 +719,7 @@ void SAL_CALL ValueSetAcc::disposing (void)
         {
             (*aListenerIterator)->disposing (aEvent);
         }
-        catch( uno::Exception& )
+        catch(const uno::Exception&)
         {
             // Ignore exceptions.
         }
@@ -845,26 +840,18 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
 
 void ValueItemAcc::ParentDestroyed()
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
     mpParent = NULL;
 }
 
-// -----------------------------------------------------------------------------
+namespace
+{
+    class theValueItemAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theValueItemAccUnoTunnelId > {};
+}
 
 const uno::Sequence< sal_Int8 >& ValueItemAcc::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq;
-
-    if( !aSeq.getLength() )
-    {
-        static osl::Mutex           aCreateMutex;
-        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
-
-        aSeq.realloc( 16 );
-        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
-    }
-
-    return aSeq;
+    return theValueItemAccUnoTunnelId::get().getSeq();
 }
 
 // -----------------------------------------------------------------------------
@@ -877,7 +864,7 @@ ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInter
         uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
         return( xUnoTunnel.is() ? reinterpret_cast<ValueItemAcc*>(sal::static_int_cast<sal_IntPtr>(xUnoTunnel->getSomething( ValueItemAcc::getUnoTunnelId() ))) : NULL );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch(const ::com::sun::star::uno::Exception&)
     {
         return NULL;
     }
@@ -912,7 +899,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleParent()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( mpParent )
@@ -926,7 +913,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
 sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     // The index defaults to -1 to indicate the child does not belong to its
     // parent.
     sal_Int32 nIndexInParent = -1;
@@ -945,7 +932,7 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
             {
                 pItem = mpParent->mrParent.ImplGetVisibleItem (i);
             }
-            catch (lang::IndexOutOfBoundsException aException)
+            catch (const lang::IndexOutOfBoundsException&)
             {
                 pItem = NULL;
             }
@@ -984,7 +971,7 @@ sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
 ::rtl::OUString SAL_CALL ValueItemAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     String              aRet;
 
     if( mpParent )
@@ -1014,7 +1001,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueItemAcc::g
 uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getAccessibleStateSet()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard                   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     ::utl::AccessibleStateSetHelper*    pStateSet = new ::utl::AccessibleStateSetHelper;
 
     if( mpParent )
@@ -1046,7 +1033,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueItemAcc::getA
 lang::Locale SAL_CALL ValueItemAcc::getLocale()
     throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
-    const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     const ::rtl::OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
     lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
@@ -1067,7 +1054,7 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
 void SAL_CALL ValueItemAcc::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
 
     if( rxListener.is() )
     {
@@ -1092,7 +1079,7 @@ void SAL_CALL ValueItemAcc::addEventListener( const uno::Reference< accessibilit
 void SAL_CALL ValueItemAcc::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
-    const ::vos::OGuard aGuard( maMutex );
+    const ::osl::MutexGuard aGuard( maMutex );
 
     if( rxListener.is() )
     {
@@ -1138,7 +1125,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibl
 awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     awt::Rectangle      aRet;
 
     if( mpParent )
@@ -1177,7 +1164,7 @@ awt::Point SAL_CALL ValueItemAcc::getLocation()
 awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
     throw (uno::RuntimeException)
 {
-    const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aSolarGuard;
     awt::Point          aRet;
 
     if( mpParent )
@@ -1256,3 +1243,5 @@ sal_Int64 SAL_CALL ValueItemAcc::getSomething( const uno::Sequence< sal_Int8 >& 
 
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,10 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+
+#include <rtl/instance.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
 
 #define MULTILINE_ENTRY_DRAW_FLAGS ( TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_VCENTER )
 
@@ -122,40 +127,50 @@ ImplEntryList::~ImplEntryList()
 void ImplEntryList::Clear()
 {
     mnImages = 0;
-    for ( sal_uInt16 n = GetEntryCount(); n; )
-    {
-        ImplEntryType* pImplEntry = GetEntry( --n );
-        delete pImplEntry;
-    }
-    List::Clear();
+    maEntries.clear();
 }
 
 // -----------------------------------------------------------------------
 
 void ImplEntryList::SelectEntry( sal_uInt16 nPos, sal_Bool bSelect )
 {
-    ImplEntryType* pImplEntry = GetEntry( nPos );
-    if ( pImplEntry &&
-       ( pImplEntry->mbIsSelected != bSelect ) &&
-       ( (pImplEntry->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0  ) )
+    if (nPos < maEntries.size())
     {
-        pImplEntry->mbIsSelected = bSelect;
-        if ( mbCallSelectionChangedHdl )
-            maSelectionChangedHdl.Call( (void*)sal_IntPtr(nPos) );
+        boost::ptr_vector<ImplEntryType>::iterator iter = maEntries.begin()+nPos;
+
+        if ( ( iter->mbIsSelected != bSelect ) &&
+           ( (iter->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0  ) )
+        {
+            iter->mbIsSelected = bSelect;
+            if ( mbCallSelectionChangedHdl )
+                maSelectionChangedHdl.Call( (void*)sal_IntPtr(nPos) );
+        }
     }
 }
 
-// -----------------------------------------------------------------------
-
-uno::Reference< i18n::XCollator > ImplGetCollator (lang::Locale &rLocale)
+namespace
 {
-    static uno::Reference< i18n::XCollator > xCollator;
-    if ( !xCollator.is() )
-        xCollator = vcl::unohelper::CreateCollator();
-    if( xCollator.is() )
-        xCollator->loadDefaultCollator (rLocale, 0);
+    struct theSorter
+        : public rtl::StaticWithInit< comphelper::string::NaturalStringSorter, theSorter >
+    {
+        comphelper::string::NaturalStringSorter operator () ()
+        {
+            return comphelper::string::NaturalStringSorter(
+                ::comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetLocale());
+        }
+    };
+}
 
-    return xCollator;
+namespace vcl
+{
+    namespace unohelper
+    {
+        const comphelper::string::NaturalStringSorter& getNaturalStringSorterForAppLocale()
+        {
+            return theSorter::get();
+        }
+    }
 }
 
 sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry, sal_Bool bSort )
@@ -163,19 +178,29 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
     if ( !!pNewEntry->maImage )
         mnImages++;
 
-    if ( !bSort || !Count() )
+    sal_uInt16 insPos = 0;
+
+    if ( !bSort || maEntries.empty())
     {
-        Insert( pNewEntry, nPos );
+        if (nPos < maEntries.size())
+        {
+            insPos = nPos;
+            maEntries.insert( maEntries.begin() + nPos, pNewEntry );
+        }
+        else
+        {
+            insPos = maEntries.size();
+            maEntries.push_back(pNewEntry);
+        }
     }
     else
     {
-        lang::Locale aLocale = Application::GetSettings().GetLocale();
-        uno::Reference< i18n::XCollator > xCollator = ImplGetCollator(aLocale);
+        const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
 
         const XubString& rStr = pNewEntry->maStr;
         sal_uLong nLow, nHigh, nMid;
 
-        nHigh = Count();
+        nHigh = maEntries.size();
 
         ImplEntryType* pTemp = GetEntry( (sal_uInt16)(nHigh-1) );
 
@@ -183,24 +208,24 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
         {
             // XXX even though XCollator::compareString returns a sal_Int32 the only
             // defined values are {-1, 0, 1} which is compatible with StringCompare
-            StringCompare eComp = xCollator.is() ?
-                (StringCompare)xCollator->compareString (rStr, pTemp->maStr)
-                : COMPARE_EQUAL;
+            StringCompare eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
 
             // Schnelles Einfuegen bei sortierten Daten
             if ( eComp != COMPARE_LESS )
             {
-                Insert( pNewEntry, LIST_APPEND );
+                insPos = maEntries.size();
+                maEntries.push_back(pNewEntry);
             }
             else
             {
                 nLow  = mnMRUCount;
                 pTemp = (ImplEntryType*)GetEntry( (sal_uInt16)nLow );
 
-                eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
+                eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
                 if ( eComp != COMPARE_GREATER )
                 {
-                    Insert( pNewEntry, (sal_uLong)0 );
+                    insPos = 0;
+                    maEntries.insert(maEntries.begin(),pNewEntry);
                 }
                 else
                 {
@@ -209,9 +234,9 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                     do
                     {
                         nMid = (nLow + nHigh) / 2;
-                        pTemp = (ImplEntryType*)GetObject( nMid );
+                        pTemp = (ImplEntryType*)GetEntry( nMid );
 
-                        eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
+                        eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
 
                         if ( eComp == COMPARE_LESS )
                             nHigh = nMid-1;
@@ -228,35 +253,38 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                     if ( eComp != COMPARE_LESS )
                         nMid++;
 
-                    Insert( pNewEntry, nMid );
+                    insPos = nMid;
+                    maEntries.insert(maEntries.begin()+nMid,pNewEntry);
                 }
             }
         }
         catch (uno::RuntimeException& )
         {
-            // XXX this is arguable, if the exception occured because pNewEntry is
-            // garbage you wouldn't insert it. If the exception occured because the
+            // XXX this is arguable, if the exception occurred because pNewEntry is
+            // garbage you wouldn't insert it. If the exception occurred because the
             // Collator implementation is garbage then give the user a chance to see
             // his stuff
-            Insert( pNewEntry, (sal_uLong)0 );
+            insPos = 0;
+            maEntries.insert(maEntries.begin(),pNewEntry);
         }
 
     }
 
-    return (sal_uInt16)GetPos( pNewEntry );
+    return insPos;
 }
 
 // -----------------------------------------------------------------------
 
 void ImplEntryList::RemoveEntry( sal_uInt16 nPos )
 {
-    ImplEntryType* pImplEntry = (ImplEntryType*)List::Remove( nPos );
-    if ( pImplEntry )
+    if (nPos < maEntries.size())
     {
-        if ( !!pImplEntry->maImage )
+        boost::ptr_vector<ImplEntryType>::iterator iter = maEntries.begin()+ nPos;
+
+        if ( !!iter->maImage )
             mnImages--;
 
-        delete pImplEntry;
+        maEntries.erase(iter);
     }
 }
 
@@ -264,11 +292,10 @@ void ImplEntryList::RemoveEntry( sal_uInt16 nPos )
 
 sal_uInt16 ImplEntryList::FindEntry( const XubString& rString, sal_Bool bSearchMRUArea ) const
 {
-    sal_uInt16 nEntries = GetEntryCount();
+    sal_uInt16 nEntries = maEntries.size();
     for ( sal_uInt16 n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
-        ImplEntryType* pImplEntry = GetEntry( n );
-        String aComp( vcl::I18nHelper::filterFormattingChars( pImplEntry->maStr ) );
+        String aComp( vcl::I18nHelper::filterFormattingChars( maEntries[n].maStr ) );
         if ( aComp == rString )
             return n;
     }
@@ -374,7 +401,7 @@ XubString ImplEntryList::GetEntryText( sal_uInt16 nPos ) const
 sal_Bool ImplEntryList::HasEntryImage( sal_uInt16 nPos ) const
 {
     sal_Bool bImage = sal_False;
-    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    ImplEntryType* pImplEntry = GetEntry( nPos );
     if ( pImplEntry )
         bImage = !!pImplEntry->maImage;
     return bImage;
@@ -385,7 +412,7 @@ sal_Bool ImplEntryList::HasEntryImage( sal_uInt16 nPos ) const
 Image ImplEntryList::GetEntryImage( sal_uInt16 nPos ) const
 {
     Image aImage;
-    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    ImplEntryType* pImplEntry = GetEntry( nPos );
     if ( pImplEntry )
         aImage = pImplEntry->maImage;
     return aImage;
@@ -395,7 +422,7 @@ Image ImplEntryList::GetEntryImage( sal_uInt16 nPos ) const
 
 void ImplEntryList::SetEntryData( sal_uInt16 nPos, void* pNewData )
 {
-    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    ImplEntryType* pImplEntry = GetEntry( nPos );
     if ( pImplEntry )
         pImplEntry->mpUserData = pNewData;
 }
@@ -404,7 +431,7 @@ void ImplEntryList::SetEntryData( sal_uInt16 nPos, void* pNewData )
 
 void* ImplEntryList::GetEntryData( sal_uInt16 nPos ) const
 {
-    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    ImplEntryType* pImplEntry = GetEntry( nPos );
     return pImplEntry ? pImplEntry->mpUserData : NULL;
 }
 
@@ -412,7 +439,7 @@ void* ImplEntryList::GetEntryData( sal_uInt16 nPos ) const
 
 void ImplEntryList::SetEntryFlags( sal_uInt16 nPos, long nFlags )
 {
-    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    ImplEntryType* pImplEntry = GetEntry( nPos );
     if ( pImplEntry )
         pImplEntry->mnFlags = nFlags;
 }
@@ -421,7 +448,7 @@ void ImplEntryList::SetEntryFlags( sal_uInt16 nPos, long nFlags )
 
 long ImplEntryList::GetEntryFlags( sal_uInt16 nPos ) const
 {
-    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    ImplEntryType* pImplEntry = GetEntry( nPos );
     return pImplEntry ? pImplEntry->mnFlags : 0;
 }
 
@@ -2747,25 +2774,17 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplWin::SetModeImage( const Image& rImage, BmpColorMode eMode )
+sal_Bool ImplWin::SetModeImage( const Image& rImage )
 {
-    if( eMode == BMP_COLOR_NORMAL )
-        SetImage( rImage );
-    else if( eMode == BMP_COLOR_HIGHCONTRAST )
-        maImageHC = rImage;
-    else
-        return sal_False;
+    SetImage( rImage );
     return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& ImplWin::GetModeImage( BmpColorMode eMode ) const
+const Image& ImplWin::GetModeImage( ) const
 {
-    if( eMode == BMP_COLOR_HIGHCONTRAST )
-        return maImageHC;
-    else
-        return maImage;
+    return maImage;
 }
 
 // -----------------------------------------------------------------------
@@ -2782,7 +2801,6 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 {
     if( IsEnabled() )
     {
-//      Control::MouseButtonDown( rMEvt );
         MBDown();
     }
 }
@@ -2943,12 +2961,6 @@ void ImplWin::DrawEntry( sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDraw
 
         // check for HC mode
         Image *pImage = &maImage;
-
-        if( !!maImageHC )
-        {
-            if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-                pImage = &maImageHC;
-        }
 
         if ( !IsZoom() )
         {
@@ -3183,6 +3195,11 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             aFloatSz.Width() += nSBWidth;
         }
+
+        long nDesktopWidth = GetDesktopRectPixel().getWidth();
+        if (aFloatSz.Width() > nDesktopWidth)
+            // Don't exceed the desktop width.
+            aFloatSz.Width() = nDesktopWidth;
     }
 
     if ( aFloatSz.Height() > nMaxHeight )
@@ -3209,6 +3226,13 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         aFloatSz.Height() = nInnerHeight + nTop + nBottom;
     }
 
+    if (aFloatSz.Width() < aSz.Width())
+    {
+        // The max width of list box entries exceeds the window width.
+        // Account for the scroll bar height.
+        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+        aFloatSz.Height() += nSBWidth;
+    }
     return aFloatSz;
 }
 
@@ -3262,3 +3286,5 @@ void ImplListBoxFloatingWindow::StartFloat( sal_Bool bStartTracking )
         mpImplLB->GetMainWindow()->ImplClearLayoutData();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

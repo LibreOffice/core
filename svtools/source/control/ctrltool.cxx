@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <sal/macros.h>
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <svtools/ctrltool.hxx>
@@ -44,7 +46,7 @@
 // =======================================================================
 
 // Standard Fontgroessen fuer scalierbare Fonts
-static long aStdSizeAry[] =
+static const long aStdSizeAry[] =
 {
      60,
      70,
@@ -120,8 +122,6 @@ private:
                             ImplFontListNameInfo( const XubString& rSearchName ) :
                                 maSearchName( rSearchName )
                             {}
-
-    const XubString&        GetSearchName() const { return maSearchName; }
 };
 
 // =======================================================================
@@ -171,30 +171,30 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
     // und somit die Wahrscheinlichkeit das hinten angehaengt werden muss
     // sehr gross ist.
     StringCompare eComp;
-    sal_uLong nCnt = Count();
+    sal_uLong nCnt = maEntries.size();
     if ( !nCnt )
     {
         if ( pIndex )
-            *pIndex = LIST_APPEND;
+            *pIndex = ULONG_MAX;
         return NULL;
     }
     else
     {
-        ImplFontListNameInfo* pCmpData = (ImplFontListNameInfo*)List::GetObject( nCnt-1 );
+        const ImplFontListNameInfo* pCmpData = &maEntries[nCnt-1];
         eComp = rSearchName.CompareTo( pCmpData->maSearchName );
         if ( eComp == COMPARE_GREATER )
         {
             if ( pIndex )
-                *pIndex = LIST_APPEND;
+                *pIndex = ULONG_MAX;
             return NULL;
         }
         else if ( eComp == COMPARE_EQUAL )
-            return pCmpData;
+            return const_cast<ImplFontListNameInfo*>(pCmpData);
     }
 
     // Fonts in der Liste suchen
-    ImplFontListNameInfo*   pCompareData;
-    ImplFontListNameInfo*   pFoundData = NULL;
+    const ImplFontListNameInfo* pCompareData;
+    const ImplFontListNameInfo* pFoundData = NULL;
     sal_uLong                   nLow = 0;
     sal_uLong                   nHigh = nCnt-1;
     sal_uLong                   nMid;
@@ -202,7 +202,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
     do
     {
         nMid = (nLow + nHigh) / 2;
-        pCompareData = (ImplFontListNameInfo*)List::GetObject( nMid );
+        pCompareData = &maEntries[nMid];
         eComp = rSearchName.CompareTo( pCompareData->maSearchName );
         if ( eComp == COMPARE_LESS )
         {
@@ -232,7 +232,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
             *pIndex = nMid;
     }
 
-    return pFoundData;
+    return const_cast<ImplFontListNameInfo*>(pFoundData);
 }
 
 // -----------------------------------------------------------------------
@@ -284,7 +284,11 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                 pData->mpFirst      = pNewInfo;
                 pNewInfo->mpNext    = NULL;
                 pData->mnType       = 0;
-                Insert( (void*)pData, nIndex );
+
+                if (nIndex < maEntries.size())
+                    maEntries.insert(maEntries.begin()+nIndex,pData);
+                else
+                    maEntries.push_back(pData);
             }
         }
         else
@@ -344,8 +348,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
 
 // =======================================================================
 
-FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll ) :
-    List( 4096, sal::static_int_cast< sal_uInt16 >(pDevice->GetDevFontCount()), 32 )
+FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll )
 {
     // Variablen initialisieren
     mpDev = pDevice;
@@ -387,20 +390,17 @@ FontList::~FontList()
         delete[] mpSizeAry;
 
     // FontInfos loeschen
-    ImplFontListNameInfo* pData = (ImplFontListNameInfo*)First();
-    while ( pData )
+    ImplFontListFontInfo *pTemp, *pInfo;
+    boost::ptr_vector<ImplFontListNameInfo>::iterator it;
+    for (it = maEntries.begin(); it != maEntries.end(); ++it)
     {
-        ImplFontListFontInfo* pTemp;
-        ImplFontListFontInfo* pInfo = pData->mpFirst;
+        pInfo = it->mpFirst;
         while ( pInfo )
         {
             pTemp = pInfo->mpNext;
             delete pInfo;
             pInfo = pTemp;
         }
-        ImplFontListNameInfo* pNext = (ImplFontListNameInfo*)Next();
-        delete pData;
-        pData = pNext;
     }
 }
 // -----------------------------------------------------------------------
@@ -757,8 +757,7 @@ const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontName(): nFont >= Count" );
 
-    ImplFontListNameInfo* pData = (ImplFontListNameInfo*)List::GetObject( nFont );
-    return *(pData->mpFirst);
+    return *(maEntries[nFont].mpFirst);
 }
 
 // -----------------------------------------------------------------------
@@ -767,8 +766,7 @@ sal_uInt16 FontList::GetFontNameType( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontNameType(): nFont >= Count" );
 
-    ImplFontListNameInfo* pData = (ImplFontListNameInfo*)List::GetObject( nFont );
-    return pData->mnType;
+    return maEntries[nFont].mnType;
 }
 
 // -----------------------------------------------------------------------
@@ -870,7 +868,7 @@ struct ImplFSNameItem
 
 //------------------------------------------------------------------------
 
-static ImplFSNameItem aImplSimplifiedChinese[] =
+static const ImplFSNameItem aImplSimplifiedChinese[] =
 {
     {  50, "\xe5\x85\xab\xe5\x8f\xb7" },
     {  55, "\xe4\xb8\x83\xe5\x8f\xb7" },
@@ -890,30 +888,6 @@ static ImplFSNameItem aImplSimplifiedChinese[] =
     { 420, "\xe5\x88\x9d\xe5\x8f\xb7" }
 };
 
-// -----------------------------------------------------------------------
-
-#if 0 // #i89077# disabled by popular request
-static ImplFSNameItem aImplTraditionalChinese[] =
-{
-    {  50, "\xe5\x85\xab\xe8\x99\x9f" },
-    {  55, "\xe4\xb8\x83\xe8\x99\x9f" },
-    {  65, "\xe5\xb0\x8f\xe5\x85\xad" },
-    {  75, "\xe5\x85\xad\xe8\x99\x9f" },
-    {  90, "\xe5\xb0\x8f\xe4\xba\x94" },
-    { 105, "\xe4\xba\x94\xe8\x99\x9f" },
-    { 120, "\xe5\xb0\x8f\xe5\x9b\x9b" },
-    { 140, "\xe5\x9b\x9b\xe8\x99\x9f" },
-    { 150, "\xe5\xb0\x8f\xe4\xb8\x89" },
-    { 160, "\xe4\xb8\x89\xe8\x99\x9f" },
-    { 180, "\xe5\xb0\x8f\xe4\xba\x8c" },
-    { 220, "\xe4\xba\x8c\xe8\x99\x9f" },
-    { 240, "\xe5\xb0\x8f\xe4\xb8\x80" },
-    { 260, "\xe4\xb8\x80\xe8\x99\x9f" },
-    { 360, "\xe5\xb0\x8f\xe5\x88\x9d" },
-    { 420, "\xe5\x88\x9d\xe8\x99\x9f" }
-};
-#endif
-
 //------------------------------------------------------------------------
 
 FontSizeNames::FontSizeNames( LanguageType eLanguage )
@@ -928,7 +902,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
         case LANGUAGE_CHINESE:
         case LANGUAGE_CHINESE_SIMPLIFIED:
             mpArray = aImplSimplifiedChinese;
-            mnElem = sizeof(aImplSimplifiedChinese) / sizeof(aImplSimplifiedChinese[0]);
+            mnElem = SAL_N_ELEMENTS(aImplSimplifiedChinese);
             break;
 
 #if 0 // #i89077# disabled by popular request
@@ -937,7 +911,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
         case LANGUAGE_CHINESE_MACAU:
         case LANGUAGE_CHINESE_TRADITIONAL:
             mpArray = aImplTraditionalChinese;
-            mnElem = sizeof(aImplTraditionalChinese) / sizeof(aImplTraditionalChinese[0]);
+            mnElem = SAL_N_ELEMENTS(aImplTraditionalChinese);
             break;
 #endif
 
@@ -1009,3 +983,5 @@ long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
         return 0;
     return mpArray[nIndex].mnSize;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

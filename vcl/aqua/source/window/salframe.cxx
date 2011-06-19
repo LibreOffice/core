@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -666,12 +667,6 @@ sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
                      SAL_FRAMESTATE_MASK_Y                 |
                      SAL_FRAMESTATE_MASK_WIDTH             |
                      SAL_FRAMESTATE_MASK_HEIGHT            |
-                     #if 0
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_X       |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_Y       |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH   |
-                     SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT  |
-                     #endif
                      SAL_FRAMESTATE_MASK_STATE;
 
     NSRect aStateRect = [mpWindow frame];
@@ -727,6 +722,10 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
             }
         }
     }
+}
+
+void AquaSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+{
 }
 
 // -----------------------------------------------------------------------
@@ -930,7 +929,7 @@ NSCursor* AquaSalFrame::getCurrentCursor() const
         pCursor = GetSalData()->getCursor( mePointerStyle );
         if( pCursor == nil )
         {
-            DBG_ERROR( "unmapped cursor" );
+            OSL_FAIL( "unmapped cursor" );
             pCursor = [NSCursor arrowCursor];
         }
         break;
@@ -1272,6 +1271,8 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 
+    aStyleSettings.SetToolbarIconSize( nDPIY > 160 ? STYLE_TOOLBAR_ICONSIZE_LARGE : STYLE_TOOLBAR_ICONSIZE_SMALL );
+
     // TODO: better mapping of aqua<->ooo font settings
     aStyleSettings.SetAppFont( aAppFont );
     aStyleSettings.SetHelpFont( aAppFont );
@@ -1325,7 +1326,9 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidth]) );
 
     // images in menus false for MacOSX
-    aStyleSettings.SetUseImagesInMenus( false );
+    aStyleSettings.SetPreferredUseImagesInMenus( false );
+    aStyleSettings.SetHideDisabledMenuItems( sal_True );
+    aStyleSettings.SetAcceleratorsInContextMenus( sal_False );
 
     rSettings.SetStyleSettings( aStyleSettings );
 
@@ -1548,6 +1551,17 @@ SalPointerState AquaSalFrame::GetPointerState()
 
 
     return state;
+}
+
+SalFrame::SalIndicatorState AquaSalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = 0;
+    return aState;
+}
+
+void AquaSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
+{
 }
 
 bool AquaSalFrame::SetPluginParent( SystemParentData* )
@@ -1790,3 +1804,4 @@ void AquaSalFrame::EndSetClipRegion()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

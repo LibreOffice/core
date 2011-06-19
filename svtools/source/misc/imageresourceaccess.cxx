@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -191,7 +192,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "GraphicAccess::getImageStream: caught an exception!" );
+            OSL_FAIL( "GraphicAccess::getImageStream: caught an exception!" );
         }
 
         return pReturn;
@@ -207,3 +208,4 @@ namespace svt
 } // namespace svt
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

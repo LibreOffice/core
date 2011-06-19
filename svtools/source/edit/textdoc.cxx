@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,22 +38,8 @@ SV_IMPL_PTRARR( TextCharAttribs, TextCharAttribPtr );
 
 // Vergleichmethode wird von QuickSort gerufen...
 
-EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
-int _stdcall
-#else
-#ifdef WNT
-#if _MSC_VER >= 1200
-int __cdecl
-#else
-int _cdecl
-#endif
-#else
-int
-#endif
-#endif
-
-CompareStart( const void* pFirst, const void* pSecond )
+extern "C" {
+int SAL_CALL CompareStart( const void* pFirst, const void* pSecond )
 {
     if ( (*((TextCharAttrib**)pFirst))->GetStart() < (*((TextCharAttrib**)pSecond))->GetStart() )
         return (-1);
@@ -60,7 +47,7 @@ CompareStart( const void* pFirst, const void* pSecond )
         return (1);
     return 0;
 }
-
+}
 
 // -------------------------------------------------------------------------
 // (+) class TextCharAttrib
@@ -239,7 +226,7 @@ sal_Bool TextCharAttribList::DbgCheckAttribs()
         if ( pAttr->GetStart() > pAttr->GetEnd() )
         {
             bOK = sal_False;
-            DBG_ERROR( "Attr verdreht" );
+            OSL_FAIL( "Attr verdreht" );
         }
     }
     return bOK;
@@ -551,7 +538,7 @@ String TextDoc::GetText( const sal_Unicode* pSep ) const
 
     if ( nLen > STRING_MAXLEN )
     {
-        DBG_ERROR( "Text zu gross fuer String" );
+        OSL_FAIL( "Text zu gross fuer String" );
         return String();
     }
 
@@ -677,370 +664,16 @@ sal_Bool TextDoc::IsValidPaM( const TextPaM& rPaM )
 {
     if ( rPaM.GetPara() >= maTextNodes.Count() )
     {
-        DBG_ERROR( "PaM: Para out of range" );
+        OSL_FAIL( "PaM: Para out of range" );
         return sal_False;
     }
     TextNode * pNode = maTextNodes.GetObject( rPaM.GetPara() );
     if ( rPaM.GetIndex() > pNode->GetText().Len() )
     {
-        DBG_ERROR( "PaM: Index out of range" );
+        OSL_FAIL( "PaM: Index out of range" );
         return sal_False;
     }
     return sal_True;
 }
 
-/*
-
-void TextDoc::InsertAttribInSelection( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem )
-{
-    DBG_ASSERT( pNode, "Wohin mit dem Attribut?" );
-    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribut zu gross!" );
-
-    // fuer Optimierung:
-    // dieses endet am Anfang der Selektion => kann erweitert werden
-    TextCharAttrib* pEndingAttrib = 0;
-    // dieses startet am Ende der Selektion => kann erweitert werden
-    TextCharAttrib* pStartingAttrib = 0;
-
-    DBG_ASSERT( nStart <= nEnd, "Kleiner Rechenfehler in InsertAttribInSelection" );
-
-    RemoveAttribs( pNode, nStart, nEnd, pStartingAttrib, pEndingAttrib, rPoolItem.Which() );
-
-    if ( pStartingAttrib && pEndingAttrib &&
-         ( *(pStartingAttrib->GetItem()) == rPoolItem ) &&
-         ( *(pEndingAttrib->GetItem()) == rPoolItem ) )
-    {
-        // wird ein groesses Attribut.
-        pEndingAttrib->GetEnd() = pStartingAttrib->GetEnd();
-        pCurPool->Remove( *(pStartingAttrib->GetItem()) );
-        pNode->GetCharAttribs().GetAttribs().Remove( pNode->GetCharAttribs().GetAttribs().GetPos( pStartingAttrib ) );
-        delete pStartingAttrib;
-    }
-    else if ( pStartingAttrib && ( *(pStartingAttrib->GetItem()) == rPoolItem ) )
-        pStartingAttrib->GetStart() = nStart;
-    else if ( pEndingAttrib && ( *(pEndingAttrib->GetItem()) == rPoolItem ) )
-        pEndingAttrib->GetEnd() = nEnd;
-    else
-        InsertAttrib( rPoolItem, pNode, nStart, nEnd );
-
-    if ( pStartingAttrib )
-        pNode->GetCharAttribs().ResortAttribs();
-}
-
-sal_Bool TextDoc::RemoveAttribs( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt16 nWhich )
-{
-    TextCharAttrib* pStarting;
-    TextCharAttrib* pEnding;
-    return RemoveAttribs( pNode, nStart, nEnd, pStarting, pEnding, nWhich );
-}
-
-sal_Bool TextDoc::RemoveAttribs( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, TextCharAttrib*& rpStarting, TextCharAttrib*& rpEnding, sal_uInt16 nWhich )
-{
-    DBG_ASSERT( pNode, "Wohin mit dem Attribut?" );
-    DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribut zu gross!" );
-
-    // dieses endet am Anfang der Selektion => kann erweitert werden
-    rpEnding = 0;
-    // dieses startet am Ende der Selektion => kann erweitert werden
-    rpStarting = 0;
-
-    sal_Bool bChanged = sal_False;
-
-    DBG_ASSERT( nStart <= nEnd, "Kleiner Rechenfehler in InsertAttribInSelection" );
-
-    // ueber die Attribute iterieren...
-    sal_uInt16 nAttr = 0;
-    TextCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-    while ( pAttr )
-    {
-        sal_Bool bRemoveAttrib = sal_False;
-        if ( !nWhich || ( pAttr->Which() == nWhich ) )
-        {
-            // Attribut beginnt in Selection
-            if ( ( pAttr->GetStart() >= nStart ) && ( pAttr->GetStart() <= nEnd ) )
-            {
-                bChanged = sal_True;
-                if ( pAttr->GetEnd() > nEnd )
-                {
-                    pAttr->GetStart() = nEnd;   // dann faengt es dahinter an
-                    rpStarting = pAttr;
-                    break;  // es kann kein weiteres Attrib hier liegen
-                }
-                else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
-                {
-                    // Feature nur loeschen, wenn genau an der Stelle
-                    bRemoveAttrib = sal_True;
-                }
-            }
-
-            // Attribut endet in Selection
-            else if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetEnd() <= nEnd ) )
-            {
-                bChanged = sal_True;
-                if ( ( pAttr->GetStart() < nStart ) && !pAttr->IsFeature() )
-                {
-                    pAttr->GetEnd() = nStart;   // dann hoert es hier auf
-                    rpEnding = pAttr;
-                }
-                else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
-                {
-                    // Feature nur loeschen, wenn genau an der Stelle
-                    bRemoveAttrib = sal_True;
-                }
-            }
-            // Attribut ueberlappt die Selektion
-            else if ( ( pAttr->GetStart() <= nStart ) && ( pAttr->GetEnd() >= nEnd ) )
-            {
-                bChanged = sal_True;
-                if ( pAttr->GetStart() == nStart )
-                {
-                    pAttr->GetStart() = nEnd;
-                    rpStarting = pAttr;
-                    break;  // es kann weitere Attribute geben!
-                }
-                else if ( pAttr->GetEnd() == nEnd )
-                {
-                    pAttr->GetEnd() = nStart;
-                    rpEnding = pAttr;
-                    break;  // es kann weitere Attribute geben!
-                }
-                else // Attribut muss gesplittet werden...
-                {
-                    sal_uInt16 nOldEnd = pAttr->GetEnd();
-                    pAttr->GetEnd() = nStart;
-                    rpEnding = pAttr;
-//                  sal_uLong nSavePos = pNode->GetCharAttribs().GetStartList().GetCurPos();
-                    InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
-//                  pNode->GetCharAttribs().GetStartList().Seek( nSavePos );
-                    break;  // es kann weitere Attribute geben!
-                }
-            }
-        }
-        if ( bRemoveAttrib )
-        {
-            DBG_ASSERT( ( pAttr != rpStarting ) && ( pAttr != rpEnding ), "Loeschen und behalten des gleichen Attributs ?" );
-            pNode->GetCharAttribs().GetAttribs().Remove(nAttr);
-            pCurPool->Remove( *pAttr->GetItem() );
-            delete pAttr;
-            nAttr--;
-        }
-        nAttr++;
-        pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-    }
-    return bChanged;
-}
-
-#pragma SEG_FUNCDEF(editdoc_3f)
-
-void TextDoc::InsertAttrib( const SfxPoolItem& rPoolItem, TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd )
-{
-    // Diese Methode prueft nicht mehr, ob ein entspr. Attribut
-    // schon an der Stelle existiert!
-
-    // pruefen, ob neues Attrib oder einfach nur Ende eines Attribs...
-//  const SfxPoolItem& rDefItem = pNode->GetContentAttribs().GetItem( rPoolItem.Which() );
-//  sal_Bool bCreateAttrib = ( rDefItem != rPoolItem );
-
-    // Durch den Verlust der Exclude-Liste geht es nicht mehr, dass ich
-    // kein neues Attribut benoetige und nur das alte nicht expandiere...
-//  if ( !bCreateAttrib )
-    {
-        // => Wenn schon Default-Item, dann wenigstens nur dann einstellen,
-        // wenn davor wirklich ein entsprechendes Attribut.
-//      if ( pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart ) )
-//          bCreateAttrib = sal_True;
-        // Aber kleiner Trost:
-        // Die wenigsten schreiben, aendern das Attr, schreiben, und
-        // stellen dann wieder das Default-Attr ein.
-    }
-
-    // 22.9.95:
-    // Die Uberlegung, einfach das andere Attribut nicht zu expandieren, war
-    // sowieso falsch, da das DefAttr aus einer Vorlage kommen kann,
-    // die irgendwann verschwindet!
-//  if ( bCreateAttrib )
-//  {
-        TextCharAttrib* pAttrib = MakeCharAttrib( *pCurPool, rPoolItem, nStart, nEnd );
-        DBG_ASSERT( pAttrib, "MakeCharAttrib fehlgeschlagen!" );
-        pNode->GetCharAttribs().InsertAttrib( pAttrib );
-//  }
-//  else
-//  {
-//      TextCharAttrib* pTmpAttrib =
-//          pNode->GetCharAttribs().FindAnyAttrib( rPoolItem.Which() );
-//      if ( pTmpAttrib )   // sonst benoetige ich es sowieso nicht....
-//      {
-//          aExcludeList.Insert( pTmpAttrib->GetItem() );
-//      }
-//  }
-}
-
-#pragma SEG_FUNCDEF(editdoc_40)
-
-void TextDoc::InsertAttrib( TextNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem )
-{
-    if ( nStart != nEnd )
-    {
-        InsertAttribInSelection( pNode, nStart, nEnd, rPoolItem );
-    }
-    else
-    {
-        // Pruefen, ob schon ein neues Attribut mit der WhichId an der Stelle:
-        TextCharAttrib* pAttr = pNode->GetCharAttribs().FindEmptyAttrib( rPoolItem.Which(), nStart );
-        if ( pAttr )
-        {
-            // Attribut entfernen....
-            pNode->GetCharAttribs().GetAttribs().Remove(
-                pNode->GetCharAttribs().GetAttribs().GetPos( pAttr ) );
-        }
-
-        // pruefen, ob ein 'gleiches' Attribut an der Stelle liegt.
-        pAttr = pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart );
-        if ( pAttr )
-        {
-            if ( pAttr->IsInside( nStart ) )    // splitten
-            {
-                // ???????????????????????????????
-                // eigentlich noch pruefen, ob wirklich splittet, oder return !
-                // ???????????????????????????????
-                sal_uInt16 nOldEnd = pAttr->GetEnd();
-                pAttr->GetEnd() = nStart;
-                pAttr = MakeCharAttrib( *pCurPool, *(pAttr->GetItem()), nStart, nOldEnd );
-                pNode->GetCharAttribs().InsertAttrib( pAttr );
-            }
-            else if ( pAttr->GetEnd() == nStart )
-            {
-                DBG_ASSERT( !pAttr->IsEmpty(), "Doch noch ein leeres Attribut?" );
-                // pruefen, ob genau das gleiche Attribut
-                if ( *(pAttr->GetItem()) == rPoolItem )
-                    return;
-            }
-        }
-        InsertAttrib( rPoolItem, pNode, nStart, nStart );
-    }
-}
-
-#pragma SEG_FUNCDEF(editdoc_41)
-
-void TextDoc::FindAttribs( TextNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet )
-{
-    DBG_ASSERT( pNode, "Wo soll ich suchen ?" );
-    DBG_ASSERT( nStartPos <= nEndPos, "Ungueltiger Bereich!" );
-
-    sal_uInt16 nAttr = 0;
-    TextCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-    // keine Selection...
-    if ( nStartPos == nEndPos )
-    {
-        while ( pAttr && ( pAttr->GetStart() <= nEndPos) )
-        {
-            const SfxPoolItem* pItem = 0;
-            // Attribut liegt dadrueber...
-            if ( ( pAttr->GetStart() < nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
-                pItem = pAttr->GetItem();
-            // Attribut endet hier, ist nicht leer
-            else if ( ( pAttr->GetStart() < nStartPos ) && ( pAttr->GetEnd() == nStartPos ) )
-            {
-                if ( !pNode->GetCharAttribs().FindEmptyAttrib( pAttr->GetItem()->Which(), nStartPos ) )
-                    pItem = pAttr->GetItem();
-            }
-            // Attribut endet hier, ist leer
-            else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() == nStartPos ) )
-            {
-//              if ( aExcludeList.FindAttrib( pAttr->GetItem()->Which() ) )
-                    pItem = pAttr->GetItem();
-//              else if ( pNode->Len() == 0 )   // Sonderfall
-//                  pItem = pAttr->GetItem();
-            }
-            // Attribut beginnt hier
-            else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
-            {
-                if ( nStartPos == 0 )   // Sonderfall
-                    pItem = pAttr->GetItem();
-            }
-
-            if ( pItem )
-            {
-                sal_uInt16 nWhich = pItem->Which();
-                if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
-                {
-                    rCurSet.Put( *pItem );
-                }
-                else if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
-                {
-                    const SfxPoolItem& rItem = rCurSet.Get( nWhich );
-                    if ( rItem != *pItem )
-                    {
-                        rCurSet.InvalidateItem( nWhich );
-                    }
-                }
-            }
-            nAttr++;
-            pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-        }
-    }
-    else    // Selektion
-    {
-        while ( pAttr && ( pAttr->GetStart() < nEndPos) )
-        {
-            const SfxPoolItem* pItem = 0;
-            // Attribut liegt dadrueber...
-            if ( ( pAttr->GetStart() <= nStartPos ) && ( pAttr->GetEnd() >= nEndPos ) )
-                pItem = pAttr->GetItem();
-            // Attribut startet mitten drin...
-            else if ( pAttr->GetStart() >= nStartPos )
-            {
-                // !!! pItem = pAttr->GetItem();
-                // einfach nur pItem reicht nicht, da ich z.B. bei Shadow
-                // niemals ein ungleiches Item finden wuerde, da ein solche
-                // seine Anwesenheit durch Abwesenheit repraesentiert!
-                // if ( ... )
-                // Es muesste geprueft werden, on genau das gleiche Attribut
-                // an der Bruchstelle aufsetzt, was recht aufwendig ist.
-                // Da ich beim Einfuegen von Attributen aber etwas optimiere
-                // tritt der Fall nicht so schnell auf...
-                // Also aus Geschwindigkeitsgruenden:
-                rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
-
-            }
-            // Attribut endet mitten drin...
-            else if ( pAttr->GetEnd() > nStartPos )
-            {
-                // pItem = pAttr->GetItem();
-                // s.o.
-
-                // -----------------31.05.95 16:01-------------------
-                //  Ist falsch, wenn das gleiche Attribut sofort wieder
-                //  eingestellt wird!
-                //  => Sollte am besten nicht vorkommen, also gleich beim
-                //      Setzen von Attributen richtig machen!
-                // --------------------------------------------------
-                rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
-            }
-
-            if ( pItem )
-            {
-                sal_uInt16 nWhich = pItem->Which();
-                if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
-                {
-                    rCurSet.Put( *pItem );
-                }
-                else if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
-                {
-                    const SfxPoolItem& rItem = rCurSet.Get( nWhich );
-                    if ( rItem != *pItem )
-                    {
-                        rCurSet.InvalidateItem( nWhich );
-                    }
-                }
-            }
-            nAttr++;
-            pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-        }
-    }
-}
-
-
-*/
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

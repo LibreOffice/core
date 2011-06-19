@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/bigint.hxx>
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 
 class LocaleDataWrapper;
 
@@ -99,9 +98,7 @@ public:
 
 class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
 {
-//#if 0 // _SOLAR__PRIVATE
     friend void ImplNewLongCurrencyFieldValue( LongCurrencyField*, BigInt );
-//#endif
 
 private:
     BigInt          mnSpinSize;
@@ -160,3 +157,5 @@ public:
 };
 
 #endif // _LONGCURR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

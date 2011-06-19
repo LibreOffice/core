@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 
 class DataChangedEvent;
 
@@ -110,3 +109,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

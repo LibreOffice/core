@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,10 +46,6 @@
 |*
 |*    ENTRYSTRUCT::Destroy()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 06.08.91
-|*    Letzte Aenderung  MM 06.08.91
-|*
 *************************************************************************/
 void ENTRY_STRUCT::Destroy()
 {
@@ -63,10 +60,6 @@ void ENTRY_STRUCT::Destroy()
 /*************************************************************************
 |*
 |*    RscBaseCont::RscBaseCont()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
 |*
 *************************************************************************/
 RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
@@ -85,10 +78,6 @@ RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
 |*
 |*    RscBaseCont::~RscBaseCont()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
-|*
 *************************************************************************/
 RscBaseCont::~RscBaseCont()
 {
@@ -97,10 +86,6 @@ RscBaseCont::~RscBaseCont()
 /*************************************************************************
 |*
 |*    RscBaseCont::GetClassType()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
 |*
 *************************************************************************/
 RSCCLASS_TYPE RscBaseCont::GetClassType() const
@@ -111,10 +96,6 @@ RSCCLASS_TYPE RscBaseCont::GetClassType() const
 /*************************************************************************
 |*
 |*    DestroyElements()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
@@ -134,10 +115,6 @@ void RscBaseCont::DestroyElements( RscBaseContInst * pClassData )
 /*************************************************************************
 |*
 |*    RscBaseCont::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
@@ -192,10 +169,6 @@ RSCINST RscBaseCont::Create( RSCINST * pInst, const RSCINST & rDflt,
 |*
 |*    RscBaseCont::Destroy()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.05.91
-|*    Letzte Aenderung  MM 25.05.91
-|*
 *************************************************************************/
 void RscBaseCont::Destroy( const RSCINST & rInst ){
     RscBaseContInst * pClassData;
@@ -209,10 +182,6 @@ void RscBaseCont::Destroy( const RSCINST & rInst ){
 /*************************************************************************
 |*
 |*    RscBaseCont::SearchEle()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 17.05.91
-|*    Letzte Aenderung  MM 17.05.91
 |*
 *************************************************************************/
 RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName,
@@ -241,10 +210,6 @@ RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName
 |*
 |*    RscBaseCont::SearchEle()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 17.05.91
-|*    Letzte Aenderung  MM 17.05.91
-|*
 *************************************************************************/
 RSCINST RscBaseCont::SearchEle( const RSCINST & rInst, const RscId & rEleName,
                                 RscTop * pClass )
@@ -255,10 +220,6 @@ RSCINST RscBaseCont::SearchEle( const RSCINST & rInst, const RscId & rEleName,
 /*************************************************************************
 |*
 |*    RscBaseCont::GetElement()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
@@ -338,10 +299,6 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
 |*
 |*    RscBaseCont::GetCount()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
-|*
 *************************************************************************/
 sal_uInt32 RscBaseCont::GetCount( const RSCINST & rInst ){
     RscBaseContInst * pClassData;
@@ -353,10 +310,6 @@ sal_uInt32 RscBaseCont::GetCount( const RSCINST & rInst ){
 /*************************************************************************
 |*
 |*    RscBaseCont::GetPosEle()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
 |*
 *************************************************************************/
 RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
@@ -372,10 +325,6 @@ RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
 /*************************************************************************
 |*
 |*    RscBaseCont::MovePosEle()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.10.91
-|*    Letzte Aenderung  MM 23.10.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
@@ -412,10 +361,6 @@ ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
 |*
 |*    RscBaseCont::SetPosRscId()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 30.09.91
-|*    Letzte Aenderung  MM 30.09.91
-|*
 *************************************************************************/
 ERRTYPE RscBaseCont::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                                   const RscId & rId ){
@@ -443,10 +388,6 @@ ERRTYPE RscBaseCont::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
 |*
 |*    RscBaseCont::GetInfoEle()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
-|*
 *************************************************************************/
 SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
     RscBaseContInst * pClassData;
@@ -465,10 +406,6 @@ SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos )
 /*************************************************************************
 |*
 |*    RscBaseCont::SetString()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.04.91
-|*    Letzte Aenderung  MM 29.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
@@ -507,10 +444,6 @@ else
 /*************************************************************************
 |*
 |*    RscBaseCont::SetNumber()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.06.91
-|*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
@@ -627,10 +560,6 @@ else
 |*
 |*    RscBaseCont::SetRef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 02.12.91
-|*    Letzte Aenderung  MM 02.12.91
-|*
 *************************************************************************/
 ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId ){
     RscBaseContInst * pClassData;
@@ -668,17 +597,13 @@ else
 |*
 |*    RscBaseCont::IsConsistent()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 23.09.91
-|*    Letzte Aenderung  MM 23.09.91
-|*
 *************************************************************************/
-sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst, RscInconsList * pList ){
+sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst ) {
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
     sal_Bool    bRet;
 
-    bRet = RscTop::IsConsistent( rInst, pList );
+    bRet = RscTop::IsConsistent( rInst );
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -689,23 +614,15 @@ sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst, RscInconsList * pList
             if( (sal_Int32)pClassData->pEntries[ i ].aName > 0x7FFF
               || (sal_Int32)pClassData->pEntries[ i ].aName < 1 ){
                 bRet = sal_False;
-                if( pList )
-                    pList->Insert( new RscInconsistent(
-                        pClassData->pEntries[ i ].aName,
-                        pClassData->pEntries[ i ].aName ) );
             }
             else if( SearchElePos( rInst, pClassData->pEntries[ i ].aName,
                 pClassData->pEntries[ i ].aInst.pClass, i +1 ).IsInst() )
             {
                  bRet = sal_False;
-                 if( pList )
-                     pList->Insert( new RscInconsistent(
-                         pClassData->pEntries[ i    ].aName,
-                         pClassData->pEntries[ i +1 ].aName ) );
              };
         }
         if( ! pClassData->pEntries[ i ].aInst.pClass->
-              IsConsistent( pClassData->pEntries[ i ].aInst, pList ) )
+              IsConsistent( pClassData->pEntries[ i ].aInst ) )
             bRet = sal_False;
     };
 
@@ -715,10 +632,6 @@ sal_Bool RscBaseCont::IsConsistent( const RSCINST & rInst, RscInconsList * pList
 /*************************************************************************
 |*
 |*    RscBaseCont::SetToDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
 void RscBaseCont::SetToDefault( const RSCINST & rInst )
@@ -740,10 +653,6 @@ void RscBaseCont::SetToDefault( const RSCINST & rInst )
 /*************************************************************************
 |*
 |*    RscBaseCont::IsDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
 sal_Bool RscBaseCont::IsDefault( const RSCINST & rInst ){
@@ -770,10 +679,6 @@ sal_Bool RscBaseCont::IsDefault( const RSCINST & rInst ){
 |*
 |*    RscBaseCont::IsValueDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 25.04.91
-|*    Letzte Aenderung  MM 15.01.92
-|*
 *************************************************************************/
 sal_Bool RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
@@ -793,10 +698,6 @@ sal_Bool RscBaseCont::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 /*************************************************************************
 |*
 |*    RscBaseCont::Delete()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.06.91
-|*    Letzte Aenderung  MM 12.06.91
 |*
 *************************************************************************/
 void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
@@ -823,10 +724,6 @@ void RscBaseCont::Delete( const RSCINST & rInst, RscTop * pClass,
 |*
 |*    RscBaseCont::DeletePos()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.06.91
-|*    Letzte Aenderung  MM 12.06.91
-|*
 *************************************************************************/
 void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
     RscBaseContInst *   pClassData;
@@ -849,10 +746,6 @@ void RscBaseCont::DeletePos( const RSCINST & rInst, sal_uInt32 nPos ){
 /*************************************************************************
 |*
 |*    RscBaseCont::ContWriteSrc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -879,10 +772,6 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscBaseCont::ContWriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
@@ -942,10 +831,6 @@ void RscBaseCont::ContWriteRcAccess
 |*
 |*    RscBaseCont::WriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
-|*
 *************************************************************************/
 void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                             RscTypCont * pTC, sal_uInt32 nTab,
@@ -958,10 +843,6 @@ void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscBaseCont::WriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
@@ -979,10 +860,6 @@ ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 /*************************************************************************
 |*
 |*    RscBaseCont::WriteHxx()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::WriteHxx( const RSCINST & rInst, FILE * fOutput,
@@ -1014,10 +891,6 @@ ERRTYPE RscBaseCont::WriteHxx( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscBaseCont::WriteCxx()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.04.91
-|*    Letzte Aenderung  MM 26.04.91
 |*
 *************************************************************************/
 ERRTYPE RscBaseCont::WriteCxx( const RSCINST & rInst, FILE * fOutput,
@@ -1051,10 +924,6 @@ ERRTYPE RscBaseCont::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscContWriteSrc::RscContWriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
-|*
 *************************************************************************/
 RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId,
                                  RscTop * pSuper, sal_Bool bNoIdent )
@@ -1064,10 +933,6 @@ RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId,
 /*************************************************************************
 |*
 |*    RscContWriteSrc::WriteSrc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
 |*
 *************************************************************************/
 void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
@@ -1095,10 +960,6 @@ void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscCont::RscCont()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
-|*
 *************************************************************************/
 RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, sal_Bool bNoIdent )
               : RscContWriteSrc( nId, nTypeId, pSuper, bNoIdent )
@@ -1107,10 +968,6 @@ RscCont::RscCont( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, sal_Bool bNoIde
 /*************************************************************************
 |*
 |*    RscCont::WriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
 |*
 *************************************************************************/
 ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
@@ -1146,10 +1003,6 @@ void RscCont::WriteRcAccess
 |*
 |*    RscContExtraData::RscContExtraData()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
-|*
 *************************************************************************/
 RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId,
                              RscTop * pSuper, sal_Bool bNoIdent )
@@ -1159,10 +1012,6 @@ RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId,
 /*************************************************************************
 |*
 |*    RscContExtraData::WriteRc()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.05.91
-|*    Letzte Aenderung  MM 08.05.91
 |*
 *************************************************************************/
 ERRTYPE RscContExtraData::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
@@ -1177,3 +1026,5 @@ ERRTYPE RscContExtraData::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
     return aError;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 /* nicht geschuetzt, darf nur einmal includet werden */
 
-// Konflíkt mit den Tools-Pair vermeiden
+// Konflï¿½kt mit den Tools-Pair vermeiden
 #define Pair StlPair
 
 #if defined WNT
@@ -38,3 +39,5 @@
 #define Region       WIN_Region
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

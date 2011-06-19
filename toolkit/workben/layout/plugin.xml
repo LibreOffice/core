@@ -10,7 +10,7 @@
              has_border="true" sizeable="true" moveable="true">
     <vbox spacing="5" border="5">
         <hbox spacing="5" cnt:expand="false">
-        <fixedimage id="FI_HEADER" cnt:expand="false" graphic="res/commandimagelist/sc_apply.png" />
+        <fixedimage id="FI_HEADER" cnt:expand="false" graphic="cmd/sc_apply.png" />
         <fixedtext id="FT_HEADER" _label="Plugin Test"/>
     </hbox>
     <fixedline id="FL_HEADER"/>

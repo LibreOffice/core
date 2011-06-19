@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -148,21 +149,7 @@ namespace utl
         OSingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
         { \
         } \
-    }; \
-    \
-    /* -------------------------------------------------------------------- */ \
-    template < class TYPE > \
-    class OLegacySingletonRegistration : public ::comphelper::OLegacySingletonRegistration< TYPE > \
-    { \
-    private: \
-        typedef ::comphelper::OLegacySingletonRegistration< TYPE >    BaseClass; \
-    \
-    public: \
-        OLegacySingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
     };
-
 
     //====================================================================
     //= implementing a concrete module
@@ -201,3 +188,4 @@ namespace utl
 
 #endif // UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

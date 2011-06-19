@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -550,21 +551,27 @@ String TokenInfo::MakeTag() const
 
 void ParserMessageList::AddError( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
 {
-    Insert( new ParserError( nErrorNr, aErrorText, rTag ), LIST_APPEND );
+    maList.push_back( new ParserError( nErrorNr, aErrorText, rTag ) );
 }
 
 void ParserMessageList::AddWarning( sal_uInt16 nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
 {
-    Insert( new ParserWarning( nErrorNr, aErrorText, rTag ), LIST_APPEND );
+    maList.push_back( new ParserWarning( nErrorNr, aErrorText, rTag ) );
 }
 
 sal_Bool ParserMessageList::HasErrors()
 {
-    sal_uInt16 i;
-    for ( i=0 ; i < Count() ; i++ )
-        if ( GetObject( i )->IsError() )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+        if ( maList[ i ]->IsError() )
             return sal_True;
     return sal_False;
+}
+
+void ParserMessageList::clear()
+{
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+        delete maList[ i ];
+    maList.clear();
 }
 
 struct Tag
@@ -663,7 +670,7 @@ void SimpleParser::Parse( String PaSource )
     nPos = 0;
     aLastToken.Erase();
     aNextTag = TokenInfo( TAG_NOMORETAGS, TOK_INVALIDPOS );
-    aTokenList.Clear();
+    aTokenList.clear();
 };
 
 TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
@@ -735,24 +742,18 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
 
     if ( aResult.nId == TAG_UNKNOWN_TAG )
         aResult = TokenInfo( TAG_UNKNOWN_TAG, nTokenStartPos, aLastToken );
-    aTokenList.Insert( aResult, LIST_APPEND );
+    aTokenList.insert( aResult );
     return aResult;
 }
 
 String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt16 &rTagStartPos )
 {
-//  sal_uInt16 nStyle1StartPos = aSource.SearchAscii( "<#", nPos );
     sal_uInt16 nStyle2StartPos = aSource.SearchAscii( "$[", nPos );
     sal_uInt16 nStyle3StartPos = aSource.SearchAscii( "\\<", nPos );
     sal_uInt16 nStyle4StartPos = aSource.SearchAscii( "\\\\", nPos );    // this is only to kick out quoted backslashes
 
     rTagStartPos = 0;
 
-/* removing since a \<... is not likely
-    // check if the tag starts with a letter to avoid things like <> <= ... >
-    while ( STRING_NOTFOUND != nStyle3StartPos && !( aSource.Copy( nStyle3StartPos+2, 1 ).IsAlphaAscii() || aSource.GetChar( nStyle3StartPos+2 ) == '/' ) )
-        nStyle3StartPos = aSource.SearchAscii( "\\<", nStyle3StartPos+1 );
-*/
     if ( STRING_NOTFOUND == nStyle2StartPos && STRING_NOTFOUND == nStyle3StartPos )
         return String();  // no more tokens
 
@@ -762,19 +763,7 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, sal_uInt
         return GetNextTokenString( rErrorList, rTagStartPos );
     }
 
-/*  if ( nStyle1StartPos < nStyle2StartPos && nStyle1StartPos <= nStyle3StartPos )  // <= to make sure our spechial tags are recognized before all others
-    {   // test for <# ... > style tokens
-        sal_uInt16 nEndPos = aSource.SearchAscii( ">", nStyle1StartPos );
-        if ( nEndPos == STRING_NOTFOUND )
-        {   // Token is incomplete. Skip start and search for better ones
-            nPos = nStyle1StartPos +2;
-            return GetNextTokenString( rErrorList, rTagStartPos );
-        }
-        nPos = nEndPos;
-        rTagStartPos = nStyle1StartPos;
-        return aSource.Copy( nStyle1StartPos, nEndPos-nStyle1StartPos +1 ).ToUpperAscii();
-    }
-    else*/ if ( nStyle2StartPos < nStyle3StartPos )
+    if ( nStyle2StartPos < nStyle3StartPos )
     {   // test for $[ ... ] style tokens
         sal_uInt16 nEndPos = aSource.SearchAscii( "]", nStyle2StartPos);
         if ( nEndPos == STRING_NOTFOUND )
@@ -876,11 +865,6 @@ void TokenParser::Parse( const String &aCode, ParserMessageList* pList )
                     ParseError( 17, "<#UNDER> expected before <#/UNDER>.", aTag );
                 }
                 break;
-/*          case TAG_MISSPARENTHESIS:
-                {
-                    ParseError( 14, "missing closing parenthesis '>'", aTag );
-                }
-                break;*/
             case TAG_AEND:
                 {
                     ParseError( 5, "Extra Tag <#AEND>. <#AVIS> or <#AHID> expected.", aTag );
@@ -969,7 +953,6 @@ void TokenParser::Paragraph()
                 Paragraph();
             }
             break;
-        case TAG_OS2:
         case TAG_WIN:
         case TAG_UNIX:
         case TAG_MAC: //...
@@ -1032,7 +1015,6 @@ void TokenParser::PfCase()
                 CaseEnd();
             }
             break;
-        case TAG_OS2:
         case TAG_WIN:
         case TAG_UNIX:
         case TAG_MAC: //First (PfBegin)
@@ -1051,7 +1033,6 @@ void TokenParser::PfCaseBegin()
 {
     switch ( aTag.nId )
     {
-        case TAG_OS2:
         case TAG_WIN:
         case TAG_UNIX:
         case TAG_MAC:
@@ -1421,13 +1402,9 @@ sal_Bool LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens
 
 void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bFixTags )
 {
-    sal_uLong i=0,j=0;
+    size_t i=0,j=0;
     // Clean old Warnings
-    while ( aCompareWarningList.Count() )
-    {
-        delete aCompareWarningList.GetCurObject();
-        aCompareWarningList.Remove();
-    }
+    aCompareWarningList.clear();
 
     /* in xml tags, do not require the following tags
         comment
@@ -1439,35 +1416,35 @@ void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bF
 
     // filter uninteresting Tags
     TokenId aMetaTokens = 0;
-    for ( i=0 ; i < aReference.Count() ; i++ )
+    for ( i=0 ; i < aReference.size() ; i++ )
     {
-        if ( !IsTagMandatory( aReference.GetObject( i ), aMetaTokens ) )
-            aReference.GetObject( i ).SetDone();
+        if ( !IsTagMandatory( aReference[ i ], aMetaTokens ) )
+            aReference[ i ].SetDone();
     }
 
     aMetaTokens = 0;
-    for ( i=0 ; i < aTestee.Count() ; i++ )
+    for ( i=0 ; i < aTestee.size() ; i++ )
     {
-        if ( !IsTagMandatory( aTestee.GetObject( i ), aMetaTokens ) )
-            aTestee.GetObject( i ).SetDone();
+        if ( !IsTagMandatory( aTestee[ i ], aMetaTokens ) )
+            aTestee[ i ].SetDone();
     }
 
     // remove all matching tags
-    for ( i=0 ; i < aReference.Count() ; i++ )
+    for ( i=0 ; i < aReference.size() ; i++ )
     {
-        if ( aReference.GetObject( i ).IsDone() )
+        if ( aReference[ i ].IsDone() )
             continue;
 
         sal_Bool bTagFound = sal_False;
-        for ( j=0 ; j < aTestee.Count() && !bTagFound ; j++ )
+        for ( j=0 ; j < aTestee.size() && !bTagFound ; j++ )
         {
-            if ( aTestee.GetObject( j ).IsDone() )
+            if ( aTestee[ j ].IsDone() )
                 continue;
 
-            if ( aReference.GetObject( i ).MatchesTranslation( aTestee.GetObject( j ), sal_False, aCompareWarningList ) )
+            if ( aReference[ i ].MatchesTranslation( aTestee[ j ], sal_False, aCompareWarningList ) )
             {
-                aReference.GetObject( i ).SetDone();
-                aTestee.GetObject( j ).SetDone();
+                aReference[ i ].SetDone();
+                aTestee[ j ].SetDone();
                 bTagFound = sal_True;
             }
         }
@@ -1479,62 +1456,62 @@ void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, sal_Bool bF
     {
         // we fix only if its a really simple case
         sal_uInt16 nTagCount = 0;
-        for ( i=0 ; i < aReference.Count() ; i++ )
-            if ( !aReference.GetObject( i ).IsDone() )
+        for ( i=0 ; i < aReference.size() ; i++ )
+            if ( !aReference[ i ].IsDone() )
                 nTagCount++;
         if ( nTagCount > 1 )
             bCanFix = sal_False;
 
         nTagCount = 0;
-        for ( i=0 ; i < aTestee.Count() ; i++ )
-            if ( !aTestee.GetObject( i ).IsDone() )
+        for ( i=0 ; i < aTestee.size() ; i++ )
+            if ( !aTestee[ i ].IsDone() )
                 nTagCount++;
         if ( nTagCount > 1 )
             bCanFix = sal_False;
     }
 
     // generate errors for tags that have differing attributes
-    for ( i=0 ; i < aReference.Count() ; i++ )
+    for ( i=0 ; i < aReference.size() ; i++ )
     {
-        if ( aReference.GetObject( i ).IsDone() )
+        if ( aReference[ i ].IsDone() )
             continue;
 
         sal_Bool bTagFound = sal_False;
-        for ( j=0 ; j < aTestee.Count() && !bTagFound ; j++ )
+        for ( j=0 ; j < aTestee.size() && !bTagFound ; j++ )
         {
-            if ( aTestee.GetObject( j ).IsDone() )
+            if ( aTestee[ j ].IsDone() )
                 continue;
 
-            if ( aReference.GetObject( i ).MatchesTranslation( aTestee.GetObject( j ), sal_True, aCompareWarningList, bCanFix && bFixTags ) )
+            if ( aReference[ i ].MatchesTranslation( aTestee[ j ], sal_True, aCompareWarningList, bCanFix && bFixTags ) )
             {
-                aReference.GetObject( i ).SetDone();
-                aTestee.GetObject( j ).SetDone();
+                aReference[ i ].SetDone();
+                aTestee[ j ].SetDone();
                 bTagFound = sal_True;
             }
         }
     }
 
     // list remaining tags as errors
-    for ( i=0 ; i < aReference.Count() ; i++ )
+    for ( i=0 ; i < aReference.size() ; i++ )
     {
-        if ( aReference.GetObject( i ).IsDone() )
+        if ( aReference[ i ].IsDone() )
             continue;
 
-        aCompareWarningList.AddError( 20, "Missing Tag in Translation", aReference.GetObject( i ) );
+        aCompareWarningList.AddError( 20, "Missing Tag in Translation", aReference[ i ] );
     }
-    for ( i=0 ; i < aTestee.Count() ; i++ )
+    for ( i=0 ; i < aTestee.size() ; i++ )
     {
-        if ( aTestee.GetObject( i ).IsDone() )
+        if ( aTestee[ i ].IsDone() )
             continue;
 
-        aCompareWarningList.AddError( 21, "Extra Tag in Translation", aTestee.GetObject( i ) );
+        aCompareWarningList.AddError( 21, "Extra Tag in Translation", aTestee[ i ] );
     }
 
-    for ( i=0 ; i < aReference.Count() ; i++ )
-        aReference.GetObject( i ).SetDone( sal_False );
+    for ( i=0 ; i < aReference.size() ; i++ )
+        aReference[ i ].SetDone( sal_False );
 
-    for ( i=0 ; i < aTestee.Count() ; i++ )
-        aTestee.GetObject( i ).SetDone( sal_False );
+    for ( i=0 ; i < aTestee.size() ; i++ )
+        aTestee[ i ].SetDone( sal_False );
 }
 
 void LingTest::CheckReference( GSILine *aReference )
@@ -1556,12 +1533,12 @@ void LingTest::CheckTestee( GSILine *aTestee, sal_Bool bHasSourceLine, sal_Bool 
         sal_Bool bFixesDone = sal_False;
         // count backwards to allow replacing from right to left
         int i;
-        for ( i=aTesteeTokens.Count()-1 ; i>=0 ; i-- )
+        for ( i = aTesteeTokens.size() ; i > 0 ; )
         {
-            if ( aTesteeTokens.GetObject( i ).HasBeenFixed() )
+            if ( aTesteeTokens[ --i ].HasBeenFixed() )
             {
                 bFixesDone = sal_True;
-                aFixedTestee.Replace( aTesteeTokens.GetObject( i ).nPos, aTesteeTokens.GetObject( i ).aTokenString.Len(), aTesteeTokens.GetObject( i ).MakeTag() );
+                aFixedTestee.Replace( aTesteeTokens[ i ].nPos, aTesteeTokens[ i ].aTokenString.Len(), aTesteeTokens[ i ].MakeTag() );
             }
         }
         if ( bFixesDone )
@@ -1572,3 +1549,4 @@ void LingTest::CheckTestee( GSILine *aTestee, sal_Bool bHasSourceLine, sal_Bool 
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

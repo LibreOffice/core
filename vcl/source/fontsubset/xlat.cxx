@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -219,3 +220,4 @@ void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 
 } // namespace vcl
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

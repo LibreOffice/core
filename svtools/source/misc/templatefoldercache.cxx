@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <ucbhelper/content.hxx>
-#include <vos/ref.hxx>
-#include <vos/refernce.hxx>
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
@@ -115,13 +116,13 @@ namespace svt
     //= TemplateContent
     //=====================================================================
     struct TemplateContent;
-    typedef ::std::vector< ::vos::ORef< TemplateContent > > TemplateFolderContent;
+    typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
     typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
     typedef TemplateFolderContent::iterator                 FolderIterator;
 
     /** a struct describing one content in one of the template dirs (or at least it's relevant aspects)
     */
-    struct TemplateContent : public ::vos::OReference
+    struct TemplateContent : public ::salhelper::SimpleReferenceObject
     {
     public:
 
@@ -160,7 +161,7 @@ namespace svt
         inline TemplateFolderContent::size_type
                                         size() const    { return m_aSubContents.size(); }
 
-        inline void                     push_back( const ::vos::ORef< TemplateContent >& _rxNewElement )
+        inline void                     push_back( const ::rtl::Reference< TemplateContent >& _rxNewElement )
                                                         { m_aSubContents.push_back( _rxNewElement ); }
     };
 
@@ -206,12 +207,12 @@ namespace svt
     //---------------------------------------------------------------------
     /// compares two TemplateContent by URL
     struct TemplateContentURLLess
-        :public ::std::binary_function  <   ::vos::ORef< TemplateContent >
-                                        ,   ::vos::ORef< TemplateContent >
+        :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
+                                        ,   ::rtl::Reference< TemplateContent >
                                         ,   bool
                                         >
     {
-        bool operator() ( const ::vos::ORef< TemplateContent >& _rxLHS, const ::vos::ORef< TemplateContent >& _rxRHS ) const
+        bool operator() ( const ::rtl::Reference< TemplateContent >& _rxLHS, const ::rtl::Reference< TemplateContent >& _rxRHS ) const
         {
             return  _rxLHS->getURL() < _rxRHS->getURL()
                 ?   true
@@ -221,7 +222,7 @@ namespace svt
 
     //---------------------------------------------------------------------
     /// sorts the sib contents of a TemplateFolderContent
-    struct SubContentSort : public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
+    struct SubContentSort : public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
     {
         void operator() ( TemplateFolderContent& _rFolder ) const
         {
@@ -240,9 +241,9 @@ namespace svt
             );
         }
 
-        void operator() ( const ::vos::ORef< TemplateContent >& _rxContent ) const
+        void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
-            if ( _rxContent.isValid() && _rxContent->size() )
+            if ( _rxContent.is() && _rxContent->size() )
             {
                 operator()( _rxContent->getSubContents() );
             }
@@ -252,17 +253,17 @@ namespace svt
     /** does a deep compare of two template contents
     */
     struct TemplateContentEqual
-        :public ::std::binary_function  <   ::vos::ORef< TemplateContent >
-                                        ,   ::vos::ORef< TemplateContent >
+        :public ::std::binary_function  <   ::rtl::Reference< TemplateContent >
+                                        ,   ::rtl::Reference< TemplateContent >
                                         ,   bool
                                         >
     {
         //.................................................................
-        bool operator() (const ::vos::ORef< TemplateContent >& _rLHS, const ::vos::ORef< TemplateContent >& _rRHS )
+        bool operator() (const ::rtl::Reference< TemplateContent >& _rLHS, const ::rtl::Reference< TemplateContent >& _rRHS )
         {
-            if ( !_rLHS.isValid() || !_rRHS.isValid() )
+            if ( !_rLHS.is() || !_rRHS.is() )
             {
-                DBG_ERROR( "TemplateContentEqual::operator(): invalid contents!" );
+                OSL_FAIL( "TemplateContentEqual::operator(): invalid contents!" );
                 return true;
                     // this is not strictly true, in case only one is invalid - but this is a heavy error anyway
             }
@@ -319,12 +320,12 @@ namespace svt
     //---------------------------------------------------------------------
     /// functor which stores the local name of a TemplateContent
     struct StoreLocalContentName
-            :public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
+            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StoreString
     {
         StoreLocalContentName( SvStream& _rStorage ) : StoreString( _rStorage ) { }
 
-        void operator() ( const ::vos::ORef< TemplateContent >& _rxContent ) const
+        void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
             DBG_ERRORFILE( "This method must not be used, the whole URL must be stored!" );
 
@@ -335,7 +336,7 @@ namespace svt
 
     //---------------------------------------------------------------------
     struct StoreContentURL
-            :public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
+            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StoreString
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
@@ -346,7 +347,7 @@ namespace svt
                                 xOfficeInstDirs )
         : StoreString( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
-        void operator() ( const ::vos::ORef< TemplateContent >& _rxContent ) const
+        void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
             // use the base class operator with the local name of the content
             String sURL = _rxContent->getURL();
@@ -360,7 +361,7 @@ namespace svt
     //---------------------------------------------------------------------
     /// functor which stores the complete content of a TemplateContent
     struct StoreFolderContent
-            :public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
+            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
@@ -396,9 +397,9 @@ namespace svt
         }
 
         //.................................................................
-        void operator() ( const ::vos::ORef< TemplateContent >& _rxContent ) const
+        void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
-            if ( _rxContent.isValid() )
+            if ( _rxContent.is() )
             {
                 operator()( *_rxContent );
             }
@@ -408,7 +409,7 @@ namespace svt
     //---------------------------------------------------------------------
     /// functor which reads a complete TemplateContent instance
     struct ReadFolderContent
-            :public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
+            :public ::std::unary_function< ::rtl::Reference< TemplateContent >, void >
             ,public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
@@ -453,9 +454,9 @@ namespace svt
         }
 
         //.................................................................
-        void operator() ( const ::vos::ORef< TemplateContent >& _rxContent ) const
+        void operator() ( const ::rtl::Reference< TemplateContent >& _rxContent ) const
         {
-            if ( _rxContent.isValid() )
+            if ( _rxContent.is() )
             {
                 operator()( *_rxContent );
             }
@@ -489,7 +490,6 @@ namespace svt
         void        storeState( sal_Bool _bForceRetrieval );
 
     private:
-        void        initTemplDirs( ::std::vector< String >& _rRootDirs );
         sal_Bool    openCacheStream( sal_Bool _bForRead );
         void        closeCacheStream( );
 
@@ -500,7 +500,7 @@ namespace svt
 
         String      implParseSmart( const String& _rPath );
 
-        sal_Bool    implReadFolder( const ::vos::ORef< TemplateContent >& _rxRoot );
+        sal_Bool    implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
 
         static  String      getCacheFileName();
         static  sal_Int32   getMagicNumber();
@@ -627,17 +627,17 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool TemplateFolderCacheImpl::implReadFolder( const ::vos::ORef< TemplateContent >& _rxRoot )
+    sal_Bool TemplateFolderCacheImpl::implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot )
     {
         try
         {
             // create a content for the current folder root
             Reference< XResultSet > xResultSet;
             Sequence< ::rtl::OUString > aContentProperties( 4);
-            aContentProperties[0] = ::rtl::OUString::createFromAscii( "Title" );
-            aContentProperties[1] = ::rtl::OUString::createFromAscii( "DateModified" );
-            aContentProperties[2] = ::rtl::OUString::createFromAscii( "DateCreated" );
-            aContentProperties[3] = ::rtl::OUString::createFromAscii( "IsFolder" );
+            aContentProperties[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+            aContentProperties[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ));
+            aContentProperties[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ));
+            aContentProperties[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
 
             // get the set of sub contents in the folder
             try
@@ -669,7 +669,7 @@ namespace svt
                     INetURLObject aSubContentURL( xContentAccess->queryContentIdentifierString() );
 
                     // a new content instance
-                    ::vos::ORef< TemplateContent > xChild = new TemplateContent( aSubContentURL );
+                    ::rtl::Reference< TemplateContent > xChild = new TemplateContent( aSubContentURL );
 
                     // the modified date
                     xChild->setModDate( xRow->getTimestamp( 2 ) );  // date modified
@@ -691,7 +691,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
+            OSL_FAIL( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
             return sal_False;
         }
         return sal_True;
@@ -791,7 +791,7 @@ namespace svt
         INetURLObject aStorageURL( sStorageURL );
         if ( INET_PROT_NOT_VALID == aStorageURL.GetProtocol() )
         {
-            DBG_ERROR( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
+            OSL_FAIL( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
             return sal_False;
         }
 
@@ -838,11 +838,6 @@ namespace svt
             }
         }
         return m_bNeedsUpdate;
-    }
-
-    //---------------------------------------------------------------------
-    void TemplateFolderCacheImpl::initTemplDirs( ::std::vector< String >& )
-    {
     }
 
     //---------------------------------------------------------------------
@@ -920,3 +915,4 @@ namespace svt
 }   // namespace sfx2
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

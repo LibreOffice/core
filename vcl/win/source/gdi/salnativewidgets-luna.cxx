@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,8 +47,9 @@
 #include <map>
 #include <string>
 
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 typedef map< wstring, HTHEME > ThemeMap;
 static ThemeMap aThemeMap;
@@ -187,7 +189,7 @@ void SalData::deInitNWF( void )
     while( iter != aThemeMap.end() )
     {
         vsAPI.CloseThemeData(iter->second);
-        iter++;
+        ++iter;
     }
     aThemeMap.clear();
     if( maDwmLib )
@@ -1417,3 +1419,4 @@ sal_Bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
     return( bRet );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

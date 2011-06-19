@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#ifdef AIX
+#define _LINUX_SOURCE_COMPAT
+#include <sys/timer.h>
+#undef _LINUX_SOURCE_COMPAT
+#endif
+
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-// --> OD 2009-04-14 #i93269#
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-// <--
 #include <cppuhelper/implbase1.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
 #include <vcl/svapp.hxx>
@@ -60,7 +65,14 @@
 
 using namespace ::com::sun::star;
 
-static uno::WeakReference< accessibility::XAccessible > xNextFocusObject;
+namespace
+{
+    struct theNextFocusObject :
+        public rtl::Static< uno::WeakReference< accessibility::XAccessible >, theNextFocusObject>
+    {
+    };
+}
+
 static guint focus_notify_handler = 0;
 
 /*****************************************************************************/
@@ -70,11 +82,11 @@ extern "C" {
 static gint
 atk_wrapper_focus_idle_handler (gpointer data)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     focus_notify_handler = 0;
 
-    uno::Reference< accessibility::XAccessible > xAccessible = xNextFocusObject;
+    uno::Reference< accessibility::XAccessible > xAccessible = theNextFocusObject::get();
     if( xAccessible.get() == reinterpret_cast < accessibility::XAccessible * > (data) )
     {
         AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : NULL;
@@ -85,7 +97,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
             fprintf(stderr, "notifying focus event for %p\n", atk_obj);
 #endif
             atk_focus_tracker_notify(atk_obj);
-            // --> OD 2009-04-14 #i93269#
+            // #i93269#
             // emit text_caret_moved event for <XAccessibleText> object,
             // if cursor is inside the <XAccessibleText> object.
             // also emit state-changed:focused event under the same condition.
@@ -112,7 +124,6 @@ atk_wrapper_focus_idle_handler (gpointer data)
                     }
                 }
             }
-            // <--
             g_object_unref(atk_obj);
         }
     }
@@ -130,7 +141,7 @@ atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility:
     if( focus_notify_handler )
         g_source_remove(focus_notify_handler);
 
-    xNextFocusObject = xAccessible;
+    theNextFocusObject::get() = xAccessible;
 
     focus_notify_handler = g_idle_add (atk_wrapper_focus_idle_handler, xAccessible.get());
 }
@@ -189,15 +200,11 @@ public:
 void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
-//    fprintf(stderr, "In DocumentFocusListener::disposing (%p)\n", this);
-//    fprintf(stderr, "m_aRefList has %d entries\n", m_aRefList.size());
 
     // Unref the object here, but do not remove as listener since the object
     // might no longer be in a state that safely allows this.
     if( aEvent.Source.is() )
         m_aRefList.erase(aEvent.Source);
-
-//    fprintf(stderr, "m_aRefList has %d entries\n", m_aRefList.size());
 
 }
 
@@ -235,12 +242,6 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
             break;
 
         case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-/*        {
-            uno::Reference< accessibility::XAccessible > xAccessible( getAccessible(aEvent) );
-            detachRecursive(xAccessible);
-            attachRecursive(xAccessible);
-        }
-*/
             g_warning( "Invalidate all children called\n" );
             break;
         default:
@@ -497,27 +498,6 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
     }
 }
 
-/*****************************************************************************/
-
-/* currently not needed anymore...
-static void create_wrapper_for_children(Window *pWindow)
-{
-    if( pWindow && pWindow->IsReallyVisible() )
-    {
-        uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible());
-        if( xAccessible.is() )
-        {
-            uno::Reference< accessibility::XAccessibleContext > xContext(xAccessible->getAccessibleContext());
-            if( xContext.is() )
-            {
-                sal_Int32 nChildren = xContext->getAccessibleChildCount();
-                for( sal_Int32 i = 0; i < nChildren; ++i )
-                    create_wrapper_for_child(xContext, i);
-            }
-        }
-    }
-}
-*/
 
 /*****************************************************************************/
 
@@ -623,46 +603,30 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 
 long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
 {
+    try {
     switch (pEvent->GetId())
     {
     case VCLEVENT_WINDOW_SHOW:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_SHOW for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_HIDE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_HIDE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_CLOSE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_CLOSE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_GETFOCUS:
         handle_get_focus(static_cast< ::VclWindowEvent const * >(pEvent));
         break;
     case VCLEVENT_WINDOW_LOSEFOCUS:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_LOSEFOCUS for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_MINIMIZE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_MINIMIZE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_NORMALIZE:
-//        fprintf(stderr, "got VCLEVENT_WINDOW_NORMALIZE for %p\n",
-//            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
     case VCLEVENT_WINDOW_KEYINPUT:
     case VCLEVENT_WINDOW_KEYUP:
     case VCLEVENT_WINDOW_COMMAND:
     case VCLEVENT_WINDOW_MOUSEMOVE:
         break;
- /*
-        fprintf(stderr, "got VCLEVENT_WINDOW_COMMAND (%d) for %p\n",
-            static_cast< ::CommandEvent const * > (
-                static_cast< ::VclWindowEvent const * >(pEvent)->GetData())->GetCommand(),
-            static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
- */
+
     case VCLEVENT_MENU_HIGHLIGHT:
         if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(pEvent))
         {
@@ -696,7 +660,7 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         break;
 
     case VCLEVENT_COMBOBOX_SETTEXT:
-        // MT 2010/02: This looks quite strange to me. Stumbled over this when fixing #i104290#.
+        // This looks quite strange to me. Stumbled over this when fixing #i104290#.
         // This kicked in when leaving the combobox in the toolbar, after that the events worked.
         // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
         // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
@@ -704,8 +668,11 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         break;
 
     default:
-//        OSL_TRACE("got event %d \n", pEvent->GetId());
         break;
+    }
+    } catch(lang::IndexOutOfBoundsException)
+    {
+        g_warning("Focused object has invalid index in parent");
     }
     return 0;
 }
@@ -780,13 +747,13 @@ ooo_atk_util_get_type (void)
 
         static const GTypeInfo typeInfo =
         {
-            type_query.class_size,
+            static_cast<guint16>(type_query.class_size),
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
             (GClassInitFunc) ooo_atk_util_class_init,
             (GClassFinalizeFunc) NULL,
             NULL,
-            type_query.instance_size,
+            static_cast<guint16>(type_query.instance_size),
             0,
             (GInstanceInitFunc) NULL,
             NULL
@@ -799,3 +766,4 @@ ooo_atk_util_get_type (void)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

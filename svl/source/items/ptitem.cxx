@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxPointItem::QueryValue( uno::Any& rVal,
+bool SfxPointItem::QueryValue( uno::Any& rVal,
                                sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -155,20 +156,20 @@ sal_Bool SfxPointItem::QueryValue( uno::Any& rVal,
         case 0: rVal <<= aTmp; break;
         case MID_X: rVal <<= aTmp.X; break;
         case MID_Y: rVal <<= aTmp.Y; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return true;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxPointItem::PutValue( const uno::Any& rVal,
+bool SfxPointItem::PutValue( const uno::Any& rVal,
                              sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     awt::Point aValue;
     sal_Int32 nVal = 0;
     if ( !nMemberId )
@@ -194,7 +195,7 @@ sal_Bool SfxPointItem::PutValue( const uno::Any& rVal,
             case 0: aVal.setX( aValue.X ); aVal.setY( aValue.Y ); break;
             case MID_X: aVal.setX( nVal ); break;
             case MID_Y: aVal.setY( nVal ); break;
-            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+            default: OSL_FAIL("Wrong MemberId!"); return false;
         }
     }
 
@@ -203,3 +204,4 @@ sal_Bool SfxPointItem::PutValue( const uno::Any& rVal,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

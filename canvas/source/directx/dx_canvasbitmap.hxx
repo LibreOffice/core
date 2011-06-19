@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
-#include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 
 #include "dx_bitmapprovider.hxx"
@@ -59,7 +60,7 @@ namespace dxcanvas
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                ::com::sun::star::lang::XServiceInfo,
                                                ::com::sun::star::beans::XFastPropertySet >      CanvasBitmapBase_Base;
-    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
+    typedef ::canvas::IntegerBitmapBase< ::canvas::DisambiguationHelper< CanvasBitmapBase_Base >,
                                          BitmapCanvasHelper,
                                          ::osl::MutexGuard,
                                          ::cppu::OWeakObject >                          CanvasBitmap_Base;
@@ -79,7 +80,7 @@ namespace dxcanvas
                       const DeviceRef&        rDevice );
 
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -102,3 +103,5 @@ namespace dxcanvas
 }
 
 #endif /* _DXCANVAS_CANVASBITMAP_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

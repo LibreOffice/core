@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "tools/string.hxx"
-#include "tools/list.hxx"
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include "tools/stream.hxx"
 #include "tools/isofallback.hxx"
@@ -50,7 +50,7 @@ class XMLElement;
 using namespace ::rtl;
 using namespace std;
 
-#include <hash_map> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <deque>    /* std::deque*/
 #include <iterator> /* std::iterator*/
 #include <list>     /* std::list*/
@@ -63,7 +63,6 @@ using namespace std;
 #define MAX_LANGUAGES               99
 
 
-//#define TESTDRIVER        /* use xml2gsi testclass */
 //-------------------------------------------------------------------------
 
 /** Holds data of Attributes
@@ -95,7 +94,7 @@ public:
     }
 };
 
-DECLARE_LIST( XMLAttributeList, XMLAttribute * )
+typedef ::std::vector< XMLAttribute* > XMLAttributeList;
 
 //-------------------------------------------------------------------------
 
@@ -133,7 +132,7 @@ public:
     virtual ~XMLChildNode(){};
 };
 
-DECLARE_LIST( XMLChildNodeList, XMLChildNode * )
+typedef ::std::vector< XMLChildNode* > XMLChildNodeList;
 
 //-------------------------------------------------------------------------
 
@@ -144,9 +143,9 @@ class XMLData;
 class XMLParentNode : public XMLChildNode
 {
 private:
-    XMLChildNodeList *pChildList;
+    XMLChildNodeList* pChildList;
     static int dbgcnt;
-    //int         nParentPos;
+
 protected:
     XMLParentNode( XMLParentNode *pPar )
                 : XMLChildNode( pPar ), pChildList( NULL )
@@ -173,7 +172,7 @@ public:
     );
 
     void AddChild(
-        XMLChildNode *pChild , int pos  /// the new child
+        XMLChildNode *pChild , size_t pos   /// the new child
     );
 
     virtual int GetPosition( ByteString id );
@@ -188,20 +187,18 @@ public:
 
 //-------------------------------------------------------------------------
 
-DECLARE_LIST( XMLStringList, XMLElement* )
-
 /// Mapping numeric Language code <-> XML Element
-typedef std::hash_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
+typedef boost::unordered_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
 
 /// Mapping XML Element string identifier <-> Language Map
-typedef std::hash_map<ByteString , LangHashMap* ,
+typedef boost::unordered_map<ByteString , LangHashMap* ,
                       hashByteString,equalByteString>                   XMLHashMap;
 
 /// Mapping iso alpha string code <-> iso numeric code
-typedef std::hash_map<ByteString, int, hashByteString,equalByteString>  HashMap;
+typedef boost::unordered_map<ByteString, int, hashByteString,equalByteString>   HashMap;
 
 /// Mapping XML tag names <-> have localizable strings
-typedef std::hash_map<ByteString , sal_Bool ,
+typedef boost::unordered_map<ByteString , sal_Bool ,
                       hashByteString,equalByteString>                   TagMap;
 
 /** Holds information of a XML file, is root node of tree
@@ -273,31 +270,9 @@ public:
 
     /// UnQuot the XML characters and restore \n \t
     static void         UnQuotHTML  ( String &rString );
-
-    /// Return the numeric iso language code
-    //sal_uInt16                GetLangByIsoLang( const ByteString &rIsoLang );
-
-    /// Return the alpha strings representation
-    ByteString          GetIsoLangByIndex( sal_uInt16 nIndex );
-
-    static XMLUtil&     Instance();
-    ~XMLUtil();
-
-    void         dump();
-
 private:
-    /// Mapping iso alpha string code <-> iso numeric code
-    HashMap      lMap;
-
-    /// Mapping iso numeric code      <-> iso alpha string code
-    ByteString   isoArray[MAX_LANGUAGES];
-
     static void UnQuotData( String &rString );
     static void UnQuotTags( String &rString );
-
-    XMLUtil();
-    XMLUtil(const XMLUtil&);
-
 };
 
 
@@ -548,3 +523,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

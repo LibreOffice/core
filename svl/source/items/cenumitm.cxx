@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <svl/cenumitm.hxx>
 #include <whassert.hxx>
 
-#ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
 
 //============================================================================
 //
@@ -70,7 +69,7 @@ SfxEnumItemInterface::GetPresentation(SfxItemPresentation, SfxMapUnit,
 
 //============================================================================
 // virtual
-sal_Bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
+bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     const
 {
     rVal <<= sal_Int32(GetEnumValue());
@@ -79,7 +78,7 @@ sal_Bool SfxEnumItemInterface::QueryValue(com::sun::star::uno::Any& rVal, sal_uI
 
 //============================================================================
 // virtual
-sal_Bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
+bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
                                     sal_uInt8)
 {
     sal_Int32 nTheValue = 0;
@@ -89,7 +88,7 @@ sal_Bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
         SetEnumValue(sal_uInt16(nTheValue));
         return true;
     }
-    DBG_ERROR("SfxEnumItemInterface::PutValue(): Wrong type");
+    OSL_FAIL("SfxEnumItemInterface::PutValue(): Wrong type");
     return false;
 }
 
@@ -233,7 +232,7 @@ SfxItemPresentation CntBoolItem::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-sal_Bool CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= sal_Bool(m_bValue);
     return true;
@@ -241,7 +240,7 @@ sal_Bool CntBoolItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) cons
 
 //============================================================================
 // virtual
-sal_Bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
+bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     sal_Bool bTheValue = sal_Bool();
     if (rVal >>= bTheValue)
@@ -249,7 +248,7 @@ sal_Bool CntBoolItem::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8)
         m_bValue = bTheValue;
         return true;
     }
-    DBG_ERROR("CntBoolItem::PutValue(): Wrong type");
+    OSL_FAIL("CntBoolItem::PutValue(): Wrong type");
     return false;
 }
 
@@ -288,7 +287,8 @@ UniString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
     return
         bTheValue ?
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_True")) :
-            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("sal_False"));
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TRUE")) :
+            UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("FALSE"));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,11 @@
 #define _VCLCANVAS_TOOLS_HXX
 
 #include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/solarmutex.hxx>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -122,18 +124,18 @@ namespace vclcanvas
         {
         public:
             LocalGuard() :
-                aGuard( Application::GetSolarMutex() )
+                aSolarGuard()
             {
             }
 
             /// To be compatible with CanvasBase mutex concept
             LocalGuard( const ::osl::Mutex& ) :
-                aGuard( Application::GetSolarMutex() )
+                aSolarGuard()
             {
             }
 
         private:
-            ::vos::OGuard aGuard;
+            SolarMutexGuard aSolarGuard;
         };
 
         class OutDevStateKeeper
@@ -199,3 +201,5 @@ namespace vclcanvas
 }
 
 #endif /* _VCLCANVAS_TOOLS_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

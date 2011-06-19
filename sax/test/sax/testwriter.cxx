@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -252,8 +253,10 @@ OUString AttributeListImpl::getTypeByName( const OUString& sName ) throw  (Runti
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sType;
         }
     }
@@ -264,8 +267,10 @@ OUString AttributeListImpl::getValueByName(const OUString& sName) throw  (Runtim
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for(; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sValue;
         }
     }
@@ -347,7 +352,7 @@ void OSaxWriterTest::testInvariant( const OUString& TestName,
                                     const Reference < XInterface >& TestObject )
     throw  (    IllegalArgumentException, RuntimeException)
 {
-    if( OUString::createFromAscii("com.sun.star.xml.sax.Writer") == TestName ) {
+    if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) == TestName ) {
         Reference< XDocumentHandler > doc( TestObject , UNO_QUERY );
         Reference< XExtendedDocumentHandler > ext( TestObject , UNO_QUERY );
         Reference< XActiveDataSource > source( TestObject , UNO_QUERY );
@@ -696,3 +701,5 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     printf( "Performance writing : %g s\n" , fEnd - fStart );
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -123,12 +124,6 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 {
     uno::Any aRet;
 
-    // @@@ Add support for additional interfaces.
-#if 0
-      aRet = cppu::queryInterface( rType,
-                                 static_cast< yyy::Xxxxxxxxx * >( this ) );
-#endif
-
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
@@ -184,7 +179,7 @@ rtl::OUString SAL_CALL Content::getImplementationName()
 {
     // @@@ Adjust implementation name.
     // Prefix with reversed company domain name.
-    return rtl::OUString::createFromAscii( "com.sun.star.comp.myucp.Content" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.myucp.Content"));
 }
 
 //=========================================================================
@@ -195,7 +190,7 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
     // @@@ Adjust macro name.
     uno::Sequence< rtl::OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-            = rtl::OUString::createFromAscii( MYUCP_CONTENT_SERVICE_NAME );
+            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MYUCP_CONTENT_SERVICE_NAME ));
     return aSNS;
 }
 
@@ -210,7 +205,7 @@ rtl::OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
     // @@@ Adjust macro name ( def in myucp_provider.hxx ).
-    return rtl::OUString::createFromAscii( MYUCP_CONTENT_TYPE );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MYUCP_CONTENT_TYPE ));
 }
 
 //=========================================================================
@@ -240,7 +235,7 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -262,7 +257,7 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -274,7 +269,7 @@ uno::Any SAL_CALL Content::execute(
 
         if ( !aProperties.getLength() )
         {
-            OSL_ENSURE( sal_False, "No properties!" );
+            OSL_FAIL( "No properties!" );
             ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -313,7 +308,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -408,7 +403,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
         {
-              OSL_ENSURE( sal_False, "Wrong argument type!" );
+              OSL_FAIL( "Wrong argument type!" );
             ::ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
                                     rtl::OUString(),
@@ -447,7 +442,7 @@ uno::Any SAL_CALL Content::execute(
         // Unsupported command
         //////////////////////////////////////////////////////////////////
 
-        OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
+        OSL_FAIL( "Content::execute - unsupported command!" );
 
         ::ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
@@ -533,14 +528,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             {
                 xRow->appendBoolean( rProp, rData.bIsFolder );
             }
-
-            // @@@ Process other properties supported directly.
-#if 0
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-            {
-            }
-#endif
             else
             {
                 // @@@ Note: If your data source supports adding/removing
@@ -584,27 +571,27 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( rtl::OUString::createFromAscii( "ContentType" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.aContentType );
         xRow->appendString (
-            beans::Property( rtl::OUString::createFromAscii( "Title" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND ),
             rData.aTitle );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString::createFromAscii( "IsDocument" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.bIsDocument );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString::createFromAscii( "IsFolder" ),
+            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
@@ -680,8 +667,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -689,8 +676,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -698,8 +685,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -727,19 +714,12 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString::createFromAscii(
-                                    "Property value has wrong type!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property value has wrong type!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
 
-        // @@@ Process other properties supported directly.
-#if 0
-        else if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-        {
-        }
-#endif
         else
         {
             // @@@ Note: If your data source supports adding/removing
@@ -800,8 +780,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= uno::Exception(
-                                rtl::OUString::createFromAscii(
-                                    "No property set for storing the value!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "No property set for storing the value!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -840,7 +820,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( nPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += ::rtl::OUString::createFromAscii( "/" );
+        aURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -884,28 +864,10 @@ void Content::insert(
 
     // Check, if all required properties were set.
 
-#if 0
-    // @@@ add checks for property presence
-    if ( m_aProps.xxxx == yyyyy )
-    {
-        OSL_ENSURE( sal_False, "Content::insert - property value missing!" );
-
-        uno::Sequence< rtl::OUString > aProps( 1 );
-        aProps[ 0 ] = rtl::OUString::createFromAscii( "zzzz" );
-        ::ucbhelper::cancelCommandExecution(
-            uno::makeAny( ucb::MissingPropertiesException(
-                                rtl::OUString(),
-                                static_cast< cppu::OWeakObject * >( this ),
-                                aProps ) ),
-            Environment );
-        // Unreachable
-    }
-#endif
-
     bool bNeedInputStream = true; // @@@ adjust to real requirements
     if ( bNeedInputStream && !xInputStream.is() )
     {
-        OSL_ENSURE( sal_False, "Content::insert - No data stream!" );
+        OSL_FAIL( "Content::insert - No data stream!" );
 
         ::ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingInputStreamException(
@@ -933,7 +895,7 @@ void Content::insert(
             ucb::IOErrorCode_ALREADY_EXISTING,
             uno::Sequence< uno::Any >(&aProps, 1),
             Environment,
-            rtl::OUString::createFromAscii( "content already existing!!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content already existing!!")),
             this );
         // Unreachable
     }
@@ -981,3 +943,4 @@ void Content::destroy( sal_Bool bDeletePhysical )
 #endif // IMPLEMENT_COMMAND_DELETE
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

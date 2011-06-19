@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HDL_
 #include <com/sun/star/ucb/XCommandEnvironment.hdl>
-#endif
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 
@@ -73,17 +72,17 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                 {
                     // truncate is implemented with deleting the original file
                     ::ucbhelper::Content aCnt( rFileName, Reference < XCommandEnvironment >() );
-                    aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+                    aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), makeAny( sal_Bool( sal_True ) ) );
                 }
 
-                catch ( CommandAbortedException& )
+                catch ( const CommandAbortedException& )
                 {
                     // couldn't truncate/delete
                 }
-                catch ( ContentCreationException& )
+                catch ( const ContentCreationException& )
                 {
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
             }
@@ -104,18 +103,18 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                     aInsertArg.ReplaceExisting = sal_False;
                     Any aCmdArg;
                     aCmdArg <<= aInsertArg;
-                    aContent.executeCommand( ::rtl::OUString::createFromAscii( "insert" ), aCmdArg );
+                    aContent.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")), aCmdArg );
                 }
 
                 // it is NOT an error when the stream already exists and no truncation was desired
-                catch ( CommandAbortedException& )
+                catch ( const CommandAbortedException& )
                 {
                     // currently never an error is detected !
                 }
-                catch ( ContentCreationException& )
+                catch ( const ContentCreationException& )
                 {
                 }
-                catch ( Exception& )
+                catch ( const Exception& )
                 {
                 }
             }
@@ -134,13 +133,13 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                 pStream->SetError( xLockBytes->GetError() );
             }
         }
-        catch ( CommandAbortedException& )
+        catch ( const CommandAbortedException& )
         {
         }
-        catch ( ContentCreationException& )
+        catch ( const ContentCreationException& )
         {
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
         }
     }
@@ -246,3 +245,5 @@ SvStream* UcbStreamHelper::CreateStream( Reference < XStream > xStream, sal_Bool
 };
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

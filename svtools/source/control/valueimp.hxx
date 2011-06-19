@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,14 +26,10 @@
  *
  ************************************************************************/
 
-#include <vos/mutex.hxx>
-#include <tools/list.hxx>
+#include <osl/mutex.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
-#include <rtl/uuid.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -101,9 +98,7 @@ struct ValueSetItem
      void               ClearAccessible();
 };
 
-// -----------------------------------------------------------------------------
-
-DECLARE_LIST( ValueItemList, ValueSetItem* )
+typedef ::std::vector< ValueSetItem* > ValueItemList;
 
 // -----------------------------------------------------------------------------
 
@@ -123,7 +118,7 @@ struct ValueSet_Impl
 // - ValueSetAcc -
 // ---------------
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::PartialWeakComponentImplHelper6<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -158,14 +153,19 @@ public:
     */
     void LoseFocus (void);
 
+    // XComponent
+    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::dispose(); }
+    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::addEventListener(xListener); }
+    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventBroadcaster
-    using cppu::WeakComponentImplHelper6<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection, com::sun::star::lang::XUnoTunnel>::addEventListener;
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    using cppu::WeakComponentImplHelper6<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection, com::sun::star::lang::XUnoTunnel>::removeEventListener;
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext
@@ -205,7 +205,6 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 
 private:
-    //    ::vos::OMutex                                                                                                           maMutex;
     ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
     ValueSet*                                                           mpParent;
@@ -274,7 +273,7 @@ private:
 
     ::std::vector< ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    ::vos::OMutex                                                       maMutex;
+    ::osl::Mutex                                                        maMutex;
     ValueSetItem*                                                       mpParent;
     bool                                                                mbIsTransientChildrenDisabled;
 
@@ -328,3 +327,5 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

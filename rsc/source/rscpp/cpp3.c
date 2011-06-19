@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,10 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
-#define _USE_32BIT_TIME_T
-#endif
-
 #include        <stdio.h>
 #ifdef UNX
 #include        <stdlib.h>
@@ -89,16 +86,14 @@ void addfile(FILE* fp, char* filename)
  */
 {
         register FILEINFO       *file;
-/* #ifndef _NO_PROTO */
-                extern FILEINFO         *getfile( int bufsize, char *filename ); /* BP */
-/* #endif */
+        extern FILEINFO         *getfile( int bufsize, char *filename );
         file = getfile(NBUFF, filename);
         file->fp = fp;                  /* Better remember FILE *       */
         file->buffer[0] = EOS;          /* Initialize for first read    */
         line = 1;                       /* Working on line 1 now        */
         wrongline = TRUE;               /* Force out initial #line      */
 }
-
+
 void setincdirs()
 /*
  * Append system-specific directories to the include directory list.
@@ -162,7 +157,7 @@ void setincdirs()
 
 #if HOST == SYS_UNKNOWN
 /*
- * BP: 25.07.91, Kontext: GenMake
+ * Kontext: GenMake
  * Unter DOS wird nun auch die Environment-Variable INCLUDE ausgewetet.
  * Es kommt erschwerend hinzu, dass alle Eintraege, die mit ';' getrennt
  * sind, mit in die Liste aufenommen werden muessen.
@@ -173,7 +168,7 @@ void setincdirs()
  * verwendete knallte es in strcpy() !
  */
 
-#if !defined( ZTC ) && !defined( WNT ) && !defined(BLC) && ! defined UNX && ! defined OS2
+#if !defined( WNT ) && ! defined UNX
         extern   char     *getenv( char *pStr ); /* BP */
 #endif
                  char     *pIncGetEnv = NULL;    /* Pointer auf INCLUDE   */
@@ -187,7 +182,7 @@ void setincdirs()
 
 }
 
-/* BP: 11.09.91, Kontext: Erweiterung des INCLUDE-Services
+/* Kontext: Erweiterung des INCLUDE-Services
  * Bislang konnte der cpp keine Include-Angaben in der Kommandozeile
  * vertragen, bei denen die directries mit ';' getrennt wurden.
  * Dies ist auch verstaendlich, da dieses cpp fuer UNIX-Systeme
@@ -213,9 +208,6 @@ int AddInclude( char* pIncStr )
     return( 1 );
 }
 
-
-
-
 int
 dooptions(int argc, char** argv)
 /*
@@ -251,9 +243,6 @@ dooptions(int argc, char** argv)
                     break;
 
                 case 'D':                       /* Define symbol        */
-#if HOST != SYS_UNIX
-/*                   zap_uc(ap); */             /* Force define to U.C. */
-#endif
                     /*
                      * If the option is just "-Dfoo", make it -Dfoo=1
                      */
@@ -314,9 +303,6 @@ dooptions(int argc, char** argv)
                     break;
 
                 case 'U':                       /* Undefine symbol      */
-#if HOST != SYS_UNIX
-/*                    zap_uc(ap);*/
-#endif
                     if (defendel(ap, TRUE) == NULL)
                         cwarn("\"%s\" wasn't defined", ap);
                     break;
@@ -366,7 +352,7 @@ dooptions(int argc, char** argv)
         }
         return (j);                     /* Return new argc              */
 }
-
+
 int
 readoptions(char* filename, char*** pfargv)
 {
@@ -429,8 +415,6 @@ readoptions(char* filename, char*** pfargv)
         return (back);
 }
 
-
-
 #if HOST != SYS_UNIX
 FILE_LOCAL void
 zap_uc(char* ap)
@@ -466,9 +450,9 @@ void initdefines()
         register char           *tp;
         register DEFBUF         *dp;
         int                     i;
-        long                    tvec;
+        time_t                  tvec;
 
-#if !defined( ZTC ) && !defined( WNT ) && !defined(BLC) && !defined(G3)
+#if !defined( WNT ) && !defined(G3)
         extern char             *ctime();
 #endif
 
@@ -504,14 +488,14 @@ void initdefines()
             dp = defendel("__DATE__", FALSE);
             dp->repl = tp = getmem(27);
             dp->nargs = DEF_NOARGS;
-            time( (time_t*)&tvec);
+            time( &tvec);
             *tp++ = '"';
-            strcpy(tp, ctime((const time_t*)&tvec));
+            strcpy(tp, ctime(&tvec));
             tp[24] = '"';                       /* Overwrite newline    */
 #endif
         }
 }
-
+
 #if HOST == SYS_VMS
 /*
  * getredirection() is intended to aid in porting C programs
@@ -599,3 +583,5 @@ char            **argv;
         return (j);                     /* Return new argc      */
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

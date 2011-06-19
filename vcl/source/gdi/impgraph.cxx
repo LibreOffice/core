@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
-
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gfxlink.hxx>
@@ -392,7 +392,7 @@ void ImpGraphic::ImplClear()
                 ::ucbhelper::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
                                      ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                      ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
             }
             catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -486,7 +486,7 @@ sal_Bool ImpGraphic::ImplIsAnimated() const
 sal_Bool ImpGraphic::ImplIsEPS() const
 {
     return( ( meType == GRAPHIC_GDIMETAFILE ) &&
-            ( maMetaFile.GetActionCount() > 0 ) &&
+            ( maMetaFile.GetActionSize() > 0 ) &&
             ( maMetaFile.GetAction( 0 )->GetType() == META_EPS_ACTION ) );
 }
 
@@ -495,7 +495,7 @@ sal_Bool ImpGraphic::ImplIsEPS() const
 sal_Bool ImpGraphic::ImplIsRenderGraphic() const
 {
     return( ( GRAPHIC_GDIMETAFILE == meType ) &&
-            ( 1 == maMetaFile.GetActionCount() ) &&
+            ( 1 == maMetaFile.GetActionSize() ) &&
             ( META_RENDERGRAPHIC_ACTION == maMetaFile.GetAction( 0 )->GetType() ) );
 }
 
@@ -1127,7 +1127,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
                                     ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                          ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                                    aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                                    aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                                          ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                                 }
                                 catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1311,7 +1311,7 @@ sal_Bool ImpGraphic::ImplSwapOut()
                             ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                            aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                            aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1413,7 +1413,7 @@ sal_Bool ImpGraphic::ImplSwapIn()
                             ::ucbhelper::Content aCnt( aSwapURL,
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                            aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                            aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1732,3 +1732,5 @@ SvStream& operator<<( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
     return rOStm;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

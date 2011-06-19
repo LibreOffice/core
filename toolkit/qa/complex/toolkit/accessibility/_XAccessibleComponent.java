@@ -394,7 +394,7 @@ public class _XAccessibleComponent {
     /**
      * Just calls the method. <p>
      *
-     * Has <b> OK </b> status if no runtime exceptions occured.
+     * Has <b> OK </b> status if no runtime exceptions occurred.
      * @return
      */
     public boolean _grabFocus() {
@@ -410,7 +410,7 @@ public class _XAccessibleComponent {
      * component which support <code>XAccessibleComponent</code>.
      *
      * @return The array of children. Empty array returned if
-     * such children were not found or some error occured.
+     * such children were not found or some error occurred.
      */
     private XAccessibleComponent[] getChildrenComponents() {
         XAccessible xAcc = UnoRuntime.queryInterface(XAccessible.class, oObj) ;
@@ -448,7 +448,7 @@ public class _XAccessibleComponent {
      * <code>XAccessibleComponent</code>.
      *
      * @return The parent or <code>null</code> if the component
-     * has no parent or some errors occured.
+     * has no parent or some errors occurred.
      */
     private XAccessibleComponent getParentComponent() {
         XAccessible xAcc = UnoRuntime.queryInterface(XAccessible.class, oObj) ;

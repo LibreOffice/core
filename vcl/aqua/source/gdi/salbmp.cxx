@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,6 +157,13 @@ bool AquaSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 
 // ------------------------------------------------------------------
 
+bool AquaSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+{
+    return false;
+}
+
+// ------------------------------------------------------------------
+
 void AquaSalBitmap::Destroy()
 {
     DestroyContext();
@@ -260,7 +268,7 @@ bool AquaSalBitmap::AllocateUserData()
         case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
         case 32:    mnBytesPerRow = mnWidth << 2; break;
         default:
-            DBG_ERROR("vcl::AquaSalBitmap::AllocateUserData(), illegal bitcount!");
+            OSL_FAIL("vcl::AquaSalBitmap::AllocateUserData(), illegal bitcount!");
         }
     }
 
@@ -271,7 +279,7 @@ bool AquaSalBitmap::AllocateUserData()
     }
     catch( const std::bad_alloc& )
     {
-        DBG_ERROR( "vcl::AquaSalBitmap::AllocateUserData: bad alloc" );
+        OSL_FAIL( "vcl::AquaSalBitmap::AllocateUserData: bad alloc" );
         maUserBuffer.reset( NULL );
         mnBytesPerRow = 0;
     }
@@ -905,3 +913,5 @@ bool AquaSalBitmap::GetSystemData( BitmapSystemData& rData )
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

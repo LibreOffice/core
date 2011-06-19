@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,12 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
 
 #define ERROR RuntimeException()
 
 #define GREGORIAN_CROSSOVER 2299161
+
+namespace com { namespace sun { namespace star { namespace i18n {
 
 // not used
 //static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
@@ -268,12 +269,11 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
 {
     /* working variables */
     long lFactorA, lFactorB, lFactorC, lFactorD, lFactorE;
-    long lAdjust;
 
     /* test whether to adjust for the Gregorian calendar crossover */
     if (lJulianDay >= GREGORIAN_CROSSOVER) {
     /* calculate a small adjustment */
-    lAdjust = (long) (((float) (lJulianDay - 1867216) - 0.25) / 36524.25);
+    long lAdjust = (long) (((float) (lJulianDay - 1867216) - 0.25) / 36524.25);
 
     lFactorA = lJulianDay + 1 + lAdjust - ((long) (0.25 * lAdjust));
 
@@ -339,3 +339,7 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
 
     return (double) intgr;
 }
+
+}}}}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

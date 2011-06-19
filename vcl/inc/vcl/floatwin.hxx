@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,8 @@ class PopupModeEvent;
 
 #define FLOATWIN_TITLE_NORMAL                   ((sal_uInt16)0x0001)
 #define FLOATWIN_TITLE_TEAROFF                  ((sal_uInt16)0x0002)
-#define FLOATWIN_TITLE_NONE                     ((sal_uInt16)0x0004)
+#define FLOATWIN_TITLE_POPUP                    ((sal_uInt16)0x0004)
+#define FLOATWIN_TITLE_NONE                     ((sal_uInt16)0x0008)
 
 // ------------------
 // - FloatingWindow -
@@ -93,7 +95,6 @@ private:
     sal_Bool            mbInCleanUp;
     Link            maPopupModeEndHdl;
 
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
     DECL_DLLPRIVATE_LINK(  ImplEndPopupModeHdl, void* );
 
@@ -122,7 +123,6 @@ public:
     SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE sal_Bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
-//#endif
 
 public:
                     FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
@@ -159,3 +159,5 @@ public:
 };
 
 #endif // _SV_FLOATWIN_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

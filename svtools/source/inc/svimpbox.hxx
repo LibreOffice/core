@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _SVIMPLBOX_HXX
 #define _SVIMPLBOX_HXX
 
-#ifndef _SELENG_HXX
 #include <vcl/seleng.hxx>
-#endif
-#ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
 #include <vcl/vclevent.hxx>
 // #102891# ----------------
 #include <unotools/intlwrapper.hxx>
@@ -50,6 +47,13 @@ class SvLBoxEntry;
 class SvLBoxItem;
 class SvLBoxTab;
 class TabBar;
+namespace comphelper
+{
+    namespace string
+    {
+        class NaturalStringSorter;
+    }
+}
 
 class ImpLBSelEng : public FunctionSet
 {
@@ -114,8 +118,6 @@ private:
 
     static Image*       s_pDefCollapsed;
     static Image*       s_pDefExpanded;
-    static Image*       s_pDefCollapsedHC;
-    static Image*       s_pDefExpandedHC;
     static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
 
     // Node Bitmaps
@@ -132,8 +134,6 @@ private:
 
     // all our images
     Image               m_aNodeAndEntryImages[ IT_IMAGE_COUNT ];
-    // plus the high contrast versions
-    Image               m_aNodeAndEntryImages_HC[ IT_IMAGE_COUNT ];
 
     // wg. kompat. hier
     Size                aOutputSize;
@@ -170,7 +170,7 @@ private:
     Timer               aEditTimer;
 
     // #102891# -------------------
-    IntlWrapper *       pIntlWrapper;
+    comphelper::string::NaturalStringSorter *m_pStringSorter;
 
     // #97680# --------------------
     std::vector< short > aContextBmpWidthVector;
@@ -246,8 +246,7 @@ private:
 
     static  void        implInitDefaultNodeImages();
 
-    // #102891# -------------------
-    void                UpdateIntlWrapper();
+    void UpdateStringSorter();
 
     // #97680# --------------------
     short               UpdateContextBmpWidthVector( SvLBoxEntry* pEntry, short nWidth );
@@ -318,24 +317,22 @@ public:
     void                PaintDDCursor( SvLBoxEntry* );
 
     // Images
-    inline Image&       implGetImageLocation( const ImageType _eType, BmpColorMode _eMode );
-    inline Image&       implGetImageLocationWithFallback( const ImageType _eType, BmpColorMode _eMode ) const;
+    inline Image&       implGetImageLocation( const ImageType _eType );
 
-    inline void         SetExpandedNodeBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline void         SetCollapsedNodeBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL  );
-    inline void         SetDontKnowNodeBmp( const Image& rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline void         SetExpandedNodeBmp(  const Image& _rImg );
+    inline void         SetCollapsedNodeBmp( const Image& _rImg );
 
-    inline const Image& GetExpandedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
-    inline const Image& GetCollapsedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
-    inline const Image& GetDontKnowNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    inline const Image& GetExpandedNodeBmp( );
+    inline const Image& GetCollapsedNodeBmp( );
+    inline const Image& GetDontKnowNodeBmp( );
 
-    inline void         SetDefaultEntryExpBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline void         SetDefaultEntryColBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline const Image& GetDefaultEntryExpBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline const Image& GetDefaultEntryColBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline void         SetDefaultEntryExpBmp( const Image& _rImg );
+    inline void         SetDefaultEntryColBmp( const Image& _rImg );
+    inline const Image& GetDefaultEntryExpBmp( );
+    inline const Image& GetDefaultEntryColBmp( );
 
-    static const Image& GetDefaultExpandedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    static const Image& GetDefaultCollapsedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    static const Image& GetDefaultExpandedNodeImage( );
+    static const Image& GetDefaultCollapsedNodeImage( );
 
     const Size&         GetOutputSize() const { return aOutputSize;}
     void                KeyUp( sal_Bool bPageUp, sal_Bool bNotifyScroll = sal_True );
@@ -374,76 +371,60 @@ public:
     bool                IsSelectable( const SvLBoxEntry* pEntry );
 };
 
-inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType, BmpColorMode _eMode )
+inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )
 {
-    DBG_ASSERT( ( BMP_COLOR_HIGHCONTRAST == _eMode ) || ( BMP_COLOR_NORMAL == _eMode ),
-        "SvImpLBox::implGetImageLocation: invalid mode!" );
     DBG_ASSERT( ( _eType >= 0 ) && ( _eType < IT_IMAGE_COUNT ),
         "SvImpLBox::implGetImageLocation: invalid image index (will crash)!" );
 
-    Image* _pSet = ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? m_aNodeAndEntryImages_HC : m_aNodeAndEntryImages;
+    Image* _pSet = m_aNodeAndEntryImages;
     return *( _pSet + (sal_Int32)_eType );
 }
 
-inline Image& SvImpLBox::implGetImageLocationWithFallback( const ImageType _eType, BmpColorMode _eMode ) const
+inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg )
 {
-    Image& rImage = const_cast< SvImpLBox* >( this )->implGetImageLocation( _eType, _eMode );
-    if ( !rImage )
-        // fallback to normal images in case the one for the special mode has not been set
-        rImage = const_cast< SvImpLBox* >( this )->implGetImageLocation( _eType, BMP_COLOR_NORMAL );
-    return rImage;
-}
-
-inline void SvImpLBox::SetDontKnowNodeBmp( const Image& rImg, BmpColorMode _eMode )
-{
-    implGetImageLocation( itNodeDontKnow, _eMode ) = rImg;
-}
-
-inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg, BmpColorMode _eMode )
-{
-    implGetImageLocation( itNodeExpanded, _eMode ) = rImg;
+    implGetImageLocation( itNodeExpanded ) = rImg;
     SetNodeBmpYOffset( rImg );
 }
 
-inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg, BmpColorMode _eMode )
+inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg )
 {
-    implGetImageLocation( itNodeCollapsed, _eMode ) = rImg;
+    implGetImageLocation( itNodeCollapsed ) = rImg;
     SetNodeBmpYOffset( rImg );
 }
 
-inline const Image& SvImpLBox::GetDontKnowNodeBmp( BmpColorMode _eMode ) const
+inline const Image& SvImpLBox::GetDontKnowNodeBmp( )
 {
-    return implGetImageLocationWithFallback( itNodeDontKnow, _eMode );
+    return implGetImageLocation( itNodeDontKnow );
 }
 
-inline const Image& SvImpLBox::GetExpandedNodeBmp( BmpColorMode _eMode ) const
+inline const Image& SvImpLBox::GetExpandedNodeBmp( )
 {
-    return implGetImageLocationWithFallback( itNodeExpanded, _eMode );
+    return implGetImageLocation( itNodeExpanded );
 }
 
-inline const Image& SvImpLBox::GetCollapsedNodeBmp( BmpColorMode _eMode ) const
+inline const Image& SvImpLBox::GetCollapsedNodeBmp( )
 {
-    return implGetImageLocationWithFallback( itNodeCollapsed, _eMode );
+    return implGetImageLocation( itNodeCollapsed );
 }
 
-inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg, BmpColorMode _eMode )
+inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg )
 {
-    implGetImageLocation( itEntryDefExpanded, _eMode ) = _rImg;
+    implGetImageLocation( itEntryDefExpanded ) = _rImg;
 }
 
-inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg, BmpColorMode _eMode )
+inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg )
 {
-    implGetImageLocation( itEntryDefCollapsed, _eMode ) = _rImg;
+    implGetImageLocation( itEntryDefCollapsed ) = _rImg;
 }
 
-inline const Image& SvImpLBox::GetDefaultEntryExpBmp( BmpColorMode _eMode )
+inline const Image& SvImpLBox::GetDefaultEntryExpBmp( )
 {
-    return implGetImageLocationWithFallback( itEntryDefExpanded, _eMode );
+    return implGetImageLocation( itEntryDefExpanded );
 }
 
-inline const Image& SvImpLBox::GetDefaultEntryColBmp( BmpColorMode _eMode )
+inline const Image& SvImpLBox::GetDefaultEntryColBmp( )
 {
-    return implGetImageLocationWithFallback( itEntryDefCollapsed, _eMode );
+    return implGetImageLocation( itEntryDefCollapsed );
 }
 
 inline Point SvImpLBox::GetEntryPosition( SvLBoxEntry* pEntry ) const
@@ -472,3 +453,4 @@ inline void SvImpLBox::TreeInserted( SvLBoxEntry* pInsTree )
 
 #endif // #ifndef _SVIMPLBOX_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
-#ifndef _VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 #include <vcl/field.hxx>
 
 class MouseEvent;
@@ -42,62 +41,57 @@ class DataChangedEvent;
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class Ruler
 
-Diese Klasse dient zur Anzeige eines Lineals. Dabei kann diese Klasse nicht
-nur als Anzeige-Control verwendet werden, sondern auch als aktives Control
-zum Setzen/Verschieben von Tabulatoren und Raendern.
+This class is used for displaying a ruler, but it can also be used
+for setting or moving tabs and margins.
 
 --------------------------------------------------------------------------
 
 WinBits
 
-WB_HORZ             Lineal wird horizontal dargestellt
-WB_VERT             Lineal wird vertikal dargestellt
-WB_3DLOOK           3D-Darstellung
-WB_BORDER           Border am unteren/rechten Rand
-WB_EXTRAFIELD       Feld in der linken/oberen Ecke zur Anzeige und
-                    Auswahl von Tabs, Null-Punkt, ...
+WB_HORZ             ruler is displayed horizontally
+WB_VERT             ruler is displayed vertically
+WB_3DLOOK           3D look
+WB_BORDER           border at the bottom/right margin
+WB_EXTRAFIELD       Field in the upper left corner for
+                    displaying and selecting tabs, origin of coordinates, ...
 WB_RIGHT_ALIGNED    Marks the vertical ruler as right aligned
 
 --------------------------------------------------------------------------
 
-Beim Lineal werden alle Werte als Pixel-Werte eingestellt. Dadurch werden
-doppelte Umrechnungen und Rundungsfehler vermieden und die Raender werden
-im Lineal auch an der Position angezeigt, den Sie auch im Dokument haben.
-Dadurch kann die Applikation zum Beispiel bei Tabellendarstellung auch
-eigene Rundungen vornehmen und die Positionen im Lineal passen trotzdem noch
-zu denen im Dokument. Damit aber das Lineal weiss, wie das Dokument auf dem
-Bildschirm dargestellt wird, muessen noch ein paar zusaetzliche Werte
-eingestellt werden.
+All ruler parameters are set in pixel units. This way double conversions
+and rounding errors are avoided and the ruler displays the margins
+at their actual position in the document. Because of this, the application can,
+for example in tables, do its own roundings and the positions on the ruler will
+still match those in the document. However, for the ruler to know how the
+document is displayed on the screen, some additional values have to be configured
 
-Mit SetWinPos() wird der Offset des Edit-Fenster zum Lineal eingestellt.
-Dabei kann auch die Breite des Fensters eingestellt werden. Wenn bei den
-Werten 0 uebergeben wird, wird die Position/Breite vom Fenster automatisch
-so breit gesetzt, wie das Lineal breit ist.
+SetWinPos() sets the offset of the ruler's edit window. In doing so,
+the width of the window can also be configured. If there is a 0 among the
+values passed to the function, the position/width is automatically set to
+the width of the ruler.
 
-Mit SetPagePos() wird der Offset der Seite zum Edit-Fenster eingestellt und
-die Breite der Seite eingestellt. Wenn bei den Werten 0 uebergeben wird,
-wird die Position/Breite automatisch so gesetzt, als ob die Seite das ganze
-Editfenster ausfuellen wuerde.
+SetPagePos() sets the offset of the page relative to the edit window and the
+width of the page. If there is a 0 among the values passed to the function,
+the position/width is automatically set as if the page filled the whole edit window.
 
-Mit SetBorderPos() kann der Offset eingestellt werden, ab dem der
-Border ausgegeben wird. Die Position bezieht sich auf die linke bzw. obere
-Fensterkante. Dies wird gebraucht, wenn ein horizontales und vertikales
-Lineal gleichzeitig sichtbar sind. Beispiel:
+SetBorderPos() sets the offset of the border. The position is relative to
+the upper/left margin of the window. This is needed when there are a horizontal
+and a vertical ruler visible at the same time. Example:
         aHRuler.SetBorderPos( aVRuler.GetSizePixel().Width()-1 );
 
-Mit SetNullOffset() wird der Null-Punkt bezogen auf die Seite gesetzt.
+SetNullOffset() sets the origin relative to the page.
 
-Alle anderen Werte (Raender, Einzug, Tabs, ...) beziehen sich auf den 0 Punkt,
-der mit SetNullOffset() eingestellt wird.
+All the other values (margins, indentation, tabs, ...) refer to the origin,
+which is set with SetNullOffset().
 
-Die Werte werden zum Beispiel folgendermassen berechnet:
+The values are computed as described below:
 
-- WinPos (wenn beide Fenster den gleichen Parent haben)
+- WinPos (if both windows have the same parent)
 
     Point aHRulerPos = aHRuler.GetPosPixel();
     Point aEditWinPos = aEditWin.GetPosPixel();
@@ -108,16 +102,15 @@ Die Werte werden zum Beispiel folgendermassen berechnet:
     Point aPagePos = aEditWin.LogicToPixel( aEditWin.GetPagePos() );
     aHRuler.SetPagePos( aPagePos().X() );
 
-- Alle anderen Werte
+- All other values
 
-    Die logischen Werte zusammenaddieren, als Position umrechnen und
-    die vorher gemerkten Pixel-Positionen (von PagePos und NullOffset)
-    entsprechend abziehen.
+    Add the logical values, recompute as position and subtract the
+    previously saved pixel positions (of PagePos and Null Offset).
 
 --------------------------------------------------------------------------
 
-Mit SetUnit() und SetZoom() wird eingestellt, in welcher Einheit das Lineal
-die Werte anzeigt. Folgende Einheiten werden akzeptiert:
+SetUnit() and SetZoom() configure which unit is used to display
+the values on the ruler. The following units are accepted:
 
     FUNIT_MM
     FUNIT_CM (Default)
@@ -131,160 +124,145 @@ die Werte anzeigt. Folgende Einheiten werden akzeptiert:
 
 --------------------------------------------------------------------------
 
-Mit SetMargin1() kann der linke/obere Rand und mit SetMargin2() kann
-der rechte/untere Rand gesetzt werden. Falls diese Methoden ohne Parameter
-aufgerufen werden, werden keine Raender angezeigt. Wenn SetMargin1() bzw.
-SetMargin2() mit Parametern aufgerufen werden, kann bei diesen
-folgendes angegeben werden:
+SetMargin1() sets the upper/left margin and SetMargin2() sets the
+bottom/right margin. If these methods are called whithout arguments,
+no margins are displayed. Otherwise, the following arguments can be passed:
 
-    long    nPos            - Offset zum NullPunkt in Pixel
-    sal_uInt16  nStyle          - Bit-Style:
+    long    nPos            - offset in pixels relative to the origin
+    sal_uInt16 nStyle       - bit style:
                                 RULER_MARGIN_SIZEABLE
-                                Rand kann in der Groesse veraendert werden.
+                                margin size can be changed
 
-                                Zu diesen Style's koennen folgende Style-
-                                Bits dazugeodert werden:
-                                RULER_STYLE_INVISIBLE (fuer nicht sichtbar)
+                                The following bits can be set in addition
+                                to these styles:
+                                RULER_STYLE_INVISIBLE
 
 
-Mit SetBorders() kann ein Array von Raendern gesetzt werden. Dabei muss
-ein Array vom Typ RulerBorder uebergeben werden, wobei folgende Werte
-initialisiert werden muessen:
+SetBorders() sets an array of margins. To do this, an array of type RulerBorder
+has to be passed. In the array, the following values have to be initialized:
 
-    long    nPos            - Offset zum NullPunkt in Pixel
-    long    nWidth          - Breite des Spaltenabstands in Pixel (kann zum
-                              Beispiel fuer Tabellenspalten auch 0 sein)
-    sal_uInt16  nStyle          - Bit-Style:
+    long    nPos            - offset in pixels relative to the origin
+    long    nWidth          - column spacing in pixels (can also be 0, for example,
+                              for table columns)
+    sal_uInt16 nStyle       - bit style:
                                 RULER_BORDER_SIZEABLE
-                                Spaltenabstand kann in der Groesse veraendert
-                                werden. Dieses Flag sollte nur gesetzt werden,
-                                wenn ein Abstand in der Groesse geaendert wird
-                                und nicht die Groesse einer Zelle.
+                                Column spacing can be changed. This flag should
+                                only be set if the size of the spacing is changed,
+                                not that of a cell.
                                 RULER_BORDER_MOVEABLE
-                                Spaltenabstand/Begrenzung kann verschoben
-                                werden. Wenn Tabellenbegrenzungen verschoben
-                                werden, sollte dieses Flag gesetzt werden und
-                                nicht Sizeable. Denn Sizeable gibt an, das
-                                ein Abstand vergroessert werden kann und nicht
-                                eine einzelne Zelle in der Groesse geaendert
-                                werden kann.
+                                Column spacing/border can be moved. Whenever
+                                table borders are to be moved, this flag should
+                                be set instead of SIZEABLE (SIZEABLE indicates
+                                that the size of a spacing, not that of a single
+                                cell can be changed).
                                 RULER_BORDER_VARIABLE
-                                Nicht alle Spaltenabstande sind gleich
+                                Not all of the column spacings are equal
                                 RULER_BORDER_TABLE
-                                Tabellenrahmen. Wenn dieser Style gesetzt
-                                wird, muss die Spaltenbreite 0 sein.
+                                Table border. Whenever this style ist set, the column
+                                width must be 0.
                                 RULER_BORDER_SNAP
-                                Hilfslinie / Fanglinie. Wenn dieser Style
-                                gesetzt wird, muss die Spaltenbreite 0 sein.
+                                Auxiliary line. Whenever this style is set, the
+                                column width must be 0.
                                 RULER_BORDER_MARGIN
-                                Margin. Wenn dieser Style gesetzt wird,
-                                muss die Spaltenbreite 0 sein.
+                                Margin. Whenever this style is set, the column
+                                width must be 0.
 
-                                Zu diesen Style's koennen folgende Style-
-                                Bits dazugeodert werden:
-                                RULER_STYLE_INVISIBLE (fuer nicht sichtbar)
+                                The following bits can be set in addition
+                                to these styles:
+                                RULER_STYLE_INVISIBLE
 
-Mit SetIndents() kann ein Array von Indents gesetzt werden. Diese Methode darf
-nur angewendet werden, wenn es sich um ein horizontales Lineal handelt. Als
-Parameter muss ein Array vom Typ RulerIndent uebergeben werden, wobei folgende
-Werte initialisiert werden muessen:
+SetIndents() sets an array of indents. This method may only be used for horizontal
+rulers. A Ruler Indent must be passed as an argument, with the following values
+initialized:
 
-    long    nPos            - Offset zum NullPunkt in Pixel
-    sal_uInt16  nStyle          - Bit-Style:
-                                RULER_INDENT_TOP    (Erstzeileneinzug)
-                                RULER_INDENT_BOTTOM (Linker/Rechter Einzug)
-                                RULER_INDENT_BORDER (Verical line that shows the border distance)
-                                Zu diesen Style's koennen folgende Style-
-                                Bits dazugeodert werden:
-                                RULER_STYLE_DONTKNOW (fuer alte Position oder
-                                                     fuer Uneindeutigkeit)
-                                RULER_STYLE_INVISIBLE (fuer nicht sichtbar)
+    long    nPos            - offset relative to the origin in pixels
+    sal_uInt16 nStyle       - bit style:
+                                RULER_INDENT_TOP    (indent of the first line)
+                                RULER_INDENT_BOTTOM (left/right indent)
+                                RULER_INDENT_BORDER (Vertical line that shows the border distance)
+                                The following bits can be set in addition
+                                to these styles:
+                                RULER_STYLE_DONTKNOW (for old position or for
+                                                     ambiguity)
+                                RULER_STYLE_INVISIBLE
 
-Mit SetTabs() kann ein Array von Tabs gesetzt werden. Diese Methode darf nur
-angewendet werden, wenn es sich um ein horizontales Lineal handelt. Als
-Parameter muss ein Array vom Typ RulerTab uebergeben werden, wobei folgende
-Werte initialisiert werden muessen:
+SetTabs() sets an array of tabs. This method may only be used for horizontal rulers.
+An array of type RulerTab must be passed as an argument, with the following values
+initialized:
 
-    long    nPos            - Offset zum NullPunkt in Pixel
-    sal_uInt16  nStyle          - Bit-Style:
-                                RULER_TAB_DEFAULT (kann nicht selektiert werden)
+    long    nPos            - offset relative to the origin in pixels
+    sal_uInt16 nStyle       - bit style:
+                                RULER_TAB_DEFAULT (can't be selected)
                                 RULER_TAB_LEFT
                                 RULER_TAB_CENTER
                                 RULER_TAB_RIGHT
                                 RULER_TAB_DECIMAL
-                                Zu diesen Style's koennen folgende Style-
-                                Bits dazugeodert werden:
-                                RULER_STYLE_DONTKNOW (fuer alte Position oder
-                                                     fuer Uneindeutigkeit)
-                                RULER_STYLE_INVISIBLE (fuer nicht sichtbar)
+                                The following bits can be set in addition
+                                to these styles:
+                                RULER_STYLE_DONTKNOW (for old position of for
+                                                     ambiguity)
+                                RULER_STYLE_INVISIBLE
 
-Mit SetLines() koennen Positionslinien im Lineal angezeigt werden. Dabei
-muss ein Array vom Typ RulerLine uebergeben werden, wobei folgende Werte
-initialisiert werden muessen:
+SetLines() displays position lines in the ruler. An array of type RulerLine must be passed, with
+the following values initialized:
 
-    long    nPos            - Offset zum NullPunkt in Pixel
-    sal_uInt16  nStyle          - Bit-Style (muss zur Zeit immer 0 sein)
+    long    nPos            - offset relative to the origin in pixels
+    sal_uInt16 nStyle       - bit style (has to be 0 currently)
 
-Mit SetArrows() koennen Bemassungspfeile im Lineal angezeigt werden. Wenn
-Bemassungspfeile gesetzt werden, werden im Lineal auch keine Unterteilungen
-mehr angezeigt. Deshalb sollten die Bemassungspfeile immer ueber die ganze
-Linealbreite gesetzt werden. Dabei muss ein Array vom Typ RulerArrow
-uebergeben werden, wobei folgende Werte initialisiert werden muessen:
+SetArrows() displays dimension arrows in the ruler. With dimension arrows set
+no subdivisions will be shown any more in the ruler. Therefore, dimension
+arrows should always be set along the whole ruler. An array of type RulerArrow
+must be passed with the following values initialized:
 
-    long    nPos            - Offset zum NullPunkt in Pixel
-    long    nWidth          - Breite des Pfeils
-    long    nLogWidth       - Breite des Pfeils in logischer Einheit
-    sal_uInt16  nStyle          - Bit-Style (muss zur Zeit immer 0 sein)
+    long    nPos            - offset relative to the origin in pixels
+    long    nWidth          - the arrow's width
+    long    nLogWidth       - the arrow's width in logical unit
+    sal_uInt16 nStyle       - bit style (has to be 0 currently)
 
-Mit SetSourceUnit() wird die Einheit eingestellt, in welcher die logischen
-Werte vorliegen, die bei SetArrows() uebergeben werden. Dabei werden nur die
-Einheiten MAP_TWIP und MAP_100TH_MM (default) akzeptiert.
+SetSourceUnit() sets the unit in which the logical values are given that are
+passed to SetArrows(). The only units accepted are MAP_TWIP and MAP_100TH_MM.
 
 --------------------------------------------------------------------------
 
-Wenn auch vom Benutzer die Raender, Tabs, Border, ... ueber das Lineal
-geaendert werden koennen, muss etwas mehr Aufwand getrieben werden. Dazu
-muessen die Methoden StartDrag(), Drag() und EndDrag() ueberlagert werden.
-Bei der Methode StartDrag() besteht die Moeglichkeit durch das zurueckgeben
-von sal_False das Draggen zu verhindern. Im Drag-Handler muss die Drag-Position
-abgefragt werden und die Werte muessen an die neue Position verschoben werden.
-Dazu ruft man einfach die einzelnen Set-Methoden auf. Solange man sich
-im Drag-Handler befindet, werden sich die Werte nur gemerkt und erst
-danach das Lineal neu ausgegeben. Alle Handler koennen auch als Links ueber
-entsprechende Set..Hdl()-Methoden gesetzt werden.
+If the user should also be able to change the margins tabs, borders, ...
+in the ruler, a bit more effort is necessary. In this case, the StartDrag(),
+Drag() and EndDrag() methods have to be overridden. For the StartDrag() method
+it is possible to prevent dragging by returning FALSE. In the drag handler,
+the drag position must be queried and the values must be moved to the new
+position. This is done by calling the particular Set methods. While in the
+drag handler, the values are just cached and only afterward the ruler is redrawn.
+All the handlers can also be set as links with the particular Set..Hdl() methods.
 
     - StartDrag()
-        Wird gerufen, wenn das Draggen gestartet wird. Wenn sal_False
-        zurueckgegeben wird, wird das Draggen nicht ausgefuehrt. Bei sal_True
-        wird das Draggen zugelassen. Wenn der Handler nicht ueberlagert
-        wird, wird sal_False zurueckgegeben.
+        Is called when dragging is started. If FALSE is returned, the dragging.
+        won't be executed. If TRUE is returned, the dragging will be permitted.
+        If the handler isn't overridden, FALSE will be returned.
 
     - EndDrag()
-        Wird gerufen, wenn das Draggen beendet wird.
+        Is called at the end of dragging.
 
     - Drag()
-        Wird gerufen, wenn gedragt wird.
+        Is called when dragging takes place.
 
     - Click()
-        Dieser Handler wird gerufen, wenn kein Element angeklickt wurde.
-        Die Position kann mit GetClickPos() abgefragt werden. Dadurch
-        kann man zum Beispiel Tabs in das Lineal setzen. Nach Aufruf des
-        Click-Handlers wird gegebenenfalls das Drag sofort ausgeloest. Dadurch
-        ist es moeglich, einen neuen Tab im Click-Handler zu setzen und
-        danach gleich zu verschieben.
+        This handler is called when no element has been clicked on.
+        The position can be queried with GetClickPos(). This way it is possible
+        to, for example, ser tabs in the ruler. After calling the click handler,
+        the drag, if any, is immediately triggered. This makes it possible to
+        set a new tab in the click handler and then immediately move it.
 
     - DoubleClick()
-        Dieser Handler wird gerufen, wenn ein DoubleClick ausserhalb des
-        Extrafeldes gemacht wurde. Was angeklickt wurde, kann mit
-        GetClickType(), GetClickAryPos() und GetClickPos() abgefragt werden.
-        Somit kann man zum Beispiel den Tab-Dialog anzeigen, wenn ein
-        Tab mit einem DoubleClick betaetigt wurde.
+        This handler is called when a double-click has been performed outside
+        the special panel. The methods GetClickType(), GetClickAryPos() and
+        GetClickPos() can be used to query what has been clicked on.
+        This way you can, for example, show the tab dialog when a double-click
+        is performed on a tab.
 
-Im Drag-Handler kann man abfragen, was und wohin gedragt wurde. Dazu gibt
-es folgende Abfrage-Methoden.
+In the drag handler it is possible to query what has been dragged and where
+it has been dragged. There are the following query methods:
 
     - GetDragType()
-        Liefert zurueck, was gedragt wird:
+        Returns what has been dragged.
             RULER_TYPE_MARGIN1
             RULER_TYPE_MARGIN2
             RULER_TYPE_BORDER
@@ -292,8 +270,8 @@ es folgende Abfrage-Methoden.
             RULER_TYPE_TAB
 
     - GetDragPos()
-        Liefert die Pixel-Position bezogen auf den eingestellten Null-Offset
-        zurueck, wohin der Anwender die Maus bewegt hat.
+        Returns the pixel position to which the user has moved the mouse
+        relative to the set zero-offset.
 
     - GetDragAryPos()
         Liefert den Index im Array zurueck, wenn ein Border, Indent oder ein
@@ -690,6 +668,10 @@ private:
     sal_uInt16              mnExtraStyle;
     sal_uInt16              mnExtraClicks;
     sal_uInt16              mnExtraModifier;
+// Amelia
+    long                mnCharWidth;
+    long                mnLineHeight;
+
     RulerExtra          meExtraType;
     RulerType           meDragType;
     MapUnit             meSourceUnit;
@@ -869,6 +851,13 @@ public:
 
     //set text direction right-to-left
     void                SetTextRTL(sal_Bool bRTL);
+
+    void                SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
+    void                SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
+
+    void                DrawTicks();
 };
 
 #endif  // _RULER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

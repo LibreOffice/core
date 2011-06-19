@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,13 +38,9 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 
-#ifndef _DATAFORMATTRANSLATOR_HXX_
 #include "DataFmtTransl.hxx"
-#endif
 
-#ifndef _FETCLIST_HXX_
 #include "FetcList.hxx"
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -175,3 +172,5 @@ private:
 typedef CEnumFormatEtc *PCEnumFormatEtc;
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

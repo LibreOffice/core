@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,3 +74,4 @@ inline ::boost::shared_ptr<T> make_shared_from_UNO( T * p )
 
 #endif // ! defined(INCLUDED_COMPHELPER_MAKE_SHARED_FROM_UNO_HXX)
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

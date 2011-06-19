@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,8 @@
 #include "precompiled_unotools.hxx"
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
-#ifndef _INTN_HXX //autogen
-//#include <tools/intn.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HDL_
 #include <com/sun/star/util/SearchFlags.hdl>
-#endif
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
@@ -405,3 +401,4 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
 }   // namespace utl
 // ............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

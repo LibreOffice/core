@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <vos/signal.hxx>
 #include <tools/debug.hxx>
-#ifndef _TABLE_HXX
-#include <tools/table.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rc.hxx>
@@ -45,6 +42,7 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
+#include <osl/signal.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
@@ -57,7 +55,7 @@
 
 #include <functional>
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <set>
 
@@ -71,7 +69,11 @@
 
 #define SEARCH_PATH_DELIMITER_STRING ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SEARCH_PATH_DELIMITER_CHAR_STRING ) )
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringHash;
+
 using namespace osl;
 
 // for thread safety
@@ -105,7 +107,7 @@ class InternalResMgr
     OUString                        aResName;
     bool                            bSingular;
     com::sun::star::lang::Locale    aLocale;
-    std::hash_map<sal_uInt64, int>* pResUseDump;
+    boost::unordered_map<sal_uInt64, int>* pResUseDump;
 
                             InternalResMgr( const OUString& rFileURL,
                                             const OUString& aPrefix,
@@ -118,7 +120,7 @@ class InternalResMgr
     void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
-    void                    FreeGlobalRes( void *, void * );
+    static void                 FreeGlobalRes( void *, void * );
 
     SvStream *              GetBitmapStream( sal_uInt32 nResId );
 };
@@ -143,7 +145,7 @@ class ResMgrContainer
             {}
     };
 
-    std::hash_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
+    boost::unordered_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
     com::sun::star::lang::Locale                             m_aDefLocale;
 
     ResMgrContainer() { init(); }
@@ -180,7 +182,7 @@ ResMgrContainer& ResMgrContainer::get()
 
 ResMgrContainer::~ResMgrContainer()
 {
-    for( std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it =
+    for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
         OSL_TRACE( "Resource file %s loaded %d times\n",
@@ -239,7 +241,7 @@ void ResMgrContainer::init()
             DirectoryItem aItem;
             while( aDir.getNextItem( aItem ) == FileBase::E_None )
             {
-                FileStatus aStatus(FileStatusMask_FileName);
+                FileStatus aStatus(osl_FileStatus_Mask_FileName);
                 if( aItem.getFileStatus( aStatus ) == FileBase::E_None )
                 {
                     OUString aFileName = aStatus.getFileName();
@@ -265,7 +267,7 @@ void ResMgrContainer::init()
         #endif
     }
     #if OSL_DEBUG_LEVEL > 1
-    for( std::hash_map< OUString, ContainerElement, OUStringHash >::const_iterator it =
+    for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::const_iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
         OSL_TRACE( "ResMgrContainer: %s -> %s\n",
@@ -279,6 +281,18 @@ void ResMgrContainer::init()
     MsLangId::convertLanguageToLocale(nLang, m_aDefLocale);
 }
 
+namespace
+{
+    bool isAlreadyPureenUS(const com::sun::star::lang::Locale &rLocale)
+    {
+        return (
+                 rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("en")) &&
+                 rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("US")) &&
+                 rLocale.Variant.getLength() == 0
+               );
+    }
+}
+
 InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
                                             com::sun::star::lang::Locale& rLocale,
                                             bool bForceNewInstance
@@ -286,7 +300,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
 {
     com::sun::star::lang::Locale aLocale( rLocale );
     OUStringBuffer aSearch( rPrefix.getLength() + 16 );
-    std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
+    boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
     int nTries = 0;
     if( aLocale.Language.getLength() > 0 )
@@ -329,7 +343,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             }
             break;
         }
-        if( nTries == 0 && !aLocale.Language.equalsIgnoreAsciiCaseAscii( "en" ) )
+        if( nTries == 0 && !isAlreadyPureenUS(aLocale) )
         {
             // locale fallback failed
             // fallback to en-US locale
@@ -446,7 +460,7 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
         aLocale.Variant = OUString();
     else if( aLocale.Country.getLength() )
         aLocale.Country = OUString();
-    else if( ! aLocale.Language.equalsIgnoreAsciiCaseAscii( "en" ) )
+    else if( !isAlreadyPureenUS(aLocale) )
     {
         aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         aLocale.Country = OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) );
@@ -468,7 +482,7 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
         delete pResMgr;
     else
     {
-        std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it =
+        boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
         m_aResFiles.find( pResMgr->aResName );
         if( it != m_aResFiles.end() )
         {
@@ -580,7 +594,7 @@ InternalResMgr::~InternalResMgr()
             aLine.Append( ByteString( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ) ) );
             aStm.WriteLine( aLine );
 
-            for( std::hash_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
+            for( boost::unordered_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
                  it != pResUseDump->end(); ++it )
             {
                 sal_uInt64 nKeyId = it->first;
@@ -637,7 +651,7 @@ sal_Bool InternalResMgr::Create()
             const sal_Char* pLogFile = getenv( "STAR_RESOURCE_LOGGING" );
             if ( pLogFile )
             {
-                pResUseDump = new std::hash_map<sal_uInt64, int>;
+                pResUseDump = new boost::unordered_map<sal_uInt64, int>;
                 for( sal_uInt32 i = 0; i < nEntries; ++i )
                     (*pResUseDump)[pContent[i].nTypeAndId] = 1;
             }
@@ -659,9 +673,7 @@ sal_Bool InternalResMgr::Create()
             }
         }
         rtl_freeMemory( pContentBuf );
-#ifndef OS2
         OSL_ENSURE( bSorted, "content not sorted" );
-#endif
         OSL_ENSURE( bEqual2Content, "resource structure wrong" );
         if( !bSorted )
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
@@ -829,7 +841,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     // clean up
     delete pNewResMgr;
 
-    DBG_ERROR( aStr.GetBuffer() );
+    OSL_FAIL( aStr.GetBuffer() );
 }
 
 #endif
@@ -838,19 +850,20 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
 static void RscException_Impl()
 {
-    switch ( vos::OSignalHandler::raise( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
+    switch ( osl_raiseSignal( OSL_SIGNAL_USER_RESOURCEFAILURE, (void*)"" ) )
     {
-        case vos::OSignalHandler::TAction_CallNextHandler:
-            abort();
+    case osl_Signal_ActCallNextHdl:
+        abort();
 
-        case vos::OSignalHandler::TAction_Ignore:
-            return;
+    case osl_Signal_ActIgnore:
+        return;
 
-        case vos::OSignalHandler::TAction_AbortApplication:
-            abort();
+    case osl_Signal_ActAbortApp:
+        abort();
 
-        case vos::OSignalHandler::TAction_KillApplication:
-            exit(-1);
+    default:
+    case osl_Signal_ActKillApp:
+        exit(-1);
     }
 }
 
@@ -948,7 +961,7 @@ void ResMgr::Init( const OUString& rFileName )
 #ifdef DBG_UTIL
         ByteString aStr( "Resourcefile not found:\n" );
         aStr += ByteString( OUStringToOString( rFileName, RTL_TEXTENCODING_UTF8 ) );
-        DBG_ERROR( aStr.GetBuffer() );
+        OSL_FAIL( aStr.GetBuffer() );
 #endif
         RscException_Impl();
     }
@@ -961,7 +974,7 @@ void ResMgr::Init( const OUString& rFileName )
         pVoid = pImpRes->LoadGlobalRes( RSC_VERSIONCONTROL, RSCVERSION_ID,
                                         &aResHandle );
         if ( pVoid )
-            pImpRes->FreeGlobalRes( aResHandle, pVoid );
+            InternalResMgr::FreeGlobalRes( aResHandle, pVoid );
         else
         {
             ByteString aStr( "Wrong version:\n" );
@@ -996,7 +1009,7 @@ ResMgr::~ResMgr()
     while( nCurStack > 0 )
     {
         if( ( aStack[nCurStack].Flags & (RC_GLOBAL | RC_NOTFOUND) ) == RC_GLOBAL )
-            pImpRes->FreeGlobalRes( aStack[nCurStack].aResHandle,
+            InternalResMgr::FreeGlobalRes( aStack[nCurStack].aResHandle,
                                     aStack[nCurStack].pResource );
         nCurStack--;
     }
@@ -1283,7 +1296,7 @@ void ResMgr::PopContext( const Resource* pResObj )
         // Resource freigeben
         if( (pTop->Flags & (RC_GLOBAL | RC_NOTFOUND)) == RC_GLOBAL )
             // kann auch Fremd-Ressource sein
-            pImpRes->FreeGlobalRes( pTop->aResHandle, pTop->pResource );
+            InternalResMgr::FreeGlobalRes( pTop->aResHandle, pTop->pResource );
         decStack();
     }
 }
@@ -1965,7 +1978,7 @@ SimpleResMgr* SimpleResMgr::Create( const sal_Char* pPrefixName, com::sun::star:
 // -----------------------------------------------------------------------
 bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId )
 {
-    vos::OGuard aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     if ( ( RSC_STRING != _resourceType ) && ( RSC_RESOURCE != _resourceType ) )
         return false;
@@ -1977,7 +1990,7 @@ bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourc
 // -----------------------------------------------------------------------
 UniString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
-    vos::OGuard aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadString : have no impl class !" );
     // perhaps constructed with an invalid filename ?
@@ -2026,7 +2039,7 @@ UniString SimpleResMgr::ReadString( sal_uInt32 nId )
 
     // not neccessary with te current implementation which holds the string table permanently, but to be sure ....
     // note: pFallback cannot be NULL here and is either the fallback or m_pResImpl
-    pFallback->FreeGlobalRes( pResHeader, pResHandle );
+    InternalResMgr::FreeGlobalRes( pResHeader, pResHandle );
     if( m_pResImpl != pFallback )
     {
         osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
@@ -2048,7 +2061,7 @@ const ::com::sun::star::lang::Locale& SimpleResMgr::GetLocale() const
 
 sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
 {
-    vos::OGuard aGuard(m_aAccessSafety);
+    osl::MutexGuard aGuard(m_aAccessSafety);
 
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::ReadBlob : have no impl class !" );
 
@@ -2118,3 +2131,5 @@ void SimpleResMgr::FreeBlob( void* pBuffer )
     void* pCompleteBuffer = (void*)(((sal_uInt8*)pBuffer) - sizeof(RSHEADER_TYPE));
     rtl_freeMemory(pCompleteBuffer);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

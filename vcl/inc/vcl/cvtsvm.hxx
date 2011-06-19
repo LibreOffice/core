@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -95,14 +96,12 @@ class Stack;
 class VCL_PLUGIN_PUBLIC SVMConverter
 {
 private:
-//#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void             ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf );
     SAL_DLLPRIVATE void             ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf );
     SAL_DLLPRIVATE sal_uLong            ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                                           VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
                                           Color& rLineCol, Stack& rLineColStack,
                                           rtl_TextEncoding& rActualCharSet );
-//#endif
 
 public:
                         SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf, sal_uLong nConvertMode  );
@@ -115,3 +114,5 @@ private:
 };
 
 #endif // _SV_CVTMTF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

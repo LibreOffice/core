@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include "outfont.hxx"
 #include "sft.hxx"
 
+#include <sal/macros.h>
 
 #include <algorithm>
 
@@ -169,7 +171,7 @@ void Impl_Font::AskConfig()
     mbConfigLookup = true;
 
     // prepare the FontSubst configuration lookup
-    const utl::FontSubstConfiguration* pFontSubst = utl::FontSubstConfiguration::get();
+    const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
 
     String      aShortName;
     String      aFamilyName;
@@ -182,11 +184,11 @@ void Impl_Font::AskConfig()
         aShortName, aFamilyName, eWeight, eWidthType, nType );
 
     // lookup the font name in the configuration
-    const utl::FontNameAttr* pFontAttr = pFontSubst->getSubstInfo( aMapName );
+    const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( aMapName );
 
     // if the direct lookup failed try again with an alias name
     if ( !pFontAttr && (aShortName != aMapName) )
-        pFontAttr = pFontSubst->getSubstInfo( aShortName );
+        pFontAttr = rFontSubst.getSubstInfo( aShortName );
 
     if( pFontAttr )
     {
@@ -1032,7 +1034,7 @@ namespace
                     aEnt.string = pOpen+1;
                     aEnt.string_len = (pClose-pOpen)-1;
                     aEnt.weight = WEIGHT_NORMAL;
-                    const int nEnt = sizeof( weight_table ) / sizeof( weight_table[0] );
+                    const int nEnt = SAL_N_ELEMENTS( weight_table );
                     WeightSearchEntry* pFound = std::lower_bound( weight_table, weight_table+nEnt, aEnt );
                     if( pFound != (weight_table+nEnt) )
                         o_rResult.SetWeight( pFound->weight );
@@ -1113,3 +1115,5 @@ FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
 sal_Bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 sal_Bool Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

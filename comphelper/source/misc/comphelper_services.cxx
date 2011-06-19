@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -29,6 +30,8 @@
 
 #include "comphelper_module.hxx"
 
+#include <rtl/instance.hxx>
+
 //--------------------------------------------------------------------
 extern void createRegistryInfo_OPropertyBag();
 extern void createRegistryInfo_SequenceOutputStream();
@@ -48,13 +51,12 @@ namespace comphelper { namespace module
 {
 //........................................................................
 
-    static void initializeModule()
+    namespace
     {
-        static bool bInitialized( false );
-        if ( !bInitialized )
+        class doInitialize
         {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !bInitialized )
+        public:
+            doInitialize()
             {
                 createRegistryInfo_OPropertyBag();
                 createRegistryInfo_SequenceOutputStream();
@@ -69,7 +71,14 @@ namespace comphelper { namespace module
                 createRegistryInfo_OSimpleLogRing();
                 createRegistryInfo_OOfficeRestartManager();
             }
-        }
+        };
+
+        struct theInitializer : public rtl::Static< doInitialize, theInitializer > {};
+    }
+
+    static void initializeModule()
+    {
+        theInitializer::get();
     }
 
 //........................................................................
@@ -77,3 +86,5 @@ namespace comphelper { namespace module
 //........................................................................
 
 IMPLEMENT_COMPONENT_LIBRARY_API( ::comphelper::module::ComphelperModule, ::comphelper::module::initializeModule )
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

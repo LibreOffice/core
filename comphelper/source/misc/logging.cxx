@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "EventLogger_Impl::impl_createLogger_nothrow: caught an exception!" );
+            OSL_FAIL( "EventLogger_Impl::impl_createLogger_nothrow: caught an exception!" );
         }
     }
 
@@ -144,7 +145,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "EventLogger::getLogLevel: caught an exception!" );
+            OSL_FAIL( "EventLogger::getLogLevel: caught an exception!" );
         }
 
         return LogLevel::OFF;
@@ -161,7 +162,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "EventLogger::setLogLevel: caught an exception!" );
+            OSL_FAIL( "EventLogger::setLogLevel: caught an exception!" );
         }
     }
 
@@ -178,7 +179,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "EventLogger::isLoggable: caught an exception!" );
+            OSL_FAIL( "EventLogger::isLoggable: caught an exception!" );
         }
 
         return false;
@@ -198,7 +199,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "EventLogger::addLogHandler: caught an exception!" );
+            OSL_FAIL( "EventLogger::addLogHandler: caught an exception!" );
         }
         return false;
     }
@@ -217,7 +218,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "EventLogger::removeLogHandler: caught an exception!" );
+            OSL_FAIL( "EventLogger::removeLogHandler: caught an exception!" );
         }
         return false;
     }
@@ -291,7 +292,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "EventLogger::impl_log: caught an exception!" );
+            OSL_FAIL( "EventLogger::impl_log: caught an exception!" );
         }
 
         return false;
@@ -334,7 +335,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "lcl_loadBundle_nothrow: caught an exception!" );
+            OSL_FAIL( "lcl_loadBundle_nothrow: caught an exception!" );
         }
 
         return _rLoggerData.xBundle.is();
@@ -355,7 +356,7 @@ namespace comphelper
         catch( const Exception& e )
         {
             (void)e;
-            OSL_ENSURE( false, "lcl_loadString_nothrow: caught an exception!" );
+            OSL_FAIL( "lcl_loadString_nothrow: caught an exception!" );
         }
         return sMessage;
     }
@@ -403,3 +404,5 @@ namespace comphelper
 //........................................................................
 } // namespace comphelper
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

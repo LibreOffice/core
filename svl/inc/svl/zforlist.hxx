@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include "svl/svldllapi.h"
 #include <tools/string.hxx>
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <i18npool/lang.h>
 #include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -61,6 +60,9 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+namespace rtl {
+    class OUString;
+}
 
 #define SV_COUNTRY_LANGUAGE_OFFSET  5000    // Max count of formats per country/language
 #define SV_MAX_ANZ_STANDARD_FORMATE  100    // Max count of builtin default formats per CL
@@ -212,9 +214,7 @@ enum NfEvalDateFormat
 };
 
 
-//#if 0 // _SOLAR__PRIVATE
 #define _ZFORLIST_DECLARE_TABLE
-//#endif
 #ifdef _ZFORLIST_DECLARE_TABLE
 DECLARE_TABLE (SvNumberFormatTable, SvNumberformat*)
 DECLARE_TABLE (SvNumberFormatterIndexTable, sal_uInt32*)
@@ -245,12 +245,10 @@ class SVL_DLLPUBLIC NfCurrencyEntry
 
 private:
 
-//#if 0 // _SOLAR__PRIVATE
                         // nDecimalFormat := 0, 1, 2
                         // #,##0 or #,##0.00 or #,##0.-- are assigned
     SVL_DLLPRIVATE void             Impl_BuildFormatStringNumChars( String&,
                             const LocaleDataWrapper&, sal_uInt16 nDecimalFormat ) const;
-//#endif    // __PRIVATE
 
 public:
 
@@ -405,7 +403,7 @@ public:
         @return
             <TRUE/> if string new and ok and inserted.
              <FALSE/> if string already exists or an unresolvable parse error
-             occured, in which case nCheckPos is the error position within rString.
+             occurred, in which case nCheckPos is the error position within rString.
             If the error occurs at position 0 or rString is empty nCheckPos
             will be 1, so an error in the string is always indicated by
              nCheckPos not being zero.
@@ -417,10 +415,13 @@ public:
     sal_Bool PutEntry( String& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
                   LanguageType eLnge = LANGUAGE_DONTKNOW );
 
+    bool PutEntry( rtl::OUString& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
+                  LanguageType eLnge = LANGUAGE_DONTKNOW );
+
     /** Same as <method>PutEntry</method> but the format code string is
          considered to be of language/country eLnge and is converted to
         language/country eNewLnge */
-    sal_Bool PutandConvertEntry( String& rString, xub_StrLen& nCheckPos,
+    bool PutandConvertEntry( String& rString, xub_StrLen& nCheckPos,
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 
@@ -428,7 +429,7 @@ public:
          is considered to be of the System language/country eLnge and is
         converted to another System language/country eNewLnge. In this case
          the automatic currency is converted too. */
-    sal_Bool PutandConvertEntrySystem( String& rString, xub_StrLen& nCheckPos,
+    bool PutandConvertEntrySystem( String& rString, xub_StrLen& nCheckPos,
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 
@@ -1029,3 +1030,5 @@ inline sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear(
 
 
 #endif  // _ZFORLIST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

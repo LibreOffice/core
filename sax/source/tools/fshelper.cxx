@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <sax/fshelper.hxx>
 #include "fastserializer.hxx"
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
@@ -9,7 +10,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sax_fastparser {
 
-FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream ) :
+FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream, bool bWriteHeader ) :
     mpSerializer(new FastSaxSerializer())
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
@@ -18,7 +19,8 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
     mpSerializer->setOutputStream( xOutputStream );
-    mpSerializer->startDocument();
+    if( bWriteHeader )
+        mpSerializer->startDocument();
 }
 
 FastSerializerHelper::~FastSerializerHelper()
@@ -179,9 +181,9 @@ FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
     return mpSerializer->getOutputStream();
 }
 
-void FastSerializerHelper::mark()
+void FastSerializerHelper::mark( Sequence< sal_Int32 > aOrder )
 {
-    mpSerializer->mark();
+    mpSerializer->mark( aOrder );
 }
 
 void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )
@@ -196,3 +198,5 @@ FastAttributeList * FastSerializerHelper::createAttrList()
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

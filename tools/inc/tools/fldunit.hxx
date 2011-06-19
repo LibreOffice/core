@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,9 @@
 
 enum FieldUnit { FUNIT_NONE, FUNIT_MM, FUNIT_CM, FUNIT_M, FUNIT_KM,
                  FUNIT_TWIP, FUNIT_POINT, FUNIT_PICA,
-                 FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CUSTOM,
+                 FUNIT_INCH, FUNIT_FOOT, FUNIT_MILE, FUNIT_CHAR, FUNIT_LINE, FUNIT_CUSTOM,
                  FUNIT_PERCENT, FUNIT_100TH_MM };
 
 #endif // _TOOLS_FLDUNIT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem )
+sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_APMFILEHEADER *pAPMHeader )
 {
     sal_uInt32 nMetaType;
     sal_uInt32 nOrgPos = rStreamWMF.Tell();
@@ -51,7 +52,7 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
     }
     else
     {
-        WMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadWMF();
+        WMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadWMF( pAPMHeader );
     }
     rStreamWMF.SetNumberFormatInt( nOrigNumberFormat );
     return !rStreamWMF.GetError();
@@ -95,8 +96,8 @@ sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               FilterConfigItem* pConfigItem )
 {
-    EMFWriter aEMFWriter;
-    return aEMFWriter.WriteEMF( rMTF, rTargetStream, pConfigItem );
+    EMFWriter aEMFWriter(rTargetStream);
+    return aEMFWriter.WriteEMF( rMTF, pConfigItem );
 }
 
 // -----------------------------------------------------------------------------
@@ -112,3 +113,5 @@ sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {
     return WMFWriter().WriteWMF( rMTF, rStream, NULL, sal_False );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

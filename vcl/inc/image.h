@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // ----------------
 // - ImplImageBmp -
@@ -53,7 +54,7 @@ public:
     void        Replace( sal_uInt16 nPos, const BitmapEx& rBmpEx );
 
     void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, sal_uIntPtr nColorCount );
-    void        ColorTransform( BmpColorMode eColorMode );
+    void        ColorTransform();
     void            Invert();
 
     BitmapEx    GetBitmapEx( sal_uInt16 nPosCount, sal_uInt16* pPosAry ) const;
@@ -111,7 +112,7 @@ struct ImageAryData
 struct ImplImageList
 {
     typedef std::vector<ImageAryData *> ImageAryDataVec;
-    typedef std::hash_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
+    typedef boost::unordered_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
         ImageAryDataNameHash;
 
     ImageAryDataVec             maImages;
@@ -180,3 +181,5 @@ private:    // prevent assignment and copy construction
 };
 
 #endif // _SV_IMAGE_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

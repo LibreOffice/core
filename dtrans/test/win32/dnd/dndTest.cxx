@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,9 +51,7 @@ CComModule _Module;
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/process.h>
 #include <cppuhelper/servicefactory.hxx>
-//#include "transferable.hxx"
 #include "sourcelistener.hxx"
-
 
 #include "atlwindow.hxx"
 BEGIN_OBJECT_MAP(ObjectMap)
@@ -63,22 +62,16 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
-using namespace rtl;
 
-// defined in atlwindow.hxx
-// #define WM_SOURCE_INIT WM_APP+100
-// #define WM_SOURCE_STARTDRAG WM_APP+101
+using ::rtl::OUString;
+
 #define WM_CREATE_MTA_WND
 
 HRESULT doTest();
 DWORD WINAPI MTAFunc( void* threadData);
 
 Reference< XMultiServiceFactory > MultiServiceFactory;
-//int APIENTRY WinMain(HINSTANCE hInstance,
-//                     HINSTANCE hPrevInstance,
-//                     LPSTR     lpCmdLine,
-//                     int       nCmdShow)
-//int _tmain( int argc, TCHAR *argv[ ], TCHAR *envp[ ] )
+
 int main( int argc, char *argv[ ], char *envp[ ] )
 {
     HRESULT hr;
@@ -94,8 +87,6 @@ int main( int argc, char *argv[ ], char *envp[ ] )
     if( FAILED(hr=doTest()))
     {
         _com_error err( hr);
-        const TCHAR * errMsg= err.ErrorMessage();
-//      MessageBox( NULL, errMsg, "Test failed", MB_ICONERROR);
     }
 
 
@@ -161,8 +152,7 @@ DWORD WINAPI MTAFunc( void* threadData)
 
     RECT pos={0, 406, 300, 605};
     AWindow win(_T("DnD, full MTA"), GetCurrentThreadId(), pos, false, true);
-//  ThreadData data= *( ThreadData*)pParams;
-//  SetEvent(data.evtThreadReady);
+
     while( GetMessage(&msg, (HWND)NULL, 0, 0) )
     {
         switch( msg.message)
@@ -208,3 +198,5 @@ DWORD WINAPI MTAFunc( void* threadData)
     CoUninitialize();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

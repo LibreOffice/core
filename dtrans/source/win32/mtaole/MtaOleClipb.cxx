@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -240,10 +241,10 @@ public:
         m_hResult = CoInitialize( NULL );
 
         if ( S_OK == m_hResult )
-            OSL_ENSURE( sal_False, \
+            OSL_FAIL( \
             "com was not yet initialzed, the thread was not created using osl_createThread" );
         else if ( FAILED( m_hResult ) && !( RPC_E_CHANGED_MODE == m_hResult ) )
-            OSL_ENSURE( sal_False, \
+            OSL_FAIL( \
             "com could not be initialized, maybe the thread was not created using osl_createThread" );
     }
 
@@ -374,7 +375,7 @@ HRESULT CMtaOleClipboard::flushClipboard( )
 {
     if ( !WaitForThreadReady( ) )
     {
-        OSL_ENSURE( sal_False, "clipboard sta thread not ready" );
+        OSL_FAIL( "clipboard sta thread not ready" );
         return E_FAIL;
     }
 
@@ -403,7 +404,7 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 
     if ( !WaitForThreadReady( ) )
     {
-        OSL_ENSURE( sal_False, "clipboard sta thread not ready" );
+        OSL_FAIL( "clipboard sta thread not ready" );
         return E_FAIL;
     }
 
@@ -442,7 +443,7 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
 {
     if ( !WaitForThreadReady( ) )
     {
-        OSL_ENSURE( sal_False, "clipboard sta thread not ready" );
+        OSL_FAIL( "clipboard sta thread not ready" );
         return E_FAIL;
     }
 
@@ -480,7 +481,7 @@ sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncC
 {
     if ( !WaitForThreadReady( ) )
     {
-        OSL_ENSURE( sal_False, "clipboard sta thread not ready" );
+        OSL_FAIL( "clipboard sta thread not ready" );
         return sal_False;
     }
 
@@ -589,7 +590,7 @@ LRESULT CMtaOleClipboard::onChangeCBChain( HWND hWndRemove, HWND hWndNext )
     else if ( IsWindow( m_hwndNextClipViewer ) )
     {
         // forward the message to the next one
-        DWORD dwResult;
+        DWORD_PTR dwpResult;
         SendMessageTimeoutA(
             m_hwndNextClipViewer,
             WM_CHANGECBCHAIN,
@@ -597,7 +598,7 @@ LRESULT CMtaOleClipboard::onChangeCBChain( HWND hWndRemove, HWND hWndNext )
             reinterpret_cast<LPARAM>(hWndNext),
             SMTO_BLOCK,
             MAX_CLIPEVENT_PROCESSING_TIME,
-            &dwResult );
+            &dwpResult );
     }
 
     return 0;
@@ -624,7 +625,7 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
     // foward the message to the next viewer in the chain
     if ( IsWindow( m_hwndNextClipViewer ) )
     {
-        DWORD dwResult;
+        DWORD_PTR dwpResult;
         SendMessageTimeoutA(
             m_hwndNextClipViewer,
             WM_DRAWCLIPBOARD,
@@ -632,7 +633,7 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
             static_cast< LPARAM >( 0 ),
             SMTO_BLOCK,
             MAX_CLIPEVENT_PROCESSING_TIME,
-            &dwResult );
+            &dwpResult );
     }
 
     return 0;
@@ -891,3 +892,4 @@ sal_Bool CMtaOleClipboard::WaitForThreadReady( ) const
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

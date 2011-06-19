@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #ifndef _GRFCACHE_HXX
 #define _GRFCACHE_HXX
 
-#include <tools/list.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/grfmgr.hxx>
@@ -107,3 +107,5 @@ public:
 };
 
 #endif // _GRFCACHE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

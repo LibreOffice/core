@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,3 +114,4 @@ SalI18N_KeyboardExtension::GetEventBase() const
 
 #endif // _SAL_I18N_XKBDEXTENSION_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

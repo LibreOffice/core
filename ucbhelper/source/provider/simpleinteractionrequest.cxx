@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -124,9 +125,9 @@ sal_Int32 SimpleInteractionRequest::getResponse() const
         if ( xDisapprove.is() )
             return CONTINUATION_DISAPPROVE;
 
-        OSL_ENSURE( sal_False,
-            "SimpleInteractionRequest::getResponse - Unknown continuation!" );
+        OSL_FAIL( "SimpleInteractionRequest::getResponse - Unknown continuation!" );
     }
     return CONTINUATION_UNKNOWN;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

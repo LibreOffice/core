@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,7 +103,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
     try
     {
         uno::Reference< io::XStream > xTempFile(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
             uno::UNO_QUERY_THROW );
         uno::Reference< io::XSeekable > xSeekable( xTempFile, uno::UNO_QUERY_THROW );
 
@@ -170,13 +171,11 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
-            uno::UNO_QUERY_THROW );
+    uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+    ::ucbhelper::Content aSourceContent( m_aURL, xEnv );
 
     // the file can be opened readonly, no locking will be done
-    return xSimpleFileAccess->openFileRead( m_aURL );
+    return aSourceContent.openStream();
 }
 
 // ----------------------------------------------------------------------
@@ -223,12 +222,12 @@ void DocumentLockFile::RemoveFile()
       || !aFileData[LOCKFILE_USERURL_ID].equals( aNewEntry[LOCKFILE_USERURL_ID] ) )
         throw io::IOException(); // not the owner, access denied
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-        xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
-        uno::UNO_QUERY_THROW );
-    xSimpleFileAccess->kill( m_aURL );
+    uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+    ::ucbhelper::Content aCnt(m_aURL, xEnv);
+    aCnt.executeCommand(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
+        uno::makeAny(sal_Bool(sal_True)));
 }
 
 } // namespace svt
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

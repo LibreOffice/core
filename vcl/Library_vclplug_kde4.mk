@@ -27,14 +27,16 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde4))
 
+$(eval $(call gb_Library_add_package_headers,vcl,vcl_kde4moc))
+
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
+    -I$(WORKDIR)/CustomTarget/vcl/unx/kde4 \
 ))
 
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
@@ -64,10 +66,8 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
     i18npaper \
     i18nutil \
     jvmaccess \
-    stl \
     cppu \
     sal \
-    vos3 \
     X11 \
     Xext \
     SM \

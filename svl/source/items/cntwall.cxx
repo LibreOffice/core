@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -150,18 +151,19 @@ SfxPoolItem* CntWallpaperItem::Clone( SfxItemPool* ) const
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&,sal_uInt8 ) const
+bool CntWallpaperItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8) const
 {
-    DBG_ERROR("Not implemented!");
-    return sal_False;
+    OSL_FAIL("Not implemented!");
+    return false;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool CntWallpaperItem::PutValue( const com::sun::star::uno::Any&,sal_uInt8 )
+bool CntWallpaperItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8)
 {
-    DBG_ERROR("Not implemented!");
-    return sal_False;
+    OSL_FAIL("Not implemented!");
+    return false;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

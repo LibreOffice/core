@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -279,7 +280,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                         }
             case JAVASCRIPT:
             default:
-                DBG_ERROR("not implemented");
+                OSL_FAIL("not implemented");
         }
     }
     // else: bRetValueOK not set
@@ -604,3 +605,4 @@ void SvMacroTableEventDescriptor::copyMacrosIntoTable(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

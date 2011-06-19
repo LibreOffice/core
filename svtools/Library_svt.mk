@@ -39,10 +39,10 @@ $(eval $(call gb_Library_set_include,svt,\
     -I$(WORKDIR)/inc/svtools \
     -I$(WORKDIR)/inc/ \
     -I$(OUTDIR)/inc/ \
-    -I$(SRCDIR)/svtools/inc \
-    -I$(SRCDIR)/svtools/inc/svtools \
-    -I$(SRCDIR)/svtools/source/inc \
-    -I$(SRCDIR)/svtools/inc/pch \
+    -I$(realpath $(SRCDIR)/svtools/inc) \
+    -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
+    -I$(realpath $(SRCDIR)/svtools/source/inc) \
+    -I$(realpath $(SRCDIR)/svtools/inc/pch) \
     -I$(OUTDIR)/inc/offuh \
 ))
 
@@ -58,16 +58,15 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     i18nisolang1 \
     i18nutil \
     jvmfwk \
+    salhelper \
     sal \
     sot \
-    stl \
     svl \
     tk \
     tl \
     ucbhelper \
     utl \
     vcl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
@@ -144,7 +143,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/valueacc \
     svtools/source/control/valueset \
     svtools/source/dialogs/addresstemplate \
-    svtools/source/dialogs/colctrl \
     svtools/source/dialogs/colrdlg \
     svtools/source/dialogs/filedlg \
     svtools/source/dialogs/filedlg2 \
@@ -209,6 +207,8 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/ehdl \
     svtools/source/misc/embedhlp \
     svtools/source/misc/embedtransfer \
+    svtools/source/misc/filterutils \
+    svtools/source/misc/filechangedchecker \
     svtools/source/misc/helpagentwindow \
     svtools/source/misc/imagemgr \
     svtools/source/misc/imageresourceaccess \
@@ -217,6 +217,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/imap3 \
     svtools/source/misc/itemdel \
     svtools/source/misc/langtab \
+    svtools/source/misc/langhelp \
     svtools/source/misc/stringtransfer \
     svtools/source/misc/svtaccessiblefactory \
     svtools/source/misc/svtdata \

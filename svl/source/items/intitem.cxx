@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,26 +112,26 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-sal_Bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
+bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int16 nValue = m_nValue;
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
 //============================================================================
 // virtual
-sal_Bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "SfxInt16Item::PutValue - Wrong type!" );
+    return false;
 }
 
 //============================================================================
@@ -239,20 +240,21 @@ SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
 
 //============================================================================
 // virtual
-int SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
+bool SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
 {
     BigInt aTheValue(GetValue());
     aTheValue *= nMult;
     aTheValue += nDiv / 2;
     aTheValue /= nDiv;
     SetValue(aTheValue);
-    return 1;
+    return true;
 }
 
 //============================================================================
 // virtual
-int SfxMetricItem::HasMetrics() const
+bool SfxMetricItem::HasMetrics() const
 {
-    return 1;
+    return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

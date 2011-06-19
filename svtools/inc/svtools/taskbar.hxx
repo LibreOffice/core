@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,19 +31,20 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/time.hxx>
-#ifndef _TOOLS_LIST_HXX
-#include <tools/list.hxx>
-#endif
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>
 
 class TaskBar;
 class TaskStatusFieldItem;
-class ImplTaskItemList;
-class ImplTaskSBItemList;
 class ImplTaskBarFloat;
 struct ImplTaskSBFldItem;
+
+struct ImplTaskItem;
+typedef ::std::vector< ImplTaskItem* > ImplTaskItemList;
+
+struct ImplTaskSBFldItem;
+typedef ::std::vector< ImplTaskSBFldItem* > ImplTaskSBItemList;
 
 // -----------------
 // - Dokumentation -
@@ -60,17 +62,12 @@ Task's und danach EndUpdateTask() wo dann die TaskButtons entsprechend
 neu angeordnet werden.
 
 ActivateTask()
-Handler der gerufen wird, wenn ein Task aktiviert werden muss. Mit
-GetTaskItem() kann abgefragt werden, welcher Task aktiviert werden muss.
+Handler der gerufen wird, wenn ein Task aktiviert werden muss.
 
 ContextMenu()
 Dieser Handler wird gerufen, wenn ein ContextMenu angezeigt werden soll.
 Mit GetTaskMode() kann abgefragt werden, ob fuer einen Task oder ein
 Item.
-
-GetTaskItem()
-Diese Methode liefert das Item zurueck, welches bei UpdateTask an der
-entsprechenden Position eingefuegt wurde.
 
 GetContextMenuPos()
 Liefert die Position zurueck, wo das Contextmenu angezeigt werden soll.
@@ -158,12 +155,6 @@ public:
                             { RemoveItem( nItemId ); }
 };
 
-// ---------------------
-// - TaskToolBox-Types -
-// ---------------------
-
-#define TASKTOOLBOX_TASK_NOTFOUND       ((sal_uInt16)0xFFFF)
-
 // ---------------
 // - TaskToolBox -
 // ---------------
@@ -176,14 +167,13 @@ private:
     ImplTaskItemList*   mpItemList;
     TaskBar*            mpNotifyTaskBar;
     Point               maContextMenuPos;
-    sal_uLong               mnOldItemCount;
+    size_t              mnOldItemCount;
     long                mnMaxTextWidth;
     long                mnDummy1;
-    sal_uInt16              mnUpdatePos;
-    sal_uInt16              mnUpdateNewPos;
-    sal_uInt16              mnActiveItemId;
-    sal_uInt16              mnNewActivePos;
-    sal_uInt16              mnTaskItem;
+    size_t              mnUpdatePos;
+    size_t              mnUpdateNewPos;
+    size_t              mnActiveItemId;
+    size_t              mnNewActivePos;
     sal_uInt16              mnSmallItem;
     sal_uInt16              mnDummy2;
     sal_Bool                mbMinActivate;
@@ -205,7 +195,6 @@ public:
 
     void                ActivateTaskItem( sal_uInt16 nItemId,
                                           sal_Bool bMinActivate = sal_False );
-    sal_uInt16              GetTaskItem( const Point& rPos ) const;
 
     virtual void        ActivateTask();
     virtual void        ContextMenu();
@@ -223,7 +212,6 @@ public:
     void                EndUpdateTask();
 
     const Point&        GetContextMenuPos() const { return maContextMenuPos; }
-    sal_uInt16              GetTaskItem() const { return mnTaskItem; }
     sal_Bool                IsMinActivate() const { return mbMinActivate; }
 
     void                SetActivateTaskHdl( const Link& rLink ) { maActivateTaskHdl = rLink; }
@@ -231,15 +219,6 @@ public:
     void                SetContextMenuHdl( const Link& rLink ) { maContextMenuHdl = rLink; }
     const Link&         GetContextMenuHdl() const { return maContextMenuHdl; }
 };
-
-inline sal_uInt16 TaskToolBox::GetTaskItem( const Point& rPos ) const
-{
-    sal_uInt16 nId = GetItemId( rPos );
-    if ( nId )
-        return nId-1;
-    else
-        return TASKTOOLBOX_TASK_NOTFOUND;
-}
 
 // ---------------------
 // - ITaskStatusNotify -
@@ -488,3 +467,5 @@ public:
 };
 
 #endif  // _TASKBAR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

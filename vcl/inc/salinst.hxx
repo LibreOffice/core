@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,8 +65,6 @@ struct SystemGraphicsData;
 struct SystemWindowData;
 class Menu;
 
-namespace vos { class IMutex; }
-
 // ---------------
 // - SalInstance -
 // ---------------
@@ -123,7 +122,7 @@ public:
     virtual SalBitmap*          CreateSalBitmap() = 0;
 
     // YieldMutex
-    virtual vos::IMutex*        GetYieldMutex() = 0;
+    virtual osl::SolarMutex*    GetYieldMutex() = 0;
     virtual sal_uLong               ReleaseYieldMutex() = 0;
     virtual void                AcquireYieldMutex( sal_uLong nCount ) = 0;
     // return true, if yield mutex is owned by this thread, else false
@@ -167,6 +166,11 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
     virtual void        AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType) = 0;
+
+    // callbacks for printer updates
+    virtual void updatePrinterUpdate() {}
+    virtual void jobStartedPrinterUpdate() {}
+    virtual void jobEndedPrinterUpdate() {}
 };
 
 // called from SVMain
@@ -196,6 +200,8 @@ void DeInitSalMain();
 // ----------
 
 // Callbacks (indepen in \sv\source\app\svmain.cxx)
-VCL_DLLPUBLIC sal_Bool SVMain();
+VCL_DLLPUBLIC int SVMain();
 
 #endif // _SV_SALINST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

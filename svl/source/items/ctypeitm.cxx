@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -223,7 +224,7 @@ void CntContentTypeItem::SetValue( const INetContentType eType )
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal,sal_uInt8 ) const
+bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= rtl::OUString(GetValue());
     return true;
@@ -231,7 +232,7 @@ sal_Bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal,sal_uInt
 
 //----------------------------------------------------------------------------
 // virtual
-sal_Bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal,sal_uInt8 )
+bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     rtl::OUString aValue;
     if ( rVal >>= aValue )
@@ -246,6 +247,8 @@ sal_Bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal,sal_
         return true;
     }
 
-    DBG_ERROR( "CntContentTypeItem::PutValue - Wrong type!" );
+    OSL_FAIL( "CntContentTypeItem::PutValue - Wrong type!" );
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

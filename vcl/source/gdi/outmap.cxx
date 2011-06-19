@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,8 +53,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-
-#define USE_64BIT_INTS
 
 // =======================================================================
 
@@ -175,12 +174,10 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
             rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductY/2)) / nDenomY);
     }
 
-#ifdef USE_64BIT_INTS
     rThresRes.mnThresLogToPixX /= 2;
     rThresRes.mnThresLogToPixY /= 2;
     rThresRes.mnThresPixToLogX /= 2;
     rThresRes.mnThresPixToLogY /= 2;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -284,7 +281,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             }
             break;
         default:
-            DBG_ERROR( "unhandled MapUnit" );
+            OSL_FAIL( "unhandled MapUnit" );
             break;
     }
 
@@ -384,7 +381,6 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
     (void) nThres;
-#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
     {
@@ -412,34 +408,6 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
        }
     }
     return n;
-#else // USE_64BIT_INTS
-    if ( Abs( n ) < nThres )
-    {
-        n *= nDPI * nMapNum;
-        n += n >= 0 ? nMapDenom/2 : -((nMapDenom-1)/2);
-                return (n / nMapDenom);
-    }
-    else
-    {
-        BigInt aTemp( n );
-        aTemp *= BigInt( nDPI );
-        aTemp *= BigInt( nMapNum );
-
-        if ( aTemp.IsNeg() )
-        {
-            BigInt aMapScDenom2( (nMapDenom-1)/2 );
-            aTemp -= aMapScDenom2;
-        }
-        else
-        {
-            BigInt aMapScDenom2( nMapDenom/2 );
-            aTemp += aMapScDenom2;
-        }
-
-        aTemp /= BigInt( nMapDenom );
-        return (long)aTemp;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -449,7 +417,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
    (void) nThres;
-#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
         n = (2 * n * nMapDenom) / (nDPI * nMapNum);
@@ -463,59 +430,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     }
     if( n < 0 ) --n; else ++n;
     return (n / 2);
-#else // USE_64BIT_INTS
-    if ( Abs( n ) < nThres )
-    {
-        long nDenom  = nDPI * nMapNum;
-        long nNum    = n * nMapDenom;
-        if( (nNum ^ nDenom) >= 0 )
-            nNum += nDenom/2;
-        else
-            nNum -= nDenom/2;
-        return (nNum / nDenom);
-    }
-    else
-    {
-        BigInt aDenom( nDPI );
-        aDenom *= BigInt( nMapNum );
-
-        BigInt aNum( n );
-        aNum *= BigInt( nMapDenom );
-
-        BigInt aDenom2( aDenom );
-        if ( aNum.IsNeg() )
-        {
-            if ( aDenom.IsNeg() )
-            {
-                aDenom2 /= BigInt(2);
-                aNum += aDenom2;
-            }
-            else
-            {
-                aDenom2 -= 1;
-                aDenom2 /= BigInt(2);
-                aNum -= aDenom2;
-            }
-        }
-        else
-        {
-            if ( aDenom.IsNeg() )
-            {
-                aDenom2 += 1;
-                aDenom2 /= BigInt(2);
-                aNum -= aDenom2;
-            }
-            else
-            {
-                aDenom2 /= BigInt(2);
-                aNum += aDenom2;
-            }
-        }
-
-        aNum  /= aDenom;
-        return (long)aNum;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1949,9 +1863,9 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion,
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
     long nDenominator    = 1;       \
-    DBG_ASSERT( eUnitSource < MAP_LASTENUMDUMMY, "Invalid source map unit");    \
-    DBG_ASSERT( eUnitDest < MAP_LASTENUMDUMMY, "Invalid destination map unit"); \
-    if( (eUnitSource < MAP_LASTENUMDUMMY) && (eUnitDest < MAP_LASTENUMDUMMY) )  \
+    DBG_ASSERT( eUnitSource <= MAP_PIXEL, "nonpermitted source map unit");  \
+    DBG_ASSERT( eUnitDest <= MAP_PIXEL, "nonpermitted destination map unit");   \
+    if( (eUnitSource <= MAP_PIXEL) && (eUnitDest <= MAP_PIXEL) )    \
     {   \
         nNumerator   = aImplNumeratorAry[eUnitSource] *             \
                            aImplDenominatorAry[eUnitDest];              \
@@ -2505,3 +2419,5 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
 
     return nY;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

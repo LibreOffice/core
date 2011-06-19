@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,10 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
+
+using ::rtl::OString;
 
 #include "xml2utf.hxx"
 
@@ -568,3 +570,5 @@ void Unicode2TextConverter::init( rtl_TextEncoding encoding )
 
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,14 +66,27 @@ namespace basegfx {
 
 class CairoFontsCache
 {
+public:
+    struct CacheId
+    {
+        const void *mpFace;
+        const void *mpOptions;
+        bool mbEmbolden;
+        bool operator ==(const CacheId& rOther) const
+        {
+            return mpFace == rOther.mpFace &&
+                mpOptions == rOther.mpOptions &&
+                mbEmbolden == rOther.mbEmbolden;
+        }
+    };
 private:
     static int mnRefCount;
-    typedef std::deque< std::pair<void *, void*> > LRUFonts;
+    typedef std::deque< std::pair<void *, CacheId> > LRUFonts;
     static LRUFonts maLRUFonts;
 public:
     CairoFontsCache();
-    static void  CacheFont(void *pFont, void *pId);
-    static void* FindCachedFont(void *pId);
+    static void  CacheFont(void *pFont, const CacheId &rId);
+    static void* FindCachedFont(const CacheId &rId);
     ~CairoFontsCache();
 };
 
@@ -88,8 +102,8 @@ protected:
     SalColormap    *m_pDeleteColormap;
     Drawable        hDrawable_;     // use
     int             m_nScreen;
-    void*           m_pRenderFormat;
-    XID             m_aRenderPicture;
+    mutable XRenderPictFormat* m_pXRenderFormat;
+    XID             m_aXRenderPicture;
     CairoFontsCache m_aCairoFontsCache;
 
     XLIB_Region     pPaintRegion_;
@@ -217,8 +231,8 @@ public:
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     void                    SetDrawable( Drawable d, int nScreen );
     XID                     GetXRenderPicture();
-    void*                   GetXRenderFormat() const { return m_pRenderFormat; }
-    inline  void            SetXRenderFormat( void* pRenderFormat ) { m_pRenderFormat = pRenderFormat; }
+    XRenderPictFormat*      GetXRenderFormat() const;
+    inline  void            SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
     inline  const SalColormap&    GetColormap() const { return *m_pColormap; }
     using SalGraphics::GetPixel;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
@@ -227,7 +241,7 @@ public:
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
-    virtual sal_uInt16          GetBitCount();
+    virtual sal_uInt16          GetBitCount() const;
     virtual long            GetGraphicsWidth() const;
     virtual long            GetGraphicsHeight() const;
 
@@ -250,6 +264,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual sal_uLong           GetKernPairs( sal_uLong nMaxPairs, ImplKernPairData* );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
+    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
@@ -272,8 +287,8 @@ public:
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
-    virtual sal_Bool            GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual sal_Bool            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
+    virtual sal_Bool            GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& );
+    virtual sal_Bool            GetGlyphOutline( sal_GlyphId nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void            DrawServerFontLayout( const ServerFontLayout& );
     virtual bool            supportsOperation( OutDevSupportType ) const;
@@ -386,3 +401,4 @@ inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 
 #endif // _SV_SALGDI_H
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,8 +112,10 @@ OUString AttributeList::getTypeByName( const OUString& sName ) throw (RuntimeExc
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii )
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sType;
         }
     }
@@ -123,8 +126,10 @@ OUString AttributeList::getValueByName(const OUString& sName) throw (RuntimeExce
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sValue;
         }
     }
@@ -166,3 +171,5 @@ void AttributeList::clear()
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

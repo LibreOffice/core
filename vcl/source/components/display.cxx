@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -156,8 +157,7 @@ Property SAL_CALL DisplayInfo::getPropertyByName( const OUString& aName ) throw 
 // XServiceInfo
 OUString SAL_CALL DisplayInfo::getImplementationName(  ) throw (RuntimeException)
 {
-    static OUString aImplementationName( RTL_CONSTASCII_USTRINGPARAM( "vcl::DisplayInfo" ) );
-    return aImplementationName;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("vcl::DisplayInfo"));
 }
 
 ::sal_Bool SAL_CALL DisplayInfo::supportsService( const OUString& ServiceName ) throw (RuntimeException)
@@ -173,9 +173,8 @@ OUString SAL_CALL DisplayInfo::getImplementationName(  ) throw (RuntimeException
 
 Sequence< OUString > SAL_CALL DisplayInfo::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayInfo" ) );
-    static Sequence< OUString > aServiceNames( &aServiceName, 1  );
-    return aServiceNames;
+    OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DisplayInfo"));
+    return Sequence< OUString >(&aServiceName, 1);
 }
 
 // ====================================================================
@@ -215,9 +214,8 @@ public:
 
 Sequence< OUString > DisplayAccess_getSupportedServiceNames()
 {
-    static OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) );
-    static Sequence< OUString > aServiceNames( &aServiceName, 1 );
-    return aServiceNames;
+    OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) );
+    return Sequence< OUString >( &aServiceName, 1 );
 }
 
 OUString DisplayAccess_getImplementationName()
@@ -343,3 +341,5 @@ Sequence< OUString > SAL_CALL DisplayAccess::getSupportedServiceNames(  ) throw 
 }
 
 } // namespace vcl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

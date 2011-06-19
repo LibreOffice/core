@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,8 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
         }
         nDX = (long)w;
         nDY = (long)h;
-        if( !pVDev->Init( GetX11SalData()->GetDisplay(), nDX, nDY, nBitCount, nScreen, pData->hDrawable, pData->pRenderFormat ) )
+        if( !pVDev->Init( GetX11SalData()->GetDisplay(), nDX, nDY, nBitCount, nScreen, pData->hDrawable,
+                static_cast< XRenderPictFormat* >( pData->pXRenderFormat )) )
         {
             delete pVDev;
             return NULL;
@@ -137,7 +139,7 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
                                 sal_uInt16 nBitCount,
                                 int nScreen,
                                 Pixmap hDrawable,
-                                void* pRenderFormatVoid )
+                                XRenderPictFormat* pXRenderFormat )
 {
     SalColormap* pColormap = NULL;
     bool bDeleteColormap = false;
@@ -145,11 +147,10 @@ sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
     pDisplay_               = pDisplay;
     pGraphics_              = new X11SalGraphics();
     m_nScreen               = nScreen;
-    if( pRenderFormatVoid ) {
-        XRenderPictFormat *pRenderFormat = ( XRenderPictFormat* )pRenderFormatVoid;
-        pGraphics_->SetXRenderFormat( pRenderFormat );
-        if( pRenderFormat->colormap )
-            pColormap = new SalColormap( pDisplay, pRenderFormat->colormap, m_nScreen );
+    if( pXRenderFormat ) {
+        pGraphics_->SetXRenderFormat( pXRenderFormat );
+        if( pXRenderFormat->colormap )
+            pColormap = new SalColormap( pDisplay, pXRenderFormat->colormap, m_nScreen );
         else
             pColormap = new SalColormap( nBitCount );
          bDeleteColormap = true;
@@ -272,3 +273,4 @@ void X11SalVirtualDevice::GetSize( long& rWidth, long& rHeight )
     rHeight = GetHeight();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

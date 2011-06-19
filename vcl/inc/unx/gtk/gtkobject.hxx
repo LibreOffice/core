@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,12 +38,16 @@ class GtkSalObject : public SalObject
 {
     SystemChildData     m_aSystemData;
     GtkWidget*          m_pSocket;
+#if GTK_CHECK_VERSION(3,0,0)
+    cairo_region_t*     m_pRegion;
+#else
     GdkRegion*          m_pRegion;
+#endif
 
     // signals
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static gboolean     signalFocus( GtkWidget*, GdkEventFocus*, gpointer );
-    static void         signalDestroy( GtkObject*, gpointer );
+    static void         signalDestroy( GtkWidget*, gpointer );
 public:
     GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow = sal_True );
     virtual ~GtkSalObject();
@@ -62,9 +67,13 @@ public:
     virtual void                    SetBackground();
     virtual void                    SetBackground( SalColor nSalColor );
 
+    virtual void                                    SetForwardKey( sal_Bool bEnable );
+
     virtual const SystemEnvData*    GetSystemData() const;
 
     virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 #endif // _SV_SALOBJ_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

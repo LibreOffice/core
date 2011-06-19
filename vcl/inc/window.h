@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -401,3 +402,5 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
 #endif // _SV_WINDOW_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

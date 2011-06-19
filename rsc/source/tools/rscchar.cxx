@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 
 // Solar Definitionen
 #include <tools/solar.h>
@@ -49,8 +48,6 @@
 |*    RscChar::MakeChar()
 |*
 |*    Beschreibung      Der String wird nach C-Konvention umgesetzt
-|*    Ersterstellung    MM 20.03.91
-|*    Letzte Aenderung  MM 20.03.91
 |*
 *************************************************************************/
 char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
@@ -192,3 +189,5 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 
     return pUtf8;
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

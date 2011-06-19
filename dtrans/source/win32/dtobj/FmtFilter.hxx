@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <sal/types.h>
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push,1)
@@ -94,3 +93,5 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( com::su
 com::sun::star::uno::Sequence< sal_Int8 > CF_HDROPToFileList(HGLOBAL hGlobal);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,14 +22,12 @@
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  registry    </project-build-dependency>
     <project-build-dependency>  store       </project-build-dependency>
-    <project-build-dependency>  vos         </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>
     <project-build-dependency>  unotools    </project-build-dependency>
     <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
     <runtime-module-dependency> cppu        </runtime-module-dependency>
     <runtime-module-dependency> reg         </runtime-module-dependency>
     <runtime-module-dependency> store       </runtime-module-dependency>
-    <runtime-module-dependency> vos         </runtime-module-dependency>
     <runtime-module-dependency> sal         </runtime-module-dependency>
     <runtime-module-dependency> unotools    </runtime-module-dependency>
 </module-description>

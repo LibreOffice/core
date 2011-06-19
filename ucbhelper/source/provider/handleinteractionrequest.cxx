@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
-#ifndef _UCBHELPER_INTERACTIONREQUEST_HXX
 #include "ucbhelper/interactionrequest.hxx"
-#endif
 #include "ucbhelper/simpleauthenticationrequest.hxx"
 #include "ucbhelper/simpleinteractionrequest.hxx"
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
@@ -162,3 +161,4 @@ handleInteractionRequest(
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

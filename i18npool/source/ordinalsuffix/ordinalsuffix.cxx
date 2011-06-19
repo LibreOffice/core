@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,14 @@
 #include <string.h>
 #include "ordinalsuffix.hxx"
 
+#include <unicode/rbnf.h>
+#include <unicode/normlzr.h>
+
+#define CSTR( ouStr ) rtl::OUStringToOString( ouStr, RTL_TEXTENCODING_UTF8 ).getStr( )
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star;
 using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -51,45 +56,56 @@ OrdinalSuffix::~OrdinalSuffix()
 }
 
 
-static OUString getOrdinalSuffixEn( sal_Int32 nNumber )
+/*
+ * For this method to properly return the ordinal suffix for other locales
+ * than english ones, ICU 4.2+ has to be used.
+ */
+uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nNumber,
+        const lang::Locale &aLocale ) throw( RuntimeException )
 {
-    OUString retValue;
+    uno::Sequence< OUString > retValue;
 
-    switch( labs( nNumber ) % 100 )
+    // Get the value from ICU
+    UErrorCode nCode = U_ZERO_ERROR;
+    const icu::Locale rIcuLocale(
+            CSTR( aLocale.Language ),
+            CSTR( aLocale.Country ),
+            CSTR( aLocale.Variant ) );
+    icu::RuleBasedNumberFormat formatter(
+            icu::URBNF_ORDINAL, rIcuLocale, nCode );
+
+    if ( U_SUCCESS( nCode ) )
     {
-        case 11: case 12: case 13:
-            retValue = OUString::createFromAscii( "th" );
-            break;
-        default:
-            switch( nNumber % 10 )
+        int32_t nRuleSets = formatter.getNumberOfRuleSetNames( );
+        for ( int32_t i = 0; i < nRuleSets; i++ )
+        {
+            icu::UnicodeString ruleSet = formatter.getRuleSetName( i );
+            // format the string
+            icu::UnicodeString icuRet;
+            icu::FieldPosition icuPos;
+            formatter.format( (int32_t)nNumber, ruleSet, icuRet, icuPos, nCode );
+
+            if ( U_SUCCESS( nCode ) )
             {
-                case 1:
-                    retValue = OUString::createFromAscii( "st" );
-                    break;
-                case 2:
-                    retValue = OUString::createFromAscii( "nd" );
-                    break;
-                case 3:
-                    retValue = OUString::createFromAscii( "rd" );
-                    break;
-                default:
-                    retValue = OUString::createFromAscii( "th" );
-                    break;
+                // Apply NFKC normalization to get normal letters
+                icu::UnicodeString normalized;
+                nCode = U_ZERO_ERROR;
+                icu::Normalizer::normalize( icuRet, UNORM_NFKC, 0, normalized, nCode );
+                if ( U_SUCCESS( nCode ) && ( normalized != icuRet ) )
+                {
+                    // Convert the normalized UnicodeString to OUString
+                    OUString sValue( reinterpret_cast<const sal_Unicode *>( normalized.getBuffer( ) ), normalized.length() );
+
+                    // Remove the number to get the prefix
+                    sal_Int32 len = OUString::valueOf( nNumber ).getLength( );
+
+                    sal_Int32 newLength = retValue.getLength() + 1;
+                    retValue.realloc( newLength );
+                    retValue[ newLength - 1 ] = sValue.copy( len );
+                }
             }
-            break;
+        }
     }
-
-    return retValue;
-}
-
-
-OUString SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nNumber,
-        const Locale &aLocale ) throw( RuntimeException )
-{
-    OUString retValue;
-
-    if (aLocale.Language.equalsAsciiL("en",2))
-        retValue = getOrdinalSuffixEn( nNumber );
 
     return retValue;
 }
@@ -115,3 +131,5 @@ Sequence< OUString > SAL_CALL OrdinalSuffix::getSupportedServiceNames(void) thro
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

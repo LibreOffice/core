@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 // includes
 #include <ucbhelper/interceptedinteraction.hxx>
 
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP__
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
 #include <ucbhelper/interceptedinteraction.hxx>
 #include "comphelper/comphelperdllapi.h"
@@ -67,3 +66,5 @@ private:
 };
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

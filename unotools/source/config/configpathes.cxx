@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,7 +98,7 @@ sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
     // strip trailing slash
     if (nPos > 0 && _sInPath[ nPos ] == sal_Unicode('/'))
     {
-        OSL_ENSURE(false, "Invalid config path: trailing '/' is not allowed");
+        OSL_FAIL("Invalid config path: trailing '/' is not allowed");
         --nPos;
     }
 
@@ -306,3 +307,5 @@ OUString wrapConfigurationElementName(OUString const& _sElementName,
 
 //----------------------------------------------------------------------------
 } // namespace utl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

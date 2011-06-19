@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
 #include "tools/string.hxx"
@@ -49,9 +48,9 @@ struct RTF_TokenEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortKeyWords = sal_False;
+static int bSortKeyWords = sal_False;
 
-static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
+static RTF_TokenEntry aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_IGNORE},        RTF_IGNOREFLAG},
 {{OOO_STRING_SVTOOLS_RTF_RTF},           RTF_RTF},
 {{OOO_STRING_SVTOOLS_RTF_ANSI},          RTF_ANSITYPE},
@@ -778,6 +777,8 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_BRDRDASHDD},   RTF_BRDRDASHDD},
 {{OOO_STRING_SVTOOLS_RTF_BRDRDASHDOTSTR},RTF_BRDRDASHDOTSTR},
 {{OOO_STRING_SVTOOLS_RTF_BRDRDASHSM},   RTF_BRDRDASHSM},
+{{OOO_STRING_SVTOOLS_RTF_BRDRINSET},    RTF_BRDRINSET},
+{{OOO_STRING_SVTOOLS_RTF_BRDROUTSET},   RTF_BRDROUTSET},
 {{OOO_STRING_SVTOOLS_RTF_BRDREMBOSS},   RTF_BRDREMBOSS},
 {{OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE},  RTF_BRDRENGRAVE},
 {{OOO_STRING_SVTOOLS_RTF_BRDRFRAME},        RTF_BRDRFRAME},
@@ -1186,14 +1187,7 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 
 
 extern "C" {
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-    RTFKeyCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL RTFKeyCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
     if( -1 == ((RTF_TokenEntry*)pFirst)->nToken )
@@ -1202,13 +1196,13 @@ _Optlink
             nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareTo(
                             *((RTF_TokenEntry*)pSecond)->pUToken );
         else
-            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareToAscii(
+            nRet = ((RTF_TokenEntry*)pFirst)->pUToken->CompareIgnoreCaseToAscii(
                             ((RTF_TokenEntry*)pSecond)->sToken );
     }
     else
     {
         if( -1 == ((RTF_TokenEntry*)pSecond)->nToken )
-            nRet = -1 * ((RTF_TokenEntry*)pSecond)->pUToken->CompareToAscii(
+            nRet = -1 * ((RTF_TokenEntry*)pSecond)->pUToken->CompareIgnoreCaseToAscii(
                             ((RTF_TokenEntry*)pFirst)->sToken );
         else
             nRet = strcmp( ((RTF_TokenEntry*)pFirst)->sToken,
@@ -1246,4 +1240,4 @@ int GetRTFToken( const String& rSearch )
     return nRet;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

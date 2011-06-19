@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
 
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_BYTESTRINGS
 #define _SVSTDARR_BYTESTRINGSSORTDTOR
 
-#include <rtl/uuid.h>
 #include <tools/tenccvt.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -52,6 +50,7 @@
 #include <svl/svstdarr.hxx>
 #include <unotools/syslocale.hxx>
 #include <algorithm>
+#include <comphelper/servicehelper.hxx>
 
 #define STYLESTREAM             "SfxStyleSheets"
 #define STYLESTREAM_VERSION     sal_uInt16(50)
@@ -280,7 +279,7 @@ sal_Bool SfxStyleSheetBase::SetParent( const XubString& rName )
         SfxStyleSheetBase* pIter = rPool.Find(rName, nFamily);
         if( rName.Len() && !pIter )
         {
-            DBG_ERROR( "StyleSheet-Parent nicht gefunden" );
+            OSL_FAIL( "StyleSheet-Parent nicht gefunden" );
             return sal_False;
         }
         // rekursive Verknuepfungen verhindern
@@ -310,7 +309,7 @@ sal_Bool SfxStyleSheetBase::SetFollow( const XubString& rName )
     {
         if( !rPool.Find( rName, nFamily ) )
         {
-            DBG_ERROR( "StyleSheet-Follow nicht gefunden" );
+            OSL_FAIL( "StyleSheet-Follow nicht gefunden" );
             return sal_False;
         }
         aFollow = rName;
@@ -485,7 +484,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_uInt16 nIdx)
             ++z;
         }
     }
-    DBG_ERROR("falscher Index");
+    OSL_FAIL("falscher Index");
     return 0;
 }
 
@@ -642,7 +641,7 @@ sal_Bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const XubString& 
     SfxStyleSheetIterator aIter(this,eFam,SFXSTYLEBIT_ALL);
     SfxStyleSheetBase *pStyle =
         aIter.Find(rStyle);
-    DBG_ASSERT(pStyle, "Vorlage nicht gefunden. Writer mit Solar <2541??");
+    OSL_ENSURE(pStyle, "Vorlage nicht gefunden. Writer mit Solar <2541??");
     if(pStyle)
         return pStyle->SetParent(rParent);
     else
@@ -699,11 +698,11 @@ SfxStyleSheetBase* SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
 
 SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const XubString& rName, SfxStyleFamily eFam, sal_uInt16 mask, sal_uInt16 nPos)
 {
-    DBG_ASSERT( eFam != SFX_STYLE_FAMILY_ALL, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
+    OSL_ENSURE( eFam != SFX_STYLE_FAMILY_ALL, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not a allowed Familie" );
 
     SfxStyleSheetIterator aIter(this, eFam, mask);
     rtl::Reference< SfxStyleSheetBase > xStyle( aIter.Find( rName ) );
-    DBG_ASSERT( !xStyle.is(), "svl::SfxStyleSheetBasePool::Make(), StyleSheet already exists" );
+    OSL_ENSURE( !xStyle.is(), "svl::SfxStyleSheetBasePool::Make(), StyleSheet already exists" );
     SfxStyleSheetIterator& rIter = GetIterator_Impl();
 
     if( !xStyle.is() )
@@ -827,16 +826,18 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 
 void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
 {
-    DBG_ASSERT( p, "svl::SfxStyleSheetBasePool::Insert(), no stylesheet?" );
+#if OSL_DEBUG_LEVEL > 0
+    OSL_ENSURE( p, "svl::SfxStyleSheetBasePool::Insert(), no stylesheet?" );
 
     SfxStyleSheetIterator aIter(this, p->GetFamily(), p->GetMask());
     SfxStyleSheetBase* pOld = aIter.Find( p->GetName() );
-    DBG_ASSERT( !pOld, "svl::SfxStyleSheetBasePool::Insert(), StyleSheet already inserted" );
+    OSL_ENSURE( !pOld, "svl::SfxStyleSheetBasePool::Insert(), StyleSheet already inserted" );
     if( p->GetParent().Len() )
     {
         pOld = aIter.Find( p->GetParent() );
-        DBG_ASSERT( pOld, "svl::SfxStyleSheetBasePool::Insert(), Parent not found!" );
+        OSL_ENSURE( pOld, "svl::SfxStyleSheetBasePool::Insert(), Parent not found!" );
     }
+#endif
     aStyles.push_back( rtl::Reference< SfxStyleSheetBase >( p ) );
     Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) );
 }
@@ -1378,20 +1379,16 @@ SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const ::com::sun::star::un
 
 // --------------------------------------------------------------------
 
+namespace
+{
+    class theSfxUnoStyleSheetIdentifier : public rtl::Static< UnoTunnelIdInit, theSfxUnoStyleSheetIdentifier > {};
+}
+
 const ::com::sun::star::uno::Sequence< ::sal_Int8 >& SfxUnoStyleSheet::getIdentifier()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSfxUnoStyleSheetIdentifier::get().getSeq();
 }
 
 // --------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

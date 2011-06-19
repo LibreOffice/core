@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,7 +127,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoThrobberControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "Throbber" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber"));
     }
 
     //--------------------------------------------------------------------
@@ -199,3 +200,4 @@ namespace toolkit
 }  // namespace toolkit
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

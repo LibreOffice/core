@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,6 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-/* -----------------------------12.10.00 11:40--------------------------------
-
- ---------------------------------------------------------------------------*/
 namespace utl
 {
     class SourceViewConfig_Impl;
@@ -61,3 +59,4 @@ namespace utl
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

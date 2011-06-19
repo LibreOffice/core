@@ -29,9 +29,6 @@ PRJ=..$/..$/..
 
 PRJNAME=i18npool
 TARGET=localedata
-.IF "$(GUI)" == "OS2"
-TARGET=ld
-.ENDIF
 LIBTARGET=NO
 
 # Disable debugging on MSC compilers, due linker bug
@@ -60,9 +57,6 @@ LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
 LINK_LOCALEDATA_EN_LIB=$(LB)$/i$(SHL1TARGET).lib
 LINK_LOCALEDATA_ES_LIB=$(LB)$/i$(SHL2TARGET).lib
 .ENDIF
-.ELIF "$(GUI)" == "OS2"
-LINK_LOCALEDATA_EN_LIB=$(LB)$/i$(SHL1TARGET).lib
-LINK_LOCALEDATA_ES_LIB=$(LB)$/i$(SHL2TARGET).lib
 .ELSE
 LINK_LOCALEDATA_EN_LIB=-l$(SHL1TARGET)
 LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
@@ -72,9 +66,6 @@ LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
 
 # English Locales
 SHL1TARGET=localedata_en
-.IF "$(GUI)" == "OS2"
-SHL1TARGET=ld_en
-.ENDIF
 SHL1IMPLIB=i$(SHL1TARGET)
 
 SHL1VERSIONMAP=localedata_en.map
@@ -102,9 +93,6 @@ LIB1OBJFILES=$(SHL1OBJS)
 
 # Spanish Locales
 SHL2TARGET=localedata_es
-.IF "$(GUI)" == "OS2"
-SHL2TARGET=ld_es
-.ENDIF
 SHL2IMPLIB=i$(SHL2TARGET)
 
 SHL2VERSIONMAP=localedata_es.map
@@ -140,9 +128,6 @@ LIB2OBJFILES=$(SHL2OBJS)
 
 # European Locales
 SHL3TARGET=localedata_euro
-.IF "$(GUI)" == "OS2"
-SHL3TARGET=ld_eur
-.ENDIF
 SHL3IMPLIB=i$(SHL3TARGET)
 
 SHL3VERSIONMAP=localedata_euro.map
@@ -229,9 +214,6 @@ LIB3OBJFILES=$(SHL3OBJS)
 
 # Other Locales
 SHL4TARGET=localedata_others
-.IF "$(GUI)" == "OS2"
-SHL4TARGET=ld_oth
-.ENDIF
 SHL4IMPLIB=i$(SHL4TARGET)
 
 SHL4VERSIONMAP=localedata_others.map
@@ -273,6 +255,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_id_ID.obj \
     $(SLO)$/localedata_ja_JP.obj \
     $(SLO)$/localedata_jbo.obj \
+    $(SLO)$/localedata_kab_DZ.obj \
     $(SLO)$/localedata_kk_KZ.obj \
     $(SLO)$/localedata_km_KH.obj \
     $(SLO)$/localedata_kn_IN.obj \
@@ -296,6 +279,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_or_IN.obj \
     $(SLO)$/localedata_pa_IN.obj \
     $(SLO)$/localedata_plt_MG.obj \
+    $(SLO)$/localedata_pt_AO.obj	\
     $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sg_CF.obj \
     $(SLO)$/localedata_shs_CA.obj \
@@ -342,11 +326,11 @@ MY_MISC_CXXFILES := $(foreach,i,$(DEPOBJFILES) $(MISC)/$(i:b).cxx)
 
 .INCLUDE :  target.mk
 
-$(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST) $(MISC)/saxparser.rdb
+$(MY_MISC_CXXFILES) : $(OUT_FOR_BUILD)$/bin$/saxparser$(EXECPOST) $(MISC)/saxparser.rdb
 
 $(MISC)$/localedata_%.cxx : %.xml
-    $(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(BIN)$/saxparser $* $< $@ \
-        $(my_file)$(PWD)/$(MISC)/saxparser.rdb $(SOLARBINDIR)$/types.rdb \
+    $(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(OUT_FOR_BUILD)$/bin$/saxparser $* $< $@ \
+        $(my_file)$(PWD)/$(MISC_FOR_BUILD)/saxparser.rdb $(SOLARBINDIR)$/types.rdb \
         -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(SOLARSHAREDBIN)
     $(RM) $(BIN)$/$(@:b).rdb
 

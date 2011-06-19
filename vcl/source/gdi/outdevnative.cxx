@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -214,12 +215,11 @@ static boost::shared_ptr< ImplControlValue > lcl_transformControlValue( const Im
         }
         break;
     default:
-        OSL_ENSURE( 0, "unknown ImplControlValue type !" );
+        OSL_FAIL( "unknown ImplControlValue type !" );
         break;
     }
     return aResult;
 }
-
 sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
                             ControlPart nPart,
                             const Rectangle& rControlRegion,
@@ -336,3 +336,4 @@ sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

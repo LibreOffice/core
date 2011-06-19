@@ -10,16 +10,16 @@
     <vbox border="5" spacing="5">
     <hbox border="5" spacing="20">
         <align cnt:expand="false" cnt:fill="true">
-        <fixedimage id="FI_ERROR" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-error.png" />
+        <fixedimage id="FI_ERROR" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="cmd/msgbox-error.png" />
         </align>
         <align cnt:expand="false" cnt:fill="true">
-        <fixedimage id="FI_INFO" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-info.png" />
+        <fixedimage id="FI_INFO" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="cmd/msgbox-info.png" />
         </align>
         <align cnt:expand="false" cnt:fill="true">
-        <fixedimage id="FI_QUERY" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-query.png" />
+        <fixedimage id="FI_QUERY" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="cmd/msgbox-query.png" />
         </align>
         <align cnt:expand="false" cnt:fill="true">
-        <fixedimage id="FI_WARNING" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="res/commandimagelist/msgbox-warning.png" />
+        <fixedimage id="FI_WARNING" cnt:expand="false" cnt:v-align="0.5" cnt:v-fill="0" graphic="cmd/msgbox-warning.png" />
         </align>
         <align cnt:expand="false" cnt:fill="true">
         <fixedtext id="FT_MESSAGE" _label="FT-LABEL" cnt:v-align="0.5" cnt:v-fill="0" />

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,13 +28,14 @@
 #ifndef TOOLS_INETMIME_HXX
 #define TOOLS_INETMIME_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include "tools/toolsdllapi.h"
 #include <rtl/alloc.h>
 #include <rtl/string.h>
 #include "rtl/tencinfo.h"
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 class DateTime;
@@ -611,9 +613,6 @@ public:
                                   const sal_Char * pEnd,
                                   rtl_TextEncoding eEncoding,
                                   sal_uInt32 & rCharacter);
-
-    static ByteString decodeUTF8(const ByteString & rText,
-                                 rtl_TextEncoding eEncoding);
 
     static UniString decodeHeaderFieldBody(HeaderFieldType eType,
                                            const ByteString & rBody);
@@ -1209,42 +1208,6 @@ inline ByteString INetMIMEStringOutputSink::takeBuffer()
 }
 
 //============================================================================
-class INetMIMEUnicodeOutputSink: public INetMIMEOutputSink
-{
-    UniString m_aBuffer;
-    bool m_bOverflow;
-
-    using INetMIMEOutputSink::writeSequence;
-
-    virtual void writeSequence(const sal_Char * pBegin,
-                               const sal_Char * pEnd);
-
-    virtual void writeSequence(const sal_uInt32 * pBegin,
-                               const sal_uInt32 * pEnd);
-
-    virtual void writeSequence(const sal_Unicode * pBegin,
-                               const sal_Unicode * pEnd);
-
-public:
-    inline INetMIMEUnicodeOutputSink(sal_uInt32 nColumn = 0,
-                                     sal_uInt32 nLineLengthLimit
-                                         = INetMIME::SOFT_LINE_LENGTH_LIMIT):
-        INetMIMEOutputSink(nColumn, nLineLengthLimit), m_bOverflow(false) {}
-
-    virtual ErrCode getError() const;
-
-    inline UniString takeBuffer();
-};
-
-inline UniString INetMIMEUnicodeOutputSink::takeBuffer()
-{
-    UniString aTheBuffer = m_aBuffer;
-    m_aBuffer.Erase();
-    m_bOverflow = false;
-    return aTheBuffer;
-}
-
-//============================================================================
 class INetMIMEEncodedWordOutputSink
 {
 public:
@@ -1417,29 +1380,36 @@ inline INetContentTypeParameter::INetContentTypeParameter(const ByteString &
 {}
 
 //============================================================================
-class TOOLS_DLLPUBLIC INetContentTypeParameterList: private List
+class TOOLS_DLLPUBLIC INetContentTypeParameterList
 {
 public:
-    ~INetContentTypeParameterList() { Clear(); }
-
-    using List::Count;
 
     void Clear();
 
     void Insert(INetContentTypeParameter * pParameter, sal_uIntPtr nIndex)
-    { List::Insert(pParameter, nIndex); }
+    {
+        maEntries.insert(maEntries.begin()+nIndex,pParameter);
+    }
 
-    inline const INetContentTypeParameter * GetObject(sal_uIntPtr nIndex) const;
+    void Append(INetContentTypeParameter *pParameter)
+    {
+        maEntries.push_back(pParameter);
+    }
+
+    inline const INetContentTypeParameter * GetObject(sal_uIntPtr nIndex) const
+    {
+        return &(maEntries[nIndex]);
+    }
 
     const INetContentTypeParameter * find(const ByteString & rAttribute)
         const;
+
+private:
+
+    boost::ptr_vector<INetContentTypeParameter> maEntries;
 };
 
-inline const INetContentTypeParameter *
-INetContentTypeParameterList::GetObject(sal_uIntPtr nIndex) const
-{
-    return static_cast< INetContentTypeParameter * >(List::GetObject(nIndex));
-}
 
 #endif // TOOLS_INETMIME_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

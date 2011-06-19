@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
-#ifndef _COMPHELPER_MASTERPROPERTYSET_HXX_
 #include <comphelper/MasterPropertySet.hxx>
-#endif
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/ChainablePropertySetInfo.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <memory>       // STL auto_ptr
 
@@ -43,19 +42,19 @@
 class AutoOGuardArray
 {
     sal_Int32                       nSize;
-    std::auto_ptr< vos::OGuard > *  pGuardArray;
+    std::auto_ptr< osl::SolarGuard > *  pGuardArray;
 
 public:
     AutoOGuardArray( sal_Int32 nNumElements );
     ~AutoOGuardArray();
 
-    std::auto_ptr< vos::OGuard > &  operator[] ( sal_Int32 i ) { return pGuardArray[i]; }
+    std::auto_ptr< osl::SolarGuard > &  operator[] ( sal_Int32 i ) { return pGuardArray[i]; }
 };
 
 AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements )
 {
     nSize       = nNumElements;
-    pGuardArray = new std::auto_ptr< vos::OGuard >[ nSize ];
+    pGuardArray = new std::auto_ptr< osl::SolarGuard >[ nSize ];
 }
 
 AutoOGuardArray::~AutoOGuardArray()
@@ -73,7 +72,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using vos::IMutex;
+
 
 SlaveData::SlaveData ( ChainablePropertySet *pSlave)
 : mpSlave ( pSlave )
@@ -82,7 +81,7 @@ SlaveData::SlaveData ( ChainablePropertySet *pSlave)
 {
 }
 
-MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, IMutex *pMutex )
+MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, osl::SolarMutex* pMutex )
     throw()
 : mpInfo ( pInfo )
 , mpMutex ( pMutex )
@@ -109,7 +108,7 @@ MasterPropertySet::~MasterPropertySet()
     while (aIter != aEnd )
     {
         delete (*aIter).second;
-        aIter++;
+        ++aIter;
     }
 }
 
@@ -131,9 +130,9 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPrope
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -151,9 +150,9 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPrope
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        std::auto_ptr< vos::OGuard > pMutexGuard2;
+        std::auto_ptr< osl::SolarGuard > pMutexGuard2;
         if (pSlave->mpMutex)
-            pMutexGuard2.reset( new vos::OGuard(pSlave->mpMutex) );
+            pMutexGuard2.reset( new osl::SolarGuard(pSlave->mpMutex) );
 
         pSlave->_preSetValues();
         pSlave->_setSingleValue( *((*aIter).second->mpInfo), rValue );
@@ -165,9 +164,9 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rProper
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -186,9 +185,9 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rProper
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        std::auto_ptr< vos::OGuard > pMutexGuard2;
+        std::auto_ptr< osl::SolarGuard > pMutexGuard2;
         if (pSlave->mpMutex)
-            pMutexGuard2.reset( new vos::OGuard(pSlave->mpMutex) );
+            pMutexGuard2.reset( new osl::SolarGuard(pSlave->mpMutex) );
 
         pSlave->_preGetValues();
         pSlave->_getSingleValue( *((*aIter).second->mpInfo), aAny );
@@ -226,9 +225,9 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUStr
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -265,7 +264,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUStr
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
                     if (pSlave->mpSlave->mpMutex)
-                        aOGuardArray[i].reset( new vos::OGuard(pSlave->mpSlave->mpMutex) );
+                        aOGuardArray[i].reset( new osl::SolarGuard(pSlave->mpSlave->mpMutex) );
 
                     pSlave->mpSlave->_preSetValues();
                     pSlave->SetInit ( sal_True );
@@ -292,9 +291,9 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< :
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-    std::auto_ptr< vos::OGuard > pMutexGuard;
+    std::auto_ptr< osl::SolarGuard > pMutexGuard;
     if (mpMutex)
-        pMutexGuard.reset( new vos::OGuard(mpMutex) );
+        pMutexGuard.reset( new osl::SolarGuard(mpMutex) );
 
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -330,7 +329,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< :
                 {
                     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
                     if (pSlave->mpSlave->mpMutex)
-                        aOGuardArray[i].reset( new vos::OGuard(pSlave->mpSlave->mpMutex) );
+                        aOGuardArray[i].reset( new osl::SolarGuard(pSlave->mpSlave->mpMutex) );
 
                     pSlave->mpSlave->_preGetValues();
                     pSlave->SetInit ( sal_True );
@@ -393,9 +392,9 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const ::rtl::OUStrin
         ChainablePropertySet * pSlave = maSlaveMap [ (*aIter).second->mnMapId ]->mpSlave;
 
         // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
-        std::auto_ptr< vos::OGuard > pMutexGuard;
+        std::auto_ptr< osl::SolarGuard > pMutexGuard;
         if (pSlave->mpMutex)
-            pMutexGuard.reset( new vos::OGuard(pSlave->mpMutex) );
+            pMutexGuard.reset( new osl::SolarGuard(pSlave->mpMutex) );
 
         pSlave->_preGetPropertyState();
         pSlave->_getPropertyState( *((*aIter).second->mpInfo), aState );
@@ -475,31 +474,33 @@ Any SAL_CALL MasterPropertySet::getPropertyDefault( const ::rtl::OUString& rProp
 void MasterPropertySet::_preGetPropertyState ()
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void MasterPropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
     throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void MasterPropertySet::_postGetPropertyState ()
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void MasterPropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 Any MasterPropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException, WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
     Any aAny;
     return aAny;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

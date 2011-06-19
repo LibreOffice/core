@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <saldatabasic.hxx>
+#include <vcl/solarmutex.hxx>
 
 // plugin factory function
 extern "C"
@@ -183,9 +185,8 @@ void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 
 void SvpSalInstance::Wakeup()
 {
-    write (m_pTimeoutFDS[1], "", 1);
+    OSL_VERIFY(write (m_pTimeoutFDS[1], "", 1) == 1);
 }
-
 
 // -=-= timeval =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline int operator >= ( const timeval &t1, const timeval &t2 )
@@ -296,7 +297,7 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
     return new SvpSalBitmap();
 }
 
-vos::IMutex* SvpSalInstance::GetYieldMutex()
+osl::SolarMutex* SvpSalInstance::GetYieldMutex()
 {
     return &m_aYieldMutex;
 }
@@ -304,7 +305,7 @@ vos::IMutex* SvpSalInstance::GetYieldMutex()
 sal_uLong SvpSalInstance::ReleaseYieldMutex()
 {
     if ( m_aYieldMutex.GetThreadId() ==
-         vos::OThread::getCurrentIdentifier() )
+         osl::Thread::getCurrentIdentifier() )
     {
         sal_uLong nCount = m_aYieldMutex.GetAcquireCount();
         sal_uLong n = nCount;
@@ -333,8 +334,7 @@ bool SvpSalInstance::CheckYieldMutex()
 {
     bool bRet = true;
 
-    if ( m_aYieldMutex.GetThreadId() !=
-         vos::OThread::getCurrentIdentifier() )
+    if ( m_aYieldMutex.GetThreadId() != ::osl::Thread::getCurrentIdentifier() )
     {
         bRet = false;
     }
@@ -460,27 +460,27 @@ SvpSalYieldMutex::SvpSalYieldMutex()
 
 void SvpSalYieldMutex::acquire()
 {
-    OMutex::acquire();
-    mnThreadId = vos::OThread::getCurrentIdentifier();
+    SolarMutexObject::acquire();
+    mnThreadId = osl::Thread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SvpSalYieldMutex::release()
 {
-    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
+    if ( mnThreadId == osl::Thread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
         mnCount--;
     }
-    OMutex::release();
+    SolarMutexObject::release();
 }
 
 sal_Bool SvpSalYieldMutex::tryToAcquire()
 {
-    if ( OMutex::tryToAcquire() )
+    if ( SolarMutexObject::tryToAcquire() )
     {
-        mnThreadId = vos::OThread::getCurrentIdentifier();
+        mnThreadId = osl::Thread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }
@@ -532,3 +532,4 @@ void SvpSalTimer::Start( sal_uLong nMS )
     m_pInstance->StartTimer( nMS );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

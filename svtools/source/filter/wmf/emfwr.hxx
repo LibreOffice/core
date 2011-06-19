@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,7 @@ private:
     VirtualDevice       maVDev;
     MapMode             maDestMapMode;
     FilterConfigItem*   mpFilterConfigItem;
-    SvStream*           mpStm;
+    SvStream& m_rStm;
     sal_Bool*               mpHandlesUsed;
     sal_uLong               mnHandleCount;
     sal_uLong               mnLastPercent;
@@ -92,9 +93,11 @@ private:
 
 public:
 
-                        EMFWriter() {}
+    EMFWriter(SvStream &rStream) : m_rStm(rStream) {}
 
-    sal_Bool                WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pConfigItem = NULL );
+    sal_Bool WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pConfigItem = NULL );
 };
 
 #endif // _EMFWR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

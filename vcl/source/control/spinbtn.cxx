@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -322,8 +323,6 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
 
 void SpinButton::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
-
     if ( !rKEvt.GetKeyCode().GetModifier() )
     {
         switch ( rKEvt.GetKeyCode().GetCode() )
@@ -548,3 +547,5 @@ long SpinButton::PreNotify( NotifyEvent& rNEvt )
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

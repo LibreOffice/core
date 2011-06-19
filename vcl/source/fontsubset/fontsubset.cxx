@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,7 +117,7 @@ bool FontSubsetInfo::CreateFontSubset(
     case NO_FONT:
         // fall trough
     default:
-        DBG_ERROR( "unhandled type in CreateFontSubset()");
+        OSL_FAIL( "unhandled type in CreateFontSubset()");
         break;
     }
 
@@ -173,14 +174,11 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
 // TODO: replace dummy implementation
 bool FontSubsetInfo::CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths)
 {
-#if 0
-    // TODO: replace dummy implementation when someone needs this
-#else
     (void)pOutGlyphWidths;
     fprintf(stderr,"CreateFontSubsetFromType1: replace dummy implementation\n");
-#endif
     return false;
 }
 
 // ====================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

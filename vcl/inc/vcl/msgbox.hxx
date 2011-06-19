@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,6 @@ protected:
     FixedImage*         mpFixedImage;
     XubString           maMessText;
     Image               maImage;
-    Image               maImageHC;
     sal_uInt16              mnSoundType;
     sal_Bool                mbHelpBtn;
     sal_Bool                mbSound;
@@ -100,8 +100,8 @@ public:
     void                SetImage( const Image& rImage ) { maImage = rImage; }
     const Image&        GetImage() const { return maImage; }
 
-    sal_Bool                SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Image&        GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    sal_Bool            SetModeImage( const Image& rImage );
+    const Image&        GetModeImage( ) const;
 
     void                SetDefaultCheckBoxText();
     void                SetCheckBoxText( const XubString& rText ) { maCheckBoxText = rText;}
@@ -126,7 +126,6 @@ public:
                         InfoBox( Window* pParent, const ResId & rResId );
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 // --------------
@@ -146,7 +145,6 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 // ------------
@@ -164,7 +162,6 @@ public:
                         ErrorBox( Window* pParent, const ResId& rResId );
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 // ------------
@@ -184,7 +181,8 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 #endif  // _SV_MSGBOX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,17 +28,18 @@
 $(eval $(call gb_Library_Library,tl))
 
 $(eval $(call gb_Library_add_package_headers,tl,tools_inc))
+$(eval $(call gb_Library_add_package_headers,tl,tools_reversemap))
 
 $(eval $(call gb_Library_add_precompiled_header,tl,$(SRCDIR)/tools/inc/pch/precompiled_tools))
 
 $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/tools/inc \
-    -I$(SRCDIR)/tools/inc/pch \
+    -I$(realpath $(SRCDIR)/tools/inc) \
+    -I$(realpath $(SRCDIR)/tools/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(SRCDIR)/solenv/inc/Xp31 \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
+    -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
 ))
 
 $(eval $(call gb_Library_add_defs,tl,\
@@ -50,17 +51,13 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
     basegfx \
     comphelper \
     i18nisolang1 \
-    stl \
     cppu \
     sal \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
-    tools/source/communi/geninfo \
-    tools/source/communi/parser \
     tools/source/datetime/datetime \
     tools/source/datetime/tdate \
     tools/source/datetime/ttime \
@@ -115,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/string/tenccvt \
     tools/source/string/tstring \
     tools/source/string/tustring \
+    tools/source/string/reversemap \
     tools/source/testtoolloader/testtoolloader \
     tools/source/zcodec/zcodec \
 ))
@@ -131,7 +129,7 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/tools/win/inc \
+    -I$(realpath $(SRCDIR)/tools/win/inc) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tl,\
@@ -151,5 +149,5 @@ endif
 # tools/source/string/debugprint -DDEBUG -DEXCEPTIONS_OFF -DOSL_DEBUG_LEVEL=2 -DSHAREDLIB -DTOOLS_DLLIMPLEMENTATION -D_DLL_ -O0 -fno-exceptions -fpic -fvisibility=hidden -g
 # -DOPTIMIZE
 # no -DTOOLS_DLLIMPLEMENTATION on toolsdll
-# -DEXCEPTIONS_OFF -fno-exceptions on geninfo parser datetime tdate ttime bigint color config fract gen line link poly2 svborder toolsin inetmime inetmsg inetstrm contnr mempool multisel table unqidx cachestr stream strmsys vcompat tenccvt tstring tustring testtoolloader
+# -DEXCEPTIONS_OFF -fno-exceptions on datetime tdate ttime bigint color config fract gen line link poly2 svborder toolsin inetmime inetmsg inetstrm contnr mempool multisel table unqidx cachestr stream strmsys vcompat tenccvt tstring tustring testtoolloader
 # vim: set noet sw=4 ts=4:

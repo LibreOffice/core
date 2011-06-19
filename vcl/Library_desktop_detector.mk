@@ -33,11 +33,10 @@ $(eval $(call gb_Library_add_precompiled_header,desktop_detector,$(SRCDIR)/vcl/i
 
 $(eval $(call gb_Library_set_include,desktop_detector,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
+    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
@@ -58,10 +57,8 @@ $(eval $(call gb_Library_add_linked_libs,desktop_detector,\
     i18npaper \
     i18nutil \
     jvmaccess \
-    stl \
     cppu \
     sal \
-    vos3 \
     X11 \
     Xext \
     SM \

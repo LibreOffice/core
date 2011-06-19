@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -87,7 +88,7 @@ namespace svt
         const size_t nUpperBound = !!aActivePanel ? *aActivePanel : nPanelCount - 1;
         for ( size_t i=0; i<=nUpperBound; ++i )
         {
-            sal_uInt32 nDrawerHeight = m_aDrawers[i]->GetPreferredHeightPixel();
+            long nDrawerHeight = m_aDrawers[i]->GetPreferredHeightPixel();
             m_aDrawers[i]->SetPosSizePixel(
                 aUpperDrawerPos, Size( nWidth, nDrawerHeight ) );
             aUpperDrawerPos.Move( 0, nDrawerHeight );
@@ -97,7 +98,7 @@ namespace svt
         Point aLowerDrawerPos( i_rDeckPlayground.BottomLeft() );
         for ( size_t j = nPanelCount - 1; j > nUpperBound; --j )
         {
-            sal_uInt32 nDrawerHeight = m_aDrawers[j]->GetPreferredHeightPixel();
+            long nDrawerHeight = m_aDrawers[j]->GetPreferredHeightPixel();
             m_aDrawers[j]->SetPosSizePixel(
                 Point( aLowerDrawerPos.X(), aLowerDrawerPos.Y() - nDrawerHeight + 1 ),
                 Size( nWidth, nDrawerHeight )
@@ -303,3 +304,5 @@ namespace svt
 //......................................................................................................................
 } // namespace svt
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

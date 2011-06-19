@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -258,10 +259,11 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable:4129 4273 4701)
+#pragma warning(disable:4129 4273 4701 4702)
 #endif
 #include "yyrscyacc.cxx"
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

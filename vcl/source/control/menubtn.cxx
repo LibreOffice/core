@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 #include <vcl/decoview.hxx>
 #include <vcl/event.hxx>
 #include <vcl/menu.hxx>
@@ -238,3 +237,5 @@ void MenuButton::SetPopupMenu( PopupMenu* pNewMenu )
     // diese Funktion zur 6.0 inline werden
     mpMenu = pNewMenu;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,37 +33,19 @@
 
 IMAGE RID_IMG_SCALABLEFONT
 {
-    ImageBitmap = Bitmap { File = "scalfont.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
-};
-
-IMAGE RID_IMG_SCALABLEFONT_HC
-{
-    ImageBitmap = Bitmap { File = "scalfont_h.bmp" ; };
+    ImageBitmap = Bitmap { File = "scalfont.png" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 IMAGE RID_IMG_PRINTERFONT
 {
-    ImageBitmap = Bitmap { File = "prnfont.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
-};
-
-IMAGE RID_IMG_PRINTERFONT_HC
-{
-    ImageBitmap = Bitmap { File = "prnfont_h.bmp" ; };
+    ImageBitmap = Bitmap { File = "prnfont.png" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
 IMAGE RID_IMG_BITMAPFONT
 {
-    ImageBitmap = Bitmap { File = "bmpfont.bmp" ; };
-    MaskColor = IMAGE_STDBTN_COLOR ;
-};
-
-IMAGE RID_IMG_BITMAPFONT_HC
-{
-    ImageBitmap = Bitmap { File = "bmpfont_h.bmp" ; };
+    ImageBitmap = Bitmap { File = "bmpfont.png" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
 
@@ -73,7 +55,7 @@ String STR_SVT_AUTOMATIC_COLOR
 };
 
 /*
- * ressources for CollatorRessource / CollatorRessourceData resp.
+ * resources for CollatorRessource / CollatorRessourceData resp.
  */
 
 String STR_SVT_COLLATE_ALPHANUMERIC
@@ -201,32 +183,3 @@ String STR_SVT_INDEXENTRY_PHONETIC_LC
 {
     Text [ en-US ] = "Phonetic (alphanumeric last, grouped by consonants)";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

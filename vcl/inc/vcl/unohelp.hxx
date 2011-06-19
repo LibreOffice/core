@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,18 +54,24 @@ namespace accessibility {
 }
 }}}
 
+namespace comphelper {
+    namespace string {
+        class NaturalStringSorter;
+}}
+
 namespace vcl
 {
 namespace unohelper
 {
-
-::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > VCL_DLLPUBLIC GetMultiServiceFactory();
-::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > VCL_DLLPUBLIC CreateBreakIterator();
-::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> VCL_DLLPUBLIC CreateCharacterClassification();
-::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCollator > VCL_DLLPUBLIC CreateCollator();
-::rtl::OUString VCL_DLLPUBLIC CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD );
-void VCL_DLLPUBLIC NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
+VCL_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetMultiServiceFactory();
+VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > CreateBreakIterator();
+VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> CreateCharacterClassification();
+//Get access to singleton Natural String Sorter collating for Application::GetLocale
+VCL_DLLPUBLIC const comphelper::string::NaturalStringSorter& getNaturalStringSorterForAppLocale();
+VCL_DLLPUBLIC ::rtl::OUString CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD );
+VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
 }}  // namespace vcl::unohelper
 
 #endif  // _VCL_UNOHELP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,10 @@
 #include FT_FREETYPE_H
 
 class FreetypeServerFont;
+#ifdef ENABLE_GRAPHITE
+class GraphiteFaceWrapper;
+#endif
+
 struct FT_GlyphRec_;
 
 // -----------------------------------------------------------------------
@@ -80,6 +85,9 @@ public:
     const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
+#ifdef ENABLE_GRAPHITE
+    GraphiteFaceWrapper*  GetGraphiteFace();
+#endif
     void                  ReleaseFaceFT( FT_FaceRec_* );
 
     const ::rtl::OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
@@ -107,15 +115,18 @@ private:
     const int       mnFaceNum;
     int             mnRefCount;
     const int       mnSynthetic;
-
+#ifdef ENABLE_GRAPHITE
+    bool            mbCheckedGraphite;
+    GraphiteFaceWrapper * mpGraphiteFace;
+#endif
     sal_IntPtr      mnFontId;
     ImplDevFontAttributes maDevFontAttributes;
 
     const ImplFontCharMap* mpFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
-    // TODO: change to hash_multimap when a use case requires a m:n mapping
-    typedef ::std::hash_map<int,int> Int2IntMap;
+    // TODO: change to boost::unordered_multimap when a use case requires a m:n mapping
+    typedef ::boost::unordered_map<int,int> Int2IntMap;
     mutable Int2IntMap* mpChar2Glyph;
     mutable Int2IntMap* mpGlyph2Char;
     void InitHashes() const;
@@ -161,7 +172,7 @@ public:
     FreetypeServerFont* CreateFont( const ImplFontSelectData& );
 
 private:
-    typedef ::std::hash_map<sal_IntPtr,FtFontInfo*> FontList;
+    typedef ::boost::unordered_map<sal_IntPtr,FtFontInfo*> FontList;
     FontList            maFontList;
 
     sal_IntPtr          mnMaxFontId;
@@ -180,7 +191,8 @@ public:
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
     virtual void*               GetFtFace() const;
-    virtual void                SetFontOptions( const ImplFontOptions&);
+    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );
+    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const;
     virtual int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     virtual bool                NeedsArtificialBold() const { return mbArtBold; }
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
@@ -203,12 +215,16 @@ public:
                                 { return mpFontInfo->GetTable( pName, pLength ); }
     int                         GetEmUnits() const;
     const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }
+#ifdef ENABLE_GRAPHITE
+    GraphiteFaceWrapper*        GetGraphiteFace() const { return mpFontInfo->GetGraphiteFace(); }
+#endif
 
 protected:
     friend class GlyphCache;
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
+    virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();
 
@@ -223,12 +239,14 @@ private:
     FT_FaceRec_*                maFaceFT;
     FT_SizeRec_*                maSizeFT;
 
+    boost::shared_ptr<ImplFontOptions> mpFontOptions;
+
     bool                        mbFaceOk;
     bool            mbArtItalic;
     bool            mbArtBold;
     bool            mbUseGamma;
 
-    typedef ::std::hash_map<int,int> GlyphSubstitution;
+    typedef ::boost::unordered_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;
     rtl_UnicodeToTextConverter  maRecodeConverter;
 
@@ -258,3 +276,5 @@ public:
 // -----------------------------------------------------------------------
 
 #endif // _SV_GCACHFTYP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

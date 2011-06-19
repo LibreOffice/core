@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -375,9 +376,9 @@ namespace toolkit
             }
 
             throw IllegalArgumentException(
-                        ( ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
+                        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to convert the given value for the property "))
                     +=  GetPropertyName((sal_uInt16)nPropId) )
-                    +=  ::rtl::OUString::createFromAscii(" (double, integer, or string expected)."),
+                    +=  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (double, integer, or string expected).")),
                 static_cast< XPropertySet* >(this),
                 1);
         }
@@ -442,7 +443,7 @@ namespace toolkit
     // -------------------------------------------------------------------
     ::rtl::OUString UnoFormattedFieldControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "FormattedField" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField"));
     }
 
     // -------------------------------------------------------------------
@@ -468,3 +469,5 @@ namespace toolkit
 //........................................................................
 }   // namespace toolkit
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

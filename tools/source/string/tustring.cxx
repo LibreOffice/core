@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,15 +33,9 @@
 
 #include "boost/static_assert.hpp"
 
-#ifndef _OSL_INTERLCK_H
 #include <osl/interlck.h>
-#endif
-#ifndef _RTL_ALLOC_H
 #include <rtl/alloc.h>
-#endif
-#ifndef _RTL_MEMORY_H
 #include <rtl/memory.h>
-#endif
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>
 
@@ -160,3 +155,4 @@ double UniString::ToDouble() const
     return rtl_ustr_toDouble( mpData->maStr );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

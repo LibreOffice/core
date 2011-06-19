@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-
 #if !defined UNX
+#ifdef WNT
+#include <windows.h>
+#undef GetObject
+#endif
 #include <io.h>
 #include <process.h>
 #endif
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -46,7 +50,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include "comdep.hxx"
 #include <tools/fsys.hxx>
 #define _TOOLS_HXX
@@ -57,16 +60,15 @@
 #endif
 #include <tools/stream.hxx>
 
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
+#include <osl/mutex.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
 
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 int ApiRet2ToSolarError_Impl( int nApiRet );
 
@@ -121,7 +123,7 @@ int Sys2SolarError_Impl( int nSysErr )
 #endif
     }
 
-    DBG_TRACE1( "FSys: unknown system error %d occured", nSysErr );
+    OSL_TRACE( "FSys: unknown system error %d occurred", nSysErr );
     return FSYS_ERR_UNKNOWN;
 }
 
@@ -136,13 +138,13 @@ sal_Bool bInRedirection = sal_True;
 #else
 sal_Bool bInRedirection = sal_False;
 #endif
-static vos:: OMutex * pRedirectMutex = 0;
+static osl::Mutex* pRedirectMutex = 0;
 
 //------------------------------------------------------------------------
 void FSysRedirector::Register( FSysRedirector *pRedirector )
 {
         if ( pRedirector )
-                pRedirectMutex = new vos:: OMutex ;
+            pRedirectMutex = new osl::Mutex;
         else
                 DELETEZ( pRedirectMutex );
         _pRedirector = pRedirector;
@@ -165,7 +167,7 @@ void FSysRedirector::DoRedirect( String &rPath )
         // Redirection is acessible only by one thread per time
         // dont move the guard behind the bInRedirection check!!!
         // think of nested calls (when called from callback)
-        vos:: OGuard  aGuard( pRedirectMutex );
+        osl::MutexGuard aGuard( pRedirectMutex );
 
         // if already in redirection, dont redirect
         if ( bInRedirection )
@@ -243,10 +245,6 @@ DBG_NAME( DirEntry );
 |*
 |*    DirEntry::~DirEntryStack()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 04.07.91
-|*
 *************************************************************************/
 
 DirEntryStack::~DirEntryStack()
@@ -262,8 +260,6 @@ DirEntryStack::~DirEntryStack()
 |*    Beschreibung      Pruefung eines DirEntry fuer DBG_UTIL
 |*    Parameter         void* p     Zeiger auf den DirEntry
 |*    Return-Wert       char*       Fehlermeldungs-TExtension oder NULL
-|*    Ersterstellung    MI 16.07.91
-|*    Letzte Aenderung  MI 26.05.93
 |*
 *************************************************************************/
 
@@ -284,8 +280,6 @@ const char* ImpCheckDirEntry( const void* p )
 |*    ImplCutPath()
 |*
 |*    Beschreibung      Fuegt ... ein, damit maximal nMaxChars lang
-|*    Ersterstellung    MI 06.04.94
-|*    Letzte Aenderung  DV 24.06.96
 |*
 *************************************************************************/
 
@@ -340,10 +334,6 @@ ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseOs2Name()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 23.06.95
 |*
 *************************************************************************/
 
@@ -457,36 +447,15 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 
                 else
                 {
-                    if ( eStyle == FSYS_STYLE_FAT )
-                    {
-                        // ist der Name grundsaetzlich ungueltig?
-                        int         nPunkte = 0;
-                        const char *pChar;
-                        for ( pChar = aName.GetBuffer();
-                              nPunkte < 2 && *pChar != 0;
-                              pChar++ )
-                        {
-                            if ( *pChar == ';' )
-                                nPunkte = 0;
-                            else
-                                nPunkte += ( *pChar == '.' ) ? 1 : 0;
-                        }
-                        if ( nPunkte > 1 )
-                        {
-                            aName = rPfad;
-                            return FSYS_ERR_MISPLACEDCHAR;
-                        }
-                    }
-
                     // normalen Entries kommen auf den Stack
-                                        DirEntry *pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
-                                        if ( !pNew->IsValid() )
-                                        {
-                                                aName = rPfad;
-                                                ErrCode eErr = pNew->GetError();
-                                                delete pNew;
-                                                return eErr;
-                                        }
+                    DirEntry *pNew = new DirEntry( aName, FSYS_FLAG_NORMAL, eStyle );
+                    if ( !pNew->IsValid() )
+                    {
+                        aName = rPfad;
+                        ErrCode eErr = pNew->GetError();
+                        delete pNew;
+                        return eErr;
+                    }
                     aStack.Push( pNew );
                 }
             }
@@ -538,72 +507,25 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 |*
 |*    DirEntry::ImpParseName()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.08.91
-|*    Letzte Aenderung  MI 26.05.93
-|*
 *************************************************************************/
 
 FSysError DirEntry::ImpParseName( const ByteString& rbInitName,
                                   FSysPathStyle eStyle )
 {
-    String  rInitName( rbInitName, osl_getThreadTextEncoding() );
     if ( eStyle == FSYS_STYLE_HOST )
         eStyle = DEFSTYLE;
 
-    // KI-Division of FSys
-    if ( eStyle == FSYS_STYLE_DETECT )
-    {
-        sal_Unicode cFirst = rInitName.GetChar(0);
-        if ( rInitName.Len() == 2 && rInitName.GetChar(1) == ':' &&
-             ((cFirst >= 'A' && cFirst <= 'Z') ||
-              (cFirst >= 'a' && cFirst <= 'z')))
-           eStyle = FSYS_STYLE_HPFS;
-        else if ( rInitName.Len() > 2 && rInitName.GetChar(1) == ':' )
-        {
-            if ( rInitName.Search( ':', 2 ) == STRING_NOTFOUND )
-                eStyle = FSYS_STYLE_HPFS;
-            else
-                eStyle = FSYS_STYLE_MAC;
-        }
-        else if ( rInitName.Search( '/' ) != STRING_NOTFOUND )
-            eStyle = FSYS_STYLE_BSD;
-        else if ( rInitName.Search( '\\' ) != STRING_NOTFOUND )
-            eStyle = FSYS_STYLE_HPFS;
-        else if ( rInitName.Search( ':' ) != STRING_NOTFOUND )
-            eStyle = FSYS_STYLE_MAC;
-        else
-            eStyle = FSYS_STYLE_HPFS;
-    }
+#if defined(WNT)
+    return ImpParseOs2Name( rbInitName, eStyle );
+#else
+    return ImpParseUnixName( rbInitName, eStyle );
+#endif
 
-    switch ( eStyle )
-    {
-        case FSYS_STYLE_FAT:
-        case FSYS_STYLE_VFAT:
-        case FSYS_STYLE_HPFS:
-        case FSYS_STYLE_NTFS:
-        case FSYS_STYLE_NWFS:
-            return ImpParseOs2Name( rbInitName, eStyle );
-
-        case FSYS_STYLE_BSD:
-        case FSYS_STYLE_SYSV:
-            return ImpParseUnixName( rbInitName, eStyle );
-
-        case FSYS_STYLE_MAC:
-            return FSYS_ERR_OK;
-
-        default:
-            return FSYS_ERR_UNKNOWN;
-    }
 }
 
 /*************************************************************************
 |*
 |*    GetStyle()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 15.11.91
-|*    Letzte Aenderung  MI 15.11.91
 |*
 *************************************************************************/
 
@@ -622,12 +544,10 @@ static FSysPathStyle GetStyle( FSysPathStyle eStyle )
 |*    Beschreibung      bringt den Namen auf Betriebssystem-Norm
 |*                      z.B. 8.3 lower beim MS-DOS Formatter
 |*                      wirkt nicht rekursiv
-|*    Ersterstellung    MI 12.08.91
-|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
-void DirEntry::ImpTrim( FSysPathStyle eStyle )
+void DirEntry::ImpTrim( FSysPathStyle /* eStyle */ )
 {
     // Wildcards werden nicht geclipt
     if ( ( aName.Search( '*' ) != STRING_NOTFOUND ) ||
@@ -635,102 +555,24 @@ void DirEntry::ImpTrim( FSysPathStyle eStyle )
          ( aName.Search( ';' ) != STRING_NOTFOUND ) )
         return;
 
-    switch ( eStyle )
+#if defined(WNT)
+    if ( aName.Len() > 254 )
     {
-        case FSYS_STYLE_FAT:
-        {
-            sal_uInt16 nPunktPos = aName.Search( '.' );
-            if ( nPunktPos == STRING_NOTFOUND )
-            {
-                if ( aName.Len() > 8 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 8 );
-                }
-            }
-            else
-            {
-                if ( nPunktPos > 8 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 8, nPunktPos - 8 );
-                    nPunktPos = 8;
-                }
-                if ( aName.Len() > nPunktPos + 3 )
-                {
-                    if ( aName.Len() - nPunktPos > 4 )
-                    {
-                        nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                        aName.Erase( nPunktPos + 4 );
-                    }
-                }
-            }
-            aName.ToLowerAscii();
-            break;
-        }
-
-        case FSYS_STYLE_VFAT:
-        case FSYS_STYLE_HPFS:
-        case FSYS_STYLE_NTFS:
-        case FSYS_STYLE_NWFS:
-            if ( aName.Len() > 254 )
-            {
-                nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                aName.Erase( 254 );
-            }
-
-            if ( eStyle == FSYS_STYLE_HPFS &&
-                 ( eFlag == FSYS_FLAG_ABSROOT || eFlag == FSYS_FLAG_RELROOT ) )
-                aName.ToUpperAscii();
-            break;
-
-        case FSYS_STYLE_SYSV:
-            if ( aName.Len() > 14 )
-            {
-                nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                aName.Erase( 14 );
-            }
-            break;
-
-        case FSYS_STYLE_BSD:
-            if ( aName.Len() > 250 )
-            {
-                nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                aName.Erase( 250 );
-            }
-            break;
-
-        case FSYS_STYLE_MAC:
-            if ( eFlag & ( FSYS_FLAG_ABSROOT | FSYS_FLAG_VOLUME ) )
-            {
-                if ( aName.Len() > 27 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 27 );
-                }
-            }
-            else
-            {
-                if ( aName.Len() > 31 )
-                {
-                    nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
-                    aName.Erase( 31 );
-                }
-            }
-            break;
-
-        default:
-            /* kann nicht sein */;
+        nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
+        aName.Erase( 254 );
     }
+#else
+    if ( aName.Len() > 250 )
+    {
+        nError = ERRCODE_IO_MISPLACEDCHAR|ERRCODE_WARNING_MASK;
+        aName.Erase( 250 );
+    }
+#endif
 }
 
 /*************************************************************************
 |*
 |*    DirEntry::DirEntry()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -753,10 +595,6 @@ DirEntry::DirEntry( const ByteString& rName, DirEntryFlag eDirFlag,
 /*************************************************************************
 |*
 |*    DirEntry::DirEntry()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -785,10 +623,6 @@ DirEntry::DirEntry( const DirEntry& rOrig ) :
 |*
 |*    DirEntry::DirEntry()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
@@ -809,7 +643,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     }
 
     ByteString aTmpName(rInitName, osl_getThreadTextEncoding());
-    if( eStyle == FSYS_STYLE_URL || aTmpName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
+    if( aTmpName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -865,7 +699,7 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
     }
 
     ByteString aTmpName( rInitName );
-    if( eStyle == FSYS_STYLE_URL || rInitName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
+    if( rInitName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
@@ -895,10 +729,6 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
 |*
 |*    DirEntry::DirEntry()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry::DirEntry( DirEntryFlag eDirFlag )
@@ -917,10 +747,6 @@ DirEntry::DirEntry( DirEntryFlag eDirFlag )
 |*
 |*    DirEntry::~DirEntry()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry::~DirEntry()
@@ -937,10 +763,6 @@ DirEntry::~DirEntry()
 /*************************************************************************
 |*
 |*    DirEntry::ImpGetTopPtr() const
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -959,10 +781,6 @@ const DirEntry* DirEntry::ImpGetTopPtr() const
 |*
 |*    DirEntry::ImpGetTopPtr()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.11.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry* DirEntry::ImpGetTopPtr()
@@ -978,35 +796,7 @@ DirEntry* DirEntry::ImpGetTopPtr()
 
 /*************************************************************************
 |*
-|*    DirEntry::ImpGetPreTopPtr()
-|*
-|*    Beschreibung      liefert einen Pointer auf den vorletzten Entry
-|*    Ersterstellung    MI 01.11.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
-*************************************************************************/
-
-DirEntry* DirEntry::ImpGetPreTopPtr()
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    DirEntry *pTemp = this;
-    if ( pTemp->pParent )
-    {
-        while ( pTemp->pParent->pParent )
-            pTemp = pTemp->pParent;
-    }
-
-    return pTemp;
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::ImpChangeParent()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
@@ -1031,22 +821,18 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 |*
 |*    DirEntry::Exists()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 24.09.91
-|*
 *************************************************************************/
 
 sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 {
 #ifndef BOOTSTRAP
-    static vos::OMutex aLocalMutex;
-    vos::OGuard aGuard( aLocalMutex );
+    static osl::Mutex aLocalMutex;
+    osl::MutexGuard aGuard( aLocalMutex );
 #endif
         if ( !IsValid() )
                 return sal_False;
 
-#if defined WNT || defined OS2
+#if defined WNT
     // spezielle Filenamen sind vom System da
     if ( ( aName.CompareIgnoreCaseToAscii("CLOCK$") == COMPARE_EQUAL ||
            aName.CompareIgnoreCaseToAscii("CON") == COMPARE_EQUAL ||
@@ -1070,7 +856,7 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
                 return sal_True;
         }
 
-#if defined WNT || defined OS2
+#if defined WNT
         if ( 0 != ( eKind & FSYS_KIND_DEV ) )
         {
                 return DRIVE_EXISTS( ImpGetTopPtr()->aName.GetChar(0) );
@@ -1083,10 +869,6 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 /*************************************************************************
 |*
 |*    DirEntry::First()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 15.01.92
 |*
 *************************************************************************/
 
@@ -1132,10 +914,6 @@ sal_Bool DirEntry::First()
 |*
 |*    DirEntry::GetFull()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
@@ -1166,12 +944,6 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
         aRet = ByteString(GetName( eStyle ), osl_getThreadTextEncoding());
     }
 
-    if ( ( eStyle == FSYS_STYLE_MAC ) &&
-         ( ImpGetTopPtr()->eFlag != FSYS_FLAG_VOLUME )  &&
-         ( ImpGetTopPtr()->eFlag != FSYS_FLAG_ABSROOT ) &&
-         ( aRet.GetChar(0) != ':' ) )
-        aRet.Insert( ACCESSDELIM_C(eStyle), 0 );
-
     //! Hack
     if ( bWithDelimiter )
         if ( aRet.GetChar( aRet.Len()-1 ) != ACCESSDELIM_C(eStyle) )
@@ -1188,10 +960,6 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
 |*
 |*    DirEntry::GetPath()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry DirEntry::GetPath() const
@@ -1207,10 +975,6 @@ DirEntry DirEntry::GetPath() const
 /*************************************************************************
 |*
 |*    DirEntry::GetExtension()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1234,10 +998,6 @@ String DirEntry::GetExtension( char cSep ) const
 /*************************************************************************
 |*
 |*    DirEntry::GetBase()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1265,10 +1025,6 @@ String DirEntry::GetBase( char cSep ) const
 |*
 |*    DirEntry::GetName()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91 13:47
-|*
 *************************************************************************/
 
 String DirEntry::GetName( FSysPathStyle eStyle ) const
@@ -1286,62 +1042,15 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
 
         case FSYS_FLAG_ABSROOT:
         {
-            if ( eStyle == FSYS_STYLE_URL )
-            {
-                aRet = "file:///";
-                aRet += aName;
-
-#ifndef UNX
-                if ( aName.Len())
-                {
-                    if ( aName.GetChar(aName.Len()-1) == ':' )
-                    {
-                        aRet.SetChar(aRet.Len()-1, '|');
-                    }
-                    else
-                    {
-                        aRet.Insert( '/', 5 );
-                    }
-                    aRet += "/";
-                }
-#endif
-            }
-            else if ( eStyle != FSYS_STYLE_MAC &&
-                                 aName.Len() > 1 && aName.GetChar( 1 ) != ':'  )
-            {
-                // UNC-Pathname
-                aRet = ACCESSDELIM_C(eStyle);
-                aRet += ACCESSDELIM_C(eStyle);
-                aRet += aName ;
-                aRet += ACCESSDELIM_C(eStyle);
-            }
-            else
-            {
-                aRet = aName;
-                aRet += ACCESSDELIM_C(eStyle);
-            }
+            aRet = aName;
+            aRet += ACCESSDELIM_C(eStyle);
             break;
         }
 
         case FSYS_FLAG_INVALID:
         case FSYS_FLAG_VOLUME:
         {
-            if ( eStyle == FSYS_STYLE_URL )
-            {
-                aRet = "file:///";
-                aRet += aName;
-#ifndef UNX
-                if ( aName.Len() && aName.GetChar(aName.Len()-1) == ':' )
-                {
-                    aRet.SetChar(aRet.Len()-1, '|');
-                }
-#endif
-            }
-            else
-            {
-                aRet = aName;
-            }
-
+            aRet = aName;
             break;
         }
 
@@ -1363,10 +1072,6 @@ String DirEntry::GetName( FSysPathStyle eStyle ) const
 |*
 |*    DirEntry::IsAbs()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 bool DirEntry::IsAbs() const
@@ -1383,10 +1088,6 @@ bool DirEntry::IsAbs() const
 /*************************************************************************
 |*
 |*    DirEntry::CutName()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1431,8 +1132,6 @@ String DirEntry::CutName( FSysPathStyle eStyle )
 |*    DirEntry::NameCompare
 |*
 |*    Beschreibung      Vergleich nur die Namen (ohne Pfad, aber mit Gross/Klein)
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1457,10 +1156,6 @@ StringCompare DirEntry::NameCompare( const DirEntry &rWith ) const
 |*
 |*    DirEntry::operator==()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
@@ -1476,14 +1171,8 @@ sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
          ( rEntry.eFlag == FSYS_FLAG_INVALID ) )
         return sal_False;
 
-#ifndef OS2
-    const
-#endif
-    DirEntry *pThis = (DirEntry *)this;
-#ifndef OS2
-    const
-#endif
-    DirEntry *pWith = (DirEntry *)&rEntry;
+    const DirEntry *pThis = (DirEntry *)this;
+    const DirEntry *pWith = (DirEntry *)&rEntry;
     while( pThis && pWith && (pThis->eFlag == pWith->eFlag) )
     {
         if ( CMP_LOWER(pThis->aName) != CMP_LOWER(pWith->aName) )
@@ -1499,10 +1188,6 @@ sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
 |*
 |*    DirEntry::operator=()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry& DirEntry::operator=( const DirEntry& rEntry )
@@ -1512,7 +1197,7 @@ DirEntry& DirEntry::operator=( const DirEntry& rEntry )
     if ( this == &rEntry )
         return *this;
     if ( rEntry.nError != FSYS_ERR_OK ) {
-        DBG_ERROR("Zuweisung mit invalidem DirEntry");
+        OSL_FAIL("Zuweisung mit invalidem DirEntry");
         nError = rEntry.nError;
         return *this;
     }
@@ -1536,10 +1221,6 @@ DirEntry& DirEntry::operator=( const DirEntry& rEntry )
 /*************************************************************************
 |*
 |*    DirEntry::operator+()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1628,10 +1309,6 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
 |*
 |*    DirEntry::operator+=()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 DirEntry &DirEntry::operator+=( const DirEntry& rEntry )
@@ -1645,10 +1322,6 @@ DirEntry &DirEntry::operator+=( const DirEntry& rEntry )
 |*
 |*    DirEntry::GetAccessDelimiter()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 27.05.93
-|*    Letzte Aenderung  MI 10.06.93
-|*
 *************************************************************************/
 
 String DirEntry::GetAccessDelimiter( FSysPathStyle eFormatter )
@@ -1659,10 +1332,6 @@ String DirEntry::GetAccessDelimiter( FSysPathStyle eFormatter )
 /*************************************************************************
 |*
 |*    DirEntry::SetExtension()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 02.08.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1702,10 +1371,6 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
 |*
 |*    DirEntry::CutExtension()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 23.07.93
-|*    Letzte Aenderung  MI 23.07.93
-|*
 *************************************************************************/
 
 String DirEntry::CutExtension( char cSep )
@@ -1731,10 +1396,6 @@ String DirEntry::CutExtension( char cSep )
 |*
 |*    DirEntry::SetName()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 04.09.93
-|*    Letzte Aenderung  MI 04.09.93
-|*
 *************************************************************************/
 
 void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
@@ -1747,8 +1408,7 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 
     if ( (eFlag != FSYS_FLAG_NORMAL) ||
          (aName.Search( ':' ) != STRING_NOTFOUND) ||
-         (aName.Search( aAccDelim ) != STRING_NOTFOUND) ||
-         (eFormatter == FSYS_STYLE_FAT && (aName.GetTokenCount( '.' ) > 2) ) )
+         (aName.Search( aAccDelim ) != STRING_NOTFOUND) )
     {
         eFlag = FSYS_FLAG_INVALID;
     }
@@ -1761,10 +1421,6 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 /*************************************************************************
 |*
 |*    DirEntry::Find()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
@@ -1806,152 +1462,7 @@ sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
 
 /*************************************************************************
 |*
-|*    DirEntry::ImpToRel()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MI 17.06.93
-|*    Letzte Aenderung  MI 17.06.93
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::ImpToRel( String aCurStr )
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-        DirEntry aThis(*this);
-    aThis.ToAbs();
-    String aThisStr( aThis.GetFull( FSYS_STYLE_HPFS ) );
-
-    // #109512 preserve case of path even if caseinsensitive
-    String aThisCompareStr( aThisStr ), aCurCompareStr( aCurStr );
-    if ( ! IsCaseSensitive() )
-    {
-        aThisCompareStr.ToLowerAscii();
-        aCurCompareStr.ToLowerAscii();
-    }
-
-    // "Ubereinstimmung pr"ufen
-    sal_uInt16 nPos = aThisCompareStr.Match( aCurCompareStr );
-    if ( nPos == STRING_MATCH && aThisStr.Len() != aCurStr.Len() )
-        nPos = Min( aThisStr.Len(), aCurStr.Len() );
-
-    // Sonderfall, die DirEntries sind identisch
-    if ( nPos == STRING_MATCH )
-    {
-        // dann ist der relative Pfad das aktuelle Verzeichnis
-        *this = DirEntry();
-        return sal_True;
-    }
-
-    // Sonderfall, die DirEntries sind total verschieden
-    if ( nPos == 0 )
-    {
-        // dann ist der relativste Pfad absolut
-        *this = aThis;
-        return sal_False;
-    }
-
-    // sonst nehmen wir die identischen Einzelteile vorne weg
-    while ( nPos > 0 && aThisStr.GetChar(nPos) != '\\' )
-        --nPos;
-        aThisStr.Erase( 0, nPos + ( ( aThisStr.GetChar(nPos) == '\\' ) ? 1 : 0 ) );
-    aCurStr.Erase( 0, nPos + ( ( aCurStr.GetChar(nPos) == '\\' ) ? 1 : 0 ) );
-
-    // und fuellen mit dem Level der Directories auf
-    for ( nPos = 0; nPos < aCurStr.Len(); ++nPos )
-        if ( aCurStr.GetChar(nPos) == '\\' )
-            aThisStr.Insert( String( "..\\", osl_getThreadTextEncoding() ), 0 );
-
-    // das ist dann unser relativer Pfad
-    *this = DirEntry( aThisStr, FSYS_STYLE_HPFS );
-    return sal_True;
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::CutRelParents()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MI 01.08.95
-|*    Letzte Aenderung  MI 01.08.95
-|*
-*************************************************************************/
-
-sal_uInt16 DirEntry::CutRelParents()
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-        // erstes '..' finden
-    DirEntry *pDir = 0;
-    DirEntry *pPar;
-
-    for (  pPar = this;
-          pPar && pPar->eFlag != FSYS_FLAG_PARENT;
-          pPar = pPar->pParent )
-        pDir = pPar;
-
-    // '..' zaehlen
-    sal_uInt16 nParCount = 0;
-    while ( pPar && pPar->eFlag == FSYS_FLAG_PARENT )
-    {
-        ++nParCount;
-        pPar = pPar->pParent;
-    }
-
-    // cutten
-    if ( pDir )
-        DELETEZ(pDir->pParent);
-    else
-        eFlag = FSYS_FLAG_CURRENT;
-
-    return nParCount;
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::ToRel()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.06.93
-|*    Letzte Aenderung  MI 17.06.93
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::ToRel()
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-        DirEntry aCur;
-    aCur.ToAbs();
-        return ImpToRel( aCur.GetFull( FSYS_STYLE_HPFS ) );
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::ToRel()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::ToRel( const DirEntry& rStart )
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-        DirEntry aStart( rStart );
-        aStart.ToAbs();
-        return ImpToRel( aStart.GetFull( FSYS_STYLE_HPFS ) );
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::GetDevice()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -1975,10 +1486,6 @@ DirEntry DirEntry::GetDevice() const
 /*************************************************************************
 |*
 |*    DirEntry::SetBase()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 23.10.91
-|*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
 
@@ -2005,10 +1512,6 @@ void DirEntry::SetBase( const String& rBase, char cSep )
 |*
 |*    DirEntry::GetSearchDelimiter()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 10.06.93
-|*    Letzte Aenderung  MI 10.06.93
-|*
 *************************************************************************/
 
 String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
@@ -2018,49 +1521,9 @@ String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 
 /*************************************************************************
 |*
-|*    DirEntry::GetMaxNameLen()
-|*
-|*    Beschreibung      Liefert die maximale Anzahl von Zeichen in
-|*                      einzelnen Namensteile. Bei FileSystmen mit
-|*                      fester Extension (FAT) zaehlt diese nicht mit.
-|*                      Bei unbekannten FileSytemen und FSYS_STYLE_URL
-|*                      wird USHRT_MAX zurueckgegeben.
-|*    Ersterstellung    MI 17.06.97
-|*    Letzte Aenderung  MI 17.06.97
-|*
-*************************************************************************/
-
-sal_uInt16 DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
-{
-    eFormatter = GetStyle( eFormatter );
-    switch ( eFormatter )
-    {
-        case FSYS_STYLE_MAC:    return  31;
-
-        case FSYS_STYLE_FAT:    return   8;
-
-        case FSYS_STYLE_VFAT:
-        case FSYS_STYLE_NTFS:
-        case FSYS_STYLE_NWFS:
-        case FSYS_STYLE_HPFS:   return 255;
-
-
-        case FSYS_STYLE_SYSV:   return  14;
-
-        case FSYS_STYLE_BSD:    return 250;
-
-        default:
-            return USHRT_MAX;
-    }
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::TempName()
 |*
 |*    Beschreibung      FSYS.SDW - Aha, wo?
-|*    Ersterstellung    VB 06.09.93 (im SWG)
-|*    Letzte Aenderung  MI 06.02.98
 |*
 *************************************************************************/
 namespace { struct TempNameBase_Impl : public rtl::Static< DirEntry, TempNameBase_Impl > {}; }
@@ -2096,20 +1559,19 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
 DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 {
         // ggf. Base-Temp-Dir verwenden (macht Remote keinen Sinn => vorher)
-    const DirEntry &rEntry = TempNameBase_Impl::get();
+        const DirEntry &rEntry = TempNameBase_Impl::get();
         if ( !pParent && FSYS_FLAG_CURRENT != rEntry.eFlag && FSYS_FLAG_ABSROOT != eFlag )
-
         {
                 DirEntry aFactory( rEntry );
                 aFactory += GetName();
                 return aFactory.TempName();
         }
 
-        ByteString aDirName; // hiermit hatte MPW C++ Probleme - immmer noch??
+        ByteString aDirName;
         char *ret_val;
         size_t i;
 
-        // dertermine Directory, Prefix and Extension
+        // determine Directory, Prefix and Extension
         char pfx[6];
         char ext[5];
         const char *dir;
@@ -2135,17 +1597,15 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         else
         {
             aDirName = ByteString(GetFull(), osl_getThreadTextEncoding());
-            strcpy( pfx, "sv" );
+            strcpy( pfx, "lo" );
             strcpy( ext, ".tmp" );
         }
         dir = aDirName.GetBuffer();
 
-        // wurde kein Dir angegeben, dann nehmen wir ein passendes TEMP-Verz.
         char sBuf[_MAX_PATH];
         if ( eFlag == FSYS_FLAG_CURRENT || ( !pParent && pWild ) )
             dir = TempDirImpl(sBuf);
 
-        // ab hier leicht modifizierter Code von VB
         DirEntry aRet(FSYS_FLAG_INVALID);
         i = strlen(dir);
         // need to add ?\\? + prefix + number + pid + .ext + '\0'
@@ -2156,7 +1616,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             strcpy(ret_val,dir);
 
             /* Make sure directory ends with a separator    */
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
             if ( i>0 && ret_val[i-1] != '\\' && ret_val[i-1] != '/' &&
                  ret_val[i-1] != ':')
                 ret_val[i++] = '\\';
@@ -2224,7 +1684,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 }
                                 else
                                 {
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
                                         if( access( ByteString(aRedirected, osl_getThreadTextEncoding()).GetBuffer(), F_OK ) )
                                         {
                                                 aRet = DirEntry( aRetVal );
@@ -2253,10 +1713,6 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 |*
 |*    DirEntry::operator[]()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 03.03.92
-|*    Letzte Aenderung  MI 03.03.92
-|*
 *************************************************************************/
 
 const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
@@ -2275,10 +1731,6 @@ const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 /*************************************************************************
 |*
 |*    DirEntry::ImpParseUnixName()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 26.05.93
 |*
 *************************************************************************/
 
@@ -2396,10 +1848,6 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
 |*
 |*    DirEntry::MakeShortName()
 |*
-|*    Beschreibung
-|*    Ersterstellung    TLX
-|*    Letzte Aenderung  PB  21.08.97 (in CreateEntry_Impl())
-|*
 *************************************************************************/
 
 ErrCode CreateEntry_Impl( const DirEntry &rPath, DirEntryKind eKind )
@@ -2449,13 +1897,6 @@ sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
     aPath += aName;
     if ( 1 == aPath.Level() )
         return sal_False;
-    if ( eStyle == FSYS_STYLE_FAT || eStyle == FSYS_STYLE_NWFS ||
-         eStyle == FSYS_STYLE_UNKNOWN )
-    {
-        DirEntry aDosEntry( rLongName, FSYS_STYLE_FAT );
-        if ( !aDosEntry.IsValid() )
-            return sal_False;
-    }
 
         // Pfad-Trenner sind nicht erlaubt (bei ungek"urzten auch nicht FSYS_SHORTNAME_DELIMITER)
         char cDelim = bUseDelim == 2 ? FSYS_SHORTNAME_DELIMITER : char(0);
@@ -2476,14 +1917,6 @@ sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
 
 //-------------------------------------------------------------------------
 
-#define MAX_EXT_FAT         3
-#define MAX_LEN_FAT         8
-#define INVALID_CHARS_FAT   "\\/\"':|^<>[]?* "
-
-#define MAX_EXT_MAC        16   // nur wegen sinnvoller Namensk"rzung
-#define MAX_LEN_MAC        31
-#define INVALID_CHARS_MAC   "\":"
-
 #define MAX_EXT_MAX       250
 #define MAX_LEN_MAX       255
 #define INVALID_CHARS_DEF   "\\/\"':|^<>?*"
@@ -2499,22 +1932,6 @@ sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
         ByteString bLongName(aLongName, osl_getThreadTextEncoding());
 
         // Auf Novell-Servern (wegen der rottigen Clients) nur 7bit ASCII
-
-        // HRO: #69627# Weg mit dem Scheiss. Wenn es Client gibt, die so einen
-        // BUG haben, dann muss halt der Client ersetzt werden, aber doch nicht das
-        // Office kastrieren !!!
-
-#if 0
-        if ( FSYS_STYLE_NWFS == GetPathStyle( ImpGetTopPtr()->GetName() ) )
-        {
-                for ( sal_uInt16 n = aLongName.Len(); n; --n )
-                {
-                        short nChar = aLongName(n-1);
-                        if ( nChar < 32 || nChar >= 127 )
-                                aLongName.Erase( n-1, 1 );
-                }
-        }
-#endif
 
         // bei FSYS_KIND_ALL den alten Namen merken und abh"angen (rename)
         ByteString aOldName;
@@ -2536,49 +1953,27 @@ sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
         if ( FSYS_STYLE_DETECT == eStyle )
             eStyle = DirEntry::GetPathStyle( GetDevice().GetName() );
         ByteString aInvalidChars;
-        switch ( eStyle )
-        {
-            case FSYS_STYLE_FAT:
-                nMaxExt = MAX_EXT_FAT;
-                nMaxLen = MAX_LEN_FAT;
-                aInvalidChars = INVALID_CHARS_FAT;
-                break;
-
-            case FSYS_STYLE_MAC:
-                nMaxExt = MAX_EXT_MAC;
-                nMaxLen = MAX_LEN_MAC;
-                aInvalidChars = INVALID_CHARS_MAC;
-                break;
-
-            default:
-                nMaxExt = MAX_EXT_MAX;
-                nMaxLen = MAX_LEN_MAX;
-                aInvalidChars = INVALID_CHARS_DEF;
-        }
+        nMaxExt = MAX_EXT_MAX;
+        nMaxLen = MAX_LEN_MAX;
+        aInvalidChars = INVALID_CHARS_DEF;
 
         // Extension abschneiden und kuerzen
         ByteString aExt;
         ByteString aFName = bLongName;
-        if ( FSYS_STYLE_MAC != eStyle )
+        DirEntry aUnparsed;
+        aUnparsed.aName = bLongName;
+        aExt = ByteString(aUnparsed.CutExtension(), osl_getThreadTextEncoding());
+        aFName = aUnparsed.aName;
+        if ( aExt.Len() > nMaxExt )
         {
-            DirEntry aUnparsed;
-            aUnparsed.aName = bLongName;
-            aExt = ByteString(aUnparsed.CutExtension(), osl_getThreadTextEncoding());
-            aFName = aUnparsed.aName;
-            if ( aExt.Len() > nMaxExt )
-            {
-                char c = aExt.GetChar( aExt.Len() - 1 );
-                aExt.Erase(nMaxExt-1);
-                aExt += c;
-            }
+            char c = aExt.GetChar( aExt.Len() - 1 );
+            aExt.Erase(nMaxExt-1);
+            aExt += c;
         }
 
-        if ( FSYS_STYLE_FAT != eStyle )
-        {
-                // ausser auf einem FAT-System geh"ort die Extension zur
-                // Maxl"ange. Muss also vorher mit dem Punkt abgezogen werden.
-                nMaxLen -= ( aExt.Len() + 1 );
-        }
+        // ausser auf einem FAT-System geh"ort die Extension zur
+        // Maxl"ange. Muss also vorher mit dem Punkt abgezogen werden.
+        nMaxLen -= ( aExt.Len() + 1 );
 
         // Name k"urzen
         ByteString aSName;
@@ -2646,10 +2041,6 @@ sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 |*
 |*    DirEntry::CreatePath()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91
-|*
 *************************************************************************/
 
 sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
@@ -2715,10 +2106,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
 |*
 |*    DirEntry::CopyTo()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 07.08.96
-|*
 *************************************************************************/
 
 FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
@@ -2749,13 +2136,9 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 |*
 |*    DirEntry::MoveTo()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  HRO 24.03.99
-|*
 *************************************************************************/
 
-#if defined WNT || defined UNX || defined OS2
+#if defined WNT || defined UNX
 
 FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 {
@@ -2777,13 +2160,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
     {
         return FSYS_ERR_ALREADYEXISTS;
     }
-
-#if defined(OS2)
-    if ( FileStat(*this).IsKind(FSYS_KIND_DIR) && aDest.GetPath() != GetPath() )
-    {
-        return FSYS_ERR_NOTSUPPORTED;
-    }
-#endif
 
         FSysFailOnErrorImpl();
         String aFrom( GetFull() );
@@ -2859,7 +2235,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         // on some nfs connections rename with from == to
         // leads to destruction of file
         if ( ( aFrom != aTo ) && ( 0 != rename( bFrom.GetBuffer(), bTo.GetBuffer() ) ) )
-#if !defined(UNX) && !defined(OS2)
+#if !defined(UNX)
             return Sys2SolarError_Impl( GetLastError() );
 #else
         {
@@ -2897,6 +2273,10 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
                         }
                         else
                         {
+                            if ( fpIN )
+                                fclose( fpIN );
+                            if ( fpOUT )
+                                fclose( fpOUT );
                             return Sys2SolarError_Impl( EXDEV );
                         }
                 }
@@ -2915,10 +2295,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 /*************************************************************************
 |*
 |*    DirEntry::Kill()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 07.08.96
 |*
 *************************************************************************/
 
@@ -3002,9 +2378,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         {
                 if ( FSYS_ACTION_USERECYCLEBIN == (nActions & FSYS_ACTION_USERECYCLEBIN) )
                 {
-#ifdef OS2
-                        eError = ApiRet2ToSolarError_Impl( DosDelete( (PSZ) pName ) );
-#elif defined(WNT)
+#if defined(WNT)
                         SHFILEOPSTRUCT aOp;
                         aOp.hwnd = 0;
                         aOp.wFunc = FO_DELETE;
@@ -3053,8 +2427,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 |*    DirEntry::Contains()
 |*
 |*    Beschreibung      ob rSubEntry direkt oder indirect in *this liegt
-|*    Ersterstellung    MI 20.03.97
-|*    Letzte Aenderung  MI 20.03.97
 |*
 *************************************************************************/
 
@@ -3078,10 +2450,6 @@ sal_Bool DirEntry::Contains( const DirEntry &rSubEntry ) const
 |*
 |*    DirEntry::Level()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 03.03.92
-|*    Letzte Aenderung  MI 03.03.92
-|*
 *************************************************************************/
 
 sal_uInt16 DirEntry::Level() const
@@ -3101,104 +2469,13 @@ sal_uInt16 DirEntry::Level() const
 
 /*************************************************************************
 |*
-|*    DirEntry::ConvertNameToSystem()
-|*
-|*    Beschreibung
-|*    Ersterstellung    DV 29.03.96
-|*    Letzte Aenderung  DV 29.03.96
-|*
-*************************************************************************/
-
-String DirEntry::ConvertNameToSystem( const String &rName )
-{
-    return rName;
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::ConvertSystemToName()
-|*
-|*    Beschreibung
-|*    Ersterstellung    DV 29.03.96
-|*    Letzte Aenderung  DV 29.03.96
-|*
-*************************************************************************/
-
-String DirEntry::ConvertSystemToName( const String &rName )
-{
-    return rName;
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::IsValid()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MI  18.09.93
-|*    Letzte Aenderung  TPF 18.09.98
 |*
 *************************************************************************/
 
 sal_Bool DirEntry::IsValid() const
 {
         return (nError == FSYS_ERR_OK);
-}
-
-/*************************************************************************
-|*
-|*    DirEntry::IsRFSAvailable()
-|*
-|*    Beschreibung
-|*    Ersterstellung    TPF 21.10.98
-|*    Letzte Aenderung  TPF 21.10.98
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::IsRFSAvailable()
-{
-    return sal_False;
-}
-
-/*************************************************************************
-|*
-|*    IsLongNameOnFAT()
-|*
-|*    Beschreibung      ?berpr?ft , ob das DirEntry einen langen
-|*                      Filenamen auf einer FAT-Partition enth?lt (EAs).
-|*                      (eigentlich nur f?r OS2 interessant)
-|*    Ersterstellung    TPF 02.10.98
-|*    Letzte Aenderung  TPF 01.03.1999
-|*
-*************************************************************************/
-
-sal_Bool DirEntry::IsLongNameOnFAT() const
-{
-        // FAT-System?
-        DirEntry aTempDirEntry(*this);
-        aTempDirEntry.ToAbs();
-        if (DirEntry::GetPathStyle(aTempDirEntry.GetDevice().GetName().GetChar(0)) != FSYS_STYLE_FAT)
-        {
-            return sal_False;       // nein, also false
-        }
-
-        // DirEntry-Kette auf lange Dateinamen pr?fen
-        for( sal_uInt16 iLevel = this->Level(); iLevel > 0; iLevel-- )
-        {
-            const DirEntry& rEntry = (const DirEntry&) (*this)[iLevel-1];
-            String  aBase( rEntry.GetBase() );
-            String  aExtension( rEntry.GetExtension() );
-
-            if (aBase.Len()>8)  // Name > 8?
-            {
-                return sal_True;
-            }
-
-            if (aExtension.Len()>3) // Extension > 3?
-            {
-                return sal_True;
-            }
-        }
-        return sal_False;
 }
 
 //========================================================================
@@ -3211,3 +2488,4 @@ void FSysTest()
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

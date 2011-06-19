@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,12 +39,13 @@
 
 //-----------------------------------------------------------------------------
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+using ::rtl::OUString;
+
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 //-----------------------------------------------------------------------------
 typedef SvxSearchEngineData* SvxSearchEngineDataPtr;
@@ -54,9 +56,7 @@ struct SvxSearchConfig_Impl
 {
     SvxSearchEngineArr   aEngineArr;
 };
-/* -----------------------------19.03.01 14:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SvxSearchEngineData::operator==(const SvxSearchEngineData& rData)
 {
     return sEngineName      == rData.sEngineName     &&
@@ -73,9 +73,7 @@ sal_Bool SvxSearchEngineData::operator==(const SvxSearchEngineData& rData)
             sExactSeparator  == rData.sExactSeparator &&
             nExactCaseMatch  == rData.nExactCaseMatch;
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& lcl_GetSearchPropertyNames_Impl()
 {
     static Sequence<OUString> aNames;
@@ -111,16 +109,12 @@ SvxSearchConfig::SvxSearchConfig(sal_Bool bEnableNotify) :
     }
     Load();
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxSearchConfig::~SvxSearchConfig()
 {
     delete pImpl;
 }
-/* -----------------------------17.01.01 09:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxSearchConfig::Load()
 {
     pImpl->aEngineArr.DeleteAndDestroy(0, pImpl->aEngineArr.Count());
@@ -167,16 +161,12 @@ void SvxSearchConfig::Load()
         pImpl->aEngineArr.Insert(pNew, pImpl->aEngineArr.Count());
     }
 }
-/* -----------------------------17.01.01 09:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxSearchConfig::Notify( const Sequence<OUString>& )
 {
     Load();
 }
-/* -----------------------------16.01.01 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxSearchConfig::Commit()
 {
     OUString sNode;
@@ -223,24 +213,18 @@ void SvxSearchConfig::Commit()
         ReplaceSetProperties(sNode, aSetValues);
     }
 }
-/* -----------------------------19.03.01 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SvxSearchConfig::Count()
 {
     return pImpl->aEngineArr.Count();
 }
-/* -----------------------------19.03.01 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 const SvxSearchEngineData&  SvxSearchConfig::GetData(sal_uInt16 nPos)
 {
     DBG_ASSERT(nPos < pImpl->aEngineArr.Count(), "wrong array index");
     return *pImpl->aEngineArr[nPos];
 }
-/* -----------------------------19.03.01 10:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 const SvxSearchEngineData*  SvxSearchConfig::GetData(const rtl::OUString& rEngineName)
 {
     for(sal_uInt16 nPos = 0; nPos < pImpl->aEngineArr.Count(); nPos++)
@@ -250,9 +234,7 @@ const SvxSearchEngineData*  SvxSearchConfig::GetData(const rtl::OUString& rEngin
     }
     return 0;
 }
-/* -----------------------------19.03.01 10:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvxSearchConfig::SetData(const SvxSearchEngineData& rData)
 {
     for(sal_uInt16 nPos = 0; nPos < pImpl->aEngineArr.Count(); nPos++)
@@ -269,9 +251,7 @@ void  SvxSearchConfig::SetData(const SvxSearchEngineData& rData)
     pImpl->aEngineArr.Insert(pInsert, pImpl->aEngineArr.Count());
     SetModified();
 }
-/* -----------------------------19.03.01 10:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxSearchConfig::RemoveData(const rtl::OUString& rEngineName)
 {
     for(sal_uInt16 nPos = 0; nPos < pImpl->aEngineArr.Count(); nPos++)
@@ -285,3 +265,4 @@ void SvxSearchConfig::RemoveData(const rtl::OUString& rEngineName)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metaact.hxx>
@@ -154,3 +154,5 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

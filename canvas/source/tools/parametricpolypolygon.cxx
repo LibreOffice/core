@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,9 +54,9 @@ namespace canvas
     uno::Sequence<rtl::OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii("LinearGradient");
-        aRet[1] = rtl::OUString::createFromAscii("EllipticalGradient");
-        aRet[2] = rtl::OUString::createFromAscii("RectangularGradient");
+        aRet[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LinearGradient" ));
+        aRet[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EllipticalGradient" ));
+        aRet[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RectangularGradient" ));
 
         return aRet;
     }
@@ -84,46 +85,46 @@ namespace canvas
             beans::PropertyValue aProp;
             if( (rArgs[i] >>= aProp) )
             {
-                if( aProp.Name.equalsAscii("Colors") )
+                if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Colors")) )
                 {
                     aProp.Value >>= colorSequence;
                 }
-                else if( aProp.Name.equalsAscii("Stops") )
+                else if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Stops")) )
                 {
                     aProp.Value >>= colorStops;
                 }
-                else if( aProp.Name.equalsAscii("AspectRatio") )
+                else if( aProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AspectRatio")) )
                 {
                     aProp.Value >>= fAspectRatio;
                 }
             }
         }
 
-        if( rServiceName.equalsAscii("LinearGradient") )
+        if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LinearGradient")) )
         {
             return createLinearHorizontalGradient(rDevice, colorSequence, colorStops);
         }
-        else if( rServiceName.equalsAscii("EllipticalGradient") )
+        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EllipticalGradient")) )
         {
             return createEllipticalGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if( rServiceName.equalsAscii("RectangularGradient") )
+        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("RectangularGradient")) )
         {
             return createRectangularGradient(rDevice, colorSequence, colorStops, fAspectRatio);
         }
-        else if( rServiceName.equalsAscii("VerticalLineHatch") )
+        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("VerticalLineHatch")) )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAscii("OrthogonalLinesHatch") )
+        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OrthogonalLinesHatch")) )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAscii("ThreeCrossingLinesHatch") )
+        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ThreeCrossingLinesHatch")) )
         {
             // TODO: NYI
         }
-        else if( rServiceName.equalsAscii("FourCrossingLinesHatch") )
+        else if( rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FourCrossingLinesHatch")) )
         {
             // TODO: NYI
         }
@@ -288,3 +289,5 @@ namespace canvas
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

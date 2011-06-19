@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 #include <vcl/event.hxx>
 #include <vcl/fixbrd.hxx>
 
@@ -234,3 +233,5 @@ void FixedBorder::SetBorderType( sal_uInt16 nType )
         Invalidate();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

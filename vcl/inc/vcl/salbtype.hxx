@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -181,13 +182,11 @@ private:
     BitmapColor*                mpBitmapColor;
     sal_uInt16                      mnCount;
 
-//#if 0 // _SOLAR__PRIVATE
 
 public:
 
     SAL_DLLPRIVATE inline BitmapColor* ImplGetColorBuffer() const;
 
-//#endif // __PRIVATE
 
 public:
 
@@ -684,13 +683,11 @@ inline BitmapColor& BitmapPalette::operator[]( sal_uInt16 nIndex )
 
 // ------------------------------------------------------------------
 
-//#if 0 // _SOLAR__PRIVATE
 inline BitmapColor* BitmapPalette::ImplGetColorBuffer() const
 {
     DBG_ASSERT( mpBitmapColor, "No color buffer available!" );
     return mpBitmapColor;
 }
-//#endif
 // ------------------------------------------------------------------
 
 inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
@@ -898,3 +895,5 @@ inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixe
 }
 
 #endif // _SV_SALBTYPE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,14 +33,14 @@
 #include <unotools/configitem.hxx>
 #include <vcl/dllapi.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //........................................................................
 namespace vcl
 {
 //........................................................................
 
-    typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > OUStrMap;
+    typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > OUStrMap;
     class SmallOUStrMap : public OUStrMap { public: SmallOUStrMap() : OUStrMap(1) {} };
 
     //====================================================================
@@ -48,7 +49,7 @@ namespace vcl
     class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
     {
 
-        std::hash_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
+        boost::unordered_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
 
         virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
 
@@ -71,3 +72,4 @@ namespace vcl
 
 #endif // VCL_INC_CONFIGSETTINGS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

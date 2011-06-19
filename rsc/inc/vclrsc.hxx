@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <tools/wintypes.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/wintypes.hxx>
 
 // from vcl/inc/vclenum.hxx
 #ifndef ENUM_TIMEFIELDFORMAT_DECLARED
@@ -170,3 +172,5 @@ typedef sal_uInt16 SymbolType;
 #define SYMBOL_NOSYMBOL         (SYMBOL_DONTKNOW)
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

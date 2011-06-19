@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,6 +58,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/vector/b2isize.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/point/b2ipoint.hxx>
 
 #include <basebmp/color.hxx>
@@ -72,8 +74,6 @@
 
 #include <boost/static_assert.hpp>
 #include <algorithm>
-#include <iostream>
-#include <fstream>
 
 using namespace ::com::sun::star;
 
@@ -973,7 +973,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString::createFromAscii( "VIGRA test" ) );
+            SetText( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VIGRA test" )) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -1077,11 +1077,9 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         basegfx::B2DPolyPolygon aPoly;
 
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString::createFromAscii(
-                                            "m0 0 h7 v7 h-7 z" ) );
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "m0 0 h7 v7 h-7 z" )) );
         basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString::createFromAscii(
-                                            "m2 2 h3 v3 h-3 z" ) );
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "m2 2 h3 v3 h-3 z" )) );
 
         pDevice->fillPolyPolygon(
             aPoly,
@@ -1089,7 +1087,6 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
             basebmp::DrawMode_PAINT );
     }
 
-#if 0
     {
         basebmp::BitmapDeviceSharedPtr pMask( basebmp::createBitmapDevice( aTestSize,
                                                                            false,
@@ -1101,8 +1098,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         pMask->drawLine( aPt111, aPt222, aCol333, basebmp::DrawMode_PAINT );
 
 
-        ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
-            "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
+        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" ));
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
         pMask->clear(basebmp::Color(0xFFFFFFFF));
@@ -1134,7 +1130,6 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         const basegfx::B2IPoint aPt3(0,1001);
         pDevice->drawLine( aPt1, aPt3, aCol, basebmp::DrawMode_PAINT );
     }
-#endif
 
     {
         pDevice->clear(basebmp::Color(0));
@@ -1171,12 +1166,12 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
             aPoly.append( basegfx::B2DPoint(project( aP1 ) + aCenter) );
             aPoly.append( basegfx::B2DPoint(project( aP2 ) + aCenter) );
             pDevice->fillPolyPolygon(
-                basegfx::tools::createAreaGeometryForPolygon(
+                basegfx::tools::createAreaGeometry(
                     aPoly,
 //                    std::max(1,n/30),
 //                    std::max(1,n/60),
                     std::max(1,n/30),
-                    basegfx::tools::B2DLINEJOIN_NONE),
+                    basegfx::B2DLINEJOIN_NONE),
                 aLineColor,
                 basebmp::DrawMode_PAINT);
 
@@ -1194,8 +1189,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
 
     // Fill bitmap with generated content
     {
-        ScopedBitmapWriteAccess pWriteAccess( aBitmap.AcquireWriteAccess(),
-                                              aBitmap );
+        Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
         for( int y=0; y<aTestSize.getY(); ++y )
             for( int x=0; x<aTestSize.getX(); ++x )
                 pWriteAccess->SetPixel(y,x,
@@ -1242,15 +1236,17 @@ void TestApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucb::ContentBroker::initialize( xFactory, aArgs );
+    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
     pWindow.Execute();
 
     // clean up UCB
-    ::ucb::ContentBroker::deinitialize();
+    ::ucbhelper::ContentBroker::deinitialize();
 }
 
 TestApp aDemoApp;
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

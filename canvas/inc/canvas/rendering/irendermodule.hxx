@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -118,7 +119,7 @@ namespace canvas
 
         /** Query error status
 
-            @returns true, if an error occured during primitive
+            @returns true, if an error occurred during primitive
             construction.
          */
         virtual bool      isError() = 0;
@@ -147,3 +148,5 @@ namespace canvas
 }
 
 #endif /* INCLUDED_CANVAS_IRENDERMODULE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

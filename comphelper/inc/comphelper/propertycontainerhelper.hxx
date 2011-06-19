@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/beans/Property.hpp>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include "comphelper/comphelperdllapi.h"
 
 //.........................................................................
@@ -216,3 +215,5 @@ private:
 //.........................................................................
 
 #endif // COMPHELPER_PROPERTYCONTAINERHELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <salframe.hxx>
 #include <unx/salinst.h>
 #include <saldatabasic.hxx>
-#ifndef _OSL_MODULE_H
 #include <osl/module.h>
-#endif
 #include <vclpluginapi.h>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -46,9 +45,8 @@ class SalPrinter;
 
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-DECLARE_LIST( SalDisplays, SalDisplay* )
-
-#if defined SCO || defined LINUX || defined NETBSD || defined AIX || defined HPUX || defined FREEBSD
+#if defined LINUX || defined NETBSD || defined AIX || \
+    defined FREEBSD || defined OPENBSD || defined DRAGONFLY
 #include <pthread.h>
 #else
 typedef unsigned int pthread_t;
@@ -89,8 +87,7 @@ public:
     inline  void            StopTimer();
     void                    Timeout() const;
 
-    const rtl::OUString&    GetLocalHostName() const
-    { return maLocalHostName; }
+    const rtl::OUString&    GetLocalHostName();
     rtl::OUString&          GetUnicodeAccumulator() { return maUnicodeAccumulator; }
 
     static int XErrorHdl( Display*, XErrorEvent* );
@@ -132,3 +129,4 @@ inline YieldMutexReleaser::~YieldMutexReleaser()
 
 #endif // _SV_SALDATA_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

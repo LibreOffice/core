@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -218,7 +219,7 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
             case META_TRANSPARENT_ACTION:
 
             default:
-                DBG_ERROR("Printer::GetPreparedMetafile impossible state reached");
+                OSL_FAIL("Printer::GetPreparedMetafile impossible state reached");
                 break;
         }
 
@@ -288,7 +289,7 @@ static void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                                        static_cast<const MetaRenderGraphicAction&>(rAct).GetSize(),
                                        aBmp ));
             default:
-                DBG_ERROR("Unexpected case");
+                OSL_FAIL("Unexpected case");
                 break;
         }
     }
@@ -651,7 +652,7 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         break;
 
         case META_TEXTLINE_ACTION:
-            DBG_ERROR("META_TEXTLINE_ACTION not supported");
+            OSL_FAIL("META_TEXTLINE_ACTION not supported");
         break;
 
         case( META_RENDERGRAPHIC_ACTION ):
@@ -1139,7 +1140,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         // settings for all cases.
 
         // maps mtf actions to CC list entries
-        ::std::vector< const ConnectedComponents* > aCCList_MemberMap( rInMtf.GetActionCount() );
+        ::std::vector< const ConnectedComponents* > aCCList_MemberMap( rInMtf.GetActionSize() );
 
         // iterate over all aCCList members and their contained metaactions
         ConnectedComponentsList::iterator       aCurr( aCCList.begin() );
@@ -1621,3 +1622,5 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const PolyPolygon& rPolyPoly, 
     else
         pOut->DrawGradient( rPolyPoly, rGradient );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

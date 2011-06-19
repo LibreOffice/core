@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,9 +62,12 @@ enum NfSymbolType
     NF_SYMBOLTYPE_DATESEP       = -18,  // date separator
     NF_SYMBOLTYPE_TIMESEP       = -19,  // time separator
     NF_SYMBOLTYPE_TIME100SECSEP = -20,  // time 100th seconds separator
-    NF_SYMBOLTYPE_PERCENT       = -21   // percent %
+    NF_SYMBOLTYPE_PERCENT       = -21,  // percent %
+    NF_SYMBOLTYPE_FRAC_FDIV     = -22   // forced divisors
 };
 
 }   // namespace svt
 
 #endif // INCLUDED_SVTOOLS_NFSYMBOL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

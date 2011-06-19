@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,16 +57,16 @@ typedef long (*PSTUB)( void*, void* );
     long Class::Method( ArgType ArgName )
 
 #define IMPL_STUB(Class, Method, ArgType) \
-    long __EXPORT Class::LinkStub##Method( void* pThis, void* pCaller) \
+    long Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
         return ((Class*)pThis )->Method( (ArgType)pCaller ); \
     }
 
 #define IMPL_STATIC_LINK( Class, Method, ArgType, ArgName ) \
-    long __EXPORT Class::Method( Class* pThis, ArgType ArgName )
+    long Class::Method( Class* pThis, ArgType ArgName )
 
 #define IMPL_STATIC_LINK_NOINSTANCE( Class, Method, ArgType, ArgName ) \
-    long __EXPORT Class::Method( Class*, ArgType ArgName )
+    long Class::Method( Class*, ArgType ArgName )
 
 #define LINK( Inst, Class, Member ) \
     Link( (Class*)Inst, (PSTUB)&Class::LinkStub##Member )
@@ -156,3 +157,5 @@ inline sal_Bool Link::operator !() const
 }
 
 #endif  // _LINK_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

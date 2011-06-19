@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,31 +41,12 @@ namespace css = com::sun::star;
 
 }
 
-namespace vcl
-{
-    class SolarMutexReleaser
-    {
-        sal_uLong mnReleased;
-    public:
-        SolarMutexReleaser()
-        {
-            mnReleased = Application::ReleaseSolarMutex();
-        }
-
-        ~SolarMutexReleaser()
-        {
-            if( mnReleased )
-                Application::AcquireSolarMutex( mnReleased );
-        }
-    };
-}
-
-using namespace rtl;
 using namespace osl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
+using ::rtl::OUString;
 
 DisplayConnection::DisplayConnection()
 {
@@ -178,3 +160,5 @@ bool DisplayConnection::dispatchErrorEvent( void* pData, int nBytes )
 
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

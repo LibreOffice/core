@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,7 +49,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const UniString& rURL,
         ::ucbhelper::Content aTestContent( rURL,
                                 uno::Reference< XCommandEnvironment > ());
         uno::Any aAny = aTestContent.getPropertyValue(
-            OUString::createFromAscii(  "DateModified" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified")) );
         if( aAny.hasValue() )
         {
             bRet = sal_True;
@@ -97,3 +98,4 @@ sal_Bool FStatHelper::IsFolder( const UniString& rURL )
     return bExist;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

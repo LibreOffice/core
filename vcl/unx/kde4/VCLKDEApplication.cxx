@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,17 +37,18 @@
 VCLKDEApplication::VCLKDEApplication() :
     KApplication()
 {
-    disp = 0;
 }
 
 bool VCLKDEApplication::x11EventFilter(XEvent* ev)
 {
     //if we have a display and the display consumes the event
     //do not process the event in qt
-    if (disp && disp->Dispatch(ev) > 0)
+    if (SalKDEDisplay::self() && SalKDEDisplay::self()->Dispatch(ev) > 0)
     {
         return true;
     }
 
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

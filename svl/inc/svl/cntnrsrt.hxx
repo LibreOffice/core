@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,7 @@
 #ifndef _CNTRSRT_HXX
 #define _CNTRSRT_HXX
 
-#if 0
-***********************************************************************
+/***********************************************************************
 *
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
@@ -52,8 +52,7 @@
 *
 *       Wie DECLARE_CONTAINER_SORT, nur dass beim Aufruf des Destruktors
 *       alle im Conatiner vorhandenen Objekte geloescht werden.
-*
-#endif
+*/
 
 #include <tools/contnr.hxx>
 
@@ -172,3 +171,5 @@ sal_Bool ClassName::Seek_Entry( const Type* pObj, sal_uLong* pPos ) const       
 }                                                                           \
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

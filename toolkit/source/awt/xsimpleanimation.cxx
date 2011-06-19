@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 #include "toolkit/helper/property.hxx"
 #include <tools/debug.hxx>
 #include <vcl/throbber.hxx>
+#include <vcl/svapp.hxx>
 
 //........................................................................
 namespace toolkit
@@ -59,7 +61,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::start() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->start();
@@ -68,7 +70,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL XSimpleAnimation::stop() throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->stop();
@@ -78,7 +80,7 @@ namespace toolkit
     void SAL_CALL XSimpleAnimation::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber != NULL)
             pThrobber->setImageList( rImageList );
@@ -88,7 +90,7 @@ namespace toolkit
     void SAL_CALL XSimpleAnimation::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
         throw( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber == NULL )
@@ -122,7 +124,7 @@ namespace toolkit
     uno::Any SAL_CALL XSimpleAnimation::getProperty( const ::rtl::OUString& PropertyName )
         throw( uno::RuntimeException )
     {
-        ::vos::OGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
         if ( pThrobber == NULL )
@@ -147,3 +149,5 @@ namespace toolkit
 //........................................................................
 }   // namespace toolkit
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

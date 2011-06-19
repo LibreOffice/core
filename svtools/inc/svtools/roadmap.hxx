@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/imgctrl.hxx>
 
-#ifndef _SVTOOLS_HYPERLABEL_HXX
 #include "svtools/hyperlabel.hxx"
-#endif
 
 
 
@@ -135,3 +134,4 @@ namespace svt
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

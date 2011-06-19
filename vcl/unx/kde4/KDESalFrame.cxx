@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,14 +89,7 @@ static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
 }
 
 #if 0
-/** Helper function to read color from KConfig configuration repository.
-*/
-static Color readColor( KConfigGroup *pGroup, const char *pKey )
-{
-    return toColor( pGroup->readEntry( pKey, QColor(Qt::white) ) );
-}
 #endif
-
 /** Helper function to add information to Font from QFont.
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
@@ -109,41 +103,41 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
     aInfo.m_aFamilyName = String( (const char *) rQFont.family().toUtf8(), RTL_TEXTENCODING_UTF8 );
 
     // set italic
-    aInfo.m_eItalic = ( qFontInfo.italic()? psp::italic::Italic: psp::italic::Upright );
+    aInfo.m_eItalic = ( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );
 
     // set weight
     int nWeight = qFontInfo.weight();
     if ( nWeight <= QFont::Light )
-        aInfo.m_eWeight = psp::weight::Light;
+        aInfo.m_eWeight = WEIGHT_LIGHT;
     else if ( nWeight <= QFont::Normal )
-        aInfo.m_eWeight = psp::weight::Normal;
+        aInfo.m_eWeight = WEIGHT_NORMAL;
     else if ( nWeight <= QFont::DemiBold )
-        aInfo.m_eWeight = psp::weight::SemiBold;
+        aInfo.m_eWeight = WEIGHT_SEMIBOLD;
     else if ( nWeight <= QFont::Bold )
-        aInfo.m_eWeight = psp::weight::Bold;
+        aInfo.m_eWeight = WEIGHT_BOLD;
     else
-        aInfo.m_eWeight = psp::weight::UltraBold;
+        aInfo.m_eWeight = WEIGHT_ULTRABOLD;
 
     // set width
     int nStretch = rQFont.stretch();
     if ( nStretch <= QFont::UltraCondensed )
-        aInfo.m_eWidth = psp::width::UltraCondensed;
+        aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
     else if ( nStretch <= QFont::ExtraCondensed )
-        aInfo.m_eWidth = psp::width::ExtraCondensed;
+        aInfo.m_eWidth = WIDTH_EXTRA_CONDENSED;
     else if ( nStretch <= QFont::Condensed )
-        aInfo.m_eWidth = psp::width::Condensed;
+        aInfo.m_eWidth = WIDTH_CONDENSED;
     else if ( nStretch <= QFont::SemiCondensed )
-        aInfo.m_eWidth = psp::width::SemiCondensed;
+        aInfo.m_eWidth = WIDTH_SEMI_CONDENSED;
     else if ( nStretch <= QFont::Unstretched )
-        aInfo.m_eWidth = psp::width::Normal;
+        aInfo.m_eWidth = WIDTH_NORMAL;
     else if ( nStretch <= QFont::SemiExpanded )
-        aInfo.m_eWidth = psp::width::SemiExpanded;
+        aInfo.m_eWidth = WIDTH_SEMI_EXPANDED;
     else if ( nStretch <= QFont::Expanded )
-        aInfo.m_eWidth = psp::width::Expanded;
+        aInfo.m_eWidth = WIDTH_EXPANDED;
     else if ( nStretch <= QFont::ExtraExpanded )
-        aInfo.m_eWidth = psp::width::ExtraExpanded;
+        aInfo.m_eWidth = WIDTH_EXTRA_EXPANDED;
     else
-        aInfo.m_eWidth = psp::width::UltraExpanded;
+        aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
@@ -165,14 +159,14 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 
     // Create the font
     Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
-    if( aInfo.m_eWeight != psp::weight::Unknown )
-        aFont.SetWeight( PspGraphics::ToFontWeight( aInfo.m_eWeight ) );
-    if( aInfo.m_eWidth != psp::width::Unknown )
-        aFont.SetWidthType( PspGraphics::ToFontWidth( aInfo.m_eWidth ) );
-    if( aInfo.m_eItalic != psp::italic::Unknown )
-        aFont.SetItalic( PspGraphics::ToFontItalic( aInfo.m_eItalic ) );
-    if( aInfo.m_ePitch != psp::pitch::Unknown )
-        aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
+    if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
+        aFont.SetWeight( aInfo.m_eWeight );
+    if( aInfo.m_eWidth != WIDTH_DONTKNOW )
+        aFont.SetWidthType( aInfo.m_eWidth );
+    if( aInfo.m_eItalic != ITALIC_DONTKNOW )
+        aFont.SetItalic( aInfo.m_eItalic );
+    if( aInfo.m_ePitch != PITCH_DONTKNOW )
+        aFont.SetPitch( aInfo.m_ePitch );
 
     return aFont;
 }
@@ -186,6 +180,8 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // General settings
     QPalette pal = kapp->palette();
+
+    style.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
     style.SetActiveColor(toColor(pal.color(QPalette::Active, QPalette::Window)));
     style.SetDeactiveColor(toColor(pal.color(QPalette::Inactive, QPalette::Window)));
@@ -268,18 +264,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetFaceColor( aBack );
     style.SetInactiveTabColor( aBack );
     style.SetDialogColor( aBack );
-
-    if( aBack == COL_LIGHTGRAY )
-        style.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
-    else
-    {
-        Color aColor2 = style.GetLightColor();
-        style.
-            SetCheckedColor( Color( (sal_uInt8)(((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
-                        (sal_uInt8)(((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
-                        (sal_uInt8)(((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
-                        ) );
-    }
+    style.SetCheckedColorSpecialCase( );
 
     // Selection
     style.SetHighlightColor( aHigh );
@@ -291,12 +276,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetAppFont( aFont );
     style.SetHelpFont( aFont );
 
-    if( !bSetTitleFont )
-    {
-        style.SetTitleFont( aFont );
-    }
-
-    style.SetFloatTitleFont( aFont );
     style.SetMenuFont( aFont ); // will be changed according to pMenuBar
     //style.SetToolFont( aFont ); //already set above
     style.SetLabelFont( aFont );
@@ -306,6 +285,13 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetFieldFont( aFont );
     style.SetIconFont( aFont );
     style.SetGroupFont( aFont );
+
+    aFont.SetWeight( WEIGHT_BOLD );
+    if( !bSetTitleFont )
+    {
+        style.SetTitleFont( aFont );
+    }
+    style.SetFloatTitleFont( aFont );
 
     int flash_time = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
@@ -349,6 +335,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Scroll bar size
     style.SetScrollBarSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
+    style.SetMinThumbSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
 
     rSettings.SetStyleSettings( style );
 }
@@ -406,3 +393,5 @@ SalGraphics* KDESalFrame::GetGraphics()
 
     return NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

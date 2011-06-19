@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,8 @@
 #define _SALUNX_H
 
 // -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#if defined SCO || defined LINUX || defined HPUX || defined FREEBSD || defined NETBSD
+#if defined LINUX || defined FREEBSD || \
+    defined NETBSD || defined OPENBSD || defined DRAGONFLY
 #include <sys/time.h>
 #elif defined AIX
 #include <time.h>
@@ -126,3 +128,4 @@ inline timeval operator - ( const timeval &t1, const timeval &t2 )
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

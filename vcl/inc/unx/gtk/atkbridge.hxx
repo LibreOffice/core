@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,3 +35,5 @@ bool VCLPLUG_GTK_PUBLIC InitAtkBridge(void);
 void VCLPLUG_GTK_PUBLIC DeInitAtkBridge(void);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

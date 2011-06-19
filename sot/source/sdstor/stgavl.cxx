@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -379,6 +380,7 @@ StgAvlIterator::StgAvlIterator( StgAvlNode* p )
 {
     pRoot = p;
     nCount = 0;
+    nCur = 0;
     if( p )
         p->StgEnum( nCount );
 }
@@ -417,3 +419,4 @@ StgAvlNode* StgAvlIterator::Prev()
     return Find( --nCur );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

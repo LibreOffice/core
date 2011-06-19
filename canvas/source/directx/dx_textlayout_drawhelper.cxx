@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,6 +42,7 @@
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
+#include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/color.hxx>
@@ -317,3 +319,5 @@ namespace dxcanvas
 
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

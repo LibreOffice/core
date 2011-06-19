@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,4 +27,6 @@
  ************************************************************************/
 #define nullmask_width 4
 #define nullmask_height 4
-static char nullmask_bits[] = { 0x00, 0x00 };
+static unsigned char nullmask_bits[] = { 0x00, 0x00 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

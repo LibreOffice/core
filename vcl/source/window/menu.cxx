@@ -1,3 +1,5 @@
+
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +30,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "tools/list.hxx"
 #include "tools/debug.hxx"
 #include "tools/diagnose_ex.h"
 #include "tools/rc.h"
@@ -101,35 +102,6 @@ DBG_NAME( Menu )
 
 // document closer
 #define IID_DOCUMENTCLOSE 1
-
-#ifdef OS2
-
-#include <xwphook.h>
-
-// return sal_True if hilite should be executed: left mouse button down
-// or xwp mouse hook enabled
-static sal_Bool ImplHilite( const MouseEvent& rMEvt )
-{
-    static sal_Bool init = sal_False;
-    static HOOKCONFIG hc;
-
-    // read XWP settings at program startup
-    if (init == sal_False) {
-        sal_Bool    rc;
-        sal_uLong   cb = sizeof(HOOKCONFIG);
-        memset(&hc, 0, sizeof(HOOKCONFIG));
-        rc = PrfQueryProfileData( HINI_USER, INIAPP_XWPHOOK, INIKEY_HOOK_CONFIG,
-            &hc, &cb);
-        init = sal_True;
-    }
-    // check mouse left button
-    if (rMEvt.GetButtons() == MOUSE_LEFT)
-        return sal_True;
-    // return xwp flag
-    return hc.fSlidingMenus;
-}
-
-#endif
 
 static sal_Bool ImplAccelDisabled()
 {
@@ -561,7 +533,6 @@ public:
     Size    getMinSize();
 
     Image   maImage;
-    Image   maImageHC;
 };
 
 DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
@@ -639,8 +610,7 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 
         Color       aEraseColor( 255, 255, 255, 255 );
         BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
-        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                              maImageHC.GetBitmapEx() : aBmpExDst );
+        BitmapEx    aBmpExSrc( aBmpExDst );
 
         aEraseColor.SetTransparency( 255 );
         aBmpExDst.Erase( aEraseColor );
@@ -965,7 +935,7 @@ void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
     mpSalMenu       = NULL;
-    nMenuFlags      = MENU_FLAG_SHOWCHECKIMAGES;
+    nMenuFlags      = 0;
     nDefaultItem    = 0;
     //bIsMenuBar      = sal_False;  // this is now set in the ctor, must not be changed here!!!
     nSelectedId     = 0;
@@ -1102,9 +1072,6 @@ void Menu::Deactivate()
     if( !aDelData.isDeleted() )
     {
         bInCallback = sal_False;
-
-        if ( this == pStartMenu )
-            GetpApp()->HideHelpStatusText();
     }
 }
 
@@ -1118,9 +1085,6 @@ void Menu::Highlight()
         if ( pStartMenu && ( pStartMenu != this ) )
             pStartMenu->aHighlightHdl.Call( this );
     }
-
-    if ( !aDelData.isDeleted() && GetCurItemId() )
-        GetpApp()->ShowHelpStatusText( GetHelpText( GetCurItemId() ) );
 }
 
 void Menu::ImplSelect()
@@ -1190,7 +1154,7 @@ void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
         ImplGetSVData()->mpApp->ImplCallEventListeners( &aEvent );
     }
 
-    if ( !aDelData.isDeleted() && !maEventListeners.empty() )
+    if ( !aDelData.isDeleted() )
         maEventListeners.Call( &aEvent );
 
     if( !aDelData.isDeleted() )
@@ -1198,8 +1162,7 @@ void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
         Menu* pMenu = this;
         while ( pMenu )
         {
-            if ( !maChildEventListeners.empty() )
-                maChildEventListeners.Call( &aEvent );
+            maChildEventListeners.Call( &aEvent );
 
             if( aDelData.isDeleted() )
                 break;
@@ -1211,12 +1174,12 @@ void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
 
 void Menu::AddEventListener( const Link& rEventListener )
 {
-    maEventListeners.push_back( rEventListener );
+    maEventListeners.addListener( rEventListener );
 }
 
 void Menu::RemoveEventListener( const Link& rEventListener )
 {
-    maEventListeners.remove( rEventListener );
+    maEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -2314,6 +2277,37 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
     return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
 }
 
+sal_Bool Menu::ImplGetNativeSubmenuArrowSize( Window* pWin, Size& rArrowSize, long& rArrowSpacing ) const
+{
+    ImplControlValue aVal;
+    Rectangle aNativeBounds;
+    Rectangle aNativeContent;
+    Point tmp( 0, 0 );
+    Rectangle aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                        PART_MENU_SUBMENU_ARROW ) )
+        {
+            if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                              ControlPart(PART_MENU_SUBMENU_ARROW),
+                                              aCtrlRegion,
+                                              ControlState(CTRL_STATE_ENABLED),
+                                              aVal,
+                                              OUString(),
+                                              aNativeBounds,
+                                              aNativeContent )
+            )
+            {
+                Size aSize( Size ( aNativeContent.GetWidth(),
+                                   aNativeContent.GetHeight() ) );
+                rArrowSize = aSize;
+                rArrowSpacing = aNativeBounds.GetWidth() - aNativeContent.GetWidth();
+
+                return sal_True;
+            }
+        }
+    return sal_False;
+}
+
 // -----------------------------------------------------------------------
 
 void Menu::ImplAddDel( ImplMenuDelData& rDel )
@@ -2369,6 +2363,10 @@ Size Menu::ImplCalcSize( Window* pWin )
     if( nMax > nMinMenuItemHeight )
         nMinMenuItemHeight = nMax;
 
+    // When no native rendering of the checkbox & no image in the menu, we
+    // have to add some extra space even in the MENU_FLAG_SHOWCHECKIMAGES case
+    bool bSpaceForCheckbox = ( nMax == 0 );
+
     const StyleSettings& rSettings = pWin->GetSettings().GetStyleSettings();
     if ( rSettings.GetUseImagesInMenus() )
     {
@@ -2378,6 +2376,9 @@ Size Menu::ImplCalcSize( Window* pWin )
             MenuItemData* pData = pItemList->GetDataFromPos( --i );
             if ( ImplIsVisible( i ) && (( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE )))
             {
+                // we have an icon, don't add the extra space
+                bSpaceForCheckbox = false;
+
                 Size aImgSz = pData->aImage.GetSizePixel();
                 if ( aImgSz.Height() > aMaxImgSz.Height() )
                     aMaxImgSz.Height() = aImgSz.Height();
@@ -2424,7 +2425,7 @@ Size Menu::ImplCalcSize( Window* pWin )
             if ( !bIsMenuBar && pData->HasCheck() )
             {
                 nCheckWidth = nMaxCheckWidth;
-                if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
+                if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
                 {
                     // checks / images take the same place
                     if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
@@ -2498,7 +2499,7 @@ Size Menu::ImplCalcSize( Window* pWin )
 
         sal_uInt16 gfxExtra = (sal_uInt16) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (sal_uInt16)nExtra;
-        if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
+        if ( ( nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES ) || bSpaceForCheckbox )
         {
             long nImgOrChkWidth = 0;
             nImagePos = nCheckPos;
@@ -2855,21 +2856,57 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                 // SubMenu?
                 if ( !bLayout && !bIsMenuBar && pData->pSubMenu )
                 {
-                    aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
-                    aTmpPos.Y() = aPos.Y();
-                    aTmpPos.Y() += nExtra/2;
-                    aTmpPos.Y() += ( pData->aSz.Height() / 2 ) - ( nFontHeight/4 );
-                    if ( pData->nBits & MIB_POPUPSELECT )
+                    bool bNativeOk = false;
+                    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                        PART_MENU_SUBMENU_ARROW ) )
                     {
-                        pWin->SetTextColor( rSettings.GetMenuTextColor() );
-                        Point aTmpPos2( aPos );
-                        aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
-                        aDecoView.DrawFrame(
-                            Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pData->aSz.Height() ) ), FRAME_DRAW_GROUP );
+                        ControlState nState = 0;
+                        Size aTmpSz( 0, 0 );
+                        long aSpacing = 0;
+
+                        if( !ImplGetNativeSubmenuArrowSize( pWin,
+                                                            aTmpSz, aSpacing ) )
+                        {
+                            aTmpSz = Size( nFontHeight, nFontHeight );
+                            aSpacing = nOuterSpace;
+                        }
+
+                        if ( pData->bEnabled )
+                            nState |= CTRL_STATE_ENABLED;
+                        if ( bHighlighted )
+                            nState |= CTRL_STATE_SELECTED;
+
+                        aTmpPos.X() = aOutSz.Width() - aTmpSz.Width() - aSpacing - nOuterSpace;
+                        aTmpPos.Y() = aPos.Y() + ( pData->aSz.Height() - aTmpSz.Height() ) / 2;
+                        aTmpPos.Y() += nExtra/2;
+
+                        Rectangle aItemRect( aTmpPos, aTmpSz );
+                        MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
+                        bNativeOk = pWin->DrawNativeControl( CTRL_MENU_POPUP,
+                                                             PART_MENU_SUBMENU_ARROW,
+                                                             aItemRect,
+                                                             nState,
+                                                             aVal,
+                                                             OUString() );
                     }
-                    aDecoView.DrawSymbol(
-                        Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
-                        SYMBOL_SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
+                    if( ! bNativeOk )
+                    {
+                        aTmpPos.X() = aOutSz.Width() - nFontHeight + nExtra - nOuterSpace;
+                        aTmpPos.Y() = aPos.Y();
+                        aTmpPos.Y() += nExtra/2;
+                        aTmpPos.Y() += ( pData->aSz.Height() / 2 ) - ( nFontHeight/4 );
+                        if ( pData->nBits & MIB_POPUPSELECT )
+                        {
+                            pWin->SetTextColor( rSettings.GetMenuTextColor() );
+                            Point aTmpPos2( aPos );
+                            aTmpPos2.X() = aOutSz.Width() - nFontHeight - nFontHeight/4;
+                            aDecoView.DrawFrame(
+                                Rectangle( aTmpPos2, Size( nFontHeight+nFontHeight/4, pData->aSz.Height() ) ), FRAME_DRAW_GROUP );
+                        }
+                        aDecoView.DrawSymbol(
+                            Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
+                            SYMBOL_SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
+                    }
                 }
 
                 if ( pThisItemOnly && bHighlighted )
@@ -4500,10 +4537,6 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeaveWindow() )
     {
-#ifdef OS2
-        if ( ImplHilite(rMEvt) )
-        {
-#endif
         // #102461# do not remove highlight if a popup menu is open at this position
         MenuItemData* pData = pMenu ? pMenu->pItemList->GetDataFromPos( nHighlightedItem ) : NULL;
         // close popup with some delayed if we leave somewhere else
@@ -4512,17 +4545,11 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
         if( !pActivePopup || (pData && pData->pSubMenu != pActivePopup ) )
             ChangeHighlightItem( ITEMPOS_INVALID, sal_False );
-#ifdef OS2
-        }
-#endif
 
         if ( IsScrollMenu() )
             ImplScroll( rMEvt.GetPosPixel() );
     }
     else
-#ifdef OS2
-        if ( ImplHilite(rMEvt) )
-#endif
     {
         aSubmenuCloseTimer.Stop();
         if( bIgnoreFirstMove )
@@ -5220,18 +5247,14 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     if( pResMgr )
     {
         BitmapEx aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        BitmapEx aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, *pResMgr ) );
-
         aCloser.maImage = Image( aBitmap );
-        aCloser.maImageHC = Image( aBitmapHC );
 
         aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
         aCloser.SetBackground();
         aCloser.SetPaintTransparent( sal_True );
         aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
-        aCloser.InsertItem( IID_DOCUMENTCLOSE,
-        GetSettings().GetStyleSettings().GetHighContrastMode() ? aCloser.maImageHC : aCloser.maImage, 0 );
+        aCloser.InsertItem( IID_DOCUMENTCLOSE, aCloser.maImage, 0 );
         aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
         aCloser.AddEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
         aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr ) ) );
@@ -5489,9 +5512,6 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
 
     sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID )
-#ifdef OS2
-       && ( ImplHilite(rMEvt) )
-#endif
        && ( nEntry != nHighlightedItem ) )
         ChangeHighlightItem( nEntry, sal_False );
 }
@@ -6160,3 +6180,5 @@ ImplMenuDelData::~ImplMenuDelData()
     if( mpMenu )
         const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

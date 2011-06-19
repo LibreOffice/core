@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,7 @@ protected:
     void                ImpShowHideSelection( sal_Bool bShow, const TextSelection* pRange = NULL );
 
     TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
-    TextPaM             ImpDelete( sal_Bool bForward, sal_uInt8 nMode );
+    TextPaM             ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode );
     void                ImpSetSelection( const TextSelection& rNewSel, sal_Bool bUI );
     sal_Bool                IsInSelection( const TextPaM& rPaM );
 
@@ -222,3 +223,5 @@ public:
 };
 
 #endif // _TEXTVIEW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

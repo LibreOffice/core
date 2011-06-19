@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,8 @@
 
 #include "svl/svldllapi.h"
 #include <tools/stream.hxx>
-#include <tools/ownlist.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace beans {
@@ -75,6 +76,8 @@ public:
                     }
 };
 
+typedef ::std::vector< SvCommand > SvCommandList_impl;
+
 //=========================================================================
 class SVL_DLLPUBLIC SvCommandList
 /*  [Beschreibung]
@@ -84,9 +87,12 @@ class SVL_DLLPUBLIC SvCommandList
     in die Liste gestellt.
 */
 {
-                    PRV_SV_DECL_OWNER_LIST(SvCommandList,SvCommand);
-    SvCommand &     Append( const String & rCommand, const String & rArg );
-    sal_Bool            AppendCommands( const String & rCmd, sal_uInt16 * pEaten );
+private:
+    SvCommandList_impl  aCommandList;
+
+public:
+    SvCommand&      Append( const String & rCommand, const String & rArg );
+    sal_Bool        AppendCommands( const String & rCmd, sal_uInt16 * pEaten );
     String          GetCommands() const;
 
     sal_Bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
@@ -94,6 +100,18 @@ class SVL_DLLPUBLIC SvCommandList
 
     SVL_DLLPUBLIC friend SvStream& operator >> ( SvStream& rStm, SvCommandList & );
     SVL_DLLPUBLIC friend SvStream& operator << ( SvStream&, const SvCommandList & );
+
+    size_t          size() const { return aCommandList.size(); }
+
+    SvCommand       operator[]( size_t i) {
+                        return aCommandList[ i ];
+                    }
+
+    void            clear() {
+                        aCommandList.clear();
+                    }
 };
 
 #endif // _OWNLIST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

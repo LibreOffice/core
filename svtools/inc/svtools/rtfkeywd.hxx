@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,6 +71,8 @@
 #define OOO_STRING_SVTOOLS_RTF_BRDRCF "\\brdrcf"
 #define OOO_STRING_SVTOOLS_RTF_BRDRDB "\\brdrdb"
 #define OOO_STRING_SVTOOLS_RTF_BRDRDOT "\\brdrdot"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASH "\\brdrdash"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASHSM "\\brdrdashsm"
 #define OOO_STRING_SVTOOLS_RTF_BRDRHAIR "\\brdrhair"
 #define OOO_STRING_SVTOOLS_RTF_BRDRL "\\brdrl"
 #define OOO_STRING_SVTOOLS_RTF_BRDRR "\\brdrr"
@@ -744,6 +747,9 @@
 #define OOO_STRING_SVTOOLS_RTF_BRDRDASHSM "\\brdrdashsm"
 #define OOO_STRING_SVTOOLS_RTF_BRDREMBOSS "\\brdremboss"
 #define OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE "\\brdrengrave"
+#define OOO_STRING_SVTOOLS_RTF_BRDROUTSET "\\brdroutset"
+#define OOO_STRING_SVTOOLS_RTF_BRDRINSET "\\brdrinset"
+#define OOO_STRING_SVTOOLS_RTF_BRDRNONE "\\brdrnone"
 #define OOO_STRING_SVTOOLS_RTF_BRDRFRAME "\\brdrframe"
 #define OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG "\\brdrthtnlg"
 #define OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG "\\brdrthtnmg"
@@ -1152,3 +1158,5 @@
 #define OOO_STRING_SVTOOLS_RTF_NONESTTABLES "\\nonesttables"
 
 #endif // _RTFKEYWD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

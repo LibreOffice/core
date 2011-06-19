@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_______________________________________________
 // namespace
@@ -80,10 +81,10 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
             ::sal_Int32 nNumber;
         };
 
-        typedef ::std::hash_map<
+        typedef ::boost::unordered_map<
                     long                    ,
                     TNumberedItem           ,
-                    ::std::hash< long >     ,
+                    ::boost::hash< long >     ,
                     ::std::equal_to< long > > TNumberedItemHash;
 
         typedef ::std::vector< long > TDeadItemList;
@@ -196,3 +197,5 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 } // namespace comphelper
 
 #endif // _COMPHELPER_NUMBEREDCOLLECTION_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

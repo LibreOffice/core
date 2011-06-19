@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 // .....................................................................................................................
 namespace svt { namespace table
@@ -891,3 +892,4 @@ namespace svt { namespace table
 // .....................................................................................................................
 } } // svt::table
 // .....................................................................................................................
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

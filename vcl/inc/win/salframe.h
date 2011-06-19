@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,10 +135,13 @@ public:
     virtual void                Beep( SoundType eSoundType );
     virtual const SystemEnvData*    GetSystemData() const;
     virtual SalPointerState     GetPointerState();
+    virtual SalIndicatorState   GetIndicatorState();
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );
     virtual void                SetScreenNumber( unsigned int );
+    virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
     virtual void                ResetClipRegion();
     virtual void                BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
@@ -147,3 +151,5 @@ public:
 void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 
 #endif // _SV_SALFRAME_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

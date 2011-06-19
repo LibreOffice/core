@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,10 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
+#include <vector>
 
-class ImplStatusItemList;
+struct ImplStatusItem;
+typedef ::std::vector< ImplStatusItem* > ImplStatusItemList;
 
 // --------------------
 // - Progress-Ausgabe -
@@ -107,9 +110,7 @@ private:
     SAL_DLLPRIVATE void      ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SAL_DLLPRIVATE void      ImplFormat();
     SAL_DLLPRIVATE sal_Bool      ImplIsItemUpdate();
-//    #if 0 // _SOLAR__PRIVATE
     using OutputDevice::ImplDrawText;
-//    #endif
     SAL_DLLPRIVATE void      ImplDrawText( sal_Bool bOffScreen, long nOldTextWidth );
     SAL_DLLPRIVATE void      ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDrawText, sal_Bool bDrawFrame );
     SAL_DLLPRIVATE void      ImplDrawProgress( sal_Bool bPaint,
@@ -224,3 +225,5 @@ public:
 };
 
 #endif  // _SV_STATUS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

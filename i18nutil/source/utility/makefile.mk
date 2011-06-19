@@ -46,11 +46,7 @@ SLOFILES= \
     $(SLO)$/oneToOneMapping.obj
 
 # Unicode utilities 
-.IF "$(GUI)" == "OS2"
-SHL1TARGET=		$(TARGET)
-.ELSE
 SHL1TARGET=		$(TARGET)$(COMID)
-.ENDIF
 SHL1IMPLIB=		i$(TARGET)
 
 DEF1DEPN=		$(MISC)$/$(SHL1TARGET).flt

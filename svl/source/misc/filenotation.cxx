@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -123,6 +124,7 @@ namespace svt
         }
 
         OSL_ENSURE( bSuccess, "OFileNotation::OFileNotation: could not detect the format!" );
+        (void)bSuccess;
     }
 
     //---------------------------------------------------------------------
@@ -134,7 +136,7 @@ namespace svt
             case N_URL: return m_sFileURL;
         }
 
-        OSL_ENSURE(sal_False, "OFileNotation::get: inavlid enum value!");
+        OSL_FAIL("OFileNotation::get: inavlid enum value!");
         return ::rtl::OUString();
     }
 
@@ -142,3 +144,4 @@ namespace svt
 }   // namespace svt
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,8 @@
 #define _CPPCANVAS_IMPLBITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
 #include <com/sun/star/rendering/XBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#endif
 
 #include <cppcanvas/bitmap.hxx>
 #include <canvasgraphichelper.hxx>
@@ -80,3 +77,5 @@ namespace cppcanvas
 }
 
 #endif /* _CPPCANVAS_IMPLBITMAP_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

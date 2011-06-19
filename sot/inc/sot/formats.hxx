@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
-#include <tools/prewin.h>
 #include <shlobj.h>
-#include <tools/postwin.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -189,3 +188,4 @@
 
 #endif // _SOT_FORMATS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

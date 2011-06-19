@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,11 +83,21 @@ struct SfxItemPool_Impl
     sal_uInt16                          nStoringStart, nStoringEnd; // zu speichernder Range
     sal_uInt8                           nMajorVer, nMinorVer; // Pool selbst
     SfxMapUnit                      eDefMetric;
-    FASTBOOL                        bInSetItem;
-    FASTBOOL                        bStreaming; // in Load() bzw. Store()
+    bool                            bInSetItem;
+    bool                            bStreaming; // in Load() bzw. Store()
 
     SfxItemPool_Impl( sal_uInt16 nStart, sal_uInt16 nEnd )
         : ppPoolItems (new SfxPoolItemArray_Impl*[ nEnd - nStart + 1])
+        , nLoadingVersion(0)
+        , nInitRefCount(0)
+        , nVerStart(0)
+        , nVerEnd(0)
+        , nStoringStart(0)
+        , nStoringEnd(0)
+        , nMajorVer(0)
+        , nMinorVer(0)
+        , bInSetItem(false)
+        , bStreaming(false)
     {
         memset( ppPoolItems, 0, sizeof( SfxPoolItemArray_Impl* ) * ( nEnd - nStart + 1) );
     }
@@ -130,7 +141,7 @@ struct SfxItemPool_Impl
         rStream >> nFileTag; \
         if ( nTag != nFileTag ) \
         { \
-            DBG_ERROR( #nTag ); /*! s.u. */ \
+            OSL_FAIL( #nTag ); /*! s.u. */ \
             /*! error-code setzen und auswerten! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
             pImp->bStreaming = sal_False; \
@@ -143,7 +154,7 @@ struct SfxItemPool_Impl
        rStream >> nFileTag; \
        if ( nTag != nFileTag ) \
         { \
-            DBG_ERROR( #nTag ); /*! s.u. */ \
+           OSL_FAIL( #nTag ); /*! s.u. */ \
            /*! error-code setzen und auswerten! */ \
            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
            pImp->bStreaming = sal_False; \
@@ -157,7 +168,7 @@ struct SfxItemPool_Impl
         rStream >> nFileTag; \
         if ( nTag1 != nFileTag && nTag2 != nFileTag ) \
         { \
-            DBG_ERROR( #nTag1 ); /*! s.u. */ \
+            OSL_FAIL( #nTag1 ); /*! s.u. */ \
             /*! error-code setzen und auswerten! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
             pImp->bStreaming = sal_False; \
@@ -202,3 +213,4 @@ inline sal_uInt16 SfxItemPool::GetIndex_Impl(sal_uInt16 nWhich) const
     return nWhich - nStart;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

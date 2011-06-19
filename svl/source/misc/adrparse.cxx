@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -700,10 +701,10 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                         nLen);
                         }
                         if (pParser->m_bHasFirst)
-                            pParser->m_aRest.Insert(new SvAddressEntry_Impl(
+                            pParser->m_aRest.push_back(new SvAddressEntry_Impl(
                                                             aTheAddrSpec,
-                                                            aTheRealName),
-                                                    LIST_APPEND);
+                                                            aTheRealName)
+                                                      );
                         else
                         {
                             pParser->m_bHasFirst = true;
@@ -768,14 +769,15 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 
 SvAddressParser::SvAddressParser(UniString const & rInput): m_bHasFirst(false)
 {
-    SvAddressParser_Impl(this, rInput);
+    SvAddressParser_Impl aDoParse(this, rInput);
 }
 
 //============================================================================
 SvAddressParser::~SvAddressParser()
 {
-    for (sal_uLong i = m_aRest.Count(); i != 0;)
-        delete m_aRest.Remove(--i);
+    for ( size_t i = m_aRest.size(); i > 0; )
+        delete m_aRest[ --i ];
+    m_aRest.clear();
 }
 
 //============================================================================
@@ -916,3 +918,4 @@ bool SvAddressParser::createRFC822Mailbox(String const & rPhrase,
     return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

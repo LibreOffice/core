@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,12 +154,6 @@ static const char* pStringIds[] = {
 };
 
 // --------------------------------------------------------------------
-
-#if 0 // TODO: use them
-static const char* pStdEncNames[] = {
-    "ISOAdobe", "Expert",   "ExpertSubSet"
-};
-#endif
 
 // --------------------------------------------------------------------
 
@@ -617,14 +612,18 @@ void CffSubsetterContext::readDictOp( void)
     const U8 c = *mpReadPtr;
     if( c <= 21 ) {
         int nOpId = *(mpReadPtr++);
-        const char* pCmdName;
+        const char* pCmdName = 0;
         if( nOpId != 12)
-            pCmdName = pDictOps[ nOpId];
+            pCmdName = pDictOps[nOpId];
         else {
             const U8 nExtId = *(mpReadPtr++);
-            pCmdName = pDictEscs[ nExtId];
+            if (nExtId < 39)
+               pCmdName = pDictEscs[nExtId];
             nOpId = 900 + nExtId;
         }
+
+        if (!pCmdName)  // skip reserved operators
+            return;
 
         //TODO: if( nStackIdx > 0)
         switch( *pCmdName) {
@@ -1244,32 +1243,23 @@ void CffSubsetterContext::convertOneTypeEsc( void)
         }
     case TYPE2OP::HFLEX1: {
             assert( mnStackIdx == 9);
-#if 0 // emulate hflex1 as straight line
-            const ValType* pX = &mnValStack[ mnStackIdx];
-            const ValType fDX = pX[-9] + pX[-7] + pX[-5] + pX[-4] + pX[-3] + pX[-1];
-            writeType1Val( fDX);
-            writeTypeOp( TYPE1OP::HLINETO);
-#else // emulate hflex1 as two curves
+
             writeCurveTo( mnStackIdx, -9, -8, -7, -6, -5,  0);
             writeCurveTo( mnStackIdx, -4,  0, -3, -2, -1,  0);
         // TODO: emulate hflex1 using othersubr call
-#endif
+
             mnStackIdx -= 9;
         }
         break;
     case TYPE2OP::HFLEX: {
             assert( mnStackIdx == 7);
             ValType* pX = &mnValStack[ mnStackIdx];
-#if 0 // emulate hflex as straight line
-            const ValType fDX = pX[-7] + pX[-6] + pX[-4] + pX[-3] + pX[-2] + pX[-1];
-            writeType1Val( fDX);
-            writeTypeOp( TYPE1OP::HLINETO);
-#else // emulate hflex as two curves
+
             pX[+1] = -pX[-5]; // temp: +dy5==-dy2
             writeCurveTo( mnStackIdx, -7,  0, -6, -5, -4,  0);
             writeCurveTo( mnStackIdx, -3,  0, -2, +1, -1,  0);
         // TODO: emulate hflex using othersubr call
-#endif
+
             mnStackIdx -= 7;
         }
         break;
@@ -1317,13 +1307,12 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
     const U8* const pOldReadPtr = mpReadPtr;
     const U8* const pOldReadEnd = mpReadEnd;
 
-    int nLen = 0;
     if( bGlobal ) {
         nSubrNumber += mnGlobalSubrBias;
-        nLen = seekIndexData( mnGlobalSubrBase, nSubrNumber);
+        seekIndexData( mnGlobalSubrBase, nSubrNumber);
     } else {
         nSubrNumber += mpCffLocal->mnLocalSubrBias;
-        nLen = seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
+        seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
     }
 
     while( mpReadPtr < mpReadEnd)
@@ -1391,13 +1380,7 @@ if( mbSawError) {
     writeType1Val( -350);
     writeType1Val( 700);
     writeTypeOp( TYPE1OP::RLINETO);
-#if 0
-    writeType1Val( -300);
-    writeType1Val( -800);
-    writeTypeOp( TYPE1OP::RLINETO);
-#else
     writeTypeOp( TYPE1OP::CLOSEPATH);
-#endif
     writeTypeOp( TYPE1OP::ENDCHAR);
 }
 #else // useful for manually encoding charstrings
@@ -1771,6 +1754,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                 assert( nRangeCount <= mnCharStrCount);
                 U16 nPrev = (pReadPtr[2]<<8) + pReadPtr[3];
                 assert( nPrev == 0);
+                (void)nPrev;
                 pReadPtr += 4;
                 // TODO? binary search
                 for( int i = 0; i < nRangeCount; ++i) {
@@ -1889,12 +1873,12 @@ public:
     /*virtual*/ ~Type1Emitter( void);
     void        setSubsetName( const char* );
 
-    void        emitRawData( const char* pData, int nLength) const;
+    size_t      emitRawData( const char* pData, size_t nLength) const;
     void        emitAllRaw( void);
     void        emitAllHex( void);
     void        emitAllCrypted( void);
     int         tellPos( void) const;
-    void        updateLen( int nTellPos, int nLength);
+    size_t      updateLen( int nTellPos, size_t nLength);
     void        emitValVector( const char* pLineHead, const char* pLineTail, const ValVector&);
 private:
     FILE*       mpFileOut;
@@ -1967,7 +1951,7 @@ int Type1Emitter::tellPos( void) const
 
 // --------------------------------------------------------------------
 
-void Type1Emitter::updateLen( int nTellPos, int nLength)
+size_t Type1Emitter::updateLen( int nTellPos, size_t nLength)
 {
     // update PFB segment header length
     U8 cData[4];
@@ -1977,15 +1961,16 @@ void Type1Emitter::updateLen( int nTellPos, int nLength)
     cData[3] = static_cast<U8>(nLength >> 24);
     const int nCurrPos = ftell( mpFileOut);
     fseek( mpFileOut, nTellPos, SEEK_SET);
-    fwrite( cData, 1, sizeof(cData), mpFileOut);
+    size_t nWrote = fwrite( cData, 1, sizeof(cData), mpFileOut);
     fseek( mpFileOut, nCurrPos, SEEK_SET);
+    return nWrote;
 }
 
 // --------------------------------------------------------------------
 
-inline void Type1Emitter::emitRawData( const char* pData, int nLength) const
+inline size_t Type1Emitter::emitRawData(const char* pData, size_t nLength) const
 {
-    fwrite( pData, 1, nLength, mpFileOut);
+    return fwrite( pData, 1, nLength, mpFileOut);
 }
 
 // --------------------------------------------------------------------
@@ -2065,7 +2050,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
         return;
 
     // emit the line head
-    mpPtr += sprintf( mpPtr, pLineHead);
+    mpPtr += sprintf( mpPtr, "%s", pLineHead);
     // emit the vector values
     ValVector::value_type aVal = 0;
     for( ValVector::const_iterator it = rVector.begin();;) {
@@ -2078,7 +2063,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     // emit the last value
     mpPtr += dbl2str( mpPtr, aVal);
     // emit the line tail
-    mpPtr += sprintf( mpPtr, pLineTail);
+    mpPtr += sprintf( mpPtr, "%s", pLineTail);
 }
 
 // --------------------------------------------------------------------
@@ -2128,13 +2113,6 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
 
     pOut += sprintf( pOut, "%%!FontType1-1.0: %s 001.003\n", rEmitter.maSubsetName);
     // emit TOPDICT
-#if 0 // improve PS Type1 caching?
-    nOfs += sprintf( &aT1Str[nOfs],
-        "FontDirectory/%s known{/%s findfont dup/UniqueID known{dup\n"
-        "/UniqueID get %d eq exch/FontType get 1 eq and}{pop false}ifelse\n"
-        "{save true}{false}ifelse}\n{false}ifelse\n",
-            pFamilyName, pFamilyName, nUniqueId);
-#endif
     pOut += sprintf( pOut,
         "11 dict begin\n"   // TODO: dynamic entry count for TOPDICT
         "/FontType 1 def\n"
@@ -2158,10 +2136,7 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         " /FamilyName (%s) readonly def\n"
         "end readonly def\n",
             pFullName, pFamilyName);
-#if 0   // TODO: use an standard Type1 encoding if possible
-    pOut += sprintf( pOut,
-        "/Encoding StandardEncoding def\n");
-#else
+
     pOut += sprintf( pOut,
         "/Encoding 256 array\n"
         "0 1 255 {1 index exch /.notdef put} for\n");
@@ -2170,7 +2145,6 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += sprintf( pOut, "dup %d /%s put\n", pReqEncoding[i], pGlyphName);
     }
     pOut += sprintf( pOut, "readonly def\n");
-#endif
     pOut += sprintf( pOut,
         // TODO: more topdict entries
         "currentdict end\n"
@@ -2416,3 +2390,4 @@ bool FontSubsetInfo::CreateFontSubsetFromCff( GlyphWidth* pOutGlyphWidths )
 
 // ====================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

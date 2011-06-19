@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,16 +28,12 @@
 #ifndef _PSTM_HXX
 #define _PSTM_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "tools/toolsdllapi.h"
 
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 
-#ifndef _INQIDX_HXX
 #include <tools/unqidx.hxx>
-#endif
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>
@@ -52,7 +49,7 @@ typedef void * (*SvCreateInstancePersist)( SvPersistBase ** );
 
 class TOOLS_DLLPUBLIC SvClassManager
 {
-    typedef std::hash_map< sal_uInt16, SvCreateInstancePersist > Map;
+    typedef boost::unordered_map< sal_uInt16, SvCreateInstancePersist > Map;
     Map aAssocTable;
 public:
     void        Register( sal_uInt16 nClassId, SvCreateInstancePersist pFunc );
@@ -152,11 +149,7 @@ public:\
 SV_DECL_PERSIST_LIST(ClassName,EntryName)\
 SV_IMPL_PERSIST_LIST(ClassName,EntryName)
 
-//#if 0 // _SOLAR__PRIVATE
 DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
-//#else
-//typedef UniqueIndex SvPersistUIdx;
-//#endif
 
 //=========================================================================
 class SvStream;
@@ -259,3 +252,5 @@ public:
 };
 
 #endif // _PSTM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

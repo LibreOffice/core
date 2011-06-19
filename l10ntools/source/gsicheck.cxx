@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <stdio.h>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 
 // local includes
 #include "tagtest.hxx"
@@ -197,7 +197,6 @@ GSILine::GSILine( const ByteString &rLine, sal_uLong nLine )
         }
         if ( nPos != STRING_NOTFOUND )
         {
-//          ByteString aStatus = sTmp.Copy( nStart, nPos - nStart );     // ext int ...
             nStart = nPos + 4;  // + length of the delemiter
         }
         if ( nPos != STRING_NOTFOUND )
@@ -305,8 +304,9 @@ GSIBlock::~GSIBlock()
     delete pSourceLine;
     delete pReferenceLine;
 
-    for ( sal_uLong i = 0; i < Count(); i++ )
-        delete ( GetObject( i ));
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+        delete maList[ i ];
+    maList.clear();
 }
 
 /*****************************************************************************/
@@ -328,23 +328,22 @@ void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
             return;
         }
     }
-    sal_uLong nPos = 0;
 
     if ( aSourceLang.Len() ) // only check blockstructure if source lang is given
     {
-        while ( nPos < Count() )
+        for ( size_t nPos = 0, n = maList.size(); nPos < n; ++nPos )
         {
-            if ( GetObject( nPos )->GetLanguageId().Equals( pLine->GetLanguageId() ) )
+            if ( maList[ nPos ]->GetLanguageId().Equals( pLine->GetLanguageId() ) )
             {
                 PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
                 bHasBlockError = sal_True;
-                GetObject( nPos )->NotOK();
+                maList[ nPos ]->NotOK();
                 pLine->NotOK();
             }
             nPos++;
         }
     }
-    Insert( pLine, LIST_APPEND );
+    maList.push_back( pLine );
 }
 
 /*****************************************************************************/
@@ -375,10 +374,9 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
     GSILine *pLine )
 /*****************************************************************************/
 {
-    sal_uLong i;
-    for ( i = 0 ; i < pList->Count() ; i++ )
+    for ( size_t i = 0 ; i < pList->size() ; i++ )
     {
-        ParserMessage *pMsg = pList->GetObject( i );
+        ParserMessage *pMsg = (*pList)[ i ];
         ByteString aContext;
         if ( bPrintContext )
         {
@@ -612,7 +610,7 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
             if ( pSourceLine )
                 pSource = pSourceLine;
             else
-                pSource = GetObject( 0 );   // get some other line
+                pSource = maList.empty() ? NULL : maList[ 0 ];   // get some other line
             if ( pSource )
                 PrintError( "No reference line found. Entry is new in source file", "File format", "", pSource->GetLineNumber(), pSource->GetUniqId() );
             else
@@ -636,21 +634,21 @@ sal_Bool GSIBlock::CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sa
     if ( pSourceLine )
         bHasError |= !TestUTF8( pSourceLine, bFixTags );
 
-    sal_uLong i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        aTester.CheckTestee( GetObject( i ), pSourceLine != NULL, bFixTags );
-        if ( GetObject( i )->HasMessages() || aTester.HasCompareWarnings() )
+        GSILine* pItem = maList[ i ];
+        aTester.CheckTestee( pItem, pSourceLine != NULL, bFixTags );
+        if ( pItem->HasMessages() || aTester.HasCompareWarnings() )
         {
-            if ( GetObject( i )->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
-                GetObject( i )->NotOK();
+            if ( pItem->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
+                pItem->NotOK();
             bHasError = sal_True;
-            PrintList( GetObject( i )->GetMessageList(), "Translation", GetObject( i ) );
-            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Missmatch", GetObject( i ) );
+            PrintList( pItem->GetMessageList(), "Translation", pItem );
+            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Mismatch", pItem );
         }
-        bHasError |= !TestUTF8( GetObject( i ), bFixTags );
+        bHasError |= !TestUTF8( pItem, bFixTags );
         if ( pSourceLine )
-            bHasError |= HasSuspiciousChars( GetObject( i ), pSourceLine );
+            bHasError |= HasSuspiciousChars( pItem, pSourceLine );
     }
 
     return bHasError || bHasBlockError;
@@ -663,14 +661,14 @@ void GSIBlock::WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLin
 
     sal_Bool bHasError = sal_False;
     sal_Bool bCopyAll = ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) || bHasBlockError;
-    sal_uLong i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        if ( !GetObject( i )->IsOK() || bCopyAll )
+        GSILine* pItem = maList[ i ];
+        if ( !pItem->IsOK() || bCopyAll )
         {
             bHasError = sal_True;
             aErrOut.LazyOpen();
-            aErrOut.WriteLine( *GetObject( i ) );
+            aErrOut.WriteLine( *pItem );
         }
     }
 
@@ -687,18 +685,18 @@ void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLi
         return;
 
     sal_Bool bHasOK = sal_False;
-    sal_uLong i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        if ( ( GetObject( i )->IsOK() || bCheckSourceLang ) && !bHasBlockError )
+        GSILine* pItem = maList[ i ];
+        if ( ( pItem->IsOK() || bCheckSourceLang ) && !bHasBlockError )
         {
             bHasOK = sal_True;
             aOkOut.LazyOpen();
-            aOkOut.WriteLine( *GetObject( i ) );
+            aOkOut.WriteLine( *pItem );
         }
     }
 
-    if ( ( pSourceLine && pSourceLine->IsOK() && ( Count() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
+    if ( ( pSourceLine && pSourceLine->IsOK() && ( !maList.empty() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
     {
         aOkOut.LazyOpen();
         aOkOut.WriteLine( *pSourceLine );
@@ -711,14 +709,14 @@ void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, sal_Bool /*bRequireSourceL
         return;
 
     sal_Bool bHasFixes = sal_False;
-    sal_uLong i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        if ( GetObject( i )->IsFixed() )
+        GSILine* pItem = maList[ i ];
+        if ( pItem->IsFixed() )
         {
             bHasFixes = sal_True;
             aFixOut.LazyOpen();
-            aFixOut.WriteLine( *GetObject( i ) );
+            aFixOut.WriteLine( *pItem );
         }
     }
 
@@ -777,7 +775,7 @@ void Help()
 }
 
 /*****************************************************************************/
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
@@ -1114,8 +1112,6 @@ int _cdecl main( int argc, char *argv[] )
                                 }
                                 else if ( pReferenceLine->GetUniqId() > aId )
                                 {
-//                                    if ( pGSILine->GetLanguageId() == aSourceLang )
-//                                      PrintError( "No reference line found. Entry is new in source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), aId );
                                     bContinueSearching = sal_False;
                                 }
                                 else
@@ -1172,3 +1168,5 @@ int _cdecl main( int argc, char *argv[] )
     else
         return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

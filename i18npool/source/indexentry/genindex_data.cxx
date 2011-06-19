@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         sal_Int32 nPos=0;
         sal_uInt32 nChar = Ostr.iterateCodePoints(&nPos, 2);
-        if (nChar > MAX_ADDRESS) {
+        if (nChar >= MAX_ADDRESS) {
             printf("Code point 0x%lx exceeds MAX_ADDRESS 0x%x, Please increase MAX_ADDRESS", static_cast<long unsigned int>(nChar), MAX_ADDRESS);
             exit(1);
         }
@@ -164,3 +165,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fclose(fp);
     return 0;
 }   // End of main
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

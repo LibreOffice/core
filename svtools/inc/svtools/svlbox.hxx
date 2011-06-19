@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,17 +36,11 @@
 #define INCLUDED_DEQUE
 #endif
 
-#ifndef _CTRL_HXX
 #include <vcl/ctrl.hxx>
-#endif
 #include <vcl/seleng.hxx>
-#ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/timer.hxx>
-#ifndef _ACCEL_HXX
 #include <vcl/accel.hxx>
-#endif
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <tools/gen.hxx>
@@ -195,9 +190,7 @@ class SVT_DLLPUBLIC SvLBoxEntry : public SvListEntry
     SvPtrarr    aItems;
     void*       pUserData;
     sal_uInt16      nEntryFlags;
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void         DeleteItems_Impl();
-//#endif
 public:
 
                 SvLBoxEntry();
@@ -274,7 +267,6 @@ class SVT_DLLPUBLIC SvLBox
 {
     friend class SvLBoxEntry;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, SvInplaceEdit2 * );
     // Handler, der von TreeList zum Clonen eines Entries aufgerufen wird
     DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvListEntry* );
@@ -288,7 +280,6 @@ class SVT_DLLPUBLIC SvLBox
     SVT_DLLPRIVATE static void AddBoxToDDList_Impl( const SvLBox& rB );
     SVT_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvLBox& rB );
     DECL_DLLPRIVATE_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8* );
-//#endif
 
     DragDropMode nOldDragMode;
 
@@ -408,7 +399,7 @@ public:
     SvLBoxEntry*    First() const { return (SvLBoxEntry*)(pModel->First()); }
     SvLBoxEntry*    Next( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Next(pEntry,pDepth));}
     SvLBoxEntry*    Prev( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Prev(pEntry,pDepth));}
-    SvLBoxEntry*    Last( sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Last(pDepth));}
+    SvLBoxEntry*    Last() const { return (SvLBoxEntry*)(pModel->Last()); }
 
     SvLBoxEntry*    FirstChild(SvLBoxEntry* pParent ) const { return (SvLBoxEntry*)(pModel->FirstChild(pParent)); }
     SvLBoxEntry*    NextSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->NextSibling( pEntry )); }
@@ -608,12 +599,10 @@ class SvInplaceEdit : public Edit
     sal_Bool        bCanceled;
     sal_Bool        bAlreadyInCallBack;
 
-//#if 0 // _SOLAR__PRIVATE
     void        CallCallBackHdl_Impl();
     DECL_LINK( Timeout_Impl, Timer * );
     DECL_LINK( ReturnHdl_Impl, Accelerator * );
     DECL_LINK( EscapeHdl_Impl, Accelerator * );
-//#endif
 
 public:
     SvInplaceEdit( Window* pParent, const Point& rPos, const Size& rSize,
@@ -639,12 +628,10 @@ class SvInplaceEdit2
     sal_Bool        bAlreadyInCallBack;
     sal_Bool        bMultiLine;
 
-//#if 0 // _SOLAR__PRIVATE
     void        CallCallBackHdl_Impl();
     DECL_LINK( Timeout_Impl, Timer * );
     DECL_LINK( ReturnHdl_Impl, Accelerator * );
     DECL_LINK( EscapeHdl_Impl, Accelerator * );
-//#endif
 
 public:
                 SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,
@@ -672,3 +659,5 @@ inline SvViewDataItem* SvLBox::GetViewDataItem( SvListEntry* pEntry,
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

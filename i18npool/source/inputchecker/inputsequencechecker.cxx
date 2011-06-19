@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -128,7 +129,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
             }
 
             Reference < uno::XInterface > xI = xMSF->createInstance(
-                        OUString::createFromAscii("com.sun.star.i18n.InputSequenceChecker_") +
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.InputSequenceChecker_")) +
                         OUString::createFromAscii(rLanguage));
 
             if ( xI.is() ) {
@@ -164,3 +165,5 @@ InputSequenceCheckerImpl::getSupportedServiceNames(void) throw( RuntimeException
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

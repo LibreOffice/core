@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ TextUndoManager::~TextUndoManager()
 {
 }
 
-sal_Bool __EXPORT TextUndoManager::Undo()
+sal_Bool TextUndoManager::Undo()
 {
     if ( GetUndoActionCount() == 0 )
         return sal_False;
@@ -70,7 +71,7 @@ sal_Bool __EXPORT TextUndoManager::Undo()
     return bDone;
 }
 
-sal_Bool __EXPORT TextUndoManager::Redo()
+sal_Bool TextUndoManager::Redo()
 {
     if ( GetRedoActionCount() == 0 )
         return sal_False;
@@ -119,7 +120,7 @@ TextUndo::~TextUndo()
 {
 }
 
-XubString __EXPORT TextUndo::GetComment() const
+XubString TextUndo::GetComment() const
 {
 //  return mpTextEngine->GetUndoComment( this );
     return String();
@@ -146,7 +147,7 @@ TextUndoDelPara::~TextUndoDelPara()
         delete mpNode;
 }
 
-void __EXPORT TextUndoDelPara::Undo()
+void TextUndoDelPara::Undo()
 {
     GetTextEngine()->InsertContent( mpNode, mnPara );
     mbDelObject = sal_False;    // gehoert wieder der Engine
@@ -158,7 +159,7 @@ void __EXPORT TextUndoDelPara::Undo()
     }
 }
 
-void __EXPORT TextUndoDelPara::Redo()
+void TextUndoDelPara::Redo()
 {
     // pNode stimmt nicht mehr, falls zwischendurch Undos, in denen
     // Absaetze verschmolzen sind.
@@ -194,13 +195,13 @@ TextUndoConnectParas::~TextUndoConnectParas()
 {
 }
 
-void __EXPORT TextUndoConnectParas::Undo()
+void TextUndoConnectParas::Undo()
 {
     TextPaM aPaM = GetTextEngine()->SplitContent( mnPara, mnSepPos );
     SetSelection( aPaM );
 }
 
-void __EXPORT TextUndoConnectParas::Redo()
+void TextUndoConnectParas::Redo()
 {
     TextPaM aPaM = GetTextEngine()->ConnectContents( mnPara );
     SetSelection( aPaM );
@@ -218,13 +219,13 @@ TextUndoSplitPara::~TextUndoSplitPara()
 {
 }
 
-void __EXPORT TextUndoSplitPara::Undo()
+void TextUndoSplitPara::Undo()
 {
     TextPaM aPaM = GetTextEngine()->ConnectContents( mnPara );
     SetSelection( aPaM );
 }
 
-void __EXPORT TextUndoSplitPara::Redo()
+void TextUndoSplitPara::Redo()
 {
     TextPaM aPaM = GetTextEngine()->SplitContent( mnPara, mnSepPos );
     SetSelection( aPaM );
@@ -237,7 +238,7 @@ TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM
 {
 }
 
-void __EXPORT TextUndoInsertChars::Undo()
+void TextUndoInsertChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
@@ -245,7 +246,7 @@ void __EXPORT TextUndoInsertChars::Undo()
     SetSelection( aPaM );
 }
 
-void __EXPORT TextUndoInsertChars::Redo()
+void TextUndoInsertChars::Redo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
@@ -254,7 +255,7 @@ void __EXPORT TextUndoInsertChars::Redo()
     SetSelection( TextSelection( aSel.GetStart(), aNewPaM ) );
 }
 
-sal_Bool __EXPORT TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
+sal_Bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 {
     if ( !pNextAction->ISA( TextUndoInsertChars ) )
         return sal_False;
@@ -279,7 +280,7 @@ TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM
 {
 }
 
-void __EXPORT TextUndoRemoveChars::Undo()
+void TextUndoRemoveChars::Undo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     GetTextEngine()->ImpInsertText( aSel, maText );
@@ -287,7 +288,7 @@ void __EXPORT TextUndoRemoveChars::Undo()
     SetSelection( aSel );
 }
 
-void __EXPORT TextUndoRemoveChars::Redo()
+void TextUndoRemoveChars::Redo()
 {
     TextSelection aSel( maTextPaM, maTextPaM );
     aSel.GetEnd().GetIndex() = aSel.GetEnd().GetIndex() + maText.Len();
@@ -311,7 +312,7 @@ TextUndoSetAttribs::~TextUndoSetAttribs()
     // ...............
 }
 
-void __EXPORT TextUndoSetAttribs::Undo()
+void TextUndoSetAttribs::Undo()
 {
     for ( sal_uLong nPara = maSelection.GetStart().GetPara(); nPara <= maSelection.GetEnd().GetPara(); nPara++ )
     {
@@ -326,7 +327,7 @@ void __EXPORT TextUndoSetAttribs::Undo()
     SetSelection( maSelection );
 }
 
-void __EXPORT TextUndoSetAttribs::Redo()
+void TextUndoSetAttribs::Redo()
 {
 //  if ( !bSetIsRemove )
 //      GetTextEngine()->SetAttribs( aSel, aNewAttribs, nSpecial );
@@ -334,3 +335,5 @@ void __EXPORT TextUndoSetAttribs::Redo()
 //      GetTextEngine()->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
     SetSelection( maSelection );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

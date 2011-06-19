@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,14 +43,10 @@ static RscCompiler * pRscCompiler = NULL;
 /*                                                              */
 /*  Description :   Gibt die Temporaeren Dateien frei.          */
 /****************************************************************/
-#if defined( UNX ) || ( defined( OS2 ) && ( defined( TCPP ) || defined ( GCC )) ) ||  defined (WTC) || defined (MTW) || defined(__MINGW32__)
+#if defined( UNX ) || defined ( GCC ) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
-#if defined( CSET )
-    void _Optlink ExitProgram( void ){
-#else
     void cdecl ExitProgram( void ){
-#endif
 #endif
     if( pRscCompiler )
         delete pRscCompiler;
@@ -71,11 +68,7 @@ RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 #ifndef UNX
-#ifdef CSET
     atexit( ExitProgram );
-#else
-    atexit( ExitProgram );
-#endif
 #endif
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "debugging %s\n", argv[0] );
@@ -85,11 +78,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 
     InitRscCompiler();
     RscError*   pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
-#ifdef MTW
-    RscCmdLine* pCmdLine   = new RscCmdLine( argc, (char **)argv, pErrHdl );
-#else
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, argv, pErrHdl );
-#endif
     RscTypCont* pTypCont   = new RscTypCont( pErrHdl,
                                              pCmdLine->nByteOrder,
                                              pCmdLine->aPath,
@@ -124,3 +113,5 @@ void RscExit( sal_uInt32 nExit )
         printf( "Program exit is %ud\n", (unsigned int)nExit );
     exit( nExit );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

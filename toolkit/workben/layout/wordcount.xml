@@ -23,6 +23,11 @@
             <flow cnt:padding="60"/>
             <fixedtext id="FI_CURRENTCHARACTER" right="true" _label="00"/>
         </hbox>
+        <hbox>
+            <fixedtext id="FT_CURRENTCHARACTEREXCLUDINGSPACES" _label="Characters excluding spaces:"/>
+            <flow cnt:padding="60"/>
+            <fixedtext id="FI_CURRENTCHARACTEREXCLUDINGSPACES" right="true" _label="000"/>
+        </hbox>
         </vbox>
     </hbox>
     <!-- if we could do cnt:cnt:padding="-12" here, we would not have to close
@@ -32,11 +37,15 @@
         <vbox cnt:padding="12" spacing="6">
         <hbox>
             <fixedtext id="FT_DOCWORD" _label="Words:"/>
-            <fixedtext id="FI_DOCWORD" right="true" _label="000"/>
+            <fixedtext id="FI_DOCWORD" right="true" _label="0000"/>
         </hbox>
         <hbox>
             <fixedtext id="FT_DOCCHARACTER" _label="Characters:"/>
-            <fixedtext id="FI_DOCCHARACTER" right="true" _label="0000"/>
+            <fixedtext id="FI_DOCCHARACTER" right="true" _label="00000"/>
+        </hbox>
+        <hbox>
+            <fixedtext id="FT_DOCCHARACTEREXCLUDINGSPACES" _label="Characters excluding spaces:"/>
+            <fixedtext id="FI_DOCCHARACTEREXCLUDINGSPACES" right="true" _label="000000"/>
         </hbox>
         </vbox>
     </hbox>

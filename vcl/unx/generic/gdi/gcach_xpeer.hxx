@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,12 +82,15 @@ private:
 class X11GlyphCache : public GlyphCache
 {
 public:
-    X11GlyphPeer&      GetPeer() { return reinterpret_cast<X11GlyphPeer&>( mrPeer ); }
-static X11GlyphCache&  GetInstance();
-static void            KillInstance();
-
-private:
-                       X11GlyphCache( X11GlyphPeer& );
+    X11GlyphCache( X11GlyphPeer& );
+    X11GlyphPeer& GetPeer()
+    {
+        return static_cast<X11GlyphPeer&>(mrPeer);
+    }
+    static X11GlyphCache& GetInstance();
+    static void  KillInstance();
 };
 
 #endif // _SV_GCACH_XPEER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,6 @@
 #include "export.hxx"
 #include "cfgmerge.hxx"
 #include "tokens.h"
-#include "utf8conv.hxx"
 
 extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
@@ -252,7 +252,7 @@ extern FILE *GetCfgFile()
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
-//          printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
+//            printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //            printf("sActFileName = %s\n",sActFileName.GetBuffer());
 
@@ -297,7 +297,7 @@ int GetError()
 CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
 {
     CfgStackData *pD = new CfgStackData( rTag, rId );
-    Insert( pD, LIST_APPEND );
+    maList.push_back( pD );
     return pD;
 }
 
@@ -309,19 +309,20 @@ CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
 CfgStack::~CfgStack()
 /*****************************************************************************/
 {
-    for ( sal_uLong i = 0; i < Count(); i++ )
-        delete GetObject( i );
+    for ( size_t i = 0, n = maList.size(); i < n; i++ )
+        delete maList[ i ];
+    maList.clear();
 }
 
 /*****************************************************************************/
-ByteString CfgStack::GetAccessPath( sal_uLong nPos )
+ByteString CfgStack::GetAccessPath( size_t nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        nPos = Count() - 1;
+        nPos = maList.size() - 1;
 
     ByteString sReturn;
-    for ( sal_uLong i = 0; i <= nPos; i++ ) {
+    for ( size_t i = 0; i <= nPos; i++ ) {
         if ( i )
             sReturn += ".";
         sReturn += GetStackData( i )->GetIdentifier();
@@ -331,13 +332,18 @@ ByteString CfgStack::GetAccessPath( sal_uLong nPos )
 }
 
 /*****************************************************************************/
-CfgStackData *CfgStack::GetStackData( sal_uLong nPos )
+CfgStackData *CfgStack::GetStackData( size_t nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        nPos = Count() - 1;
+    {
+        if (!maList.empty())
+            nPos = maList.size() - 1;
+        else
+            return 0;
+    }
 
-    return GetObject( nPos );
+    return maList[  nPos ];
 }
 
 //
@@ -502,7 +508,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 pStackData = aStack.GetStackData();
             }
             else {
-                ByteString sError( "Missplaced close tag: " );
+                ByteString sError( "Misplaced close tag: " );
                 ByteString sInFile(" in file ");
                 sError += sToken;
                 sError += sInFile;
@@ -576,9 +582,6 @@ int CfgParser::Execute( int nToken, char * pToken )
 void CfgParser::Error( const ByteString &rError )
 /*****************************************************************************/
 {
-//  ByteString sError( rError );
-//    sError.Append("Error: In file ");
-//    sError.Append( sActFileName );
     yyerror(( char * ) rError.GetBuffer());
 }
 
@@ -655,18 +658,14 @@ void CfgExport::WorkOnRessourceEnd()
                     pStackData->sText[ ByteString("en-US") ].Len() )))
         {
             ByteString sFallback = pStackData->sText[ ByteString("en-US") ];
-
-            //if ( pStackData->sText[ ByteString("en-US") ].Len())
-            //  sFallback = pStackData->sText[ ByteString("en-US") ];
-
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
-            if ( aStack.Count() == 1 ) {
+            if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
             }
             else {
-                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
+                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
             ByteString sTimeStamp( Export::GetTimeStamp());
@@ -693,7 +692,6 @@ void CfgExport::WorkOnRessourceEnd()
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
-                    //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                     pOutputStream->WriteLine( sOutput );
             }
         }
@@ -723,7 +721,6 @@ CfgMerge::CfgMerge(
                 : CfgOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
                 pResData( NULL ),
-                bGerman( sal_False ),
                 sFilename( rFilename ),
                 bEnglish( sal_False )
 {
@@ -759,12 +756,12 @@ void CfgMerge::WorkOnText(
         if ( !pResData ) {
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
-            if ( aStack.Count() == 1 ) {
+            if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
             }
             else {
-                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
+                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
             ByteString sPlatform( "" );
@@ -774,8 +771,6 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
-        //if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
-        //  bGerman = sal_True;
         if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
             bEnglish = sal_True;
 
@@ -805,10 +800,10 @@ void CfgMerge::Output( const ByteString& rOutput )
         pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
 }
 
-sal_uLong CfgStack::Push( CfgStackData *pStackData )
+size_t CfgStack::Push( CfgStackData *pStackData )
 {
-    Insert( pStackData, LIST_APPEND );
-    return Count() - 1;
+    maList.push_back( pStackData );
+    return maList.size() - 1;
 }
 
 /*****************************************************************************/
@@ -827,7 +822,6 @@ void CfgMerge::WorkOnRessourceEnd()
                 ByteString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , sal_True );
                 if (
-                    // (!sCur.EqualsIgnoreCaseAscii("de") )    &&
                     ( !sCur.EqualsIgnoreCaseAscii("en-US") ) &&
 
                     ( sContent != "-" ) && ( sContent.Len()))
@@ -867,6 +861,7 @@ void CfgMerge::WorkOnRessourceEnd()
     }
     delete pResData;
     pResData = NULL;
-    bGerman = sal_False;
     bEnglish = sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

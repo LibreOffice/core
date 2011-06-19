@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,17 +120,14 @@ namespace canvas
         {
         }
 
-#if defined __SUNPRO_CC
-        using Base::disposing;
-#endif
-        virtual void SAL_CALL disposing()
+        virtual void disposeThis()
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             maCanvasHelper.disposing();
 
             // pass on to base class
-            BaseType::disposing();
+            BaseType::disposeThis();
         }
 
         // XCanvas
@@ -481,3 +479,5 @@ namespace canvas
 }
 
 #endif /* INCLUDED_CANVAS_CANVASBASE_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

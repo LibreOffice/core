@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 #include <map>
 #include <memory>
@@ -148,3 +147,5 @@ private:
 }
 
 #endif // _SAX_SAXPARSER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

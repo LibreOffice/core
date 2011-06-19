@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -181,7 +182,6 @@ private:
     void WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound);
     void WMFRecord_SaveDC();
     void WMFRecord_SelectObject(sal_uInt16 nObjectHandle);
-    void WMFRecord_SetBkColor(const Color & rColor);
     void WMFRecord_SetBkMode(sal_Bool bTransparent);
     void WMFRecord_SetStretchBltMode();
     void WMFRecord_SetPixel(const Point & rPoint, const Color & rColor);
@@ -227,3 +227,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

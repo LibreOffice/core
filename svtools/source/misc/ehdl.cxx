@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#if defined(OS2)
-#include <vcl/sound.hxx>
-#endif
-
-#ifndef GCC
-#endif
 
 #include <svtools/ehdl.hxx>
 #include <svtools/svtdata.hxx>
@@ -64,7 +59,7 @@ static sal_uInt16 aWndFunc(
 
 
 {
-    vos:: OGuard  aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     // aus den Flags die benoetigten WinBits ermitteln
     WinBits eBits=0;
@@ -177,8 +172,7 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
 
 SfxErrorHandler::~SfxErrorHandler()
 {
-    if( pFreeMgr )
-        delete pFreeMgr;
+    delete pFreeMgr;
 }
 
 //-------------------------------------------------------------------------
@@ -377,7 +371,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
     */
 
 {
-    vos:: OGuard  aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Bool bRet = sal_False;
     rStr=String(SvtResId(RID_ERRHDL_CLASS));
@@ -454,7 +448,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
     }
     if( pMgr )
     {
-        vos:: OGuard  aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
 
         ResId aResId( nResId, *pMgr );
 
@@ -487,3 +481,5 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

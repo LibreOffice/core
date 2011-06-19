@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,7 +102,7 @@ public:
     long                CalcHeight() const;
     sal_Bool            IsRootURL( const String& rURL ) const;
     sal_uLong               GetRootPos( const String& rURL ) const;
-    void                UpdateIcons( sal_Bool _bHiContrast );
+    void                UpdateIcons();
 
     inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
 
@@ -233,7 +234,8 @@ public:
 
 // class SvtTemplateWindow -----------------------------------------------
 
-class HistoryList_Impl;
+struct FolderHistory;
+typedef ::std::vector< FolderHistory* > HistoryList_Impl;
 
 class SvtTemplateWindow : public Window
 {
@@ -307,3 +309,4 @@ public:
 
 #endif // _SVTOOLS_TEMPLWIN_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

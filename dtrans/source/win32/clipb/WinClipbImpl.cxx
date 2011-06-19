@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
 using namespace osl;
 using namespace std;
 using namespace cppu;
@@ -64,6 +64,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::datatransfer::clipboard::RenderingCapabilities;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 // deklarations
@@ -271,3 +273,5 @@ void SAL_CALL CWinClipbImpl::onReleaseDataObject( CXNotifyingDataObject* theCall
     if ( m_pCurrentClipContent == theCaller )
         m_pCurrentClipContent = NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

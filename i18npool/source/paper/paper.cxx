@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include <osl/diagnose.h>
 #include <sal/config.h>
+#include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <comphelper/processfactory.hxx>
@@ -47,7 +49,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#if defined(LC_PAPER) && defined(_GNU_SOURCE)
 #include <langinfo.h>
+#endif
 #endif
 
 struct PageDesc
@@ -157,7 +161,7 @@ static PageDesc aDinTab[] =
     { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL }
 };
 
-static const size_t nTabSize = sizeof(aDinTab) / sizeof(aDinTab[0]);
+static const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 
 #define MAXSLOPPY 21
 
@@ -226,21 +230,26 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
     rtl::OUString aLocaleStr;
 
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XMultiServiceFactory > xConfigProv(
-        xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ),
-        UNO_QUERY_THROW );
-
+    Reference< XMultiServiceFactory > xConfigProv;
+    Reference< XNameAccess > xConfigNA;
     Sequence< Any > aArgs( 1 );
-    aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.Setup/L10N/" );
-    Reference< XNameAccess > xConfigNA( xConfigProv->createInstanceWithArguments(
-        CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ), UNO_QUERY_THROW );
     try
     {
+        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        xConfigProv = Reference< XMultiServiceFactory >(
+            xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ),
+            UNO_QUERY_THROW);
+
+        aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.Setup/L10N/" );
+        xConfigNA = Reference< XNameAccess >(xConfigProv->createInstanceWithArguments(
+            CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ), UNO_QUERY_THROW);
+
         // try user-defined locale setting
         xConfigNA->getByName( CREATE_OUSTRING( "ooSetupSystemLocale" ) ) >>= aLocaleStr;
     }
-    catch( Exception& ) {}
+    catch( Exception& )
+    {
+    }
 
 #ifdef UNX
     // if set to "use system", get papersize from system
@@ -288,7 +297,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 bool bHalve = false;
 
-                size_t nExtraTabSize = sizeof(aCustoms) / sizeof(aCustoms[0]);
+                size_t nExtraTabSize = SAL_N_ELEMENTS(aCustoms);
                 for (size_t i = 0; i < nExtraTabSize; ++i)
                 {
                     if (rtl_str_compareIgnoreAsciiCase(aCustoms[i].pName, aPaper.getStr()) == 0)
@@ -359,7 +368,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     try
     {
         // if set to "use system", try to get locale from system
-        if( aLocaleStr.getLength() == 0 )
+        if (aLocaleStr.getLength() == 0 && xConfigProv.is())
         {
             aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.System/L10N/" );
             xConfigNA.set( xConfigProv->createInstanceWithArguments(
@@ -511,4 +520,4 @@ PaperInfo PaperInfo::getDefaultPaperForLocale(
     return eType;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

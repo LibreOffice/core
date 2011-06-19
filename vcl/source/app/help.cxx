@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -381,12 +382,6 @@ HelpTextWindow::~HelpTextWindow()
 
     if( this == ImplGetSVData()->maHelpData.mpHelpWin )
         ImplGetSVData()->maHelpData.mpHelpWin = NULL;
-
-    if ( maStatusText.Len() )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        pSVData->mpApp->HideHelpStatusText();
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -435,11 +430,6 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
 void HelpTextWindow::ImplShow()
 {
     ImplDelData aDogTag( this );
-    if ( maStatusText.Len() )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        pSVData->mpApp->ShowHelpStatusText( maStatusText );
-    }
     Show( sal_True, SHOW_NOACTIVATE );
     if( !aDogTag.IsDelete() )
     Update();
@@ -801,3 +791,5 @@ void ImplSetHelpWindowPos( Window* pHelpWin, sal_uInt16 nHelpWinStyle, sal_uInt1
     aPos = pWindow->AbsoluteScreenToOutputPixel( aPos );
     pHelpWin->SetPosPixel( aPos );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

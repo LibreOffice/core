@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _STGAVL_HXX
 #define _STGAVL_HXX
 
-#ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
-#endif
 
 // This class must be overloaded to define real, living nodes.
 // Especially, the compare function must be implemented.
@@ -77,3 +76,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,7 +148,7 @@ Sequence< Attribute > FastAttributeList::getUnknownAttributes(  ) throw (Runtime
 {
     Sequence< Attribute > aSeq( maUnknownAttributes.size() );
     Attribute* pAttr = aSeq.getArray();
-    for( UnknownAttributeList::iterator attrIter = maUnknownAttributes.begin(); attrIter != maUnknownAttributes.end(); attrIter++ )
+    for( UnknownAttributeList::iterator attrIter = maUnknownAttributes.begin(); attrIter != maUnknownAttributes.end(); ++attrIter )
         (*attrIter).FillAttribute( pAttr++ );
     return aSeq;
 }
@@ -156,7 +157,7 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (Runtim
     Sequence< FastAttribute > aSeq( maAttributes.size() );
     FastAttribute* pAttr = aSeq.getArray();
     FastAttributeMap::iterator fastAttrIter = maAttributes.begin();
-    for(; fastAttrIter != maAttributes.end(); fastAttrIter++ )
+    for(; fastAttrIter != maAttributes.end(); ++fastAttrIter )
     {
         pAttr->Token = fastAttrIter->first;
         pAttr->Value = OStringToOUString( fastAttrIter->second, RTL_TEXTENCODING_UTF8 );
@@ -166,3 +167,5 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (Runtim
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

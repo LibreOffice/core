@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -209,7 +210,7 @@ namespace utl
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::getNodeNames: caught a generic exception!");
+                OSL_FAIL("OConfigurationNode::getNodeNames: caught a generic exception!");
             }
         }
 
@@ -235,16 +236,16 @@ namespace utl
                 aBuf.append("OConfigurationNode::removeNode: there is no element named!");
                 aBuf.append( rtl::OUStringToOString( _rName, RTL_TEXTENCODING_ASCII_US ) );
                 aBuf.append( "!" );
-                OSL_ENSURE(sal_False, aBuf.getStr());
+                OSL_FAIL(aBuf.getStr());
                 #endif
             }
             catch (WrappedTargetException&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::removeNode: caught a WrappedTargetException!");
+                OSL_FAIL("OConfigurationNode::removeNode: caught a WrappedTargetException!");
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::removeNode: caught a generic exception!");
+                OSL_FAIL("OConfigurationNode::removeNode: caught a generic exception!");
             }
         }
         return sal_False;
@@ -315,12 +316,12 @@ namespace utl
             if (m_xDirectAccess.is() && m_xDirectAccess->hasByName(sNormalized))
             {
                 if (!::cppu::extractInterface(xNode, m_xDirectAccess->getByName(sNormalized)))
-                    OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+                    OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
             }
             else if (m_xHierarchyAccess.is())
             {
                 if (!::cppu::extractInterface(xNode, m_xHierarchyAccess->getByHierarchicalName(_rPath)))
-                    OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
+                    OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
             }
             if (xNode.is())
                 return OConfigurationNode( xNode );
@@ -333,12 +334,12 @@ namespace utl
             aBuf.append("OConfigurationNode::openNode: there is no element named ");
             aBuf.append( rtl::OUStringToOString( _rPath, RTL_TEXTENCODING_ASCII_US ) );
             aBuf.append("!");
-            OSL_ENSURE(sal_False, aBuf.getStr());
+            OSL_FAIL(aBuf.getStr());
             #endif
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OConfigurationNode::openNode: caught an exception while retrieving the node!");
+            OSL_FAIL("OConfigurationNode::openNode: caught an exception while retrieving the node!");
         }
         return OConfigurationNode();
     }
@@ -356,14 +357,11 @@ namespace utl
         Reference< XServiceInfo > xSI(m_xHierarchyAccess, UNO_QUERY);
         if (xSI.is())
         {
-            try { bIsSet = xSI->supportsService(::rtl::OUString::createFromAscii("com.sun.star.configuration.SetAccess")); }
+            try { bIsSet = xSI->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.SetAccess"))); }
             catch(Exception&) { }
         }
         return bIsSet;
     }
-
-    //---------------------------------------------------------------------
-    //--- 20.08.01 19:03:20 -----------------------------------------------
 
     sal_Bool OConfigurationNode::hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw()
     {
@@ -439,19 +437,19 @@ namespace utl
             }
             catch(IllegalArgumentException&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::setNodeValue: could not replace the value: caught an IllegalArgumentException!");
+                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught an IllegalArgumentException!");
             }
             catch(NoSuchElementException&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::setNodeValue: could not replace the value: caught a NoSuchElementException!");
+                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught a NoSuchElementException!");
             }
             catch(WrappedTargetException&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::setNodeValue: could not replace the value: caught a WrappedTargetException!");
+                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught a WrappedTargetException!");
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::setNodeValue: could not replace the value: caught a generic Exception!");
+                OSL_FAIL("OConfigurationNode::setNodeValue: could not replace the value: caught a generic Exception!");
             }
 
 
@@ -532,10 +530,9 @@ namespace utl
                 aArgs.put( "lazywrite", i_bLazyWrite );
                 aArgs.put( "depth", i_nDepth );
 
-                ::rtl::OUString sAccessService = ::rtl::OUString::createFromAscii(
-                        i_bUpdatable
-                    ? "com.sun.star.configuration.ConfigurationUpdateAccess"
-                    : "com.sun.star.configuration.ConfigurationAccess" );
+                ::rtl::OUString sAccessService( i_bUpdatable ?
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" )) :
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )));
 
                 Reference< XInterface > xRoot(
                     i_rxConfigProvider->createInstanceWithArguments( sAccessService, aArgs.getWrappedPropertyValues() ),
@@ -663,3 +660,4 @@ namespace utl
 }   // namespace utl
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

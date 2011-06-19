@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
-#ifndef _COMPHELPER_TYPEGENERATION_HXX
 #include <comphelper/TypeGeneration.hxx>
-#endif
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -97,9 +96,7 @@
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -129,9 +126,8 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-// --> OD 2004-08-09 #i28749#
+// #i28749#
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-// <--
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
@@ -221,19 +217,20 @@ namespace comphelper
             case CPPUTYPE_REFCONNECTION:    pType = &::getCppuType( (Reference< sdbc::XConnection >*)0);    break;
             case CPPUTYPE_REFMODEL:         pType = &::getCppuType( (Reference< frame::XModel >*)0);    break;
             case CPPUTYPE_REFCOMPONENT:     pType = &::getCppuType( (Reference< lang::XComponent >*)0 ); break;
-            // --> OD 2004-08-09 #i28749#
+            // #i28749#
             case CPPUTYPE_TRANSFORMATIONINHORIL2R:
             {
                 pType = &::getCppuType( (drawing::HomogenMatrix3*)0 );
             }
             break;
-            // <--
             case CPPUTYPE_SEQNAMEDVALUE:    pType = &::getCppuType( (Sequence<beans::NamedValue>*)0 ); break;
             case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
             case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;
             case CPPUTPYE_REFEMBEDDEDOBJECT:        pType = &embed::XEmbeddedObject::static_type(); break;
             default:
-                OSL_ASSERT( "Unknown CPPU type" );
+                OSL_FAIL( "Unknown CPPU type" );
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

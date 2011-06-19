@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,9 +26,6 @@
  *
  ************************************************************************/
 
-//#include <stdlib.h>
-//#include <sal/alloca.h>
-
 #include <boost/scoped_ptr.hpp>
 
 #include <osl/diagnose.h>
@@ -51,7 +49,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
-//using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
 namespace sax_fastparser {
@@ -528,6 +525,19 @@ void SAL_CALL FastSaxParser::registerNamespace( const OUString& NamespaceURL, sa
     throw IllegalArgumentException();
 }
 
+OUString SAL_CALL FastSaxParser::getNamespaceURL( const OUString& rPrefix ) throw(IllegalArgumentException, RuntimeException)
+{
+    try
+    {
+        return GetNamespaceURL( OUStringToOString( rPrefix, RTL_TEXTENCODING_UTF8 ) );
+    }
+    catch(Exception)
+    {
+        ;
+    }
+    throw IllegalArgumentException();
+}
+
 void FastSaxParser::setErrorHandler(const Reference< XErrorHandler > & Handler) throw (RuntimeException)
 {
     maData.mxErrorHandler = Handler;
@@ -553,7 +563,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
 // XServiceInfo
 OUString FastSaxParser::getImplementationName() throw (RuntimeException)
 {
-    return OUString::createFromAscii( PARSER_IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_IMPLEMENTATION_NAME ));
 }
 
 // XServiceInfo
@@ -574,7 +584,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames(void) throw (Runtim
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString::createFromAscii( PARSER_SERVICE_NAME );
+    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_SERVICE_NAME ));
     return seq;
 }
 
@@ -951,3 +961,5 @@ int FastSaxParser::callbackExternalEntityRef( XML_Parser parser,
 }
 
 } // namespace sax_fastparser
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

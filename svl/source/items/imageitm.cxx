@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@ int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
     return( ((SfxImageItem&) rItem).GetValue() == GetValue() && (*pImp == *(((SfxImageItem&)rItem).pImp) ) );
 }
 
-sal_Bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
     aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
@@ -96,10 +97,10 @@ sal_Bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) c
     aSeq[3] = ::com::sun::star::uno::makeAny( rtl::OUString( pImp->aURL ));
 
     rVal = ::com::sun::star::uno::makeAny( aSeq );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
@@ -112,10 +113,10 @@ sal_Bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
         aSeq[2] >>= pImp->bMirrored;
         if ( aSeq[3] >>= aURL )
             pImp->aURL = aURL;
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 void SfxImageItem::SetRotation( long nValue )
@@ -143,3 +144,4 @@ String SfxImageItem::GetURL() const
     return pImp->aURL;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

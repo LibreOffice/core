@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include "svdata.hxx"
 #include "window.h"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 // =======================================================================
@@ -76,8 +77,8 @@ struct ImplTabItem
 
 struct ImplTabCtrlData
 {
-    std::hash_map< int, int >       maLayoutPageIdToLine;
-    std::hash_map< int, int >       maLayoutLineToPageId;
+    boost::unordered_map< int, int >        maLayoutPageIdToLine;
+    boost::unordered_map< int, int >        maLayoutLineToPageId;
     std::vector< Rectangle >        maTabRectangles;
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
@@ -161,6 +162,18 @@ const Color& TabControl::GetCanonicalTextColor( const StyleSettings& _rStyle ) c
 
 // -----------------------------------------------------------------------
 
+WinBits TabControl::ImplInitStyle( WinBits nStyle )
+{
+    if ( !(nStyle & WB_NOTABSTOP) )
+        nStyle |= WB_TABSTOP;
+    if ( !(nStyle & WB_NOGROUP) )
+        nStyle |= WB_GROUP;
+
+    return nStyle;
+}
+
+// -----------------------------------------------------------------------
+
 void TabControl::ImplInitSettings( sal_Bool bFont,
                                    sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -215,6 +228,7 @@ TabControl::TabControl( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_TABCONTROL )
 {
     ImplInit( pParent, nStyle );
+    OSL_TRACE("*** TABCONTROL no notabs? %s", ( GetStyle() & WB_NOBORDER ) ? "true" : "false" );
 }
 
 // -----------------------------------------------------------------------
@@ -607,7 +621,13 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
     if ( pPage )
     {
-        pPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
+        if (  ( GetStyle() & WB_NOBORDER ) )
+        {
+            Rectangle aRectNoTab( (const Point&)Point( 0, 0 ), GetSizePixel() );
+            pPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
+        }
+        else
+            pPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
 
         // activate page here so the conbtrols can be switched
         // also set the help id of the parent window to that of the tab page
@@ -662,6 +682,12 @@ sal_Bool TabControl::ImplPosCurTabPage()
     ImplTabItem* pItem = ImplGetItem( GetCurPageId() );
     if ( pItem && pItem->mpTabPage )
     {
+        if (  ( GetStyle() & WB_NOBORDER ) )
+        {
+            Rectangle aRectNoTab( (const Point&)Point( 0, 0 ), GetSizePixel() );
+            pItem->mpTabPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
+            return sal_True;
+        }
         Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
         pItem->mpTabPage->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
         return sal_True;
@@ -1055,7 +1081,8 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
 
 void TabControl::Paint( const Rectangle& rRect )
 {
-    ImplPaint( rRect, false );
+    if (  !( GetStyle() & WB_NOBORDER ) )
+        ImplPaint( rRect, false );
 }
 
 // -----------------------------------------------------------------------
@@ -1083,7 +1110,6 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // Draw the TabPage border
     const StyleSettings&    rStyleSettings  = GetSettings().GetStyleSettings();
     Rectangle               aCurRect;
-    long                    nTopOff = 1;
     aRect.Left()   -= TAB_OFFSET;
     aRect.Top()    -= TAB_OFFSET;
     aRect.Right()  += TAB_OFFSET;
@@ -1125,6 +1151,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     }
     else
     {
+        long nTopOff = 1;
         if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
             SetLineColor( rStyleSettings.GetLightColor() );
         else
@@ -1486,6 +1513,10 @@ void TabControl::StateChanged( StateChangedType nType )
     {
         ImplInitSettings( sal_False, sal_False, sal_True );
         Invalidate();
+    }
+    else if ( nType == STATE_CHANGE_STYLE )
+    {
+        SetStyle( ImplInitStyle( GetStyle() ) );
     }
 }
 
@@ -2083,7 +2114,7 @@ Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, long nIndex ) cons
 
     if( HasLayoutData() )
     {
-        std::hash_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPageId );
+        boost::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPageId );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
             Pair aPair = mpControlData->mpLayoutData->GetLineStartEnd( it->second );
@@ -2148,7 +2179,7 @@ Rectangle TabControl::GetTabPageBounds( sal_uInt16 nPage ) const
 
     if( HasLayoutData() )
     {
-        std::hash_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPage );
+        boost::unordered_map< int, int >::const_iterator it = mpTabCtrlData->maLayoutPageIdToLine.find( (int)nPage );
         if( it != mpTabCtrlData->maLayoutPageIdToLine.end() )
         {
             if( it->second >= 0 && it->second < static_cast<int>(mpTabCtrlData->maTabRectangles.size()) )
@@ -2214,3 +2245,4 @@ void TabControl::SetMinimumSizePixel( const Size& i_rSize )
 // -----------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

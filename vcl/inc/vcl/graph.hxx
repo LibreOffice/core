@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,14 +88,10 @@ private:
 
     ImpGraphic*         mpImpGraphic;
 
-//#if 0 // _SOLAR__PRIVATE
-
 public:
 
     SAL_DLLPRIVATE void         ImplTestRefCount();
     SAL_DLLPRIVATE ImpGraphic*  ImplGetImpGraphic() const { return mpImpGraphic; }
-
-//#endif
 
 public:
 
@@ -224,3 +221,5 @@ public:
 };
 
 #endif  // _SV_GRAPH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

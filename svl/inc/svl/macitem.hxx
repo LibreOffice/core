@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 
-#ifndef _TABLE_HXX
 #include <tools/table.hxx>
-#endif
 
 class SvStream;
 
@@ -207,3 +206,5 @@ inline sal_Bool SvxMacroItem::DelMacro( sal_uInt16 nEvent )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

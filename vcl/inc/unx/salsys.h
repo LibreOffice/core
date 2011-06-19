@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 #define _SV_SALSYS_H
 
 #include <vcl/sv.h>
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
-#endif
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 #include <salsys.hxx>
 #include <vclpluginapi.h>
 
@@ -65,3 +62,5 @@ public:
 };
 
 #endif // _SV_SALSYS_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

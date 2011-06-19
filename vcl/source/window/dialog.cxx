@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>
-
 #include <svdata.hxx>
 #include <window.h>
 #include <brdwin.hxx>
@@ -559,7 +559,18 @@ sal_Bool Dialog::Close()
 {
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
+    //liuchen 2009-7-22, support Excel VBA UserForm_QueryClose event
+    mnCancelClose = 0;
     ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
+        // basic boolean ( and what the user might use in the event handler) can
+    // be ambiguous ( e.g. basic true = -1 )
+    // test agains 0 ( false ) and assume anything else is true
+    // ( Note: ) this used to work ( something changes somewhere )
+    if (mnCancelClose != 0)
+    {
+        return sal_False;
+    }
+    //liuchen 2009-7-22
     if ( aDelData.IsDelete() )
         return sal_False;
     ImplRemoveDel( &aDelData );
@@ -612,7 +623,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
 #ifdef DBG_UTIL
         ByteString aErrorStr( "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): " );
         aErrorStr += ImplGetDialogText( this );
-        DBG_ERROR( aErrorStr.GetBuffer() );
+        OSL_FAIL( aErrorStr.GetBuffer() );
 #endif
         return sal_False;
     }
@@ -622,7 +633,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
 #ifdef DBG_UTIL
         ByteString aErrorStr( "Dialog::StartExecuteModal() is called in a none UI application: " );
         aErrorStr += ImplGetDialogText( this );
-        DBG_ERROR( aErrorStr.GetBuffer() );
+        OSL_FAIL( aErrorStr.GetBuffer() );
 #endif
         return sal_False;
     }
@@ -712,7 +723,7 @@ short Dialog::Execute()
         if( ! aParentDelData.IsDelete() )
             pDialogParent->ImplRemoveDel( &aParentDelData );
         else
-            DBG_ERROR( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
+            OSL_FAIL( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
     }
 #endif
     if ( !aDelData.IsDelete() )
@@ -720,7 +731,7 @@ short Dialog::Execute()
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR( "Dialog::Execute() - Dialog destroyed in Execute()" );
+        OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );
     }
 #endif
 
@@ -1026,3 +1037,5 @@ ModalDialog::ModalDialog( Window* pParent, const ResId& rResId ) :
     ImplInit( pParent, ImplInitRes( rResId ) );
     ImplLoadRes( rResId );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

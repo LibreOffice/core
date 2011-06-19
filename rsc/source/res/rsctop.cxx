@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,10 +43,6 @@
 |*
 |*    RscTop::RscTop()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.06.91
-|*    Letzte Aenderung  MM 03.06.91
-|*
 *************************************************************************/
 RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
     : RefNode( nId )
@@ -62,10 +59,6 @@ RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
 |*
 |*    RscTop::SetCallPar()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 void RscTop::SetCallPar( const ByteString & rPar1, const ByteString & rPar2,
                          const ByteString & rParType )
@@ -79,10 +72,6 @@ void RscTop::SetCallPar( const ByteString & rPar1, const ByteString & rPar2,
 |*
 |*    RscTop::GetDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 RSCINST RscTop::GetDefault()
 {
@@ -94,10 +83,6 @@ RSCINST RscTop::GetDefault()
 /*************************************************************************
 |*
 |*    RscTop::Pre_dtor()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 19.06.91
-|*    Letzte Aenderung  MM 19.06.91
 |*
 *************************************************************************/
 void RscTop :: Pre_dtor(){
@@ -112,10 +97,6 @@ void RscTop :: Pre_dtor(){
 |*
 |*    RscTop::GetConstant()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 Atom    RscTop :: GetConstant( sal_uInt32 ){
     return InvalidAtom;
@@ -124,10 +105,6 @@ Atom    RscTop :: GetConstant( sal_uInt32 ){
 /*************************************************************************
 |*
 |*    RscTop::GetIndexType()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 RscTop * RscTop::GetTypeClass() const
@@ -142,10 +119,6 @@ RscTop * RscTop::GetTypeClass() const
 |*
 |*    RscTop::Size()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 sal_uInt32 RscTop :: Size()
 {
@@ -159,10 +132,6 @@ sal_uInt32 RscTop :: Size()
 |*
 |*    RscTop::GetRef()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop :: GetRef( const RSCINST & rInst, RscId * pRscId ){
     if( pSuperClass )
@@ -174,10 +143,6 @@ ERRTYPE RscTop :: GetRef( const RSCINST & rInst, RscId * pRscId ){
 /*************************************************************************
 |*
 |*    RscTop::InHierarchy()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 17.05.91
-|*    Letzte Aenderung  MM 17.05.91
 |*
 *************************************************************************/
 sal_Bool RscTop::InHierarchy( RscTop * pClass ){
@@ -191,10 +156,6 @@ sal_Bool RscTop::InHierarchy( RscTop * pClass ){
 /*************************************************************************
 |*
 |*    RscTop::SetVariable()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
@@ -213,10 +174,6 @@ ERRTYPE RscTop::SetVariable( Atom nVarName, RscTop * pClass,
 |*
 |*    RscTop::EnumVariable()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 03.02.93
-|*    Letzte Aenderung  MM 03.02.93
-|*
 *************************************************************************/
 void RscTop::EnumVariables( void * pData, VarEnumCallbackProc pProc )
 {
@@ -227,10 +184,6 @@ void RscTop::EnumVariables( void * pData, VarEnumCallbackProc pProc )
 /*************************************************************************
 |*
 |*    RscTop::GetVariable()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 RSCINST RscTop::GetVariable
@@ -253,10 +206,6 @@ RSCINST RscTop::GetVariable
 |*
 |*    RscTop::GetCopyVar()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 RSCINST RscTop::GetCopyVar( const RSCINST & rInst, Atom nVarName )
 {
@@ -271,10 +220,6 @@ RSCINST RscTop::GetCopyVar( const RSCINST & rInst, Atom nVarName )
 |*
 |*    RscTop::GetTupelVar()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 RSCINST RscTop::GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                             const RSCINST & rInitInst )
@@ -288,10 +233,6 @@ RSCINST RscTop::GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
 /*************************************************************************
 |*
 |*    RscTop::GetElement()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::GetElement( const RSCINST & rInst, const RscId & rEleName,
@@ -310,10 +251,6 @@ ERRTYPE RscTop::GetElement( const RSCINST & rInst, const RscId & rEleName,
 /*************************************************************************
 |*
 |*    RscTop::GetArrayEle()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::GetArrayEle
@@ -334,10 +271,6 @@ ERRTYPE RscTop::GetArrayEle
 |*
 |*    RscTop::GetValueEle()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::GetValueEle
 (
@@ -357,10 +290,6 @@ ERRTYPE RscTop::GetValueEle
 |*
 |*    RscTop::SearchEle()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 RSCINST RscTop::SearchEle( const RSCINST & rInst, const RscId & rEleName,
                    RscTop * pClass )
@@ -376,10 +305,6 @@ RSCINST RscTop::SearchEle( const RSCINST & rInst, const RscId & rEleName,
 |*
 |*    RscTop::GetPosEle()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 RSCINST RscTop::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
     if( pSuperClass )
@@ -392,10 +317,6 @@ RSCINST RscTop::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos ){
 /*************************************************************************
 |*
 |*    RscTop::MovePosEle()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
@@ -412,10 +333,6 @@ ERRTYPE RscTop::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
 |*
 |*    RscTop::SetPosRscId()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
                      const RscId & rRscId )
@@ -431,10 +348,6 @@ ERRTYPE RscTop::SetPosRscId( const RSCINST & rInst, sal_uInt32 nPos,
 |*
 |*    RscTop::GetInfoEle()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 SUBINFO_STRUCT RscTop::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
     if( pSuperClass )
@@ -448,10 +361,6 @@ SUBINFO_STRUCT RscTop::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos ){
 |*
 |*    RscTop::GetCount()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 sal_uInt32  RscTop::GetCount( const RSCINST & rInst ){
     if( pSuperClass )
@@ -463,10 +372,6 @@ sal_uInt32  RscTop::GetCount( const RSCINST & rInst ){
 /*************************************************************************
 |*
 |*    RscTop::SetNumber()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
@@ -481,10 +386,6 @@ ERRTYPE RscTop::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
 |*
 |*    RscTop::SetBool()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::SetBool( const RSCINST & rInst, sal_Bool bValue ){
     if( pSuperClass )
@@ -497,10 +398,6 @@ ERRTYPE RscTop::SetBool( const RSCINST & rInst, sal_Bool bValue ){
 /*************************************************************************
 |*
 |*    RscTop::SetConst()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::SetConst( const RSCINST & rInst, Atom nId, sal_Int32 nVal )
@@ -515,10 +412,6 @@ ERRTYPE RscTop::SetConst( const RSCINST & rInst, Atom nId, sal_Int32 nVal )
 |*
 |*    RscTop::SetNotConst()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::SetNotConst( const RSCINST & rInst, Atom nId ){
     if( pSuperClass )
@@ -531,10 +424,6 @@ ERRTYPE RscTop::SetNotConst( const RSCINST & rInst, Atom nId ){
 /*************************************************************************
 |*
 |*    RscTop::SetString()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::SetString( const RSCINST & rInst, const char * pStr ){
@@ -549,10 +438,6 @@ ERRTYPE RscTop::SetString( const RSCINST & rInst, const char * pStr ){
 |*
 |*    RscTop::GetNumber()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::GetNumber( const RSCINST & rInst, sal_Int32 * pN ){
     if( pSuperClass )
@@ -565,10 +450,6 @@ ERRTYPE RscTop::GetNumber( const RSCINST & rInst, sal_Int32 * pN ){
 /*************************************************************************
 |*
 |*    RscTop::GetBool()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::GetBool( const RSCINST & rInst, sal_Bool * pB ){
@@ -583,10 +464,6 @@ ERRTYPE RscTop::GetBool( const RSCINST & rInst, sal_Bool * pB ){
 |*
 |*    RscTop::GetCont()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::GetConst( const RSCINST & rInst, Atom * pH ){
     if( pSuperClass )
@@ -600,10 +477,6 @@ ERRTYPE RscTop::GetConst( const RSCINST & rInst, Atom * pH ){
 |*
 |*    RscTop::GetString()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::GetString( const RSCINST & rInst, char ** ppStr ){
     if( pSuperClass )
@@ -616,10 +489,6 @@ ERRTYPE RscTop::GetString( const RSCINST & rInst, char ** ppStr ){
 /*************************************************************************
 |*
 |*    RscTop::Create()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 17.05.91
-|*    Letzte Aenderung  MM 17.07.91
 |*
 *************************************************************************/
 RSCINST RscTop::Create( RSCINST * pInst, const RSCINST & rDefInst, sal_Bool bOwnRange )
@@ -638,10 +507,6 @@ RSCINST RscTop::Create( RSCINST * pInst, const RSCINST & rDefInst, sal_Bool bOwn
 |*
 |*    RscTop::Destroy()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 void    RscTop::Destroy( const RSCINST & rInst ){
     if( pSuperClass )
@@ -652,16 +517,11 @@ void    RscTop::Destroy( const RSCINST & rInst ){
 |*
 |*    RscTop::IsConsistent()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
-sal_Bool    RscTop::IsConsistent( const RSCINST & rInst,
-                              RscInconsList * pList )
+sal_Bool RscTop::IsConsistent( const RSCINST & rInst )
 {
     if( pSuperClass )
-        return pSuperClass->IsConsistent( rInst, pList );
+        return pSuperClass->IsConsistent( rInst );
     else
         return sal_True;
 }
@@ -669,10 +529,6 @@ sal_Bool    RscTop::IsConsistent( const RSCINST & rInst,
 /*************************************************************************
 |*
 |*    RscTop::SetToDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 void    RscTop::SetToDefault( const RSCINST & rInst )
@@ -684,10 +540,6 @@ void    RscTop::SetToDefault( const RSCINST & rInst )
 /*************************************************************************
 |*
 |*    RscTop::IsDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 sal_Bool    RscTop::IsDefault( const RSCINST & rInst ){
@@ -701,10 +553,6 @@ sal_Bool    RscTop::IsDefault( const RSCINST & rInst ){
 |*
 |*    RscTop::IsValueDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 sal_Bool    RscTop::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( pSuperClass )
@@ -717,10 +565,6 @@ sal_Bool    RscTop::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*
 |*    RscTop::SetDefault()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 void    RscTop::SetDefault( const RSCINST & rInst, Atom nVarId ){
     if( pSuperClass )
@@ -730,10 +574,6 @@ void    RscTop::SetDefault( const RSCINST & rInst, Atom nVarId ){
 /*************************************************************************
 |*
 |*    RscTop::GetDefault()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
 RSCINST RscTop::GetDefault( Atom nVarId ){
@@ -748,10 +588,6 @@ RSCINST RscTop::GetDefault( Atom nVarId ){
 |*
 |*    RscTop::Delete()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 void    RscTop::Delete( const RSCINST & rInst, RscTop * pClass,
                 const RscId & rId )
@@ -764,10 +600,6 @@ void    RscTop::Delete( const RSCINST & rInst, RscTop * pClass,
 |*
 |*    RscTop::DeletePos()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.10.91
-|*    Letzte Aenderung  MM 29.10.91
-|*
 *************************************************************************/
 void    RscTop::DeletePos( const RSCINST & rInst, sal_uInt32 nPos )
 {
@@ -778,10 +610,6 @@ void    RscTop::DeletePos( const RSCINST & rInst, sal_uInt32 nPos )
 /*************************************************************************
 |*
 |*    RscTop::SetRef()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 18.09.91
-|*    Letzte Aenderung  MM 18.09.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::SetRef( const RSCINST & rInst, const RscId & rRefId ){
@@ -794,10 +622,6 @@ ERRTYPE RscTop::SetRef( const RSCINST & rInst, const RscId & rRefId ){
 /*************************************************************************
 |*
 |*    RscTop::WriteHxxHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
@@ -813,10 +637,6 @@ ERRTYPE RscTop::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscTop::WriteHxx()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::WriteHxx( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont * pTC, const RscId & rId ){
@@ -829,10 +649,6 @@ ERRTYPE RscTop::WriteHxx( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscTop::WriteCxxHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
@@ -848,10 +664,6 @@ ERRTYPE RscTop::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscTop::WriteCxx()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::WriteCxx( const RSCINST & rInst, FILE * fOutput,
                           RscTypCont * pTC, const RscId & rId ){
@@ -864,10 +676,6 @@ ERRTYPE RscTop::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscTop::WriteSrcHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
 void RscTop::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
@@ -884,10 +692,6 @@ void RscTop::WriteSrcHeader( const RSCINST & rInst, FILE * fOutput,
 |*
 |*    RscTop::WriteSrc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
-|*
 *************************************************************************/
 void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                        RscTypCont * pTC, sal_uInt32 nTab, const char * pVarName )
@@ -899,10 +703,6 @@ void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 /*************************************************************************
 |*
 |*    RscTop::WriteRcHeader()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.04.91
-|*    Letzte Aenderung  MM 12.04.91
 |*
 *************************************************************************/
 ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
@@ -920,10 +720,6 @@ ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 |*
 |*    RscTop::WriteRc()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.04.91
-|*    Letzte Aenderung  MM 08.04.91
-|*
 *************************************************************************/
 ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                          RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
@@ -939,10 +735,6 @@ ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 |*
 |*    RscTop::WriteSyntaxHeader()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
-|*
 *************************************************************************/
 void RscTop::WriteSyntaxHeader( FILE * fOutput, RscTypCont * pTC )
 {
@@ -957,10 +749,6 @@ void RscTop::WriteSyntaxHeader( FILE * fOutput, RscTypCont * pTC )
 /*************************************************************************
 |*
 |*    RscTop::WriteSyntax()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 29.05.91
-|*    Letzte Aenderung  MM 29.05.91
 |*
 *************************************************************************/
 void RscTop::WriteSyntax( FILE * fOutput, RscTypCont * pTC )
@@ -992,3 +780,4 @@ void RscTop::WriteRcCtor( FILE * fOutput, RscTypCont * pTC )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

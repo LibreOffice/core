@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -167,20 +168,6 @@ namespace cppcanvas
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-
-#ifdef SPECIAL_DEBUG
-                aLocalState.Clip.clear();
-                aLocalState.DeviceColor =
-                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
-                                                            ::Color( 0x80FF0000 ) );
-
-                if( maState.Clip.is() )
-                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
-
-                aLocalState.DeviceColor = maState.DeviceColor;
-#endif
 
                 if( maFillColor.getLength() )
                 {
@@ -536,3 +523,5 @@ namespace cppcanvas
 
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

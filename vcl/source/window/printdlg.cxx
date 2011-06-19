@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,10 +73,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
 {
     SetPaintTransparent( sal_True );
     SetBackground();
-    if( useHCColorReplacement() )
-        maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-    else
-        maPageVDev.SetBackground( Color( COL_WHITE ) );
+    maPageVDev.SetBackground( Color( COL_WHITE ) );
     maHorzDim.Show();
     maVertDim.Show();
 
@@ -87,79 +85,12 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 {
 }
 
-bool PrintDialog::PrintPreviewWindow::useHCColorReplacement() const
-{
-    bool bRet = false;
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        try
-        {
-            // get service provider
-            Reference< XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
-            // create configuration hierachical access name
-            if( xSMgr.is() )
-            {
-                try
-                {
-                    Reference< XMultiServiceFactory > xConfigProvider(
-                        Reference< XMultiServiceFactory >(
-                            xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "com.sun.star.configuration.ConfigurationProvider" ))),
-                            UNO_QUERY )
-                        );
-                    if( xConfigProvider.is() )
-                    {
-                        Sequence< Any > aArgs(1);
-                        PropertyValue aVal;
-                        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-                        aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Accessibility" ) );
-                        aArgs.getArray()[0] <<= aVal;
-                        Reference< XNameAccess > xConfigAccess(
-                            Reference< XNameAccess >(
-                                xConfigProvider->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    "com.sun.star.configuration.ConfigurationAccess" )),
-                                                                                aArgs ),
-                                UNO_QUERY )
-                            );
-                        if( xConfigAccess.is() )
-                        {
-                            try
-                            {
-                                sal_Bool bValue = sal_False;
-                                Any aAny = xConfigAccess->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsForPagePreviews" ) ) );
-                                if( aAny >>= bValue )
-                                    bRet = bool(bValue);
-                            }
-                            catch( NoSuchElementException& )
-                            {
-                            }
-                            catch( WrappedTargetException& )
-                            {
-                            }
-                        }
-                    }
-                }
-                catch( Exception& )
-                {
-                }
-            }
-        }
-        catch( WrappedTargetException& )
-        {
-        }
-    }
-    return bRet;
-}
-
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
     // react on settings changed
     if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
     {
-        if( useHCColorReplacement() )
-            maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-        else
-            maPageVDev.SetBackground( Color( COL_WHITE ) );
+        maPageVDev.SetBackground( Color( COL_WHITE ) );
     }
     Window::DataChanged( i_rDCEvt );
 }
@@ -322,10 +253,6 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aBuf.append( maToolTipString );
     SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
-    if( useHCColorReplacement() )
-    {
-        maMtf.ReplaceColors( Color( COL_BLACK ), Color( COL_WHITE ), 30 );
-    }
 
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
@@ -623,12 +550,11 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maCollateImage( this, VclResId( SV_PRINT_COLLATE_IMAGE ) )
     , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
     , maCollateImg( VclResId( SV_PRINT_COLLATE_IMG ) )
-    , maCollateHCImg( VclResId( SV_PRINT_COLLATE_HC_IMG ) )
     , maNoCollateImg( VclResId( SV_PRINT_NOCOLLATE_IMG ) )
-    , maNoCollateHCImg( VclResId( SV_PRINT_NOCOLLATE_HC_IMG ) )
     , mnCollateUIMode( 0 )
 {
     FreeResource();
+
 
     maCopySpacer.Show();
     maStatusTxt.Show();
@@ -707,15 +633,6 @@ void PrintDialog::JobTabPage::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
-    #if 0
-    // do not actually make copy count persistent
-    // the assumption is that this would lead to a lot of unwanted copies
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
-    sal_Int32 nVal = aValue.toInt32();
-    maCopyCountField.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
-    #endif
-
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateBox" ) ) );
     if( aValue.equalsIgnoreAsciiCaseAscii( "alwaysoff" ) )
@@ -742,7 +659,8 @@ void PrintDialog::JobTabPage::storeToSettings()
                      maCopyCountField.GetText() );
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
-                     rtl::OUString::createFromAscii( maCollateBox.IsChecked() ? "true" : "false" ) );
+                     maCollateBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) :
+                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
 }
 
 PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rResId )
@@ -777,14 +695,6 @@ void PrintDialog::OutputOptPage::setupLayout()
 
 void PrintDialog::OutputOptPage::readFromSettings()
 {
-    #if 0
-    SettingsConfigItem* pItem = SettingsConfigItem::get();
-    rtl::OUString aValue;
-
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
-    maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
-    #endif
 }
 
 void PrintDialog::OutputOptPage::storeToSettings()
@@ -792,7 +702,8 @@ void PrintDialog::OutputOptPage::storeToSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
-                     rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
+                     maToFileBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"))
+                                             : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
 }
 
 PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
@@ -841,6 +752,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
 
     // init reverse print
     maJobPage.maReverseOrderBox.Check( maPController->getReversePrint() );
+
 
     // fill printer listbox
     const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
@@ -1146,7 +1058,7 @@ void PrintDialog::setupOptionalUI()
     boost::shared_ptr< vcl::RowOrColumn > pCurColumn;
 
     Window* pCurParent = 0, *pDynamicPageParent = 0;
-    sal_uInt16 nOptPageId = 9, nCurSubGroup = 0;
+    sal_uInt16 nOptPageId = 9;
     bool bOnStaticPage = false;
     bool bSubgroupOnStaticPage = false;
 
@@ -1159,7 +1071,6 @@ void PrintDialog::setupOptionalUI()
         rOptions[i].Value >>= aOptProp;
 
         // extract ui element
-        bool bEnabled = true;
         rtl::OUString aCtrlType;
         rtl::OUString aText;
         rtl::OUString aPropertyName;
@@ -1168,7 +1079,6 @@ void PrintDialog::setupOptionalUI()
         Sequence< rtl::OUString > aHelpTexts;
         Sequence< rtl::OUString > aHelpIds;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
-        sal_Int32 nCurHelpText = 0;
         rtl::OUString aGroupingHint;
         rtl::OUString aDependsOnName;
         sal_Int32 nDependsOnValue = 0;
@@ -1177,59 +1087,58 @@ void PrintDialog::setupOptionalUI()
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
-            if( rEntry.Name.equalsAscii( "Text" ) )
+            if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Text" ) ) )
             {
                 rEntry.Value >>= aText;
             }
-            else if( rEntry.Name.equalsAscii( "ControlType" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ControlType" ) ) )
             {
                 rEntry.Value >>= aCtrlType;
             }
-            else if( rEntry.Name.equalsAscii( "Choices" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Choices" ) ) )
             {
                 rEntry.Value >>= aChoices;
             }
-            else if( rEntry.Name.equalsAscii( "ChoicesDisabled" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ChoicesDisabled" ) ) )
             {
                 rEntry.Value >>= aChoicesDisabled;
             }
-            else if( rEntry.Name.equalsAscii( "Property" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Property" ) ) )
             {
                 PropertyValue aVal;
                 rEntry.Value >>= aVal;
                 aPropertyName = aVal.Name;
             }
-            else if( rEntry.Name.equalsAscii( "Enabled" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Enabled" ) ) )
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
-                bEnabled = bValue;
             }
-            else if( rEntry.Name.equalsAscii( "GroupingHint" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GroupingHint" ) ) )
             {
                 rEntry.Value >>= aGroupingHint;
             }
-            else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnName" ) ) )
             {
                 rEntry.Value >>= aDependsOnName;
             }
-            else if( rEntry.Name.equalsAscii( "DependsOnEntry" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DependsOnEntry" ) ) )
             {
                 rEntry.Value >>= nDependsOnValue;
             }
-            else if( rEntry.Name.equalsAscii( "AttachToDependency" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AttachToDependency" ) ) )
             {
                 rEntry.Value >>= bUseDependencyRow;
             }
-            else if( rEntry.Name.equalsAscii( "MinValue" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MinValue" ) ) )
             {
                 rEntry.Value >>= nMinValue;
             }
-            else if( rEntry.Name.equalsAscii( "MaxValue" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MaxValue" ) ) )
             {
                 rEntry.Value >>= nMaxValue;
             }
-            else if( rEntry.Name.equalsAscii( "HelpText" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HelpText" ) ) )
             {
                 if( ! (rEntry.Value >>= aHelpTexts) )
                 {
@@ -1241,7 +1150,7 @@ void PrintDialog::setupOptionalUI()
                     }
                 }
             }
-            else if( rEntry.Name.equalsAscii( "HelpId" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HelpId" ) ) )
             {
                 if( ! (rEntry.Value >>= aHelpIds ) )
                 {
@@ -1253,7 +1162,7 @@ void PrintDialog::setupOptionalUI()
                     }
                 }
             }
-            else if( rEntry.Name.equalsAscii( "HintNoLayoutPage" ) )
+            else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HintNoLayoutPage" ) ) )
             {
                 sal_Bool bNoLayoutPage = sal_False;
                 rEntry.Value >>= bNoLayoutPage;
@@ -1268,7 +1177,7 @@ void PrintDialog::setupOptionalUI()
         bool bSwitchPage = false;
         if( aGroupingHint.getLength() )
             bSwitchPage = true;
-        else if( aCtrlType.equalsAscii( "Subgroup" ) || (bOnStaticPage && ! bSubgroupOnStaticPage )  )
+        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) || (bOnStaticPage && ! bSubgroupOnStaticPage )  )
             bSwitchPage = true;
         if( bSwitchPage )
         {
@@ -1281,25 +1190,25 @@ void PrintDialog::setupOptionalUI()
             bOnStaticPage = false;
             bSubgroupOnStaticPage = false;
 
-            if( aGroupingHint.equalsAscii( "PrintRange" ) )
+            if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) )
             {
                 pCurColumn = maJobPage.mxPrintRange;
                 pCurParent = &maJobPage;            // set job page as current parent
                 bOnStaticPage = true;
             }
-            else if( aGroupingHint.equalsAscii( "OptionsPage" ) )
+            else if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OptionsPage" ) ) )
             {
                 pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maOptionsPage.getLayout());
                 pCurParent = &maOptionsPage;        // set options page as current parent
                 bOnStaticPage = true;
             }
-            else if( aGroupingHint.equalsAscii( "OptionsPageOptGroup" ) )
+            else if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OptionsPageOptGroup" ) ) )
             {
                 pCurColumn = maOptionsPage.mxOptGroup;
                 pCurParent = &maOptionsPage;        // set options page as current parent
                 bOnStaticPage = true;
             }
-            else if( aGroupingHint.equalsAscii( "LayoutPage" ) )
+            else if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LayoutPage" ) ) )
             {
                 pCurColumn = boost::dynamic_pointer_cast<vcl::RowOrColumn>(maNUpPage.getLayout());
                 pCurParent = &maNUpPage;            // set layout page as current parent
@@ -1313,7 +1222,7 @@ void PrintDialog::setupOptionalUI()
             }
         }
 
-        if( aCtrlType.equalsAscii( "Group" ) ||
+        if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Group" ) ) ||
             ( ! pCurParent && ! (bOnStaticPage || aGroupingHint.getLength() ) ) )
         {
             // add new tab page
@@ -1329,25 +1238,22 @@ void PrintDialog::setupOptionalUI()
             // set help text
             setHelpText( pNewGroup, aHelpTexts, 0 );
 
-            // reset subgroup counter
-            nCurSubGroup = 0;
-
             aDynamicColumns.push_back( boost::dynamic_pointer_cast<vcl::RowOrColumn>(pNewGroup->getLayout()) );
             pCurColumn = aDynamicColumns.back();
             pCurColumn->setParentWindow( pNewGroup );
             bSubgroupOnStaticPage = false;
             bOnStaticPage = false;
         }
-        else if( aCtrlType.equalsAscii( "Subgroup" ) && (pCurParent || aGroupingHint.getLength() ) )
+        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Subgroup" ) ) && (pCurParent || aGroupingHint.getLength() ) )
         {
             bSubgroupOnStaticPage = (aGroupingHint.getLength() != 0);
             // create group FixedLine
-            if( ! aGroupingHint.equalsAscii( "PrintRange" ) ||
+            if( ! aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) ||
                 ! pCurColumn->countElements() == 0
                )
             {
                 Window* pNewSub = NULL;
-                if( aGroupingHint.equalsAscii( "PrintRange" ) )
+                if( aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintRange" ) ) )
                     pNewSub = new FixedText( pCurParent, WB_VCENTER );
                 else
                     pNewSub = new FixedLine( pCurParent );
@@ -1371,9 +1277,9 @@ void PrintDialog::setupOptionalUI()
             pIndent->setChild( pCurColumn );
         }
         // EVIL
-        else if( aCtrlType.equalsAscii( "Bool" ) &&
-                 aGroupingHint.equalsAscii( "LayoutPage" ) &&
-                 aPropertyName.equalsAscii( "PrintProspect" )
+        else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) &&
+                 aGroupingHint.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LayoutPage" ) ) &&
+                 aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintProspect" ) )
                  )
         {
             maNUpPage.maBrochureBtn.SetText( aText );
@@ -1417,7 +1323,7 @@ void PrintDialog::setupOptionalUI()
                     }
                 }
             }
-            if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
+            if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bool" ) ) && pCurParent )
             {
                 // add a check box
                 CheckBox* pNewBox = new CheckBox( pCurParent );
@@ -1447,8 +1353,9 @@ void PrintDialog::setupOptionalUI()
                 // add checkbox to current column
                 pDependencyRow->addWindow( pNewBox );
             }
-            else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
+            else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Radio" ) ) && pCurParent )
             {
+                sal_Int32 nCurHelpText = 0;
                 boost::shared_ptr<vcl::RowOrColumn> pRadioColumn( pCurColumn );
                 if( aText.getLength() )
                 {
@@ -1506,9 +1413,9 @@ void PrintDialog::setupOptionalUI()
                     pLabel->setLabel( pBtn );
                 }
             }
-            else if( ( aCtrlType.equalsAscii( "List" )   ||
-                       aCtrlType.equalsAscii( "Range" )  ||
-                       aCtrlType.equalsAscii( "Edit" )
+            else if( ( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) )   ||
+                       aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) )  ||
+                       aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) )
                      ) && pCurParent )
             {
                 // create a row in the current column
@@ -1525,13 +1432,14 @@ void PrintDialog::setupOptionalUI()
                     pHeading->SetText( aText );
                     pHeading->Show();
 
+
                     // add to row
                     pLabel = new vcl::LabeledElement( pFieldColumn.get(), 2 );
                     pFieldColumn->addChild( pLabel );
                     pLabel->setLabel( pHeading );
                 }
 
-                if( aCtrlType.equalsAscii( "List" ) )
+                if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "List" ) ) )
                 {
                     ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
                     maControls.push_front( pList );
@@ -1564,7 +1472,7 @@ void PrintDialog::setupOptionalUI()
                     else
                         pFieldColumn->addWindow( pList );
                 }
-                else if( aCtrlType.equalsAscii( "Range" ) )
+                else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Range" ) ) )
                 {
                     NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
                     maControls.push_front( pField );
@@ -1597,7 +1505,7 @@ void PrintDialog::setupOptionalUI()
                     else
                         pFieldColumn->addWindow( pField );
                 }
-                else if( aCtrlType.equalsAscii( "Edit" ) )
+                else if( aCtrlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Edit" ) ) )
                 {
                     Edit* pField = new Edit( pCurParent, WB_BORDER );
                     maControls.push_front( pField );
@@ -1627,7 +1535,11 @@ void PrintDialog::setupOptionalUI()
             }
             else
             {
-                DBG_ERROR( "Unsupported UI option" );
+                rtl::OStringBuffer sMessage;
+                sMessage.append(RTL_CONSTASCII_STRINGPARAM("Unsupported UI option: \""));
+                sMessage.append(rtl::OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
+                sMessage.append('"');
+                OSL_FAIL( sMessage.getStr() );
             }
 
             pCurColumn = pSaveCurColumn;
@@ -1720,6 +1632,7 @@ void PrintDialog::setupOptionalUI()
     }
 
     Size aSz = getLayout()->getOptimalSize( WINDOWSIZE_PREFERRED );
+
     SetOutputSizePixel( aSz );
 }
 
@@ -1739,21 +1652,12 @@ void PrintDialog::checkControlDependencies()
         maJobPage.maCollateBox.Enable( sal_False );
 
     Image aImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateImg : maJobPage.maNoCollateImg );
-    Image aHCImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateHCImg : maJobPage.maNoCollateHCImg );
-    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     Size aImgSize( aImg.GetSizePixel() );
-    Size aHCImgSize( aHCImg.GetSizePixel() );
-
-    if( aHCImgSize.Width() > aImgSize.Width() )
-        aImgSize.Width() = aHCImgSize.Width();
-    if( aHCImgSize.Height() > aImgSize.Height() )
-        aImgSize.Height() = aHCImgSize.Height();
 
     // adjust size of image
     maJobPage.maCollateImage.SetSizePixel( aImgSize );
-    maJobPage.maCollateImage.SetImage( bHC ? aHCImg : aImg );
-    maJobPage.maCollateImage.SetModeImage( aHCImg, BMP_COLOR_HIGHCONTRAST );
+    maJobPage.maCollateImage.SetImage( aImg );
     maJobPage.getLayout()->resize();
 
     // enable setup button only for printers that can be setup
@@ -2283,7 +2187,7 @@ PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
     }
     else
     {
-        DBG_ERROR( "changed control not in property map" );
+        OSL_FAIL( "changed control not in property map" );
     }
     return pVal;
 }
@@ -2307,7 +2211,7 @@ void PrintDialog::updateWindowFromProperty( const rtl::OUString& i_rProperty )
                 {
                     pBox->Check( bVal );
                 }
-                else if( i_rProperty.equalsAscii( "PrintProspect" ) )
+                else if( i_rProperty.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PrintProspect" ) ) )
                 {
                     // EVIL special case
                     if( bVal )
@@ -2611,3 +2515,4 @@ void PrintProgressDialog::Paint( const Rectangle& )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

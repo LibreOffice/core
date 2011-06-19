@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <iterator>
 
 
 //--------------------------------------------------------------------------
@@ -484,8 +486,6 @@ namespace comphelper
 
         try
         {
-            ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
-
             // check for unknown properties
             // we cannot simply rely on the XMultiPropertySet::setPropertyValues
             // implementation of our base class, since it does not throw
@@ -502,6 +502,7 @@ namespace comphelper
                     ++pName, ++pHandle, ++pProperty
                 )
             {
+                ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
                 *pHandle = rPropInfo.getHandleByName( *pName );
                 if ( *pHandle != -1 )
                     continue;
@@ -512,9 +513,6 @@ namespace comphelper
                     // add the property
                     sal_Int16 nAttributes = PropertyAttribute::BOUND | PropertyAttribute::REMOVEABLE | PropertyAttribute::MAYBEDEFAULT;
                     addProperty( *pName, nAttributes, pProperty->Value );
-                    // rPropInfo is invalid, refetch
-                    rPropInfo = getInfoHelper();
-                    *pHandle = rPropInfo.getHandleByName( *pName );
                     continue;
                 }
 
@@ -583,3 +581,4 @@ namespace comphelper
 }   // namespace comphelper
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

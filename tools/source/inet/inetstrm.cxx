@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1685,9 +1686,9 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 for( pOldPos = pChar = (const sal_Char *) pMsgBuffer->GetData(); nBufSize--;
                      pChar++ )
                 {
-                    int status;
                     if( *pChar == '\r' || *pChar == '\n' )
                     {
+                        int status;
                         if( aDelim.CompareTo (pOldPos, aDelim.Len())
                             != COMPARE_EQUAL &&
                             aClose.CompareTo (pOldPos, aClose.Len())
@@ -1819,3 +1820,4 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

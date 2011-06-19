@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define SVTOOLS_REGISTRATIONDLG_HXX
 
 #include <vcl/fixed.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 
 //........................................................................
@@ -85,3 +84,5 @@ namespace svt
 //........................................................................
 
 #endif // SVTOOLS_REGISTRATIONDLG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

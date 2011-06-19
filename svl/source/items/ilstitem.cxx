@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,25 +76,25 @@ SfxPoolItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
     return new SfxIntegerListItem( *this );
 }
 
-sal_Bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SfxIntegerListItem::PutValue  ( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::script::XTypeConverter > xConverter
-            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+            ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
             ::com::sun::star::uno::UNO_QUERY );
     ::com::sun::star::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, ::getCppuType((const ::com::sun::star::uno::Sequence < sal_Int32 >*)0) ); }
     catch (::com::sun::star::uno::Exception&)
     {
-        return sal_False;
+        return true;
     }
 
     return ( aNew >>= m_aList );
 }
 
-sal_Bool SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool SfxIntegerListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= m_aList;
-    return sal_True;
+    return true;
 }
 
 void SfxIntegerListItem::GetList( SvULongs& rList ) const
@@ -101,3 +102,5 @@ void SfxIntegerListItem::GetList( SvULongs& rList ) const
     for ( sal_Int32 n=0; n<m_aList.getLength(); n++ )
         rList.Insert( m_aList[n], sal::static_int_cast< sal_uInt16 >(n) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

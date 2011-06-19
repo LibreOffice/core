@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,6 +47,8 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
+#include <vcl/svapp.hxx>
+
 using namespace ::svt::table;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt::grid;
@@ -80,7 +83,7 @@ void SVTXGridControl::SetWindow( Window* pWindow )
 // ---------------------------------------------------------------------------------------------------------------------
 sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getRowAtPoint: no control (anymore)!", -1 );
@@ -92,7 +95,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) 
 // ---------------------------------------------------------------------------------------------------------------------
 sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getColumnAtPoint: no control (anymore)!", -1 );
@@ -104,7 +107,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 
 // ---------------------------------------------------------------------------------------------------------------------
 sal_Int32 SAL_CALL SVTXGridControl::getCurrentColumn(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getCurrentColumn: no control (anymore)!", -1 );
@@ -116,7 +119,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getCurrentColumn(  ) throw (RuntimeException
 // ---------------------------------------------------------------------------------------------------------------------
 sal_Int32 SAL_CALL SVTXGridControl::getCurrentRow(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getCurrentRow: no control (anymore)!", -1 );
@@ -140,7 +143,7 @@ void SAL_CALL SVTXGridControl::removeSelectionListener(const ::com::sun::star::u
 // ---------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable != NULL, "SVTXGridControl::setProperty: no control (anymore)!" );
@@ -383,7 +386,7 @@ namespace
 
 Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable != NULL, "SVTXGridControl::getProperty: no control (anymore)!", Any() );
@@ -513,7 +516,7 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::rowsInserted( const GridDataEvent& i_event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     m_pTableModel->notifyRowsInserted( i_event );
 }
 
@@ -521,14 +524,14 @@ void SAL_CALL SVTXGridControl::rowsInserted( const GridDataEvent& i_event ) thro
 void SAL_CALL//----------------------------------------------------------------------------------------------------------------------
  SVTXGridControl::rowsRemoved( const GridDataEvent& i_event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     m_pTableModel->notifyRowsRemoved( i_event );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     m_pTableModel->notifyDataChanged( i_event );
 
@@ -542,7 +545,7 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& i_event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     OSL_UNUSED( i_event );
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
@@ -555,7 +558,7 @@ void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& i_event )
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Reference< XGridColumn > const xGridColumn( i_event.Element, UNO_QUERY_THROW );
 
@@ -567,7 +570,7 @@ void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nIndex( -1 );
     OSL_VERIFY( i_event.Accessor >>= nIndex );
@@ -593,7 +596,7 @@ void SAL_CALL SVTXGridControl::disposing( const ::com::sun::star::lang::EventObj
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::selectRow: no control (anymore)!" );
@@ -604,7 +607,7 @@ void SAL_CALL SVTXGridControl::selectRow( ::sal_Int32 i_rowIndex ) throw (::com:
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::selectAllRows: no control (anymore)!" );
@@ -615,7 +618,7 @@ void SAL_CALL SVTXGridControl::selectAllRows() throw (::com::sun::star::uno::Run
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::deselectRow: no control (anymore)!" );
@@ -626,7 +629,7 @@ void SAL_CALL SVTXGridControl::deselectRow( ::sal_Int32 i_rowIndex ) throw (::co
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::deselectAllRows: no control (anymore)!" );
@@ -637,7 +640,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
 //----------------------------------------------------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL SVTXGridControl::getSelection() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable, "SVTXGridControl::getSelection: no control (anymore)!", Sequence< sal_Int32 >() );
@@ -652,7 +655,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
 //----------------------------------------------------------------------------------------------------------------------
 ::sal_Bool SAL_CALL SVTXGridControl::isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable, "SVTXGridControl::getSelection: no control (anymore)!", sal_True );
@@ -663,7 +666,7 @@ void SAL_CALL SVTXGridControl::deselectAllRows() throw (::com::sun::star::uno::R
 //----------------------------------------------------------------------------------------------------------------------
 ::sal_Bool SAL_CALL SVTXGridControl::isSelectedIndex( ::sal_Int32 index ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN( pTable, "SVTXGridControl::isSelectedIndex: no control (anymore)!", sal_False );
@@ -683,7 +686,7 @@ void SVTXGridControl::dispose() throw(::com::sun::star::uno::RuntimeException)
 //----------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    ::vos::OGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
     switch ( rVclWindowEvent.GetId() )
@@ -778,3 +781,4 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

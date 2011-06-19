@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,9 @@
 
 #include <X11_selection.hxx>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBAORD_XCLIPBOARDEX_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBAORD_XCLIPBOARDNOTIFIER_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
-#endif
 #include <cppuhelper/compbase4.hxx>
 
 // ------------------------------------------------------------------------
@@ -149,3 +146,5 @@ namespace x11 {
 } // namepspace
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

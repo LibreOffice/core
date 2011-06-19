@@ -41,17 +41,7 @@ Image IMG_TRIANGLE_RIGHT
     ImageBitmap = Bitmap { File = "triangle_right.png"; };
 };
 
-Image IMG_TRIANGLE_RIGHT_HC
-{
-    ImageBitmap = Bitmap { File = "triangle_right_hc.png"; };
-};
-
 Image IMG_TRIANGLE_DOWN
 {
     ImageBitmap = Bitmap { File = "triangle_down.png"; };
-};
-
-Image IMG_TRIANGLE_DOWN_HC
-{
-    ImageBitmap = Bitmap { File = "plus.png"; } ;
 };

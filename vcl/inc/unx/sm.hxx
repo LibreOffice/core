@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,6 +28,7 @@
 #ifndef _VCL_SM_HXX
 #define _VCL_SM_HXX
 
+#include <rtl/string.hxx>
 #include "tools/link.hxx"
 #include "unx/salunx.h"
 #include <X11/SM/SMlib.h>
@@ -36,7 +38,7 @@
 class SessionManagerClient
 {
     static SmcConn          aSmcConnection;
-    static ByteString       aClientID;
+    static rtl::OString m_aClientID;
     static bool         bDocSaveDone;
 
     static void SaveYourselfProc(       SmcConn connection,
@@ -54,7 +56,7 @@ class SessionManagerClient
     static void InteractProc(           SmcConn connection,
                                         SmPointer clientData );
 
-    static const ByteString& getPreviousSessionID();
+    static const rtl::OString& getPreviousSessionID();
 
     DECL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void* );
     DECL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void* );
@@ -69,8 +71,8 @@ public:
     static void saveDone();
     static void interactionDone( bool bCancelShutdown );
 
-    static String getExecName();
-    static VCLPLUG_GEN_PUBLIC const ByteString&  getSessionID();
+    static rtl::OUString getExecName();
+    static VCLPLUG_GEN_PUBLIC const rtl::OString& getSessionID();
 };
 
 class SalFrame;
@@ -90,3 +92,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

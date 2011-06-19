@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -125,7 +126,7 @@ void G2GApp::Message( const String& rText, sal_uInt8 nExitCode )
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
-    fprintf( stderr, aText.GetBuffer() );
+    fprintf( stderr, "%s", aText.GetBuffer() );
 }
 
 // -----------------------------------------------------------------------------
@@ -147,8 +148,7 @@ void G2GApp::ShowUsage()
 
 int G2GApp::Start( const ::std::vector< String >& rArgs )
 {
-    int     nCmdCount = rArgs.size();
-    sal_uInt16  nCurCmd = 0;
+    size_t nCmdCount = rArgs.size();
 
     cExitCode = EXIT_NOERROR;
 
@@ -156,6 +156,7 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
     {
         GraphicFilter   aFilter( sal_False );
         String          aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
+        size_t nCurCmd = 0;
 
         aInFile = rArgs[ nCurCmd++ ];
         aOutFile = rArgs[ nCurCmd++ ];
@@ -249,3 +250,5 @@ int main( int nArgCount, char* ppArgs[] )
 
     return aG2GApp.Start( aArgs );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

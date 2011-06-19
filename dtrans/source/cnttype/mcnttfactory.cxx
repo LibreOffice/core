@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ namespace
     Sequence< OUString > SAL_CALL MimeContentTypeFactory_getSupportedServiceNames( )
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.MimeContentTypeFactory");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"));
         return aRet;
     }
 }
@@ -93,7 +94,7 @@ Reference< XMimeContentType > CMimeContentTypeFactory::createMimeContentType( co
 OUString SAL_CALL CMimeContentTypeFactory::getImplementationName(  )
     throw( RuntimeException )
 {
-    return OUString::createFromAscii( MIMECONTENTTYPEFACTORY_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( MIMECONTENTTYPEFACTORY_IMPL_NAME ));
 }
 
 // -------------------------------------------------
@@ -121,3 +122,5 @@ Sequence< OUString > SAL_CALL CMimeContentTypeFactory::getSupportedServiceNames(
 {
     return MimeContentTypeFactory_getSupportedServiceNames( );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

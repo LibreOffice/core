@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -134,7 +135,7 @@ public:
 };
 
 // ------------------
-// - ImplFontHints -
+// - ImplFontOptions -
 // ------------------
 
 class ImplFontOptions
@@ -153,19 +154,20 @@ public:
         meHinting(HINTING_DONTKNOW),
         meHintStyle(HINT_SLIGHT)
     {}
-    ImplFontOptions( FontEmbeddedBitmap eEmbeddedBitmap, FontAntiAlias eAntiAlias,
-        FontAutoHint eAutoHint, FontHinting eHinting, FontHintStyle eHintStyle) :
-        meEmbeddedBitmap(eEmbeddedBitmap),
-        meAntiAlias(eAntiAlias),
-        meAutoHint(eAutoHint),
-        meHinting(eHinting),
-        meHintStyle(eHintStyle)
+    virtual ~ImplFontOptions()
     {}
-    FontAutoHint GetUseAutoHint() const { return meAutoHint; }
-    FontHintStyle GetHintStyle() const { return meHintStyle; }
-    bool DontUseEmbeddedBitmaps() const { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
-    bool DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
-    bool DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
+    FontAutoHint GetUseAutoHint() const
+        { return meAutoHint; }
+    FontHintStyle GetHintStyle() const
+        { return meHintStyle; }
+    bool DontUseEmbeddedBitmaps() const
+        { return meEmbeddedBitmap == EMBEDDEDBITMAP_FALSE; }
+    bool DontUseAntiAlias() const
+        { return meAntiAlias == ANTIALIAS_FALSE; }
+    bool DontUseHinting() const
+        { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
+    virtual void *GetPattern(void * /*pFace*/, bool /*bEmbolden*/) const
+        { return NULL; }
 };
 
 // -------------------
@@ -237,3 +239,4 @@ bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
 #endif // _SV_IMPFONT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

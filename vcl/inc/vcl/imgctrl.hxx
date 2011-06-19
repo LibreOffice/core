@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,10 @@ public:
 protected:
     void    ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const;
 private:
-    using FixedImage::ImplDraw;
+    sal_Bool        SetModeBitmap( const BitmapEx& rBitmap );
+    const BitmapEx& GetModeBitmap( ) const;
 };
 
 #endif  // _SV_IMGCTRL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

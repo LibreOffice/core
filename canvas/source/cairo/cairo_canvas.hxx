@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
-#include <canvas/base/basemutexhelper.hxx>
+#include <canvas/base/disambiguationhelper.hxx>
 #include <canvas/base/bufferedgraphicdevicebase.hxx>
 
 #include <basegfx/vector/b2isize.hxx>
@@ -68,7 +69,7 @@ namespace cairocanvas
                                                 ::com::sun::star::util::XUpdatable,
                                                 ::com::sun::star::beans::XPropertySet,
                                                 ::com::sun::star::lang::XServiceName >  GraphicDeviceBase_Base;
-    typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase_Base >,
+    typedef ::canvas::GraphicDeviceBase< ::canvas::DisambiguationHelper< GraphicDeviceBase_Base >,
                                                  DeviceHelper,
                                                  ::osl::MutexGuard,
                                                  ::cppu::OWeakObject > CanvasBase_Base;
@@ -121,12 +122,8 @@ namespace cairocanvas
         /// For resource tracking
         ~Canvas();
 
-#if defined __SUNPRO_CC
-        using CanvasBaseT::disposing;
-#endif
-
         /// Dispose all internal references
-        virtual void SAL_CALL disposing();
+        virtual void disposeThis();
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
@@ -159,3 +156,5 @@ namespace cairocanvas
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

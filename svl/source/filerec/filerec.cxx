@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,11 +75,11 @@ SV_IMPL_VARARR( SfxUINT32s, sal_uInt32 );
 
 sal_uInt32 SfxMiniRecordWriter::Close
 (
-    FASTBOOL    bSeekToEndOfRec     /*  sal_True (default)
+    bool         bSeekToEndOfRec    /*  true (default)
                                         Der Stream wird an das Ende des Records
                                         positioniert.
 
-                                        sal_False
+                                        false
                                         Der Stream wird an den Anfang des
                                         Contents (also hinter den Header)
                                         positioniert.
@@ -118,26 +119,9 @@ sal_uInt32 SfxMiniRecordWriter::Close
             _pStream->Seek( nEndPos );
 
         // Header wurde JETZT geschrieben
-        _bHeaderOk = sal_True;
+        _bHeaderOk = true;
         return nEndPos;
     }
-#ifdef DBG_UTIL
-    // mu\s Fix-Size-Record gepr"uft werden?
-    else if ( SFX_BOOL_DONTCARE == _bHeaderOk )
-    {
-        // Header auslesen, um Soll-Gr"o\se zu bestimmen
-        sal_uInt32 nEndPos = _pStream->Tell();
-        _pStream->Seek( _nStartPos );
-        sal_uInt32 nHeader;
-        *_pStream >> nHeader;
-        _pStream->Seek( nEndPos );
-
-        // Soll-Gr"o\se mit Ist-Gr"o\se vergleichen
-        DBG_ASSERT( nEndPos - SFX_REC_OFS(nHeader) == _nStartPos + sizeof(sal_uInt32),
-                    "fixed record size incorrect" );
-        DbgOutf( "SfxFileRec: written record until %ul", nEndPos );
-    }
-#endif
 
     // Record war bereits geschlossen
     return 0;
@@ -260,7 +244,7 @@ sal_uInt16 SfxMiniRecordReader::ScanRecordType
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
+bool SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
 
 /*  [Beschreibung]
 
@@ -272,7 +256,7 @@ FASTBOOL SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
 */
 
 {
-    FASTBOOL bRet = sal_True;
+    bool bRet = true;
 
     // Record-Ende und Pre-Tag aus dem Header ermitteln
     _nEofRec = _pStream->Tell() + SFX_REC_OFS(nHeader);
@@ -282,7 +266,7 @@ FASTBOOL SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
     if ( _nPreTag == SFX_REC_PRETAG_EOR )
     {
         _pStream->SetError( ERRCODE_IO_WRONGFORMAT );
-        bRet = sal_False;
+        bRet = true;
     }
     return bRet;
 }
@@ -487,7 +471,7 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
 
 //=========================================================================
 
-inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
+inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
 
 /*  [Beschreibung]
 
@@ -498,13 +482,13 @@ inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
 */
 
 {
-    FASTBOOL bRet;
+    bool bRet;
 
     // Basisklassen-Header einlesen
     sal_uInt32 nHeader=0;
     *_pStream >> nHeader;
     if ( !SetHeader_Impl( nHeader ) )
-        bRet = sal_False;
+        bRet = false;
     else
     {
         // eigenen Header einlesen
@@ -561,7 +545,7 @@ SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream, sal_uInt16 nTag
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxSingleRecordReader::FindHeader_Impl
+bool SfxSingleRecordReader::FindHeader_Impl
 (
     sal_uInt16      nTypes,     // arithm. Veroderung erlaubter Record-Typen
     sal_uInt16      nTag        // zu findende Record-Art-Kennung
@@ -674,7 +658,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 
 //------------------------------------------------------------------------
 
-sal_uInt32 SfxMultiFixRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
+sal_uInt32 SfxMultiFixRecordWriter::Close( bool bSeekToEndOfRec )
 
 //  siehe <SfxMiniRecordWriter>
 
@@ -799,7 +783,7 @@ void SfxMultiVarRecordWriter::NewContent()
 
 //-------------------------------------------------------------------------
 
-sal_uInt32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
+sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
 
 // siehe <SfxMiniRecordWriter>
 
@@ -872,7 +856,7 @@ void SfxMultiMixRecordWriter::NewContent
 
 //=========================================================================
 
-FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
+bool SfxMultiRecordReader::ReadHeader_Impl()
 
 /*  [Beschreibung]
 
@@ -898,12 +882,13 @@ FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
         else
             _pStream->Seek( _nContentSize );
         _pContentOfs = new sal_uInt32[_nContentCount];
+        memset(_pContentOfs, 0, _nContentCount*sizeof(sal_uInt32));
         //! darf man jetzt so einr"ucken
         #if defined(OSL_LITENDIAN)
-            _pStream->Read( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
+        _pStream->Read( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
         #else
-            for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
-                *_pStream >> _pContentOfs[n];
+        for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
+            *_pStream >> _pContentOfs[n];
         #endif
         _pStream->Seek( nContentPos );
     }
@@ -915,7 +900,10 @@ FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
 //-------------------------------------------------------------------------
 
 SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream )
-:   _pContentOfs( NULL ), _nContentNo(0)
+    : _pContentOfs(0)
+    , _nContentSize(0)
+    , _nContentCount(0)
+    , _nContentNo(0)
 {
     // Position im Stream merken, um im Fehlerfall zur"uck-seeken zu k"onnen
     _nStartPos = pStream->Tell();
@@ -963,7 +951,7 @@ SfxMultiRecordReader::~SfxMultiRecordReader()
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxMultiRecordReader::GetContent()
+bool SfxMultiRecordReader::GetContent()
 
 /*  [Beschreibung]
 
@@ -1014,3 +1002,4 @@ FASTBOOL SfxMultiRecordReader::GetContent()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,16 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _HELP_HXX
 #include <vcl/help.hxx>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -138,8 +134,9 @@ ValueSet::~ValueSet()
 
 void ValueSet::ImplDeleteItems()
 {
-    for( ValueSetItem* pItem = mpImpl->mpItemList->First(); pItem; pItem = mpImpl->mpItemList->Next() )
+    for ( size_t i = 0, n = mpImpl->mpItemList->size(); i < n; ++i )
     {
+        ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
         if( !pItem->maRect.IsEmpty() && ImplHasAccessibleListeners() )
         {
             ::com::sun::star::uno::Any aOldAny, aNewAny;
@@ -151,7 +148,7 @@ void ValueSet::ImplDeleteItems()
         delete pItem;
     }
 
-    mpImpl->mpItemList->Clear();
+    mpImpl->mpItemList->clear();
 }
 
 // -----------------------------------------------------------------------
@@ -345,7 +342,7 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
 void ValueSet::Format()
 {
     Size        aWinSize = GetOutputSizePixel();
-    sal_uLong       nItemCount = mpImpl->mpItemList->Count();
+    size_t      nItemCount = mpImpl->mpItemList->size();
     WinBits     nStyle = GetStyle();
     long        nTxtHeight = GetTextHeight();
     long        nOff;
@@ -437,8 +434,8 @@ void ValueSet::Format()
 
     // Zeilenanzahl berechnen
     mbScroll = sal_False;
-    mnLines = (long)mpImpl->mpItemList->Count() / mnCols;
-    if ( mpImpl->mpItemList->Count() % mnCols )
+    mnLines = (long)mpImpl->mpItemList->size() / mnCols;
+    if ( mpImpl->mpItemList->size() % mnCols )
         mnLines++;
     else if ( !mnLines )
         mnLines = 1;
@@ -509,9 +506,9 @@ void ValueSet::Format()
             }
         }
 
-        for ( sal_uLong i = 0; i < nItemCount; i++ )
+        for ( size_t i = 0; i < nItemCount; i++ )
         {
-            ValueSetItem* pItem = mpImpl->mpItemList->GetObject( i );
+            ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
             pItem->maRect.SetEmpty();
         }
 
@@ -598,9 +595,9 @@ void ValueSet::Format()
             if ( y+(mnVisLines*(nItemHeight+nSpace)) < aWinSize.Height() )
                 nLastItem += mnCols;
         }
-        for ( sal_uLong i = 0; i < nItemCount; i++ )
+        for ( size_t i = 0; i < nItemCount; i++ )
         {
-            ValueSetItem*   pItem = mpImpl->mpItemList->GetObject( i );
+            ValueSetItem*   pItem = (*mpImpl->mpItemList)[ i ];
 
             if ( (i >= nFirstItem) && (i < nLastItem) )
             {
@@ -739,7 +736,7 @@ void ValueSet::ImplDrawSelect()
 
         ValueSetItem* pItem;
         if ( nItemId )
-            pItem = mpImpl->mpItemList->GetObject( GetItemPos( nItemId ) );
+            pItem = (*mpImpl->mpItemList)[ GetItemPos( nItemId ) ];
         else
         {
             if ( mpNoneItem )
@@ -904,7 +901,7 @@ void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
 
     sal_uInt16 nItemPos = GetItemPos( nItemId );
     if ( nItemPos != sal::static_int_cast<sal_uInt16>(LIST_ENTRY_NOTFOUND) )
-        aRect = mpImpl->mpItemList->GetObject( nItemPos )->maRect;
+        aRect = (*mpImpl->mpItemList)[ nItemPos ]->maRect;
     else
     {
         if ( mpNoneItem )
@@ -945,15 +942,15 @@ void ValueSet::ImplHighlightItem( sal_uInt16 nItemId, sal_Bool bIsSelection )
 
 void ValueSet::ImplDrawDropPos( sal_Bool bShow )
 {
-    if ( (mnDropPos != VALUESET_ITEM_NOTFOUND) && mpImpl->mpItemList->Count() )
+    if ( (mnDropPos != VALUESET_ITEM_NOTFOUND) && !mpImpl->mpItemList->empty() )
     {
-        sal_uInt16  nItemPos = mnDropPos;
+        size_t  nItemPos = mnDropPos;
         sal_uInt16  nItemId1;
         sal_uInt16  nItemId2 = 0;
         sal_Bool    bRight;
-        if ( nItemPos >= mpImpl->mpItemList->Count() )
+        if ( nItemPos >= mpImpl->mpItemList->size() )
         {
-            nItemPos = (sal_uInt16)(mpImpl->mpItemList->Count()-1);
+            nItemPos = mpImpl->mpItemList->size() - 1;
             bRight = sal_True;
         }
         else
@@ -962,7 +959,7 @@ void ValueSet::ImplDrawDropPos( sal_Bool bShow )
         nItemId1 = GetItemId( nItemPos );
         if ( (nItemId1 != mnSelItemId) && (nItemId1 != mnHighItemId) )
             nItemId1 = 0;
-        Rectangle aRect2 = mpImpl->mpItemList->GetObject( nItemPos )->maRect;
+        Rectangle aRect2 = (*mpImpl->mpItemList)[ nItemPos ]->maRect;
         Rectangle aRect1;
         if ( bRight )
         {
@@ -971,7 +968,7 @@ void ValueSet::ImplDrawDropPos( sal_Bool bShow )
         }
         else if ( nItemPos > 0 )
         {
-            aRect1 = mpImpl->mpItemList->GetObject( nItemPos-1 )->maRect;
+            aRect1 = (*mpImpl->mpItemList)[ nItemPos-1 ]->maRect;
             nItemId2 = GetItemId( nItemPos-1 );
             if ( (nItemId2 != mnSelItemId) && (nItemId2 != mnHighItemId) )
                 nItemId2 = 0;
@@ -1104,7 +1101,7 @@ sal_Bool ValueSet::ImplScroll( const Point& rPos )
 
     long             nScrollOffset;
     sal_uInt16           nOldLine = mnFirstLine;
-    const Rectangle& rTopRect = mpImpl->mpItemList->GetObject( mnFirstLine*mnCols )->maRect;
+    const Rectangle& rTopRect = (*mpImpl->mpItemList)[ mnFirstLine * mnCols ]->maRect;
     if ( rTopRect.GetHeight() <= 16 )
         nScrollOffset = VALUESET_SCROLL_OFFSET/2;
     else
@@ -1118,7 +1115,7 @@ sal_Bool ValueSet::ImplScroll( const Point& rPos )
     if ( (mnFirstLine == nOldLine) &&
          (mnFirstLine < (sal_uInt16)(mnLines-mnVisLines)) && (rPos.Y() < aOutSize.Height()) )
     {
-        long nBottomPos = mpImpl->mpItemList->GetObject( (mnFirstLine+mnVisLines-1)*mnCols )->maRect.Bottom();
+        long nBottomPos = (*mpImpl->mpItemList)[ (mnFirstLine+mnVisLines-1)*mnCols ]->maRect.Bottom();
         if ( (rPos.Y() >= nBottomPos-nScrollOffset) && (rPos.Y() <= nBottomPos) )
             mnFirstLine++;
     }
@@ -1135,7 +1132,7 @@ sal_Bool ValueSet::ImplScroll( const Point& rPos )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
+size_t ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
 {
     if ( mpNoneItem )
     {
@@ -1146,14 +1143,14 @@ sal_uInt16 ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
     Point     aDefPos;
     Rectangle aWinRect( aDefPos, maVirDev.GetOutputSizePixel() );
 
-    sal_uLong nItemCount = mpImpl->mpItemList->Count();
-    for ( sal_uLong i = 0; i < nItemCount; i++ )
+    size_t nItemCount = mpImpl->mpItemList->size();
+    for ( size_t i = 0; i < nItemCount; i++ )
     {
-        ValueSetItem* pItem = mpImpl->mpItemList->GetObject( i );
+        ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
         if ( pItem->maRect.IsInside( rPos ) )
         {
             if ( aWinRect.IsInside( rPos ) )
-                return (sal_uInt16)i;
+                return i;
             else
                 return VALUESET_ITEM_NOTFOUND;
         }
@@ -1173,27 +1170,23 @@ sal_uInt16 ValueSet::ImplGetItem( const Point& rPos, sal_Bool bMove ) const
 
 // -----------------------------------------------------------------------
 
-ValueSetItem* ValueSet::ImplGetItem( sal_uInt16 nPos )
+ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
 {
     if ( nPos == VALUESET_ITEM_NONEITEM )
         return mpNoneItem;
     else
-        return mpImpl->mpItemList->GetObject( nPos );
+        return ( nPos < mpImpl->mpItemList->size() ) ? (*mpImpl->mpItemList)[ nPos ] : NULL;
 }
 
 // -----------------------------------------------------------------------
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
 {
-    sal_uInt16 nItemCount = (sal_uInt16)mpImpl->mpItemList->Count();
-    sal_uInt16 i = 0;
-
-    while ( i < nItemCount )
-    {
-        ValueSetItem* pItem = mpImpl->mpItemList->GetObject( i );
-        if ( pItem->meType != VALUESETITEM_SPACE )
+    for ( size_t i = 0, nItemCount = mpImpl->mpItemList->size(); i < nItemCount; ++i ) {
+        ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
+        if ( pItem->meType != VALUESETITEM_SPACE ) {
             return pItem;
-        i++;
+        }
     }
 
     return NULL;
@@ -1205,9 +1198,9 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
 {
     sal_uInt16 nRet = 0;
 
-    for( sal_Int32 n = 0, nItemCount = mpImpl->mpItemList->Count(); n < nItemCount; n++  )
+    for( size_t n = 0, nItemCount = mpImpl->mpItemList->size(); n < nItemCount; n++  )
     {
-        ValueSetItem* pItem = mpImpl->mpItemList->GetObject( n );
+        ValueSetItem* pItem = (*mpImpl->mpItemList)[ n ];
 
         if( pItem->meType != VALUESETITEM_SPACE && !pItem->maRect.IsEmpty() )
             nRet++;
@@ -1223,9 +1216,9 @@ ValueSetItem* ValueSet::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
     ValueSetItem*   pRet = NULL;
     sal_uInt16          nFoundPos = 0;
 
-    for( sal_Int32 n = 0, nItemCount = mpImpl->mpItemList->Count(); ( n < nItemCount ) && !pRet; n++  )
+    for( sal_Int32 n = 0, nItemCount = mpImpl->mpItemList->size(); ( n < nItemCount ) && !pRet; n++  )
     {
-        ValueSetItem* pItem = mpImpl->mpItemList->GetObject( n );
+        ValueSetItem* pItem = (*mpImpl->mpItemList)[ n ];
 
         if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() && ( nVisiblePos == nFoundPos++ ) )
             pRet = pItem;
@@ -1416,10 +1409,10 @@ void ValueSet::Tracking( const TrackingEvent& rTEvt )
 
 void ValueSet::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_uInt16 nLastItem = (sal_uInt16)mpImpl->mpItemList->Count();
-    sal_uInt16 nItemPos = VALUESET_ITEM_NOTFOUND;
-    sal_uInt16 nCurPos = VALUESET_ITEM_NONEITEM;
-    sal_uInt16 nCalcPos;
+    size_t nLastItem = mpImpl->mpItemList->size();
+    size_t nItemPos = VALUESET_ITEM_NOTFOUND;
+    size_t nCurPos = VALUESET_ITEM_NONEITEM;
+    size_t nCalcPos;
 
     if ( !nLastItem || !ImplGetFirstItem() )
     {
@@ -1507,7 +1500,7 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
             if( rKEvt.GetKeyCode().GetCode() != KEY_PAGEUP ||
                 ( !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() ) )
             {
-                const long nLineCount = ( ( KEY_UP == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
+                const size_t nLineCount = ( ( KEY_UP == rKEvt.GetKeyCode().GetCode() ) ? 1 : mnVisLines );
                 do
                 {
                     if ( nCalcPos == VALUESET_ITEM_NONEITEM )
@@ -1568,16 +1561,6 @@ void ValueSet::KeyInput( const KeyEvent& rKEvt )
                             nCalcPos + ( nLineCount * mnCols ));
                     else
                     {
-#if 0
-                        if( (KEY_DOWN == rKEvt.GetKeyCode().GetCode() ) && (GetStyle() & WB_MENUSTYLEVALUESET) )
-                        {
-                            Window* pParent = GetParent();
-                            pParent->GrabFocus();
-                            pParent->KeyInput( rKEvt );
-                            break;
-                        }
-                        else
-#endif
                         {
                             if ( mpNoneItem )
                             {
@@ -1710,7 +1693,7 @@ void ValueSet::RequestHelp( const HelpEvent& rHEvt )
     if ( (rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON)) == HELPMODE_QUICK )
     {
         Point aPos = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-        sal_uInt16 nItemPos = ImplGetItem( aPos );
+        size_t nItemPos = ImplGetItem( aPos );
         if ( nItemPos != VALUESET_ITEM_NOTFOUND )
         {
             ValueSetItem* pItem = ImplGetItem( nItemPos );
@@ -1817,7 +1800,7 @@ void ValueSet::UserDraw( const UserDrawEvent& )
 
 // -----------------------------------------------------------------------
 
-void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, sal_uInt16 nPos )
+void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos )
 {
     DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
@@ -1827,7 +1810,13 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, sal_uInt16 n
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
-    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
+    if ( nPos < mpImpl->mpItemList->size() ) {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpImpl->mpItemList->insert( it, pItem );
+    } else {
+        mpImpl->mpItemList->push_back( pItem );
+    }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1836,7 +1825,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, sal_uInt16 n
 
 // -----------------------------------------------------------------------
 
-void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, sal_uInt16 nPos )
+void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos )
 {
     DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
@@ -1846,7 +1835,13 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, sal_uInt16 n
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
-    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
+    if ( nPos < mpImpl->mpItemList->size() ) {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpImpl->mpItemList->insert( it, pItem );
+    } else {
+        mpImpl->mpItemList->push_back( pItem );
+    }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1856,7 +1851,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, sal_uInt16 n
 // -----------------------------------------------------------------------
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                           const XubString& rText, sal_uInt16 nPos )
+                           const XubString& rText, size_t nPos )
 {
     DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
@@ -1867,7 +1862,13 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
-    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
+    if ( nPos < mpImpl->mpItemList->size() ) {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpImpl->mpItemList->insert( it, pItem );
+    } else {
+        mpImpl->mpItemList->push_back( pItem );
+    }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1877,7 +1878,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
 // -----------------------------------------------------------------------
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
-                           const XubString& rText, sal_uInt16 nPos )
+                           const XubString& rText, size_t nPos )
 {
     DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
@@ -1888,7 +1889,13 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
-    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
+    if ( nPos < mpImpl->mpItemList->size() ) {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpImpl->mpItemList->insert( it, pItem );
+    } else {
+        mpImpl->mpItemList->push_back( pItem );
+    }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1897,7 +1904,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
 
 // -----------------------------------------------------------------------
 
-void ValueSet::InsertItem( sal_uInt16 nItemId, sal_uInt16 nPos )
+void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
     DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
@@ -1906,7 +1913,13 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, sal_uInt16 nPos )
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
-    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
+    if ( nPos < mpImpl->mpItemList->size() ) {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpImpl->mpItemList->insert( it, pItem );
+    } else {
+        mpImpl->mpItemList->push_back( pItem );
+    }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1915,7 +1928,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-void ValueSet::InsertSpace( sal_uInt16 nItemId, sal_uInt16 nPos )
+void ValueSet::InsertSpace( sal_uInt16 nItemId, size_t nPos )
 {
     DBG_ASSERT( nItemId, "ValueSet::InsertSpace(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
@@ -1924,7 +1937,13 @@ void ValueSet::InsertSpace( sal_uInt16 nItemId, sal_uInt16 nPos )
     ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_SPACE;
-    mpImpl->mpItemList->Insert( pItem, (sal_uLong)nPos );
+    if ( nPos < mpImpl->mpItemList->size() ) {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        mpImpl->mpItemList->insert( it, pItem );
+    } else {
+        mpImpl->mpItemList->push_back( pItem );
+    }
 
     mbFormat = sal_True;
     if ( IsReallyVisible() && IsUpdateMode() )
@@ -1935,12 +1954,17 @@ void ValueSet::InsertSpace( sal_uInt16 nItemId, sal_uInt16 nPos )
 
 void ValueSet::RemoveItem( sal_uInt16 nItemId )
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    delete mpImpl->mpItemList->Remove( nPos );
+    if ( nPos < mpImpl->mpItemList->size() ) {
+        ValueItemList::iterator it = mpImpl->mpItemList->begin();
+        ::std::advance( it, nPos );
+        delete *it;
+        mpImpl->mpItemList->erase( it );
+    }
 
     // Variablen zuruecksetzen
     if ( (mnHighItemId == nItemId) || (mnSelItemId == nItemId) )
@@ -1963,9 +1987,9 @@ void ValueSet::CopyItems( const ValueSet& rValueSet )
 {
     ImplDeleteItems();
 
-    ValueSetItem* pItem = rValueSet.mpImpl->mpItemList->First();
-    while ( pItem )
+    for ( size_t i = 0, n = rValueSet.mpImpl->mpItemList->size(); i < n; ++i )
     {
+        ValueSetItem* pItem = (*rValueSet.mpImpl->mpItemList)[ i ];
         ValueSetItem* pNewItem = new ValueSetItem( *this );
 
         pNewItem->mnId = pItem->mnId;
@@ -1977,9 +2001,7 @@ void ValueSet::CopyItems( const ValueSet& rValueSet )
         pNewItem->mpData = pItem->mpData;
         pNewItem->maRect = pItem->maRect;
         pNewItem->mpxAcc = NULL;
-
-        mpImpl->mpItemList->Insert( pNewItem );
-        pItem = rValueSet.mpImpl->mpItemList->Next();
+        mpImpl->mpItemList->push_back( pNewItem );
     }
 
     // Variablen zuruecksetzen
@@ -2016,43 +2038,36 @@ void ValueSet::Clear()
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ValueSet::GetItemCount() const
+size_t ValueSet::GetItemCount() const
 {
-    return (sal_uInt16)mpImpl->mpItemList->Count();
+    return mpImpl->mpItemList->size();
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ValueSet::GetItemPos( sal_uInt16 nItemId ) const
+size_t ValueSet::GetItemPos( sal_uInt16 nItemId ) const
 {
-    ValueSetItem* pItem = mpImpl->mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mnId == nItemId )
-            return (sal_uInt16)mpImpl->mpItemList->GetCurPos();
-        pItem = mpImpl->mpItemList->Next();
+    for ( size_t i = 0, n = mpImpl->mpItemList->size(); i < n; ++i ) {
+        ValueSetItem* pItem = (*mpImpl->mpItemList)[ i ];
+        if ( pItem->mnId == nItemId ) {
+            return i;
+        }
     }
-
     return VALUESET_ITEM_NOTFOUND;
 }
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ValueSet::GetItemId( sal_uInt16 nPos ) const
+sal_uInt16 ValueSet::GetItemId( size_t nPos ) const
 {
-    ValueSetItem* pItem = mpImpl->mpItemList->GetObject( nPos );
-
-    if ( pItem )
-        return pItem->mnId;
-    else
-        return 0;
+    return ( nPos < mpImpl->mpItemList->size() ) ? (*mpImpl->mpItemList)[ nPos ]->mnId : 0 ;
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt16 ValueSet::GetItemId( const Point& rPos ) const
 {
-    sal_uInt16 nItemPos = ImplGetItem( rPos );
+    size_t nItemPos = ImplGetItem( rPos );
     if ( nItemPos != VALUESET_ITEM_NOTFOUND )
         return GetItemId( nItemPos );
 
@@ -2063,10 +2078,10 @@ sal_uInt16 ValueSet::GetItemId( const Point& rPos ) const
 
 Rectangle ValueSet::GetItemRect( sal_uInt16 nItemId ) const
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mpImpl->mpItemList->GetObject( nPos )->maRect;
+        return (*mpImpl->mpItemList)[ nPos ]->maRect;
     else
         return Rectangle();
 }
@@ -2147,14 +2162,14 @@ void ValueSet::SetFirstLine( sal_uInt16 nNewLine )
 
 void ValueSet::SelectItem( sal_uInt16 nItemId )
 {
-    sal_uInt16 nItemPos = 0;
+    size_t nItemPos = 0;
 
     if ( nItemId )
     {
         nItemPos = GetItemPos( nItemId );
         if ( nItemPos == VALUESET_ITEM_NOTFOUND )
             return;
-        if ( mpImpl->mpItemList->GetObject( nItemPos )->meType == VALUESETITEM_SPACE )
+        if ( (*mpImpl->mpItemList)[ nItemPos ]->meType == VALUESETITEM_SPACE )
             return;
     }
 
@@ -2210,12 +2225,12 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             // focus event (deselect)
             if( nOldItem )
             {
-                const sal_uInt16 nPos = GetItemPos( nItemId );
+                const size_t nPos = GetItemPos( nItemId );
 
                 if( nPos != VALUESET_ITEM_NOTFOUND )
                 {
                     ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(
-                        mpImpl->mpItemList->GetObject( nPos )->GetAccessible( mpImpl->mbIsTransientChildrenDisabled ) );
+                        (*mpImpl->mpItemList)[ nPos ]->GetAccessible( mpImpl->mbIsTransientChildrenDisabled ) );
 
                     if( pItemAcc )
                     {
@@ -2236,11 +2251,11 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
             }
 
             // focus event (select)
-            const sal_uInt16 nPos = GetItemPos( mnSelItemId );
+            const size_t nPos = GetItemPos( mnSelItemId );
 
             ValueSetItem* pItem;
             if( nPos != VALUESET_ITEM_NOTFOUND )
-                pItem = mpImpl->mpItemList->GetObject(nPos);
+                pItem = (*mpImpl->mpItemList)[ nPos ];
             else
                 pItem = mpNoneItem;
 
@@ -2288,20 +2303,20 @@ void ValueSet::SetNoSelection()
 
 void ValueSet::SetItemBits( sal_uInt16 nItemId, sal_uInt16 nItemBits )
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        mpImpl->mpItemList->GetObject( nPos )->mnBits = nItemBits;
+        (*mpImpl->mpItemList)[ nPos ]->mnBits = nItemBits;
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt16 ValueSet::GetItemBits( sal_uInt16 nItemId ) const
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mpImpl->mpItemList->GetObject( nPos )->mnBits;
+        return (*mpImpl->mpItemList)[ nPos ]->mnBits;
     else
         return 0;
 }
@@ -2310,12 +2325,12 @@ sal_uInt16 ValueSet::GetItemBits( sal_uInt16 nItemId ) const
 
 void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mpImpl->mpItemList->GetObject( nPos );
+    ValueSetItem* pItem = (*mpImpl->mpItemList)[ nPos ];
     pItem->meType  = VALUESETITEM_IMAGE;
     pItem->maImage = rImage;
 
@@ -2332,10 +2347,10 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 
 Image ValueSet::GetItemImage( sal_uInt16 nItemId ) const
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mpImpl->mpItemList->GetObject( nPos )->maImage;
+        return (*mpImpl->mpItemList)[ nPos ]->maImage;
     else
         return Image();
 }
@@ -2344,12 +2359,12 @@ Image ValueSet::GetItemImage( sal_uInt16 nItemId ) const
 
 void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mpImpl->mpItemList->GetObject( nPos );
+    ValueSetItem* pItem = (*mpImpl->mpItemList)[ nPos ];
     pItem->meType  = VALUESETITEM_COLOR;
     pItem->maColor = rColor;
 
@@ -2366,10 +2381,10 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
 
 Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mpImpl->mpItemList->GetObject( nPos )->maColor;
+        return (*mpImpl->mpItemList)[ nPos ]->maColor;
     else
         return Color();
 }
@@ -2378,12 +2393,12 @@ Color ValueSet::GetItemColor( sal_uInt16 nItemId ) const
 
 void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mpImpl->mpItemList->GetObject( nPos );
+    ValueSetItem* pItem = (*mpImpl->mpItemList)[ nPos ];
     pItem->mpData = pData;
 
     if ( pItem->meType == VALUESETITEM_USERDRAW )
@@ -2402,10 +2417,10 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
 
 void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mpImpl->mpItemList->GetObject( nPos )->mpData;
+        return (*mpImpl->mpItemList)[ nPos ]->mpData;
     else
         return NULL;
 }
@@ -2414,13 +2429,13 @@ void* ValueSet::GetItemData( sal_uInt16 nItemId ) const
 
 void ValueSet::SetItemText( sal_uInt16 nItemId, const XubString& rText )
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
 
-    ValueSetItem* pItem = mpImpl->mpItemList->GetObject( nPos );
+    ValueSetItem* pItem = (*mpImpl->mpItemList)[ nPos ];
 
     // Remember old and new name for accessibility event.
     ::com::sun::star::uno::Any aOldName, aNewName;
@@ -2457,10 +2472,10 @@ void ValueSet::SetItemText( sal_uInt16 nItemId, const XubString& rText )
 
 XubString ValueSet::GetItemText( sal_uInt16 nItemId ) const
 {
-    sal_uInt16 nPos = GetItemPos( nItemId );
+    size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
-        return mpImpl->mpItemList->GetObject( nPos )->maText;
+        return (*mpImpl->mpItemList)[ nPos ]->maText;
     else
         return XubString();
 }
@@ -2560,13 +2575,13 @@ sal_Bool ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCols,
                                     sal_uInt16 nDesireLines )
 {
-    long nCalcCols = (long)nDesireCols;
-    long nCalcLines = (long)nDesireLines;
+    size_t nCalcCols = nDesireCols;
+    size_t nCalcLines = nDesireLines;
 
     if ( !nCalcCols )
     {
         if ( mnUserCols )
-            nCalcCols = (long)mnUserCols;
+            nCalcCols = mnUserCols;
         else
             nCalcCols = 1;
     }
@@ -2581,8 +2596,8 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
                 nCalcLines = mnUserVisLines;
             else
             {
-                nCalcLines = (long)mpImpl->mpItemList->Count() / nCalcCols;
-                if ( mpImpl->mpItemList->Count() % nCalcCols )
+                nCalcLines = mpImpl->mpItemList->size() / nCalcCols;
+                if ( mpImpl->mpItemList->size() % nCalcCols )
                     nCalcLines++;
                 else if ( !nCalcLines )
                     nCalcLines = 1;
@@ -2692,7 +2707,7 @@ sal_uInt16 ValueSet::ShowDropPos( const Point& rPos )
     ImplScroll( rPos );
 
     // DropPosition ermitteln
-    sal_uInt16 nPos = ImplGetItem( rPos, sal_True );
+    size_t nPos = ImplGetItem( rPos, sal_True );
     if ( nPos == VALUESET_ITEM_NONEITEM )
         nPos = 0;
     else if ( nPos == VALUESET_ITEM_NOTFOUND )
@@ -2702,12 +2717,12 @@ sal_uInt16 ValueSet::ShowDropPos( const Point& rPos )
             aOutSize.Height() = mnTextOffset;
         if ( (rPos.X() >= 0) && (rPos.X() < aOutSize.Width()) &&
              (rPos.Y() >= 0) && (rPos.Y() < aOutSize.Height()) )
-            nPos = (sal_uInt16)mpImpl->mpItemList->Count();
+            nPos = mpImpl->mpItemList->size();
     }
     else
     {
         // Im letzten viertel, dann wird ein Item spaeter eingefuegt
-        Rectangle aRect = mpImpl->mpItemList->GetObject( nPos )->maRect;
+        Rectangle aRect = (*mpImpl->mpItemList)[ nPos ]->maRect;
         if ( rPos.X() > aRect.Left()+aRect.GetWidth()-(aRect.GetWidth()/4) )
             nPos++;
     }
@@ -2756,3 +2771,4 @@ const Link& ValueSet::GetHighlightHdl() const
 
 // -----------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

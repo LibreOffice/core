@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,8 +90,6 @@ private:
 |*    CBlock::GetObject()
 |*
 |*    Beschreibung      Gibt einen Pointer aus dem Block zurueck
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -106,8 +105,6 @@ inline void* CBlock::GetObject( sal_uInt16 nIndex ) const
 |*    Beschreibung      Wir gehen davon aus, das Pointer in der Regel
 |*                      sich im ersten Block befindet und schalten
 |*                      deshalb eine Inline-Methode davor
-|*    Ersterstellung    TH 02.07.93
-|*    Letzte Aenderung  TH 02.07.93
 |*
 *************************************************************************/
 
@@ -126,8 +123,6 @@ inline void* Container::ImpGetObject( sal_uIntPtr nIndex ) const
 |*
 |*    Beschreibung      Wenn es nur einen Block gibt, wird davon
 |*                      das Daten-Array zurueckgegeben
-|*    Ersterstellung    TH 24.01.96
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 
@@ -145,3 +140,5 @@ inline void** Container::ImpGetOnlyNodes() const
 }
 
 #endif // _IMPCONT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

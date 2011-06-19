@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -145,7 +146,6 @@ sal_Bool ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = argv[ i ];
-//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -201,7 +201,7 @@ void Help()
 /*****************************************************************************/
 #ifndef TESTDRIVER
 
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
@@ -288,3 +288,5 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

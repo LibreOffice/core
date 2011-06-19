@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,17 +44,11 @@
 #include <sot/formats.hxx>
 #include <svl/urlbmk.hxx>
 
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_TEXT_CHARACTERITERATORMODE_HPP_
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -61,9 +56,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#endif
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
@@ -73,7 +66,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 using namespace ::com::sun::star;
@@ -163,9 +156,6 @@ sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor
     return ( nT == SOT_FORMAT_STRING );
 }
 
-/*-- 24.06.2004 13:54:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 struct ImpTextView
 {
     TextEngine*         mpTextEngine;
@@ -2096,7 +2086,7 @@ void TextView::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd:
 {
     if ( mpImpl->mbClickedInSelection )
     {
-        vos::OGuard aVclGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aVclGuard;
 
         DBG_ASSERT( mpImpl->maSelection.HasRange(), "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
 
@@ -2149,7 +2139,7 @@ void TextView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourc
 
 void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     sal_Bool bChanges = sal_False;
     if ( !mpImpl->mbReadOnly && mpImpl->mpDDInfo )
@@ -2265,13 +2255,13 @@ void TextView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetD
 
 void TextView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
     ImpHideDDCursor();
 }
 
 void TextView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aVclGuard;
 
     if ( !mpImpl->mpDDInfo )
         mpImpl->mpDDInfo = new TextDDInfo;
@@ -2396,11 +2386,11 @@ TextSelFunctionSet::TextSelFunctionSet( TextView* pView )
     mpView = pView;
 }
 
-void __EXPORT TextSelFunctionSet::BeginDrag()
+void TextSelFunctionSet::BeginDrag()
 {
 }
 
-void __EXPORT TextSelFunctionSet::CreateAnchor()
+void TextSelFunctionSet::CreateAnchor()
 {
 //  TextSelection aSel( mpView->GetSelection() );
 //  aSel.GetStart() = aSel.GetEnd();
@@ -2411,27 +2401,27 @@ void __EXPORT TextSelFunctionSet::CreateAnchor()
     mpView->ImpSetSelection( mpView->mpImpl->maSelection.GetEnd() );
 }
 
-sal_Bool __EXPORT TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
+sal_Bool TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
 {
     return mpView->SetCursorAtPoint( rPointPixel );
 }
 
-sal_Bool __EXPORT TextSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+sal_Bool TextSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     return mpView->IsSelectionAtPoint( rPointPixel );
 }
 
-void __EXPORT TextSelFunctionSet::DeselectAll()
+void TextSelFunctionSet::DeselectAll()
 {
     CreateAnchor();
 }
 
-void __EXPORT TextSelFunctionSet::DeselectAtPoint( const Point& )
+void TextSelFunctionSet::DeselectAtPoint( const Point& )
 {
     // Nur bei Mehrfachselektion
 }
 
-void __EXPORT TextSelFunctionSet::DestroyAnchor()
+void TextSelFunctionSet::DestroyAnchor()
 {
     // Nur bei Mehrfachselektion
 }
@@ -2468,3 +2458,4 @@ sal_Bool                TextView::IsInsertMode() const
 void                TextView::SupportProtectAttribute(sal_Bool bSupport)
 { mpImpl->mbSupportProtectAttribute = bSupport;}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

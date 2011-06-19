@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,21 +33,6 @@
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 
-
-/************** class SvStorageInfoList **********************************
-*************************************************************************/
-PRV_SV_IMPL_OWNER_LIST(SvStorageInfoList,SvStorageInfo)
-
-const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
-{
-    for( sal_uLong i = 0; i < Count(); i++ )
-    {
-        const SvStorageInfo & rType = GetObject( i );
-        if( rType.GetName() == rEleName )
-            return &rType;
-    }
-    return NULL;
-}
 
 /************** class SvStorageInfo **************************************
 *************************************************************************/
@@ -109,3 +95,4 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

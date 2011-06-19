@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,9 +75,9 @@ public:
                                             "SetDateTime() with pooled item" );
                                 aDateTime = rDT; }
 
-    virtual sal_Bool PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue  ( const com::sun::star::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 );
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 ) const;
 };
 
@@ -104,3 +105,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

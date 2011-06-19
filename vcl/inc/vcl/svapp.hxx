@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,17 @@
 #ifndef _SV_SVAPP_HXX
 #define _SV_SVAPP_HXX
 
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
-#endif
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/unqid.hxx>
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/apptypes.hxx>
-#ifndef _VCL_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
 #include <vcl/vclevent.hxx>
+class BitmapEx;
 class Link;
 class AllSettings;
 class DataChangedEvent;
@@ -57,7 +56,6 @@ class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
 
-namespace vos { class IMutex; }
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/connection/XConnection.hpp>
 
@@ -245,7 +243,7 @@ public:
                                 Application();
     virtual                     ~Application();
 
-    virtual void                Main() = 0;
+    virtual int                 Main() = 0;
 
     virtual sal_Bool                QueryExit();
 
@@ -257,13 +255,11 @@ public:
     virtual void                ShowStatusText( const XubString& rText );
     virtual void                HideStatusText();
 
-    virtual void                ShowHelpStatusText( const XubString& rText );
-    virtual void                HideHelpStatusText();
-
     virtual void                FocusChanged();
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void                Init();
+    virtual void                InitFinished();
     virtual void                DeInit();
 
     static void                 InitAppRes( const ResId& rResId );
@@ -280,8 +276,8 @@ public:
     static void                 Reschedule( bool bAllEvents = false );
     static void                 Yield( bool bAllEvents = false );
     static void                 EndYield();
-    static vos::IMutex&                     GetSolarMutex();
-    static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
+    static osl::SolarMutex&     GetSolarMutex();
+    static oslThreadIdentifier  GetMainThreadIdentifier();
     static sal_uLong                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( sal_uLong nCount );
     static void                 EnableNoYieldMode( bool i_bNoYield );
@@ -364,6 +360,7 @@ public:
 
     static void                 SetAppName( const String& rUniqueName );
     static String               GetAppName();
+    static bool                 LoadBrandBitmap (const char* pName, BitmapEx &rBitmap);
 
     static void                 SetDisplayName( const UniString& rDisplayName );
     static UniString            GetDisplayName();
@@ -498,6 +495,151 @@ private:
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
 };
 
+
+class VCL_DLLPUBLIC SolarMutexGuard
+{
+    private:
+        SolarMutexGuard( const SolarMutexGuard& );
+        const SolarMutexGuard& operator = ( const SolarMutexGuard& );
+        ::osl::SolarMutex& m_solarMutex;
+
+    public:
+
+        /** Acquires the object specified as parameter.
+         */
+        SolarMutexGuard() :
+        m_solarMutex(Application::GetSolarMutex())
+    {
+        m_solarMutex.acquire();
+    }
+
+    /** Releases the mutex or interface. */
+    ~SolarMutexGuard()
+    {
+        m_solarMutex.release();
+    }
+};
+
+class VCL_DLLPUBLIC SolarMutexClearableGuard
+{
+    SolarMutexClearableGuard( const SolarMutexClearableGuard& );
+    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& );
+    bool m_bCleared;
+public:
+    /** Acquires mutex
+        @param pMutex pointer to mutex which is to be acquired  */
+    SolarMutexClearableGuard()
+        : m_bCleared(false)
+        , m_solarMutex( Application::GetSolarMutex() )
+        {
+            m_solarMutex.acquire();
+        }
+
+    /** Releases mutex. */
+    virtual ~SolarMutexClearableGuard()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+            }
+        }
+
+    /** Releases mutex. */
+    void SAL_CALL clear()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+                m_bCleared = true;
+            }
+        }
+protected:
+    osl::SolarMutex& m_solarMutex;
+};
+
+class VCL_DLLPUBLIC SolarMutexResettableGuard
+{
+    SolarMutexResettableGuard( const SolarMutexResettableGuard& );
+    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& );
+    bool m_bCleared;
+public:
+    /** Acquires mutex
+        @param pMutex pointer to mutex which is to be acquired  */
+    SolarMutexResettableGuard()
+        : m_bCleared(false)
+        , m_solarMutex( Application::GetSolarMutex() )
+        {
+            m_solarMutex.acquire();
+        }
+
+    /** Releases mutex. */
+    virtual ~SolarMutexResettableGuard()
+        {
+            if( !m_bCleared )
+            {
+                m_solarMutex.release();
+            }
+        }
+
+    /** Releases mutex. */
+    void SAL_CALL clear()
+        {
+            if( !m_bCleared)
+            {
+                m_solarMutex.release();
+                m_bCleared = true;
+            }
+        }
+    /** Releases mutex. */
+    void SAL_CALL reset()
+        {
+            if( m_bCleared)
+            {
+                m_solarMutex.acquire();
+                m_bCleared = false;
+            }
+        }
+protected:
+    osl::SolarMutex& m_solarMutex;
+};
+
+
+/**
+ A helper class that calls Application::ReleaseSolarMutex() in its constructor
+ and restores the mutex in its destructor.
+*/
+class SolarMutexReleaser
+{
+    sal_uLong mnReleased;
+    const bool  mbRescheduleDuringAcquire;
+public:
+    enum
+    {
+        RescheduleDuringAcquire = true
+    };
+    SolarMutexReleaser( const bool i_rescheduleDuringAcquire = false )
+        : mnReleased( Application::ReleaseSolarMutex())
+        , mbRescheduleDuringAcquire( i_rescheduleDuringAcquire )
+    {
+    }
+
+    ~SolarMutexReleaser()
+    {
+        if ( mnReleased > 0 )
+        {
+            if ( mbRescheduleDuringAcquire )
+            {
+                while ( !Application::GetSolarMutex().tryToAcquire() )
+                {
+                    Application::Reschedule();
+                }
+                --mnReleased;
+            }
+            Application::AcquireSolarMutex( mnReleased );
+        }
+    }
+};
+
 VCL_DLLPUBLIC Application* GetpApp();
 
 VCL_DLLPUBLIC sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
@@ -515,3 +657,5 @@ inline void Application::EndYield()
 }
 
 #endif // _APP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

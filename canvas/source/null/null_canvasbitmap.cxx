@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,12 +53,12 @@ namespace nullcanvas
                              bHasAlpha );
     }
 
-    void SAL_CALL CanvasBitmap::disposing()
+    void CanvasBitmap::disposeThis()
     {
         mpDevice.clear();
 
         // forward to parent
-        CanvasBitmap_Base::disposing();
+        CanvasBitmap_Base::disposeThis();
     }
 
 #define IMPLEMENTATION_NAME "NullCanvas.CanvasBitmap"
@@ -82,3 +83,5 @@ namespace nullcanvas
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

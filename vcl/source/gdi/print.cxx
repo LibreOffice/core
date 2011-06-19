@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -339,7 +340,7 @@ ImplPrnQueueList::~ImplPrnQueueList()
 
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
-    std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash >::iterator it =
+    boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash >::iterator it =
         m_aNameToIndex.find( pData->maPrinterName );
     if( it == m_aNameToIndex.end() )
     {
@@ -364,7 +365,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 ImplPrnQueueData* ImplPrnQueueList::Get( const rtl::OUString& rPrinter )
 {
     ImplPrnQueueData* pData = NULL;
-    std::hash_map<rtl::OUString,sal_Int32,rtl::OUStringHash>::iterator it =
+    boost::unordered_map<rtl::OUString,sal_Int32,rtl::OUStringHash>::iterator it =
         m_aNameToIndex.find( rPrinter );
     if( it != m_aNameToIndex.end() )
         pData = &m_aQueueInfos[it->second];
@@ -1285,7 +1286,7 @@ rtl::OUString Printer::GetPaperName( Paper ePaper )
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mpPaperNames )
     {
-        pSVData->mpPaperNames = new std::hash_map< int, rtl::OUString >();
+        pSVData->mpPaperNames = new boost::unordered_map< int, rtl::OUString >();
         if( ImplGetResMgr() )
         {
             ResStringArray aPaperStrings( VclResId( RID_STR_PAPERNAMES ) );
@@ -1305,7 +1306,7 @@ rtl::OUString Printer::GetPaperName( Paper ePaper )
         }
     }
 
-    std::hash_map<int,rtl::OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );
+    boost::unordered_map<int,rtl::OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );
     return (it != pSVData->mpPaperNames->end()) ? it->second : rtl::OUString();
 }
 
@@ -1626,3 +1627,5 @@ void Printer::updatePrinters()
             delete pNewList;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

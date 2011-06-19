@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include "svl/svldllapi.h"
 
-#ifndef SHL_HXX
 #include <tools/shl.hxx>
-#endif
 #include <tools/rtti.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
@@ -60,9 +59,9 @@ public:
     virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue  ( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 );
 
     void                    SetBitmapURL( const UniString& rURL ) { _aURL = rURL; }
@@ -78,3 +77,4 @@ public:
 
 #endif // _CNTWALL_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

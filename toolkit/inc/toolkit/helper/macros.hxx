@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #define _TOOLKIT_HELPER_MACROS_HXX_
 
-// -------------------------------------------------------------------------------------
+#include <comphelper/servicehelper.hxx>
 
 #define IMPL_XUNOTUNNEL( ClassName ) \
 sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException) \
@@ -39,20 +40,13 @@ sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_In
     } \
     return 0; \
 } \
+namespace \
+{ \
+    class the##ClassName##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##ClassName##UnoTunnelId> {}; \
+} \
 const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
 { \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL; \
-    if( !pSeq ) \
-    { \
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
-        if( !pSeq ) \
-        { \
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 ); \
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True ); \
-            pSeq = &aSeq; \
-        } \
-    } \
-    return *pSeq; \
+    return the##ClassName##UnoTunnelId::get().getSeq(); \
 } \
 ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
 { \
@@ -69,20 +63,13 @@ sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_In
     } \
     return BaseClass::getSomething( rIdentifier ); \
 } \
+namespace \
+{ \
+    class the##ClassName##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##ClassName##UnoTunnelId> {}; \
+} \
 const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
 { \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL; \
-    if( !pSeq ) \
-    { \
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
-        if( !pSeq ) \
-        { \
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 ); \
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True ); \
-            pSeq = &aSeq; \
-        } \
-    } \
-    return *pSeq; \
+    return the##ClassName##UnoTunnelId::get().getSeq(); \
 } \
 ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
 { \
@@ -184,10 +171,61 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
         ::rtl::OString sMessage( #ClassName "::" #MethodName ": caught an exception!\n" ); \
         sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
-        OSL_ENSURE( sal_False, sMessage.getStr() );
+        OSL_FAIL( sMessage.getStr() );
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )
 #endif
+
+#define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_2PARAM( ClassName, InterfaceName, MethodName, ParamType1, ParamType2 ) \
+{ \
+    ParamType1 aMulti( evt ); \
+    ParamType2 aMulti2( evt2 ); \
+    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
+    while( aIt.hasMoreElements() ) \
+    { \
+        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
+            static_cast< InterfaceName* >( aIt.next() ) ); \
+        try \
+        { \
+            xListener->MethodName( aMulti, aMulti2 ); \
+        } \
+        catch( ::com::sun::star::lang::DisposedException e ) \
+        { \
+            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
+            if ( e.Context == xListener || !e.Context.is() ) \
+                aIt.remove(); \
+        } \
+        catch( ::com::sun::star::uno::RuntimeException e ) \
+        { \
+            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
+        } \
+    } \
+}
+
+#define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
+{ \
+    ParamType1 aMulti( evt ); \
+    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
+    while( aIt.hasMoreElements() ) \
+    { \
+        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
+            static_cast< InterfaceName* >( aIt.next() ) ); \
+        try \
+        { \
+            xListener->MethodName( aMulti ); \
+        } \
+        catch( ::com::sun::star::lang::DisposedException e ) \
+        { \
+            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
+            if ( e.Context == xListener || !e.Context.is() ) \
+                aIt.remove(); \
+        } \
+        catch( ::com::sun::star::uno::RuntimeException e ) \
+        { \
+            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
+        } \
+    } \
+}
 
 #define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType ) \
 { \
@@ -240,7 +278,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 // -------------------------------------------------------------------------------------
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
@@ -252,7 +290,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 // -------------------------------------------------------------------------------------
 
 #define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( 1 ); \
@@ -268,3 +306,4 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 
 #endif // _TOOLKIT_HELPER_MACROS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

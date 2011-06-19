@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 #include <tools/solar.h>
 #include <osl/diagnose.h>
+#include "tools/toolsdllapi.h"
 
 struct RSHEADER_TYPE;
 typedef sal_uInt32 RESOURCE_TYPE;
@@ -41,6 +43,10 @@ class ResMgr;
 //---------
 //- ResId -
 //---------
+
+namespace rtl {
+    class OUString;
+}
 
 class ResId
 {
@@ -157,6 +163,10 @@ class ResId
 
     sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
     RSHEADER_TYPE* GetpResource()   const { return m_pResource; }
+
+    static TOOLS_DLLPUBLIC rtl::OUString toString(const ResId& aId);
 };
 
 #endif // _RESID_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

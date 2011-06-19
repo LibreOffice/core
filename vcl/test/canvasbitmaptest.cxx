@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,7 +115,7 @@ class TestApp : public Application
 {
 public:
     virtual void   Main();
-    virtual USHORT Exception( USHORT nError );
+    virtual sal_uInt16 Exception( sal_uInt16 nError );
 };
 
 class TestWindow : public Dialog
@@ -122,7 +123,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString::createFromAscii( "CanvasBitmap test harness" ) );
+            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CanvasBitmap test harness")) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -172,8 +173,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     int      nDepth = nOriginalDepth;
 
     {
-        ScopedBitmapReadAccess pAcc( aContainedBmp.AcquireReadAccess(),
-                                     aContainedBmp );
+        Bitmap::ScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
     }
 
@@ -323,8 +323,7 @@ void checkBitmapImport( const rtl::Reference<VclCanvasBitmap>& xBmp,
     int      nDepth = nOriginalDepth;
 
     {
-        ScopedBitmapReadAccess pAcc( aContainedBmp.AcquireReadAccess(),
-                                     aContainedBmp );
+        Bitmap::ScopedReadAccess pAcc( aContainedBmp );
         nDepth = pAcc->GetBitCount();
     }
 
@@ -887,8 +886,7 @@ void TestWindow::Paint( const Rectangle& )
             Bitmap aBitmap(Size(200,200),nDepth);
             aBitmap.Erase(COL_WHITE);
             {
-                ScopedBitmapWriteAccess pAcc(aBitmap.AcquireWriteAccess(),
-                                             aBitmap);
+                Bitmap::ScopedWriteAccess pAcc(aBitmap);
                 if( pAcc.get() )
                 {
                     BitmapColor aBlack(0);
@@ -918,8 +916,7 @@ void TestWindow::Paint( const Rectangle& )
             Bitmap aMask(Size(200,200),1);
             aMask.Erase(COL_WHITE);
             {
-                ScopedBitmapWriteAccess pAcc(aMask.AcquireWriteAccess(),
-                                             aMask);
+                Bitmap::ScopedWriteAccess pAcc(aMask);
                 if( pAcc.get() )
                 {
                     pAcc->SetFillColor(COL_BLACK);
@@ -1044,3 +1041,4 @@ void Main()
     Application::Execute();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

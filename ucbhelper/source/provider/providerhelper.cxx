@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 
  *************************************************************************/
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -76,7 +77,7 @@ struct hashString
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     rtl::OUString,
     uno::WeakReference< ucb::XContent >,
@@ -325,8 +326,8 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
         uno::Reference< com::sun::star::ucb::XPropertySetRegistryFactory >
             xRegFac(
                 m_xSMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.ucb.Store" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.ucb.Store" )) ),
                 uno::UNO_QUERY );
 
         OSL_ENSURE( xRegFac.is(),
@@ -670,3 +671,5 @@ sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
 }
 
 } // namespace ucbhelper
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

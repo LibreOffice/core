@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,7 +107,7 @@ bool eliminate(     Matrix&         matrix,
     Result vector. Given matrix must have space for one column (rows entries).
 
     @return true, if back substitution was possible (i.e. no division
-    by zero occured).
+    by zero occurred).
  */
 template <class Matrix, class Vector, typename BaseType>
 bool substitute(    const Matrix&   matrix,
@@ -170,3 +171,5 @@ bool solve( Matrix&     matrix,
 
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

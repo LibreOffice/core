@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ public:
 
         uno::Reference< lang::XSingleServiceFactory > xFactory(
             comphelper::createProcessComponent(
-                OUString::createFromAscii( "com.sun.star.awt.Layout" ) ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout")) ),
             uno::UNO_QUERY );
         if ( !xFactory.is() )
         {
@@ -150,13 +151,13 @@ PeerHandle Context::GetPeerHandle( const char *id, sal_uInt32 nId ) const
     xHandle = pImpl->getByName( OUString( id, strlen( id ), RTL_TEXTENCODING_UTF8 ) );
     if ( !xHandle.is() )
     {
-        DBG_ERROR1( "Failed to fetch widget '%s'", id );
+        OSL_TRACE( "Failed to fetch widget '%s'", id );
     }
 
     if ( nId != 0 )
     {
         rtl::OString aStr = rtl::OString::valueOf( (sal_Int32) nId );
-        xHandle = GetPeerHandle( aStr, 0 );
+        xHandle = GetPeerHandle( aStr.getStr(), 0 );
     }
     return xHandle;
 }
@@ -1119,25 +1120,6 @@ void TabControl::InsertPage (sal_uInt16 id, OUString const& title, sal_uInt16 po
 #else
     GetTabPage (id)->SetText (title);
 #endif
-
-#if 0
-    /// This so seems the right solution, but it makes the buttons of the
-    /// tabdialog move up
-
-    ::TabPage *page = GetTabPage (id);
-    if (Window *w = dynamic_cast <Window*> (page))
-    {
-        w->SetParent (this);
-        //GetVCLXTabControl ()->Box_Base::addChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->Box_Base::AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (w);
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //uno::Reference <uno::XInterface> x (page->GetWindowPeer());
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->::Window::GetWindowPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetComponentInterface (), uno::UNO_QUERY));
-    }
-    getImpl ().redraw ();
-#endif
 }
 void TabControl::RemovePage (sal_uInt16 id)
 {
@@ -1168,21 +1150,6 @@ sal_uInt16 TabControl::GetCurPageId () const
 void TabControl::SetTabPage (sal_uInt16 id, ::TabPage* page)
 {
     GetTabControl ()->SetTabPage (id, page);
-
-#if 0
-    /// This so seems the right solution, but it makes the buttons of the
-    /// tabdialog move up
-    if (Window *w = dynamic_cast <Window*> (page))
-    {
-        w->SetParent (this);
-        //GetVCLXTabControl ()->Box_Base::addChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->Box_Base::AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (w);
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (w->GetPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetWindowPeer (), uno::UNO_QUERY));
-        //GetVCLXTabControl ()->AddChild (uno::Reference <awt::XLayoutConstrains> (page->GetComponentInterface (), uno::UNO_QUERY));
-    }
-#endif
     getImpl ().redraw ();
 }
 ::TabPage* TabControl::GetTabPage (sal_uInt16 id) const
@@ -1216,17 +1183,6 @@ void TabControl::SetTabPageSizePixel (Size const& size)
 }
 Size TabControl::GetTabPageSizePixel () const
 {
-#if 0
-    //return GetTabControl ()->GetTabPageSizePixel ();
-    static size_t const tab_page_first_index = 1;
-    for (size_t i = 0; i < GetPageCount (); i++)
-    {
-        ::TabPage *p = GetTabPage (i + tab_page_first_index);
-        //if (dynamic_cast<Windowt*> (p))
-        if (i) // URG
-            return p->GetOptimalSize (WINDOWSIZE_MINIMUM);
-    }
-#endif
     return GetTabControl ()->GetTabPageSizePixel ();
 }
 
@@ -1375,19 +1331,13 @@ class FixedImageImpl: public ControlImpl
 public:
     uno::Reference< graphic::XGraphic > mxGraphic;
     FixedImageImpl( Context *context, const PeerHandle &peer, Window *window)
-//                    const char *pName )
         : ControlImpl( context, peer, window )
-          //, mxGraphic( layoutimpl::loadGraphic( pName ) )
         , mxGraphic( peer, uno::UNO_QUERY )
     {
         if ( !mxGraphic.is() )
         {
-            DBG_ERROR( "ERROR: failed to load image: `%s'" /*, pName*/ );
+            OSL_FAIL( "ERROR: failed to load image: `%s'" );
         }
-#if 0
-        else
-            getImpl().mxGraphic->...();
-#endif
     }
 };
 
@@ -1402,20 +1352,6 @@ void FixedImage::setImage( ::Image const& i )
     //FIXME: hack moved to proplist
     //getImpl().mxGraphic =
 }
-
-#if 0
-
-FixedImage::FixedImage( const char *pName )
-    : pImpl( new FixedImageImpl( pName ) )
-{
-}
-
-FixedImage::~FixedImage()
-{
-    delete pImpl;
-}
-
-#endif
 
 
 IMPL_CONSTRUCTORS( ProgressBar, Control, "ProgressBar" );
@@ -1618,3 +1554,5 @@ void InPlug::ParentSet (Window *window)
 }
 
 } // namespace layout
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

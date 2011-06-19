@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdio.h>                      // for EOF
 #include <rtl/tencinfo.h>
@@ -339,12 +338,6 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 case '\'':
                     {
 
-#if 0
-                        // #i35653 patch from cmc
-                        ByteString aByteString(static_cast<char>(GetHexValue()));
-                        if (aByteString.Len())
-                            aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
-#else
                         ByteString aByteString;
                         while (1)
                         {
@@ -395,7 +388,6 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                         if (aByteString.Len())
                             aStrBuffer.Append(String(aByteString, GetSrcEncoding()));
-#endif
                     }
                     break;
                 case '\\':
@@ -692,16 +684,4 @@ void SvRTFParser::SetEncoding( rtl_TextEncoding eEnc )
     SetSrcEncoding(eEnc);
 }
 
-#ifdef USED
-void SvRTFParser::SaveState( int nToken )
-{
-    SvParser::SaveState( nToken );
-}
-
-void SvRTFParser::RestoreState()
-{
-    SvParser::RestoreState();
-}
-#endif
-
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

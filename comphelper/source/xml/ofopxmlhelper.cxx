@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/StringPair.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/attributelist.hxx>
@@ -465,3 +454,4 @@ void SAL_CALL OFOPXMLHelper::setDocumentLocator( const uno::Reference< xml::sax:
 
 } // namespace comphelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

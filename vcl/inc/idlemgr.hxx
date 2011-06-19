@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,10 @@
 
 #include <vcl/sv.h>
 #include <vcl/timer.hxx>
+#include <vector>
 
-class ImplIdleList;
+struct ImplIdleData;
+typedef ::std::vector< ImplIdleData* > ImplIdleList;
 
 // ---------------
 // - ImplIdleMgr -
@@ -58,3 +61,5 @@ public:
 };
 
 #endif  // _SV_IDLEMGR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

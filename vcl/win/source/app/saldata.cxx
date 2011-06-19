@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
-#include "tools/svwin.h"
+#include <svsys.h>
 #include "rtl/tencinfo.h"
 #include "vcl/svapp.hxx"
 
@@ -118,20 +118,6 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 
 // =======================================================================
 
-LONG ImplSetWindowLong( HWND hWnd, int nIndex, DWORD dwNewLong )
-{
-    return SetWindowLongW( hWnd, nIndex, dwNewLong );
-}
-
-// -----------------------------------------------------------------------
-
-LONG ImplGetWindowLong( HWND hWnd, int nIndex )
-{
-    return GetWindowLongW( hWnd, nIndex );
-}
-
-// -----------------------------------------------------------------------
-
 BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return PostMessageW( hWnd, nMsg, wParam, lParam );
@@ -141,8 +127,7 @@ BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 
 BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
-    BOOL bRet = SendMessageW( hWnd, nMsg, wParam, lParam );
-    return bRet;
+    return SendMessageW( hWnd, nMsg, wParam, lParam );
 }
 
 // -----------------------------------------------------------------------
@@ -166,3 +151,4 @@ LONG ImplDispatchMessage( CONST MSG *lpMsg )
     return DispatchMessageW( lpMsg );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

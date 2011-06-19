@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -193,10 +194,6 @@ SvStream& operator<<( SvStream& rOStream, const Pair& rPair )
 |*
 |*    Rectangle::SetSize()
 |*
-|*    Beschreibung      GEN.SDW
-|*    Ersterstellung    DV 29.10.91
-|*    Letzte Aenderung  MM 21.04.94
-|*
 *************************************************************************/
 
 void Rectangle::SetSize( const Size& rSize )
@@ -219,10 +216,6 @@ void Rectangle::SetSize( const Size& rSize )
 /*************************************************************************
 |*
 |*    Rectangle::Union()
-|*
-|*    Beschreibung      GEN.SDW
-|*    Ersterstellung    TH 20.10.92
-|*    Letzte Aenderung  MM 21.04.94
 |*
 *************************************************************************/
 
@@ -247,10 +240,6 @@ Rectangle& Rectangle::Union( const Rectangle& rRect )
 /*************************************************************************
 |*
 |*    Rectangle::Intersection()
-|*
-|*    Beschreibung      GEN.SDW
-|*    Ersterstellung    TH 20.10.92
-|*    Letzte Aenderung  MM 21.04.94
 |*
 *************************************************************************/
 
@@ -286,10 +275,6 @@ Rectangle& Rectangle::Intersection( const Rectangle& rRect )
 |*
 |*    Rectangle::Justify()
 |*
-|*    Beschreibung      GEN.SDW
-|*    Ersterstellung    DV 07.03.91
-|*    Letzte Aenderung  DV 07.03.91
-|*
 *************************************************************************/
 
 void Rectangle::Justify()
@@ -316,10 +301,6 @@ void Rectangle::Justify()
 /*************************************************************************
 |*
 |*    Rectangle::IsInside()
-|*
-|*    Beschreibung      GEN.SDW
-|*    Ersterstellung    TH 19.03.90
-|*    Letzte Aenderung  MM 21.04.94
 |*
 *************************************************************************/
 
@@ -356,10 +337,6 @@ sal_Bool Rectangle::IsInside( const Point& rPoint ) const
 |*
 |*    Rectangle::IsInside()
 |*
-|*    Beschreibung      GEN.SDW
-|*    Ersterstellung    TH 19.03.90
-|*    Letzte Aenderung  MM 21.04.94
-|*
 *************************************************************************/
 
 sal_Bool Rectangle::IsInside( const Rectangle& rRect ) const
@@ -373,10 +350,6 @@ sal_Bool Rectangle::IsInside( const Rectangle& rRect ) const
 /*************************************************************************
 |*
 |*    Rectangle::IsOver()
-|*
-|*    Beschreibung      GEN.SDW
-|*    Ersterstellung    TH 19.03.90
-|*    Letzte Aenderung  MM 21.04.94
 |*
 *************************************************************************/
 
@@ -659,3 +632,5 @@ SvStream& operator<<( SvStream& rOStream, const Rectangle& rRect )
 
     return rOStream;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -163,7 +164,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
-    sal_Bool            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
+    sal_Bool        IsConsistent( const RSCINST & rInst );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 
@@ -207,3 +208,5 @@ public:
 };
 
 #endif // _RSCRANGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

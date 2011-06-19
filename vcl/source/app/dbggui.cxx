@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,6 @@
 #include <limits.h>
 
 #include "tools/debug.hxx"
-
-#include "vos/mutex.hxx"
 
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"
@@ -1975,6 +1974,7 @@ void DbgAbort( char const * i_message )
 void ImplDbgTestSolarMutex()
 {
     bool bCheck = ImplGetSVData()->mpDefInst->CheckYieldMutex();
+    (void)bCheck;
     OSL_ENSURE( bCheck, "SolarMutex not locked" );
 }
 
@@ -2036,3 +2036,5 @@ sal_uInt16 DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPri
 }
 
 #endif // DBG_UTIL
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,4 @@
+#
+# Collation of Catalan letters
+#
+& L << ŀ = l· <<< Ŀ = L·

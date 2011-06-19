@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -469,7 +470,7 @@ std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
     }
     catch(sal::systools::ComError& ex)
     {
-        OSL_ENSURE(false, ex.what());
+        OSL_FAIL(ex.what());
         ex = ex;
     }
     return target;
@@ -577,3 +578,4 @@ Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP aHBMP )
     return ooBmpStream;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

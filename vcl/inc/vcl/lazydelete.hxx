@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include "dllapi.h"
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 #if OSL_DEBUG_LEVEL > 2
@@ -124,7 +125,7 @@ namespace vcl
         };
 
         std::vector< DeleteObjectEntry >    m_aObjects;
-        typedef std::hash_map< sal_IntPtr, unsigned int > PtrToIndexMap;
+        typedef boost::unordered_map< sal_IntPtr, unsigned int > PtrToIndexMap;
         PtrToIndexMap                       m_aPtrToIndex;
 
         /** strict weak ordering funtion to bring objects to be destroyed lazily
@@ -257,6 +258,11 @@ namespace vcl
         // set contents, returning old contents
         // ownership is transfered !
         T* set( T* i_pNew ) { T* pOld = m_pT; m_pT = i_pNew; return pOld; }
+
+        // set contents, deleting old contents
+        // ownership is transfered !
+        void reset( T* i_pNew = NULL )
+            { OSL_ASSERT( i_pNew != m_pT || i_pNew == NULL ); T* pOld = m_pT; m_pT = i_pNew; delete pOld; }
     };
 
     /** Similar to DeleteOnDeinit, the DeleteUnoReferenceOnDeinit
@@ -299,3 +305,4 @@ namespace vcl
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

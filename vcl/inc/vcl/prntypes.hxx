@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,3 +95,5 @@ enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
 #define PRINTER_CAPABILITIES_USEPULLMODEL       ((sal_uInt16)12)
 
 #endif  // _SV_PRNTYPES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

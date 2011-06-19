@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #include <tools/debug.hxx>
-#ifndef _OSL_MUTEX_HXX
 #include <osl/mutex.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX
 #include <rtl/ustrbuf.hxx>
-#endif
 #include <uno/dispatcher.h> // declaration of generic uno interface
 #include <uno/mapping.hxx> // mapping stuff
 #include <cppuhelper/factory.hxx>
@@ -163,3 +160,5 @@ extern "C" {
     }
 
 } /* extern "C" */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

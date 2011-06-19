@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ class SAX_DLLPUBLIC FastSerializerHelper
 {
 public:
 
-    FastSerializerHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream );
+    FastSerializerHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream, bool bWriteHeader = true );
 
     ~FastSerializerHelper();
 
@@ -101,7 +102,8 @@ public:
 
     FastAttributeList *createAttrList();
 
-    void mark();
+    void mark( ::com::sun::star::uno::Sequence< sal_Int32 > aOrder =
+            ::com::sun::star::uno::Sequence< sal_Int32 >() );
     void mergeTopMarks( MergeMarksEnum eMergeType = MERGE_MARKS_APPEND );
 
 private:
@@ -116,3 +118,5 @@ typedef boost::shared_ptr< FastSerializerHelper > FSHelperPtr;
 }
 
 #endif // _SAX_FS_HELPER_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

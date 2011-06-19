@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,25 +41,30 @@
 
 namespace tools {
 
-bool getProcessWorkingDir(rtl::OUString * url) {
-    OSL_ASSERT(url != NULL);
+bool getProcessWorkingDir(rtl::OUString &rUrl)
+{
+    rUrl = rtl::OUString();
     rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("$OOO_CWD"));
     rtl::Bootstrap::expandMacros(s);
-    if (s.getLength() == 0) {
-        if (osl_getProcessWorkingDir(&url->pData) == osl_Process_E_None) {
+    if (s.getLength() == 0)
+    {
+        if (osl_getProcessWorkingDir(&rUrl.pData) == osl_Process_E_None)
             return true;
-        }
-    } else if (s[0] == '1') {
-        *url = s.copy(1);
+    }
+    else if (s[0] == '1')
+    {
+        rUrl = s.copy(1);
         return true;
-    } else if (s[0] == '2' &&
-               (osl::FileBase::getFileURLFromSystemPath(s.copy(1), *url) ==
+    }
+    else if (s[0] == '2' &&
+               (osl::FileBase::getFileURLFromSystemPath(s.copy(1), rUrl) ==
                 osl::FileBase::E_None))
     {
         return true;
     }
-    *url = rtl::OUString();
     return false;
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

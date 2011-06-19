@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,12 +78,7 @@ void BigInt::MakeBigInt( const BigInt& rVal )
 
         nNum[0] = (sal_uInt16)(nTmp & 0xffffL);
         nNum[1] = (sal_uInt16)(nTmp >> 16);
-#ifndef _WIN16
         if ( nTmp & 0xffff0000L )
-#else
-        long l = 0xffff0000L;
-        if ( nTmp & l )
-#endif
             nLen = 2;
         else
             nLen = 1;
@@ -529,35 +525,7 @@ BigInt::BigInt( const BigInt& rBigInt )
 
 // -----------------------------------------------------------------------
 
-BigInt::BigInt( const ByteString& rString )
-{
-    bIsSet = sal_True;
-    bIsNeg = sal_False;
-    bIsBig = sal_False;
-    nVal   = 0;
-
-    sal_Bool bNeg = sal_False;
-    const sal_Char* p = rString.GetBuffer();
-    if ( *p == '-' )
-    {
-        bNeg = sal_True;
-        p++;
-    }
-    while( *p >= '0' && *p <= '9' )
-    {
-        *this *= 10;
-        *this += *p - '0';
-        p++;
-    }
-    if ( bIsBig )
-        bIsNeg = bNeg;
-    else if( bNeg )
-        nVal = -nVal;
-}
-
-// -----------------------------------------------------------------------
-
-BigInt::BigInt( const UniString& rString )
+BigInt::BigInt( const String& rString )
 {
     bIsSet = sal_True;
     bIsNeg = sal_False;
@@ -690,12 +658,12 @@ BigInt::operator double() const
 
 // -----------------------------------------------------------------------
 
-ByteString BigInt::GetByteString() const
+String BigInt::GetString() const
 {
-    ByteString aString;
+    String aString;
 
     if ( !bIsBig )
-        aString = ByteString::CreateFromInt32( nVal );
+        aString = String::CreateFromInt32( nVal );
     else
     {
         BigInt aTmp( *this );
@@ -708,66 +676,23 @@ ByteString BigInt::GetByteString() const
             a    %= a1000000000;
             aTmp /= a1000000000;
 
-            ByteString aStr = aString;
+            String aStr = aString;
             if ( a.nVal < 100000000L )
             { // leading 0s
-                aString = ByteString::CreateFromInt32( a.nVal + 1000000000L );
-                aString.Erase( 0, 1 );
-            }
-            else
-                aString = ByteString::CreateFromInt32( a.nVal );
-            aString += aStr;
-        }
-        while( aTmp.bIsBig );
-
-        ByteString aStr = aString;
-        if ( bIsNeg )
-            aString = ByteString::CreateFromInt32( -aTmp.nVal );
-        else
-            aString = ByteString::CreateFromInt32( aTmp.nVal );
-        aString += aStr;
-    }
-
-    return aString;
-}
-
-// -----------------------------------------------------------------------
-
-UniString BigInt::GetString() const
-{
-    UniString aString;
-
-    if ( !bIsBig )
-        aString = UniString::CreateFromInt32( nVal );
-    else
-    {
-        BigInt aTmp( *this );
-        BigInt a1000000000( 1000000000L );
-        aTmp.Abs();
-
-        do
-        {
-            BigInt a = aTmp;
-            a    %= a1000000000;
-            aTmp /= a1000000000;
-
-            UniString aStr = aString;
-            if ( a.nVal < 100000000L )
-            { // leading 0s
-                aString = UniString::CreateFromInt32( a.nVal + 1000000000L );
+                aString = String::CreateFromInt32( a.nVal + 1000000000L );
                 aString.Erase(0,1);
             }
             else
-                aString = UniString::CreateFromInt32( a.nVal );
+                aString = String::CreateFromInt32( a.nVal );
             aString += aStr;
         }
         while( aTmp.bIsBig );
 
-        UniString aStr = aString;
+        String aStr = aString;
         if ( bIsNeg )
-            aString = UniString::CreateFromInt32( -aTmp.nVal );
+            aString = String::CreateFromInt32( -aTmp.nVal );
         else
-            aString = UniString::CreateFromInt32( aTmp.nVal );
+            aString = String::CreateFromInt32( aTmp.nVal );
         aString += aStr;
     }
 
@@ -875,7 +800,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
     {
         if ( rVal.nVal == 0 )
         {
-            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
+            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
             return *this;
         }
 
@@ -936,7 +861,7 @@ void BigInt::DivMod( const BigInt& rVal, BigInt& rMod )
     {
         if ( rVal.nVal == 0 )
         {
-            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
+            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
             return;
         }
 
@@ -1005,7 +930,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
     {
         if ( rVal.nVal == 0 )
         {
-            DBG_ERROR( "BigInt::operator/ --> divide by zero" );
+            OSL_FAIL( "BigInt::operator/ --> divide by zero" );
             return *this;
         }
 
@@ -1139,3 +1064,5 @@ sal_Bool operator >(const BigInt& rVal1, const BigInt& rVal2 )
 
     return rVal1.nVal > rVal2.nVal;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

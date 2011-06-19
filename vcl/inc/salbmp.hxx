@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,10 @@
 #ifndef _SV_SALBMP_HXX
 #define _SV_SALBMP_HXX
 
-#ifndef _TL_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 #include <vcl/dllapi.h>
+
+#include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 struct BitmapBuffer;
 class SalGraphics;
@@ -52,6 +53,9 @@ public:
                                     SalGraphics* pGraphics ) = 0;
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     sal_uInt16 nNewBitCount ) = 0;
+    virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
+                                    Size& rSize,
+                                    bool bMask = false ) = 0;
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
     virtual sal_uInt16          GetBitCount() const = 0;
@@ -63,3 +67,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

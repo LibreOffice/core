@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     -I$(SRCDIR)/vcl/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
 
@@ -48,6 +47,10 @@ $(eval $(call gb_Library_add_defs,vclplug_gtk,\
 ))
 
 ifneq ($(ENABLE_DBUS),)
+$(eval $(call gb_Library_set_include,vclplug_gtk,\
+	$$(INCLUDE) \
+	$(filter -I%,$(shell pkg-config --cflags dbus-glib-1)) \
+))
 $(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DENABLE_DBUS \
 ))
@@ -75,10 +78,8 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     i18npaper \
     i18nutil \
     jvmaccess \
-    stl \
     cppu \
     sal \
-    vos3 \
     X11 \
     Xext \
     SM \

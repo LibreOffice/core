@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,15 +42,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL OHatchWindowFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.HatchWindowFactory");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.HatchWindowFactory");
+    aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.HatchWindowFactory" ));
+    aRet[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.embed.HatchWindowFactory" ));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OHatchWindowFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.HatchWindowFactory");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.embed.HatchWindowFactory" ));
 }
 
 //-------------------------------------------------------------------------
@@ -70,7 +71,7 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
     if ( !xParent.is() )
         throw lang::IllegalArgumentException(); // TODO
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     VCLXHatchWindow* pResult = new VCLXHatchWindow();
     pResult->initializeWindow( xParent, aBounds, aHandlerSize );
     return uno::Reference< embed::XHatchWindow >( static_cast< embed::XHatchWindow* >( pResult ) );
@@ -148,3 +149,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
 }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

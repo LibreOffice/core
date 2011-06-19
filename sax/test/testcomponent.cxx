@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,8 +42,7 @@
 
 #include <cppuhelper/servicefactory.hxx>
 
-#include <vos/dynload.hxx>
-#include <vos/diagnose.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -79,7 +79,7 @@ int main (int argc, char **argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -102,7 +102,7 @@ int main (int argc, char **argv)
             aDllName += OUString( RTL_CONSTASCII_USTRINGPARAM(".so"));
 #endif
             xReg->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                 aDllName,
                 xSimpleReg );
         }
@@ -130,7 +130,7 @@ int main (int argc, char **argv)
 #endif
 
         xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ) ,
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")) ,
             aDllName,
             xSimpleReg );
     }
@@ -228,3 +228,5 @@ int main (int argc, char **argv)
     rComp->dispose();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

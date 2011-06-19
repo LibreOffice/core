@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,29 +32,21 @@
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_H_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_H_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_H_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
 
 
 #include <tools/rtti.hxx>
-#ifndef _TOOLS_STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
-#ifndef _TOOLS_GLOBNAME_HXX //autogen
 #include <tools/globname.hxx>
-#endif
+#include "sot/storinfo.hxx"
 #include "sot/sotdllapi.h"
 
 #include <list>
+
 class UNOStorageHolder;
 typedef ::std::list< UNOStorageHolder* > UNOStorageHolderList;
 
@@ -108,7 +101,6 @@ public:
     virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const = 0;
 };
 
-class SvStorageInfoList;
 class BaseStorage : public StorageBase
 {
 public:
@@ -396,3 +388,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

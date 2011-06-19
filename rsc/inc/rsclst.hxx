@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,11 @@
 #ifndef _RSCLST_HXX
 #define _RSCLST_HXX
 
-#ifndef _TOOLS_LIST_HXX
-#include <tools/list.hxx>
-#endif
 #include <rscall.h>
 
 class REResourceList;
 
-DECLARE_LIST( RESubResourceList, REResourceList * )
-
-class REResourceList : public RESubResourceList
+class REResourceList
 {
 protected:
     REResourceList*  pParent;
@@ -65,3 +61,5 @@ public:
 };
 
 #endif // _RSCLST_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

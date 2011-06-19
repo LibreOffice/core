@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,39 @@
 
 #include <list>
 
+inline GdkWindow * widget_get_window(GtkWidget *widget)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return gtk_widget_get_window(widget);
+#else
+    return widget->window;
+#endif
+}
+
+inline void widget_set_can_focus(GtkWidget *widget, gboolean can_focus)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return gtk_widget_set_can_focus(widget, can_focus);
+#else
+    if (can_focus)
+        GTK_WIDGET_SET_FLAGS( widget, GTK_CAN_FOCUS );
+    else
+        GTK_WIDGET_UNSET_FLAGS( widget, GTK_CAN_FOCUS );
+#endif
+}
+
+inline void widget_set_can_default(GtkWidget *widget, gboolean can_default)
+{
+#if GTK_CHECK_VERSION(3,0,0)
+    return gtk_widget_set_can_default(widget, can_default);
+#else
+    if (can_default)
+        GTK_WIDGET_SET_FLAGS( widget, GTK_CAN_DEFAULT );
+    else
+        GTK_WIDGET_UNSET_FLAGS( widget, GTK_CAN_DEFAULT );
+#endif
+}
+
 class GtkData : public X11SalData
 {
 public:
@@ -61,7 +95,7 @@ class GtkSalDisplay : public SalDisplay
     bool                            m_bStartupCompleted;
     std::vector< int >              m_aXineramaScreenIndexMap;
 
-    GdkCursor* getFromXPM( const char *pBitmap, const char *pMask,
+    GdkCursor* getFromXPM( const unsigned char *pBitmap, const unsigned char *pMask,
                            int nWidth, int nHeight, int nXHot, int nYHot );
 public:
              GtkSalDisplay( GdkDisplay* pDisplay );
@@ -77,9 +111,8 @@ public:
 
     virtual int GetDefaultMonitorNumber() const;
 
-    static GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
-                                           GdkEvent* event,
-                                           gpointer data );
+    GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
+                                    GdkEvent* event );
     inline bool HasMoreEvents()     { return m_aUserEvents.size() > 1; }
     inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
     inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
@@ -91,3 +124,5 @@ public:
 
 
 #endif // _VCL_GTKDATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

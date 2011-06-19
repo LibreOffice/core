@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
-#ifndef _SV_HATCX_HXX
 #include <vcl/hatch.hxx>
-#endif
 
 DBG_NAME( Hatch )
 
@@ -220,3 +219,5 @@ SvStream& operator<<( SvStream& rOStm, const Hatch& rHatch )
 {
     return( rOStm << *rHatch.mpImplHatch );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

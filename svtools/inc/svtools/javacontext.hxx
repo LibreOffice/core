@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,9 +47,6 @@ namespace svt
     {
 
     public:
-        JavaContext( const com::sun::star::uno::Reference<
-                     com::sun::star::uno::XCurrentContext> & ctx);
-
         /** The parameter bShowErrorsOnce controls whether a message box is
             only displayed once for a reocurring Java error. That is only
             the first time JavaInteractionHandler.handle is called with a
@@ -57,7 +55,7 @@ namespace svt
          */
         JavaContext( const com::sun::star::uno::Reference<
                      com::sun::star::uno::XCurrentContext> & ctx,
-                     bool bReportErrorOnce);
+                     bool bReportErrorOnce = true );
         virtual ~JavaContext();
 
         // XInterface
@@ -89,3 +87,5 @@ namespace svt
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

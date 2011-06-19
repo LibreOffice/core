@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,123 +35,6 @@
 
 #include "bootstrp/appdef.hxx"
 
-const char* GetDefStandList()
-{
-    char* pRet;
-    char* pEnv = getenv("STAR_STANDLST");
-    if ( pEnv )
-    {
-        int nLen = strlen( pEnv );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, pEnv );
-    }
-    else
-    {
-        int nLen = strlen( _DEF_STAND_LIST );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, _DEF_STAND_LIST );
-    }
-    return pRet;
-}
-
-
-const char* GetIniRoot()
-{
-    char* pRet;
-    char* pEnv = getenv("STAR_INIROOT");
-    if ( pEnv )
-    {
-        int nLen = strlen( pEnv );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, pEnv );
-    }
-    else
-    {
-        int nLen = strlen( _INIROOT );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, _INIROOT );
-    }
-    return pRet;
-}
-
-const char* GetIniRootOld()
-{
-    char* pRet;
-    char* pEnv = getenv("STAR_INIROOTOLD");
-    if ( pEnv )
-    {
-        int nLen = strlen( pEnv );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, pEnv );
-    }
-    else
-    {
-        int nLen = strlen( _INIROOT_OLD );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, _INIROOT_OLD );
-    }
-    return pRet;
-}
-
-const char* GetSSolarIni()
-{
-    char* pRet;
-    char* pEnv = getenv("STAR_SSOLARINI");
-    if ( pEnv )
-    {
-        int nLen = strlen( pEnv );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, pEnv );
-    }
-    else
-    {
-        int nLen = strlen( _DEF_SSOLARINI );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, _DEF_SSOLARINI );
-    }
-    return pRet;
-}
-
-
-const char* GetSSCommon()
-{
-    char* pRet;
-    char* pEnv = getenv("STAR_SSCOMMON");
-    if ( pEnv )
-    {
-        int nLen = strlen( pEnv );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, pEnv );
-    }
-    else
-    {
-        int nLen = strlen( _DEF_SSCOMMON );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, _DEF_SSCOMMON );
-    }
-    return pRet;
-}
-
-
-const char* GetBServerRoot()
-{
-    char* pRet;
-    char* pEnv = getenv("STAR_BSERVERROOT");
-    if ( pEnv )
-    {
-        int nLen = strlen( pEnv );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, pEnv );
-    }
-    else
-    {
-        int nLen = strlen( B_SERVER_ROOT );
-        pRet = ( char *) malloc( nLen + 1 );
-        (void) strcpy( pRet, B_SERVER_ROOT );
-    }
-    return pRet;
-}
-
 const char* GetEnv( const char *pVar )
 {
     char const *pRet = getenv( pVar );
@@ -166,3 +50,5 @@ const char* GetEnv( const char *pVar, const char *pDefault )
         return pDefault;
     return pRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

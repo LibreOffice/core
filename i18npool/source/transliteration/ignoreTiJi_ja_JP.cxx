@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -68,3 +68,5 @@ ignoreTiJi_ja_JP::ignoreTiJi_ja_JP()
 }
 
 } } } }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

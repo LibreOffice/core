@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-#include <tools/svwin.h>
 #include <sal/main.h>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -56,7 +56,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::connection;
-using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
@@ -216,7 +215,8 @@ void Main( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMult
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
 
     MyWin * pWindow;
-    ::osl::Guard< vos::IMutex > aVclGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aVclGuard;
+
     pWindow = new MyWin();
     pWindow->Show();
 
@@ -267,3 +267,4 @@ void MyWin::Paint( const Rectangle& r )
         mxView->draw( 50, 50 );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

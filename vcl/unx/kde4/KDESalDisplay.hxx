@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,22 @@ class SalKDEDisplay : public SalX11Display
 {
     public:
         SalKDEDisplay( Display* pDisp );
-            virtual ~SalKDEDisplay();
+        virtual ~SalKDEDisplay();
+        static SalKDEDisplay* self();
+        inline int userEventsCount() const { return m_aUserEvents.size(); }
+        inline void EventGuardAcquire() { osl_acquireMutex( hEventGuard_ ); }
+        inline void EventGuardRelease() { osl_releaseMutex( hEventGuard_ ); }
+//        virtual long Dispatch( XEvent *event );
+        virtual void Yield();
+        bool checkDirectInputEvent( XEvent* ev );
+    private:
+        Atom xim_protocol;
+        static SalKDEDisplay* selfptr;
 };
 
+inline SalKDEDisplay* SalKDEDisplay::self()
+{
+    return selfptr;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

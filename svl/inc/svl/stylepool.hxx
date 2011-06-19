@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,9 +43,7 @@ private:
 public:
     typedef boost::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
-    // --> OD 2008-03-07 #i86923#
     explicit StylePool( SfxItemSet* pIgnorableItems = 0 );
-    // <--
 
     /** Insert a SfxItemSet into the style pool.
 
@@ -98,3 +97,5 @@ public:
     virtual ~IStylePoolIteratorAccess() {};
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 #include <rtl/unload.h>
 
-#ifndef COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
 #include "comphelper/makesequence.hxx"
-#endif
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include "aqua_clipboard.hxx"
@@ -53,7 +52,6 @@
 #include <aqua/salframe.h>
 #include <aqua/salframeview.h>
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
@@ -64,6 +62,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace comphelper;
+
+using ::rtl::OUString;
 
 OUString dropTarget_getImplementationName()
 {
@@ -604,3 +604,4 @@ void DropTarget::concludeDragOperation(id /*sender*/)
     return dropTarget_getSupportedServiceNames();
   }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

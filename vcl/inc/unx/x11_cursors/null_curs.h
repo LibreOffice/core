@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,4 +29,6 @@
 #define nullcurs_height 4
 #define nullcurs_x_hot 2
 #define nullcurs_y_hot 2
-static char nullcurs_bits[] = { 0x00, 0x00 };
+static unsigned char nullcurs_bits[] = { 0x00, 0x00 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

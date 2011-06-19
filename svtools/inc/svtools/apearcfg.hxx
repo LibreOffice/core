@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,6 @@
 
 class Application;
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 typedef enum {
     SnapToButton = 0,
     SnapToMiddle,
@@ -55,12 +53,12 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
     short           nScaleFactor        ;
     short           nSnapMode           ;
     short           nMiddleMouse;
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     short           nAAMinPixelHeight   ;
 #endif
 
     sal_Bool            bMenuMouseFollow        ;
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     sal_Bool            bFontAntialiasing       ;
 #endif
 
@@ -92,7 +90,7 @@ public:
     void        SetMenuMouseFollow(sal_Bool bSet) {bMenuMouseFollow = bSet; SetModified();}
     sal_Bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     void        SetFontAntiAliasing( sal_Bool bSet )    { bFontAntialiasing = bSet; SetModified(); }
     sal_Bool        IsFontAntiAliasing() const { return bFontAntialiasing; }
 
@@ -105,3 +103,5 @@ public:
 };
 
 #endif //  _OFA_APEARCFG_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

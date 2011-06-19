@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,13 +37,25 @@
 
 #include <unx/salgdi.h>
 
+#if GTK_CHECK_VERSION(3,0,0)
+
+// Disabled for gtk3 - use legacy theming code
+#define GTK_GRAPHICS_DISABLED
+class GtkSalFrame;
+class GtkSalGraphics : public X11SalGraphics {
+public:
+    GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
+};
+
+#else
+
 class GtkSalGraphics : public X11SalGraphics
 {
     GtkWidget           *m_pWindow;
     Region               m_aClipRegion;
 
 public:
-                        GtkSalGraphics( GtkWidget *window )
+                         GtkSalGraphics( GtkSalFrame *, GtkWidget *window )
                             : m_pWindow( window ),
                               m_aClipRegion( REGION_NULL )
                               {}
@@ -94,6 +107,11 @@ protected:
     GdkPixmap* NWGetPixmapFromScreen( Rectangle srcRect );
     sal_Bool NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRect );
 
+    sal_Bool NWPaintGTKButtonReal( GtkWidget* button, GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
+                           const Rectangle& rControlRectangle,
+                           const clipList& rClipList,
+                           ControlState nState, const ImplControlValue& aValue,
+                           const OUString& rCaption );
     sal_Bool NWPaintGTKButton( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                            const Rectangle& rControlRectangle,
                            const clipList& rClipList,
@@ -177,4 +195,8 @@ protected:
                             const OUString& rCaption );
 };
 
+#endif // !gtk3
+
 #endif // _VCL_GTKGDI_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

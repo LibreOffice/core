@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,16 @@
 #include "precompiled_comphelper.hxx"
 #include <comphelper/namedvaluecollection.hxx>
 
-/** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
-/** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <functional>
 #include <algorithm>
 
@@ -65,7 +65,7 @@ namespace comphelper
     //====================================================================
     //= NamedValueCollection_Impl
     //====================================================================
-    typedef ::std::hash_map< ::rtl::OUString, Any, ::rtl::OUStringHash >    NamedValueRepository;
+    typedef ::boost::unordered_map< ::rtl::OUString, Any, ::rtl::OUStringHash >    NamedValueRepository;
 
     struct NamedValueCollection_Impl
     {
@@ -158,13 +158,11 @@ namespace comphelper
     //--------------------------------------------------------------------
     ::std::vector< ::rtl::OUString > NamedValueCollection::getNames() const
     {
-        ::std::vector< ::rtl::OUString > aNames( m_pImpl->aValues.size() );
-        ::std::transform(
-            m_pImpl->aValues.begin(),
-            m_pImpl->aValues.end(),
-            aNames.begin(),
-            ::std::select1st< NamedValueRepository::value_type >()
-        );
+        ::std::vector< ::rtl::OUString > aNames;
+        for ( NamedValueRepository::const_iterator it = m_pImpl->aValues.begin(), end = m_pImpl->aValues.end(); it != end; ++it )
+        {
+            aNames.push_back( it->first );
+        }
         return aNames;
     }
 
@@ -213,7 +211,7 @@ namespace comphelper
                 ::rtl::OStringBuffer message;
                 message.append( "NamedValueCollection::impl_assign: encountered a value type which I cannot handle:\n" );
                 message.append( ::rtl::OUStringToOString( pArgument->getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_ENSURE( false, message.makeStringAndClear() );
+                OSL_FAIL( message.makeStringAndClear() );
             }
 #endif
         }
@@ -278,6 +276,11 @@ namespace comphelper
         return false;
     }
 
+    namespace
+    {
+        class theEmptyDefault : public rtl::Static<Any, theEmptyDefault> {};
+    }
+
     //--------------------------------------------------------------------
     const Any& NamedValueCollection::impl_get( const ::rtl::OUString& _rValueName ) const
     {
@@ -285,8 +288,7 @@ namespace comphelper
         if ( pos != m_pImpl->aValues.end() )
             return pos->second;
 
-        static Any aEmptyDefault;
-        return aEmptyDefault;
+        return theEmptyDefault::get();
     }
 
     //--------------------------------------------------------------------
@@ -355,3 +357,4 @@ namespace comphelper
 } // namespace comphelper
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

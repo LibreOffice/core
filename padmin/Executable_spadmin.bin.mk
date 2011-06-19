@@ -48,7 +48,6 @@ $(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
     cppuhelper \
     cppu \
     sal \
-    stl \
     $(gb_STDLIBS) \
 ))
 
@@ -57,10 +56,15 @@ $(eval $(call gb_Executable_add_exception_objects,spadmin.bin,\
     padmin/source/pamain \
 ))
 
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
+$(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
+    pthread \
+))
+endif
+
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Executable_add_linked_libs,spadmin.bin,\
     dl \
-    pthread \
 ))
 endif
 

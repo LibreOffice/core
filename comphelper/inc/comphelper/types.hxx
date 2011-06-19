@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ namespace comphelper
     /** check if a type you have at hand at runtime is equal to another type you have at compile time
     */
     template <class TYPE>
-    sal_Bool isAReference(const staruno::Any& _rVal, TYPE* pDummy)
+    sal_Bool isAReference(const staruno::Any& _rVal, TYPE*)
     {
         return  _rVal.getValueType().equals(
             cppu::getTypeFavourUnsigned(
@@ -178,3 +179,4 @@ namespace comphelper
 
 #endif // _COMPHELPER_TYPES_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

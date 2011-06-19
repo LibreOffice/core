@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <svtools/wizdlg.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/tabpage.hxx>
 #include <comphelper/stl_types.hxx>
 
@@ -392,3 +391,4 @@ namespace svt
 
 #endif // _SVTOOLS_WIZARDMACHINE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

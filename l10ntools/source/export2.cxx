@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_l10ntools.hxx"
 #include "export.hxx"
-#include "utf8conv.hxx"
 #include <tools/datetime.hxx>
 #include <tools/isofallback.hxx>
 #include <stdio.h>
 #include <osl/time.h>
 #include <osl/process.h>
 #include <rtl/ustring.hxx>
+#include <sal/macros.h>
 #include <iostream>
 #include <iomanip>
 #include <tools/urlobj.hxx>
@@ -52,32 +53,32 @@ ResData::~ResData()
 {
     if ( pStringList ) {
         // delete existing res. of type StringList
-        for ( sal_uLong i = 0; i < pStringList->Count(); i++ ) {
-            ExportListEntry* test = pStringList->GetObject( i );
+        for ( size_t i = 0; i < pStringList->size(); i++ ) {
+            ExportListEntry* test = (*pStringList)[ i ];
             if( test != NULL ) delete test;
         }
         delete pStringList;
     }
     if ( pFilterList ) {
         // delete existing res. of type FilterList
-        for ( sal_uLong i = 0; i < pFilterList->Count(); i++ ) {
-            ExportListEntry* test = pFilterList->GetObject( i );
+        for ( size_t i = 0; i < pFilterList->size(); i++ ) {
+            ExportListEntry* test = (*pFilterList)[ i ];
             delete test;
         }
         delete pFilterList;
     }
     if ( pItemList ) {
         // delete existing res. of type ItemList
-        for ( sal_uLong i = 0; i < pItemList->Count(); i++ ) {
-            ExportListEntry* test = pItemList->GetObject( i );
+        for ( size_t i = 0; i < pItemList->size(); i++ ) {
+            ExportListEntry* test = (*pItemList)[ i ];
             delete test;
         }
         delete pItemList;
     }
     if ( pUIEntries ) {
         // delete existing res. of type UIEntries
-        for ( sal_uLong i = 0; i < pUIEntries->Count(); i++ ) {
-            ExportListEntry* test = pUIEntries->GetObject( i );
+        for ( size_t i = 0; i < pUIEntries->size(); i++ ) {
+            ExportListEntry* test = (*pUIEntries)[ i ];
             delete test;
         }
         delete pUIEntries;
@@ -98,8 +99,8 @@ void Export::DumpExportList( ByteString& sListName , ExportList& aList ){
     printf( "%s\n", sListName.GetBuffer() );
     ByteString l("");
     ExportListEntry* aEntry;
-    for( unsigned int x = 0; x < aList.Count() ; x++ ){
-        aEntry = (ExportListEntry*) aList.GetObject( x );
+    for( unsigned int x = 0; x < aList.size() ; x++ ){
+        aEntry = (ExportListEntry*) aList[ x ];
         Export::DumpMap( l , *aEntry );
     }
     printf("\n");
@@ -145,7 +146,6 @@ void Export::QuotHTMLXRM( ByteString &rString )
 /*****************************************************************************/
 {
     ByteString sReturn;
-    //sal_Bool bBreak = sal_False;
     for ( sal_uInt16 i = 0; i < rString.Len(); i++ ) {
         ByteString sTemp = rString.Copy( i );
         if ( sTemp.Search( "<Arg n=" ) == 0 ) {
@@ -298,13 +298,11 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
         aFileIn.ReadLine( sLine );
         // Test header
         if( hasUTF8ByteOrderMarker( sLine ) ){
-            //cout << "UTF8 Header found!\n";
             DirEntry aTempFile = Export::GetTempFile();
             ByteString sTempFile = ByteString( aTempFile.GetFull() , RTL_TEXTENCODING_ASCII_US );
             SvFileStream aNewFile( String( sTempFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_WRITE );
             // Remove header
             RemoveUTF8ByteOrderMarker( sLine );
-            //cout << "Copy stripped stuff to " << sTempFile.GetBuffer() << endl;
             aNewFile.WriteLine( sLine );
             // Copy the rest
             while( !aFileIn.IsEof() ){
@@ -314,40 +312,15 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
             if( aFileIn.IsOpen() ) aFileIn.Close();
             if( aNewFile.IsOpen() ) aNewFile.Close();
             DirEntry aEntry( rFilename.GetBuffer() );
-            //cout << "Removing file " << rFilename.GetBuffer() << "\n";
             aEntry.Kill();
-            //cout << "Renaming file " << sTempFile.GetBuffer() << " to " << rFilename.GetBuffer() << "\n";
             DirEntry( sTempFile ).MoveTo( DirEntry( rFilename.GetBuffer() ) );
         }
     }
     if( aFileIn.IsOpen() ) aFileIn.Close();
 }
 
-// Merge it into source code!
-//bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
-//    (void) rPrj;
-//  return true;
-/*  static ByteStringBoolHashMap aHash;
-
-    if( aHash.find( rPrj ) != aHash.end() ){
-        return aHash[ rPrj ];
-    }
-
-    ByteString sFile = Export::GetEnv( "SRC_ROOT" ) ;
-    sFile.Append("/");
-    sFile.Append( rPrj );
-    sFile.Append("/prj/l10n");
-#if defined(WNT) || defined(OS2)
-    sFile.SearchAndReplaceAll('/','\\');
-#endif
-    DirEntry aFlagfile( sFile );
-
-    aHash[ rPrj ] = !aFlagfile.Exists();
-    return aHash[ rPrj ];*/
-//}
 bool Export::CopyFile( const ByteString& source , const ByteString& dest )
 {
-//    cout << "CopyFile( " << source.GetBuffer() << " , " << dest.GetBuffer() << " )\n";
     const int BUFFERSIZE    = 8192;
     char buf[ BUFFERSIZE ];
 
@@ -474,7 +447,7 @@ void Export::InitForcedLanguages( bool bMergeMode ){
 ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
 /*****************************************************************************/
 {
-    ByteString sFallback=nLanguage;
+    rtl::OString sFallback=nLanguage;
     GetIsoFallback( sFallback );
     return sFallback;
 }
@@ -558,8 +531,8 @@ void Export::FillInListFallbacks(
 /*****************************************************************************/
 {
 
-    for ( sal_uLong i = 0; i < pList->Count(); i++ ) {
-        ExportListEntry *pEntry = pList->GetObject( i );
+    for ( size_t i = 0; i < pList->size(); i++ ) {
+        ExportListEntry *pEntry = (*pList)[ i ];
         if ( !( *pEntry )[ nSource ].Len()){
              ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
             ByteString x = ( *pEntry )[ nSource ];
@@ -665,7 +638,7 @@ void Export::getCurrentDir( string& dir )
 void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , const ByteString& sPostfix )
 {
     static const char LETTERS[]        = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    static const int  COUNT_OF_LETTERS = sizeof(LETTERS)/sizeof(LETTERS[0]) - 1;
+    static const int  COUNT_OF_LETTERS = SAL_N_ELEMENTS(LETTERS) - 1;
     sRandStr.Append( sPrefix );
 
     static sal_uInt64 value;
@@ -676,7 +649,8 @@ void Export::getRandomName( const ByteString& sPrefix , ByteString& sRandStr , c
     int                 i;
 
     osl_getSystemTime( &tv );
-    oslProcessInfo  proInfo;
+    oslProcessInfo proInfo;
+    proInfo.Size = sizeof(oslProcessInfo);
     osl_getProcessInfo( 0 , osl_Process_IDENTIFIER , &proInfo );
 
     value += ((sal_uInt64) ( tv.Nanosec / 1000 ) << 16) ^ ( tv.Nanosec / 1000 ) ^ proInfo.Ident;
@@ -715,7 +689,7 @@ DirEntry Export::GetTempFile()
     String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
     ByteString sTmp( sDecodedStr , RTL_TEXTENCODING_UTF8 );
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
     sTmp.SearchAndReplace("file:///","");
     sTmp.SearchAndReplaceAll('/','\\');
 #else
@@ -732,3 +706,5 @@ DirEntry Export::GetTempFile()
     delete sTempFilename;
     return aDirEntry;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

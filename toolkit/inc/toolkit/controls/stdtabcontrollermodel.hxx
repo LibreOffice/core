@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,16 +41,16 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/list.hxx>
 #include <tools/gen.hxx>
+#include <vector>
 
 struct UnoControlModelEntry;
+typedef ::std::vector< UnoControlModelEntry* > UnoControlModelEntryListBase;
 
-DECLARE_LIST( UnoControlModelEntryListBase, UnoControlModelEntry* )
-
-class UnoControlModelEntryList : public UnoControlModelEntryListBase
+class UnoControlModelEntryList
 {
 private:
+    UnoControlModelEntryListBase maList;
     ::rtl::OUString maGroupName;
 
 public:
@@ -60,7 +61,11 @@ public:
     void                        SetName( const ::rtl::OUString& rName ) { maGroupName = rName; }
 
     void    Reset();
-    void    DestroyEntry( sal_uInt32 nEntry );
+    void    DestroyEntry( size_t nEntry );
+    size_t  size() const;
+    UnoControlModelEntry* operator[]( size_t i ) const;
+    void push_back( UnoControlModelEntry* item );
+    void insert( size_t i, UnoControlModelEntry* item );
 };
 
 struct UnoControlModelEntry
@@ -73,14 +78,13 @@ struct UnoControlModelEntry
     };
 };
 
-// Keine Referenz halten, nur temporaer fuer AutoTabOrder
 struct ComponentEntry
 {
     ::com::sun::star::awt::XWindow*     pComponent;
     Point                               aPos;
 };
 
-DECLARE_LIST( ComponentEntryList, ComponentEntry* )
+typedef ::std::vector< ComponentEntry* > ComponentEntryList;
 
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 
@@ -140,3 +144,4 @@ public:
 
 #endif // _TOOLKIT_HELPER_STDTABCONTROLLERMODEL_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

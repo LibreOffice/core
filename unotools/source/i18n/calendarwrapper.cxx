@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
-#endif
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/XExtendedCalendar.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -678,3 +677,4 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     return String();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -229,7 +230,6 @@ private:
                         mbCustomize:1,
                         mbCustomizeMode:1,
                         mbDragging:1,
-                        mbHideStatusText:1,
                         mbMenuStrings:1,
                         mbIsShift:1,
                         mbIsKeyEvent:1,
@@ -251,9 +251,7 @@ private:
     using Window::ImplInit;
     private:
     SAL_DLLPRIVATE void            ImplInit( Window* pParent, WinBits nStyle );
-//    #if 0 // _SOLAR__PRIVATE
     using DockingWindow::ImplInitSettings;
-//    #endif
     SAL_DLLPRIVATE void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SAL_DLLPRIVATE void            ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
@@ -262,7 +260,8 @@ private:
     SAL_DLLPRIVATE void            ImplFormat( sal_Bool bResize = sal_False );
     SAL_DLLPRIVATE void            ImplDrawSpin( sal_Bool bUpperIn, sal_Bool bLowerIn );
     SAL_DLLPRIVATE void            ImplDrawNext( sal_Bool bIn );
-    SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_Bool bHighlight = sal_False, sal_Bool bPaint = sal_False, sal_Bool bLayout = sal_False );
+    SAL_DLLPRIVATE void            ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect );
+    SAL_DLLPRIVATE void            ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight = 0, sal_Bool bPaint = sal_False, sal_Bool bLayout = sal_False );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( sal_Bool bNewCalc = sal_False, sal_Bool bFullPaint = sal_False );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
@@ -282,7 +281,6 @@ private:
     SAL_DLLPRIVATE void            ImplHideFocus();
     SAL_DLLPRIVATE void            ImplUpdateInputEnable();
     SAL_DLLPRIVATE void            ImplFillLayoutData() const;
-    SAL_DLLPRIVATE void            ImplUpdateCustomMenu();
     SAL_DLLPRIVATE sal_Bool            ImplHasClippedItems();
     SAL_DLLPRIVATE Point           ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize ) const;
     SAL_DLLPRIVATE void            ImplExecuteCustomMenu();
@@ -299,7 +297,6 @@ private:
     DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
     DECL_DLLPRIVATE_LINK(          ImplDropdownLongClickHdl, ToolBox* );
 
-//#if 0 // _SOLAR__PRIVATE
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE                 ToolBox (const ToolBox &);
     SAL_DLLPRIVATE        ToolBox& operator= (const ToolBox &);
@@ -341,7 +338,6 @@ public:
     static SAL_DLLPRIVATE void ImplDrawMenubutton( ToolBox *pThis, sal_Bool bHighlight );
     static SAL_DLLPRIVATE sal_uInt16 ImplCountLineBreaks( const ToolBox *pThis );
     SAL_DLLPRIVATE ImplToolBoxPrivateData* ImplGetToolBoxPrivateData() const { return mpData; }
-//#endif
 
 protected:
     void                SetCurItemId(sal_uInt16 nSet) { mnCurItemId = nSet; }
@@ -602,6 +598,7 @@ public:
     sal_uInt16              GetMenuType() const;
     sal_Bool                IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
+    void                UpdateCustomMenu();
     void                SetMenuButtonHdl( const Link& rLink );
     const Link&         GetMenuButtonHdl() const;
 
@@ -609,7 +606,7 @@ public:
     void                ExecuteCustomMenu();
 
     // allow Click Handler to detect special key
-    sal_Bool                IsShift() const { return mbIsShift; }
+    bool                IsShift() const { return mbIsShift; }
     // allow Click Handler to distinguish between mouse and key input
     sal_Bool                IsKeyEvent() const { return mbIsKeyEvent; }
 
@@ -680,3 +677,5 @@ inline sal_uInt16 ToolBox::GetFloatingLines() const
 }
 
 #endif  // _SV_TOOLBOX_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

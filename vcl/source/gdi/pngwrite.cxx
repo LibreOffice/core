@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,7 +120,7 @@ private:
     void                ImplWriteChunk( sal_uInt8 nNumb );
     void                ImplWriteChunk( sal_uInt32 nNumb );
     void                ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
-    void                ImplCloseChunk( void );
+    void                ImplCloseChunk( void ) const;
 };
 
 // ------------------------------------------------------------------------
@@ -148,11 +149,11 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             sal_Int32 i = 0;
             for ( i = 0; i < pFilterData->getLength(); i++ )
             {
-                if ( (*pFilterData)[ i ].Name.equalsAscii( "Compression" ) )
+                if ( (*pFilterData)[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Compression" ) ) )
                     (*pFilterData)[ i ].Value >>= mnCompLevel;
-                else if ( (*pFilterData)[ i ].Name.equalsAscii( "Interlaced" ) )
+                else if ( (*pFilterData)[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Interlaced" ) ) )
                     (*pFilterData)[ i ].Value >>= mnInterlaced;
-                else if ( (*pFilterData)[ i ].Name.equalsAscii( "MaxChunkSize" ) )
+                else if ( (*pFilterData)[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MaxChunkSize" ) ) )
                 {
                     sal_Int32 nVal = 0;
                     if ( (*pFilterData)[ i ].Value >>= nVal )
@@ -185,7 +186,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                         ImplWriteTransparent();
                         ImplWriteIDAT();
                     }
-                    aBmp.ReleaseAccess( mpAccess );
+                    aBmp.ReleaseAccess( mpAccess ), mpAccess = 0;
                 }
                 else
                     mbStatus = sal_False;
@@ -206,7 +207,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                                 ImplWritepHYs( rBmpEx );
                                 ImplWriteIDAT();
                             }
-                            aMask.ReleaseAccess( mpMaskAccess );
+                            aMask.ReleaseAccess( mpMaskAccess ), mpMaskAccess = 0;
                         }
                         else
                             mbStatus = sal_False;
@@ -222,12 +223,12 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                                 ImplWritepHYs( rBmpEx );
                                 ImplWriteIDAT();
                             }
-                            aMask.ReleaseAccess( mpMaskAccess );
+                            aMask.ReleaseAccess( mpMaskAccess ), mpMaskAccess = 0;
                         }
                         else
                             mbStatus = sal_False;
                     }
-                    aBmp.ReleaseAccess( mpAccess );
+                    aBmp.ReleaseAccess( mpAccess ), mpAccess = 0;
                 }
                 else
                     mbStatus = sal_False;
@@ -246,7 +247,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
 
                     ImplWriteIDAT();
                 }
-                aBmp.ReleaseAccess( mpAccess );
+                aBmp.ReleaseAccess( mpAccess ), mpAccess = 0;
             }
             else
                 mbStatus = sal_False;
@@ -698,7 +699,7 @@ void PNGWriterImpl::ImplWriteChunk ( unsigned char* pSource, sal_uInt32 nDatSize
 
 // ------------------------------------------------------------------------
 // nothing to do
-void PNGWriterImpl::ImplCloseChunk ( void )
+void PNGWriterImpl::ImplCloseChunk ( void ) const
 {
 }
 
@@ -735,3 +736,4 @@ std::vector< vcl::PNGWriter::ChunkData >& PNGWriter::GetChunks()
 
 } // namespace vcl
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

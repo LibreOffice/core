@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,26 +68,20 @@ public:
     virtual int operator ==(const SfxPoolItem & rItem) const;
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
-
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const
     { return new SfxFontItem(*this); }
 
     sal_Bool hasFont() const { return m_bHasFont; }
-
     sal_Bool hasColor() const { return m_bHasColor; }
-
     sal_Bool hasFillColor() const { return m_bHasFillColor; }
 
     const XubString & getName() const { return m_aName; }
-
     const XubString & getStyleName() const { return m_aStyleName; }
 
     const Size & getSize() const { return m_aSize; }
-
     const Color & getColor() const { return m_aColor; }
-
     const Color & getFillColor() const { return m_aFillColor; }
 
     rtl_TextEncoding getCharSet() const { return m_nCharSet; }
@@ -94,51 +89,30 @@ public:
     LanguageType getLanguage() const { return m_nLanguage; }
 
     sal_Int16 getFamily() const { return m_nFamily; }
-
     sal_Int16 getPitch() const { return m_nPitch; }
-
     sal_Int16 getWeight() const { return m_nWeight; }
-
     sal_Int16 getWidthType() const { return m_nWidthType; }
-
     sal_Int16 getItalic() const { return m_nItalic; }
-
     sal_Int16 getUnderline() const { return m_nUnderline; }
-
     sal_Int16 getStrikeout() const { return m_nStrikeout; }
-
     sal_Int16 getOrientation() const { return m_nOrientation; }
-
     sal_Bool getWordLine() const { return m_bWordLine; }
-
     sal_Bool getOutline() const { return m_bOutline; }
-
     sal_Bool getShadow() const { return m_bShadow; }
-
     sal_Bool getKerning() const { return m_bKerning; }
 
     inline void setFont(sal_Int16 nTheFamily, const XubString & rTheName,
                         const XubString & rTheStyleName, sal_Int16 nThePitch,
                         rtl_TextEncoding nTheCharSet);
-
     inline void setWeight(sal_Int16 nTheWeight);
-
     inline void setItalic(sal_Int16 nTheItalic);
-
     inline void setHeight(sal_Int32 nHeight);
-
     inline void setColor(const Color & rTheColor);
-
     inline void setFillColor(const Color & rTheFillColor);
-
     inline void setUnderline(sal_Int16 nTheUnderline);
-
     inline void setStrikeout(sal_Int16 nTheStrikeout);
-
     inline void setOutline(sal_Bool bTheOutline);
-
     inline void setShadow(sal_Bool bTheShadow);
-
     inline void setLanguage(LanguageType nTheLanguage);
 };
 
@@ -239,3 +213,4 @@ inline void SfxFontItem::setLanguage(LanguageType nTheLanguage)
 
 #endif // _SFONTITM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

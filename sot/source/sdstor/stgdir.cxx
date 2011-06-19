@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -819,7 +820,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
         {
             delete pCur;
             rIo.SetError( SVSTREAM_GENERALERROR );
-            // an error occured
+            // an error occurred
             return;
         }
 
@@ -1055,3 +1056,4 @@ sal_Bool StgDirStrm::Move( StgDirEntry& rStg1, StgDirEntry& rStg2, const String&
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

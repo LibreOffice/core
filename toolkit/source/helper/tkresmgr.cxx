@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#ifndef  _TOOLS_RESMGR_HXX_
 #include <tools/resmgr.hxx>
-#endif
 #include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
@@ -129,3 +128,4 @@ Image TkResMgr::getImageFromURL( const ::rtl::OUString& i_rImageURL )
     return Image();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

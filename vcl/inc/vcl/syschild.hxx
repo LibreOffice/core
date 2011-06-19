@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,8 +63,8 @@ public:
     //  per default systemchildwindows erase their background for better plugin support
     //  however, this might not always be required
     void                    EnableEraseBackground( sal_Bool bEnable = sal_True );
-    sal_Bool                    IsEraseBackgroundEnabled();
-
+    sal_Bool                IsEraseBackgroundEnabled();
+    void                    SetForwardKey( sal_Bool bEnable );
     // return the platform specific handle/id of this window;
     // in case the flag bUseJava is set, a java compatible overlay window
     // is created on which other java windows can be created (plugin interface)
@@ -71,3 +72,5 @@ public:
 };
 
 #endif // _SV_SYSCHILD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

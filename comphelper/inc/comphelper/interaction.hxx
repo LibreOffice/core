@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ namespace comphelper
     */
     class OInteractionSelect
     {
-        sal_Bool    m_bSelected : 1;    /// indicates if the select event occured
+        sal_Bool    m_bSelected : 1;    /// indicates if the select event occurred
 
     protected:
         OInteractionSelect() : m_bSelected(sal_False) { }
@@ -168,3 +169,4 @@ namespace comphelper
 #endif // _COMPHELPER_INTERACTION_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

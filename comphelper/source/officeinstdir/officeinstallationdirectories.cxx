@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ static bool makeCanonicalFileURL( rtl::OUString & rURL )
         if ( osl::DirectoryItem::get( aNormalizedURL, aDirItem )
                 == osl::DirectoryItem::E_None )
         {
-            osl::FileStatus aFileStatus( FileStatusMask_FileURL );
+            osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
 
             if ( aDirItem.getFileStatus( aFileStatus )
                     == osl::DirectoryItem::E_None )
@@ -161,9 +162,9 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
         if ( nIndex  != -1 )
         {
             return rtl::OUString(
-                URL.replaceAt( nIndex,
-                               m_pOfficeBrandDir->getLength(),
-                               m_aOfficeBrandDirMacro ) );
+                aCanonicalURL.replaceAt( nIndex,
+                                         m_pOfficeBrandDir->getLength(),
+                                         m_aOfficeBrandDirMacro ) );
         }
         else
         {
@@ -171,9 +172,9 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
             if ( nIndex  != -1 )
             {
                 return rtl::OUString(
-                    URL.replaceAt( nIndex,
-                                   m_pOfficeBaseDir->getLength(),
-                                   m_aOfficeBaseDirMacro ) );
+                    aCanonicalURL.replaceAt( nIndex,
+                                             m_pOfficeBaseDir->getLength(),
+                                             m_aOfficeBaseDirMacro ) );
             }
             else
             {
@@ -181,9 +182,9 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
                 if ( nIndex  != -1 )
                 {
                     return rtl::OUString(
-                        URL.replaceAt( nIndex,
-                                       m_pUserDir->getLength(),
-                                       m_aUserDirMacro ) );
+                        aCanonicalURL.replaceAt( nIndex,
+                                                 m_pUserDir->getLength(),
+                                                 m_aUserDirMacro ) );
                 }
             }
         }
@@ -382,3 +383,5 @@ void createRegistryInfo_OfficeInstallationDirectories()
 {
     static ::comphelper::module::OSingletonRegistration< OfficeInstallationDirectories > aAutoRegistration;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

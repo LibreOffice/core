@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <cppuhelper/compbase3.hxx>
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBAORD_XCLIPBOARDMANAGER_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardManager.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <map>
@@ -125,3 +124,5 @@ namespace dtrans
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

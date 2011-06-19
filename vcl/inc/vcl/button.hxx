@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,14 +86,14 @@ public:
     static XubString    GetStandardText( StandardButtonType eButton );
     static XubString    GetStandardHelpText( StandardButtonType eButton );
 
-    sal_Bool                SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Image         GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
-    sal_Bool                HasImage() const;
+    sal_Bool            SetModeImage( const Image& rImage );
+    const Image         GetModeImage( ) const;
+    sal_Bool            HasImage() const;
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
 
-    sal_Bool                SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    BitmapEx            GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    sal_Bool            SetModeBitmap( const BitmapEx& rBitmap );
+    BitmapEx            GetModeBitmap( ) const;
 
     void                EnableImageDisplay( sal_Bool bEnable );
     sal_Bool                IsImageDisplayEnabled();
@@ -296,7 +297,6 @@ private:
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
-    Image           maImageHC;
     sal_Bool            mbChecked;
     sal_Bool            mbSaveValue;
     sal_Bool            mbRadioCheck;
@@ -372,8 +372,8 @@ public:
     void            EnableRadioCheck( sal_Bool bRadioCheck = sal_True ) { mbRadioCheck = bRadioCheck; }
     sal_Bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
-    sal_Bool            SetModeRadioImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Image&    GetModeRadioImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    sal_Bool        SetModeRadioImage( const Image& rImage );
+    const Image&    GetModeRadioImage( ) const;
 
     void            SetState( sal_Bool bCheck );
     void            Check( sal_Bool bCheck = sal_True );
@@ -563,3 +563,5 @@ public:
 };
 
 #endif  // _SV_BUTTON_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

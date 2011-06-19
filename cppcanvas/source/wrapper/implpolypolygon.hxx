@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,9 @@
 #define _CANVAS_IMPLPOLYPOLYGON_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_STROKEATTRIBUTES_HPP__
 #include <com/sun/star/rendering/StrokeAttributes.hpp>
-#endif
 
 #include <cppcanvas/polypolygon.hxx>
 #include <canvasgraphichelper.hxx>
@@ -97,3 +92,5 @@ namespace cppcanvas
 }
 
 #endif /* _CANVAS_IMPLPOLYPOLYGON_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

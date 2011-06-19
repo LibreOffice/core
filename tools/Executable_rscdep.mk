@@ -29,9 +29,9 @@ $(eval $(call gb_Executable_Executable,rscdep))
 
 $(eval $(call gb_Executable_set_include,rscdep,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/tools/inc/ \
-    -I$(SRCDIR)/tools/inc/pch \
-    -I$(SRCDIR)/tools/bootstrp/ \
+    -I$(realpath $(SRCDIR)/tools/inc) \
+    -I$(realpath $(SRCDIR)/tools/inc/pch) \
+    -I$(realpath $(SRCDIR)/tools/bootstrp) \
 ))
 
 $(eval $(call gb_Executable_add_defs,rscdep,\
@@ -40,18 +40,16 @@ $(eval $(call gb_Executable_add_defs,rscdep,\
 
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
     sal \
-    stl \
     tl \
-    vos3 \
     $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rscdep,\
-    tools/bootstrp/appdef \
-    tools/bootstrp/cppdep \
-    tools/bootstrp/inimgr \
-    tools/bootstrp/prj \
     tools/bootstrp/rscdep \
+))
+
+$(eval $(call gb_Executable_add_linked_static_libs,rscdep,\
+	toolshelpers \
 ))
 
 ifeq ($(OS),WNT)

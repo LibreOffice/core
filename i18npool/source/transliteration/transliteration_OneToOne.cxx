@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,8 @@
 #include <transliteration_OneToOne.hxx>
 
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -106,3 +108,4 @@ transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar) throw(Runt
 
 } } } }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

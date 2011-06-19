@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,12 @@
 #ifndef _ISOFALLBACK_HXX
 #define _ISOFALLBACK_HXX
 
-#include <tools/string.hxx>
+#include <rtl/string.hxx>
 #include "tools/toolsdllapi.h"
 
 // Return true if valid fallback found
-TOOLS_DLLPUBLIC sal_Bool GetIsoFallback( ByteString& rLanguage );
+TOOLS_DLLPUBLIC bool GetIsoFallback(rtl::OString& rLanguage);
 
 #endif //_ISOFALLBACK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

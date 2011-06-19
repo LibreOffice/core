@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 
-#ifndef _IMAGEBTN_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/brwbox.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/brwhead.hxx>
@@ -115,7 +114,6 @@ namespace svt
 
         // commit any current changes. Especially, do any reformatting you need (from input formatting
         // to output formatting) here
-        // 95826 - 2002-10-14 - fs@openoffice.org
         virtual void CommitModifications();
 
         // suspending the controller is not culmulative!
@@ -694,3 +692,4 @@ namespace svt
 #undef SVTOOLS_IN_EDITBROWSEBOX_HXX
 #endif // _SVTOOLS_EDITBROWSEBOX_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

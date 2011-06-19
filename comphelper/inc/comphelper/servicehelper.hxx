@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,22 @@
 #ifndef _COMPHELPER_SERVICEHELPER_HXX_
 #define _COMPHELPER_SERVICEHELPER_HXX_
 
+#include <rtl/uuid.h>
+#include <rtl/instance.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+class UnoTunnelIdInit
+{
+private:
+    ::com::sun::star::uno::Sequence< sal_Int8 > m_aSeq;
+public:
+    UnoTunnelIdInit() : m_aSeq(16)
+    {
+        rtl_createUuid( (sal_uInt8*)m_aSeq.getArray(), 0, sal_True );
+    }
+    const ::com::sun::star::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
+};
+
 /** the UNO3_GETIMPLEMENTATION_* macros  implement a static helper function
     that gives access to your implementation for a given interface reference,
     if possible.
@@ -48,20 +65,13 @@
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
+namespace \
+{ \
+    class the##classname##UnoTunnelId : public rtl::Static< UnoTunnelIdInit, the##classname##UnoTunnelId> {}; \
+} \
 const ::com::sun::star::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() throw() \
 { \
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0; \
-    if( !pSeq ) \
-    { \
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
-        if( !pSeq ) \
-        { \
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 ); \
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True ); \
-            pSeq = &aSeq; \
-        } \
-    } \
-    return *pSeq; \
+    return the##classname##UnoTunnelId::get().getSeq(); \
 } \
 \
 classname* classname::getImplementation( const uno::Reference< uno::XInterface >& xInt ) \
@@ -103,3 +113,4 @@ sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequenc
 
 #endif // _COMPHELPER_SERVICEHELPER_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

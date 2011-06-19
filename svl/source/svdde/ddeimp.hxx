@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,44 +29,17 @@
 #ifndef _DDEIMP_HXX
 #define _DDEIMP_HXX
 
-#ifdef OS2
-
-#include "ddemlos2.h"
-
-#define WORD sal_uInt16
-#define DWORD sal_uLong
-#define LPBYTE sal_uInt8*
-#define LPWORD sal_uInt16*
-#define LPDWORD sal_uLong*
-#define LPCTSTR PCSZ
-
-#else
-
-#include <tools/prewin.h>
+#include <windows.h>
 #include <ddeml.h>
-#include <tools/postwin.h>
 #include "ddewrap.hxx"
 
-/*
-extern "C"
-{
-#define sal_Bool WIN_BOOL
-#define sal_uInt8 WIN_BYTE
-#undef sal_Bool
-#undef sal_uInt8
-};
-*/
-
-#endif
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
+#include <vector>
 
 class DdeService;
 class DdeTopic;
 class DdeItem;
-class DdeTopics;
-class DdeItems;
 
 // ----------------
 // - Conversation -
@@ -77,7 +51,7 @@ struct Conversation
     DdeTopic*   pTopic;
 };
 
-DECLARE_LIST( ConvList, Conversation* );
+typedef ::std::vector< Conversation* > ConvList;
 
 // ---------------
 // - DdeInternal -
@@ -94,12 +68,12 @@ public:
     static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
-#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
-    static HDDEDATA CALLBACK __EXPORT CliCallback
+#if defined( ICC )
+    static HDDEDATA CALLBACK CliCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK __EXPORT SvrCallback
+    static HDDEDATA CALLBACK SvrCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK __EXPORT InfCallback
+    static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
     static HDDEDATA CALLBACK _export CliCallback
@@ -146,20 +120,20 @@ struct DdeDataImp
     sal_uLong           nFmt;
 };
 
-class DdeConnections;
+class DdeConnection;
 class DdeServices;
 
 struct DdeInstData
 {
     sal_uInt16          nRefCount;
-    DdeConnections* pConnections;
+    std::vector<DdeConnection*> aConnections;
     // Server
     long            hCurConvSvr;
-    sal_uLong           hDdeInstSvr;
+    DWORD           hDdeInstSvr;
     short           nInstanceSvr;
     DdeServices*    pServicesSvr;
     // Client
-    sal_uLong           hDdeInstCli;
+    DWORD           hDdeInstCli;
     short           nInstanceCli;
 };
 
@@ -175,3 +149,5 @@ DdeInstData* ImpInitInstData();
 void ImpDeinitInstData();
 
 #endif // _DDEIMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

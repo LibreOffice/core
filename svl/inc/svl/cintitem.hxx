@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,10 +65,10 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual sal_Bool QueryValue(com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const;
 
-    virtual sal_Bool PutValue(const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0);
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
@@ -126,10 +127,10 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual sal_Bool QueryValue(com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const;
 
-    virtual sal_Bool PutValue(const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0);
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
@@ -188,10 +189,10 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual sal_Bool QueryValue(com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const;
 
-    virtual sal_Bool PutValue(const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0);
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
@@ -250,10 +251,10 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual sal_Bool QueryValue(com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const;
 
-    virtual sal_Bool PutValue(const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal,
                           sal_uInt8 nMemberId = 0);
 
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
@@ -281,3 +282,4 @@ inline void CntUInt32Item::SetValue(sal_uInt32 nTheValue)
 
 #endif // _SVTOOLS_CINTITEM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

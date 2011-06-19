@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,10 +37,7 @@ int main( argc, argv )
     int   argc;
     char *argv[];
 {
-#ifdef TSTCPP
-    ( start_cpp( argc, argv ) );
-    puts("erster teil ist fertig" );
-#endif
     return( start_cpp( argc, argv ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,10 +36,6 @@
 |*
 |*    UniqueIndex::UniqueIndex()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 UniqueIndex::UniqueIndex( sal_uIntPtr _nStartIndex,
@@ -55,10 +52,6 @@ UniqueIndex::UniqueIndex( sal_uIntPtr _nStartIndex,
 |*
 |*    UniqueIndex::UniqueIndex()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 UniqueIndex::UniqueIndex( const UniqueIndex& rIdx ) :
@@ -73,10 +66,6 @@ UniqueIndex::UniqueIndex( const UniqueIndex& rIdx ) :
 /*************************************************************************
 |*
 |*    UniqueIndex::Insert()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -110,10 +99,6 @@ sal_uIntPtr UniqueIndex::Insert( void* p )
 |*
 |*    UniqueIndex::Insert()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 21.04.96
-|*    Letzte Aenderung  MM 21.04.96
-|*
 *************************************************************************/
 
 sal_uIntPtr UniqueIndex::Insert( sal_uIntPtr nIndex, void* p )
@@ -139,10 +124,6 @@ sal_uIntPtr UniqueIndex::Insert( sal_uIntPtr nIndex, void* p )
 |*
 |*    UniqueIndex::Remove()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Remove( sal_uIntPtr nIndex )
@@ -166,10 +147,6 @@ void* UniqueIndex::Remove( sal_uIntPtr nIndex )
 |*
 |*    UniqueIndex::Replace()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Replace( sal_uIntPtr nIndex, void* p )
@@ -192,10 +169,6 @@ void* UniqueIndex::Replace( sal_uIntPtr nIndex, void* p )
 |*
 |*    UniqueIndex::Get()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Get( sal_uIntPtr nIndex ) const
@@ -211,10 +184,6 @@ void* UniqueIndex::Get( sal_uIntPtr nIndex ) const
 /*************************************************************************
 |*
 |*    UniqueIndex::GetCurIndex()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -232,10 +201,6 @@ sal_uIntPtr UniqueIndex::GetCurIndex() const
 /*************************************************************************
 |*
 |*    UniqueIndex::GetIndex()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -256,10 +221,6 @@ sal_uIntPtr UniqueIndex::GetIndex( const void* p ) const
 /*************************************************************************
 |*
 |*    UniqueIndex::IsIndexValid()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -283,10 +244,6 @@ sal_Bool UniqueIndex::IsIndexValid( sal_uIntPtr nIndex ) const
 |*
 |*    UniqueIndex::Seek()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Seek( sal_uIntPtr nIndex )
@@ -301,10 +258,6 @@ void* UniqueIndex::Seek( sal_uIntPtr nIndex )
 /*************************************************************************
 |*
 |*    UniqueIndex::Seek()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -327,10 +280,6 @@ void* UniqueIndex::Seek( void* p )
 |*
 |*    UniqueIndex::First()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::First()
@@ -346,10 +295,6 @@ void* UniqueIndex::First()
 /*************************************************************************
 |*
 |*    UniqueIndex::Last()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -367,10 +312,6 @@ void* UniqueIndex::Last()
 |*
 |*    UniqueIndex::Next()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Next()
@@ -387,10 +328,6 @@ void* UniqueIndex::Next()
 |*
 |*    UniqueIndex::Prev()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Prev()
@@ -406,10 +343,6 @@ void* UniqueIndex::Prev()
 /*************************************************************************
 |*
 |*    UniqueIndex::operator =()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -428,10 +361,6 @@ UniqueIndex& UniqueIndex::operator =( const UniqueIndex& rIdx )
 |*
 |*    UniqueIndex::operator ==()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 sal_Bool UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
@@ -447,10 +376,6 @@ sal_Bool UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
 /*************************************************************************
 |*
 |*    UniqueIdContainer::UniqueIdContainer ()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 29.04.96
-|*    Letzte Aenderung  MM 29.04.96
 |*
 *************************************************************************/
 
@@ -472,10 +397,6 @@ UniqueIdContainer::UniqueIdContainer( const UniqueIdContainer& rObj )
 /*************************************************************************
 |*
 |*    UniqueIdContainer::operator = ()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
 |*
 *************************************************************************/
 
@@ -499,10 +420,6 @@ UniqueIdContainer& UniqueIdContainer::operator = ( const UniqueIdContainer & rOb
 /*************************************************************************
 |*
 |*    UniqueIdContainer::Clear()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
 |*
 *************************************************************************/
 
@@ -534,10 +451,6 @@ void UniqueIdContainer::Clear( sal_Bool bAll )
 |*
 |*    UniqueIdContainer::CreateId()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
-|*
 *************************************************************************/
 
 UniqueItemId UniqueIdContainer::CreateId()
@@ -559,10 +472,6 @@ UniqueItemId UniqueIdContainer::CreateId()
 |*
 |*    UniqueIdContainer::CreateIdProt()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
-|*
 *************************************************************************/
 
 UniqueItemId UniqueIdContainer::CreateFreeId( sal_uIntPtr nId )
@@ -577,10 +486,6 @@ UniqueItemId UniqueIdContainer::CreateFreeId( sal_uIntPtr nId )
 /*************************************************************************
 |*
 |*    UniqueIdContainer::CreateIdProt()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
 |*
 *************************************************************************/
 
@@ -599,3 +504,5 @@ UniqueItemId UniqueIdContainer::CreateIdProt( sal_uIntPtr nId )
     while( pId->nId != nId );
     return UniqueItemId( pId );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -267,7 +268,7 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
 #endif
             break;
         default:
-            OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
+            OSL_FAIL("BrowseBox::GetAccessibleName: invalid enum!");
     }
     return aRetText;
 }
@@ -374,7 +375,7 @@ void BrowseBox::FillAccessibleStateSet(
         case ::svt::BBTYPE_ROWHEADERCELL:
         case ::svt::BBTYPE_COLUMNHEADERCELL:
         case ::svt::BBTYPE_CHECKBOXCELL:
-            OSL_ENSURE(0,"Illegal call here!");
+            OSL_FAIL("Illegal call here!");
             break;
     }
 }
@@ -566,3 +567,5 @@ Window* BrowseBox::GetWindowInstance()
 {
     return this;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

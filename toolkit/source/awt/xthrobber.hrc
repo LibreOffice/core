@@ -28,12 +28,6 @@
 #ifndef _TOOLKIT_AWT_XTHROBBER_HRC_
 #define _TOOLKIT_AWT_XTHROBBER_HRC_
 
-
-//------------------------------------------------------------------------------
-
 #define RID_TK_ICON_THROBBER_START       1000
-#define RID_TK_HC_ICON_THROBBER_START    1020
-
-// -----------------------------------------------------------------------------
 
 #endif          // _TOOLKIT_AWT_XTHROBBER_HRC_

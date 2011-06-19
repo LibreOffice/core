@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include <svsys.h>
 #include "rtl/ustring.hxx"
 
 #include "osl/module.h"
 #include "osl/file.h"
-
-#include "tools/svwin.h"
 
 #include "vcl/svapp.hxx"
 
@@ -62,26 +62,24 @@
 #include <winver.h>
 #endif // USE_UNISCRIBE
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 
-typedef std::hash_map<int,int> IntMap;
+typedef boost::unordered_map<int,int> IntMap;
 typedef std::set<int> IntSet;
 
 // Graphite headers
 #ifdef ENABLE_GRAPHITE
 #include <i18npool/mslangid.hxx>
-#include <graphite/GrClient.h>
-#include <graphite/WinFont.h>
-#include <graphite/Segment.h>
 #include <graphite_layout.hxx>
-#include <graphite_cache.hxx>
 #include <graphite_features.hxx>
 #endif
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 // =======================================================================
 
@@ -1506,11 +1504,6 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             if( nRC != 0 )
                 continue;
 
-#if 0       // keep the glyphs for now because they are better than nothing
-            // mark as NotDef glyphs
-            for( i = 0; i < nGlyphCount; ++i )
-                mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 0;
-#endif
         }
         else if( nRC != 0 )
             // something undefined happened => give up for this visual item
@@ -1547,11 +1540,10 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                // #i55716#
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
-                                // <--
                                     rArgs.NeedFallback( c, false );
                            }
                         }
@@ -1563,11 +1555,10 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                         {
                             if( mpLogClusters[ c ] == i )
                             {
-                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                // #i55716#
                                 if( rArgs.mpStr[ c ] == 0x2060 )
                                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
                                 else
-                                // <--
                                     rArgs.NeedFallback( c, true );
                             }
                         }
@@ -1865,6 +1856,28 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             const VisualItem& rVI = mpVisualItems[ nItem ];
             if( rVI.IsEmpty() )
                 continue;
+
+            //Resolves: fdo#33090 Ensure that all glyph slots, even if 0-width
+            //or empty due to combining chars etc, map back to a character
+            //position so that iterating over glyph slots one at a time for
+            //glyph fallback can keep context as to what characters are the
+            //inputs that caused a missing glyph in a given font.
+            {
+                int dir = 1;
+                int out = rVI.mnMinCharPos;
+                if (rVI.IsRTL())
+                {
+                    dir = -1;
+                    out = rVI.mnEndCharPos-1;
+                }
+                for(c = rVI.mnMinCharPos; c < rVI.mnEndCharPos; ++c)
+                {
+                    int i = out;
+                    mpGlyphs2Chars[i] = c;
+                    out += dir;
+                }
+            }
+
             // calculate the mapping by using mpLogClusters[]
             // mpGlyphs2Chars[] should obey the logical order
             // => reversing the loop does this by overwriting higher logicals
@@ -1923,11 +1936,11 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             }
             else
             {
-                nExtraOfs += nToFillWidth;  // at right of cell
-                nSubIter = 0;               // done with glyph injection
+                nExtraOfs += nToFillWidth;    // at right of cell
+                nSubIter = 0;                 // done with glyph injection
             }
             if( !bManualCellAlign )
-                nExtraOfs -= nExtraWidth;   // adjust for right-aligned cells
+                nExtraOfs -= nExtraWidth;     // adjust for right-aligned cells
 
             // adjust the draw position for the injected-glyphs case
             if( nExtraOfs )
@@ -2063,7 +2076,7 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
             if( GetItemSubrange( *pVI, nStart, nDummy ) )
                 break;
         DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::DropG overflow" );
-        int nOffset = 0;
+
         int j = pVI->mnMinGlyphPos;
         while (mpOutGlyphs[j] == DROPPED_OUTGLYPH) j++;
         if (j == nStart)
@@ -2110,7 +2123,6 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
     }
 
     // remove the dropped glyphs
-    const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVI = mpVisualItems[ nItem ];
@@ -2131,7 +2143,6 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         i = nMinGlyphPos;
         while( (mpOutGlyphs[i] == cDroppedGlyph) && (i < nEndGlyphPos) )
         {
-            //rVI.mnXOffset += pGlyphWidths[ i ];
             rVI.mnMinGlyphPos = ++i;
         }
 
@@ -2204,12 +2215,6 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
                 nBaseGlyphPos = nEndGlyphPos - 1;
             else
                 nBaseGlyphPos = nMinGlyphPos;
-
-            const int* pGlyphWidths;
-            if( mpJustifications )
-                pGlyphWidths = mpJustifications;
-            else
-                pGlyphWidths = mpGlyphAdvances;
 
             int i = mnMinCharPos;
             while( (--i >= rVisualItem.mnMinCharPos)
@@ -2556,8 +2561,8 @@ void UniscribeLayout::KashidaItemFix( int nMinGlyphPos, int nEndGlyphPos )
     {
         // check for vowels
         if( (i > nMinGlyphPos && !mpGlyphAdvances[ i-1 ])
-        &&  (1U << mpVisualAttrs[i].uJustification) & 0xFF83 )  // all Arabic justifiction types
-        {                                                       // including SCRIPT_JUSTIFY_NONE
+        &&  (1U << mpVisualAttrs[i].uJustification) & 0xFF83 )    // all Arabic justifiction types
+        {                                                        // including SCRIPT_JUSTIFY_NONE
             // vowel, we do it like ScriptJustify does
             // the vowel gets the extra width
             long nSpaceAdded =  mpJustifications[ i ] - mpGlyphAdvances[ i ];
@@ -2690,7 +2695,7 @@ void UniscribeLayout::Justify( long nNewWidth )
     if( nOldWidth <= 0 )
         return;
 
-    nNewWidth *= mnUnitsPerPixel;   // convert into font units
+    nNewWidth *= mnUnitsPerPixel;    // convert into font units
     if( nNewWidth == nOldWidth )
         return;
     // prepare to distribute the extra width evenly among the visual items
@@ -2703,7 +2708,6 @@ void UniscribeLayout::Justify( long nNewWidth )
 
     // justify stretched script items
     long nXOffset = 0;
-    SCRIPT_CACHE& rScriptCache = GetScriptCache();
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVisualItem = mpVisualItems[ nItem ];
@@ -2753,8 +2757,8 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
     if ( nMinGlyphIndex == -1 || !mpLogClusters[ nCharPos ] )
         return false;
 
-//  This test didn't give the expected results
-/*  if( mpLogClusters[ nCharPos+1 ] == mpLogClusters[ nCharPos ])
+//    This test didn't give the expected results
+/*    if( mpLogClusters[ nCharPos+1 ] == mpLogClusters[ nCharPos ])
     // two chars, one glyph
         return false;*/
 
@@ -2778,9 +2782,9 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
 class GraphiteLayoutWinImpl : public GraphiteLayout
 {
 public:
-    GraphiteLayoutWinImpl(const gr::Font & font, ImplWinFontEntry & rFont)
+    GraphiteLayoutWinImpl(const gr_face * pFace, ImplWinFontEntry & rFont)
         throw()
-    : GraphiteLayout(font), mrFont(rFont) {};
+    : GraphiteLayout(pFace), mrFont(rFont) {};
     virtual ~GraphiteLayoutWinImpl() throw() {};
     virtual sal_GlyphId getKashidaGlyph(int & rWidth);
 private:
@@ -2799,18 +2803,15 @@ sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
 class GraphiteWinLayout : public WinLayout
 {
 private:
-    mutable GraphiteWinFont mpFont;
+    gr_font * mpFont;
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
     GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE);
 
-    static bool IsGraphiteEnabledFont(HDC hDC) throw();
-
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
     virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting after fallback etc.
-    //  virtual void  InitFont() const;
     virtual void  DrawText( SalGraphics& ) const;
 
     // methods using string indexing
@@ -2827,21 +2828,36 @@ public:
     virtual void    MoveGlyph( int nStart, long nNewXPos );
     virtual void    DropGlyph( int nStart );
     virtual void    Simplify( bool bIsBase );
-    ~GraphiteWinLayout() { delete mpFeatures; mpFeatures = NULL; };
-protected:
-    virtual void    ReplaceDC(gr::Segment & segment) const;
-    virtual void    RestoreDC(gr::Segment & segment) const;
+    ~GraphiteWinLayout()
+    {
+        delete mpFeatures;
+        gr_font_destroy(maImpl.GetFont());
+    }
 };
 
-bool GraphiteWinLayout::IsGraphiteEnabledFont(HDC hDC) throw()
+float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
-  return gr::WinFont::FontHasGraphiteTables(hDC);
+    HDC hDC = reinterpret_cast<HDC>(const_cast<void*>(appFontHandle));
+    GLYPHMETRICS gm;
+    const MAT2 mat2 = {{0,1}, {0,0}, {0,0}, {0,1}};
+    if (GDI_ERROR == ::GetGlyphOutlineW(hDC, glyphId, GGO_GLYPH_INDEX | GGO_METRICS,
+        &gm, 0, NULL, &mat2))
+    {
+        return .0f;
+    }
+    return gm.gmCellIncX;
 }
 
 GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE) throw()
-  : WinLayout(hDC, rWFD, rWFE), mpFont(hDC),
-    maImpl(mpFont, rWFE)
+  : WinLayout(hDC, rWFD, rWFE), mpFont(NULL),
+    maImpl(rWFD.GraphiteFace(), rWFE)
 {
+    // the log font size may differ from the font entry size if scaling is used for large fonts
+    LOGFONTW aLogFont;
+    ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+    mpFont = gr_make_font_with_advance_fn(static_cast<float>(-aLogFont.lfHeight),
+        hDC, gr_fontAdvance, rWFD.GraphiteFace());
+    maImpl.SetFont(mpFont);
     const rtl::OString aLang = MsLangId::convertLanguageToIsoByteString( rWFE.maFontSelData.meLanguage );
     rtl::OString name = rtl::OUStringToOString(
         rWFE.maFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
@@ -2849,25 +2865,13 @@ GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplW
     if (nFeat > 0)
     {
         rtl::OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
-        mpFeatures = new grutils::GrFeatureParser(mpFont, aFeat.getStr(), aLang.getStr());
+        mpFeatures = new grutils::GrFeatureParser(rWFD.GraphiteFace(), aFeat.getStr(), aLang.getStr());
     }
     else
     {
-        mpFeatures = new grutils::GrFeatureParser(mpFont, aLang.getStr());
+        mpFeatures = new grutils::GrFeatureParser(rWFD.GraphiteFace(), aLang.getStr());
     }
     maImpl.SetFeatures(mpFeatures);
-}
-
-void GraphiteWinLayout::ReplaceDC(gr::Segment & segment) const
-{
-    COLORREF color = GetTextColor(mhDC);
-    dynamic_cast<gr::WinFont&>(segment.getFont()).replaceDC(mhDC);
-    SetTextColor(mhDC, color);
-}
-
-void GraphiteWinLayout::RestoreDC(gr::Segment & segment) const
-{
-    dynamic_cast<gr::WinFont&>(segment.getFont()).restoreDC();
 }
 
 bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
@@ -2877,7 +2881,7 @@ bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
         maImpl.clear();
         return true;
     }
-    HFONT hUnRotatedFont;
+    HFONT hUnRotatedFont = 0;
     if (args.mnOrientation)
     {
         // Graphite gets very confused if the font is rotated
@@ -2889,36 +2893,16 @@ bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
         ::SelectFont(mhDC, hUnRotatedFont);
     }
     WinLayout::AdjustLayout(args);
-    mpFont.replaceDC(mhDC);
     maImpl.SetFontScale(WinLayout::mfFontScale);
-    //bool succeeded = maImpl.LayoutText(args);
-#ifdef GRCACHE
-    GrSegRecord * pSegRecord = NULL;
-    gr::Segment * pSegment = maImpl.CreateSegment(args, &pSegRecord);
-#else
-    gr::Segment * pSegment = maImpl.CreateSegment(args);
-#endif
+    gr_segment * pSegment = maImpl.CreateSegment(args);
     bool bSucceeded = false;
     if (pSegment)
     {
         // replace the DC on the font within the segment
-        ReplaceDC(*pSegment);
         // create glyph vectors
-#ifdef GRCACHE
-        bSucceeded = maImpl.LayoutGlyphs(args, pSegment, pSegRecord);
-#else
         bSucceeded = maImpl.LayoutGlyphs(args, pSegment);
-#endif
-        // restore original DC
-        RestoreDC(*pSegment);
-#ifdef GRCACHE
-        if (pSegRecord) pSegRecord->unlock();
-        else delete pSegment;
-#else
-        delete pSegment;
-#endif
+        gr_seg_destroy(pSegment);
     }
-    mpFont.restoreDC();
     if (args.mnOrientation)
     {
         // restore the rotated font
@@ -2967,9 +2951,7 @@ void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
 
 int GraphiteWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
-    mpFont.replaceDC(mhDC);
     int nBreak = maImpl.GetTextBreak(nMaxWidth, nCharExtra, nFactor);
-    mpFont.restoreDC();
     return nBreak;
 }
 
@@ -3023,7 +3005,9 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     {
 #ifdef ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
+        {
             pWinLayout = new GraphiteWinLayout(mhDC, rFontFace, rFontInstance);
+        }
         else
 #endif // ENABLE_GRAPHITE
         // script complexity is determined in upper layers
@@ -3056,20 +3040,20 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
             pWinLayout = new SimpleWinLayout( mhDC, eCharSet, rFontFace, rFontInstance );
     }
 
-    if( mfFontScale != 1.0 )
-        pWinLayout->SetFontScale( mfFontScale );
+    if( mfFontScale[nFallbackLevel] != 1.0 )
+        pWinLayout->SetFontScale( mfFontScale[nFallbackLevel] );
 
     return pWinLayout;
 }
 
 // -----------------------------------------------------------------------
 
-int WinSalGraphics::GetMinKashidaWidth()
+int    WinSalGraphics::GetMinKashidaWidth()
 {
     if( !mpWinFontEntry[0] )
         return 0;
     mpWinFontEntry[0]->InitKashidaHandling( mhDC );
-    int nMinKashida = static_cast<int>(mfFontScale * mpWinFontEntry[0]->GetMinKashidaWidth());
+    int nMinKashida = static_cast<int>(mfFontScale[0] * mpWinFontEntry[0]->GetMinKashidaWidth());
     return nMinKashida;
 }
 
@@ -3080,8 +3064,8 @@ ImplWinFontEntry::ImplWinFontEntry( ImplFontSelectData& rFSD )
 ,   maWidthMap( 512 )
 ,   mpKerningPairs( NULL )
 ,   mnKerningPairs( -1 )
-,   mnMinKashidaWidth( -1 )
-,   mnMinKashidaGlyph( -1 )
+,    mnMinKashidaWidth( -1 )
+,    mnMinKashidaGlyph( -1 )
 {
 #ifdef USE_UNISCRIBE
     maScriptCache = NULL;
@@ -3171,6 +3155,10 @@ ImplFontData* ImplWinFontData::Clone() const
 {
     if( mpUnicodeMap )
         mpUnicodeMap->AddReference();
+#ifdef ENABLE_GRAPHITE
+    if ( mpGraphiteData )
+        mpGraphiteData->AddReference();
+#endif
     ImplFontData* pClone = new ImplWinFontData( *this );
     return pClone;
 }
@@ -3184,3 +3172,5 @@ ImplFontEntry* ImplWinFontData::CreateFontInstance( ImplFontSelectData& rFSD ) c
 }
 
 // =======================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

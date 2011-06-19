@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ namespace cairocanvas
         maCanvasHelper.clear();
     }
 
-    void SAL_CALL CanvasCustomSprite::disposing()
+    void CanvasCustomSprite::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -85,7 +86,7 @@ namespace cairocanvas
         mpBufferSurface.reset();
 
         // forward to parent
-        CanvasCustomSpriteBaseT::disposing();
+        CanvasCustomSpriteBaseT::disposeThis();
     }
 
     void CanvasCustomSprite::redraw( const CairoSharedPtr& pCairo,
@@ -173,3 +174,5 @@ namespace cairocanvas
         return aRet;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

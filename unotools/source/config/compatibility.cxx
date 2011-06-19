@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,13 +36,12 @@
 #include <unotools/compatibility.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #include <itemholder1.hxx>
 
@@ -223,7 +223,7 @@ class SvtCompatibility
             return lEntries.size();
         }
 
-        const SvtCompatibilityEntry& operator[]( int i )
+        const SvtCompatibilityEntry& operator[]( int i ) const
         {
             return lEntries[i];
         }
@@ -246,6 +246,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
          SvtCompatibilityOptions_Impl();
         ~SvtCompatibilityOptions_Impl();
+
+        void SetDefault( OUString sName, bool bValue );
 
         //---------------------------------------------------------------------------------------------------------
         //  overloaded methods of baseclass
@@ -425,6 +427,13 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
 
         if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
         {
+            SvtSysLocale aSysLocale;
+            com::sun::star::lang::Locale aLocale = aSysLocale.GetLocale();
+            if ( aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) ||
+                 aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ||
+                 aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) )
+                aItem.bExpandWordSpace = false;
+
             m_aDefOptions = aItem;
             bDefaultFound = true;
         }
@@ -441,6 +450,32 @@ SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
     {
         Commit();
     }
+}
+
+void SvtCompatibilityOptions_Impl::SetDefault( OUString sName, bool bValue )
+{
+    if ( COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS.equals( sName ) )
+        m_aDefOptions.SetUsePrtMetrics( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_ADDSPACING.equals( sName ) )
+        m_aDefOptions.SetAddSpacing( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES.equals( sName ) )
+        m_aDefOptions.SetAddSpacingAtPages( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS.equals( sName ) )
+        m_aDefOptions.SetUseOurTabStops( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_NOEXTLEADING.equals( sName ) )
+        m_aDefOptions.SetNoExtLeading( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USELINESPACING.equals( sName ) )
+        m_aDefOptions.SetUseLineSpacing( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING.equals( sName ) )
+        m_aDefOptions.SetAddTableSpacing( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING.equals( sName ) )
+        m_aDefOptions.SetUseObjPos( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING.equals( sName ) )
+        m_aDefOptions.SetUseOurTextWrapping( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE.equals( sName ) )
+        m_aDefOptions.SetConsiderWrappingStyle( bValue );
+    else if ( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE.equals( sName ) )
+        m_aDefOptions.SetExpandWordSpace( bValue );
 }
 
 //*****************************************************************************************************************
@@ -680,6 +715,11 @@ void SvtCompatibilityOptions::Clear()
     m_pDataContainer->Clear();
 }
 
+void SvtCompatibilityOptions::SetDefault( ::rtl::OUString sName, bool bValue )
+{
+    m_pDataContainer->SetDefault( sName, bValue );
+}
+
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -777,28 +817,17 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const
     return m_pDataContainer->GetList();
 }
 
+namespace
+{
+    class theCompatibilityOptionsMutex : public rtl::Static<osl::Mutex, theCompatibilityOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Mutex& SvtCompatibilityOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theCompatibilityOptionsMutex::get();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

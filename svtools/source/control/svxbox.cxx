@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,10 +66,6 @@ SvxBoxEntry::SvxBoxEntry(const SvxBoxEntry& rOld) :
 {
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 SvxListBox::SvxListBox(Window* pParent, WinBits nBits) :
     ListBox(pParent, nBits)
 {
@@ -86,7 +83,7 @@ SvxListBox::SvxListBox(Window* pParent, const ResId& rId):
      Beschreibung: Basisklasse Dtor
  --------------------------------------------------------------------*/
 
-__EXPORT SvxListBox::~SvxListBox()
+SvxListBox::~SvxListBox()
 {
     aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
@@ -354,7 +351,7 @@ SvxComboBox::SvxComboBox(Window* pParent, const ResId& rId, sal_uInt16 nStyleBit
      Beschreibung: Basisklasse Dtor
  --------------------------------------------------------------------*/
 
-__EXPORT SvxComboBox::~SvxComboBox()
+SvxComboBox::~SvxComboBox()
 {
     aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
@@ -578,7 +575,7 @@ void SvxComboBox::InsertSorted(SvxBoxEntry* pEntry)
     Beschreibung: Je nach Option bestimmte Zeichen ausblenden
  --------------------------------------------------------------------*/
 
-void __EXPORT SvxComboBox::KeyInput( const KeyEvent& rKEvt )
+void SvxComboBox::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Unicode cChar = rKEvt.GetCharCode();
 
@@ -615,3 +612,4 @@ String SvxComboBox::GetText() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

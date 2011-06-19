@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,10 +36,6 @@
 |*
 |*    DateTime::IsBetween()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
-|*
 *************************************************************************/
 
 sal_Bool DateTime::IsBetween( const DateTime& rFrom,
@@ -53,10 +50,6 @@ sal_Bool DateTime::IsBetween( const DateTime& rFrom,
 /*************************************************************************
 |*
 |*    DateTime::operator >()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
 |*
 *************************************************************************/
 
@@ -73,10 +66,6 @@ sal_Bool DateTime::operator >( const DateTime& rDateTime ) const
 |*
 |*    DateTime::operator <()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
-|*
 *************************************************************************/
 
 sal_Bool DateTime::operator <( const DateTime& rDateTime ) const
@@ -91,10 +80,6 @@ sal_Bool DateTime::operator <( const DateTime& rDateTime ) const
 /*************************************************************************
 |*
 |*    DateTime::operator >=()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
 |*
 *************************************************************************/
 
@@ -111,10 +96,6 @@ sal_Bool DateTime::operator >=( const DateTime& rDateTime ) const
 |*
 |*    DateTime::operator <=()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 18.05.92
-|*    Letzte Aenderung  TH 18.05.92
-|*
 *************************************************************************/
 
 sal_Bool DateTime::operator <=( const DateTime& rDateTime ) const
@@ -129,10 +110,6 @@ sal_Bool DateTime::operator <=( const DateTime& rDateTime ) const
 /*************************************************************************
 |*
 |*    DateTime::GetSecFromDateTime()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -155,10 +132,6 @@ long DateTime::GetSecFromDateTime( const Date& rDate ) const
 |*
 |*    DateTime::GetSecFromDateTime()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 void DateTime::MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec )
@@ -175,10 +148,6 @@ void DateTime::MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec )
 /*************************************************************************
 |*
 |*    DateTime::operator +=()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -215,10 +184,6 @@ DateTime& DateTime::operator +=( const Time& rTime )
 |*
 |*    DateTime::operator -=()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 DateTime& DateTime::operator -=( const Time& rTime )
@@ -254,10 +219,6 @@ DateTime& DateTime::operator -=( const Time& rTime )
 |*
 |*    DateTime::operator+()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 DateTime operator +( const DateTime& rDateTime, long nDays )
@@ -270,10 +231,6 @@ DateTime operator +( const DateTime& rDateTime, long nDays )
 /*************************************************************************
 |*
 |*    DateTime::operator-()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -288,10 +245,6 @@ DateTime operator -( const DateTime& rDateTime, long nDays )
 |*
 |*    DateTime::operator+()
 |*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
-|*
 *************************************************************************/
 
 DateTime operator +( const DateTime& rDateTime, const Time& rTime )
@@ -304,10 +257,6 @@ DateTime operator +( const DateTime& rDateTime, const Time& rTime )
 /*************************************************************************
 |*
 |*    DateTime::operator-()
-|*
-|*    Beschreibung      DATETIME.SDW
-|*    Ersterstellung    TH 02.10.96
-|*    Letzte Aenderung  TH 02.10.96
 |*
 *************************************************************************/
 
@@ -440,3 +389,5 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
 
     return DateTime( _aDate, _aTime );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

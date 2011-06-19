@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <rtl/bootstrap.hxx>
 
 using namespace ::com::sun::star;
 
@@ -45,46 +47,47 @@ namespace utl
 
     // First product: branded name + version
     // version is <product_versions>_<product_extension>$<platform>
-    utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
-    if ( pMgr )
+    utl::ConfigManager& rMgr = utl::ConfigManager::GetConfigManager();
+    // plain product name
+    rtl::OUString aValue;
+    uno::Any aAny = rMgr.GetDirectConfigProperty(
+                                        utl::ConfigManager::PRODUCTNAME);
+    if ( (aAny >>= aValue) && aValue.getLength() )
     {
-        // plain product name
-        rtl::OUString aValue;
-        uno::Any aAny = pMgr->GetDirectConfigProperty(
-                                            utl::ConfigManager::PRODUCTNAME);
+        aResult.append( aValue.replace( ' ', '_' ) );
+        aResult.append( (sal_Unicode)'/' );
+
+        aAny = rMgr.GetDirectConfigProperty(
+                                    utl::ConfigManager::PRODUCTVERSION);
         if ( (aAny >>= aValue) && aValue.getLength() )
         {
             aResult.append( aValue.replace( ' ', '_' ) );
-            aResult.append( (sal_Unicode)'/' );
 
-            aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTVERSION);
+            aAny = rMgr.GetDirectConfigProperty(
+                                    utl::ConfigManager::PRODUCTEXTENSION);
             if ( (aAny >>= aValue) && aValue.getLength() )
             {
+                aResult.append( (sal_Unicode)'_' );
                 aResult.append( aValue.replace( ' ', '_' ) );
-
-                aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTEXTENSION);
-                if ( (aAny >>= aValue) && aValue.getLength() )
-                {
-                    aResult.append( (sal_Unicode)'_' );
-                    aResult.append( aValue.replace( ' ', '_' ) );
-                }
             }
-
-            aResult.append( (sal_Unicode)'$' );
-            aResult.append( ::rtl::OUString::createFromAscii(
-                                    TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
-
-            aResult.append( (sal_Unicode)' ' );
         }
+
+        ::rtl::OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
+        ::rtl::OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
+        ::rtl::Bootstrap::expandMacros(os);
+        ::rtl::Bootstrap::expandMacros(arch);
+        aResult.append( (sal_Unicode)'$' );
+        aResult.append( os );
+        aResult.append( (sal_Unicode)'_' );
+        aResult.append( arch );
+        aResult.append( (sal_Unicode)' ' );
     }
 
-    // second product: OpenOffice.org_project/<build_information>
+    // second product: LibreOffice_project/<build_information>
     // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
     // and ':' replaced by '-'
     {
-        aResult.appendAscii( "OpenOffice.org_project/" );
+        aResult.appendAscii( "LibreOffice_project/" );
         ::rtl::OUString aDefault;
         ::rtl::OUString aBuildId( Bootstrap::getBuildIdData( aDefault ) );
         for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
@@ -114,3 +117,4 @@ namespace utl
 
 } // end of namespace utl
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

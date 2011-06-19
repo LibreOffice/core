@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -103,7 +104,6 @@ namespace css = ::com::sun::star;
         sMsg.appendAscii("Unexpected exception catched. Original message was:\n\""      );                          \
         sMsg.append     (SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION.Message);                          \
         sMsg.appendAscii("\""                                                           );                          \
-        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr()); \
     }
 
 //_________________________________________________________________________________________________________________
@@ -272,7 +272,7 @@ struct IMPL_TStringHashCode
     }
 };
 
-typedef ::std::hash_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          IMPL_TViewData                     ,
                          IMPL_TStringHashCode               ,
                          ::std::equal_to< ::rtl::OUString > > IMPL_TViewHash;
@@ -859,7 +859,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     }
                                 }
                                 break;
-        default             :   OSL_ENSURE( sal_False, "SvtViewOptions::SvtViewOptions()\nThese view type is unknown! All following calls at these instance will do nothing!\n" );
+        default             :   OSL_FAIL( "SvtViewOptions::SvtViewOptions()\nThese view type is unknown! All following calls at these instance will do nothing!\n" );
     }
 }
 
@@ -1225,29 +1225,17 @@ void SvtViewOptions::SetUserItem( const ::rtl::OUString& sName  ,
     }
 }
 
+namespace
+{
+    class theViewOptionsMutex : public rtl::Static<osl::Mutex, theViewOptionsMutex>{};
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 ::osl::Mutex& SvtViewOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static ::osl::Mutex* pMutex = NULL;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of ouer class will be fastr then these!
-        if( pMutex == NULL )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static ::osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    return theViewOptionsMutex::get();
 }
 
 void SvtViewOptions::AcquireOptions()
@@ -1299,3 +1287,5 @@ void SvtViewOptions::ReleaseOptions()
         m_pDataContainer_Windows = NULL;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -148,6 +148,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Norwegian, Nynorsk" ; LANGUAGE_NORWEGIAN_NYNORSK ; > ;
         < "Oriya" ; LANGUAGE_ORIYA ; > ;
         < "Polish" ; LANGUAGE_POLISH ; > ;
+        < "Portuguese (Angola)" ; LANGUAGE_USER_PORTUGUESE_ANGOLA ; > ;
         < "Portuguese (Portugal)" ; LANGUAGE_PORTUGUESE ; > ;
         < "Portuguese (Brazil)" ; LANGUAGE_PORTUGUESE_BRAZILIAN ; > ;
         < "Punjabi" ; LANGUAGE_PUNJABI ; > ;
@@ -323,12 +324,22 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Yoruba" ; LANGUAGE_YORUBA ; > ;
         < "Rusyn (Ukraine)" ; LANGUAGE_USER_RUSYN_UKRAINE ; > ;
         < "Rusyn (Slovakia)" ; LANGUAGE_USER_RUSYN_SLOVAKIA ; > ;
+        < "Kabyle Latin" ; LANGUAGE_TAMAZIGHT_LATIN ; > ;
         < "Yiddish (USA)" ; LANGUAGE_USER_YIDDISH_US ; > ;
         < "Hawaiian" ; LANGUAGE_HAWAIIAN_UNITED_STATES ; > ;
         < "Limbu" ; LANGUAGE_USER_LIMBU ; > ;
         < "Lojban" ; LANGUAGE_USER_LOJBAN ; > ;
         < "Kabyle" ; LANGUAGE_USER_KABYLE ; > ;
         < "Haitian" ; LANGUAGE_USER_HAITIAN ; > ;
+        < "Beembe" ; LANGUAGE_USER_BEEMBE ; > ;
+        < "Bekwel" ; LANGUAGE_USER_BEKWEL ; > ;
+        < "Kituba" ; LANGUAGE_USER_KITUBA ; > ;
+        < "Lari" ; LANGUAGE_USER_LARI ; > ;
+        < "Mbochi" ; LANGUAGE_USER_MBOCHI ; > ;
+        < "Teke-Eboo" ; LANGUAGE_USER_TEKE_EBOO ; > ;
+        < "Teke-Ibali" ; LANGUAGE_USER_TEKE_IBALI ; > ;
+        < "Teke-Tyee" ; LANGUAGE_USER_TEKE_TYEE ; > ;
+        < "Vili" ; LANGUAGE_USER_VILI ; > ;
     };
 };
 

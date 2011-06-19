@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,12 +45,8 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include "comphelper/comphelperdllapi.h"
-#endif
 
 namespace comphelper {
 
@@ -100,3 +97,5 @@ namespace comphelper {
     };
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

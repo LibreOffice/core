@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_tools.hxx"
 #include <sal/types.h>
 #include <tools/datetime.hxx>
-#ifndef _TOOLS_INETMIME_HXX
 #include <tools/inetmime.hxx>
-#endif
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <rtl/instance.hxx>
@@ -689,13 +688,6 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
                         nIdx = INETMSG_RFC822_X_MAILER;
                         break;
 
-#if 0  /* NYI */
-                    case 'p':
-                        check = "riority";
-                        eOkState = INETMSG_RFC822_X_PRIORITY;
-                        break;
-#endif /* NYI */
-
                     default:
                         eState = INETMSG_RFC822_JUNK;
                         break;
@@ -904,14 +896,6 @@ void INetRFC822Message::SetTo (const UniString& rTo)
         INetMIME::HEADER_FIELD_ADDRESS,
         HDR(INETMSG_RFC822_TO), rTo,
         m_nIndex[INETMSG_RFC822_TO]);
-}
-
-void INetRFC822Message::SetXMailer (const UniString& rXMailer)
-{
-    SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
-        HDR(INETMSG_RFC822_X_MAILER), rXMailer,
-        m_nIndex[INETMSG_RFC822_X_MAILER]);
 }
 
 /*
@@ -1651,3 +1635,4 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

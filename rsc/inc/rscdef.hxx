@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,9 @@
 #ifndef _RSCDEF_HXX
 #define _RSCDEF_HXX
 
-#ifndef _TOOLS_UNQIDX_HXX
 #include <tools/unqidx.hxx>
-#endif
 #include <rsctree.hxx>
+#include <vector>
 
 /****************** C L A S S E S ****************************************/
 class RscExpression;
@@ -153,21 +153,28 @@ public:
     ByteString  GetMacro();
 };
 
-DECLARE_LIST( RscSubDefList, RscDefine * )
+typedef ::std::vector< RscDefine* > RscSubDefList;
 
-class RscDefineList : public RscSubDefList {
+class RscDefineList {
 friend class RscFile;
 friend class RscFileTab;
 private:
+    RscSubDefList   maList;
                 // pExpression wird auf jedenfall Eigentum der Liste
     RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
-                     sal_Int32 lDefId, sal_uLong lPos );
+                     sal_Int32 lDefId, size_t lPos );
     RscDefine * New( sal_uLong lFileKey, const ByteString & rDefName,
-                     RscExpression * pExpression, sal_uLong lPos );
+                     RscExpression * pExpression, size_t lPos );
     sal_Bool        Befor( const RscDefine * pFree, const RscDefine * pDepend );
     sal_Bool        Remove( RscDefine * pDef );
-    sal_Bool        Remove( sal_uLong nIndex );
+    sal_Bool        Remove( size_t nIndex );
     sal_Bool        Remove();
+    size_t      GetPos( RscDefine* item ) {
+                    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+                        if ( maList[ i ] == item )
+                            return i;
+                    return size_t(-1);
+                }
 public:
     void        WriteAll( FILE * fOutput );
 };
@@ -193,10 +200,11 @@ public:
             RscDepend( sal_uLong lIncKey ){ lKey = lIncKey; };
     sal_uLong   GetFileKey(){ return lKey; }
 };
-DECLARE_LIST( RscDependList, RscDepend * )
+
+typedef ::std::vector< RscDepend* > RscDependList;
 
 // Tabelle die alle Dateinamen enthaelt
-class RscFile : public RscDependList
+class RscFile
 {
 friend class RscFileTab;
     sal_Bool            bIncFile;   // Ist es eine Include-Datei
@@ -207,10 +215,11 @@ public:
     ByteString      aFileName;  // Name der Datei
     ByteString      aPathName;  // Pfad und Name der Datei
     RscDefineList   aDefLst;    // Liste der Defines
+    RscDependList   aDepLst;    // List of Depend
 
                     RscFile();
                     ~RscFile();
-    sal_Bool            InsertDependFile( sal_uLong lDepFile, sal_uLong lPos );
+    sal_Bool            InsertDependFile( sal_uLong lDepFile, size_t lPos );
     void            RemoveDependFile( sal_uLong lDepFile );
     sal_Bool            Depend( sal_uLong lDepend, sal_uLong lFree );
     void            SetIncFlag(){ bIncFile = sal_True; };
@@ -245,9 +254,9 @@ public:
     RscDefine * FindDef( sal_uLong lKey, const ByteString & );
 
     sal_Bool        Depend( sal_uLong lDepend, sal_uLong lFree );
-    sal_Bool        TestDef( sal_uLong lFileKey, sal_uLong lPos,
+    sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
                          const RscDefine * pDefDec );
-    sal_Bool        TestDef( sal_uLong lFileKey, sal_uLong lPos,
+    sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
                          const RscExpression * pExpDec );
 
     RscDefine * NewDef( sal_uLong lKey, const ByteString & rDefName,
@@ -272,3 +281,5 @@ public:
 };
 
 #endif // _RSCDEF_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

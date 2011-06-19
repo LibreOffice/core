@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "helpmerge.hxx"
-#include "utf8conv.hxx"
 #include <algorithm>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -42,11 +42,9 @@
 #include <vector>
 #include "rtl/strbuf.hxx"
 #ifdef WNT
-#include <direct.h>
-//#include <WinBase.h>
-#include "tools/prewin.h"
 #include <windows.h>
-#include "tools/postwin.h"
+#undef CopyFile
+#include <direct.h>
 #endif
 
 /*****************************************************************************/
@@ -59,7 +57,7 @@ void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in
     XMLElement* pTmp2    = NULL;
 
     sCur = sLangIdx_in;
-    ByteString sFallback( sCur );
+    rtl::OString sFallback( sCur );
     GetIsoFallback( sFallback );
     if( (rElem_out.find( sFallback ) != rElem_out.end()) && rElem_out[ sFallback ] != NULL ){
         pTmp2 = rElem_out[ sFallback ];
@@ -165,7 +163,6 @@ bool HelpParser::CreateSDF(
     if(file.get() == NULL){
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
         exit(-1);
-        //return false;
     }
     file->Extract();
     if( !file->CheckExportStatus() ){
@@ -184,8 +181,6 @@ bool HelpParser::CreateSDF(
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
-
-    //Dump(aXMLStrHM);
 
     ByteString sTimeStamp( Export::GetTimeStamp() );
     OUString sOUTimeStamp( sTimeStamp.GetBuffer() , sTimeStamp.Len() , RTL_TEXTENCODING_ASCII_US );
@@ -244,16 +239,12 @@ bool HelpParser::CreateSDF(
                   sBuffer.append( GSI_SEQUENCE4 );      //"\t\t\t\t";
                 sBuffer.append( sOUTimeStamp );
                 ByteString sOut( sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8 );
-                //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj_in ) ) )
-                //{
                 if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
-                //}
                 pXMLElement=NULL;
             }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.GetBuffer() );
         }
 
     }
-    //Dump(aXMLStrHM);
     aSDFStream.Close();
 
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
@@ -398,7 +389,6 @@ bool HelpParser::Merge(
     {
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_UTF8).GetBuffer());
         exit(-1);
-        //return false;
     }
 
 
@@ -479,7 +469,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 
     if( !Export::CopyFile( sTempFile , sTempFileCopy ) )
     {
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
         sleep( 3 );
 #else
         Sleep( 3 );
@@ -490,7 +480,6 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
             return false;
         }
     }
-    //remove( sTargetFile.GetBuffer() );
 
     FileStat aFSTest( aTar );
     if( aFSTest.GetSize() < 1 )
@@ -498,7 +487,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         remove( sTargetFile.GetBuffer() );
     }
     int rc;
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
     rc = rename( sTempFile.GetBuffer() , sTargetFile.GetBuffer() );
 #else
     rc = MoveFileEx( sTempFile.GetBuffer() , sTargetFile.GetBuffer(), MOVEFILE_REPLACE_EXISTING );
@@ -514,7 +503,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 //    if( aFS.GetSize() < 1 )
 //#endif
     {
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
         sleep( 3 );
 #else
         Sleep( 3 );
@@ -524,7 +513,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         {
             remove( sTargetFile.GetBuffer() );
         }
-#if defined(UNX) || defined(OS2)
+#if defined(UNX)
         rc = rename( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() );
 #else
         rc = MoveFileEx( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() , MOVEFILE_REPLACE_EXISTING );
@@ -595,7 +584,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
     XMLElement*   pXMLElement = NULL;
        PFormEntrys   *pEntrys    = NULL;
     XMLData       *data       = NULL;
-    XMLParentNode *parent     = NULL;
 
     String        sNewdata;
     ByteString sLId;
@@ -615,7 +603,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
         }
         if( pXMLElement != NULL )
         {
-            parent  = pXMLElement->GetParent();
             sLId    = pXMLElement->GetOldref();
             pResData->sId     =  sLId;
 
@@ -714,3 +701,4 @@ void HelpParser::Process( LangHashMap* aLangHM , const ByteString& sCur , ResDat
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

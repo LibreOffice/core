@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,24 +41,13 @@
 
 #include "boost/static_assert.hpp"
 
-/*
-#if defined( DBG_UTIL ) && (OSL_DEBUG_LEVEL > 1)
-// prueft Synchronisation des Buffers nach allen Read, Write, Seek
-#define OV_DEBUG
-#endif
-*/
-
 #include <tools/solar.h>
 
-#if defined(BLC)
-#define SWAPNIBBLES(c) c=_crotl(c,4);
-#else
 #define SWAPNIBBLES(c)      \
 unsigned char nSwapTmp=c;   \
 nSwapTmp <<= 4;             \
 c >>= 4;                    \
 c |= nSwapTmp;
-#endif
 
 #include <tools/debug.hxx>
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
@@ -68,14 +58,6 @@ c |= nSwapTmp;
 // -----------------------------------------------------------------------
 
 DBG_NAME( Stream )
-
-// -----------------------------------------------------------------------
-
-// sprintf Param-Mode
-#define SPECIAL_PARAM_NONE 0        // Format-Str, Number
-#define SPECIAL_PARAM_WIDTH 1       // Format-Str, Width, Number
-#define SPECIAL_PARAM_PRECISION 2   // Format-Str, Precision, Number
-#define SPECIAL_PARAM_BOTH 3        // Format-Str, Width, Precision, Number
 
 // -----------------------------------------------------------------------
 
@@ -92,11 +74,38 @@ inline static void SwapLongInt( int& r )
     {   r = SWAPLONG(r);   }
 inline static void SwapLongUInt( unsigned int& r )
     {   r = SWAPLONG(r);   }
+
+inline static void SwapUInt64( sal_uInt64& r )
+    {
+        union
+        {
+            sal_uInt64 n;
+            sal_uInt32 c[2];
+        } s;
+
+        s.n = r;
+        s.c[0] ^= s.c[1]; // swap the 32 bit words
+        s.c[1] ^= s.c[0];
+        s.c[0] ^= s.c[1];
+        // swap the bytes in the words
+        s.c[0] = SWAPLONG(s.c[0]);
+        s.c[1] = SWAPLONG(s.c[1]);
+        r = s.n;
+    }
 #ifdef UNX
 inline static void SwapFloat( float& r )
     {
-        *((sal_uInt32*)(void*)&r) = SWAPLONG( *((sal_uInt32*)(void*)&r) );
+        union
+        {
+            float f;
+            sal_uInt32 c;
+        } s;
+
+        s.f = r;
+        s.c = SWAPLONG( s.c );
+        r = s.f;
     }
+
 inline static void SwapDouble( double& r )
     {
         if( sizeof(double) != 8 )
@@ -105,12 +114,19 @@ inline static void SwapDouble( double& r )
         }
         else
         {
-          sal_uInt32* c = (sal_uInt32*)(void*)&r;
-          c[0] ^= c[1]; // zwei 32-Bit-Werte in situ vertauschen
-          c[1] ^= c[0];
-          c[0] ^= c[1];
-          c[0] = SWAPLONG(c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
-          c[1] = SWAPLONG(c[1]);
+            union
+            {
+                double d;
+                sal_uInt32 c[2];
+            } s;
+
+            s.d = r;
+            s.c[0] ^= s.c[1]; // zwei 32-Bit-Werte in situ vertauschen
+            s.c[1] ^= s.c[0];
+            s.c[0] ^= s.c[1];
+            s.c[0] = SWAPLONG(s.c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
+            s.c[1] = SWAPLONG(s.c[1]);
+            r = s.d;
         }
     }
 #endif
@@ -173,7 +189,7 @@ ErrCode SvLockBytes::ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::ReadAt(): Bad stream");
+        OSL_FAIL("SvLockBytes::ReadAt(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -191,7 +207,7 @@ ErrCode SvLockBytes::WriteAt(sal_Size nPos, const void * pBuffer, sal_Size nCoun
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::WriteAt(): Bad stream");
+        OSL_FAIL("SvLockBytes::WriteAt(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -208,7 +224,7 @@ ErrCode SvLockBytes::Flush() const
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::Flush(): Bad stream");
+        OSL_FAIL("SvLockBytes::Flush(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -222,7 +238,7 @@ ErrCode SvLockBytes::SetSize(sal_Size nSize)
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::SetSize(): Bad stream");
+        OSL_FAIL("SvLockBytes::SetSize(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -233,7 +249,7 @@ ErrCode SvLockBytes::SetSize(sal_Size nSize)
 //============================================================================
 ErrCode SvLockBytes::LockRegion(sal_Size, sal_Size, LockType)
 {
-    DBG_ERROR("SvLockBytes::LockRegion(): Not implemented");
+    OSL_FAIL("SvLockBytes::LockRegion(): Not implemented");
     return ERRCODE_NONE;
 }
 
@@ -241,7 +257,7 @@ ErrCode SvLockBytes::LockRegion(sal_Size, sal_Size, LockType)
 
 ErrCode SvLockBytes::UnlockRegion(sal_Size, sal_Size, LockType)
 {
-    DBG_ERROR("SvLockBytes::UnlockRegion(): Not implemented");
+    OSL_FAIL("SvLockBytes::UnlockRegion(): Not implemented");
     return ERRCODE_NONE;
 }
 
@@ -250,7 +266,7 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
 {
     if (!m_pStream)
     {
-        DBG_ERROR("SvLockBytes::Stat(): Bad stream");
+        OSL_FAIL("SvLockBytes::Stat(): Bad stream");
         return ERRCODE_NONE;
     }
 
@@ -442,13 +458,7 @@ void SvStream::ImpInit()
     eIOMode             = STREAM_IO_DONTKNOW;
     nBufFree            = 0;
 
-    nRadix              = 10;
-    nPrecision          = 0;  // all significant digits
-    nWidth              = 0; // default width
-    cFiller             = ' ';
-    nJustification      = JUSTIFY_RIGHT;
     eStreamMode         = 0;
-    CreateFormatString();
 
     nVersion           = 0;
 
@@ -458,10 +468,6 @@ void SvStream::ImpInit()
 /*************************************************************************
 |*
 |*    Stream::Stream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -492,10 +498,6 @@ SvStream::SvStream()
 |*
 |*    Stream::~Stream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 SvStream::~SvStream()
@@ -513,10 +515,6 @@ SvStream::~SvStream()
 |*
 |*    Stream::IsA()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 sal_uInt16 SvStream::IsA() const
@@ -527,10 +525,6 @@ sal_uInt16 SvStream::IsA() const
 /*************************************************************************
 |*
 |*    Stream::ClearError()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -544,10 +538,6 @@ void SvStream::ClearError()
 |*
 |*    Stream::SetError()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 void SvStream::SetError( sal_uInt32 nErrorCode )
@@ -560,10 +550,6 @@ void SvStream::SetError( sal_uInt32 nErrorCode )
 /*************************************************************************
 |*
 |*    Stream::SetNumberFormatInt()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -583,10 +569,6 @@ void SvStream::SetNumberFormatInt( sal_uInt16 nNewFormat )
 /*************************************************************************
 |*
 |*    Stream::SetBufferSize()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -621,10 +603,6 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
 |*
 |*    Stream::ClearBuffer()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 void SvStream::ClearBuffer()
@@ -644,10 +622,6 @@ void SvStream::ClearBuffer()
 |*
 |*    Stream::ResetError()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 void SvStream::ResetError()
@@ -658,10 +632,6 @@ void SvStream::ResetError()
 /*************************************************************************
 |*
 |*    Stream::ReadLine()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -933,10 +903,6 @@ sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding 
 |*
 |*    Stream::WriteLine()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 sal_Bool SvStream::WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet )
@@ -958,28 +924,11 @@ sal_Bool SvStream::WriteUniStringLine( const String& rStr )
     return nError == SVSTREAM_OK;
 }
 
-sal_Bool SvStream::WriteUniOrByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet )
-{
-    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
-        return WriteUniStringLine( rStr );
-    else
-        return WriteByteStringLine( rStr, eDestCharSet );
-}
-
 /*************************************************************************
 |*
 |*    Stream::WriteLines()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 17.07.95
-|*    Letzte Aenderung  OV 17.07.95
-|*
 *************************************************************************/
-
-sal_Bool SvStream::WriteByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet )
-{
-    return WriteLines( ByteString( rStr, eDestCharSet ) );
-}
 
 sal_Bool SvStream::WriteLines( const ByteString& rStr )
 {
@@ -996,14 +945,6 @@ sal_Bool SvStream::WriteUniStringLines( const String& rStr )
     aStr.ConvertLineEnd( eLineDelimiter );
     WriteUniStringLine( aStr );
     return nError == SVSTREAM_OK;
-}
-
-sal_Bool SvStream::WriteUniOrByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet )
-{
-    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
-        return WriteUniStringLines( rStr );
-    else
-        return WriteByteStringLines( rStr, eDestCharSet );
 }
 
 /*************************************************************************
@@ -1131,6 +1072,10 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
     if (bEmbeddedLineBreak)
     {
         const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
+
+        // See if the separator(s) include tab.
+        bool bTabSep = lcl_UnicodeStrChr(pSeps, '\t') != NULL;
+
         xub_StrLen nLastOffset = 0;
         xub_StrLen nQuotes = 0;
         while (!IsEof() && rStr.Len() < STRING_MAXLEN)
@@ -1143,6 +1088,16 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
             {
                 if (nQuotes)
                 {
+                    if (bTabSep && *p == '\t')
+                    {
+                        // When tab-delimited, tab char ends quoted sequence
+                        // even if we haven't reached the end quote.  Doing
+                        // this helps keep mal-formed rows from damaging
+                        // other, well-formed rows.
+                        nQuotes = 0;
+                        break;
+                    }
+
                     if (*p == cFieldQuote && !bBackslashEscaped)
                         ++nQuotes;
                     else if (bAllowBackslashEscape)
@@ -1180,10 +1135,6 @@ sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
 |*
 |*    Stream::SeekRel()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 sal_Size SvStream::SeekRel( sal_sSize nPos )
@@ -1210,10 +1161,6 @@ sal_Size SvStream::SeekRel( sal_sSize nPos )
 |*
 |*    Stream::operator>>()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 SvStream& SvStream::operator >> ( sal_uInt16& r )
@@ -1229,6 +1176,15 @@ SvStream& SvStream::operator>> ( sal_uInt32& r )
     READNUMBER_WITHOUT_SWAP(sal_uInt32,r)
     if( bSwap )
         SwapULong(r);
+    return *this;
+}
+
+
+SvStream& SvStream::operator>> ( sal_uInt64& r )
+{
+    READNUMBER_WITHOUT_SWAP(sal_uInt64,r)
+    if( bSwap )
+        SwapUInt64(r);
     return *this;
 }
 
@@ -1350,10 +1306,6 @@ SvStream& SvStream::operator>> ( SvStream& rStream )
 |*
 |*    Stream::operator<<()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 SvStream& SvStream::operator<< ( sal_uInt16 v )
@@ -1369,6 +1321,14 @@ SvStream& SvStream::operator<<  ( sal_uInt32 v )
     if( bSwap )
         SwapULong(v);
     WRITENUMBER_WITHOUT_SWAP(sal_uInt32,v)
+    return *this;
+}
+
+SvStream& SvStream::operator<<  ( sal_uInt64 v )
+{
+    if( bSwap )
+        SwapUInt64(v);
+    WRITENUMBER_WITHOUT_SWAP(sal_uInt64,v)
     return *this;
 }
 
@@ -1614,10 +1574,6 @@ SvStream& SvStream::WriteByteString( const ByteString& rStr)
 |*
 |*    Stream::Read()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 sal_Size SvStream::Read( void* pData, sal_Size nCount )
@@ -1712,10 +1668,6 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
 |*
 |*    Stream::Write()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 sal_Size SvStream::Write( const void* pData, sal_Size nCount )
@@ -1802,10 +1754,6 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
 |*
 |*    Stream::Seek()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 sal_Size SvStream::Seek( sal_Size nFilePos )
@@ -1858,10 +1806,6 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
 |*
 |*    Stream::Flush()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 void SvStream::Flush()
@@ -1884,10 +1828,6 @@ void SvStream::Flush()
 /*************************************************************************
 |*
 |*    Stream::PutBack()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 01.08.94
-|*    Letzte Aenderung  OV 01.08.94
 |*
 *************************************************************************/
 
@@ -1957,10 +1897,6 @@ SvStream& SvStream::PutBack( char aCh )
 |*
 |*    Stream::EatWhite()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 01.08.94
-|*    Letzte Aenderung  OV 01.08.94
-|*
 *************************************************************************/
 
 void SvStream::EatWhite()
@@ -1976,10 +1912,6 @@ void SvStream::EatWhite()
 /*************************************************************************
 |*
 |*    Stream::RefreshBuffer()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 01.08.94
-|*    Letzte Aenderung  OV 01.08.94
 |*
 *************************************************************************/
 
@@ -2004,223 +1936,19 @@ void SvStream::RefreshBuffer()
     eIOMode = STREAM_IO_DONTKNOW;
 }
 
-
-/*************************************************************************
-|*
-|*    Stream::CreateFormatString()
-|*
-|*    Beschreibung      Baut Formatstring zusammen
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
-*************************************************************************/
-
-void SvStream::CreateFormatString()
+SvStream& SvStream::WriteNumber(sal_Int32 nInt32)
 {
-    aFormatString = '%';
-    nPrintfParams = SPECIAL_PARAM_NONE;
-
-    if( nJustification )
-    {
-        aFormatString += '-';
-    }
-
-    if( nWidth )
-    {
-        if( cFiller != ' ' )
-            aFormatString += '0';
-        aFormatString += '*';
-        nPrintfParams = SPECIAL_PARAM_WIDTH;
-    }
-
-    if( nPrecision )
-    {
-        aFormatString += ".*";
-        if( nWidth )
-            nPrintfParams = SPECIAL_PARAM_BOTH;
-        else
-            nPrintfParams = SPECIAL_PARAM_PRECISION;
-    }
-}
-
-/*************************************************************************
-|*
-|*    Stream::ReadNumber()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
-*************************************************************************/
-
-#define BUFSIZE_LONG 21  // log( 2 hoch 64 ) + 1
-
-SvStream& SvStream::ReadNumber( long& rLong )
-{
-    EatWhite();
-    if( bIsEof || nError )
-    {
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-    sal_Size nFPtr = Tell();
-    char buf[ BUFSIZE_LONG ];
-    memset( buf, 0, BUFSIZE_LONG );
-    sal_Size nTemp = Read( buf, BUFSIZE_LONG-1 );
-    if( !nTemp || nError )
-    {
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-    char *pEndPtr;
-    rLong = strtol( buf, &pEndPtr, (int)nRadix );
-    nFPtr += ( (sal_Size)pEndPtr - (sal_Size)(&(buf[0])) );
-    Seek( nFPtr );
-    bIsEof = sal_False;
+    char buffer[12];
+    sal_Size nLen = sprintf(buffer, "%"SAL_PRIdINT32, nInt32);
+    Write(buffer, nLen);
     return *this;
 }
 
-SvStream& SvStream::ReadNumber( sal_uInt32& rUInt32 )
+SvStream& SvStream::WriteNumber(sal_uInt32 nUInt32)
 {
-    EatWhite();
-    if( bIsEof || nError )
-    {
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-    sal_Size nFPtr = Tell();
-    char buf[ BUFSIZE_LONG ];
-    memset( buf, 0, BUFSIZE_LONG );
-    sal_Size nTemp = Read( buf, BUFSIZE_LONG-1 );
-    if( !nTemp || nError )
-    {
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-    char *pEndPtr;
-    rUInt32 = strtoul( buf, &pEndPtr, (int)nRadix );
-    nFPtr += ( (sal_uIntPtr)pEndPtr - (sal_uIntPtr)buf );
-    Seek( nFPtr );
-    bIsEof = sal_False;
-    return *this;
-}
-
-SvStream& SvStream::ReadNumber( double& rDouble )
-{
-    EatWhite();
-    if( bIsEof || nError )
-    {
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-    sal_Size nFPtr = Tell();
-    char buf[ BUFSIZE_LONG ];
-    memset( buf, 0, BUFSIZE_LONG );
-    sal_Size nTemp = Read( buf, BUFSIZE_LONG-1 );
-    if( !nTemp || nError )
-    {
-        SetError( SVSTREAM_GENERALERROR );
-        return *this;
-    }
-    char *pEndPtr;
-    rDouble = strtod( buf, &pEndPtr );
-    nFPtr += ( (sal_Size)pEndPtr - (sal_Size)buf );
-    Seek( nFPtr );
-    bIsEof = sal_False;
-    return *this;
-}
-
-
-/*************************************************************************
-|*
-|*    Stream::WriteNumber()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
-*************************************************************************/
-
-SvStream& SvStream::WriteNumber( long nLong )
-{
-    char buffer[256+12];
-    char pType[] = "ld"; // Nicht static!
-    if( nRadix == 16 )
-        pType[1] = 'x';
-    else if( nRadix == 8 )
-        pType[1] = 'o';
-    ByteString aFStr( aFormatString);
-    aFStr += pType;
-    int nLen;
-    switch ( nPrintfParams )
-    {
-        case SPECIAL_PARAM_NONE :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nLong );
-            break;
-        case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nWidth, nLong );
-            break;
-        case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nPrecision,nLong);
-            break;
-        default:
-            nLen=sprintf(buffer, aFStr.GetBuffer(),nWidth,nPrecision,nLong);
-    }
-    Write( buffer, (long)nLen );
-    return *this;
-}
-
-SvStream& SvStream::WriteNumber( sal_uInt32 nUInt32 )
-{
-    char buffer[256+12];
-    char pType[] = "lu"; // Nicht static!
-    if( nRadix == 16 )
-        pType[1] = 'x';
-    else if( nRadix == 8 )
-        pType[1] = 'o';
-    ByteString aFStr( aFormatString);
-    aFStr += pType;
-    int nLen;
-    switch ( nPrintfParams )
-    {
-        case SPECIAL_PARAM_NONE :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nUInt32 );
-            break;
-        case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nWidth, nUInt32 );
-            break;
-        case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nPrecision, nUInt32 );
-            break;
-        default:
-            nLen=sprintf(buffer,aFStr.GetBuffer(),nWidth,nPrecision,nUInt32 );
-    }
-    Write( buffer, (long)nLen );
-    return *this;
-}
-
-
-SvStream& SvStream::WriteNumber( const double& rDouble )
-{
-    char buffer[256+24];
-    ByteString aFStr( aFormatString);
-    aFStr += "lf";
-    int nLen;
-    switch ( nPrintfParams )
-    {
-        case SPECIAL_PARAM_NONE :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), rDouble );
-            break;
-        case SPECIAL_PARAM_WIDTH :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nWidth, rDouble );
-            break;
-        case SPECIAL_PARAM_PRECISION :
-            nLen = sprintf( buffer, aFStr.GetBuffer(), nPrecision, rDouble);
-            break;
-        default:
-            nLen=sprintf(buffer, aFStr.GetBuffer(),nWidth,nPrecision,rDouble);
-    }
-    Write( buffer, (long)nLen );
+    char buffer[11];
+    sal_Size nLen = sprintf(buffer, "%"SAL_PRIuUINT32, nUInt32);
+    Write(buffer, nLen);
     return *this;
 }
 
@@ -2229,8 +1957,6 @@ SvStream& SvStream::WriteNumber( const double& rDouble )
 |*    Stream::CryptAndWriteBuffer()
 |*
 |*    Beschreibung      Verschluesseln und Schreiben
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -2272,8 +1998,6 @@ sal_Size SvStream::CryptAndWriteBuffer( const void* pStart, sal_Size nLen)
 |*    Stream::EncryptBuffer()
 |*
 |*    Beschreibung      Buffer entschluesseln
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -2295,10 +2019,6 @@ sal_Bool SvStream::EncryptBuffer(void* pStart, sal_Size nLen)
 /*************************************************************************
 |*
 |*    Stream::SetKey()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -2337,19 +2057,16 @@ unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersi
     return nCryptMask;
 }
 
-void SvStream::SetKey( const ByteString& rKey )
+void SvStream::SetCryptMaskKey(const rtl::OString& rCryptMaskKey)
 {
-    aKey = rKey;
-    nCryptMask = implGetCryptMask( aKey.GetBuffer(), aKey.Len(), GetVersion() );
+    m_aCryptMaskKey = rCryptMaskKey;
+    nCryptMask = implGetCryptMask(m_aCryptMaskKey.getStr(),
+        m_aCryptMaskKey.getLength(), GetVersion());
 }
 
 /*************************************************************************
 |*
 |*    Stream::SyncSvStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -2363,10 +2080,6 @@ void SvStream::SyncSvStream( sal_Size nNewStreamPos )
 |*
 |*    Stream::SyncSysStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 void SvStream::SyncSysStream()
@@ -2378,10 +2091,6 @@ void SvStream::SyncSysStream()
 /*************************************************************************
 |*
 |*    Stream::SetStreamSize()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
 |*
 *************************************************************************/
 
@@ -2398,25 +2107,9 @@ sal_Bool SvStream::SetStreamSize( sal_Size nSize )
     return (sal_Bool)(nError == 0);
 }
 
-//============================================================================
-
-void SvStream::AddMark( sal_Size )
-{
-}
-
-//============================================================================
-
-void SvStream::RemoveMark( sal_Size )
-{
-}
-
 /*************************************************************************
 |*
 |*    endl()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  TH 13.11.96
 |*
 *************************************************************************/
 
@@ -2460,10 +2153,6 @@ SvStream& endlub( SvStream& rStrm )
 |*
 |*    SvMemoryStream::SvMemoryStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
-|*
 *************************************************************************/
 
 SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
@@ -2485,10 +2174,6 @@ SvMemoryStream::SvMemoryStream( void* pBuffer, sal_Size bufSize,
 /*************************************************************************
 |*
 |*    SvMemoryStream::SvMemoryStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
 |*
 *************************************************************************/
 
@@ -2516,10 +2201,6 @@ SvMemoryStream::SvMemoryStream( sal_Size nInitSize, sal_Size nResizeOffset )
 |*
 |*    SvMemoryStream::~SvMemoryStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
-|*
 *************************************************************************/
 
 SvMemoryStream::~SvMemoryStream()
@@ -2537,10 +2218,6 @@ SvMemoryStream::~SvMemoryStream()
 |*
 |*    SvMemoryStream::IsA()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
-|*
 *************************************************************************/
 
 sal_uInt16 SvMemoryStream::IsA() const
@@ -2551,10 +2228,6 @@ sal_uInt16 SvMemoryStream::IsA() const
 /*************************************************************************
 |*
 |*    SvMemoryStream::SetBuffer()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
 |*
 *************************************************************************/
 
@@ -2593,10 +2266,6 @@ void* SvMemoryStream::SetBuffer( void* pNewBuf, sal_Size nCount,
 |*
 |*    SvMemoryStream::GetData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
-|*
 *************************************************************************/
 
 sal_Size SvMemoryStream::GetData( void* pData, sal_Size nCount )
@@ -2612,10 +2281,6 @@ sal_Size SvMemoryStream::GetData( void* pData, sal_Size nCount )
 /*************************************************************************
 |*
 |*    SvMemoryStream::PutData()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
 |*
 *************************************************************************/
 
@@ -2678,10 +2343,6 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
 |*
 |*    SvMemoryStream::SeekPos()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
-|*
 *************************************************************************/
 
 // nEndOfData: Erste Position im Stream, die nicht gelesen werden darf
@@ -2724,10 +2385,6 @@ sal_Size SvMemoryStream::SeekPos( sal_Size nNewPos )
 |*
 |*    SvMemoryStream::FlushData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
-|*
 *************************************************************************/
 
 void SvMemoryStream::FlushData()
@@ -2737,10 +2394,6 @@ void SvMemoryStream::FlushData()
 /*************************************************************************
 |*
 |*    SvMemoryStream::ResetError()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
 |*
 *************************************************************************/
 
@@ -2753,10 +2406,6 @@ void SvMemoryStream::ResetError()
 |*
 |*    SvMemoryStream::AllocateMemory()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
-|*
 *************************************************************************/
 
 sal_Bool SvMemoryStream::AllocateMemory( sal_Size nNewSize )
@@ -2768,10 +2417,6 @@ sal_Bool SvMemoryStream::AllocateMemory( sal_Size nNewSize )
 /*************************************************************************
 |*
 |*    SvMemoryStream::ReAllocateMemory()   (Bozo-Algorithmus)
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 20.06.94
-|*    Letzte Aenderung  OV 20.06.94
 |*
 *************************************************************************/
 
@@ -2830,10 +2475,6 @@ void SvMemoryStream::FreeMemory()
 |*
 |*    SvMemoryStream::SwitchBuffer()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 26.07.94
-|*    Letzte Aenderung  OV 26.07.94
-|*
 *************************************************************************/
 
 void* SvMemoryStream::SwitchBuffer( sal_Size nInitSize, sal_Size nResizeOffset)
@@ -2877,3 +2518,5 @@ TYPEINIT0 ( SvDataCopyStream )
 void SvDataCopyStream::Assign( const SvDataCopyStream& )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

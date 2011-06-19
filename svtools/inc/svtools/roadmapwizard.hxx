@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -231,7 +232,7 @@ protected:
         void    updateRoadmapItemLabel( WizardState _nState );
 
     protected:
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         const sal_Char* checkInvariants() const;
         friend const char* CheckInvariants( const void* pVoid );
 #endif
@@ -255,3 +256,5 @@ protected:
 //........................................................................
 
 #endif // OOO_SVTOOLS_INC_ROADMAPWIZARD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

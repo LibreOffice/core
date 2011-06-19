@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -329,3 +330,5 @@ IMPL_FORMAT_SETPIXEL( _32BIT_TC_MASK )
 {
     rMask.SetColorFor32Bit( rBitmapColor, pScanline + ( nX << 2UL ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

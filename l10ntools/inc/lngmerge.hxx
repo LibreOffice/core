@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,8 +27,9 @@
  ************************************************************************/
 // local includes
 #include "export.hxx"
+#include <vector>
 
-DECLARE_LIST( LngLineList, ByteString * )
+typedef ::std::vector< ByteString* > LngLineList;
 
 #define LNG_OK              0x0000
 #define LNG_FILE_NOTFOUND   0x0001
@@ -64,3 +66,5 @@ public:
     sal_Bool CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
     sal_Bool Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,12 +81,12 @@ void PropertyMapImpl::add( PropertyMapEntry* pMap ) throw()
         PropertyMap::iterator aIter = maPropertyMap.find( aName );
         if( aIter != maPropertyMap.end() )
         {
-            DBG_ERROR( "Warning: PropertyMapEntry added twice, possible error!" );
+            OSL_FAIL( "Warning: PropertyMapEntry added twice, possible error!" );
         }
 #endif
         if( NULL == pMap->mpType )
         {
-            DBG_ERROR( "No type in PropertyMapEntry!" );
+            OSL_FAIL( "No type in PropertyMapEntry!" );
             pMap->mpType = &::getCppuType((const sal_Int32*)0);
         }
 
@@ -126,8 +127,8 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
             pProperties->Handle = pEntry->mnWhich;
             pProperties->Type = *pEntry->mpType;
             pProperties->Attributes = pEntry->mnFlags;
-            pProperties++;
-            aIter++;
+            ++pProperties;
+            ++aIter;
         }
     }
 
@@ -197,3 +198,5 @@ const PropertyMap* PropertySetInfo::getPropertyMap() const throw()
 {
     return mpMap->getPropertyMap();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

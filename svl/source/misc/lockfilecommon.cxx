@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,6 +56,8 @@
 
 #include <unotools/useroptions.hxx>
 
+#include <salhelper/linkhelper.hxx>
+
 #include <svl/lockfilecommon.hxx>
 
 using namespace ::com::sun::star;
@@ -73,7 +76,7 @@ LockFileCommon::LockFileCommon( const ::rtl::OUString& aOrigURL, const uno::Refe
     ::rtl::OUString aShareURLString = aDocURL.GetPartBeforeLastName();
     aShareURLString += aPrefix;
     aShareURLString += aDocURL.GetName();
-    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "#" ) );
+    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%23" ) ); // '#'
     m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::NO_DECODE );
 }
 
@@ -88,36 +91,19 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
     if ( aDocURL.HasError() )
         throw lang::IllegalArgumentException();
 
-    ::rtl::OUString aURLToCheck = aDocURL.GetMainURL( INetURLObject::NO_DECODE );
+    ::rtl::OUString aURLToCheck = aDocURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    sal_Bool bNeedsChecking = sal_True;
-    sal_Int32 nMaxLinkCount = 128;
-    sal_Int32 nCount = 0;
-
-    while( bNeedsChecking )
+    // there is currently no UCB functionality to resolve the symbolic links;
+    // since the lock files are used only for local file systems the osl
+    // functionality is used directly
+    salhelper::LinkResolver aResolver(osl_FileStatus_Mask_FileName);
+    osl::FileBase::RC eStatus = aResolver.fetchFileStatus(aURLToCheck);
+    if (eStatus == osl::FileBase::E_None)
+        aURLToCheck = aResolver.m_aStatus.getFileURL();
+    else if (eStatus == osl::FileBase::E_MULTIHOP)
     {
-        bNeedsChecking = sal_False;
-
         // do not allow too deep links
-        if ( nCount++ >= nMaxLinkCount )
-            throw io::IOException();
-
-        // there is currently no UCB functionality to resolve the symbolic links;
-        // since the lock files are used only for local file systems the osl functionality is used directly
-
-        ::osl::FileStatus aStatus( FileStatusMask_Type | FileStatusMask_LinkTargetURL );
-        ::osl::DirectoryItem aItem;
-        if ( ::osl::FileBase::E_None == ::osl::DirectoryItem::get( aURLToCheck, aItem )
-          && aItem.is() && ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )
-        {
-            if ( aStatus.isValid( FileStatusMask_Type )
-              && aStatus.isValid( FileStatusMask_LinkTargetURL )
-              && aStatus.getFileType() == ::osl::FileStatus::Link )
-            {
-                aURLToCheck = aStatus.getLinkTargetURL();
-                bNeedsChecking = sal_True;
-            }
-        }
+        throw io::IOException();
     }
 
     return INetURLObject( aURLToCheck );
@@ -270,3 +256,4 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::GenerateOwnEntry()
 
 } // namespace svt
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

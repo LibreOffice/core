@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,111 +31,72 @@
 
 
 #include "winmtf.hxx"
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/graphictools.hxx>
+#include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/svapp.hxx>
 #include <rtl/tencinfo.h>
 
 // ------------------------------------------------------------------------
 
 #define WIN_MTF_MAX_CLIP_DEPTH 16
 
-void WinMtfClipPath::ImpUpdateType()
-{
-    if ( !aPolyPoly.Count() )
-        eType = EMPTY;
-    else if ( aPolyPoly.IsRect() )
-        eType = RECTANGLE;
-    else
-        eType = COMPLEX;
+#define EMFP_DEBUG(x)
+//#define EMFP_DEBUG(x) x
 
-    bNeedsUpdate = sal_True;
+void WinMtfClipPath::intersectClipRect( const Rectangle& rRect )
+{
+    maClip.intersectRange(
+        vcl::unotools::b2DRectangleFromRectangle(rRect));
 }
 
-void WinMtfClipPath::IntersectClipRect( const Rectangle& rRect )
+void WinMtfClipPath::excludeClipRect( const Rectangle& rRect )
 {
-    if ( !aPolyPoly.Count() )
-        aPolyPoly = Polygon( rRect );
-    else if ( nDepth < WIN_MTF_MAX_CLIP_DEPTH )
+    maClip.subtractRange(
+        vcl::unotools::b2DRectangleFromRectangle(rRect));
+}
+
+void WinMtfClipPath::setClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
+{
+    const basegfx::B2DPolyPolygon& rB2DPoly=rPolyPolygon.getB2DPolyPolygon();
+    switch ( nClippingMode )
     {
-        Polygon aPolygon( rRect );
-        PolyPolygon aIntersection;
-        PolyPolygon aPolyPolyRect( aPolygon );
-        aPolyPoly.GetIntersection( aPolyPolyRect, aIntersection );
-        aPolyPoly = aIntersection;
-        nDepth++;
+        case RGN_OR :
+            maClip.unionPolyPolygon(rB2DPoly);
+            break;
+        case RGN_XOR :
+            maClip.xorPolyPolygon(rB2DPoly);
+            break;
+        case RGN_DIFF :
+            maClip.subtractPolyPolygon(rB2DPoly);
+            break;
+        case RGN_AND :
+            maClip.intersectPolyPolygon(rB2DPoly);
+            break;
+        case RGN_COPY :
+            maClip = basegfx::tools::B2DClipState(rB2DPoly);
+            break;
     }
-    ImpUpdateType();
 }
 
-void WinMtfClipPath::ExcludeClipRect( const Rectangle& rRect )
+void WinMtfClipPath::moveClipRegion( const Size& rSize )
 {
-    if ( aPolyPoly.Count() && ( nDepth < WIN_MTF_MAX_CLIP_DEPTH ) )
-    {
-        Polygon aPolygon( rRect );
-        PolyPolygon aPolyPolyRect( aPolygon );
-        PolyPolygon aDifference;
-        aPolyPoly.GetDifference( aPolyPolyRect, aDifference );
-        aPolyPoly = aDifference;
-        nDepth++;
-    }
-    ImpUpdateType();
+    // what a weird concept. emulate, don't want this in B2DClipState
+    // API
+    basegfx::B2DPolyPolygon aCurrClip=maClip.getClipPoly();
+    basegfx::B2DHomMatrix aTranslate;
+    aTranslate.translate(rSize.Width(), rSize.Height());
+
+    aCurrClip.transform(aTranslate);
+    maClip = basegfx::tools::B2DClipState( aCurrClip );
 }
 
-void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode )
+basegfx::B2DPolyPolygon WinMtfClipPath::getClipPath() const
 {
-    if ( !rPolyPolygon.Count() )
-        aPolyPoly = rPolyPolygon;
-    else if ( nDepth < WIN_MTF_MAX_CLIP_DEPTH )
-    {
-        nDepth++;
-
-        PolyPolygon aNewClipPath;
-
-        // #115345# Watch out for empty aPolyPoly here - conceptually,
-        // an empty clip path is a rectangle of infinite size, but it
-        // is represented by an empty aPolyPoly. When intersecting
-        // rPolyPolygon with this _empty_ aPolyPoly, set algebra
-        // guarantees wrong results.
-        switch ( nClippingMode )
-        {
-            case RGN_OR :
-                // #115345# clip stays empty, when ORing an arbitrary
-                // rPolyPolygon. Thus, we can save us the unnecessary
-                // clipper call.
-                if( aPolyPoly.Count() )
-                    aPolyPoly.GetUnion( rPolyPolygon, aNewClipPath );
-            break;
-            case RGN_XOR :
-                // TODO:
-                // #115345# Cannot handle this case, for the time being
-                aPolyPoly.GetXOR( rPolyPolygon, aNewClipPath );
-            break;
-            case RGN_DIFF :
-                // TODO:
-                // #115345# Cannot handle this case, for the time being
-                aPolyPoly.GetDifference( rPolyPolygon, aNewClipPath );
-            break;
-            case RGN_AND :
-                // #115345# Clip becomes rPolyPolygon, when ANDing
-                // with an arbitrary rPolyPolygon
-                if( aPolyPoly.Count() )
-                    aPolyPoly.GetIntersection( rPolyPolygon, aNewClipPath );
-                else
-                    aNewClipPath = rPolyPolygon;
-            break;
-            case RGN_COPY :
-                aNewClipPath = rPolyPolygon;
-            break;
-        }
-        aPolyPoly = aNewClipPath;
-    }
-    ImpUpdateType();
-}
-
-void WinMtfClipPath::MoveClipRegion( const Size& rSize )
-{
-    aPolyPoly.Move( rSize.Width(), rSize.Height() );
-    bNeedsUpdate = sal_True;
+    return maClip.getClipPoly();
 }
 
 // ------------------------------------------------------------------------
@@ -192,11 +154,11 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 {
     CharSet eCharSet;
     if ( ( rFont.lfCharSet == OEM_CHARSET ) || ( rFont.lfCharSet == DEFAULT_CHARSET ) )
-        eCharSet = gsl_getSystemTextEncoding();
+        eCharSet = RTL_TEXTENCODING_MS_1252;
     else
         eCharSet = rtl_getTextEncodingFromWindowsCharset( rFont.lfCharSet );
     if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
-        eCharSet = gsl_getSystemTextEncoding();
+        eCharSet = RTL_TEXTENCODING_MS_1252;
     aFont.SetCharSet( eCharSet );
     aFont.SetName( rFont.alfFaceName );
     FontFamily eFamily;
@@ -416,6 +378,19 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
         {
             switch( mnMapMode )
             {
+                case MM_TEXT:
+                    fX2 -= mnWinOrgX;
+                    fY2 -= mnWinOrgY;
+                    if( mnDevWidth != 1 || mnDevHeight != 1 ) {
+                        fX2 *= 2540.0/mnUnitsPerInch;
+                        fY2 *= 2540.0/mnUnitsPerInch;
+                    }
+                    fX2 += mnDevOrgX;
+                    fY2 += mnDevOrgY;
+                    fX2 *= (double)mnMillX * 100.0 / (double)mnPixX;
+                    fY2 *= (double)mnMillY * 100.0 / (double)mnPixY;
+
+                    break;
                 case MM_LOENGLISH :
                 {
                     fX2 -= mnWinOrgX;
@@ -491,6 +466,15 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
         {
             switch( mnMapMode )
             {
+                case MM_TEXT:
+                if( mnDevWidth != 1 && mnDevHeight != 1 ) {
+                    fWidth *= 2540.0/mnUnitsPerInch;
+                    fHeight*= 2540.0/mnUnitsPerInch;
+                } else {
+                    fWidth *= (double)mnMillX * 100 / (double)mnPixX;
+                    fHeight *= (double)mnMillY * 100 / (double)mnPixY;
+                }
+                break;
                 case MM_LOENGLISH :
                 {
                     fWidth *= 25.40;
@@ -855,7 +839,7 @@ void WinMtfOutput::CreateObject( sal_Int32 nIndex, GDIObjectType eType, void* pS
             break;
 
             default:
-                DBG_ERROR( "unsupported style not deleted" );
+                OSL_FAIL( "unsupported style not deleted" );
                 break;
         }
     }
@@ -879,31 +863,35 @@ void WinMtfOutput::DeleteObject( sal_Int32 nIndex )
 
 void WinMtfOutput::IntersectClipRect( const Rectangle& rRect )
 {
-    aClipPath.IntersectClipRect( ImplMap( rRect ) );
+    mbClipNeedsUpdate=true;
+    aClipPath.intersectClipRect( ImplMap( rRect ) );
 }
 
 //-----------------------------------------------------------------------------------
 
 void WinMtfOutput::ExcludeClipRect( const Rectangle& rRect )
 {
-    aClipPath.ExcludeClipRect( ImplMap( rRect ) );
+    mbClipNeedsUpdate=true;
+    aClipPath.excludeClipRect( ImplMap( rRect ) );
 }
 
 //-----------------------------------------------------------------------------------
 
 void WinMtfOutput::MoveClipRegion( const Size& rSize )
 {
-    aClipPath.MoveClipRegion( ImplMap( rSize ) );
+    mbClipNeedsUpdate=true;
+    aClipPath.moveClipRegion( ImplMap( rSize ) );
 }
 
 void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, sal_Bool bIsMapped )
 {
+    mbClipNeedsUpdate=true;
     if ( bIsMapped )
-        aClipPath.SetClipPath( rPolyPolygon, nClippingMode );
+        aClipPath.setClipPath( rPolyPolygon, nClippingMode );
     else
     {
         PolyPolygon aPP( rPolyPolygon );
-        aClipPath.SetClipPath( ImplMap( aPP ), nClippingMode );
+        aClipPath.setClipPath( ImplMap( aPP ), nClippingMode );
     }
 }
 
@@ -925,8 +913,11 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     maActPos            ( Point() ),
     mbNopMode           ( sal_False ),
     mbFillStyleSelected ( sal_False ),
+    mbClipNeedsUpdate   ( true ),
+    mbComplexClip       ( false ),
     mnGfxMode           ( GM_COMPATIBLE ),
     mnMapMode           ( MM_TEXT ),
+    mnUnitsPerInch ( 96 ),
     mnDevOrgX           ( 0 ),
     mnDevOrgY           ( 0 ),
     mnDevWidth          ( 1 ),
@@ -947,7 +938,7 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
                                                                             // SetClipRgn( NULL ) and similar ClipRgn actions (SJ)
 
     maFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Arial" )) );  // sj: #i57205#, we do have some scaling problems if using
-    maFont.SetCharSet( gsl_getSystemTextEncoding() );                       // the default font then most times a x11 font is used, we
+    maFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );                      // the default font then most times a x11 font is used, we
     maFont.SetHeight( 423 );                                                // will prevent this defining a font
 
     maLatestLineStyle.aLineColor = Color( 0x12, 0x34, 0x56 );
@@ -976,31 +967,25 @@ WinMtfOutput::~WinMtfOutput()
 
 void WinMtfOutput::UpdateClipRegion()
 {
-    if ( aClipPath.bNeedsUpdate )
+    if ( mbClipNeedsUpdate )
     {
-        aClipPath.bNeedsUpdate = sal_False;
+        mbClipNeedsUpdate = false;
+        mbComplexClip = false;
 
         mpGDIMetaFile->AddAction( new MetaPopAction() );                    // taking the orignal clipregion
         mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  //
 
-        switch ( aClipPath.GetType() )
+        // skip for 'no clipping at all' case
+        if( !aClipPath.isEmpty() )
         {
-            case RECTANGLE :
-            case COMPLEX :
-            {
-//              we will not generate a RegionClipRegion Action, because this action
-//              cannot be saved to the wmf format - saving to wmf always happens
-//              if the placeholder graphic for ole objects is generated. (SJ)
+            const basegfx::B2DPolyPolygon& rClipPoly( aClipPath.getClipPath() );
+            mpGDIMetaFile->AddAction(
+                new MetaISectRectClipRegionAction(
+                    vcl::unotools::rectangleFromB2DRectangle(
+                        rClipPoly.getB2DRange())));
 
-//              Region aClipRegion( aClipPath.GetClipPath() );
-//              mpGDIMetaFile->AddAction( new MetaISectRegionClipRegionAction( aClipRegion ) );
-
-                Rectangle aClipRect( aClipPath.GetClipPath().GetBoundRect() );
-                mpGDIMetaFile->AddAction( new MetaISectRectClipRegionAction( aClipRect ) );
-            }
-            break;
-            case EMPTY:
-            break;  // -Wall not handled.
+            mbComplexClip = rClipPoly.count() > 1
+                || !basegfx::tools::isRectangle(rClipPoly);
         }
     }
 }
@@ -1038,7 +1023,8 @@ void WinMtfOutput::UpdateFillStyle()
     if (!( maLatestFillStyle == maFillStyle ) )
     {
         maLatestFillStyle = maFillStyle;
-        mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
+        if (maFillStyle.aType == FillStyleSolid)
+            mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
     }
 }
 
@@ -1178,12 +1164,12 @@ void WinMtfOutput::DrawRect( const Rectangle& rRect, sal_Bool bEdge )
     UpdateClipRegion();
     UpdateFillStyle();
 
-    if ( aClipPath.GetType() == COMPLEX )
+    if ( mbComplexClip )
     {
         Polygon aPoly( ImplMap( rRect ) );
         PolyPolygon aPolyPolyRect( aPoly );
         PolyPolygon aDest;
-        aClipPath.GetClipPath().GetIntersection( aPolyPolyRect, aDest );
+        PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPolyRect, aDest );
         ImplDrawClippedPolyPolygon( aDest );
     }
     else
@@ -1338,11 +1324,11 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
     {
         UpdateFillStyle();
 
-        if ( aClipPath.GetType() == COMPLEX )
+        if ( mbComplexClip )
         {
             PolyPolygon aPolyPoly( rPolygon );
             PolyPolygon aDest;
-            aClipPath.GetClipPath().GetIntersection( aPolyPoly, aDest );
+            PolyPolygon(aClipPath.getClipPath()).GetIntersection( aPolyPoly, aDest );
             ImplDrawClippedPolyPolygon( aDest );
         }
         else
@@ -1366,7 +1352,35 @@ void WinMtfOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
             else
             {
                 UpdateLineStyle();
-                mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+
+                if (maLatestFillStyle.aType != FillStylePattern)
+                    mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+                else {
+                    SvtGraphicFill aFill = SvtGraphicFill( PolyPolygon( rPolygon ),
+                                                           Color(),
+                                                           0.0,
+                                                           SvtGraphicFill::fillNonZero,
+                                                           SvtGraphicFill::fillTexture,
+                                                           SvtGraphicFill::Transform(),
+                                                           true,
+                                                           SvtGraphicFill::hatchSingle,
+                                                           Color(),
+                                                           SvtGraphicFill::gradientLinear,
+                                                           Color(),
+                                                           Color(),
+                                                           0,
+                                                           Graphic (maLatestFillStyle.aBmp) );
+
+                    SvMemoryStream  aMemStm;
+
+                    aMemStm << aFill;
+
+                    mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
+                                                            static_cast<const sal_uInt8*>(aMemStm.GetData()),
+                                                            aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
+                    mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
+                }
+
             }
         }
     }
@@ -1386,10 +1400,10 @@ void WinMtfOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordP
     {
         UpdateFillStyle();
 
-        if ( aClipPath.GetType() == COMPLEX )
+        if ( mbComplexClip )
         {
             PolyPolygon aDest;
-            aClipPath.GetClipPath().GetIntersection( rPolyPolygon, aDest );
+            PolyPolygon(aClipPath.getClipPath()).GetIntersection( rPolyPolygon, aDest );
             ImplDrawClippedPolyPolygon( aDest );
         }
         else
@@ -1604,6 +1618,8 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         sal_Int32* pDX = pDXArry;
         if ( !pDXArry )
         {
+            SolarMutexGuard aGuard;
+
             pDX = new sal_Int32[ rText.Len() ];
             if ( !pVDev )
                 pVDev = new VirtualDevice;
@@ -1624,7 +1640,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap )
 {
     BitmapEx aBmpEx( rBitmap );
-    if ( aClipPath.GetType() == COMPLEX )
+    if ( mbComplexClip )
     {
         VirtualDevice aVDev;
         MapMode aMapMode( MAP_100TH_MM );
@@ -1639,7 +1655,7 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         aVDev.SetMapMode( aMapMode );
         aVDev.SetOutputSizePixel( aSizePixel );
         aVDev.SetFillColor( Color( COL_BLACK ) );
-        const PolyPolygon aClip( aClipPath.GetClipPath() );
+        const PolyPolygon aClip( aClipPath.getClipPath() );
         aVDev.DrawPolyPolygon( aClip );
         const Point aEmptyPoint;
 
@@ -1709,7 +1725,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
             if ( ( nRasterOperation & 0xaa ) != ( ( nRasterOperation & 0x55 ) << 1 ) )
                 nUsed |= 4;     // destination is used
 
-            if ( (nUsed & 1) && (( nUsed & 2 ) == 0) )
+            if ( (nUsed & 1) && (( nUsed & 2 ) == 0) && nWinRop != PATINVERT )
             {   // patterns aren't well supported yet
                 sal_uInt32 nOldRop = SetRasterOp( ROP_OVERPAINT );  // in this case nRasterOperation is either 0 or 0xff
                 UpdateFillStyle();
@@ -2024,6 +2040,14 @@ void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
 
 //-----------------------------------------------------------------------------------
 
+void WinMtfOutput::SetUnitsPerInch( sal_uInt16 nUnitsPerInch )
+{
+    if( nUnitsPerInch != 0 )
+    mnUnitsPerInch = nUnitsPerInch;
+}
+
+//-----------------------------------------------------------------------------------
+
 void WinMtfOutput::SetWorldTransform( const XForm& rXForm )
 {
     maXForm.eM11 = rXForm.eM11;
@@ -2188,7 +2212,7 @@ void WinMtfOutput::Pop()
         if ( ! ( aClipPath == pSave->aClipPath ) )
         {
             aClipPath = pSave->aClipPath;
-            aClipPath.bNeedsUpdate = sal_True;
+            mbClipNeedsUpdate = true;
         }
         if ( meLatestRasterOp != meRasterOp )
             mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
@@ -2200,3 +2224,40 @@ void WinMtfOutput::AddFromGDIMetaFile( GDIMetaFile& rGDIMetaFile )
 {
    rGDIMetaFile.Play( *mpGDIMetaFile, 0xFFFFFFFF );
 }
+
+void WinMtfOutput::PassEMFPlusHeaderInfo()
+{
+    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS header info\n"));
+
+    SvMemoryStream mem;
+    sal_Int32 nLeft, nRight, nTop, nBottom;
+
+    nLeft = mrclFrame.Left();
+    nTop = mrclFrame.Top();
+    nRight = mrclFrame.Right();
+    nBottom = mrclFrame.Bottom();
+
+    // emf header info
+    mem << nLeft << nTop << nRight << nBottom;
+    mem << mnPixX << mnPixY << mnMillX << mnMillY;
+
+    float one, zero;
+
+    one = 1;
+    zero = 0;
+
+    // add transformation matrix to be used in vcl's metaact.cxx for
+    // rotate and scale operations
+    mem << one << zero << zero << one << zero << zero;
+
+    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const sal_uInt8*) mem.GetData(), mem.GetEndOfData() ) );
+    mpGDIMetaFile->UseCanvas( sal_True );
+}
+
+void WinMtfOutput::PassEMFPlus( void* pBuffer, sal_uInt32 nLength )
+{
+    EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS comment length %d\n", nLength));
+    mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS", 0, static_cast<const sal_uInt8*>(pBuffer), nLength ) );
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

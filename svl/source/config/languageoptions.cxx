@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <i18npool/mslangid.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -146,30 +147,22 @@ sal_Bool SvtLanguageOptions::IsCTLSequenceChecking() const
 {
     return m_pCTLOptions->IsCTLSequenceChecking();
 }
-/*-- 26.09.2005 15:48:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtLanguageOptions::SetCTLSequenceCheckingRestricted( sal_Bool _bEnable )
 {
     m_pCTLOptions->SetCTLSequenceCheckingRestricted( _bEnable );
 }
-/*-- 26.09.2005 15:48:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SvtLanguageOptions::IsCTLSequenceCheckingRestricted( void ) const
 {
     return m_pCTLOptions->IsCTLSequenceCheckingRestricted();
 }
-/*-- 26.09.2005 15:48:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtLanguageOptions::SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable )
 {
     m_pCTLOptions->SetCTLSequenceCheckingTypeAndReplace( _bEnable );
 }
-/*-- 26.09.2005 15:48:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SvtLanguageOptions::IsCTLSequenceCheckingTypeAndReplace() const
 {
     return m_pCTLOptions->IsCTLSequenceCheckingTypeAndReplace();
@@ -200,7 +193,6 @@ sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) con
     }
     return bReadOnly;
 }
-/* -----------------30.04.2003 11:03-----------------*/
 
 // returns for a language the scripttype
 sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
@@ -227,10 +219,6 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 }
 // -----------------------------------------------------------------------------
 
-
-/*-- 27.10.2005 08:18:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("System/L10N") ))
 {
@@ -244,15 +232,11 @@ SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
         aValues[0]>>= m_sWin16SystemLocale;
     }
 }
-/*-- 27.10.2005 08:18:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvtSystemLanguageOptions::~SvtSystemLanguageOptions()
 {
 }
-/*-- 27.10.2005 08:18:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SvtSystemLanguageOptions::Commit()
 {
     //does nothing
@@ -263,9 +247,7 @@ void    SvtSystemLanguageOptions::Notify( const com::sun::star::uno::Sequence< r
     // no listeners supported yet
 }
 
-/*-- 27.10.2005 08:36:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
 {
     if( m_sWin16SystemLocale.getLength() == 0 )
@@ -274,3 +256,4 @@ LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -47,6 +48,7 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/wrkwin.hxx>
+#include <sal/macros.h>
 
 namespace svt { namespace toolpanel
 {
@@ -64,7 +66,7 @@ using ::com::sun::star::accessibility::XAccessible;
 class PanelDemo : public Application
 {
 public:
-    virtual void Main();
+    virtual int Main();
 
 private:
     static Reference< XMultiServiceFactory > createApplicationServiceManager();
@@ -92,7 +94,7 @@ public:
         {
             "This", "is a", "Tab", "Control", "intended", "for", "comparison"
         };
-        for ( size_t i=0; i < sizeof( pTabTitles ) / sizeof( pTabTitles[0] ); ++i )
+        for ( size_t i=0; i < SAL_N_ELEMENTS( pTabTitles ); ++i )
         {
             String sText( String::CreateFromAscii( pTabTitles[i] ) );
             m_aTabControl.InsertPage( i + 1, sText );
@@ -414,7 +416,7 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
         "Tab Bar Alignment", "Left", "Right", "Top", "Bottom", "Tab Items", "Images and Text", "Images only",
         "Text only", "Automatic", "Panels", "", "Remove Panel", "", "", "Insert Panel"
     };
-    for ( size_t i=0; i < sizeof( pControls ) / sizeof( pControls[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( pControls ); ++i )
     {
         const WindowType eWindowType = pControls[i]->GetType();
 
@@ -504,7 +506,7 @@ void OptionsWindow::GetFocus()
     {
         &m_aAlignLeft, &m_aAlignRight, &m_aAlignTop, &m_aAlignBottom
     };
-    for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( pRadios ); ++i )
     {
         if ( pRadios[i]->IsChecked() )
         {
@@ -568,7 +570,7 @@ void OptionsWindow::Resize()
         ControlRow( m_aInsertPanel,         true )
     };
     bool bPreviousWasSubordinate = false;
-    for ( size_t i=0; i < sizeof( aControlRows ) / sizeof( aControlRows[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aControlRows ); ++i )
     {
         aItemPos.X() = ( aControlRows[i].bSubordinate ) ? nSubordinateX : nSuperordinateX;
 
@@ -858,7 +860,7 @@ Reference< XMultiServiceFactory > PanelDemo::createApplicationServiceManager()
 }
 
 //-----------------------------------------------------------------------------
-void __EXPORT PanelDemo::Main()
+int PanelDemo::Main()
 {
     // create service factory
     Reference< XMultiServiceFactory >  xSMgr = createApplicationServiceManager();
@@ -866,15 +868,18 @@ void __EXPORT PanelDemo::Main()
 
     // initialize the UCB
     Sequence< Any > aArgs(2);
-    aArgs[0] <<= rtl::OUString::createFromAscii( "Local" );
-    aArgs[1] <<= rtl::OUString::createFromAscii( "Office" );
+    aArgs[0] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Local" ));
+    aArgs[1] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office" ));
     ::ucbhelper::ContentBroker::initialize( xSMgr, aArgs );
 
     // run the application
     PanelDemoMainWindow aWindow;
     Execute();
+    return EXIT_SUCCESS;
 }
 
 PanelDemo aTheApplication;
 
 } } // namespace ::svt::toolpanel
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

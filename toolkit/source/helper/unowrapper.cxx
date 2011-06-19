@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 #include <toolkit/awt/vclxcontainer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxgraphics.hxx>
+#include <awt/vclxtabcontrol.hxx>
 
 #include "toolkit/dllapi.h"
 #include <vcl/svapp.hxx>
@@ -62,7 +64,7 @@ using namespace ::com::sun::star;
         case WINDOW_OKBUTTON:
         case WINDOW_CANCELBUTTON:   return new VCLXButton;
         case WINDOW_CHECKBOX:       return new VCLXCheckBox;
-        // --> OD 2009-06-29 #i95042#
+        // #i95042#
         // A Window of type <MetricBox> is inherited from type <ComboBox>.
         // Thus, it does make more sense to return a <VCLXComboBox> instance
         // instead of only a <VCLXWindow> instance, especially regarding its
@@ -106,6 +108,7 @@ using namespace ::com::sun::star;
         case WINDOW_TABPAGE:        return new VCLXContainer;
 
         case WINDOW_TOOLBOX:        return new VCLXToolBox;
+        case WINDOW_TABCONTROL:     return new VCLXMultiPage;
 
         // case WINDOW_FIXEDLINE:
         // case WINDOW_FIXEDBITMAP:
@@ -339,3 +342,5 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 {
     return maAccessibleFactoryAccess.getFactory().createAccessible( pMenu, bIsMenuBar );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

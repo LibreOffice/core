@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
@@ -61,7 +62,7 @@ void SAL_CALL TransferableClipboardListener::changedContents(
 {
     if ( aLink.IsSet() )
     {
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        const SolarMutexGuard aGuard;
 
         TransferableDataHelper aDataHelper( rEventObject.Contents );
         aLink.Call( &aDataHelper );
@@ -96,3 +97,4 @@ void TransferableClipboardListener::ClearCallbackLink()
     aLink = Link();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

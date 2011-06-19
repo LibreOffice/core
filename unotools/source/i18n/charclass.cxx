@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 
-#ifndef _COMPHELPER_COMPONENTFACTORY_HXX_
 #include <comphelper/componentfactory.hxx>
-#endif
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -62,7 +61,7 @@ CharClass::CharClass(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHARCLASS_SERVICENAME ) ) ),
                 uno::UNO_QUERY );
         }
-        catch ( Exception& )
+        catch ( const Exception& )
         {
             DBG_ERRORFILE( "CharClass ctor: Exception caught!" );
         }
@@ -102,7 +101,7 @@ void CharClass::getComponentInstance()
             x >>= xCC;
         }
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
     }
@@ -187,7 +186,7 @@ sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isAlpha: Exception caught!" );
         return sal_False;
@@ -204,7 +203,7 @@ sal_Bool CharClass::isAlpha( const String& rStr ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isAlpha: Exception caught!" );
         return sal_False;
@@ -226,7 +225,7 @@ sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isLetter: Exception caught!" );
         return sal_False;
@@ -243,7 +242,7 @@ sal_Bool CharClass::isLetter( const String& rStr ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isLetter: Exception caught!" );
         return sal_False;
@@ -265,7 +264,7 @@ sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isDigit: Exception caught!" );
         return sal_False;
@@ -282,7 +281,7 @@ sal_Bool CharClass::isNumeric( const String& rStr ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isNumeric: Exception caught!" );
         return sal_False;
@@ -304,7 +303,7 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isAlphaNumeric: Exception caught!" );
         return sal_False;
@@ -321,7 +320,7 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isAlphaNumeric: Exception caught!" );
         return sal_False;
@@ -343,7 +342,7 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isLetterNumeric: Exception caught!" );
         return sal_False;
@@ -360,7 +359,7 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
         else
             return sal_False;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "isLetterNumeric: Exception caught!" );
         return sal_False;
@@ -389,7 +388,7 @@ String CharClass::toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCoun
         else
             return rStr.Copy( nPos, nCount );
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "toTitle: Exception caught!" );
         return rStr.Copy( nPos, nCount );
@@ -406,7 +405,7 @@ String CharClass::toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCoun
         else
             return rStr.copy( nPos, nCount );
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "toUpper: Exception caught!" );
         return rStr.copy( nPos, nCount );
@@ -423,7 +422,7 @@ String CharClass::toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCoun
         else
             return rStr.copy( nPos, nCount );
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "toLower: Exception caught!" );
         return rStr.copy( nPos, nCount );
@@ -440,7 +439,7 @@ sal_Int16 CharClass::getType( const String& rStr, xub_StrLen nPos ) const
         else
             return 0;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "getType: Exception caught!" );
         return 0;
@@ -457,7 +456,7 @@ sal_Int16 CharClass::getCharacterDirection( const String& rStr, xub_StrLen nPos 
         else
             return 0;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "getCharacterDirection: Exception caught!" );
         return 0;
@@ -474,7 +473,7 @@ sal_Int16 CharClass::getScript( const String& rStr, xub_StrLen nPos ) const
         else
             return 0;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "getScript: Exception caught!" );
         return 0;
@@ -491,7 +490,7 @@ sal_Int32 CharClass::getCharacterType( const String& rStr, xub_StrLen nPos ) con
         else
             return 0;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "getCharacterType: Exception caught!" );
         return 0;
@@ -508,7 +507,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
         else
             return 0;
     }
-    catch ( Exception& )
+    catch ( const Exception& )
     {
         DBG_ERRORFILE( "getStringType: Exception caught!" );
         return 0;
@@ -533,7 +532,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
         else
             return ParseResult();
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
         ByteString aMsg( "parseAnyToken: Exception caught\n" );
@@ -565,7 +564,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
         else
             return ParseResult();
     }
-    catch ( Exception& e )
+    catch ( const Exception& e )
     {
 #ifdef DBG_UTIL
         ByteString aMsg( "parsePredefinedToken: Exception caught\n" );
@@ -580,3 +579,4 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

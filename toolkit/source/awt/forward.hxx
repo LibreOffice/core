@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,3 +72,5 @@
 #endif // !(defined (_MSC_VER) && (_MSC_VER <= 1310))
 
 #endif /* AWT_FORWARD_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,22 +32,6 @@
 #include <rscdef.hxx>
 #include <rscall.h>
 
-/****************** C L A S S E S ****************************************/
-class RscTypCont;
-
-/*********** R s c I n c o n s i s t e n t *******************************/
-class RscInconsistent {
-public:
-    RscId aFirstId;   //Paar von inkonsistenten Id's
-    RscId aSecondId;
-    RscInconsistent( const RscId & rFirst, const RscId & rSecond ){
-            aFirstId = rFirst;
-            aSecondId = rSecond;
-        };
-};
-
-DECLARE_LIST( RscInconsList, RscInconsistent * )
-
 /******************* O b j N o d e ***************************************/
 class ObjNode : public IdNode{
     RscId       aRscId; // Id der Resource
@@ -75,7 +60,7 @@ public:
                     // get the Object from this Node
                     return( pRscObj );
                 }
-    sal_Bool        IsConsistent( RscInconsList * pList = NULL );
+    sal_Bool        IsConsistent();
 };
 
 /******************* R e f N o d e ***************************************/
@@ -110,3 +95,5 @@ public:
 };
 
 #endif // _RSCCLOBJ_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,8 +34,8 @@ $(eval $(call gb_Library_add_precompiled_header,comphelper,$(SRCDIR)/comphelper/
 $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
 
 $(eval $(call gb_Library_set_include,comphelper,\
-    -I$(SRCDIR)/comphelper/inc/pch \
-    -I$(SRCDIR)/comphelper/source/inc \
+    -I$(realpath $(SRCDIR)/comphelper/inc/pch) \
+    -I$(realpath $(SRCDIR)/comphelper/source/inc) \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
 ))
@@ -49,8 +49,6 @@ $(eval $(call gb_Library_add_linked_libs,comphelper,\
     cppuhelper \
     cppu \
     ucbhelper \
-    vos3 \
-    stl \
     $(gb_STDLIBS) \
 ))
 
@@ -91,7 +89,6 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/ihwrapnofilter \
     comphelper/source/misc/instancelocker \
     comphelper/source/misc/interaction \
-    comphelper/source/misc/legacysingletonfactory \
     comphelper/source/misc/listenernotification \
     comphelper/source/misc/locale \
     comphelper/source/misc/logging \

@@ -73,9 +73,6 @@ my $srcpath                 = '';
 my $languages;
 #my %sl_modules;     # Contains all modules where en-US and de is source language
 my $use_default_date = '0';
-my $force_ooo_module = '0';
-my %is_ooo_module;
-my %is_so_module;
 
          #         (                           leftpart                                                     )            (           rightpart                    )
          #            prj      file      dummy     type       gid       lid      helpid    pform     width      lang       text    helptext  qhelptext   title    timestamp
@@ -89,17 +86,7 @@ my @sdfparticles;
 parse_options();
 
 my $binpath = '';
-if( defined $ENV{UPDMINOREXT} )
-{
-    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin".$ENV{UPDMINOREXT}."/" ;
-}
-else
-{
-    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
-}
-
-#%sl_modules = fetch_sourcelanguage_dirlist();
-
+$binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
 
 if   ( $mode eq "merge"    )    {
     if ( ! $no_gsicheck ){
@@ -140,9 +127,6 @@ sub splitfile{
 
 #    my %lang_hash;
     my %string_hash_ooo;
-    my %string_hash_so;
-    my %so_modules;
-    $so_modules{ "extras_full" } = "TRUE";
 
     while( <MYFILE>){
          if( /$sdf_regex/ ){
@@ -158,38 +142,20 @@ sub splitfile{
             next if( $prj eq "binfilter" );     # Don't merge strings into binfilter module
             chomp( $line );
 
-            if( $force_ooo_module )
-            {
-                $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
-            }
-            else
-            {
-                $string_hash_so{ $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
-            }
+            $string_hash_ooo { $lang }{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } = $line;
         }
     }
     close( MYFILE );
 
-    if( !defined $ENV{SOURCE_ROOT_DIR} ){
-        print "Error, no SOURCE_ROOT_DIR in env found.\n";
+    if( !defined $ENV{SRC_ROOT} ){
+        print "Error, no SRC_ROOT in env found.\n";
         exit( -1 );
     }
-    my $src_root = $ENV{SOURCE_ROOT_DIR};
-    my $ooo_src_root = $src_root."/l10n";
-    my $so_l10n_path  = $src_root."/sun/l10n_so/source";
-    my $ooo_l10n_path = $ooo_src_root."/l10n/source";
+    my $src_root = $ENV{SRC_ROOT};
+    my $ooo_src_root = $ENV{SRC_ROOT};
+    my $ooo_l10n_path = $ooo_src_root."/translations/source";
 
-    #print "$so_l10n_path\n";
-    #print "$ooo_l10n_path\n";
-
-    if( $force_ooo_module )
-    {
-        write_sdf( \%string_hash_ooo , $ooo_l10n_path );
-    }
-    else
-    {
-        write_sdf( \%string_hash_so , $so_l10n_path );
-    }
+    write_sdf( \%string_hash_ooo , $ooo_l10n_path );
 }
 
 sub write_sdf
@@ -314,8 +280,9 @@ sub merge_gsicheck{
     $command .= "$ENV{SOLARVER}/$ENV{INPATH}/bin/gsicheck";
 
     my $errfile = $sdffile.".err";
-    $command .= " -k -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
+    $command .= " -k -c -wcf $tmpfile -wef ".fix_cygwin_path($errfile)." -l \"\" ".fix_cygwin_path($sdffile);
     #my $rc = system( $command );
+    if ($bVerbose) { print STDOUT "localize.pl running $command\n"; }
     my $output = `$command`;
     my $rc = $? << 8;
     if ( $output ne "" ){
@@ -330,24 +297,11 @@ sub merge_gsicheck{
     }
     $sdffile = $tmpfile;
 }
-#########################################################
-# find search function
-sub wanted
-{
-    my $file = $File::Find::name;
-    if( -f $file && $file =~ /.*localize.sdf$/ && !( $file =~ /.*\.svn.*/ ) ) {
-        push   @sdfparticles , $file;
-        if( $bVerbose eq "1" ) { print STDOUT "$file\n"; }
-        else { print ".";  }
-    }
-}
-
 sub add_paths
 {
     my $langhash_ref            = shift;
     my $root_dir = $ENV{ SRC_ROOT };
-    my $ooo_l10n_dir = "$root_dir/l10n/source";
-    my $so_l10n_dir  = "$root_dir/l10n_so/source";
+    my $ooo_l10n_dir = "$root_dir/translations/source";
 
     if( -e $ooo_l10n_dir )
     {
@@ -362,20 +316,6 @@ sub add_paths
         }
     }
     else { die "ERROR: Can not find directory $ooo_l10n_dir!!!" }
-    if( -e $so_l10n_dir )
-    {
-        foreach my $lang ( keys( %{ $langhash_ref } ) )
-        {
-            my $loc_file = "$so_l10n_dir/$lang/localize.sdf";
-            if( -e $loc_file )
-            {
-                push @sdfparticles , "$ooo_l10n_dir/$lang/localize.sdf";
-            }
-            else { #print "WARNING: $loc_file not found ....\n";
-            }
-        }
-
-    }
 }
 sub collectfiles{
     print STDOUT "### Localize\n";
@@ -387,7 +327,7 @@ sub collectfiles{
     STDOUT->autoflush( 1 );
 
     my $working_path = getcwd();
-    chdir $ENV{SOURCE_ROOT_DIR}, if defined $ENV{SOURCE_ROOT_DIR};
+    chdir $ENV{SRC_ROOT}, if defined $ENV{SRC_ROOT};
     add_paths( $langhash_ref );
 
     my ( $LOCALIZEPARTICLE , $localizeSDF ) = File::Temp::tempfile();
@@ -409,12 +349,12 @@ sub collectfiles{
         }else{
             $command = $binpath."localize_sl";
         }
-        print $command;
+        print $command . "\n";
         # -e
         # if ( -x $command ){
         if( $command ){
             if( !$bVerbose  ){ $args .= " "; }
-            $args .= " -e -f $localizeSDF -l ";
+            $args .= " -e -f ".fix_cygwin_path($localizeSDF)." -l ";
             my $bFlag="";
             if( $bAll ) {$args .= " en-US";}
             else{
@@ -626,145 +566,7 @@ sub collectfiles{
 
     #print STDOUT "DBG: \$localizeSDF $localizeSDF \$particleSDF_merged $particleSDF_merged\n";
     unlink $localizeSDF , $particleSDF_merged ,  $my_localize_log;
-
-    #sort_outfile( $outputfile );
-    #remove_obsolete( $outputfile ) , if $bHasSourceLanguage ne "";
     }
-
-#########################################################
-sub remove_obsolete{
-    my $outfile = shift;
-    my @lines;
-    my $enusleftpart;
-    my @good_lines;
-
-    print STDOUT "### Removing obsolete strings\n";
-
-    # Kick out all strings without en-US reference
-    if ( open ( SORTEDFILE , "< $outfile" ) ){
-        while( <SORTEDFILE> ){
-            if( /$sdf_regex/ ){
-                my $line           = defined $_ ? $_ : '';
-                my $language       = defined $12 ? $12 : '';
-                my $prj            = defined $3 ? $3 : '';
-                my $file           = defined $4 ? $4 : '';
-                my $type           = defined $6 ? $6 : '';
-                my $gid            = defined $7 ? $7 : '';
-                my $lid            = defined $8 ? $8 : '';
-                my $plattform      = defined $10 ? $10 : '';
-                my $helpid         = defined $9 ? $9 : '';
-
-                my $leftpart = $prj.$gid.$lid.$file.$type.$plattform.$helpid;
-
-                if( $language eq "en-US" ){                 # source string found, 1. entry
-                    $enusleftpart = $leftpart;
-                    push @good_lines , $line;
-                }else{
-                    if( !defined $enusleftpart or !defined $leftpart ){
-                        print STDERR "BADLINE: $line\n";
-                        print STDERR "\$enusleftpart = $enusleftpart\n";
-                        print STDERR "\$leftpart = $leftpart\n";
-                    }
-                    if( $enusleftpart eq $leftpart ){   # matching language
-                        push @good_lines , $line;
-                    }
-                    #else{
-                    #    print STDERR "OUT:  \$enusleftpart=$enusleftpart \$leftpart=$leftpart \$line=$line\n";
-                    #}
-                }
-            }
-        }
-        close SORTEDFILE;
-    } else { print STDERR "ERROR: Can't open file $outfile\n";}
-
-    # Write file
-    if ( open ( SORTEDFILE , "> $outfile" ) ){
-        foreach my $newline ( @good_lines ) {
-            print SORTEDFILE $newline;
-        }
-        close SORTEDFILE;
-    } else { print STDERR "ERROR: Can't open file $outfile\n";}
-
-}
-#########################################################
-sub sort_outfile{
-        my $outfile = shift;
-        print STDOUT "### Sorting ... $outfile ...";
-        my @lines;
-        my @sorted_lines;
-
-
-        #if ( open ( SORTEDFILE , "< $outputfile" ) ){
-        if ( open ( SORTEDFILE , "< $outfile" ) ){
-            my $line;
-            while ( <SORTEDFILE> ){
-                $line = $_;
-                if( $line =~ /^[^\#]/ ){
-                    push @lines , $line;
-                }
-            }
-            close SORTEDFILE;
-            @sorted_lines = sort {
-                my $xa_lang          = "";
-                my $xa_left_part    = "";
-                my $xa_right_part    = "";
-                my $xa_timestamp     = "";
-                my $xb_lang          = "";
-                my $xb_left_part    = "";
-                my $xb_right_part    = "";
-                my $xb_timestamp     = "";
-                my $xa               = "";
-                my $xb               = "";
-                my @alist;
-                my @blist;
-
-                if( $a=~ /$sdf_regex/ ){
-                    $xa_left_part       = defined $2 ? $2 : '';
-                    $xa_lang           = defined $12 ? $12 : '';
-                    $xa_right_part     = defined $13 ? $13 : '';
-                    $xa_left_part = remove_last_column( $xa_left_part );
-
-                }
-                if( $b=~ /$sdf_regex/ ){
-                    $xb_left_part       = defined $2 ? $2 : '';
-                    $xb_lang           = defined $12 ? $12 : '';
-                    $xb_right_part     = defined $13 ? $13 : '';
-                    $xb_left_part = remove_last_column( $xb_left_part );
-
-
-                }
-                if( (  $xa_left_part cmp $xb_left_part ) == 0 ){         # Left part equal
-                     if( ( $xa_lang cmp $xb_lang ) == 0 ){               # Lang equal
-                         return ( $xa_right_part cmp $xb_right_part );   # Right part compare
-                    }
-                    elsif( $xa_lang eq "en-US" ) { return -1; }        # en-US wins
-                    elsif( $xb_lang eq "en-US" ) { return 1;  }        # en-US wins
-                    else { return $xa_lang cmp $xb_lang; }             # lang compare
-                }
-                else {
-                    return $xa_left_part cmp $xb_left_part;        # Left part compare
-                }
-            } @lines;
-
-            if ( open ( SORTEDFILE , "> $outfile" ) ){
-                print SORTEDFILE get_license_header();
-                foreach my $newline ( @sorted_lines ) {
-                    print SORTEDFILE $newline;
-                    #print STDOUT $newline;
-                }
-            }
-            close SORTEDFILE;
-        } else { print STDERR "WARNING: Can't open file $outfile\n";}
-    print "done\n";
-
-}
-#########################################################
-sub remove_last_column{
-    my $string                  = shift;
-    my @alist = split ( "\t" , $string );
-    pop @alist;
-    return join( "\t" , @alist );
-}
 
 #########################################################
 sub rename_language{
@@ -1011,7 +813,7 @@ sub parse_options{
     my $extract;
     my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose ,
                              'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort , 'd' => \$use_default_date , 'c' => \$create_dirs ,
-                             'n' => \$no_gsicheck , 'o' => \$force_ooo_module );
+                             'n' => \$no_gsicheck );
     $outputfile = $sdffile;
 
     #print STDOUT "DBG: lang = $languages\n";
@@ -1068,11 +870,23 @@ sub usage{
     print STDERR "    -h              File with localize.sdf's\n!";
     print STDERR "    -n              No gsicheck\n";
     print STDERR "    -i              Module to merge\n";
-    print STDERR "    -o              force using ooo localization from the l10n module instead of l10n_so; \n";
     print STDERR "                    useful if the type can't be detected by the .svn tags; \n";
     print STDERR "    -v              Verbose\n";
     print STDERR "\nExample:\n";
     print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";
     print STDERR "\nlocalize -m -l cs -f my.sdf\n( Merge cs translation into the sourcecode ) \n";
+}
+
+sub fix_cygwin_path
+{
+    my ( $path ) = @_;
+
+    if ( $^O eq 'cygwin' )
+    {
+    $path = qx{cygpath -m "$path"};
+    chomp($path);
+    }
+
+    return $path;
 }
 

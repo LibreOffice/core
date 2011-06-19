@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/svapp.hxx>
-
 #include "impimagetree.hxx"
 
 //........................................................................
@@ -43,15 +43,23 @@ namespace vcl
     //= ImageRepository
     //====================================================================
     //--------------------------------------------------------------------
-    bool ImageRepository::loadImage( const ::rtl::OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent )
+    bool ImageRepository::loadImage( const ::rtl::OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent, bool loadMissing )
     {
         ::rtl::OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
         ImplImageTreeSingletonRef aImplImageTree;
-        return aImplImageTree->loadImage( _rName, sCurrentSymbolsStyle, _out_rImage, _bSearchLanguageDependent );
+        return aImplImageTree->loadImage( _rName, sCurrentSymbolsStyle, _out_rImage, _bSearchLanguageDependent, loadMissing );
+    }
+
+    bool ImageRepository::loadDefaultImage( BitmapEx& _out_rImage)
+    {
+        ::rtl::OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        ImplImageTreeSingletonRef aImplImageTree;
+        return aImplImageTree->loadDefaultImage( sCurrentSymbolsStyle,_out_rImage);
     }
 
 //........................................................................
 } // namespace vcl
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

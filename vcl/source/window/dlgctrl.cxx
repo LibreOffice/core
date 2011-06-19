@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -898,10 +899,8 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
 sal_Bool Window::ImplHasDlgCtrl()
 {
     Window* pDlgCtrlParent;
-    Window* pDlgCtrl;
 
     // lookup window for dialog control
-    pDlgCtrl = this;
     pDlgCtrlParent = ImplGetParent();
     while ( pDlgCtrlParent &&
             !pDlgCtrlParent->ImplIsOverlapWindow() &&
@@ -1335,3 +1334,5 @@ KeyEvent Window::GetActivationKey() const
     }
     return aKeyEvent;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@ $(eval $(call gb_Module_add_targets,canvas,\
 	Library_canvasfactory \
 	Package_inc \
 ))
-
 ifeq ($(strip $(OS)),WNT)
 ifneq ($(strip $(ENABLE_DIRECTX)),)
 

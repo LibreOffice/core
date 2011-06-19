@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
 #include <svids.hrc>
 #include <svdata.hxx>
 #include <brdwin.hxx>
@@ -212,7 +212,7 @@ void ImplBorderWindowView::ImplInitTitle( ImplBorderFrameData* pData )
 {
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
 
-    if ( !(pBorderWindow->GetStyle() & WB_MOVEABLE) ||
+    if ( !(pBorderWindow->GetStyle() & (WB_MOVEABLE | WB_POPUP)) ||
           (pData->mnTitleType == BORDERWINDOW_TITLE_NONE) )
     {
         pData->mnTitleType   = BORDERWINDOW_TITLE_NONE;
@@ -277,7 +277,7 @@ sal_uInt16 ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const 
 
         // no corner resize for floating toolbars, which would lead to jumps while formatting
         // setting nSizeWidth = 0 will only return pure left,top,right,bottom
-        if( pBorderWindow->GetStyle() & WB_OWNERDRAWDECORATION )
+        if( pBorderWindow->GetStyle() & (WB_OWNERDRAWDECORATION | WB_POPUP) )
             nSizeWidth = 0;
 
         if ( rPos.X() < pData->mnLeftBorder )
@@ -373,9 +373,9 @@ sal_Bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, 
     {
         pData->maMouseOff = rMEvt.GetPosPixel();
         pData->mnHitTest = ImplHitTest( pData, pData->maMouseOff );
-        sal_uInt16 nDragFullTest = 0;
         if ( pData->mnHitTest )
         {
+            sal_uInt16 nDragFullTest = 0;
             sal_Bool bTracking = sal_True;
             sal_Bool bHitTest = sal_True;
 
@@ -1497,7 +1497,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     pData->mnTitleType      = pBorderWindow->mnTitleType;
     pData->mbFloatWindow    = pBorderWindow->mbFloatWindow;
 
-    if ( !(pBorderWindow->GetStyle() & WB_MOVEABLE) || (pData->mnTitleType == BORDERWINDOW_TITLE_NONE) )
+    if ( !(pBorderWindow->GetStyle() & (WB_MOVEABLE | WB_POPUP)) || (pData->mnTitleType == BORDERWINDOW_TITLE_NONE) )
         pData->mnBorderSize = 0;
     else if ( pData->mnTitleType == BORDERWINDOW_TITLE_TEAROFF )
         pData->mnBorderSize = 0;
@@ -1522,7 +1522,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
 
         // set a proper background for drawing
         // highlighted buttons in the title
-        pBorderWindow->SetBackground( rStyleSettings.GetWindowColor() );
+        pBorderWindow->SetBackground( rStyleSettings.GetFaceColor() );
 
         pData->maTitleRect.Left()    = pData->mnLeftBorder;
         pData->maTitleRect.Right()   = nWidth-pData->mnRightBorder-1;
@@ -1665,19 +1665,43 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
     const StyleSettings&    rStyleSettings = pData->mpOutDev->GetSettings().GetStyleSettings();
     DecorationView          aDecoView( pDev );
-    Color                   aFrameColor( rStyleSettings.GetFaceColor() );
+    Color                   aFaceColor( rStyleSettings.GetFaceColor() );
+    Color                   aFrameColor( aFaceColor );
 
     aFrameColor.DecreaseContrast( (sal_uInt8) (0.50 * 255));
 
     // Draw Frame
     if ( nDrawFlags & BORDERWINDOW_DRAW_FRAME )
     {
+        Region oldClipRgn( pDev->GetClipRegion( ) );
+
+        // for popups, don't draw part of the frame
+        if ( pData->mnTitleType == BORDERWINDOW_TITLE_POPUP )
+        {
+            FloatingWindow *pWin = dynamic_cast< FloatingWindow* >( pData->mpBorderWindow->GetWindow( WINDOW_CLIENT ) );
+            if ( pWin )
+            {
+                Region aClipRgn( aInRect );
+                Rectangle aItemClipRect( pWin->ImplGetItemEdgeClipRect() );
+                if( !aItemClipRect.IsEmpty() )
+                {
+                    aItemClipRect.SetPos( pData->mpBorderWindow->AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
+                    aClipRgn.Exclude( aItemClipRect );
+                    pDev->SetClipRegion( aClipRgn );
+                }
+            }
+        }
+
         // single line frame
         pDev->SetLineColor( aFrameColor );
         pDev->SetFillColor();
         pDev->DrawRect( aInRect );
         aInRect.nLeft++; aInRect.nRight--;
         aInRect.nTop++; aInRect.nBottom--;
+
+        // restore
+        if ( pData->mnTitleType == BORDERWINDOW_TITLE_POPUP )
+            pDev->SetClipRegion( oldClipRgn );
     }
     else
         aInRect = aDecoView.DrawFrame( aInRect, FRAME_DRAW_DOUBLEOUT | FRAME_DRAW_NODRAW);
@@ -1704,7 +1728,11 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
         aInRect = pData->maTitleRect;
 
         // use no gradient anymore, just a static titlecolor
-        pDev->SetFillColor( aFrameColor );
+        if ( pData->mnTitleType != BORDERWINDOW_TITLE_POPUP )
+            pDev->SetFillColor( aFrameColor );
+        else
+            pDev->SetFillColor( aFaceColor );
+
         pDev->SetTextColor( rStyleSettings.GetButtonTextColor() );
         Rectangle aTitleRect( pData->maTitleRect );
         if( pOffset )
@@ -1839,7 +1867,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
 {
     // Alle WindowBits entfernen, die wir nicht haben wollen
     WinBits nOrgStyle = nStyle;
-    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_NEEDSFOCUS);
+    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_NEEDSFOCUS | WB_POPUP);
     if ( nTypeStyle & BORDERWINDOW_STYLE_APP )
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
@@ -1854,7 +1882,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
             mpWindowImpl->mbFrame       = sal_True;
             mbFrameBorder               = sal_False;
         }
-        else if( (nStyle & WB_OWNERDRAWDECORATION) )
+        else if( (nStyle & (WB_OWNERDRAWDECORATION | WB_POPUP)) )
         {
             mpWindowImpl->mbOverlapWin  = sal_True;
             mpWindowImpl->mbFrame       = sal_True;
@@ -2106,7 +2134,7 @@ void ImplBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        if ( !mpWindowImpl->mbFrame || (GetStyle() & WB_OWNERDRAWDECORATION) )
+        if ( !mpWindowImpl->mbFrame || (GetStyle() & (WB_OWNERDRAWDECORATION | WB_POPUP)) )
             UpdateView( sal_True, ImplGetWindow()->GetOutputSizePixel() );
     }
 
@@ -2354,3 +2382,5 @@ Rectangle ImplBorderWindow::GetMenuRect() const
 {
     return mpBorderView->GetMenuRect();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

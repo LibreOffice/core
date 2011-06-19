@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,21 +121,13 @@ namespace comphelper
         return ( NULL != pImplementation );
     }
 
+    namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
+
     //---------------------------------------------------------------------
-    const Sequence< sal_Int8 >& OAccessibleImplementationAccess::getUnoTunnelImplementationId()
+    const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {
-        static Sequence< sal_Int8 > aId;
-        if ( !aId.getLength() )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !aId.getLength() )
-            {
-                static ::cppu::OImplementationId aImplId;
-                // unfortunately, the OImplementationId::getImplementationId returns a copy, not a static reference ...
-                aId = aImplId.getImplementationId();
-            }
-        }
-        return aId;
+        ::cppu::OImplementationId &rID = lcl_ImplId::get();
+        return rID.getImplementationId();
     }
 
     //---------------------------------------------------------------------
@@ -165,7 +158,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAccessibleImplementationAccess::setAccessibleParent: caught an exception while retrieving the implementation!" );
+            OSL_FAIL( "OAccessibleImplementationAccess::setAccessibleParent: caught an exception while retrieving the implementation!" );
         }
         return pImplementation;
     }
@@ -187,3 +180,4 @@ namespace comphelper
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

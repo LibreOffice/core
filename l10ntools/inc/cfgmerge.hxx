@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,10 @@
 #define _CFG_MERGE_HXX
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <vector>
 
-typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
 
@@ -68,21 +69,32 @@ public:
 // class CfgStack
 //
 
-DECLARE_LIST( CfgStackList, CfgStackData * )
+typedef ::std::vector< CfgStackData* > CfgStackList;
 
-class CfgStack : public CfgStackList
+class CfgStack
 {
+private:
+    CfgStackList maList;
+
 public:
-    CfgStack() : CfgStackList( 10, 10 ) {}
+    CfgStack() {}
     ~CfgStack();
 
-    sal_uLong Push( CfgStackData *pStackData );
+    size_t Push( CfgStackData *pStackData );
     CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
-    CfgStackData *Pop() { return Remove( Count() - 1 ); }
+    CfgStackData *Pop()
+        {
+            if ( maList.empty() ) return NULL;
+            CfgStackData* temp = maList.back();
+            maList.pop_back();
+            return temp;
+        }
 
-    CfgStackData *GetStackData( sal_uLong nPos = LIST_APPEND );
+    CfgStackData *GetStackData( size_t nPos = LIST_APPEND );
 
-    ByteString GetAccessPath( sal_uLong nPos = LIST_APPEND );
+    ByteString GetAccessPath( size_t nPos = LIST_APPEND );
+
+    size_t size() const { return maList.size(); }
 };
 
 //
@@ -181,7 +193,6 @@ private:
     std::vector<ByteString> aLanguages;
     ResData *pResData;
 
-    sal_Bool bGerman;
     ByteString sFilename;
     sal_Bool bEnglish;
 
@@ -203,3 +214,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

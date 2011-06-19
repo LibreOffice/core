@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -45,10 +46,9 @@
 #define DEF_INCH    2540L
 #define DEF_RELTWIP 1440L
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+using ::rtl::OUString;
 
 namespace utl
 {
@@ -63,7 +63,7 @@ class SfxMiscCfg : public utl::ConfigItem
     sal_Bool            bNotFound;
     sal_Int32       nYear2000;      // two digit year representation
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    const com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     void                    Load();
 
 public:
@@ -88,11 +88,8 @@ public:
 
 };
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 SfxMiscCfg::SfxMiscCfg() :
-    ConfigItem(C2U("Office.Common") ),
+    ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common")) ),
     bPaperSize(sal_False),
     bPaperOrientation (sal_False),
     bNotFound (sal_False),
@@ -102,15 +99,10 @@ SfxMiscCfg::SfxMiscCfg() :
 
     Load();
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxMiscCfg::~SfxMiscCfg()
 {
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SfxMiscCfg::SetNotFoundWarning( sal_Bool bSet)
 {
@@ -119,10 +111,6 @@ void SfxMiscCfg::SetNotFoundWarning( sal_Bool bSet)
     bNotFound = bSet;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 void SfxMiscCfg::SetPaperSizeWarning( sal_Bool bSet)
 {
     if(bPaperSize != bSet)
@@ -130,18 +118,12 @@ void SfxMiscCfg::SetPaperSizeWarning( sal_Bool bSet)
     bPaperSize = bSet;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 void SfxMiscCfg::SetPaperOrientationWarning( sal_Bool bSet)
 {
     if(bPaperOrientation != bSet)
         SetModified();
     bPaperOrientation = bSet;
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
 {
@@ -149,42 +131,30 @@ void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
         SetModified();
     nYear2000 = nSet;
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
-const Sequence<OUString>& SfxMiscCfg::GetPropertyNames()
+const Sequence<OUString> SfxMiscCfg::GetPropertyNames()
 {
-    static Sequence<OUString> aNames;
-    if(!aNames.getLength())
+    const OUString pProperties[] =
     {
-        static const char* aPropNames[] =
-        {
-               "Print/Warning/PaperSize",               //  0
-               "Print/Warning/PaperOrientation",        //  1
-               "Print/Warning/NotFound",                //  2
-            "DateFormat/TwoDigitYear",              //  3
-        };
-        const int nCount = 4;
-        aNames.realloc(nCount);
-        OUString* pNames = aNames.getArray();
-        for(int i = 0; i < nCount; i++)
-            pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
-    return aNames;
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Print/Warning/PaperSize")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Print/Warning/PaperOrientation")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("Print/Warning/NotFound")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("DateFormat/TwoDigitYear"))
+    };
+    const Sequence< OUString > seqPropertyNames( pProperties, 4 );
+    return seqPropertyNames;
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Load()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
+    const Sequence<OUString>& rNames = GetPropertyNames();
+    Sequence<Any> aValues = GetProperties(rNames);
+    EnableNotification(rNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
-    if(aValues.getLength() == aNames.getLength())
+    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+    if(aValues.getLength() == rNames.getLength())
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        for(int nProp = 0; nProp < rNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
             {
@@ -199,24 +169,20 @@ void SfxMiscCfg::Load()
         }
     }
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
 {
     Load();
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Commit()
 {
-    const Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
+    const Sequence<OUString>& rNames = GetPropertyNames();
+    Sequence<Any> aValues(rNames.getLength());
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
-    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    for(int nProp = 0; nProp < rNames.getLength(); nProp++)
     {
         switch(nProp)
         {
@@ -226,7 +192,7 @@ void SfxMiscCfg::Commit()
             case  3: pValues[nProp] <<= nYear2000;break;                 //"DateFormat/TwoDigitYear",
         }
     }
-    PutProperties(aNames, aValues);
+    PutProperties(rNames, aValues);
 }
 // -----------------------------------------------------------------------
 namespace
@@ -308,3 +274,4 @@ void MiscCfg::SetYear2000( sal_Int32 nSet )
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

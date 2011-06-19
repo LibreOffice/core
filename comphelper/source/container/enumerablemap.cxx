@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -174,7 +175,7 @@ namespace comphelper
                 return;
             }
         }
-        OSL_ENSURE( false, "lcl_revokeMapModificationListener: the listener is not registered!" );
+        OSL_FAIL( "lcl_revokeMapModificationListener: the listener is not registered!" );
     }
 
     //--------------------------------------------------------------------
@@ -387,16 +388,16 @@ namespace comphelper
 
         Type aKeyType, aValueType;
         if ( !( _arguments[0] >>= aKeyType ) )
-            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "com.sun.star.uno.Type expected." ), *this, 1 );
+            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Type expected.")), *this, 1 );
         if ( !( _arguments[1] >>= aValueType ) )
-            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "com.sun.star.uno.Type expected." ), *this, 2 );
+            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.Type expected.")), *this, 2 );
 
         Sequence< Pair< Any, Any > > aInitialValues;
         bool bMutable = true;
         if ( nArgumentCount == 3 )
         {
             if ( !( _arguments[2] >>= aInitialValues ) )
-                throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "[]com.sun.star.beans.Pair<any,any> expected." ), *this, 2 );
+                throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[]com.sun.star.beans.Pair<any,any> expected.")), *this, 2 );
             bMutable = false;
         }
 
@@ -805,3 +806,5 @@ void createRegistryInfo_Map()
 {
     ::comphelper::module::OAutoRegistration< ::comphelper::EnumerableMap > aAutoRegistration;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

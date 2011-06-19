@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,15 +32,9 @@
 #include <sot/storinfo.hxx>
 #include <osl/file.hxx>
 #include <tools/tempfile.hxx>
-#include <tools/ownlist.hxx>
 #include <tools/string.hxx>
-#ifndef _TOOLS_FSYS_HXX
 #include <tools/fsys.hxx>
-#endif
-#ifndef _TOOLS_STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#include <tools/pstm.hxx>
 #include <tools/debug.hxx>
 
 #include "sot/stg.hxx"
@@ -435,7 +430,7 @@ Storage::Storage( UCBStorageStream& rStrm, sal_Bool bDirect )
     SvStream* pStream = rStrm.GetModifySvStream();
     if ( !pStream )
     {
-        OSL_ENSURE( sal_False, "UCBStorageStream can not provide SvStream implementation!\n" );
+        OSL_FAIL( "UCBStorageStream can not provide SvStream implementation!\n" );
         SetError( SVSTREAM_GENERALERROR );
         pEntry = NULL;
         return;
@@ -552,7 +547,7 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
             if( !p->bInvalid )
             {
                 SvStorageInfo aInfo( *p );
-                pList->Append( aInfo );
+                pList->push_back( aInfo );
             }
             p = aIter.Next();
         }
@@ -563,7 +558,7 @@ void Storage::FillInfoList( SvStorageInfoList* pList ) const
 
 BaseStorage* Storage::OpenUCBStorage( const String& rName, StreamMode m, sal_Bool bDirect )
 {
-    DBG_ERROR("Not supported!");
+    OSL_FAIL("Not supported!");
 /*
     BaseStorage* pStorage = new Storage( pIo, NULL, m );
     SetError( ERRCODE_IO_NOTSUPPORTED );
@@ -581,12 +576,8 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, sal_Bool b
 {
     if( !Validate() || !ValidateMode( m ) )
         return new Storage( pIo, NULL, m );
-    sal_Bool bSetAutoCommit = sal_False;
     if( bDirect && !pEntry->bDirect )
-    {
-        bSetAutoCommit = sal_True;
         bDirect = sal_False;
-    }
 
     StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
     if( !p )
@@ -813,9 +804,9 @@ sal_Bool Storage::CopyTo( BaseStorage* pDest ) const
     SvStorageInfoList aList;
     FillInfoList( &aList );
     sal_Bool bRes = sal_True;
-    for( sal_uInt16 i = 0; i < aList.Count() && bRes; i++ )
+    for( size_t i = 0; i < aList.size() && bRes; i++ )
     {
-        SvStorageInfo& rInfo = aList.GetObject( i );
+        SvStorageInfo& rInfo = aList[ i ];
         bRes = pThis->CopyTo( rInfo.GetName(), pDest, rInfo.GetName() );
     }
     if( !bRes )
@@ -1089,3 +1080,4 @@ sal_Bool Storage::Equals( const BaseStorage& rStorage ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

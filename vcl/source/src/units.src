@@ -28,6 +28,7 @@
 
 #include <svids.hrc>
 
+// Amelia : adds two units , 'ch' and 'line'
 StringArray SV_FUNIT_STRINGS
 {
     ItemList [ en-US ] =
@@ -39,7 +40,7 @@ StringArray SV_FUNIT_STRINGS
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
-        < "pi" ; FUNIT_PICA ; > ;
+        < "pc" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
@@ -49,6 +50,8 @@ StringArray SV_FUNIT_STRINGS
         < "feet" ; FUNIT_FOOT ; > ;
         < "miles" ; FUNIT_MILE ; > ;
         < "mile" ; FUNIT_MILE ; > ;
+        < "ch" ; FUNIT_CHAR ; > ;
+        < "line" ; FUNIT_LINE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
 };

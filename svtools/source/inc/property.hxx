@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,27 +29,13 @@
 #ifndef SV_PROPERTY_HXX
 #define SV_PROPERTY_HXX
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
-#ifndef SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef SV_GROUP_HXX
 #include <vcl/group.hxx>
-#endif
-#ifndef SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef SV_MOREBTN_HXX
 #include <vcl/morebtn.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
 #include <svl/svarray.hxx>
@@ -583,3 +570,4 @@ public:
 #endif // SC_AUTOFMT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

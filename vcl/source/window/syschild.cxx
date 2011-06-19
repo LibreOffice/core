@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -234,7 +235,15 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
 
             throw uno::RuntimeException(ouMessage, uno::Reference<uno::XInterface>());
     }
+#else
+    (void)pEnv;
 #endif // SOLAR_JAVA
+}
+
+void SystemChildWindow::SetForwardKey( sal_Bool bEnable )
+{
+    if ( mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }
 
 // -----------------------------------------------------------------------
@@ -246,9 +255,11 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
     (void)bUseJava;
 #if defined WNT
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
+    (void)bUseJava;
 #elif defined QUARTZ
     // FIXME: this is wrong
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->pView );
+    (void)bUseJava;
 #elif defined UNX
     if( !bUseJava )
     {
@@ -340,3 +351,5 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
 
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

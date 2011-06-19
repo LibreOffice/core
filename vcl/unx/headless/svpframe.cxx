@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -415,6 +416,17 @@ SalFrame::SalPointerState SvpSalFrame::GetPointerState()
     return aState;
 }
 
+SalFrame::SalIndicatorState SvpSalFrame::GetIndicatorState()
+{
+    SalIndicatorState aState;
+    aState.mnState = 0;
+    return aState;
+}
+
+void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
+{
+}
+
 void SvpSalFrame::SetParent( SalFrame* pNewParent )
 {
     if( m_pParent )
@@ -447,3 +459,4 @@ void SvpSalFrame::EndSetClipRegion()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

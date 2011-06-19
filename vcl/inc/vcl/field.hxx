@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -255,7 +256,7 @@ public:
     virtual void            CustomConvert() = 0;
     virtual void            Reformat();
 
-    void                    SetUnit( FieldUnit meUnit );
+    virtual void            SetUnit( FieldUnit meUnit );
     FieldUnit               GetUnit() const { return meUnit; }
     void                    SetCustomUnitText( const XubString& rStr );
     const XubString&        GetCustomUnitText() const { return maCustomUnitText; }
@@ -568,6 +569,8 @@ public:
     virtual void            First();
     virtual void            Last();
     virtual void            CustomConvert();
+
+    virtual void            SetUnit( FieldUnit meUnit );
 
     void                    SetFirst( sal_Int64 nNewFirst, FieldUnit eInUnit );
     inline void             SetFirst(sal_Int64 first) { SetFirst(first, FUNIT_NONE); }
@@ -882,3 +885,5 @@ public:
 };
 
 #endif // _SV_FIELD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

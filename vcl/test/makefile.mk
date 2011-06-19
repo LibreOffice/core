@@ -32,10 +32,6 @@ TARGET=dndtest
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
-.IF "$(GUI)" == "OS2"
-TARGETTYPE=GUI
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -52,7 +48,6 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
                 $(SOTLIB)			\
                 $(COMPHELPERLIB)	\
                 $(VCLLIB)

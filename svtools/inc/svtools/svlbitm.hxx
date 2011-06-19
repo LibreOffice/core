@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,9 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef LINK_HXX
 #include <tools/link.hxx>
-#endif
 
-#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #include <svtools/svlbox.hxx>
 
 class SvLBoxEntry;
@@ -256,44 +253,40 @@ public:
     void            Clone( SvLBoxItem* pSource );
 
 
-    sal_Bool            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    void            GetModeImages(       Image& _rBitmap1,       Image& _rBitmap2, BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    sal_Bool            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 );
+    void            GetModeImages(       Image& _rBitmap1,       Image& _rBitmap2 ) const;
 
-    inline void         SetBitmap1( const Image& _rImage, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline void         SetBitmap2( const Image& _rImage, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline const Image& GetBitmap1( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
-    inline const Image& GetBitmap2( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    inline void         SetBitmap1( const Image& _rImage );
+    inline void         SetBitmap2( const Image& _rImage );
+    inline const Image& GetBitmap1( ) const;
+    inline const Image& GetBitmap2( ) const;
 
 private:
-    Image& implGetImageStore( sal_Bool _bFirst, BmpColorMode _eMode );
+    Image& implGetImageStore( sal_Bool _bFirst );
 };
 
-inline void SvLBoxContextBmp::SetBitmap1( const Image& _rImage, BmpColorMode _eMode  )
+inline void SvLBoxContextBmp::SetBitmap1( const Image& _rImage  )
 {
-    implGetImageStore( sal_True, _eMode ) = _rImage;
+    implGetImageStore( sal_True ) = _rImage;
 }
 
-inline void SvLBoxContextBmp::SetBitmap2( const Image& _rImage, BmpColorMode _eMode  )
+inline void SvLBoxContextBmp::SetBitmap2( const Image& _rImage )
 {
-    implGetImageStore( sal_False, _eMode ) = _rImage;
+    implGetImageStore( sal_False ) = _rImage;
 }
 
-inline const Image& SvLBoxContextBmp::GetBitmap1( BmpColorMode _eMode ) const
+inline const Image& SvLBoxContextBmp::GetBitmap1( ) const
 {
-    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_True, _eMode );
-    if ( !rImage )
-        // fallback to the "normal" image
-        rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_True, BMP_COLOR_NORMAL );
+    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_True );
     return rImage;
 }
 
-inline const Image& SvLBoxContextBmp::GetBitmap2( BmpColorMode _eMode ) const
+inline const Image& SvLBoxContextBmp::GetBitmap2( ) const
 {
-    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_False, _eMode );
-    if ( !rImage )
-        // fallback to the "normal" image
-        rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_True, BMP_COLOR_NORMAL );
+    Image& rImage = const_cast< SvLBoxContextBmp* >( this )->implGetImageStore( sal_False );
     return rImage;
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgutil.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +61,9 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, sal_Bool bAll )
     rField.SetUnit( eUnit );
     switch( eUnit )
     {
+        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FUNIT_MM
+        case FUNIT_CHAR:
+        case FUNIT_LINE:
         case FUNIT_MM:
             rField.SetSpinSize( 50 );
             break;
@@ -761,3 +762,4 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
     return ConvertTable[nOld][nNew]( nVal );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

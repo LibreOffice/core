@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,15 +34,6 @@
 #include "dialogbuttonhbox.hxx"
 #include "flow.hxx"
 #include "proplist.hxx"
-
-#if TEST_LAYOUT && !defined( DBG_UTIL )
-#undef DBG_ERROR
-#define DBG_ERROR OSL_TRACE
-#undef DBG_ERROR1
-#define DBG_ERROR1 OSL_TRACE
-#undef DBG_ERROR2
-#define DBG_ERROR2 OSL_TRACE
-#endif /* TEST_LAYOUT && !DBG_UTIL */
 
 namespace layoutimpl
 {
@@ -89,7 +81,7 @@ DialogButtonHBox::setOrdering( rtl::OUString const& ordering )
         mnOrdering = WINDOWS;
     else
     {
-        DBG_ERROR1( "DialogButtonHBox: no such ordering: %s", OUSTRING_CSTR( ordering ) );
+        OSL_TRACE( "DialogButtonHBox: no such ordering: %s", OUSTRING_CSTR( ordering ) );
     }
 }
 
@@ -184,7 +176,7 @@ DialogButtonHBox::removeChild( uno::Reference< awt::XLayoutConstrains > const& x
     }
     else
     {
-        DBG_ERROR( "DialogButtonHBox: removeChild: no such child" );
+        OSL_FAIL( "DialogButtonHBox: removeChild: no such child" );
     }
 }
 
@@ -287,3 +279,5 @@ DialogButtonHBox::windowsOrdering()
 }
 
 } // namespace layoutimpl
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

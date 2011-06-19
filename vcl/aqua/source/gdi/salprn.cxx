@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
+#include <sal/macros.h>
 
 #include "aqua/salinst.h"
 #include "aqua/salprn.h"
@@ -49,13 +51,15 @@
 
 #include <algorithm>
 
-using namespace rtl;
 using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
+using ::rtl::OStringToOUString;
 
 // =======================================================================
 
@@ -105,12 +109,6 @@ AquaSalInfoPrinter::~AquaSalInfoPrinter()
     delete mpGraphics;
     if( mpPrintInfo )
         [mpPrintInfo release];
-    #if 0
-    // FIXME: verify that NSPrintInfo releases the printer
-    // else we have a leak here
-    if( mpPrinter )
-        [mpPrinter release];
-    #endif
     if( mrContext )
         CFRelease( mrContext );
 }
@@ -156,7 +154,7 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY, 1.0 );
         }
         else
-            DBG_ERROR( "no print info in SetupPrinterGraphics" );
+            OSL_FAIL( "no print info in SetupPrinterGraphics" );
     }
 }
 
@@ -441,7 +439,7 @@ static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPag
     Sequence< PropertyValue > aPageParms( i_rController.getPageParameters( i_nPage ) );
     for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( aPageParms[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        if( aPageParms[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PageSize" ) ) )
         {
             awt::Size aSize;
             aPageParms[ nProperty].Value >>= aSize;
@@ -714,7 +712,7 @@ sal_Bool AquaSalPrinter::StartJob( const XubString* /*i_pFileName*/,
                                bool /*i_bDirect*/,
                                ImplJobSetup* )
 {
-    DBG_ERROR( "should never be called" );
+    OSL_FAIL( "should never be called" );
     return sal_False;
 }
 
@@ -824,3 +822,4 @@ int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

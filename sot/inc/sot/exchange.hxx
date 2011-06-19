@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,12 @@
 #ifndef _SOT_EXCHANGE_HXX
 #define _SOT_EXCHANGE_HXX
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANTS_HDL_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hdl>
-#endif
 #include "sot/sotdllapi.h"
 
 class SotDataObject;
@@ -251,3 +246,5 @@ public:
 };
 
 #endif // _EXCHANGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

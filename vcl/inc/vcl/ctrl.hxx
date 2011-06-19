@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,6 @@ protected:
 
     void ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForeground );
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void ImplClearLayoutData() const;
     /** draws a frame around the give rectangle, onto the given device
@@ -131,7 +131,6 @@ public:
             by the space occupied by the drawn pixels.
     */
     SAL_DLLPRIVATE void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect );
-//#endif
 
 public:
                     Control( Window* pParent, WinBits nWinStyle = 0 );
@@ -199,3 +198,5 @@ public:
 };
 
 #endif  // _SV_CTRL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

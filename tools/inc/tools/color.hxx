@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@ class SvStream;
 class ResId;
 #include <tools/solar.h>
 
-#ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
-#endif
 
 // --------------------
 // - ColorCount-Types -
@@ -178,10 +177,14 @@ public:
     static ColorData    HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri );
     void                RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const;
 
-    sal_Bool                operator==( const Color& rColor ) const
-                            { return (mnColor == rColor.mnColor); }
-    sal_Bool                operator!=( const Color& rColor ) const
-                            { return !(Color::operator==( rColor )); }
+    // the range for cymk is 0 to 1.0
+    static ColorData    CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKey );
+    void                RGBtoCMYK( double& fCyan, double& fMagenta, double& fYellow, double& fKey );
+
+    sal_Bool            operator==( const Color& rColor ) const
+                        { return (mnColor == rColor.mnColor); }
+    sal_Bool            operator!=( const Color& rColor ) const
+                        { return !(Color::operator==( rColor )); }
 
     SvStream&           Read( SvStream& rIStm, sal_Bool bNewFormat = sal_True );
     SvStream&           Write( SvStream& rOStm, sal_Bool bNewFormat = sal_True );
@@ -237,3 +240,5 @@ inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 }
 
 #endif // _TOOLS_COLOR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

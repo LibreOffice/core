@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,14 +46,14 @@ ScopeGuard::~ScopeGuard()
             }
             catch (com::sun::star::uno::Exception & exc) {
                 (void) exc; // avoid warning about unused variable
-                OSL_ENSURE(
-                    false, rtl::OUStringToOString(
+                OSL_FAIL(
+                    rtl::OUStringToOString(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                           "UNO exception occured: ") ) +
+                                           "UNO exception occurred: ") ) +
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
             catch (...) {
-                OSL_ENSURE( false, "unknown exception occured!" );
+                OSL_FAIL( "unknown exception occurred!" );
             }
         }
         else
@@ -77,3 +78,4 @@ FlagRestorationGuard::~FlagRestorationGuard()
 
 } // namespace comphelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

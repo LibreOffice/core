@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -450,7 +451,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
         {
             if( bInterlaced )
             {
-                long nT1, nT2;
+                long nT1;
 
                 // falls Interlaced, werden die Zeilen kopiert
                 if( nLastInterCount )
@@ -488,7 +489,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
 
                 if( nT1 >= nImageHeight )
                 {
-                    nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
+                    long nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
                     nT1 = ( nT2 << 3 ) + 4;
                     nLastInterCount = 3;
 
@@ -856,3 +857,5 @@ sal_Bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

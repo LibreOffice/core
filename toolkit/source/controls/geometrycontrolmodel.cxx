@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <rtl/instance.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
-#ifndef _COM_SUN_STAR_XNAMECONTAINER_HPP_
 #include <toolkit/controls/eventcontainer.hxx>
-#endif
 #include <toolkit/helper/property.hxx>
 #include <tools/debug.hxx>
 #include <algorithm>
@@ -211,7 +210,7 @@
             case GCM_PROPERTY_ID_STEP:              aDefault <<= (sal_Int32) 0; break;
             case GCM_PROPERTY_ID_TAG:               aDefault <<= ::rtl::OUString(); break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER:  aDefault <<= Reference< resource::XStringResourceResolver >(); break;
-            default:                            DBG_ERROR( "ImplGetDefaultValueByHandle - unknown Property" );
+            default:                            OSL_FAIL( "ImplGetDefaultValueByHandle - unknown Property" );
         }
 
         return aDefault;
@@ -233,7 +232,7 @@
             case GCM_PROPERTY_ID_STEP:          aValue <<= m_nStep; break;
             case GCM_PROPERTY_ID_TAG:           aValue <<= m_aTag; break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER: aValue <<= m_xStrResolver; break;
-            default:                            DBG_ERROR( "ImplGetPropertyValueByHandle - unknown Property" );
+            default:                            OSL_FAIL( "ImplGetPropertyValueByHandle - unknown Property" );
         }
 
         return aValue;
@@ -253,7 +252,7 @@
             case GCM_PROPERTY_ID_STEP:          aValue >>= m_nStep; break;
             case GCM_PROPERTY_ID_TAG:           aValue >>= m_aTag; break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER: aValue >>= m_xStrResolver; break;
-            default:                            DBG_ERROR( "ImplSetPropertyValueByHandle - unknown Property" );
+            default:                            OSL_FAIL( "ImplSetPropertyValueByHandle - unknown Property" );
         }
     }
 
@@ -454,7 +453,7 @@
     //====================================================================
     //--------------------------------------------------------------------
 
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash > HashMapString2Int;
+    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash > HashMapString2Int;
     typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
     typedef ::std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 
@@ -594,20 +593,16 @@
         return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
     }
 
+    namespace
+    {
+        class theOCommonGeometryControlModelImplementationId :
+            public rtl::Static< ::cppu::OImplementationId, theOCommonGeometryControlModelImplementationId > {};
+    }
+
     //--------------------------------------------------------------------
     Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  ) throw (RuntimeException)
     {
-        static ::cppu::OImplementationId * pId = NULL;
-        if ( !pId )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pId )
-            {
-                static ::cppu::OImplementationId s_aId;
-                pId = &s_aId;
-            }
-        }
-        return pId->getImplementationId();
+        return theOCommonGeometryControlModelImplementationId::get().getImplementationId();
     }
 
     //--------------------------------------------------------------------
@@ -651,3 +646,5 @@
 //........................................................................
 // }    // namespace toolkit
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

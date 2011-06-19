@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _EINF_HXX
 #include <tools/errinf.hxx>
-#endif
 
 class Window;
 class ResMgr;
@@ -75,9 +74,7 @@ private:
     ResMgr          *pMgr;
     ResMgr          *pFreeMgr;
 
-//#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, String &) const;
-//#endif
     virtual sal_Bool     CreateString(
                          const ErrorInfo *, String &, sal_uInt16 &) const;
 };
@@ -86,3 +83,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

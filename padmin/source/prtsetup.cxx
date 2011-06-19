@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,12 @@
 #define LSCAPE_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Landscape" ) )
 #define PORTRAIT_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Portrait" ) )
 
-using namespace rtl;
 using namespace psp;
 using namespace padmin;
+
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OString;
 
 void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, const PPDKey* pKey )
 {
@@ -636,7 +640,7 @@ RTSFontSubstPage::RTSFontSubstPage( RTSDialog* pParent ) :
     ::std::list< FastPrintFontInfo > aFonts;
     rFontManager.getFontListWithFastInfo( aFonts, m_pParent->m_aJobData.m_pParser, false );
     ::std::list< FastPrintFontInfo >::const_iterator it;
-    ::std::hash_map< OUString, int, OUStringHash > aToMap, aFromMap;
+    ::boost::unordered_map< OUString, int, OUStringHash > aToMap, aFromMap;
     for( it = aFonts.begin(); it != aFonts.end(); ++it )
     {
         if( it->m_eType == fonttype::Builtin )
@@ -688,7 +692,7 @@ void RTSFontSubstPage::update()
     m_aSubstitutionsBox.Clear();
     m_aRemoveButton.Enable( sal_False );
     // fill substitutions box
-    ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+    ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
     for( it = m_pParent->m_aJobData.m_aFontSubstitutes.begin();
          it != m_pParent->m_aJobData.m_aFontSubstitutes.end(); ++it )
     {
@@ -838,3 +842,5 @@ extern "C" {
     }
 
 } // extern "C"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

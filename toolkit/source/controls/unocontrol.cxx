@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#ifndef _COM_SUN_STAR_LAN_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <toolkit/controls/unocontrol.hxx>
@@ -41,7 +40,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <tools/string.hxx>
 #include <tools/table.hxx>
 #include <tools/date.hxx>
@@ -58,7 +57,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/controls/accessiblecontrolcontext.hxx>
 #include <comphelper/container.hxx>
 
@@ -229,7 +228,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
 
         Window* pParentWindow( NULL );
         {
-            osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aGuard;
             pParentWindow = dynamic_cast< Window* >( Application::GetDefaultDevice() );
             ENSURE_OR_THROW( pParentWindow != NULL, "could obtain a default parent window!" );
         }
@@ -385,7 +384,7 @@ void UnoControl::disposeAccessibleContext()
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
+            OSL_FAIL( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
         }
     }
 }
@@ -660,14 +659,13 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         aGuard.clear();
 
         // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
-        // #82300# - 2000-12-21 - fs@openoffice.org
+
         if (bNeedNewPeer && xParent.is())
         {
-            vos::OGuard aVclGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aVclGuard;
                 // and now this is the final withdrawal:
-                // With 83561, I have no other idea than locking the SolarMutex here ....
+                // I have no other idea than locking the SolarMutex here ....
                 // I really hate the fact that VCL is not theadsafe ....
-                // #83561# - 2001-03-01 - fs@openoffice.org
 
             // Funktioniert beim Container nicht!
             getPeer()->dispose();
@@ -685,7 +683,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // model did not cause the listeners of the controls/peers to be called
         // Since the implementations for the listeners changed a lot towards 1.1, this
         // would not be the case anymore, if we would not do this listener-lock below
-        // #i14703# - 2003-05-23 - fs@openoffice.org
+        // #i14703#
         Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
         VCLXWindow* pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
         VclListenerLock aNoVclEventMultiplexing( pPeer );
@@ -693,7 +691,6 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
         // usually don't have an own mutex but use the SolarMutex instead.
         // To prevent deadlocks resulting from this, we do this without our own mutex locked
-        // 2000-11-03 - fs@openoffice.org
         PropertyValueVectorIterator aEnd = aPeerPropertiesToSet.end();
         for (   PropertyValueVectorIterator aLoop = aPeerPropertiesToSet.begin();
                 aLoop != aEnd;
@@ -1130,7 +1127,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     if ( !mxModel.is() )
     {
         RuntimeException aException;
-        aException.Message = ::rtl::OUString::createFromAscii( "createPeer: no model!" );
+        aException.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createPeer: no model!"));
         aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
         throw( aException );
     }
@@ -1439,7 +1436,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         disposeAccessibleContext();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("design")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("alive" ));
     }
 
     // ajust the visibility of our window
@@ -1463,7 +1460,7 @@ sal_Bool UnoControl::isTransparent(  ) throw(RuntimeException)
 // XServiceInfo
 ::rtl::OUString UnoControl::getImplementationName(  ) throw(RuntimeException)
 {
-    DBG_ERROR( "This method should be overloaded!" );
+    OSL_FAIL( "This method should be overloaded!" );
     return ::rtl::OUString();
 }
 
@@ -1491,7 +1488,7 @@ Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(Runti
 Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  ) throw (RuntimeException)
 {
     // creation of the context will certainly require the SolarMutex ...
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( GetMutex() );
 
     Reference< XAccessibleContext > xCurrentContext( maAccessibleContext.get(), UNO_QUERY );
@@ -1609,3 +1606,5 @@ uno::Reference< awt::XStyleSettings > SAL_CALL UnoControl::getStyleSettings() th
         return xPeerSupplier->getStyleSettings();
     return NULL;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

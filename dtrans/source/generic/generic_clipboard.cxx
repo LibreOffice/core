@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 OUString SAL_CALL GenericClipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------
@@ -192,7 +193,7 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
 Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.GenericClipboard");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboard"));
     return aRet;
 }
 
@@ -203,3 +204,5 @@ Reference< XInterface > SAL_CALL GenericClipboard_createInstance(
 {
     return Reference < XInterface >( ( OWeakObject * ) new GenericClipboard());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

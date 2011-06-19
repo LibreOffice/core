@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -330,9 +331,9 @@ namespace basegfx
                     if( !xLinePoly.is() )
                     {
                         throw lang::IllegalArgumentException(
-                            ::rtl::OUString::createFromAscii(
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                     "basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
-                                    "poly-polygon, cannot retrieve vertex data"),
+                                    "poly-polygon, cannot retrieve vertex data")),
                             uno::Reference< uno::XInterface >(),
                             0 );
                     }
@@ -672,3 +673,5 @@ namespace basegfx
     } // namespace bgfxtools
 
 } // namespace canvas
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

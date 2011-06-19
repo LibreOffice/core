@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,8 @@
 #ifndef CHARTPRETTYPAINTER_HXX
 #define CHARTPRETTYPAINTER_HXX
 
-#ifndef INCLUDED_SVTDLLAPI_H
 #include "svtools/svtdllapi.h"
-#endif
 
-//#include <svtools/embedhlp.hxx>
 #include <vcl/outdev.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -69,3 +67,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

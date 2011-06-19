@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 #include <osl/endian.h>
-#ifndef INCLUDED_I18NUTIL_UNICODE_HXX
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
-#endif
 
 #include <vcl/metric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -248,34 +247,6 @@
 
 #define PRIVATE_ESCAPE_UNICODE          2
 
-/// copied from writerwordglue.cxx
-
-/*
-    Utility to categorize unicode characters into the best fit windows charset
-    range for exporting to ww6, or as a hint to non \u unicode token aware rtf
-    readers
-*/
-rtl_TextEncoding getScriptClass(sal_Unicode cChar)
-{
-    using namespace com::sun::star::i18n;
-
-    static ScriptTypeList aScripts[] =
-    {
-        { UnicodeScript_kBasicLatin, UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
-        { UnicodeScript_kLatin1Supplement, UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
-        { UnicodeScript_kLatinExtendedA, UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
-        { UnicodeScript_kLatinExtendedB, UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
-        { UnicodeScript_kGreek, UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
-        { UnicodeScript_kCyrillic, UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
-        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
-        { UnicodeScript_kArabic, UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
-        { UnicodeScript_kThai, UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
-    };
-    return unicode::getUnicodeScriptType(cChar, aScripts,
-        RTL_TEXTENCODING_MS_1252);
-}
-
 //========================== Methoden von WMFWriter ==========================
 
 void WMFWriter::MayCallback()
@@ -303,11 +274,11 @@ void WMFWriter::MayCallback()
 
 void WMFWriter::CountActionsAndBitmaps( const GDIMetaFile & rMTF )
 {
-    sal_uLong nAction, nActionCount;
+    size_t nAction, nActionCount;
 
-    nActionCount = rMTF.GetActionCount();
+    nActionCount = rMTF.GetActionSize();
 
-    for ( nAction=0; nAction<nActionCount; nAction++ )
+    for ( nAction=0; nAction < nActionCount; nAction++ )
     {
         MetaAction* pMA = rMTF.GetAction( nAction );
 
@@ -601,13 +572,13 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
             {                                                   // try again, with determining a better charset from unicode char
                 pBuf = rUniStr.GetBuffer();
                 const sal_Unicode* pCheckChar = pBuf;
-                rtl_TextEncoding aTextEncoding = getScriptClass (*pCheckChar); // try the first character
+                rtl_TextEncoding aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the first character
                 for ( i = 1; i < nStringLen; i++)
                 {
                     if (aTextEncoding != aTextEncodingOrg) // found something
                         break;
                     pCheckChar++;
-                    aTextEncoding = getScriptClass (*pCheckChar); // try the next character
+                    aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the next character
                 }
 
                 aByteStr = ByteString ( rUniStr,  aTextEncoding );
@@ -841,13 +812,6 @@ void WMFWriter::WMFRecord_SelectObject(sal_uInt16 nObjectHandle)
 {
     WriteRecordHeader(0x00000004,W_META_SELECTOBJECT);
     *pWMF << nObjectHandle;
-}
-
-
-void WMFWriter::WMFRecord_SetBkColor(const Color & rColor)
-{
-    WriteRecordHeader(0x00000005,W_META_SETBKCOLOR);
-    WriteColor(rColor);
 }
 
 
@@ -1182,16 +1146,16 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
 
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
-    sal_uLong       nA, nACount;
+    size_t      nA, nACount;
     MetaAction* pMA;
 
     if( bStatus )
     {
-        nACount = rMTF.GetActionCount();
+        nACount = rMTF.GetActionSize();
 
         WMFRecord_SetStretchBltMode();
 
-        for( nA=0; nA<nACount; nA++ )
+        for( nA=0; nA < nACount; nA++ )
         {
             pMA = rMTF.GetAction( nA );
 
@@ -1622,10 +1586,11 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaFontAction* pA = (const MetaFontAction*) pMA;
                     aSrcFont = pA->GetFont();
 
-                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
-                        aSrcFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
-                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE )
+                    if ( (aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW)
+                         || (aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE) )
+                    {
                         aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+                    }
                     eSrcTextAlign = aSrcFont.GetAlign();
                     aSrcTextColor = aSrcFont.GetColor();
                     aSrcFont.SetAlign( ALIGN_BASELINE );
@@ -1700,8 +1665,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
                     const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
-                    sal_Int32 nCount = aGDIMetaFile.GetActionCount();
-                    for ( sal_Int32 i = 0; i < nCount; i++ )
+                    size_t nCount = aGDIMetaFile.GetActionSize();
+                    for ( size_t i = 0; i < nCount; i++ )
                     {
                         const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                         if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
@@ -1780,7 +1745,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_MASKSCALE_ACTION:
                 case META_MASKSCALEPART_ACTION:
                 {
-                    DBG_ERROR( "Unsupported action: MetaMask...Action!" );
+                    OSL_FAIL( "Unsupported action: MetaMask...Action!" );
                 }
                 break;
 
@@ -1789,13 +1754,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_ISECTREGIONCLIPREGION_ACTION:
                 {
-                    DBG_ERROR( "Unsupported action: MetaISectRegionClipRegionAction!" );
+                    OSL_FAIL( "Unsupported action: MetaISectRegionClipRegionAction!" );
                 }
                 break;
 
                 case META_MOVECLIPREGION_ACTION:
                 {
-                    DBG_ERROR( "Unsupported action: MetaMoveClipRegionAction!" );
+                    OSL_FAIL( "Unsupported action: MetaMoveClipRegionAction!" );
                 }
                 break;
 
@@ -1821,7 +1786,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 default:
                 {
-                    DBG_ERROR( "Unsupported meta action!" );
+                    OSL_FAIL( "Unsupported meta action!" );
                 }
                 break;
           }
@@ -1985,7 +1950,7 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     bDstIsClipping = bSrcIsClipping = sal_False;
 
     Font aFont;
-    aFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
+    aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
     aFont.SetColor( Color( COL_WHITE ) );
     aFont.SetAlign( ALIGN_BASELINE );
     aDstFont = aSrcFont = aFont;
@@ -2050,10 +2015,10 @@ sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
 
 void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 {
-    EMFWriter aEMFWriter;
     SvMemoryStream aStream;
+    EMFWriter aEMFWriter(aStream);
 
-    if( aEMFWriter.WriteEMF( rMTF, aStream ) )
+    if( aEMFWriter.WriteEMF( rMTF ) )
     {
         sal_Size nTotalSize = aStream.Tell();
         if( nTotalSize > SAL_MAX_UINT32 )
@@ -2122,3 +2087,5 @@ void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sa
    rStream.SeekRel( nCurSize );
    UpdateRecordHeader();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

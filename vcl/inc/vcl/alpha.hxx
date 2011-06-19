@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,6 +100,11 @@ public:
     BitmapWriteAccess*      AcquireWriteAccess() { return Bitmap::AcquireWriteAccess(); }
     void                    ReleaseAccess( BitmapReadAccess* pAccess );
 
+    typedef vcl::ScopedBitmapAccess< BitmapReadAccess, AlphaMask, &AlphaMask::AcquireReadAccess >
+        ScopedReadAccess;
+    typedef vcl::ScopedBitmapAccess< BitmapWriteAccess, AlphaMask, &AlphaMask::AcquireWriteAccess >
+        ScopedWriteAccess;
+
 public:
 
     sal_Bool                    Read( SvStream& rIStm, sal_Bool bFileHeader = sal_True ) { return Bitmap::Read( rIStm, bFileHeader ); }
@@ -109,3 +115,5 @@ public:
 };
 
 #endif // _SV_ALPHA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <osl/diagnose.h>
 // ---------------------------------------------------------------------------------------
 #include <rtl/bootstrap.hxx>
+#include <rtl/instance.hxx>
 #include <osl/process.h> // for osl_getExecutableFile
 #include "tools/getprocessworkingdir.hxx"
 
@@ -51,6 +53,7 @@
 #define BOOTSTRAP_DATA_NAME                 SAL_CONFIGFILE("bootstrap")
 
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
+#define BOOTSTRAP_ITEM_PRODUCT_VERSION      "OOOBaseVersion"
 #define BOOTSTRAP_ITEM_PRODUCT_SOURCE       "ProductSource"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "Location"
 #define BOOTSTRAP_ITEM_BUILDID              "buildid"
@@ -85,9 +88,21 @@ namespace utl
 // Implementation class: Bootstrap::Impl
 // ---------------------------------------------------------------------------------------
 
+    namespace
+    {
+        rtl::OUString makeImplName()
+        {
+            rtl::OUString uri;
+            rtl::Bootstrap::get(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")),
+                uri);
+            return uri + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"BOOTSTRAP_DATA_NAME));
+        }
+    }
+
     class Bootstrap::Impl
     {
-        OUString const m_aImplName;
+        const OUString m_aImplName;
     public: // struct to cache the result of a path lookup
         struct PathData
         {
@@ -114,14 +129,12 @@ namespace utl
         Status status_;
 
     public: // construction and initialization
-        explicit
-        Impl(OUString const& _aImplName)
-        : m_aImplName(_aImplName)
+        Impl() : m_aImplName(makeImplName())
         {
-            status_ = initialize();
+            initialize();
         }
 
-        Status initialize();
+        void initialize();
 
         // access helper
         OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
@@ -133,36 +146,20 @@ namespace utl
         bool initBaseInstallationData(rtl::Bootstrap& _rData);
         bool initUserInstallationData(rtl::Bootstrap& _rData);
     };
-// ---------------------------------------------------------------------------------------
-    static OUString getExecutableDirectory();
-// ---------------------------------------------------------------------------------------
 
-    static Bootstrap::Impl* s_pData = NULL;
-
-    Bootstrap::Impl const& Bootstrap::data()
+    namespace
     {
+        class theImpl : public rtl::Static<Bootstrap::Impl, theImpl> {};
+    }
 
-        if (!s_pData)
-        {
-            using namespace osl;
-            MutexGuard aGuard( Mutex::getGlobalMutex() );
-
-            // static Impl s_theData(getExecutableDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_DATA_NAME)));
-            // s_pData = &s_theData;
-            rtl::OUString uri;
-            rtl::Bootstrap::get(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BRAND_BASE_DIR")), uri);
-            s_pData = new Impl(uri + OUString(RTL_CONSTASCII_USTRINGPARAM("/program/"BOOTSTRAP_DATA_NAME)));
-        }
-        return *s_pData;
+    const Bootstrap::Impl& Bootstrap::data()
+    {
+        return theImpl::get();
     }
 
     void Bootstrap::reloadData()
     {
-        if (s_pData != NULL) {
-            delete s_pData;
-            s_pData = NULL;
-        }
+        theImpl::get().initialize();
     }
 
 // ---------------------------------------------------------------------------------------
@@ -232,9 +229,9 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 
     OSL_PRECOND(aDirItem.is(), "Opened DirItem required");
 
-    static const sal_uInt32 cFileStatusMask = FileStatusMask_FileURL;
+    static const sal_uInt32 cosl_FileStatus_Mask = osl_FileStatus_Mask_FileURL;
 
-    FileStatus aFileStatus(cFileStatusMask);
+    FileStatus aFileStatus(cosl_FileStatus_Mask);
 
     if (aDirItem.getFileStatus(aFileStatus) != DirectoryItem::E_None)
         return false;
@@ -260,7 +257,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     using osl::File;
 
     OUString sBasePath;
-    OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
+    OSL_VERIFY(tools::getProcessWorkingDir(sBasePath));
 
     OUString sAbsolute;
     if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
@@ -270,7 +267,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     }
     else
     {
-        OSL_ENSURE(false, "Could not get absolute file URL for URL");
+        OSL_FAIL("Could not get absolute file URL for URL");
         return false;
     }
 }
@@ -358,7 +355,7 @@ PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
         if (eStatus == Bootstrap::PATH_EXISTS)
         {
             if (!implNormalizeURL(_sURL,aDirItem))
-                OSL_ENSURE(false,"Unexpected failure getting actual URL for existing object");
+                OSL_FAIL("Unexpected failure getting actual URL for existing object");
         }
     }
     return eStatus;
@@ -400,7 +397,7 @@ PathStatus getDerivedPath(
 
         OSL_ENSURE(sDerivedURL == _rURL,"Could not set derived URL via Bootstrap default parameter");
         OSL_POSTCOND(RTL_BOOTSTRAP_DEFAULTS_BROKEN ||
-                    _rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL,"Use of default did not affect bootstrap value");
+                    (_rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL),"Use of default did not affect bootstrap value");
     }
     else
     {
@@ -651,6 +648,14 @@ OUString Bootstrap::getProductKey(OUString const& _sDefault)
 }
 // ---------------------------------------------------------------------------------------
 
+OUString Bootstrap::getProductVersion()
+{
+    // read OOOBaseVersion from version.ini (versionrc)
+    OUString sVersion;
+    data().getVersionValue( OUString( RTL_CONSTASCII_USTRINGPARAM( BOOTSTRAP_ITEM_PRODUCT_VERSION ) ), sVersion, OUString() );
+    return sVersion;
+}
+
 OUString Bootstrap::getProductSource(OUString const& _sDefault)
 {
     OUString const csProductSourceItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_SOURCE));
@@ -674,6 +679,7 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
         sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
     return sBuildId;
 }
+
 // ---------------------------------------------------------------------------------------
 
 OUString Bootstrap::getAllUsersValue(OUString const& _sDefault)
@@ -840,19 +846,17 @@ bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
 }
 // ---------------------------------------------------------------------------------------
 
-Bootstrap::Status Bootstrap::Impl::initialize()
+void Bootstrap::Impl::initialize()
 {
-    Bootstrap::Status result;
-
     rtl::Bootstrap aData( m_aImplName );
 
     if (!initBaseInstallationData(aData))
     {
-        result = INVALID_BASE_INSTALL;
+        status_ = INVALID_BASE_INSTALL;
     }
     else if (!initUserInstallationData(aData))
     {
-        result = INVALID_USER_INSTALL;
+        status_ = INVALID_USER_INSTALL;
 
         if (aUserInstall_.status >= DATA_MISSING)
         {
@@ -860,12 +864,12 @@ Bootstrap::Status Bootstrap::Impl::initialize()
             {
             case PATH_EXISTS:
             case PATH_VALID:
-                result = MISSING_USER_INSTALL;
+                status_ = MISSING_USER_INSTALL;
                 break;
 
             case DATA_INVALID:
             case DATA_MISSING:
-                result = INVALID_BASE_INSTALL;
+                status_ = INVALID_BASE_INSTALL;
                 break;
             default:
                 break;
@@ -874,9 +878,8 @@ Bootstrap::Status Bootstrap::Impl::initialize()
     }
     else
     {
-        result = DATA_OK;
+        status_ = DATA_OK;
     }
-    return result;
 }
 // ---------------------------------------------------------------------------------------
 
@@ -910,3 +913,4 @@ sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rVa
 
 } // namespace utl
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
