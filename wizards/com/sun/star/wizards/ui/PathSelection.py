@@ -89,6 +89,8 @@ class PathSelection(object):
 
     def triggerPathPicker(self):
         try:
+            print self.iTransferMode
+            print self.TransferMode.SAVE
             if self.iTransferMode == self.TransferMode.SAVE:
                 if self.iDialogType == self.DialogTypes.FOLDER:
                     #TODO: write code for picking a folder for saving
@@ -106,7 +108,7 @@ class PathSelection(object):
                         self.xSaveTextBox.Text = myFA.getPath(sStorePath, None)
                         self.sDefaultDirectory = \
                             FileAccess.getParentDir(sStorePath)
-                        self.sDefaultName = myFA.getFilename(self.sStorePath)
+                        self.sDefaultName = myFA.getFilename(sStorePath)
                     return
             elif iTransferMode == TransferMode.LOAD:
                 if iDialogType == DialogTypes.FOLDER:
