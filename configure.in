@@ -1829,15 +1829,22 @@ if test "$_os" = "WINNT"; then
    AC_SUBST(DISABLE_ACTIVEX)
 
    AC_MSG_CHECKING([whether to use ATL])
-   if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE" -o "$enable_atl" = ""; then
+   if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE"; then
       DISABLE_ATL=""
       AC_MSG_RESULT([yes])
+   elif test "$enable_atl" = ""; then
+      if test "$WITH_MINGW" = "yes"; then
+         DISABLE_ATL="TRUE"
+         AC_MSG_RESULT([no])
+      else
+         DISABLE_ATL=""
+         AC_MSG_RESULT([yes])
+      fi
    else
       DISABLE_ATL="TRUE"
       AC_MSG_RESULT([no])
    fi
    AC_SUBST(DISABLE_ATL)
-
 fi
 
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)

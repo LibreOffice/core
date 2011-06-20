@@ -1680,6 +1680,7 @@ if ( $platform =~ m/cygwin/ )
 }
 elsif ( $platform =~ m/mingw32/ )
 {  ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
+   ToFile( "DISABLE_ATL",       "@DISABLE_ATL@",    "e" );
 }
 
 if ("@WITH_VC_REDIST@" eq "TRUE") {
