@@ -38,8 +38,7 @@ $(eval $(call gb_Library_set_include,drawinglayer,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,drawinglayer,\
-	$$(DEFS) \
+$(eval $(call gb_Library_add_defs,drawinglayer,\
 	-DDRAWINGLAYER_DLLIMPLEMENTATION \
 ))
 

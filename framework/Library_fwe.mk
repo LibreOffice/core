@@ -90,5 +90,4 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/xml/xmlnamespaces \
 ))
 
-ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 # vim: set noet sw=4 ts=4:

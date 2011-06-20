@@ -45,18 +45,16 @@ $(eval $(call gb_Library_add_defs,lng,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,lng,\
+	comphelper \
 	cppu \
 	cppuhelper \
-	comphelper \
-	vos3 \
-	tl \
 	i18nisolang1 \
-	svl \
-	stl \
 	sal \
-	xo \
+	svl \
+	tl \
 	ucbhelper \
 	utl \
+	xo \
     $(gb_STDLIBS) \
 ))
 

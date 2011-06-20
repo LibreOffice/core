@@ -42,7 +42,6 @@ $(eval $(call gb_Executable_add_defs,svidl,\
 $(eval $(call gb_Executable_add_linked_libs,svidl,\
 	tl \
 	sal \
-	stl \
     $(gb_STDLIBS) \
 ))
 
