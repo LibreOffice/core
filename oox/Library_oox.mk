@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,oox,\
     -I$(OUTDIR)/inc \
     -I$(OUTDIR)/inc/offuh \
     -I$(realpath $(SRCDIR)/oox/inc) \
-    $(if $(filter YES,$(SYSTEM_OPENSSL)),$(filter -I%,$(OPENSSL_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_defs,oox,\
@@ -62,11 +61,7 @@ $(eval $(call gb_Library_add_linked_libs,oox,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_external,oox,openssl)
-
-$(eval $(call gb_Library_add_ldflags,oox,\
-	$(if $(filter YES,$(SYSTEM_OPENSSL)),$(OPENSSL_LIBS)) \
-))
+$(eval $(call gb_Library_use_external,oox,openssl))
 
 $(eval $(call gb_Library_set_componentfile,oox,oox/util/oox))
 

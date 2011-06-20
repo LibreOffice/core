@@ -30,51 +30,50 @@ $ARGV1 = shift @ARGV;
 $ARGV2 = shift @ARGV;
 $ARGV3 = shift @ARGV;
 
-open( INFILE, $ARGV0 ) or die "Error: cannot open input file: $!";
-my %tokens;
-while ( <INFILE> )
+# parse input file
+
+open( INFILE, $ARGV0 ) or die "cannot open input file: $!";
+my %namespaces;
+while( <INFILE> )
 {
     # trim newline
     chomp( $_ );
     # trim leading/trailing whitespace
     $_ =~ s/^\s*//g;
     $_ =~ s/\s*$//g;
-    # check for valid characters
-    $_ =~ /^[a-zA-Z0-9-_]+$/ or die "Error: invalid character in token '$_'";
-    $id = "XML_$_";
-    $id =~ s/-/_/g;
-    $tokens{$_} = $id;
+    # trim comments
+    $_ =~ s/^#.*//;
+    # skip empty lines
+    if( $_ )
+    {
+        # check for valid characters
+        $_ =~ /^([a-zA-Z]+)\s+([a-zA-Z0-9-.:\/]+)\s*$/ or die "Error: invalid character in input data";
+        $namespaces{$1} = $2;
+    }
 }
-close ( INFILE );
+close( INFILE );
 
 # generate output files
 
-open ( IDFILE, ">$ARGV1" ) or die "Error: cannot open output file: $!";
-open ( NAMEFILE, ">$ARGV2" ) or die "Error: cannot open output file: $!";
-open ( GPERFFILE, ">$ARGV3" ) or die "Error: cannot open output file: $!";
+open( IDFILE, ">$ARGV1" ) or die "Error: cannot open output file: $!";
+open( NAMEFILE, ">$ARGV2" ) or die "Error: cannot open output file: $!";
+open( TXTFILE, ">$ARGV3" ) or die "Error: cannot open output file: $!";
 
-print( GPERFFILE "%language=C++\n" );
-print( GPERFFILE "%global-table\n" );
-print( GPERFFILE "%null-strings\n" );
-print( GPERFFILE "%struct-type\n" );
-print( GPERFFILE "struct xmltoken {\n" );
-print( GPERFFILE "    const sal_Char *name;\n" );
-print( GPERFFILE "    sal_Int32 nToken;\n" );
-print( GPERFFILE "};\n" );
-print( GPERFFILE "%%\n" );
+# number of bits to shift the namespace identifier
+$shift = 16;
 
-$i = 0;
-foreach( sort( keys( %tokens ) ) )
+print ( IDFILE "const size_t NMSP_SHIFT = $shift;\n" );
+
+$i = 1;
+foreach( keys( %namespaces ) )
 {
-    print( IDFILE "const sal_Int32 $tokens{$_} = $i;\n" );
-    print( NAMEFILE "\"$_\",\n" );
-    print( GPERFFILE "$_,$tokens{$_}\n" );
+    print( IDFILE "const sal_Int32 NMSP_$_ = $i << NMSP_SHIFT;\n" );
+    $id = $i << $shift;
+    print( NAMEFILE "{ $id, \"$namespaces{$_}\" },\n" );
+    print( TXTFILE "$id $_ $namespaces{$_}\n" );
     ++$i;
 }
 
-print( IDFILE "const sal_Int32 XML_TOKEN_COUNT = $i;\n" );
-print( GPERFFILE "%%\n" );
-
 close( IDFILE );
-close( NAMEFILE );
-close( GPERFFILE );
+close( nameFILE );
+close( TXTFILE );
