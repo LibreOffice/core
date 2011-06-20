@@ -1247,9 +1247,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_CELLX:
             {
-                int nCellx = nParam - m_aStates.top().nCellX;
-                m_aStates.top().nCellX += nParam;
-                RTFValue::Pointer_t pValue(new RTFValue(nCellx));
+                int nCellX = nParam - m_aStates.top().nCellX;
+                m_aStates.top().nCellX = nParam;
+                RTFValue::Pointer_t pValue(new RTFValue(nCellX));
                 m_aStates.top().aTableRowSprms.push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pValue));
 
                 m_aStates.top().bNeedTableCellBorders = true;
