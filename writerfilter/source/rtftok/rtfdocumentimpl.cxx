@@ -125,6 +125,17 @@ void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue
     }
 }
 
+void lcl_Break(Stream& rMapper, bool bMinimal = false)
+{
+    sal_uInt8 sBreak[] = { 0xd };
+    rMapper.text(sBreak, 1);
+    if (!bMinimal)
+    {
+        rMapper.endParagraphGroup();
+        rMapper.startParagraphGroup();
+    }
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -593,8 +604,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             {
                 // end previous paragraph
                 Mapper().startCharacterGroup();
-                sal_uInt8 sParEnd[] = { 0xd };
-                Mapper().text(sParEnd, 1);
+                lcl_Break(Mapper(), true);
                 Mapper().endCharacterGroup();
                 Mapper().endParagraphGroup();
                 // start new one
@@ -670,12 +680,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
 
                 if (nKeyword == RTF_CELL)
-                {
-                    sal_uInt8 sCellEnd[] = { 0xd };
-                    Mapper().text(sCellEnd, 1);
-                    Mapper().endParagraphGroup();
-                    Mapper().startParagraphGroup();
-                }
+                    lcl_Break(Mapper());
                 else
                 {
                     RTFValue::Pointer_t pValue(new RTFValue(0));
@@ -699,10 +704,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         );
                 Mapper().props(pTableRowProperties);
 
-                sal_uInt8 sRowEnd[] = { 0xd };
-                Mapper().text(sRowEnd, 1);
-                Mapper().endParagraphGroup();
-                Mapper().startParagraphGroup();
+                lcl_Break(Mapper());
                 m_bNeedPap = true;
             }
             break;
@@ -1331,10 +1333,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                                     new RTFReferenceProperties(m_aStates.top().aTableCellAttributes, m_aStates.top().aTableCellSprms)
                                     );
                             Mapper().props(pTableCellProperties);
-                            sal_uInt8 sCellEnd[] = { 0xd };
-                            Mapper().text(sCellEnd, 1);
-                            Mapper().endParagraphGroup();
-                            Mapper().startParagraphGroup();
+                            lcl_Break(Mapper());
                             break;
                         }
                         else if (aPair.first == BUFFER_STARTRUN)
