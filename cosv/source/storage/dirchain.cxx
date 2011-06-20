@@ -81,18 +81,6 @@ DirectoryChain::Set( const char *        i_sSubPath,
 }
 
 void
-DirectoryChain::PushFront( const String & i_sName )
-{
-    aPath.insert( aPath.begin(), i_sName );
-}
-
-void
-DirectoryChain::PushFront( const DirectoryChain & i_sPath )
-{
-    aPath.insert( aPath.begin(), i_sPath.Begin(), i_sPath.End() );
-}
-
-void
 DirectoryChain::PushBack( const String & i_sName )
 {
     aPath.push_back(i_sName);

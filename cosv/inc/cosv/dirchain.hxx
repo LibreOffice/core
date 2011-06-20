@@ -80,11 +80,6 @@ class DirectoryChain
                             const char *        i_sPath,
                             bool                i_bPathIsAlwaysDir = false,
                             const char *        i_sDelimiter = Delimiter() );
-    void                PushFront(
-                            const String &      i_sName );
-    void                PushFront(
-                            const DirectoryChain &
-                                                i_sPath );
     void                PushBack(
                             const String &      i_sName );
     void                PushBack(
