@@ -111,7 +111,7 @@ public:
 class VCL_DLLPUBLIC PatternFormatter : public FormatterBase
 {
 private:
-    ByteString              maEditMask;
+    rtl::OString m_aEditMask;
     XubString               maFieldString;
     XubString               maLiteralMask;
     sal_uInt16                  mnFormatFlags;
@@ -122,7 +122,8 @@ protected:
                             PatternFormatter();
 
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void     ImplSetMask( const ByteString& rEditMask, const XubString& rLiteralMask );
+    SAL_DLLPRIVATE void ImplSetMask(const rtl::OString& rEditMask,
+        const XubString& rLiteralMask);
     SAL_DLLPRIVATE sal_Bool     ImplIsSameMask() const { return mbSameMask; }
     SAL_DLLPRIVATE sal_Bool&    ImplGetInPattKeyInput() { return mbInPattKeyInput; }
 
@@ -131,9 +132,8 @@ public:
 
     virtual void            Reformat();
 
-    void                    SetMask( const ByteString& rEditMask,
-                                     const XubString& rLiteralMask );
-    const ByteString&       GetEditMask() const     { return maEditMask; }
+    void SetMask(const rtl::OString& rEditMask, const XubString& rLiteralMask );
+    const rtl::OString& GetEditMask() const { return m_aEditMask; }
     const XubString&        GetLiteralMask() const  { return maLiteralMask; }
 
     void                    SetFormatFlags( sal_uInt16 nFlags ) { mnFormatFlags = nFlags; }

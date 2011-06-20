@@ -241,11 +241,11 @@ static int ImplKommaPointCharEqual( xub_Unicode c1, xub_Unicode c2 )
 // -----------------------------------------------------------------------
 
 static XubString ImplPatternReformat( const XubString& rStr,
-                                      const ByteString& rEditMask,
+                                      const rtl::OString& rEditMask,
                                       const XubString& rLiteralMask,
                                       sal_uInt16 nFormatFlags )
 {
-    if ( !rEditMask.Len() )
+    if (rEditMask.isEmpty())
         return rStr;
 
     XubString   aStr    = rStr;
@@ -258,14 +258,14 @@ static XubString ImplPatternReformat( const XubString& rStr,
     xub_StrLen  i = 0;
     xub_StrLen  n;
 
-    while ( i < rEditMask.Len() )
+    while ( i < rEditMask.getLength() )
     {
         if ( nStrIndex >= aStr.Len() )
             break;
 
         cChar = aStr.GetChar(nStrIndex);
         cLiteral = rLiteralMask.GetChar(i);
-        cMask = rEditMask.GetChar(i);
+        cMask = rEditMask[i];
 
         // Aktuelle Position ein Literal
         if ( cMask == EDITMASK_LITERAL )
@@ -281,11 +281,11 @@ static XubString ImplPatternReformat( const XubString& rStr,
                 // Dies ist dann der Fall, wenn es nicht in das Muster
                 // des naechsten nicht Literal-Zeichens passt
                 n = i+1;
-                while ( n < rEditMask.Len() )
+                while ( n < rEditMask.getLength() )
                 {
-                    if ( rEditMask.GetChar(n) != EDITMASK_LITERAL )
+                    if ( rEditMask[n] != EDITMASK_LITERAL )
                     {
-                        if ( !ImplIsPatternChar( cChar, rEditMask.GetChar(n) ) )
+                        if ( !ImplIsPatternChar( cChar, rEditMask[n] ) )
                             nStrIndex++;
                         break;
                     }
@@ -318,9 +318,9 @@ static XubString ImplPatternReformat( const XubString& rStr,
                     if ( nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS )
                     {
                         n = i;
-                        while ( n < rEditMask.Len() )
+                        while ( n < rEditMask.getLength() )
                         {
-                            if ( rEditMask.GetChar( n ) == EDITMASK_LITERAL )
+                            if ( rEditMask[n] == EDITMASK_LITERAL )
                             {
                                 if ( ImplKommaPointCharEqual( cChar, rLiteralMask.GetChar( n ) ) )
                                     i = n+1;
@@ -346,7 +346,7 @@ static XubString ImplPatternReformat( const XubString& rStr,
 
 // -----------------------------------------------------------------------
 
-static void ImplPatternMaxPos( const XubString rStr, const ByteString& rEditMask,
+static void ImplPatternMaxPos( const XubString rStr, const rtl::OString& rEditMask,
                                sal_uInt16 nFormatFlags, sal_Bool bSameMask,
                                sal_uInt16 nCursorPos, sal_uInt16& rPos )
 {
@@ -360,7 +360,7 @@ static void ImplPatternMaxPos( const XubString rStr, const ByteString& rEditMask
     {
         while ( nMaxPos )
         {
-            if ( (rEditMask.GetChar(nMaxPos-1) != EDITMASK_LITERAL) &&
+            if ( (rEditMask[nMaxPos-1] != EDITMASK_LITERAL) &&
                  (rStr.GetChar(nMaxPos-1) != ' ') )
                 break;
             nMaxPos--;
@@ -369,9 +369,9 @@ static void ImplPatternMaxPos( const XubString rStr, const ByteString& rEditMask
         // Wenn wir vor einem Literal stehen, dann solange weitersuchen,
         // bis erste Stelle nach Literal
         xub_StrLen nTempPos = nMaxPos;
-        while ( nTempPos < rEditMask.Len() )
+        while ( nTempPos < rEditMask.getLength() )
         {
-            if ( rEditMask.GetChar(nTempPos) != EDITMASK_LITERAL )
+            if ( rEditMask[nTempPos] != EDITMASK_LITERAL )
             {
                 nMaxPos = nTempPos;
                 break;
@@ -390,7 +390,7 @@ static void ImplPatternMaxPos( const XubString rStr, const ByteString& rEditMask
 // -----------------------------------------------------------------------
 
 static void ImplPatternProcessStrictModify( Edit* pEdit,
-                                            const ByteString& rEditMask,
+                                            const rtl::OString& rEditMask,
                                             const XubString& rLiteralMask,
                                             sal_uInt16 nFormatFlags, sal_Bool bSameMask )
 {
@@ -403,14 +403,14 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
         xub_StrLen nMaxLen = aText.Len();
         while ( i < nMaxLen )
         {
-            if ( (rEditMask.GetChar( i ) != EDITMASK_LITERAL) &&
+            if ( (rEditMask[i] != EDITMASK_LITERAL) &&
                  (aText.GetChar( i ) != ' ') )
                 break;
 
             i++;
         }
         // Alle Literalzeichen beibehalten
-        while ( i && (rEditMask.GetChar( i ) == EDITMASK_LITERAL) )
+        while ( i && (rEditMask[i] == EDITMASK_LITERAL) )
             i--;
         aText.Erase( 0, i );
     }
@@ -442,14 +442,14 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplPatternLeftPos( const ByteString& rEditMask, xub_StrLen nCursorPos )
+static xub_StrLen ImplPatternLeftPos(const rtl::OString& rEditMask, xub_StrLen nCursorPos)
 {
     // Vorheriges Zeichen suchen, was kein Literal ist
     xub_StrLen nNewPos = nCursorPos;
     xub_StrLen nTempPos = nNewPos;
     while ( nTempPos )
     {
-        if ( rEditMask.GetChar(nTempPos-1) != EDITMASK_LITERAL )
+        if ( rEditMask[nTempPos-1] != EDITMASK_LITERAL )
         {
             nNewPos = nTempPos-1;
             break;
@@ -461,16 +461,16 @@ static xub_StrLen ImplPatternLeftPos( const ByteString& rEditMask, xub_StrLen nC
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplPatternRightPos( const XubString& rStr, const ByteString& rEditMask,
+static xub_StrLen ImplPatternRightPos( const XubString& rStr, const rtl::OString& rEditMask,
                                        sal_uInt16 nFormatFlags, sal_Bool bSameMask,
                                        xub_StrLen nCursorPos )
 {
     // Naechstes Zeichen suchen, was kein Literal ist
     xub_StrLen nNewPos = nCursorPos;
     xub_StrLen nTempPos = nNewPos;
-    while ( nTempPos < rEditMask.Len() )
+    while ( nTempPos < rEditMask.getLength() )
     {
-        if ( rEditMask.GetChar(nTempPos+1) != EDITMASK_LITERAL )
+        if ( rEditMask[nTempPos+1] != EDITMASK_LITERAL )
         {
             nNewPos = nTempPos+1;
             break;
@@ -484,14 +484,14 @@ static xub_StrLen ImplPatternRightPos( const XubString& rStr, const ByteString& 
 // -----------------------------------------------------------------------
 
 static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                        const ByteString& rEditMask,
+                                        const rtl::OString& rEditMask,
                                         const XubString& rLiteralMask,
                                         sal_Bool bStrictFormat,
                                         sal_uInt16 nFormatFlags,
                                         sal_Bool bSameMask,
                                         sal_Bool& rbInKeyInput )
 {
-    if ( !rEditMask.Len() || !bStrictFormat )
+    if ( rEditMask.isEmpty() || !bStrictFormat )
         return sal_False;
 
     Selection   aOldSel     = pEdit->GetSelection();
@@ -533,8 +533,8 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         {
             // Home ist Position des ersten nicht literalen Zeichens
             nNewPos = 0;
-            while ( (nNewPos < rEditMask.Len()) &&
-                    (rEditMask.GetChar(nNewPos) == EDITMASK_LITERAL) )
+            while ( (nNewPos < rEditMask.getLength()) &&
+                    (rEditMask[nNewPos] == EDITMASK_LITERAL) )
                 nNewPos++;
             // Home sollte nicht nach rechts wandern
             if ( nCursorPos < nNewPos )
@@ -548,9 +548,9 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         else if ( nKeyCode == KEY_END )
         {
             // End ist die Position des letzten nicht literalen Zeichens
-            nNewPos = rEditMask.Len();
+            nNewPos = rEditMask.getLength();
             while ( nNewPos &&
-                    (rEditMask.GetChar(nNewPos-1) == EDITMASK_LITERAL) )
+                    (rEditMask[nNewPos-1] == EDITMASK_LITERAL) )
                 nNewPos--;
             // Hier nehmen wir Selectionsanfang als minimum, da falls durch
             // Focus alles selektiert ist, ist eine kleine Position schon
@@ -601,7 +601,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                 {
                     if ( bSameMask )
                     {
-                        if ( rEditMask.GetChar( nNewPos ) != EDITMASK_LITERAL )
+                        if ( rEditMask[nNewPos] != EDITMASK_LITERAL )
                             aStr.Erase( nNewPos, 1 );
                     }
                     else
@@ -647,9 +647,9 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
     aSel.Justify();
     nNewPos = (xub_StrLen)aSel.Min();
 
-    if ( nNewPos < rEditMask.Len() )
+    if ( nNewPos < rEditMask.getLength() )
     {
-        xub_Unicode cPattChar = ImplPatternChar( cChar, rEditMask.GetChar(nNewPos) );
+        xub_Unicode cPattChar = ImplPatternChar( cChar, rEditMask[nNewPos] );
         if ( cPattChar )
             cChar = cPattChar;
         else
@@ -661,17 +661,17 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             // nicht dazu fuehren, das der Anwender dann da steht, wo
             // er nicht stehen wollte.
             if ( nNewPos &&
-                 (rEditMask.GetChar(nNewPos-1) != EDITMASK_LITERAL) &&
+                 (rEditMask[nNewPos-1] != EDITMASK_LITERAL) &&
                  !aSel.Len() )
             {
                 // Naechstes Zeichen suchen, was kein Literal ist
                 nTempPos = nNewPos;
-                while ( nTempPos < rEditMask.Len() )
+                while ( nTempPos < rEditMask.getLength() )
                 {
-                    if ( rEditMask.GetChar(nTempPos) == EDITMASK_LITERAL )
+                    if ( rEditMask[nTempPos] == EDITMASK_LITERAL )
                     {
                         // Gilt nur, wenn ein Literalzeichen vorhanden
-                        if ( (rEditMask.GetChar(nTempPos+1) != EDITMASK_LITERAL ) &&
+                        if ( (rEditMask[nTempPos+1] != EDITMASK_LITERAL ) &&
                              ImplKommaPointCharEqual( cChar, rLiteralMask.GetChar(nTempPos) ) )
                         {
                             nTempPos++;
@@ -705,7 +705,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             while ( n && (n > nNewPos) )
             {
                 if ( (aStr.GetChar( n-1 ) != ' ') &&
-                     ((n > rEditMask.Len()) || (rEditMask.GetChar(n-1) != EDITMASK_LITERAL)) )
+                     ((n > rEditMask.getLength()) || (rEditMask[n-1] != EDITMASK_LITERAL)) )
                     break;
 
                 n--;
@@ -715,14 +715,14 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             if ( aSel.Len() )
                 aStr.Erase( (xub_StrLen)aSel.Min(), (xub_StrLen)aSel.Len() );
 
-            if ( aStr.Len() < rEditMask.Len() )
+            if ( aStr.Len() < rEditMask.getLength() )
             {
                 // String evtl. noch bis Cursor-Position erweitern
                 if ( aStr.Len() < nNewPos )
                     aStr += rLiteralMask.Copy( aStr.Len(), nNewPos-aStr.Len() );
                 if ( nNewPos < aStr.Len() )
                     aStr.Insert( cChar, nNewPos );
-                else if ( nNewPos < rEditMask.Len() )
+                else if ( nNewPos < rEditMask.getLength() )
                     aStr += cChar;
                 aStr = ImplPatternReformat( aStr, rEditMask, rLiteralMask, nFormatFlags );
             }
@@ -740,7 +740,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
             if ( nNewPos < aStr.Len() )
                 aStr.SetChar( nNewPos, cChar );
-            else if ( nNewPos < rEditMask.Len() )
+            else if ( nNewPos < rEditMask.getLength() )
                 aStr += cChar;
         }
 
@@ -764,19 +764,19 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::ImplSetMask( const ByteString& rEditMask,
-                                    const XubString& rLiteralMask )
+void PatternFormatter::ImplSetMask(const rtl::OString& rEditMask,
+                                    const XubString& rLiteralMask)
 {
-    maEditMask      = rEditMask;
+    m_aEditMask      = rEditMask;
     maLiteralMask   = rLiteralMask;
     mbSameMask      = sal_True;
 
-    if ( maEditMask.Len() != maLiteralMask.Len() )
+    if ( m_aEditMask.getLength() != maLiteralMask.Len() )
     {
-        if ( maEditMask.Len() < maLiteralMask.Len() )
-            maLiteralMask.Erase( maEditMask.Len() );
+        if ( m_aEditMask.getLength() < maLiteralMask.Len() )
+            maLiteralMask.Erase(m_aEditMask.getLength());
         else
-            maLiteralMask.Expand( maEditMask.Len(), ' ' );
+            maLiteralMask.Expand(m_aEditMask.getLength(), ' ');
     }
 
     // StrictModus erlaubt nur Input-Mode, wenn als Maske nur
@@ -785,9 +785,9 @@ void PatternFormatter::ImplSetMask( const ByteString& rEditMask,
     // nicht zugelassen sind
     xub_StrLen  i = 0;
     sal_Char    c = 0;
-    while ( i < rEditMask.Len() )
+    while ( i < rEditMask.getLength() )
     {
-        sal_Char cTemp = rEditMask.GetChar( i );
+        sal_Char cTemp = rEditMask[i];
         if ( cTemp != EDITMASK_LITERAL )
         {
             if ( (cTemp == EDITMASK_ALLCHAR) ||
@@ -830,7 +830,7 @@ PatternFormatter::PatternFormatter()
 
 void PatternFormatter::ImplLoadRes( const ResId& rResId )
 {
-    ByteString  aEditMask;
+    rtl::OString aEditMask;
     XubString   aLiteralMask;
     ResMgr*     pMgr = rResId.GetResMgr();
     if( pMgr )
@@ -841,7 +841,10 @@ void PatternFormatter::ImplLoadRes( const ResId& rResId )
             SetStrictFormat( (sal_Bool)pMgr->ReadShort() );
 
         if ( PATTERNFORMATTER_EDITMASK & nMask )
-            aEditMask = ByteString( pMgr->ReadString(), RTL_TEXTENCODING_ASCII_US );
+        {
+            aEditMask = rtl::OUStringToOString(pMgr->ReadString(),
+                RTL_TEXTENCODING_ASCII_US);
+        }
 
         if ( PATTERNFORMATTER_LITTERALMASK & nMask )
             aLiteralMask = pMgr->ReadString();
@@ -859,7 +862,7 @@ PatternFormatter::~PatternFormatter()
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::SetMask( const ByteString& rEditMask,
+void PatternFormatter::SetMask( const rtl::OString& rEditMask,
                                 const XubString& rLiteralMask )
 {
     ImplSetMask( rEditMask, rLiteralMask );
@@ -885,7 +888,7 @@ XubString PatternFormatter::GetString() const
     if ( !GetField() )
         return ImplGetSVEmptyStr();
     else
-        return ImplPatternReformat( GetField()->GetText(), maEditMask, maLiteralMask, mnFormatFlags );
+        return ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, mnFormatFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -894,7 +897,7 @@ void PatternFormatter::Reformat()
 {
     if ( GetField() )
     {
-        ImplSetText( ImplPatternReformat( GetField()->GetText(), maEditMask, maLiteralMask, mnFormatFlags ) );
+        ImplSetText( ImplPatternReformat( GetField()->GetText(), m_aEditMask, maLiteralMask, mnFormatFlags ) );
         if ( !mbSameMask && IsStrictFormat() && !GetField()->IsReadOnly() )
             GetField()->SetInsertMode( sal_False );
     }
