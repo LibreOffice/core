@@ -773,21 +773,24 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                             // Store it now!
                             uno::Reference< embed::XStorage > xDocStg = GetDoc().GetDocStorage();
-                            uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
-                            SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
-
-                            if ( xObjDst.Is() )
+                            if (xDocStg.is())
                             {
-                                xSrc1->CopyTo( xObjDst );
+                                uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::WRITE );
+                                SotStorageRef xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
 
-                                if ( !xObjDst->GetError() )
-                                    xObjDst->Commit();
+                                if ( xObjDst.Is() )
+                                {
+                                    xSrc1->CopyTo( xObjDst );
+
+                                    if ( !xObjDst->GetError() )
+                                        xObjDst->Commit();
+                                }
+
+                                uno::Reference< embed::XTransactedObject > xTransact( xOleStg, uno::UNO_QUERY );
+                                if ( xTransact.is() )
+                                    xTransact->commit();
                             }
-
-                            uno::Reference< embed::XTransactedObject > xTransact( xOleStg, uno::UNO_QUERY );
-                            if ( xTransact.is() )
-                                xTransact->commit();
 
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
