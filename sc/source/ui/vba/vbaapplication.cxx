@@ -218,7 +218,7 @@ ScVbaApplication::invoke( const ::rtl::OUString& FunctionName, const uno::Sequen
         uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
         aAny = xWSF->invoke( FunctionName, Params, OutParamIndex, OutParam );
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
         aAny <<= script::BasicErrorException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), 1000, ::rtl::OUString() );
     }
@@ -519,7 +519,7 @@ ScVbaApplication::setCutCopyMode( const uno::Any& _cutcopymode ) throw (uno::Run
                             {
                                 xFlushableClipboard->flushClipboard();
                             }
-                            catch( const uno::Exception& )
+                            catch (const uno::Exception&)
                             {
                             }
                             Application::AcquireSolarMutex( nRef );
@@ -733,7 +733,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
                 gridWindow->GrabFocus();
             }
         }
-        catch( uno::RuntimeException )
+        catch (const uno::RuntimeException&)
         {
             //maybe this should be a procedure name
             //TODO for procedure name
@@ -835,7 +835,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
                 // IllegalArgumentException, or so
         }
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -996,7 +996,7 @@ rtl::OUString ScVbaApplication::getOfficePath( const rtl::OUString& _sPathType )
             sUrl = sUrl.copy( nIndex + 1 );
         ::osl::File::getSystemPathFromFileURL( sUrl, sRetPath );
     }
-    catch (uno::Exception&)
+    catch (const uno::Exception&)
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -1528,7 +1528,7 @@ ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& Fi
             }
         }
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
@@ -1696,7 +1696,7 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
             }
         }
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
         DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
     }
