@@ -2,7 +2,6 @@ import traceback
 import uno
 from common.PropertyNames import *
 from common.FileAccess import *
-from com.sun.star.uno import Exception as UnoException
 from common.SystemDialog import SystemDialog
 
 class PathSelection(object):
@@ -84,7 +83,7 @@ class PathSelection(object):
                 myFA.getPath(self.sDefaultDirectory + \
                     "/" + \
                     self.sDefaultName, None))
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
 
     def triggerPathPicker(self):
@@ -115,7 +114,7 @@ class PathSelection(object):
                 elif iDialogType == DialogTypes.FILE:
                     #TODO: write code for picking a file for loading
                     return
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
 
     def callXPathSelectionListener(self):

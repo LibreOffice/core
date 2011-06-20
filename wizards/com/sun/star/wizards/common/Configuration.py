@@ -1,5 +1,4 @@
 from PropertyNames import PropertyNames
-from com.sun.star.uno import Exception as UnoException
 from Helper import *
 import traceback
 import uno
@@ -73,7 +72,7 @@ class Configuration(object):
                 "org.openoffice.Setup/Product", False)
             ProductName = Helper.getUnoObjectbyName(oProdNameAccess, "ooName")
             return ProductName
-        except UnoException:
+        except Exception:
             traceback.print_exc()
             return None
 
@@ -86,7 +85,7 @@ class Configuration(object):
                 "org.openoffice.Setup/L10N/", False)
             sLocale = (String)
             Helper.getUnoObjectbyName(oMasterKey, "ooLocale")
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
 
         return sLocale
@@ -109,7 +108,7 @@ class Configuration(object):
                 "org.openoffice.Setup/L10N/", False)
             sLinguistic = Helper.getUnoObjectbyName(oMasterKey, "ooLocale")
             return sLinguistic
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -188,7 +187,7 @@ class Configuration(object):
 
                 i += 1
             return sdisplaynames
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
             return snames
 
@@ -198,7 +197,7 @@ class Configuration(object):
             snames = _xNameAccess.getElementNames()
             oNode = _xNameAccess.getByName(snames[_index])
             return oNode
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
             return None
 
@@ -208,7 +207,7 @@ class Configuration(object):
             if _xNameAccessNode.hasByName(_SubNodeName):
                 return _xNameAccessNode.getByName(_SubNodeName)
 
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
 
         return None
@@ -235,7 +234,7 @@ class Configuration(object):
                     return _xNameAccessNode.getByName(snames[i])
 
                 i += 1
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
 
         return None
@@ -263,7 +262,7 @@ class Configuration(object):
                     return _xNameAccessNode.getByName(snames[i])
 
                 i += 1
-        except UnoException, e:
+        except Exception, e:
             traceback.print_exc()
 
         return None

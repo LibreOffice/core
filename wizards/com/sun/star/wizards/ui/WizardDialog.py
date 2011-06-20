@@ -2,7 +2,6 @@ from UnoDialog2 import *
 from common.Resource import Resource
 from abc import ABCMeta, abstractmethod
 from com.sun.star.lang import NoSuchMethodException
-from com.sun.star.uno import Exception as UnoException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
 from common.HelpIds import *
@@ -53,7 +52,7 @@ class WizardDialog(UnoDialog2):
             if self.xUnoDialog is not None:
                 self.xUnoDialog.toFront()
 
-        except UnoException, ex:
+        except Exception, ex:
             pass
             # do nothing;
 
@@ -93,7 +92,7 @@ class WizardDialog(UnoDialog2):
         try:
             return int(Helper.getUnoPropertyValue(
                 self.oRoadmap, "CurrentItemID"))
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return -1
 
@@ -129,7 +128,7 @@ class WizardDialog(UnoDialog2):
                 self.__oWizardResource.getResText(UIConsts.RID_COMMON + 16))
         except NoSuchMethodException, ex:
             Resource.showCommonResourceError(xMSF)
-        except UnoException, jexception:
+        except Exception, jexception:
             traceback.print_exc()
 
     def setRMItemLabels(self, _oResource, StartResID):
@@ -152,7 +151,7 @@ class WizardDialog(UnoDialog2):
             self.oRoadmap.insertByIndex(Index, oRoadmapItem)
             NextIndex = Index + 1
             return NextIndex
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return -1
 
@@ -169,7 +168,7 @@ class WizardDialog(UnoDialog2):
                     return CurRoadmapItem
 
             return None
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return None
 
@@ -369,7 +368,7 @@ class WizardDialog(UnoDialog2):
             bIsEnabled = bool(Helper.getUnoPropertyValue(xRoadmapItem,
                 PropertyNames.PROPERTY_ENABLED))
             return bIsEnabled
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return False
 
@@ -440,7 +439,7 @@ class WizardDialog(UnoDialog2):
         try:
             return int(Helper.getUnoPropertyValue(self.xDialogModel,
                 PropertyNames.PROPERTY_STEP))
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return -1
 

@@ -4,7 +4,6 @@ from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
 from com.sun.star.i18n.KParseTokens import ANY_LETTER_OR_NUMBER, ASC_UNDERSCORE
 from NoValidPathException import *
-from com.sun.star.uno import Exception as UnoException
 
 
 class Desktop(object):
@@ -15,7 +14,7 @@ class Desktop(object):
         if xMSF is not None:
             try:
                 xDesktop = xMSF.createInstance( "com.sun.star.frame.Desktop")
-            except UnoException, exception:
+            except Exception, exception:
                 traceback.print_exc()
         else:
             print "Can't create a desktop. null pointer !"
@@ -49,7 +48,7 @@ class Desktop(object):
             oURLArray[0] = oURL
             xDispatch = xFrame.queryDispatch(oURLArray[0], _stargetframe, ALL)
             return xDispatch
-        except UnoException, e:
+        except Exception, e:
             e.printStackTrace(System.out)
 
         return None
@@ -64,7 +63,7 @@ class Desktop(object):
             oURL[0].Complete = _sURL
             xTransformer.parseStrict(oURL)
             return oURL[0]
-        except UnoException, e:
+        except Exception, e:
             e.printStackTrace(System.out)
 
         return None
@@ -102,7 +101,7 @@ class Desktop(object):
             aResult = ocharservice.parsePredefinedToken(KParseType.IDENTNAME,
                 _sString, 0, _aLocale, nStartFlags, "", nStartFlags, " ")
             return aResult.EndPos
-        except UnoException, e:
+        except Exception, e:
             e.printStackTrace(System.out)
             return -1
 
@@ -203,7 +202,7 @@ class Desktop(object):
                     "com.sun.star.configuration.ConfigurationAccess",
                     aNodePath)
 
-        except UnoException, exception:
+        except Exception, exception:
             exception.printStackTrace(System.out)
             return None
 

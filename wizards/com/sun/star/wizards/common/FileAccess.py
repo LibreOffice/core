@@ -1,7 +1,6 @@
 import traceback
 from NoValidPathException import *
 from com.sun.star.ucb import CommandAbortedException
-from com.sun.star.uno import Exception as UnoException
 from com.sun.star.awt.VclWindowPeerAttribute import OK, YES_NO
 import types
 from os import path as osPath
@@ -74,7 +73,7 @@ class FileAccess(object):
             ResultPath = str(Helper.getUnoPropertyValue(xInterface, sPath))
             ResultPath = self.deleteLastSlashfromUrl(ResultPath)
             return ResultPath
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             return ""
 
@@ -126,7 +125,7 @@ class FileAccess(object):
                         break
 
             ResultPath = self.deleteLastSlashfromUrl(ResultPath)
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
             ResultPath = ""
 
@@ -167,7 +166,7 @@ class FileAccess(object):
                 i += 1
             aPathList.add(Template_writable)
 
-        except UnoException, exception:
+        except Exception, exception:
             traceback.print_exc()
         return aPathList
 
@@ -293,7 +292,7 @@ class FileAccess(object):
             sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1")
             SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sMsgNoDir)
             return False
-        except com.sun.star.uno.Exception, unoexception:
+        except com.sun.star.uno.Exception, Exception:
             sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1")
             SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sMsgNoDir)
             return False
