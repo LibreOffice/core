@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,27 +28,13 @@
 #ifndef DBUI_TABLECOPYHELPER_HXX
 #define DBUI_TABLECOPYHELPER_HXX
 
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
 #include <functional>
 
 class SvLBoxEntry;
@@ -94,10 +81,10 @@ namespace dbaui
         struct DropDescriptor
         {
             ::svx::ODataAccessDescriptor    aDroppedData;
-            //dyf add 20070601
+
             //for transfor the tablename
             ::rtl::OUString                 sDefaultTableName;
-            //dyf add end
+
             String                          aUrl;
             SotStorageStreamRef             aHtmlRtfStorage;
             ElementType                     nType;
@@ -210,3 +197,4 @@ namespace dbaui
 //........................................................................
 #endif // DBUI_TABLECOPYHELPER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

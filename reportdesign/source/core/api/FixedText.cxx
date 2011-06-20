@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,13 +28,9 @@
 #include "precompiled_reportdesign.hxx"
 #include "FixedText.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include "core_resource.hxx"
 #include <comphelper/sequence.hxx>
 #include "Tools.hxx"
@@ -51,7 +48,7 @@ namespace reportdesign
 uno::Sequence< ::rtl::OUString > lcl_getFixedTextOptionals()
 {
     ::rtl::OUString pProps[] = { PROPERTY_DATAFIELD,PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 DBG_NAME( rpt_OFixedText )
 // -----------------------------------------------------------------------------
@@ -101,7 +98,6 @@ uno::Any SAL_CALL OFixedText::queryInterface( const uno::Type& _rType ) throw (u
     return aReturn.hasValue() ? aReturn : (m_aProps.aComponent.m_xProxy.is() ? m_aProps.aComponent.m_xProxy->queryAggregation(_rType) : aReturn);
 }
 
-//IMPLEMENT_FORWARD_XINTERFACE2(OFixedText,FixedTextBase,FixedTextPropertySet)
 // -----------------------------------------------------------------------------
 void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
 {
@@ -123,9 +119,8 @@ void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
 //--------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > OFixedText::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);//2);
+    uno::Sequence< ::rtl::OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_FIXEDTEXT;
-    //aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"));
 
     return aServices;
 }
@@ -346,3 +341,4 @@ void SAL_CALL OFixedText::setSize( const awt::Size& aSize ) throw (beans::Proper
 } // namespace reportdesign
 // =============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

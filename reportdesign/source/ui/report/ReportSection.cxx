@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -114,18 +115,17 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception catched!");
+        OSL_FAIL("Exception catched!");
     }
 
     m_pFunc.reset(new DlgEdFuncSelect( this ));
-    m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getViewsWindow()->getView()->getReportView()->getController().getORB() */ ) );
+    m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor() );
 }
 //------------------------------------------------------------------------------
 OReportSection::~OReportSection()
 {
     DBG_DTOR( rpt_OReportSection,NULL);
     m_pPage = NULL;
-    //m_pModel->GetUndoEnv().RemoveSection(m_xSection.get());
     if ( m_pMulti.is() )
         m_pMulti->dispose();
 
@@ -139,7 +139,6 @@ OReportSection::~OReportSection()
             m_pView->EndListening( *m_pModel );
         m_pView = NULL;
     }
-    /*m_pModel->DeletePage(m_pPage->GetPageNum());*/
 }
 //------------------------------------------------------------------------------
 void OReportSection::Paint( const Rectangle& rRect )
@@ -241,12 +240,9 @@ void OReportSection::fill()
     m_pView->SetDesignMode( sal_True );
 
     m_pView->StartListening( *m_pModel  );
-    /*Resize();*/
     m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
     const Size aPageSize = m_pPage->GetSize();
     m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
-
-    //SetBackground( Wallpaper( COL_BLUE ));
 }
 // -----------------------------------------------------------------------------
 void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyCopiedObjects,bool _bForce)
@@ -297,7 +293,6 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                                 {
                                     aRet.Move(0,aRet.getHeight()+1);
                                     pNeuObj->SetLogicRect(aRet);
-                                    //(*pCopiesIter)->setPositionY(aRet.Top());
                                 }
                             }
                             m_pView->AddUndo( m_pView->GetModel()->GetSdrUndoFactory().CreateUndoNewObject( *pNeuObj ) );
@@ -309,7 +304,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
                 }
                 catch(uno::Exception&)
                 {
-                    OSL_ENSURE(0,"Exception caught while pasting a new object!");
+                    OSL_FAIL("Exception caught while pasting a new object!");
                 }
                 if ( !_bForce )
                     break;
@@ -356,9 +351,6 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
     if( !m_pView->AreObjectsMarked() || !m_xSection.is() )
         return;
 
-    // stop all drawing actions
-    //m_pView->BrkAction();
-
     // insert control models of marked objects into clipboard dialog model
     const SdrMarkList& rMarkedList = m_pView->GetMarkedObjectList();
     const sal_uLong nMark = rMarkedList.GetMarkCount();
@@ -388,10 +380,10 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
             }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(0,"Can't copy report elements!");
+                OSL_FAIL("Can't copy report elements!");
             }
         }
-    } // for( sal_uLong i = 0; i < nMark; i++ )
+    }
 
     if ( !aCopies.empty() )
     {
@@ -449,7 +441,11 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         }
     }
 }
-void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rController,const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame,sal_Bool _bHiContrast)
+void lcl_insertMenuItemImages(
+    PopupMenu& rContextMenu,
+    OReportController& rController,
+    const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame
+)
 {
     const sal_uInt16 nCount = rContextMenu.GetItemCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -460,12 +456,12 @@ void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rContro
             PopupMenu* pPopupMenu = rContextMenu.GetPopupMenu( nId );
             if ( pPopupMenu )
             {
-                lcl_insertMenuItemImages(*pPopupMenu,rController,_xReportDefinition,_rFrame,_bHiContrast);
+                lcl_insertMenuItemImages(*pPopupMenu,rController,_xReportDefinition,_rFrame);
             }
             else
             {
                 const ::rtl::OUString sCommand = rContextMenu.GetItemCommand(nId);
-                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,sal_False,_bHiContrast));
+                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,sal_False));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
                     String sText = String(ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
@@ -480,7 +476,7 @@ void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rContro
             rContextMenu.CheckItem(nId,rController.isCommandChecked(nId));
             rContextMenu.EnableItem(nId,rController.isCommandEnabled(nId));
         }
-    } // for (sal_uInt16 i = 0; i < nCount; ++i)
+    }
 }
 //----------------------------------------------------------------------------
 void OReportSection::Command( const CommandEvent& _rCEvt )
@@ -490,14 +486,12 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     {
         case COMMAND_CONTEXTMENU:
         {
-            const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-            sal_Bool bHiContrast = rSettings.GetHighContrastMode();
             OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
             uno::Reference<frame::XFrame> xFrame = rController.getFrame();
             PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
             uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
 
-            lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame,bHiContrast);
+            lcl_insertMenuItemImages(aContextMenu,rController,xReportDefinition,xFrame);
 
             Point aPos = _rCEvt.GetMousePosPixel();
             m_pView->EndAction();
@@ -611,11 +605,11 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                 }
                 pBase->StartListening();
             }
-        } // for (sal_Int32 i = 0; i < nCount; ++i)
+        }
     }
     catch(uno::Exception)
     {
-        OSL_ENSURE(0,"Exception caught: OReportSection::_propertyChanged(");
+        OSL_FAIL("Exception caught: OReportSection::_propertyChanged(");
     }
 }
 //------------------------------------------------------------------------------
@@ -632,7 +626,7 @@ void OReportSection::deactivateOle()
 // -----------------------------------------------------------------------------
 void OReportSection::createDefault(const ::rtl::OUString& _sType)
 {
-    SdrObject* pObj = m_pView->GetCreateObj();//rMarkList.GetMark(0)->GetObj();
+    SdrObject* pObj = m_pView->GetCreateObj();
     if ( !pObj )
         return;
     createDefault(_sType,pObj);
@@ -807,8 +801,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         nDropOption = DND_ACTION_COPYMOVE;
         m_pParent->getViewsWindow()->BrkAction();
         m_pParent->getViewsWindow()->unmarkAllObjects(m_pView);
-        //m_pParent->getViewsWindow()->getView()->setMarked(m_pView,sal_True);
-    } // if ( OReportExchange::canExtract(rFlavors) )
+    }
     else if ( bMultipleFormat
         || ::svx::OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR) )
     {
@@ -830,7 +823,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
             aValues.realloc(1);
             aValues[0].Value <<= aDescriptor.createPropertyValueSequence();
-        } // if ( !bMultipleFormat )
+        }
         else
             aValues = ::svx::OMultiColumnTransferable::extractDescriptor(aDropped);
 
@@ -877,3 +870,5 @@ bool OReportSection::isUiActive() const
 // =============================================================================
 }
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

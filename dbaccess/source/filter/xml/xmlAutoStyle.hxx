@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,18 +27,10 @@
  ************************************************************************/
 #ifndef DBA_XMLAUTOSTYLE_HXX
 #define DBA_XMLAUTOSTYLE_HXX
-#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
 #include <xmloff/maptype.hxx>
-#endif
-#ifndef _XMLOFF_XMLASTPLP_HXX
 #include <xmloff/xmlaustp.hxx>
-#endif
-#ifndef _XMLOFF_XMLTYPES_HXX
 #include <xmloff/xmltypes.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include <xmloff/xmlprmap.hxx>
-#endif
 
 namespace dbaxml
 {
@@ -64,3 +57,4 @@ namespace dbaxml
 // -----------------------------------------------------------------------------
 #endif // DBA_XMLAUTOSTYLE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

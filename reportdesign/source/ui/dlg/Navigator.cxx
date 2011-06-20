@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,7 +154,6 @@ class NavigatorTree :   public ::cppu::BaseMutex
     AutoTimer                                                                   m_aDropActionTimer;
     Timer                                                                       m_aSynchronizeTimer;
     ImageList                                                                   m_aNavigatorImages;
-    ImageList                                                                   m_aNavigatorImagesHC;
     Point                                                                       m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
     DROP_ACTION                                                                 m_aDropActionType;
     OReportController&                                                          m_rController;
@@ -243,17 +243,10 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
     SetHelpId( HID_REPORT_NAVIGATOR_TREE );
 
     m_aNavigatorImages = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL ) );
-    m_aNavigatorImagesHC = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL_HC ) );
 
     SetNodeBitmaps(
         m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-        BMP_COLOR_NORMAL
-    );
-    SetNodeBitmaps(
-        m_aNavigatorImagesHC.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        m_aNavigatorImagesHC.GetImage( RID_SVXIMG_EXPANDEDNODE ),
-        BMP_COLOR_HIGHCONTRAST
+        m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
     );
 
     SetDragDropMode(0xFFFF);
@@ -334,7 +327,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
                     else
                         aContextMenu.EnableItem(nId,bEnabled);
                 }
-            } // for (sal_uInt16 i = 0; i < nCount; ++i)
+            }
             sal_uInt16 nId = aContextMenu.Execute(this, aWhere);
             if ( nId )
             {
@@ -418,7 +411,6 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
 // -------------------------------------------------------------------------
 sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& /*_rEvt*/ )
 {
-    // _rEvt.mnAction;
     return DND_ACTION_NONE;
 }
 // -------------------------------------------------------------------------
@@ -527,12 +519,6 @@ SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntr
     {
         const Image aImage( m_aNavigatorImages.GetImage( _nImageId ) );
         pEntry = InsertEntry(_sName,aImage,aImage,_pParent,sal_False,_nPosition,_pData);
-        if ( pEntry )
-        {
-            const Image aImageHC( m_aNavigatorImagesHC.GetImage( _nImageId ) );
-            SetExpandedEntryBmp( pEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
-            SetCollapsedEntryBmp( pEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
-        }
     }
     else
         pEntry = InsertEntry(_sName,_pParent,sal_False,_nPosition,_pData);
@@ -851,8 +837,6 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
                     ++nPos;
                 m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? SID_GROUPFOOTER : SID_GROUPHEADER,nPos);
             }
-            //else
-            //    m_pTree->removeEntry(m_pTree->GetEntry(pEntry,nPos));
         }
         else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)
         {
@@ -936,10 +920,6 @@ ONavigator::ONavigator( Window* _pParent
 
     m_pImpl.reset(new ONavigatorImpl(_rController,this));
 
-    //Size aSpace = LogicToPixel( Size( 7, 120), MAP_APPFONT );
-    //Size aOutSize(nMaxTextWidth + m_aHeader.GetSizePixel().Width() + 3*aSpace.Width(),aSpace.Height());
-    //SetMinOutputSizePixel(aOutSize);
-    //SetOutputSizePixel(aOutSize);
     FreeResource();
     m_pImpl->m_pNavigatorTree->Show();
     m_pImpl->m_pNavigatorTree->GrabFocus();
@@ -984,3 +964,4 @@ void ONavigator::GetFocus()
 } // rptui
 // =============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

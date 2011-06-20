@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,22 +27,12 @@
  ************************************************************************/
 
 
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "Acomponentmodule.hxx"
-#endif
 
-#ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
-#endif
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
+#include <osl/diagnose.h>
 
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(s_aMutex); \
@@ -99,12 +90,12 @@ namespace COMPMOD_NAMESPACE
         // note that this method is not threadsafe, which counts for the whole class !
         if (!m_pRessources && !m_bInitialized)
         {
-            DBG_ASSERT(m_sFilePrefix.Len(), "OModuleImpl::getResManager: no resource file prefix!");
+            OSL_ENSURE(m_sFilePrefix.Len(), "OModuleImpl::getResManager: no resource file prefix!");
             // create a manager with a fixed prefix
             ByteString aMgrName = m_sFilePrefix;
 
             m_pRessources = ResMgr::CreateResMgr(aMgrName.GetBuffer());
-            DBG_ASSERT(m_pRessources,
+            OSL_ENSURE(m_pRessources,
                     (ByteString("OModuleImpl::getResManager: could not create the resource manager (file name: ")
                 +=  aMgrName
                 +=  ByteString(")!")).GetBuffer());
@@ -214,7 +205,7 @@ namespace COMPMOD_NAMESPACE
     {
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
             return;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -257,7 +248,7 @@ namespace COMPMOD_NAMESPACE
 
         if (!s_pImplementationNames)
         {
-            OSL_ASSERT("OModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
+            OSL_FAIL("OModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
             return NULL;
         }
         OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -301,3 +292,4 @@ namespace COMPMOD_NAMESPACE
 }   // namespace COMPMOD_NAMESPACE
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

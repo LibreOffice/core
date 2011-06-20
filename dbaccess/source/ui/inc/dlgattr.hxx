@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,10 @@
 #define DBAUI_SBATTRDLG_HXX
 
 
-#ifndef DBAUI_SBATTRDLG_HRC
 #include "dlgattr.hrc"
-#endif
 
-#ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _SOLAR_H
 #include <tools/solar.h>
-#endif
 
 
 
@@ -66,3 +61,4 @@ namespace dbaui
 
 #endif//DBAUI_SBATTRDLG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

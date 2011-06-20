@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,9 +108,11 @@ void OXMLReportElementBase::EndElement()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception caught while inserting a new control!");
+        OSL_FAIL("Exception caught while inserting a new control!");
     }
 }
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

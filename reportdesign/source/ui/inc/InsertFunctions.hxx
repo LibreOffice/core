@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef RPT_INSERTFUNCTIONS_HXX_INCLUDED
 #define RPT_INSERTFUNCTIONS_HXX_INCLUDED
 
-#ifndef _EVENT_HXX //autogen
 #include <vcl/event.hxx>
-#endif
 #include <vcl/timer.hxx>
 
 class SdrView;
@@ -44,3 +43,4 @@ namespace rptui
 // ---------
 #endif      // RPT_INSERTFUNCTIONS_HXX_INCLUDED
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

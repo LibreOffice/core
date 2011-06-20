@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #include "precompiled_rptui.hxx"
 #include "ColorListener.hxx"
 #include <svl/smplhint.hxx>
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 
 #define BORDERCOLORCHANGE 191
 //=====================================================================
@@ -101,3 +100,5 @@ void OColorListener::setMarked(sal_Bool _bMark)
 // =======================================================================
 }
 // =======================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

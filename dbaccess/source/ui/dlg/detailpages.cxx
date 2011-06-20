@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,46 +43,20 @@
 #include "dbu_dlg.hrc"
 #include "dbadmin.hrc"
 
-#ifndef _SFXITEMSET_HXX
 #include <svl/itemset.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svl/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svl/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svl/cjkoptions.hxx>
-#endif
 #include <jvmaccess/virtualmachine.hxx>
-#ifndef DBAUI_ADABASPAGE_HRC
 #include "AdabasPage.hrc"
-#endif
-#ifndef _DBAUI_ADASTAT_HXX_
 #include "AdabasStat.hxx"
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 #include "AutoControlsDef.hrc"
 
 //.........................................................................
@@ -139,7 +114,7 @@ namespace dbaui
                                 m_pAutoIncrementLabel, m_pAutoIncrement,
                                 m_pAutoRetrievingLabel, m_pAutoRetrieving };
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
         {
             if ( pWindows[i] )
@@ -392,7 +367,7 @@ namespace dbaui
                                 ,m_pOptionsLabel,m_pOptions,&m_aUseCatalog
                                 };
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }
@@ -573,7 +548,7 @@ namespace dbaui
                                 &m_aFTDriverClass, &m_aEDDriverClass,&m_aTestJavaDriver,
                                 m_pCharsetLabel, m_pCharset};
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
@@ -705,7 +680,7 @@ namespace dbaui
 
         Window* pWindows[] = {  &m_aMySQLSettings, &m_aSeparator2, &m_aUserNameLabel, &m_aUserName,
                                 &m_aPasswordRequired, m_pCharsetLabel, m_pCharset};
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
@@ -845,7 +820,7 @@ namespace dbaui
                                 ,&m_CB_SHUTDB
                                 ,m_pCharsetLabel, m_pCharset,&m_PB_STAT};
 
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }
@@ -1149,3 +1124,5 @@ namespace dbaui
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

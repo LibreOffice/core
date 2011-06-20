@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,21 +28,11 @@
 #ifndef DBAUI_STATUSBARCONTROLLER_HXX
 #define DBAUI_STATUSBARCONTROLLER_HXX
 
-#ifndef _SVTOOLS_STATUSBARCONTROLLER_HXX
 #include <svtools/statusbarcontroller.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 namespace dbaui
 {
@@ -60,3 +51,4 @@ namespace dbaui
 }
 #endif // DBAUI_STATUSBARCONTROLLER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

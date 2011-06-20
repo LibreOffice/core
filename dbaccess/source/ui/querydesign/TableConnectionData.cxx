@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
-#endif
 
 using namespace dbaui;
 using namespace comphelper;
@@ -65,7 +61,7 @@ void OTableConnectionData::Init()
 {
     //////////////////////////////////////////////////////////////////////
     // LineDataList mit Defaults initialisieren
-    DBG_ASSERT(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
+    OSL_ENSURE(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
     ResetConnLines(sal_True);
         // das legt Defaults an
 }
@@ -88,7 +84,6 @@ OTableConnectionData::~OTableConnectionData()
     DBG_DTOR(OTableConnectionData,NULL);
     // LineDataList loeschen
     OConnectionLineDataVec().swap(m_vConnLineData);
-    //ResetConnLines(sal_False);
 }
 
 //------------------------------------------------------------------------
@@ -126,7 +121,7 @@ sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSo
         return AppendConnLine(rSourceFieldName, rDestFieldName);
 
     OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
-    DBG_ASSERT(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
+    OSL_ENSURE(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );
@@ -147,7 +142,7 @@ sal_Bool OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFie
     if(aIter == aEnd)
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
-        if (!pNew.isValid())
+        if (!pNew.is())
             return sal_False;
 
         m_vConnLineData.push_back(pNew);
@@ -200,3 +195,4 @@ void OTableConnectionData::normalizeLines()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

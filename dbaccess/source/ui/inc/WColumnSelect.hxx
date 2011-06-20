@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,9 @@
 #include "WTabPage.hxx"
 #include "WCopyTable.hxx"
 
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <comphelper/stl_types.hxx>
 
 namespace dbaui
@@ -107,3 +102,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

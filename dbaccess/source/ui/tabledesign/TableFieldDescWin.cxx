@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,33 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_TABLEFIELDDESCRIPTION_HXX
 #include "TableFieldDescWin.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef _DBU_TBL_HRC_
 #include "dbu_tbl.hrc"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #include "TableDesignHelpBar.hxx"
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 #include <memory>
 
 #define STANDARD_MARGIN                  6
@@ -128,7 +111,7 @@ OTableFieldDescWin::~OTableFieldDescWin()
 //------------------------------------------------------------------------------
 void OTableFieldDescWin::Init()
 {
-    DBG_ASSERT(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
+    OSL_ENSURE(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
     getGenPage()->Init();
 }
 
@@ -334,4 +317,4 @@ long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
     return bHandled ? 1L : TabPage::PreNotify(rNEvt);
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

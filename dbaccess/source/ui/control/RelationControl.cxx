@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,58 +28,23 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_RELATIONCONTROL_HXX
 #include "RelationControl.hxx"
-#endif
-#ifndef DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HRC
 #include "RelationControl.hrc"
-#endif
 
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef DBAUI_RELCONTROLIFACE_HXX
 #include "RelControliFace.hxx"
-#endif
-#ifndef _DBU_CONTROL_HRC_
 #include "dbu_control.hrc"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
+#include <osl/diagnose.h>
 
 #include <algorithm>
 
@@ -167,7 +133,7 @@ namespace dbaui
     DBG_NAME(ORelationControl)
     //------------------------------------------------------------------------
     ORelationControl::ORelationControl( OTableListBoxControl* pParent ,const OJoinTableView::OTableWindowMap* _pTableMap)
-        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | /*WB_3DLOOK | */WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
+        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
         ,m_pTableMap(_pTableMap)
         ,m_pBoxControl(pParent)
         ,m_xSourceDef( NULL )
@@ -529,7 +495,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::fillListBoxes()
     {
-        DBG_ASSERT( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
+        OSL_ENSURE( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
         OTableWindow* pInitialLeft = NULL;
         OTableWindow* pInitialRight = NULL;
 
@@ -551,7 +517,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
                 pInitialRight = aIter->second;
                 m_strCurrentRight = aIter->first;
             }
-        } // for(;aIter != m_pTableMap->end();++aIter)
+        }
 
         if ( !pInitialRight )
         {
@@ -616,7 +582,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             OTableWindow* pLoop = NULL;
             if( aFind != m_pTableMap->end() )
                 pLoop = aFind->second;
-            DBG_ASSERT(pLoop != NULL, "ORelationDialog::OnTableChanged : ungueltiger Eintrag in ListBox !");
+            OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged : ungueltiger Eintrag in ListBox !");
                 // da ich die ListBoxen selber mit eben diesen Tabellennamen, mit denen ich sie jetzt vergleiche, gefuellt habe,
                 // MUSS ich strSelected finden
             if (pListBox == &m_lmbLeftTable)
@@ -701,7 +667,6 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
         {
             _pTableSeparator->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
             m_pRC_Tables->SetZOrder(_pTableSeparator, WINDOW_ZORDER_BEHIND);
-            //aDlgPoint = m_pTableSeparator->GetPosPixel() + Point(0,aSize.Height()) + LogicToPixel( Point(0,6), MAP_APPFONT );
             _pTableSeparator->SetPosPixel(Point(0,m_aFL_InvolvedFields.GetPosPixel().Y()));
             const Size aSize = _pTableSeparator->GetSizePixel();
             aDlgPoint.Y() = _pTableSeparator->GetPosPixel().Y() + aSize.Height();
@@ -749,3 +714,4 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

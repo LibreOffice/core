@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,10 @@
 #ifndef DBAUI_COLUMNCONTROLWINDOW_HXX
 #define DBAUI_COLUMNCONTROLWINDOW_HXX
 
-#ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 #include "FieldDescControl.hxx"
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
 
 //.........................................................................
 namespace dbaui
@@ -88,3 +81,5 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 #endif // DBAUI_COLUMNCONTROLWINDOW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

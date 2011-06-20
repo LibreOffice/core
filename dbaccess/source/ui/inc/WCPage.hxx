@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,24 +30,12 @@
 
 #include "WTabPage.hxx"
 
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_GROUP_HXX
 #include <vcl/group.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 
 namespace dbaui
 {
@@ -81,9 +70,7 @@ namespace dbaui
         DECL_LINK( KeyClickHdl, Button* );
 
         sal_Bool checkAppendData();
-        //--------dyf add
         void SetAppendDataRadio();
-        //--------add end
 
     public:
         virtual void            Reset();
@@ -118,3 +105,4 @@ namespace dbaui
 #endif // DBAUI_WIZARD_CPAGE_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ namespace comphelper
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::comphelper::WeakComponentImplHelper13 <   ::com::sun::star::report::XReportDefinition
+    typedef ::comphelper::PartialWeakComponentImplHelper13 <   ::com::sun::star::report::XReportDefinition
                                                     ,   ::com::sun::star::document::XEventBroadcaster
                                                     ,   ::com::sun::star::lang::XServiceInfo
                                                     ,   ::com::sun::star::frame::XModule
@@ -412,3 +413,4 @@ namespace reportdesign
 // =============================================================================
 #endif // REPORTDESIGN_API_REPORTDEFINITION_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

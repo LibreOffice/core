@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -38,6 +39,7 @@
 #include <comphelper/property.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <sal/macros.h>
 
 //........................................................................
 namespace dbaccess
@@ -66,20 +68,18 @@ namespace dbaccess
     //= OColumnSettings
     //==============================================================================
     DBG_NAME( OColumnSettings )
-    //------------------------------------------------------------------------------
+
     OColumnSettings::OColumnSettings()
         :m_bHidden(sal_False)
     {
         DBG_CTOR( OColumnSettings, NULL );
     }
 
-    //------------------------------------------------------------------------------
     OColumnSettings::~OColumnSettings()
     {
         DBG_DTOR( OColumnSettings, NULL );
     }
 
-    //------------------------------------------------------------------------------
     void OColumnSettings::registerProperties( IPropertyContainer& _rPropertyContainer )
     {
         const sal_Int32 nBoundAttr = PropertyAttribute::BOUND;
@@ -98,7 +98,6 @@ namespace dbaccess
         _rPropertyContainer.registerProperty( PROPERTY_HIDDEN, PROPERTY_ID_HIDDEN, nBoundAttr, &m_bHidden, ::getCppuType( &m_bHidden ) );
     }
 
-    //------------------------------------------------------------------------------
     bool OColumnSettings::isColumnSettingProperty( const sal_Int32 _nPropertyHandle )
     {
         return  ( _nPropertyHandle == PROPERTY_ID_ALIGN )
@@ -111,7 +110,6 @@ namespace dbaccess
             ||  ( _nPropertyHandle == PROPERTY_ID_HIDDEN );
     }
 
-    //------------------------------------------------------------------------------
     bool OColumnSettings::isDefaulted( const sal_Int32 _nPropertyHandle, const Any& _rPropertyValue )
     {
         switch ( _nPropertyHandle )
@@ -134,11 +132,10 @@ namespace dbaccess
                 return !bHidden;
             }
         }
-        OSL_ENSURE( false, "OColumnSettings::isDefaulted: illegal property handle!" );
+        OSL_FAIL( "OColumnSettings::isDefaulted: illegal property handle!" );
         return sal_False;
     }
 
-    //------------------------------------------------------------------------------
     bool OColumnSettings::hasDefaultSettings( const Reference< XPropertySet >& _rxColumn )
     {
         ENSURE_OR_THROW( _rxColumn.is(), "illegal column" );
@@ -163,7 +160,7 @@ namespace dbaccess
                 { PROPERTY_HIDDEN,           PROPERTY_ID_HIDDEN }
             };
 
-            for ( size_t i=0; i < sizeof( aProps ) / sizeof( aProps[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( aProps ); ++i )
             {
                 if ( xPSI->hasPropertyByName( aProps[i].sName ) )
                     if ( !isDefaulted( aProps[i].nHandle, _rxColumn->getPropertyValue( aProps[i].sName ) ) )
@@ -180,3 +177,5 @@ namespace dbaccess
 //........................................................................
 } // namespace dbaccess
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

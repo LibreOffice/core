@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,34 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBACORE_DATACOLUMN_HXX_
 #include "CRowSetDataColumn.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 using namespace dbaccess;
 using namespace comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -64,7 +50,7 @@ using namespace cppu;
 using namespace osl;
 
 DBG_NAME(ORowSetDataColumn)
-// -------------------------------------------------------------------------
+
 ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& _xMetaData,
                                       const Reference < XRow >& _xRow,
                                       const Reference < XRowUpdate >& _xRowUpdate,
@@ -82,20 +68,16 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
     OColumnSettings::registerProperties( *this );
     registerProperty( PROPERTY_DESCRIPTION, PROPERTY_ID_DESCRIPTION, PropertyAttribute::READONLY, &m_aDescription, ::getCppuType( &m_aDescription ) );
 }
-// -------------------------------------------------------------------------
+
 ORowSetDataColumn::~ORowSetDataColumn()
 {
     DBG_DTOR(ORowSetDataColumn,NULL);
 }
-// -------------------------------------------------------------------------
+
 // comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
 {
-    const sal_Int32 nDerivedProperties = 21;
-    Sequence< Property> aDerivedProperties( nDerivedProperties );
-    Property* pDesc = aDerivedProperties.getArray();
-    sal_Int32 nPos = 0;
+    BEGIN_PROPERTY_SEQUENCE(21)
 
     DECL_PROP1( CATALOGNAME,                ::rtl::OUString,    READONLY );
     DECL_PROP1( DISPLAYSIZE,                sal_Int32,          READONLY );
@@ -118,26 +100,26 @@ ORowSetDataColumn::~ORowSetDataColumn()
     DECL_PROP1( TYPE,                       sal_Int32,          READONLY );
     DECL_PROP1( TYPENAME,                   ::rtl::OUString,    READONLY );
     DECL_PROP1( VALUE,                      Any,                BOUND );
-    OSL_ENSURE( nPos == nDerivedProperties, "ORowSetDataColumn::createArrayHelper: inconsistency!" );
+
+    END_PROPERTY_SEQUENCE()
 
     Sequence< Property > aRegisteredProperties;
     describeProperties( aRegisteredProperties );
 
-    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDerivedProperties, aRegisteredProperties ), sal_False );
+    return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), sal_False );
 }
 
 // cppu::OPropertySetHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& ORowSetDataColumn::getInfoHelper()
 {
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< ORowSetDataColumn >* >(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     if ( PROPERTY_ID_VALUE == nHandle )
     {
-        if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() )
+        if ( !m_aColumnValue.isNull() && m_aColumnValue->is() )
         {
             ::osl::Mutex* pMutex = m_aColumnValue.getMutex();
             ::osl::MutexGuard aGuard( *pMutex );
@@ -154,7 +136,6 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
         ODataColumn::getFastPropertyValue( rValue, nHandle );
 }
 
-// -------------------------------------------------------------------------
 void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue )throw (Exception)
 {
     switch( nHandle )
@@ -174,7 +155,7 @@ void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHan
             break;
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedValue,
                                                             Any & rOldValue,
                                                             sal_Int32 nHandle,
@@ -204,7 +185,7 @@ sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedV
 
     return bModified;
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeException)
 {
     static OImplementationId * pId = 0;
@@ -219,10 +200,10 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
     }
     return pId->getImplementationId();
 }
-// -------------------------------------------------------------------------
+
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    if ( !m_aColumnValue.isNull() && m_aColumnValue->isValid() && (!(((*m_aColumnValue)->get())[m_nPos] == _rOldValue)) )
+    if ( !m_aColumnValue.isNull() && m_aColumnValue->is() && (!(((*m_aColumnValue)->get())[m_nPos] == _rOldValue)) )
     {
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
@@ -239,11 +220,11 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
         fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
 }
-// -----------------------------------------------------------------------------
+
 DBG_NAME(ORowSetDataColumns )
 ORowSetDataColumns::ORowSetDataColumns(
                 sal_Bool _bCase,
-                const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+                const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
                 const ::std::vector< ::rtl::OUString> &_rVector
@@ -252,12 +233,12 @@ ORowSetDataColumns::ORowSetDataColumns(
 {
     DBG_CTOR(ORowSetDataColumns ,NULL);
 }
-// -----------------------------------------------------------------------------
+
 ORowSetDataColumns::~ORowSetDataColumns()
 {
     DBG_DTOR(ORowSetDataColumns ,NULL);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::ObjectType ORowSetDataColumns::createObject(const ::rtl::OUString& _rName)
 {
     connectivity::sdbcx::ObjectType xNamed;
@@ -269,24 +250,20 @@ sdbcx::ObjectType ORowSetDataColumns::createObject(const ::rtl::OUString& _rName
 
     return xNamed;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL ORowSetDataColumns::disposing(void)
 {
-    //  clear_NoDispose();
     ORowSetDataColumns_BASE::disposing();
     m_aColumns = NULL;
-    //  m_aColumns.clear();
 }
-// -----------------------------------------------------------------------------
-void ORowSetDataColumns::assign(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
+
+void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
 {
     m_aColumns = _rColumns;
     reFill(_rVector);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetDataColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

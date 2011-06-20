@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,48 +28,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_QUERYORDER_HRC
 #include "queryorder.hrc"
-#endif
-#ifndef DBAUI_QUERYORDER_HXX
 #include "queryorder.hxx"
-#endif
 
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
 
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include <connectivity/sqliterator.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
 
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
 #include <algorithm>
 
@@ -272,8 +247,8 @@ void DlgOrderCrit::EnableLines()
     DBG_CHKTHIS(DlgOrderCrit,NULL);
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
-    static const ::rtl::OUString sDESC = ::rtl::OUString::createFromAscii(" DESC ");
-    static const ::rtl::OUString sASC  = ::rtl::OUString::createFromAscii(" ASC ");
+    static const ::rtl::OUString sDESC(RTL_CONSTASCII_USTRINGPARAM(" DESC "));
+    static const ::rtl::OUString sASC(RTL_CONSTASCII_USTRINGPARAM(" ASC "));
 
     Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
 
@@ -283,7 +258,7 @@ void DlgOrderCrit::EnableLines()
         if(m_aColumnList[i]->GetSelectEntryPos() != 0)
         {
             if(sOrder.getLength())
-                sOrder += ::rtl::OUString::createFromAscii(",");
+                sOrder += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
 
             String sName = m_aColumnList[i]->GetSelectEntry();
             try
@@ -308,7 +283,7 @@ void DlgOrderCrit::EnableLines()
                 else
                     sOrder += ::dbtools::quoteName(sQuote,sName);
             }
-            catch(Exception)
+            catch(const Exception&)
             {
             }
             if(m_aValueList[i]->GetSelectEntryPos())
@@ -332,3 +307,4 @@ void DlgOrderCrit::BuildOrderPart()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

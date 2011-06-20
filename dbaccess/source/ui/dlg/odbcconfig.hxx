@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,11 +31,11 @@
 
 #include "commontypes.hxx"
 
-#if defined(WNT) || defined (UNX) || defined (OS2)
+#if defined(WNT) || defined (UNX)
 #define HAVE_ODBC_SUPPORT
 #endif
 
-#if ( defined(WNT) || defined (OS2) ) && defined(HAVE_ODBC_SUPPORT)
+#if defined(WNT) && defined(HAVE_ODBC_SUPPORT)
 #define HAVE_ODBC_ADMINISTRATION
 #endif
 
@@ -138,3 +139,4 @@ public:
 
 #endif // _DBAUI_ODBC_CONFIG_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -270,7 +271,7 @@ namespace dbmm
             break;
 
         default:
-            OSL_ENSURE( false, "MacroMigrationDialog::enterState: unhandled state!" );
+            OSL_FAIL( "MacroMigrationDialog::enterState: unhandled state!" );
         }
     }
 
@@ -295,7 +296,7 @@ namespace dbmm
         case STATE_SUMMARY:
             break;
         default:
-            OSL_ENSURE( false, "MacroMigrationDialog::prepareLeaveCurrentState: unhandled state!" );
+            OSL_FAIL( "MacroMigrationDialog::prepareLeaveCurrentState: unhandled state!" );
         }
 
         return sal_True;
@@ -534,7 +535,7 @@ namespace dbmm
                 if ( !xController->suspend( sal_True ) )
                 {   // ouch. There shouldn't be any modal dialogs and such, so there
                     // really is no reason why suspending shouldn't work.
-                    OSL_ENSURE( false, "MacroMigrationDialog::impl_reloadDocument_nothrow: could not suspend a controller!" );
+                    OSL_FAIL( "MacroMigrationDialog::impl_reloadDocument_nothrow: could not suspend a controller!" );
                     // ignoring this would be at the cost of a crash (potentially)
                     // so, we cannot continue here.
                     throw CloseVetoException();
@@ -626,3 +627,5 @@ namespace dbmm
 //........................................................................
 } // namespace dbmm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

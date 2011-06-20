@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #include "ConnectionPageSetup.hxx"
-#endif
 #include "AutoControlsDef.hrc"
 #include "dbadminsetup.hrc"
 #include "dbu_dlg.hrc"
@@ -57,7 +56,6 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -204,7 +202,7 @@ namespace dbaui
         //{
         //  String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
         //  FixedText* ppTextControls[] ={&m_aFT_Connection};
-        //  for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
+        //  for (size_t i = 0; i < SAL_N_ELEMENTS(ppTextControls); ++i)
         //  {
         //      ppTextControls[i]->SetText(sDisplayName);
         //  }
@@ -243,3 +241,4 @@ namespace dbaui
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

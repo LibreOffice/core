@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -91,7 +92,6 @@ private:
     /** loads the given object from the given URL
     @throws WrappedTargetException
         if an error occurs accessing the URL via the UCB
-
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL);
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject( const ::rtl::OUString& _rURL );
@@ -211,3 +211,4 @@ private:
 #endif // _DBA_COREDATAACCESS_DATABASECONTEXT_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

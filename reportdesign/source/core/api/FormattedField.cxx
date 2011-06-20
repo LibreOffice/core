@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #include "FormattedField.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include "core_resource.hxx"
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
@@ -58,7 +55,7 @@ uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::X
 uno::Sequence< ::rtl::OUString > lcl_getFormattedFieldOptionals()
 {
     ::rtl::OUString pProps[] = { PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 DBG_NAME( rpt_OFormattedField )
 // -----------------------------------------------------------------------------
@@ -95,7 +92,6 @@ OFormattedField::~OFormattedField()
     DBG_DTOR( rpt_OFormattedField,NULL);
 }
 // -----------------------------------------------------------------------------
-//IMPLEMENT_FORWARD_XINTERFACE2(OFormattedField,FormattedFieldBase,FormattedFieldPropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OFormattedField, FormattedFieldBase )
 // --------------------------------------------------------------------------------
 uno::Any SAL_CALL OFormattedField::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
@@ -386,3 +382,5 @@ void SAL_CALL OFormattedField::setSize( const awt::Size& aSize ) throw (beans::P
 // =============================================================================
 } // namespace reportdesign
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

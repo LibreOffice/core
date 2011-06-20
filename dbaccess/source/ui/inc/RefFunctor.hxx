@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef DBAUI_REFFUNCTOR_HXX
 #define DBAUI_REFFUNCTOR_HXX
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
+#include <rtl/ref.hxx>
 #ifndef INCLUDED_FUNCTIONAL
 #define INCLUDED_FUNCTIONAL
 #include <functional>
@@ -38,23 +37,20 @@
 
 namespace dbaui
 {
-    template <class T> class OUnaryRefFunctor : public ::std::unary_function< ::vos::ORef<T> ,void>
+    template <class T> class OUnaryRefFunctor : public ::std::unary_function< ::rtl::Reference<T> ,void>
     {
         ::std::mem_fun_t<bool,T> m_aFunction;
     public:
         OUnaryRefFunctor(const ::std::mem_fun_t<bool,T>& _aFunc) : m_aFunction(_aFunc)
         {}
-        inline void operator()(const ::vos::ORef<T>& _aType) const
+        inline void operator()(const ::rtl::Reference<T>& _aType) const
         {
-            m_aFunction(_aType.getBodyPtr());
+            m_aFunction(_aType.get());
         }
-//      inline void operator()(const ::vos::ORef<T>& _aType)
-//      {
-//          m_aFunction(_aType.getBodyPtr());
-//      }
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaui
 // -----------------------------------------------------------------------------
 #endif //DBAUI_REFFUNCTOR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

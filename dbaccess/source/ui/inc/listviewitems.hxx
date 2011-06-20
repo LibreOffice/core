@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #define _DBAUI_LISTVIEWITEMS_HXX_
 
-#ifndef _SVLBOXITM_HXX
 #include <svtools/svlbitm.hxx>
-#endif
 
 //........................................................................
 namespace dbaui
@@ -68,3 +67,4 @@ namespace dbaui
 
 #endif // _DBAUI_LISTVIEWITEMS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

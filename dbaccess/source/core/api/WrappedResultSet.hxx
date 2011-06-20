@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BookmarkSet.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +29,7 @@
 #ifndef DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
 #define DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
 
-#ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
-#endif
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 
@@ -77,3 +73,4 @@ namespace dbaccess
 }
 #endif // DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,34 +29,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 #include <comphelper/namedvaluecollection.hxx>
-#ifndef _SFXAPP_HXX //autogen wg. SFX_APP
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXIMGMGR_HXX
 #include <sfx2/imgmgr.hxx>
-#endif
-#ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
-#ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
-#endif
 #include <tools/diagnose_ex.h>
 
 //.........................................................................
@@ -239,3 +222,5 @@ namespace dbaui
 }
 // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

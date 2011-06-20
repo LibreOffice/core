@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,13 @@
 #define DBACCESS_CONTAINERAPPROVE_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     //====================================================================
     //= IContainerApprove
@@ -72,9 +69,8 @@ namespace dbaccess
 
     typedef ::boost::shared_ptr< IContainerApprove >    PContainerApprove;
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // DBACCESS_CONTAINERAPPROVE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

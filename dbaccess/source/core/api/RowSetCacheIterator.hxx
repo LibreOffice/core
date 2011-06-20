@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #define DBACCESS_ROWSETCACHEITERATOR_HXX
 
-#ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 namespace dbaccess
 {
@@ -89,4 +86,4 @@ namespace dbaccess
 }
 #endif // DBACCESS_ROWSETCACHEITERATOR_HXX
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

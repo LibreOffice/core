@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 #ifndef _DBAUI_CHARSETS_HXX_
 #define _DBAUI_CHARSETS_HXX_
 
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _TOOLS_RC_HXX
 #include <tools/rc.hxx>
-#endif
-#ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
-#endif
-#ifndef _SVX_TXENCTAB_HXX
 #include <svx/txenctab.hxx>
-#endif
 
 //.........................................................................
 namespace dbaui
@@ -148,3 +141,4 @@ namespace dbaui
 
 #endif // _DBAUI_CHARSETS_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

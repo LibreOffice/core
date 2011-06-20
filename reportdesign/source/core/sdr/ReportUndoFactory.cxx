@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,7 +97,6 @@ SdrUndoAction* OReportUndoFactory::CreateUndoInsertObject( SdrObject& rObject, b
 SdrUndoAction* OReportUndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
 {
     return lcl_createUndo(rObject,rptui::Removed,RID_STR_UNDO_DELETE_CONTROL);
-    //return m_pUndoFactory->CreateUndoDeleteObject( rObject, bOrdNumDirect ? sal_True : sal_False );
 }
 
 SdrUndoAction* OReportUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool /*bOrdNumDirect*/ )
@@ -180,3 +180,4 @@ SdrUndoAction* OReportUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChan
 }   //rptui
 //==================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

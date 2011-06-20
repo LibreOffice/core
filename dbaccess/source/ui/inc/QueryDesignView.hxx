@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,27 +28,13 @@
 #ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #define DBAUI_QUERYDESIGNVIEW_HXX
 
-#ifndef DBAUI_QUERYVIEW_HXX
 #include "queryview.hxx"
-#endif
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
 
 namespace connectivity
 {
@@ -187,3 +174,4 @@ namespace dbaui
 }
 #endif // DBAUI_QUERYDESIGNVIEW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

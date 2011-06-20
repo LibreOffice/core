@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,9 @@
 #ifndef ADABASUI_NEWDB_HXX
 #define ADABASUI_NEWDB_HXX
 
-#ifndef _SVT_GENERICUNODIALOG_HXX_
 #include <svtools/genericunodialog.hxx>
-#endif
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "Acomponentmodule.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
-#endif
 
 
 
@@ -98,3 +93,5 @@ namespace adabasui
 //.........................................................................
 
 #endif // ADABASUI_NEWDB_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,12 +75,13 @@
 #include <svx/dbaexchange.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //........................................................................
 namespace dbaui
@@ -215,7 +217,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
 {
     try
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
         WaitObject aWO(getView());
 
@@ -225,7 +227,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
         if ( !xWindow.is() )
         {
-            DBG_ASSERT( getContainer(), "OApplicationController::Construct: have no view!" );
+            OSL_ENSURE( getContainer(), "OApplicationController::Construct: have no view!" );
             if ( getContainer() )
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }
@@ -290,7 +292,7 @@ void OApplicationController::refreshTables()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Could not refresh tables!");
+            OSL_FAIL("Could not refresh tables!");
         }
 
         getContainer()->getDetailView()->clearPages(sal_False);
@@ -305,7 +307,7 @@ void OApplicationController::openDirectSQLDialog()
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( evt.PropertyName == PROPERTY_USER )
     {
@@ -392,7 +394,7 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     SQLExceptionInfo aError;
@@ -431,7 +433,7 @@ beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL OApplicationController::ide
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->closeSubComponents();
 }
@@ -450,7 +452,7 @@ namespace
         case DatabaseObject::FORM:   eType = E_FORM;    break;
         case DatabaseObject::REPORT: eType = E_REPORT;  break;
         default:
-            OSL_ENSURE( false, "lcl_objectType2ElementType: unsupported object type!" );
+            OSL_FAIL( "lcl_objectType2ElementType: unsupported object type!" );
                 // this should have been caught earlier
         }
         return eType;
@@ -516,7 +518,7 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_In
 Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
     const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     impl_validateObjectTypeAndName_throw( _ObjectType, _ObjectName );
@@ -541,7 +543,7 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_
 // -----------------------------------------------------------------------------
 Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< ::rtl::OUString >() );
@@ -571,7 +573,7 @@ void SAL_CALL OApplicationController::releaseContextMenuInterceptor( const Refer
 // -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
 
     if ( m_xDataSource.is() && !isDataSourceReadOnly() )
@@ -595,20 +597,6 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
     InvalidateFeature(SID_DB_APP_VIEW_DOCINFO_PREVIEW);
     InvalidateFeature(SID_DB_APP_VIEW_DOC_PREVIEW);
 }
-// -----------------------------------------------------------------------------
-//void OApplicationController::updateTitle()
-//{
-//  ::rtl::OUString sName = getStrippedDatabaseName();
-//
-//  String sTitle = String(ModuleRes(STR_APP_TITLE));
-//  sName = sName + sTitle;
-//#ifdef DBG_UTIL
-//    ::rtl::OUString aDefault;
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
-//    sName += utl::Bootstrap::getBuildIdData( aDefault );
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
-//#endif
-//}
 // -----------------------------------------------------------------------------
 void OApplicationController::askToReconnect()
 {
@@ -853,3 +841,5 @@ ElementType OApplicationController::getElementType(const Reference< XContainer >
 //........................................................................
 }   // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

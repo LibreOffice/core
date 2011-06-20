@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,6 +56,7 @@
 #include "UITools.hxx"
 #include <unotools/configmgr.hxx>
 #include <memory>
+#include <o3tl/compat_functional.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <i18npool/mslangid.hxx>
@@ -289,7 +291,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 break;
             }
         }
-    } // if(xSet.is())
+    }
     if ( !m_pTypeInfo )
         m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     SetColumnTypes(pList,_pInfoMap);
@@ -325,20 +327,17 @@ void ODatabaseExport::insertValueIntoColumn()
                 sal_Int32 nPos = m_vColumns[nNewPos].first;
                 if ( nPos != COLUMN_POSITION_NOT_FOUND )
                 {
-    //                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
-    //                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
-
                     if ( !m_sTextToken.Len() && pField->IsNullable() )
                         m_pUpdateHelper->updateNull(nPos,pField->GetType());
                     else
                     {
-                        sal_Int32 nNumberFormat = 0;
-                        double fOutNumber = 0.0;
                         OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
                         if (m_vColumnTypes[nNewPos] != DataType::VARCHAR && m_vColumnTypes[nNewPos] != DataType::CHAR && m_vColumnTypes[nNewPos] != DataType::LONGVARCHAR )
                         {
                             RTL_LOGFILE_CONTEXT_TRACE( aLogger, "ODatabaseExport::insertValueIntoColumn != DataType::VARCHAR" );
                             ensureFormatter();
+                            sal_Int32 nNumberFormat = 0;
+                            double fOutNumber = 0.0;
                             bool bNumberFormatError = false;
                             if ( m_pFormatter && m_sNumToken.Len() )
                             {
@@ -364,7 +363,7 @@ void ODatabaseExport::insertValueIntoColumn()
                                     ,NumberFormat::NUMBER
                                     ,NumberFormat::LOGICAL
                                 };
-                                for (size_t i = 0; i < sizeof(nFormats)/sizeof(nFormats[0]); ++i)
+                                for (size_t i = 0; i < SAL_N_ELEMENTS(nFormats); ++i)
                                 {
                                     try
                                     {
@@ -562,7 +561,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                     }
                     break;
                 default:
-                    OSL_ENSURE(0,"ODatabaseExport: Unbekanntes Format");
+                    OSL_FAIL("ODatabaseExport: Unbekanntes Format");
             }
         }
     }
@@ -790,7 +789,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
             m_bDontAskAgain = sal_True;
         else
             m_bError = sal_True;
-    } // if(!m_bDontAskAgain)
+    }
 }
 // -----------------------------------------------------------------------------
 void ODatabaseExport::adjustFormat()
@@ -872,7 +871,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
     {
         ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
+            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::o3tl::select2nd<ODatabaseExport::TPositions::value_type>()));
         if ( _rvColumns.end() != aFind && aFind->second != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) && aFind->first != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) )
         {
             OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");
@@ -903,3 +902,4 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

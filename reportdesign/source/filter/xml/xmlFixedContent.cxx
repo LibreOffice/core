@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ class OXMLCharContent : public XMLCharContext
 {
     OXMLFixedContent* m_pFixedContent;
     OXMLCharContent(const OXMLCharContent&);
-    void operator =(const OXMLCharContent&);
+    OXMLCharContent operator =(const OXMLCharContent&);
 public:
     OXMLCharContent(
             SvXMLImport& rImport,
@@ -105,7 +106,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
             m_pFixedContent->Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")));
             break;
         default:
-            OSL_ENSURE(0,"Not supported control character");
+            OSL_FAIL("Not supported control character");
             break;
     }
 }
@@ -239,3 +240,5 @@ void OXMLFixedContent::Characters( const ::rtl::OUString& rChars )
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 #ifndef _DBA_CORE_USERINFORMATION_HXX_
 #define _DBA_CORE_USERINFORMATION_HXX_
 
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 class UserInformation
 {
@@ -48,3 +45,4 @@ public:
 
 #endif // _DBA_CORE_USERINFORMATION_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

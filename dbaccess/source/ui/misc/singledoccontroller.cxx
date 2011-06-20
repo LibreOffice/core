@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -37,6 +38,7 @@
 /** === end UNO includes === **/
 
 #include <svl/undo.hxx>
+#include <osl/diagnose.h>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -198,3 +200,5 @@ namespace dbaui
 //......................................................................................................................
 } // namespace dbaui
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

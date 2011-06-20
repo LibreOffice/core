@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,12 @@
 #ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #define DBAUI_QUERYCONTAINERWINDOW_HXX
 
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef DBAUI_QUERYVIEWSWITCH_HXX
 #include "QueryViewSwitch.hxx"
-#endif
-#ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
-#endif
 
 class FixedLine;
 //.........................................................................
@@ -134,3 +123,4 @@ namespace dbaui
 
 #endif // DBAUI_QUERYCONTAINERWINDOW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

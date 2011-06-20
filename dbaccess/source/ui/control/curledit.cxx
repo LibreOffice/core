@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_CURLEDIT_HXX_
 #include "curledit.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
+#include <osl/diagnose.h>
 
 //.........................................................................
 namespace dbaui
@@ -66,7 +64,7 @@ OConnectionURLEdit::~OConnectionURLEdit()
 //-------------------------------------------------------------------------
 void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
 {
-    DBG_ASSERT(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
+    OSL_ENSURE(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
     if (GetSubEdit())
         GetSubEdit()->SetText(_rText);
 }
@@ -156,3 +154,4 @@ void OConnectionURLEdit::ShowPrefix(sal_Bool _bShowPrefix)
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

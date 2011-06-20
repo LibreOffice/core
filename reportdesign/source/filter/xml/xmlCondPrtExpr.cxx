@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include "xmlEnums.hxx"
 #include "xmlControlProperty.hxx"
 #include "xmlComponent.hxx"
-#ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include <tools/debug.hxx>
 
 namespace rptxml
@@ -82,7 +81,7 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while putting Function props!");
+        OSL_FAIL("Exception catched while putting Function props!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -101,3 +100,5 @@ void OXMLCondPrtExpr::Characters( const ::rtl::OUString& rChars )
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

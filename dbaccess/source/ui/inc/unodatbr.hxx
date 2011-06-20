@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,72 +29,28 @@
 #ifndef _SBA_UNODATBR_HXX_
 #define _SBA_UNODATBR_HXX_
 
-#ifndef _SBA_BWRCTRLR_HXX
 #include "brwctrlr.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTION_HPP_
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECTCONTAINER_HPP_
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_DATABASEOBJECTCONTAINER_HPP_
 #include <com/sun/star/sdb/XDatabaseRegistrationsListener.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
-#endif
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
-#endif
-#ifndef DBUI_TABLECOPYHELPER_HXX
 #include "TableCopyHelper.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
 
 // =========================================================================
 class SvLBoxEntry;
@@ -494,7 +451,7 @@ namespace dbaui
             void* _pTreeListUserData    // in rela a DBTreeListUserData*, but we do not know this class here ....
         );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const;
 #endif
@@ -513,9 +470,6 @@ namespace dbaui
 
         // remove all grid columns and dispose them
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
-
-        sal_Bool isHiContrast() const;
-
 
         /** checks if the currently displayed entry changed
             @param  _sName
@@ -543,3 +497,4 @@ namespace dbaui
 
 #endif // _SBA_UNODATBR_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

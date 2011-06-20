@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,28 +30,20 @@
 #include "RptObject.hxx"
 #include "ReportController.hxx"
 #include <cppuhelper/component_context.hxx>
-#ifndef _REPORT_DLGRESID_HRC
 #include <RptResId.hrc>
-#endif
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
 #include <tools/debug.hxx>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <vcl/stdtext.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <comphelper/property.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/composedprops.hxx>
@@ -64,9 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include "SectionView.hxx"
 #include "ReportSection.hxx"
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include "DesignView.hxx"
 #include "ViewsWindow.hxx"
 #include "UITools.hxx"
@@ -130,12 +121,12 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         if (m_xMeAsFrame.is())
         {
             m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("report property browser"));  // change name!
+            m_xMeAsFrame->setName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("report property browser")));  // change name!
         }
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize my frame!");
+        OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
@@ -150,9 +141,6 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                 xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
                 UNO_QUERY_THROW );
 
-            /*uno::Reference< XComponent> xModel = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getModel(),uno::UNO_QUERY) );
-            uno::Reference< XComponent> xDialogParentWindow = new OContextHelper(m_xORB,uno::Reference< XComponent>(VCLUnoHelper::GetInterface ( this ),uno::UNO_QUERY) );
-            uno::Reference< XComponent> xConnection = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getConnection(),uno::UNO_QUERY) );*/
             // a ComponentContext for the
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
@@ -161,7 +149,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ), makeAny( m_pDesignView->getController().getConnection() ) ),
             };
             m_xInspectorContext.set(
-                ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
+                ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
                 xOwnContext ) );
             // create a property browser controller
             bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
@@ -191,7 +179,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         }
         catch (Exception&)
         {
-            DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
+            OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
             try
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
@@ -232,7 +220,7 @@ PropBrw::~PropBrw()
             const ::rtl::OUString pProps[] = { ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) )
                                             ,  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
                                             , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) )};
-            for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
+            for (size_t i = 0; i < SAL_N_ELEMENTS(pProps); ++i)
                 xName->removeByName(pProps[i]);
         }
     }
@@ -281,7 +269,7 @@ void PropBrw::implDetachController()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+        OSL_FAIL( "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
     }
     return sCurrentPage;
 }
@@ -301,7 +289,7 @@ sal_Bool PropBrw::Close()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::Close: caught an exception while asking the controller!" );
+            OSL_FAIL( "FmPropBrw::Close: caught an exception while asking the controller!" );
         }
     }
     implDetachController();
@@ -358,10 +346,8 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+            OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
         }
-
-        //Resize();
     }
     SetText( GetHeadlineName(_aObjects) );
 }
@@ -377,13 +363,13 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
     }
     else if ( _aObjects.getLength() == 1 )    // single selection
     {
-        sal_uInt16 nResId = 0;
         aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReportComponent"))), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
+            sal_uInt16 nResId = 0;
             if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ) )
             {
                 nResId = RID_STR_PROPTITLE_FIXEDTEXT;
@@ -422,7 +408,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
             }
             else
             {
-                OSL_ENSURE(0,"Unknown service name!");
+                OSL_FAIL("Unknown service name!");
                 nResId = RID_STR_CLASS_FORMATTEDFIELD;
             }
 
@@ -533,7 +519,7 @@ void PropBrw::Update( OSectionView* pNewView )
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                    OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
                 }
             }
         }
@@ -576,7 +562,7 @@ void PropBrw::Update( OSectionView* pNewView )
     }
     catch ( Exception& )
     {
-        DBG_ERROR( "PropBrw::Update: Exception occured!" );
+        OSL_FAIL( "PropBrw::Update: Exception occurred!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -591,14 +577,14 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
             {
                 EndListening( *(m_pView->GetModel()) );
                 m_pView = NULL;
-            } // if ( m_pView )
+            }
 
             uno::Reference< uno::XInterface> xTemp(CreateComponentPair(_xReportComponent,_xReportComponent));
             implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
         }
         catch ( Exception& )
         {
-            DBG_ERROR( "PropBrw::Update: Exception occured!" );
+            OSL_FAIL( "PropBrw::Update: Exception occurred!" );
         }
     }
 }
@@ -617,3 +603,5 @@ void PropBrw::LoseFocus()
 }
 //----------------------------------------------------------------------------
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

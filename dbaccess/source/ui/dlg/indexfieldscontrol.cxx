@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_INDEXFIELDSCONTROL_HXX_
 #include "indexfieldscontrol.hxx"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
 
 //......................................................................
 namespace dbaui
@@ -205,7 +198,6 @@ DBG_NAME(IndexFieldsControl)
         // insert rows for the the fields
         RowInserted(GetRowCount(), m_aFields.size(), sal_False);
         // insert an additional row for a new field for that index
-//      if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
         RowInserted(GetRowCount(), 1, sal_False);
         SetUpdateMode(sal_True);
 
@@ -318,7 +310,7 @@ DBG_NAME(IndexFieldsControl)
                 break;
 
             default:
-                OSL_ENSURE(sal_False, "IndexFieldsControl::GetController: invalid column id!");
+                OSL_FAIL("IndexFieldsControl::GetController: invalid column id!");
         }
 
         if (pReturn)
@@ -408,7 +400,7 @@ DBG_NAME(IndexFieldsControl)
             }
             break;
             default:
-                OSL_ENSURE(sal_False, "IndexFieldsControl::SaveModified: invalid column id!");
+                OSL_FAIL("IndexFieldsControl::SaveModified: invalid column id!");
         }
         return sal_True;
     }
@@ -432,7 +424,7 @@ DBG_NAME(IndexFieldsControl)
                 break;
 
             default:
-                OSL_ENSURE(sal_False, "IndexFieldsControl::InitController: invalid column id!");
+                OSL_FAIL("IndexFieldsControl::InitController: invalid column id!");
         }
     }
 
@@ -498,7 +490,7 @@ DBG_NAME(IndexFieldsControl)
                     else
                         return _rRow->bSortAscending ? m_sAscendingText : m_sDescendingText;
                 default:
-                    OSL_ENSURE(sal_False, "IndexFieldsControl::GetCurrentRowCellText: invalid column id!");
+                    OSL_FAIL("IndexFieldsControl::GetCurrentRowCellText: invalid column id!");
             }
         }
         return String();
@@ -514,3 +506,4 @@ DBG_NAME(IndexFieldsControl)
 }   // namespace dbaui
 //......................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

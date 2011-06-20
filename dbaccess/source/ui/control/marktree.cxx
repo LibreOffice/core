@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_MARKTREE_HXX_
 #include "marktree.hxx"
-#endif
-#ifndef _DBU_CONTROL_HRC_
 #include "dbu_control.hrc"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 //.........................................................................
 namespace dbaui
@@ -157,10 +152,9 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
         // we did not finish the loop because at least one of the children is in tristate
         eState = SV_BUTTON_TRISTATE;
 
-        // but this means that we did not finish all the siblings of pChildLoop, so their checking may be
-        // incorrect at the moment
+        // but this means that we did not finish all the siblings of pChildLoop,
+        // so their checking may be incorrect at the moment
         // -> correct this
-        // 88485 - 20.06.2001 - frank.schoenheit@sun.com
         while (pChildLoop)
         {
             implDetermineState(pChildLoop);
@@ -168,9 +162,9 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
         }
     }
     else
-        // none if the children is in tristate
+        // none if the children are in tristate
         if (nCheckedChildren)
-            // we have at least one chil checked
+            // we have at least one child checked
             if (nCheckedChildren != nChildrenOverall)
                 // not all children are checked
                 eState = SV_BUTTON_TRISTATE;
@@ -245,3 +239,4 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

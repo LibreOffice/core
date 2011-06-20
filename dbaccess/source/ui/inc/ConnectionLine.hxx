@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 #ifndef DBAUI_CONNECTIONLINE_HXX
 #define DBAUI_CONNECTIONLINE_HXX
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
 #include <functional>
 
 class OutputDevice;
@@ -69,7 +64,7 @@ namespace dbaui
         OConnectionLine( const OConnectionLine& rLine );
         virtual ~OConnectionLine();
 
-        virtual OConnectionLine& operator=( const OConnectionLine& rLine );
+        OConnectionLine& operator=( const OConnectionLine& rLine );
 
         Rectangle           GetBoundingRect();
         sal_Bool                RecalcLine();
@@ -113,3 +108,5 @@ namespace dbaui
 
 }
 #endif // DBAUI_CONNECTIONLINE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

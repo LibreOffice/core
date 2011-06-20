@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -107,7 +108,7 @@ namespace dbaui
             break;
 
         default:
-            OSL_ENSURE( false, "TextResetOperator::operateOn: unexpected event ID!" );
+            OSL_FAIL( "TextResetOperator::operateOn: unexpected event ID!" );
             // all those IDs should have been filtered out by payAttentionTo
             break;
         }
@@ -309,3 +310,5 @@ namespace dbaui
 //........................................................................
 } // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

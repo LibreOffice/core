@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef ADABASUI_SQLNAMEEDIT_HXX
 #define ADABASUI_SQLNAMEEDIT_HXX
 
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
 
 namespace adabasui
 {
@@ -59,3 +56,4 @@ namespace adabasui
 #endif // DBAUI_SQLNAMEEDIT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

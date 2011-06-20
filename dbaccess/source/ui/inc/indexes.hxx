@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _DBAUI_INDEXES_HXX_
 #define _DBAUI_INDEXES_HXX_
 
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 //......................................................................
 namespace dbaui
@@ -105,3 +102,4 @@ namespace dbaui
 
 #endif // _DBAUI_INDEXES_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

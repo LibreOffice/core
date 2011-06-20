@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,12 +38,8 @@
 
  *************************************************************************/
 
-#ifndef DBA_DATASUPPLIER_HXX
 #include "myucp_datasupplier.hxx"
-#endif
-#ifndef DBA_UCPRESULTSET_HXX
 #include "myucp_resultset.hxx"
-#endif
 
 
 using namespace ::com::sun::star::uno;
@@ -56,11 +53,9 @@ using namespace ::com::sun::star::container;
 using namespace dbaccess;
 
 //=========================================================================
-//=========================================================================
 //
 // DynamicResultSet Implementation.
 //
-//=========================================================================
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
@@ -79,7 +74,6 @@ DynamicResultSet::DynamicResultSet(
 // Non-interface methods.
 //
 //=========================================================================
-
 void DynamicResultSet::initStatic()
 {
     m_xResultSet1
@@ -91,7 +85,6 @@ void DynamicResultSet::initStatic()
                                       m_xEnv );
 }
 
-//=========================================================================
 void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
@@ -103,4 +96,4 @@ void DynamicResultSet::initDynamic()
                                       m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

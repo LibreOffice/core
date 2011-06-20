@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,18 +35,14 @@
 #include "RptDef.hxx"
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
-#ifndef RPT_XMLCOLUMN_HXX
 #include "xmlColumn.hxx"
-#endif
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include "xmlCondPrtExpr.hxx"
 #include "xmlStyleImport.hxx"
 #include "xmlstrings.hrc"
 #include <connectivity/dbtools.hxx>
 #include <tools/debug.hxx>
-#ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 
@@ -125,7 +122,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling the section props");
+        OSL_FAIL("Exception catched while filling the section props");
     }
 }
 // -----------------------------------------------------------------------------
@@ -195,7 +192,7 @@ void OXMLTable::EndElement()
                         pAutoStyle->FillPropertySet(m_xSection.get());
                     }
                 }
-            } // if ( m_sStyleName.getLength() )
+            }
             // set height
             ::std::vector<sal_Int32>::iterator aIter = m_aHeight.begin();
             ::std::vector<sal_Int32>::iterator aEnd = m_aHeight.end();
@@ -272,7 +269,7 @@ void OXMLTable::EndElement()
                                 }
                                 catch(beans::PropertyVetoException)
                                 {
-                                    OSL_ENSURE(0,"Could not set the correct position or size!");
+                                    OSL_FAIL("Could not set the correct position or size!");
                                 }
                             }
                         }
@@ -281,11 +278,11 @@ void OXMLTable::EndElement()
                 }
                 nPosY += m_aHeight[i];
             }
-        } // if ( m_xComponent.is() )
+        }
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"OXMLTable::EndElement -> exception catched");
+        OSL_FAIL("OXMLTable::EndElement -> exception catched");
     }
 }
 // -----------------------------------------------------------------------------
@@ -321,3 +318,5 @@ void OXMLTable::incrementRowIndex()
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

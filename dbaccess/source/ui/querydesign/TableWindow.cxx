@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,36 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
-#endif
-#ifndef DBACCESS_IMAGEPROVIDER_HXX
 #include "imageprovider.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _SV_SVAPP_HXX
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
-#endif
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -140,7 +121,7 @@ OTableWindow::~OTableWindow()
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
         ::std::auto_ptr<Window> aTemp(m_pListBox);
         m_pListBox = NULL;
-    } // if (m_pListBox)
+    }
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
@@ -207,13 +188,13 @@ sal_Bool OTableWindow::FillListBox()
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
     // mark all primary keys with special image
-    ModuleRes TmpRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS);
+    ModuleRes TmpRes(IMG_JOINS);
     ImageList aImageList(TmpRes);
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())
     {
-        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
+        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 
@@ -224,7 +205,7 @@ sal_Bool OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occured!");
+        OSL_FAIL("Exception occurred!");
     }
     try
     {
@@ -253,7 +234,7 @@ sal_Bool OTableWindow::FillListBox()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occured!");
+        OSL_FAIL("Exception occurred!");
     }
 
     return sal_True;
@@ -292,17 +273,16 @@ void OTableWindow::impl_updateImage()
 {
     ImageProvider aImageProvider( getDesignView()->getController().getConnection() );
 
-    Image aImage, aImageHC;
-    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage, aImageHC );
+    Image aImage;
+    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage );
 
-    if ( !aImage || !aImageHC )
+    if ( !aImage )
     {
-        OSL_ENSURE( false, "OTableWindow::impl_updateImage: no images!" );
+        OSL_FAIL( "OTableWindow::impl_updateImage: no images!" );
         return;
     }
 
-    m_aTypeImage.SetModeImage( aImage, BMP_COLOR_NORMAL );
-    m_aTypeImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
+    m_aTypeImage.SetModeImage( aImage );
     m_aTypeImage.Show();
 }
 
@@ -313,7 +293,7 @@ sal_Bool OTableWindow::Init()
     if ( !m_pListBox )
     {
         m_pListBox = CreateListBox();
-        DBG_ASSERT( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
+        OSL_ENSURE( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
         m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 
@@ -820,3 +800,4 @@ void OTableWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

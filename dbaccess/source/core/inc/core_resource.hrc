@@ -32,10 +32,8 @@
 #include <svl/solar.hrc>
 #endif
 
-//------------------------------------------------------------------------------
 #define RID_CORE_STRINGS_START                  RID_DBACCESS_START
 
-//------------------------------------------------------------------------------
 //- String-IDs
 #define RID_STR_TRIED_OPEN_TABLE                ( RID_CORE_STRINGS_START +  0 )
 #define RID_STR_CONNECTION_INVALID              ( RID_CORE_STRINGS_START +  1 )
@@ -110,4 +108,3 @@
 #define RID_NO_SUCH_DATA_SOURCE                 ( RID_CORE_STRINGS_START + 67 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
-

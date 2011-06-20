@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
 #include "WExtendPages.hxx"
-#endif
-#ifndef DBAUI_RTFREADER_HXX
 #include "RtfReader.hxx"
-#endif
-#ifndef DBAUI_HTMLREADER_HXX
 #include "HtmlReader.hxx"
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
 
 using namespace dbaui;
 //========================================================================
@@ -90,3 +83,4 @@ SvParser* OWizNormalExtend::createReader(sal_Int32 /*_nRows*/)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

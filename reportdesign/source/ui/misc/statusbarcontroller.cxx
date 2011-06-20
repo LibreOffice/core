@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 namespace rptui
@@ -93,7 +94,7 @@ OStatusbarController::OStatusbarController(const Reference< XMultiServiceFactory
 void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
 {
     StatusbarController::initialize(_rArguments);
-    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     StatusBar* pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow));
@@ -109,11 +110,11 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
                 break;
             }
         }
-        if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
+        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ZoomSlider")) )
         {
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomSliderControl(m_nSlotId = SID_ATTR_ZOOMSLIDER,m_nId,*pStatusBar));
-        } // if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
-        else if ( m_aCommandURL.equalsAscii(".uno:Zoom") )
+        }
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Zoom")) )
         {
             m_pController = TStatusbarHelper::createFromQuery(new SvxZoomStatusBarControl(m_nSlotId = SID_ATTR_ZOOM,m_nId,*pStatusBar));
         }
@@ -131,12 +132,12 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
 // XStatusListener
 void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEvent)throw ( RuntimeException )
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if ( m_pController.is() )
     {
-        if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
+        if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ZoomSlider")) )
         {
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 2 )
@@ -145,8 +146,8 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
                 aZoomSlider.PutValue(_aEvent.State);
                 static_cast<SvxZoomSliderControl*>(m_pController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoomSlider);
             }
-        } // if ( m_aCommandURL.equalsAscii(".uno:ZoomSlider") )
-        else if ( m_aCommandURL.equalsAscii(".uno:Zoom") )
+        }
+        else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Zoom")) )
         {
             Sequence< PropertyValue > aSeq;
             if ( (_aEvent.State >>= aSeq) && aSeq.getLength() == 3 )
@@ -228,3 +229,5 @@ void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::Runt
 // =============================================================================
 } // rptui
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

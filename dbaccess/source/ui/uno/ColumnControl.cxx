@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,24 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_COLUMNCONTROL_HXX
 #include "ColumnControl.hxx"
-#endif
-#ifndef DBAUI_COLUMNPEER_HXX
 #include "ColumnPeer.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl()
 {
@@ -149,3 +138,5 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

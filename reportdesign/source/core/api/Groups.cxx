@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "Group.hxx"
 #include <tools/debug.hxx>
 #include "core_resource.hxx"
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include <boost/bind.hpp>
 #include <algorithm>
 // =============================================================================
@@ -216,3 +215,5 @@ void OGroups::checkIndex(sal_Int32 _nIndex)
 // =============================================================================
 }
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

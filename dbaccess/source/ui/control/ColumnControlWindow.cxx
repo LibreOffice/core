@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,24 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_COLUMNCONTROLWINDOW_HXX
 #include "ColumnControlWindow.hxx"
-#endif
-#ifndef DBAUI_FIELDCONTROLS_HXX
 #include "FieldControls.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <unotools/syslocale.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 
 
 using namespace ::dbaui;
@@ -84,7 +73,6 @@ void OColumnControlWindow::ActivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
-//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -98,7 +86,6 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
-//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -196,3 +183,5 @@ TOTypeInfoSP OColumnControlWindow::getDefaultTyp() const
     return m_pTypeInfo;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

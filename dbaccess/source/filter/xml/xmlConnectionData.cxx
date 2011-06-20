@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,37 +28,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaxml.hxx"
-#ifndef DBA_XMLCONNECTIONDATA_HXX_INCLUDED
 #include "xmlConnectionData.hxx"
-#endif
-#ifndef DBA_XMLLOGIN_HXX
 #include "xmlLogin.hxx"
-#endif
-#ifndef DBA_XMLTABLEFILTERLIST_HXX
 #include "xmlTableFilterList.hxx"
-#endif
-#ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
 #include "xmlEnums.hxx"
 #include "xmlDatabaseDescription.hxx"
 #include "xmlConnectionResource.hxx"
 #include "xmlstrings.hrc"
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
 namespace dbaxml
 {
@@ -116,7 +99,7 @@ SvXMLImportContext* OXMLConnectionData::CreateChildContext(
             if ( !m_bFoundOne )
             {
                 m_bFoundOne = true;
-                OSL_ENSURE(0,"Not supported yet!");
+                OSL_FAIL("Not supported yet!");
             }
             break;
     }
@@ -135,3 +118,5 @@ ODBFilter& OXMLConnectionData::GetOwnImport()
 //----------------------------------------------------------------------------
 } // namespace dbaxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

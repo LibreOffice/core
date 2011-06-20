@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -415,15 +416,13 @@ xKey.clear();
             }
         }
     xKey.clear();
-    } // for(sal_Int32 i=0;i<xKeys->getCount();++i)
+    }
     if ( bDropRelation )
     {
         DropRelation();
         String sError(ModuleRes(STR_QUERY_REL_COULD_NOT_CREATE));
         ::dbtools::throwGenericSQLException(sError,NULL);
     }
-
-//  OSL_ENSURE(xKey.is(),"No key found have insertion!");
 
     // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
     if ( xColSup.is() )
@@ -453,8 +452,8 @@ xKey.clear();
                 m_vConnLineData.push_back(pNewData);
             }
         }
-    } // if ( xColSup.is() )
-    // NOTE : the caller is resposible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
+    }
+    // NOTE : the caller is responsible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
 
     ////////////////////////////////////////////////////////////
     // Kardinalitaet bestimmen
@@ -464,3 +463,4 @@ xKey.clear();
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

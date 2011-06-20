@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,12 @@
 #ifndef DBAUI_COLLECTIONVIEW_HXX
 #define DBAUI_COLLECTIONVIEW_HXX
 
-#ifndef _SVT_FILEVIEW_HXX
 #include <svtools/fileview.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 //.........................................................................
 namespace dbaui
@@ -98,3 +87,4 @@ namespace dbaui
 #endif //DBAUI_COLLECTIONVIEW_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

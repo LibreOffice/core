@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,38 +29,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_ODBC_CONFIG_HXX_
 #include "odbcconfig.hxx"
+
+#ifdef SYSTEM_ODBC_HEADERS
+#include <sqltypes.h>
+#else
+#include <odbc/sqltypes.h>
 #endif
+
 #include <rtl/bootstrap.hxx>
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
-#endif
-#ifndef _THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 #ifdef HAVE_ODBC_SUPPORT
 
-#if defined(OS2)
-#define ODBC_LIBRARY    "ODBC.DLL"
-#define ODBC_UI_LIBRARY "ODBCINST.DLL"
-#endif
 #if defined WNT
 #define ODBC_LIBRARY    "ODBC32.DLL"
 #define ODBC_UI_LIBRARY "ODBCCP32.DLL"
@@ -90,17 +78,10 @@
 #endif
 #endif // defined(WNT)
 
-#if defined(OS2)
-#define ALLREADY_HAVE_OS2_TYPES
-#define DONT_TD_VOID
-#endif
-
 #ifdef SYSTEM_ODBC_HEADERS
 #include <sqlext.h>
 #else
-#ifndef __SQLEXT_H
 #include <odbc/sqlext.h>
-#endif
 #endif
 
 #if defined(WNT)
@@ -111,10 +92,6 @@
 #define SQL_API __stdcall
 #endif // defined(WNT)
 // from here on you can do what you want to
-
-#if defined(OS2)
-#define SQL_API _System
-#endif // defined(OS2)
 
 #else
 
@@ -295,7 +272,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 
     if (!allocEnv())
     {
-        OSL_ENSURE(sal_False, "OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
+        OSL_FAIL("OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
         return;
     }
 
@@ -401,3 +378,5 @@ bool OOdbcManagement::isRunning() const
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

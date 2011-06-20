@@ -69,12 +69,10 @@ String STR_MSACCESS_MDB_FILE
     Text[ en-US ] = "Microsoft Access database file";
 };
 
-
 String STR_NO_ADDITIONAL_SETTINGS
 {
     Text[ en-US ] = "No more settings are necessary. To verify that the connection is working, click the '%test' button.";
 };
-
 
 String STR_COMMONURL
 {
@@ -85,18 +83,15 @@ String STR_HOSTNAME
 {
     Text[ en-US ] = "~Host name";
 };
+
 String STR_MOZILLA_PROFILE_NAME
 {
     Text[ en-US ] = "~Mozilla profile name";
 };
+
 String STR_THUNDERBIRD_PROFILE_NAME
 {
     Text[ en-US ] = "~Thunderbird profile name";
 };
 
-
 // -------------------------------------------------------------------------------------------------
-
-
-
-

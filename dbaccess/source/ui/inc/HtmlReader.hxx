@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,21 +28,11 @@
 #ifndef DBAUI_HTMLREADER_HXX
 #define DBAUI_HTMLREADER_HXX
 
-#ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
-#endif
-#ifndef _PARHTML_HXX //autogen
 #include <svtools/parhtml.hxx>
-#endif
-#ifndef _SVX_SVXENUM_HXX
 #include <editeng/svxenum.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
 
 
 namespace dbaui
@@ -64,7 +55,7 @@ namespace dbaui
         virtual TypeSelectionPageFactory
                              getTypeSelectionPageFactory();
 
-        void                TableDataOn(SvxCellHorJustify& eVal,int nToken);
+        void                TableDataOn(SvxCellHorJustify& eVal);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
         sal_Int16           GetWidthPixel( const HTMLOption* pOption );
         void                setTextEncoding();
@@ -98,3 +89,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

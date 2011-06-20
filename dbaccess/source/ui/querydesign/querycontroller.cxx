@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -89,9 +90,10 @@
 #include <svtools/localresaccess.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {
@@ -123,12 +125,12 @@ namespace dbaui
         // need by registration
         static ::rtl::OUString getImplementationName_Static() throw( RuntimeException )
         {
-            return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OViewDesign");
+            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OViewDesign"));
         }
         static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( RuntimeException )
         {
             Sequence< ::rtl::OUString> aSupported(1);
-            aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ViewDesign");
+            aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ViewDesign"));
             return aSupported;
         }
         static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
@@ -155,11 +157,11 @@ namespace dbaui
             if (!_pNode->isToken())
             {
                 // Regelnamen als rule: ...
-                rString = ::rtl::OUString::createFromAscii("RULE_ID: ");
+                rString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RULE_ID: "));
                 rString += ::rtl::OUString::valueOf( (sal_Int32)_pNode->getRuleID());
-                rString+= ::rtl::OUString::createFromAscii("(");
+                rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("));
                 rString += OSQLParser::RuleIDToStr(_pNode->getRuleID());
-                rString+= ::rtl::OUString::createFromAscii(")");
+                rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
 
 
                 _pParent = _pBox->InsertEntry(rString,_pParent);
@@ -180,53 +182,58 @@ namespace dbaui
 
                 case SQL_NODE_KEYWORD:
                     {
-                        rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:");
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_KEYWORD:"));
                         ::rtl::OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
                         rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
                      break;}
 
                 case SQL_NODE_COMPARISON:
-                    {rString+= ::rtl::OUString::createFromAscii("SQL_COMPARISON:");
-                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                    {
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_COMPARISON:"));
+                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
                             // und beginne neu Zeile
-                    break;}
+                        break;}
 
                 case SQL_NODE_NAME:
-                    {rString+= ::rtl::OUString::createFromAscii("SQL_NAME:");
-                     rString+= ::rtl::OUString::createFromAscii("\"");
-                     rString += _pNode->getTokenValue();
-                     rString+= ::rtl::OUString::createFromAscii("\"");
-
-                     break;}
+                    {
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_NAME:"));
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+                        rString += _pNode->getTokenValue();
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+                        break;}
 
                 case SQL_NODE_STRING:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_STRING:'");
-                     rString += _pNode->getTokenValue();
-                     break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_STRING:'"));
+                        rString += _pNode->getTokenValue();
+                        break;}
 
                 case SQL_NODE_INTNUM:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_INTNUM:");
-                     rString += _pNode->getTokenValue();
-                     break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_INTNUM:"));
+                        rString += _pNode->getTokenValue();
+                        break;}
 
                 case SQL_NODE_APPROXNUM:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_APPROXNUM:");
-                     rString += _pNode->getTokenValue();
-                     break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_APPROXNUM:"));
+                        rString += _pNode->getTokenValue();
+                        break;}
 
                 case SQL_NODE_PUNCTUATION:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_PUNCTUATION:");
-                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
-                    break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_PUNCTUATION:"));
+                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                        break;}
 
                 case SQL_NODE_AMMSC:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_AMMSC:");
-                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
-
-                    break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_AMMSC:"));
+                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                        break;}
 
                 default:
-                    OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
+                    OSL_FAIL("OSQLParser::ShowParseTree: unzulaessiger NodeType");
                     rString += _pNode->getTokenValue();
                 }
                 _pBox->InsertEntry(rString,_pParent);
@@ -302,13 +309,13 @@ namespace
 //------------------------------------------------------------------------------
 ::rtl::OUString OQueryController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OQueryDesign"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> OQueryController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.QueryDesign");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.QueryDesign"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -354,7 +361,7 @@ OQueryController::~OQueryController()
     DBG_DTOR(OQueryController,NULL);
     if ( !getBroadcastHelper().bDisposed && !getBroadcastHelper().bInDispose )
     {
-        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
+        OSL_FAIL("Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
@@ -664,7 +671,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     }
                 }
             }
-            catch(const SQLException& e)
+            catch(const SQLException&)
             {
                 aError = ::cppu::getCaughtException();
             }
@@ -693,7 +700,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 if(m_bGraphicalDesign)
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
             }
-            //  InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
             break;
         case SID_QUERY_VIEW_FUNCTIONS:
         case SID_QUERY_VIEW_TABLES:
@@ -719,29 +725,24 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     {
                         xCloseFrame->close( sal_True );
                     }
-                    catch( const Exception& )
+                    catch(const Exception&)
                     {
-                        OSL_ENSURE( sal_False, "OQueryController::Execute(SID_DB_QUERY_PREVIEW): *nobody* is expected to veto closing the preview frame!" );
+                        OSL_FAIL( "OQueryController::Execute(SID_DB_QUERY_PREVIEW): *nobody* is expected to veto closing the preview frame!" );
                     }
                 }
                 else
                     Execute(ID_BROWSER_QUERY_EXECUTE,Sequence< PropertyValue >());
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
             }
             break;
         case ID_QUERY_ZOOM_IN:
             {
-//              m_aZoom *= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
         case ID_QUERY_ZOOM_OUT:
             {
-//              if(m_aZoom != Fraction(1,1))
-//                  m_aZoom /= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
 #if OSL_DEBUG_LEVEL > 1
@@ -778,11 +779,10 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 pNodeTmp = pTemp->getChild(1);
                                 OSQLParseNode::compress(pNodeTmp);
                                 pNodeTmp = pTemp->getChild(1);
-                            } // if ( pCondition ) // no where clause
+                            }
                             ::rtl::OUString sTemp;
                             pNode->parseNodeToStr(sTemp,getConnection());
                             getContainer()->setStatement(sTemp);
-
                         }
                     }
 
@@ -863,7 +863,7 @@ void OQueryController::impl_initialize()
     ::rtl::OUString sIndependentSQLCommand;
     if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: IndependentSQLCommand is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: IndependentSQLCommand is regognized for compatibility only!" );
         sCommand = sIndependentSQLCommand;
         m_nCommandType = CommandType::COMMAND;
     }
@@ -871,7 +871,7 @@ void OQueryController::impl_initialize()
     ::rtl::OUString sCurrentQuery;
     if ( rArguments.get_ensureType( "CurrentQuery", sCurrentQuery ) )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
         sCommand = sCurrentQuery;
         m_nCommandType = CommandType::QUERY;
     }
@@ -879,7 +879,7 @@ void OQueryController::impl_initialize()
     sal_Bool bCreateView( sal_False );
     if ( rArguments.get_ensureType( "CreateView", bCreateView ) && bCreateView )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
         m_nCommandType = CommandType::TABLE;
     }
 
@@ -903,7 +903,7 @@ void OQueryController::impl_initialize()
         m_sName = ::rtl::OUString();
         break;
     default:
-        OSL_ENSURE( false, "OQueryController::impl_initialize: logic error in code!" );
+        OSL_FAIL( "OQueryController::impl_initialize: logic error in code!" );
         throw RuntimeException();
     }
 
@@ -911,7 +911,7 @@ void OQueryController::impl_initialize()
     sal_Bool bGraphicalDesign( sal_True );
     if ( rArguments.get_ensureType( (::rtl::OUString)PROPERTY_QUERYDESIGNVIEW, bGraphicalDesign ) )
     {
-        OSL_ENSURE( false, "OQueryController::impl_initialize: QueryDesignView is regognized for compatibility only!" );
+        OSL_FAIL( "OQueryController::impl_initialize: QueryDesignView is regognized for compatibility only!" );
         m_bGraphicalDesign = bGraphicalDesign;
     }
 
@@ -1050,7 +1050,7 @@ void OQueryController::impl_initialize()
 
         setModified(sal_False);
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         DBG_UNHANDLED_EXCEPTION();
         // we caught an exception so we switch to text only mode
@@ -1078,7 +1078,7 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
     {
         if ( !editingCommand() )
         {
-            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+            SolarMutexGuard aSolarGuard;
             ::osl::MutexGuard aGuard( getMutex() );
             String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             sName = aDefaultName.GetToken(0,' ');
@@ -1101,7 +1101,7 @@ void OQueryController::setQueryComposer()
                 m_xComposer = xFactory->createQueryComposer();
                 getContainer()->setStatement(m_sStatement);
             }
-            catch (Exception&)
+            catch(const Exception&)
             {
                 m_xComposer = NULL;
             }
@@ -1159,12 +1159,12 @@ void OQueryController::impl_onModifyChanged()
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ( getContainer() && Source.Source.is() )
     {
         if ( Source.Source == m_aCurrentFrame.getFrame() )
-        {   // our frame is beeing disposed -> close the preview window (if we have one)
+        {   // our frame is being disposed -> close the preview window (if we have one)
             Reference< XFrame > xPreviewFrame( getContainer()->getPreviewFrame() );
             ::comphelper::disposeComponent( xPreviewFrame );
         }
@@ -1289,7 +1289,7 @@ void OQueryController::executeQuery()
             InvalidateFeature(SID_DB_QUERY_PREVIEW);
 
             URL aWantToDispatch;
-            aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
+            aWantToDispatch.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/DataSourceBrowser"));
 
             ::rtl::OUString sFrameName( FRAME_NAME_QUERY_PREVIEW );
             sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
@@ -1350,12 +1350,12 @@ void OQueryController::executeQuery()
             }
             else
             {
-                OSL_ENSURE(0,"Couldn't create a beamer window!");
+                OSL_FAIL("Couldn't create a beamer window!");
             }
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Couldn't create a beamer window!");
+            OSL_FAIL("Couldn't create a beamer window!");
         }
     }
 }
@@ -1381,7 +1381,6 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
         {
             String sName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             aDefaultName = sName.GetToken(0,' ');
-            //aDefaultName = getPrivateTitle( );
             aDefaultName = ::dbtools::createUniqueName(_xElements,aDefaultName);
         }
 
@@ -1547,7 +1546,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
                 ::dbaui::appendToFilter( getConnection(), m_sName, getORB(), getView() );
-            } // if ( editingView() )
+            }
             Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
             {
@@ -1561,13 +1560,13 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         bSuccess = true;
 
     }
-    catch( const SQLException& )
+    catch(const SQLException&)
     {
         if ( !bNew )
             m_sName = sOriginalName;
         aInfo = SQLExceptionInfo( ::cppu::getCaughtException() );
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         if ( !bNew )
             m_sName = sOriginalName;
@@ -1612,11 +1611,11 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
             m_xComposer->setQuery(sTranslatedStmt);
             sTranslatedStmt = m_xComposer->getComposedQuery();
         }
-        catch(SQLException& e)
+        catch(const SQLException& e)
         {
             ::dbtools::SQLExceptionInfo aInfo(e);
             showError(aInfo);
-            // an error occured so we clear the statement
+            // an error occurred so we clear the statement
             sTranslatedStmt = ::rtl::OUString();
         }
     }
@@ -1635,7 +1634,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 // -----------------------------------------------------------------------------
 short OQueryController::saveModified()
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     short nRet = RET_YES;
     if ( !isConnected() || !isModified() )
@@ -1698,7 +1697,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "OQueryController::impl_reset: could not retrieve the layout information from the query!" );
+                        OSL_FAIL( "OQueryController::impl_reset: could not retrieve the layout information from the query!" );
                     }
                 }
             }
@@ -1834,7 +1833,7 @@ bool OQueryController::allowViews() const
 // -----------------------------------------------------------------------------
 bool OQueryController::allowQueries() const
 {
-    DBG_ASSERT( getSdbMetaData().isConnected(), "OQueryController::allowQueries: illegal call!" );
+    OSL_ENSURE( getSdbMetaData().isConnected(), "OQueryController::allowQueries: illegal call!" );
     if ( !getSdbMetaData().supportsSubqueriesInFrom() )
         return false;
 
@@ -1866,3 +1865,4 @@ void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( Runt
 } // namespace dbaui
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

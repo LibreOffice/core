@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,10 @@
 #ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #define DBAUI_QUERY_TABLEWINDOW_HXX
 
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
 #include "QTableWindowData.hxx"
-#endif
-#ifndef DBAUI_TABLEFIELDDESC_HXX
 #include "TableFieldDescription.hxx"
-#endif
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
 
 namespace dbaui
 {
@@ -98,3 +91,4 @@ namespace dbaui
 #endif // DBAUI_QUERY_TABLEWINDOW_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

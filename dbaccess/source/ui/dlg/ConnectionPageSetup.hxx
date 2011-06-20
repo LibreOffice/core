@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,37 +29,19 @@
 
 #ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #define DBAUI_CONNECTIONPAGESETUP_HXX
-#ifndef DBAUI_CONNECTIONHELPER_HXX
 #include "ConnectionHelper.hxx"
-#endif
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _DBAUI_CURLEDIT_HXX_
 #include "curledit.hxx"
-#endif
 
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 
 
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-/*  // #106016# --------------
-    enum IS_PATH_EXIST
-    {
-        PATH_NOT_EXIST = 0,
-        PATH_EXIST,
-        PATH_NOT_KNOWN
-    };
-    */
 
     class IDatabaseSettingsDialog;
     //=========================================================================
@@ -115,3 +98,5 @@ namespace dbaui
 //.........................................................................
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

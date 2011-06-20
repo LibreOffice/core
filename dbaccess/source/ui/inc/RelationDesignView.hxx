@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,21 +29,13 @@
 #ifndef DBAUI_RELATIONDESIGNVIEW_HXX
 #define DBAUI_RELATIONDESIGNVIEW_HXX
 
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
-#endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef DBAUI_RELATION_TABLEVIEW_HXX
 #include "RelationTableView.hxx"
-#endif
 
 namespace dbaui
 {
@@ -72,3 +65,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

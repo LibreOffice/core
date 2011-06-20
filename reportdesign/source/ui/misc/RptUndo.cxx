@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@ namespace
                 _xSection->remove(xShape);
                 --nCount;
             }
-        } // if ( _xSection.is() )
+        }
     }
     //----------------------------------------------------------------------------
     void lcl_insertElements(const uno::Reference< report::XSection >& _xSection,const ::std::vector< uno::Reference< drawing::XShape> >& _aControls)
@@ -91,7 +92,7 @@ namespace
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_ENSURE(0,"lcl_insertElements:Exception caught!");
+                    OSL_FAIL("lcl_insertElements:Exception caught!");
                 }
             }
         }
@@ -111,7 +112,7 @@ namespace
                 }
                 catch(const uno::Exception&)
                 {
-                    OSL_ENSURE(0,"lcl_setValues:Exception caught!");
+                    OSL_FAIL("lcl_setValues:Exception caught!");
                 }
             }
         }
@@ -156,7 +157,7 @@ OSectionUndo::~OSectionUndo()
             }
             catch(uno::Exception)
             {
-                OSL_ENSURE(0,"Exception caught!");
+                OSL_FAIL("Exception caught!");
             }
         }
     }
@@ -202,7 +203,7 @@ void OSectionUndo::Undo()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OSectionUndo::Undo: caught an exception!" );
+        OSL_FAIL( "OSectionUndo::Undo: caught an exception!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -223,7 +224,7 @@ void OSectionUndo::Redo()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OSectionUndo::Redo: caught an exception!" );
+        OSL_FAIL( "OSectionUndo::Redo: caught an exception!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -359,7 +360,7 @@ void OGroupUndo::implReInsert( )
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while undoing remove group");
+        OSL_FAIL("Exception catched while undoing remove group");
     }
 }
 //----------------------------------------------------------------------------
@@ -371,7 +372,7 @@ void OGroupUndo::implReRemove( )
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while redoing remove group");
+        OSL_FAIL("Exception catched while redoing remove group");
     }
 }
 //----------------------------------------------------------------------------
@@ -409,3 +410,4 @@ void OGroupUndo::Redo()
 //============================================================================
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

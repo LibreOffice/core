@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define RPTUI_GROUPS_SORTING_HXX
 
 #include <vcl/floatwin.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
@@ -66,18 +65,15 @@ class OReportController;
 \************************************************************************/
 
 class OGroupsSortingDialog :    public FloatingWindow
-                            ,   public ::cppu::BaseMutex
-                                ,   public ::comphelper::OPropertyChangeListener
-                           ,public dbaui::OToolBoxHelper
-                           ,public vcl::IImageListProvider
+                           ,    public ::cppu::BaseMutex
+                           ,    public ::comphelper::OPropertyChangeListener
+                           ,    public dbaui::OToolBoxHelper
+                           ,    public vcl::IImageListProvider
 {
     friend class OFieldExpressionControl;
 
     FixedLine                               m_aFL2;
     FixedText                               m_aMove;
-//BTN   ImageButton                             m_aPB_Up;
-//BTN   ImageButton                             m_aPB_Down;
-//BTN   ImageButton                             m_aPB_Delete;
     ToolBox                                 m_aToolBox;
 
     FixedLine                               m_aFL3;
@@ -107,7 +103,6 @@ private:
     DECL_LINK( OnControlFocusLost, Control* );
     DECL_LINK( OnControlFocusGot, Control* );
     DECL_LINK( LBChangeHdl, ListBox* );
-//BTN   DECL_LINK( ClickHdl, ImageButton* );
     DECL_LINK( OnFormatAction,      ToolBox* );
 
     /** returns the groups
@@ -189,10 +184,8 @@ public:
         /** will be called when the image list is needed.
             @param  _eSymbolsSize
                 <svtools/imgdef.hxx>
-            @param  _bHiContast
-                <TRUE/> when in high contrast mode.
         */
-    virtual ImageList getImageList(sal_Int16 _eSymbolsSize,sal_Bool _bHiContast) const;
+    virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const;
 
     // ImageListProvider interface
     virtual ImageList getImageList(vcl::ImageListType) SAL_THROW ((com::sun::star::lang::IllegalArgumentException ));
@@ -202,3 +195,5 @@ public:
 } // namespace rptui
 // =============================================================================
 #endif // RPTUI_GROUPS_SORTING_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

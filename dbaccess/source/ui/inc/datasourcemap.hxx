@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,21 +29,11 @@
 #ifndef DBAUI_DATASOURCEMAP_HXX
 #define DBAUI_DATASOURCEMAP_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
 
 class SfxItemPool;
 class SfxItemSet;
@@ -122,7 +113,7 @@ namespace dbaui
         void        clearModifiedFlag(const ::rtl::OUString& _rName);
 
         /** tell the map that a data source is scheduled to be deleted.
-            @return     id for accessing the deleted data source later. -1 if no free id existed or an error occured
+            @return     id for accessing the deleted data source later. -1 if no free id existed or an error occurred
         */
         sal_Int32   markDeleted(const ::rtl::OUString& _rName);
 
@@ -272,3 +263,4 @@ namespace dbaui
 
 #endif // DBAUI_DATASOURCEMAP_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

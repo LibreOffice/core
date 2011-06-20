@@ -62,6 +62,11 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text [ en-US ] = "The directory $name$ could not be created.";
 };
 
+
+
+
+
+
 #define EDIT_SIZE_X     50
 #define FT_SIZE_X       90
 #define WIN_X           220
@@ -147,4 +152,3 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ en-US ] = "Mark the tables that should be visible for the applications.";
     };
 };
-

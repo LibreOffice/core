@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,21 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_COLUMNPEER_HXX
 #include "ColumnPeer.hxx"
-#endif
-#ifndef DBAUI_COLUMNCONTROLWINDOW_HXX
 #include "ColumnControlWindow.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
 
 //.........................................................................
 namespace dbaui
@@ -68,7 +59,7 @@ OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XMultiServiceFactory>&
 // -----------------------------------------------------------------------------
 void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
     if ( pFieldControl )
@@ -79,7 +70,7 @@ void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
 // -----------------------------------------------------------------------------
 void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
     if ( pFieldControl )
@@ -106,7 +97,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
                 _xColumn->getPropertyValue(PROPERTY_PRECISION)      >>= nPrecision;
                 _xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT)    >>= bAutoIncrement;
             }
-            catch(Exception)
+            catch(const Exception&)
             {
             }
 
@@ -127,7 +118,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 // -----------------------------------------------------------------------------
 void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
     if ( pFieldControl )
         pFieldControl->setConnection(_xCon);
@@ -135,7 +126,7 @@ void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
 //------------------------------------------------------------------------------
 void OColumnPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any& Value) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if ( 0 == _rPropertyName.compareToAscii( PROPERTY_COLUMN ) )
     {
@@ -170,3 +161,5 @@ Any OColumnPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( Run
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

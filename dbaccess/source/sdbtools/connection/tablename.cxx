@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,6 +43,7 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>
+#include <sal/macros.h>
 
 //........................................................................
 namespace sdbtools
@@ -210,7 +212,7 @@ namespace sdbtools
     //--------------------------------------------------------------------
     namespace
     {
-        /** translates a CopmositionType into a EComposeRule
+        /** translates a CompositionType into a EComposeRule
             @throws IllegalArgumentException
                 if the given value does not denote a valid CompositionType
         */
@@ -232,7 +234,7 @@ namespace sdbtools
 
             bool found = false;
             size_t i = 0;
-            for ( ; ( i < sizeof( TypeTable ) / sizeof( TypeTable[0] ) ) && !found; ++i )
+            for ( ; ( i < SAL_N_ELEMENTS( TypeTable ) ) && !found; ++i )
                 if ( TypeTable[i].nCompositionType == _nType )
                     found = true;
             if ( !found )
@@ -273,3 +275,4 @@ namespace sdbtools
 } // namespace sdbtools
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

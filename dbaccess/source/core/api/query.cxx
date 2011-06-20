@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,83 +29,38 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_COREAPI_QUERY_HXX_
 #include "query.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
 #include <connectivity/warningscontainer.hxx>
-#endif
-#ifndef DBA_HELPERCOLLECTIONS_HXX
 #include "HelperCollections.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
+#include <osl/diagnose.h>
 #include <comphelper/propagg.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
 #include <unotools/sharedunocomponent.hxx>
-#endif
-#ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
-#endif
 
 #include <functional>
 
-#ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
 #include "querycomposer.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef DBA_CONTAINERMEDIATOR_HXX
 #include "ContainerMediator.hxx"
-#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -120,16 +76,14 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::utl;
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
 //==========================================================================
 //= OQuery
 //==========================================================================
 DBG_NAME(OQuery)
-//--------------------------------------------------------------------------
+
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
                ,const Reference< XMultiServiceFactory >& _xORB)
@@ -148,7 +102,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ODataSettings::registerPropertiesFor(this);
 
     osl_incrementInterlockedCount(&m_refCount);
-    DBG_ASSERT(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
+    OSL_ENSURE(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
     if ( m_xCommandDefinition.is() )
     {
         try
@@ -157,27 +111,26 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
+            OSL_FAIL("OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
         }
 
         m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);
         //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
     }
-    DBG_ASSERT(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
+    OSL_ENSURE(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
     osl_decrementInterlockedCount(&m_refCount);
 }
 
-//--------------------------------------------------------------------------
 OQuery::~OQuery()
 {
     DBG_DTOR(OQuery, NULL);
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_IMPLEMENTATION_ID(OQuery);
 IMPLEMENT_GETTYPES3(OQuery,OQueryDescriptor_Base,ODataSettings,OContentHelper);
 IMPLEMENT_FORWARD_XINTERFACE3( OQuery,OContentHelper,OQueryDescriptor_Base,ODataSettings)
-//--------------------------------------------------------------------------
+
 void OQuery::rebuildColumns()
 {
     OSL_PRECOND( getColumnCount() == 0, "OQuery::rebuildColumns: column container should be empty!" );
@@ -225,7 +178,7 @@ void OQuery::rebuildColumns()
             }
 
             Reference< XDatabaseMetaData > xDBMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
-            ::vos::ORef< OSQLColumns > aParseColumns(
+            ::rtl::Reference< OSQLColumns > aParseColumns(
                 ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta,xColumnDefinitions ) );
             xColumns = OPrivateColumns::createWithIntrinsicNames(
                 aParseColumns, xDBMeta->supportsMixedCaseQuotedIdentifiers(), *this, m_aMutex );
@@ -277,18 +230,16 @@ void OQuery::rebuildColumns()
 }
 
 // XServiceInfo
-//--------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, SERVICE_SDB_QUERYDEFINITION)
 
 // ::com::sun::star::beans::XPropertyChangeListener
-//--------------------------------------------------------------------------
 void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) throw(RuntimeException)
 {
     sal_Int32 nOwnHandle = -1;
     {
         MutexGuard aGuard(m_aMutex);
 
-        DBG_ASSERT(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+        OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
             "OQuery::propertyChange : where did this call come from ?");
 
         if (m_eDoingCurrently == SETTING_PROPERTIES)
@@ -307,20 +258,19 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
         }
         else
         {
-            DBG_ERROR("OQuery::propertyChange : my CommandDefinition has more properties than I do !");
+            OSL_FAIL("OQuery::propertyChange : my CommandDefinition has more properties than I do !");
         }
     }
 
     fire(&nOwnHandle, &_rSource.NewValue, &_rSource.OldValue, 1, sal_False);
 }
 
-//--------------------------------------------------------------------------
 void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
     (void)_rSource;
-    DBG_ASSERT(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+    OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
         "OQuery::disposing : where did this call come from ?");
 
     m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);
@@ -328,14 +278,12 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
 }
 
 // XDataDescriptorFactory
-//--------------------------------------------------------------------------
 Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  ) throw(RuntimeException)
 {
     return new OQueryDescriptor(*this);
 }
 
 // pseudo-XComponent
-//--------------------------------------------------------------------------
 void SAL_CALL OQuery::disposing()
 {
     MutexGuard aGuard(m_aMutex);
@@ -349,7 +297,6 @@ void SAL_CALL OQuery::disposing()
     m_pWarnings = NULL;
 }
 
-//--------------------------------------------------------------------------
 void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
 {
     ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
@@ -361,29 +308,25 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
 
         m_eDoingCurrently = SETTING_PROPERTIES;
-        OAutoActionReset aActionResetter(this);
+        OAutoActionReset aAutoReset(this);
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);
 
         if ( PROPERTY_ID_COMMAND == _nHandle )
             // the columns are out of date if we are based on a new statement ....
-            // 90573 - 16.08.2001 - frank.schoenheit@sun.com
             setColumnsOutOfDate();
     }
 }
 
-//--------------------------------------------------------------------------
 Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OQuery::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
-//--------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OQuery::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -391,12 +334,12 @@ Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(Runt
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -----------------------------------------------------------------------------
+
 OColumn* OQuery::createColumn(const ::rtl::OUString& /*_rName*/) const
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -405,7 +348,7 @@ void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLExcepti
     if(xRename.is())
         xRename->rename(newName);
 }
-// -----------------------------------------------------------------------------
+
 void OQuery::registerProperties()
 {
     // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
@@ -432,14 +375,10 @@ void OQuery::registerProperties()
                     &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString OQuery::determineContentType() const
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.org.openoffice.DatabaseQuery" ) );
 }
 
-// -----------------------------------------------------------------------------
-//........................................................................
 }   // namespace dbaccess
-//........................................................................
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

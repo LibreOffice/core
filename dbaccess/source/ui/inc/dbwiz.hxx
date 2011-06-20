@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,12 @@
 #ifndef DBAUI_DBWIZ_HXX
 #define DBAUI_DBWIZ_HXX
 
-#ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
-#ifndef DBAUI_ITEMSETHELPER_HXX
 #include "IItemSetHelper.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _SVTOOLS_WIZARDMACHINE_HXX_
 #include <svtools/wizardmachine.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 #include <memory>
 
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
@@ -127,7 +116,7 @@ protected:
     {
         AR_LEAVE_MODIFIED,      // somthing was modified and has successfully been committed
         AR_LEAVE_UNCHANGED,     // no changes were made
-        AR_KEEP                 // don't leave the page (e.g. because an error occured)
+        AR_KEEP                 // don't leave the page (e.g. because an error occurred)
     };
     /** apply all changes made
     */
@@ -143,3 +132,4 @@ private:
 
 #endif // DBAUI_DBWIZ_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

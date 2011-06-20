@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -41,12 +42,10 @@
 #include <cppuhelper/weakref.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
@@ -89,7 +88,6 @@ namespace dbaccess
         }
     };
 
-    //--------------------------------------------------------------------
     namespace
     {
         static void lcl_dispatchScriptURL_throw( DocumentEventExecutor_Data& _rDocExecData,
@@ -103,7 +101,7 @@ namespace dbaccess
                 xDispProv.set( xController->getFrame(), UNO_QUERY );
             if ( !xDispProv.is() )
             {
-                OSL_ENSURE( false, "lcl_dispatchScriptURL_throw: no controller/frame? How should I dispatch?" );
+                OSL_FAIL( "lcl_dispatchScriptURL_throw: no controller/frame? How should I dispatch?" );
                 return;
             }
 
@@ -115,12 +113,12 @@ namespace dbaccess
             // unfortunately, executing a script can trigger all kind of complex stuff, and unfortunately, not
             // every component involved into this properly cares for thread safety. To be on the safe side,
             // we lock the solar mutex here.
-            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            SolarMutexGuard aSolarGuard;
 
             Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aScriptURL, ::rtl::OUString(), 0 ) );
             if ( !xDispatch.is() )
             {
-                OSL_ENSURE( false, "lcl_dispatchScriptURL_throw: no dispatcher for the script URL!" );
+                OSL_FAIL( "lcl_dispatchScriptURL_throw: no dispatcher for the script URL!" );
                 return;
             }
 
@@ -134,7 +132,6 @@ namespace dbaccess
     //====================================================================
     //= DocumentEventExecutor
     //====================================================================
-    //--------------------------------------------------------------------
     DocumentEventExecutor::DocumentEventExecutor( const ::comphelper::ComponentContext& _rContext,
             const Reference< XEventsSupplier >& _rxDocument )
         :m_pData( new DocumentEventExecutor_Data( _rxDocument ) )
@@ -157,18 +154,16 @@ namespace dbaccess
         }
     }
 
-    //--------------------------------------------------------------------
     DocumentEventExecutor::~DocumentEventExecutor()
     {
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEventExecutor::documentEventOccured( const DocumentEvent& _Event ) throw (RuntimeException)
     {
         Reference< XEventsSupplier > xEventsSupplier( m_pData->xDocument.get(), UNO_QUERY );
         if ( !xEventsSupplier.is() )
         {
-            OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccured: no document anymore, but still being notified?" );
+            OSL_FAIL( "DocumentEventExecutor::documentEventOccurred: no document anymore, but still being notified?" );
             return;
         }
 
@@ -181,12 +176,11 @@ namespace dbaccess
             {
                 // this is worth an assertion: We are listener at the very same document which we just asked
                 // for its events. So when EventName is fired, why isn't it supported by xDocEvents?
-                OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccured: an unsupported event is notified!" );
+                OSL_FAIL( "DocumentEventExecutor::documentEventOccurred: an unsupported event is notified!" );
                 return;
             }
 
             const ::comphelper::NamedValueCollection aScriptDescriptor( xDocEvents->getByName( _Event.EventName ) );
-
 
             ::rtl::OUString sEventType;
             bool bScriptAssigned = aScriptDescriptor.get_ensureType( "EventType", sEventType );
@@ -205,7 +199,7 @@ namespace dbaccess
             bool bNonEmptyScript = sScript.getLength() != 0;
 
             OSL_ENSURE( bDispatchScriptURL && bNonEmptyScript,
-                "DocumentEventExecutor::documentEventOccured: invalid/unsupported script descriptor" );
+                "DocumentEventExecutor::documentEventOccurred: invalid/unsupported script descriptor" );
 
             if ( bDispatchScriptURL && bNonEmptyScript )
             {
@@ -219,13 +213,10 @@ namespace dbaccess
         }
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEventExecutor::disposing( const lang::EventObject& /*_Source*/ ) throw (RuntimeException)
     {
         // not interested in
     }
 
-
-//........................................................................
 } // namespace dbaccess
-//........................................................................
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef DBAUI_QUERYTABWINSHOWUNDOACT_HXX
 #define DBAUI_QUERYTABWINSHOWUNDOACT_HXX
 
-#ifndef DBAUI_QUERYTABWINUNDOACT_HXX
 #include "QueryTabWinUndoAct.hxx"
-#endif
 
 namespace dbaui
 {
@@ -64,3 +63,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

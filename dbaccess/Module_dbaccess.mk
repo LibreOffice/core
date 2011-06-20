@@ -1,58 +1,52 @@
-#*************************************************************************
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
 #
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# The Initial Developer of the Original Code is
+#       Bjoern Michaelsen, Canonical Ltd. <bjoern.michaelsen@canonical.com>
+# Portions created by the Initial Developer are Copyright (C) 2010 the
+# Initial Developer. All Rights Reserved.
 #
-# This file is part of OpenOffice.org.
+# Major Contributor(s):
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
+# For minor contributions see the git repository.
 #
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
 
 $(eval $(call gb_Module_Module,dbaccess))
 
 $(eval $(call gb_Module_add_targets,dbaccess,\
-	AllLangResTarget_adabasui \
-	AllLangResTarget_dba \
-	AllLangResTarget_dbmm \
-	AllLangResTarget_dbui \
-	AllLangResTarget_sdbt \
-	Library_adabasui \
-	Library_dba \
-	Library_dbaxml \
-	Library_dbmm \
-	Library_dbui \
-	Library_sdbt \
-	Package_inc \
-	Package_uiconfig \
-	Package_xml \
+    $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
+    AllLangResTarget_adabasui \
+    AllLangResTarget_dba \
+    AllLangResTarget_dbmm \
+    AllLangResTarget_dbu \
+    AllLangResTarget_sdbt \
+    Library_adabasui \
+    Library_dba \
+    Library_dbaxml \
+    Library_dbmm \
+    Library_dbu \
+    Library_sdbt \
+    Package_inc \
+    Package_uiconfig \
 ))
-
-ifeq ($(GUI),WNT)
-$(eval $(call gb_Module_add_targets,dbaccess,\
-	Executable_odbcconfig \
-))
-endif
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	JunitTest_dbaccess_complex \
-	JunitTest_dbaccess_unoapi \
+    JunitTest_dbaccess_unoapi \
 ))
 
 # vim: set noet ts=4 sw=4:

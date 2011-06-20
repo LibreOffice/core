@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,58 +29,27 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBACCESS_SOURCE_UI_INC_OPENDOCCONTROLS_HXX
 #include "opendoccontrols.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
 #include <com/sun/star/ui/XImageManager.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <unotools/historyoptions.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef SVTOOLS_FILENOTATION_HXX
 #include <svl/filenotation.hxx>
-#endif
+#include <osl/diagnose.h>
 
 //........................................................................
 namespace dbaui
@@ -137,7 +107,7 @@ namespace dbaui
                     for ( sal_Int32 i=0; i<nCount; ++i )
                     {
                         ::rtl::OUString sPropertyName( aProperties[i].Name );
-                        if ( sPropertyName.equalsAscii("Label" ) )
+                        if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Label" ) ) )
                         {
                             aProperties[i].Value >>= sLabel;
                             break;
@@ -216,7 +186,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     void OpenDocumentButton::impl_init( const sal_Char* _pAsciiModuleName )
     {
-        DBG_ASSERT( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
+        OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
         m_sModule = ::rtl::OUString::createFromAscii( _pAsciiModuleName );
 
         // our label should equal the UI text of the "Open" command
@@ -226,7 +196,7 @@ namespace dbaui
         SetText( sLabel );
 
         // Place icon left of text and both centered in the button.
-        SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ), BMP_COLOR_NORMAL );
+        SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ) );
         EnableImageDisplay( sal_True );
         EnableTextDisplay( sal_True );
         SetImageAlign( IMAGEALIGN_LEFT );
@@ -246,7 +216,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     void OpenDocumentListBox::impl_init( const sal_Char* _pAsciiModuleName )
     {
-        DBG_ASSERT( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
+        OSL_ENSURE( _pAsciiModuleName, "OpenDocumentListBox::impl_init: invalid module name!" );
 
         Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( ePICKLIST );
         Reference< XNameAccess > xFilterFactory;
@@ -322,7 +292,7 @@ namespace dbaui
     OpenDocumentListBox::StringPair OpenDocumentListBox::impl_getDocumentAtIndex( sal_uInt16 _nListIndex, bool _bSystemNotation ) const
     {
         MapIndexToStringPair::const_iterator pos = m_aURLs.find( _nListIndex );
-        DBG_ASSERT( pos != m_aURLs.end(), "OpenDocumentListBox::impl_getDocumentAtIndex: invalid index!" );
+        OSL_ENSURE( pos != m_aURLs.end(), "OpenDocumentListBox::impl_getDocumentAtIndex: invalid index!" );
 
         StringPair aDocumentDescriptor;
         if ( pos != m_aURLs.end() )
@@ -361,3 +331,5 @@ namespace dbaui
 //........................................................................
 } // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

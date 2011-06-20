@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,7 +99,7 @@ namespace rptui
         }
         break;
         default:
-            OSL_ENSURE( false, "ReportFormula::ReportFormula: illegal bind type!" );
+            OSL_FAIL( "ReportFormula::ReportFormula: illegal bind type!" );
             return;
         }
 
@@ -181,3 +182,4 @@ namespace rptui
 } // namespace rptui
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

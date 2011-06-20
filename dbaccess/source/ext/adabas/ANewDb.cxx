@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,24 +26,12 @@
  *
  ************************************************************************/
 
-#ifndef ADABASUI_NEWDB_HXX
 #include "ANewDb.hxx"
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef adabasui_ADABAS_CREATEDB_HXX
 #include "AdabasNewDb.hxx"
-#endif
-#ifndef adabasui_SHARED_DBUSTRINGS_HRC
 #include "adabasuistrings.hrc"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 
 using namespace adabasui;
 using namespace dbtools;
@@ -98,7 +87,7 @@ Reference< XInterface > SAL_CALL OAdabasCreateDialog::Create(const Reference< XM
 //-------------------------------------------------------------------------
 ::rtl::OUString OAdabasCreateDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.adabasui.AdabasCreateDialog");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.adabasui.AdabasCreateDialog"));
 }
 
 //-------------------------------------------------------------------------
@@ -111,7 +100,7 @@ Reference< XInterface > SAL_CALL OAdabasCreateDialog::Create(const Reference< XM
 ::comphelper::StringSequence OAdabasCreateDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.AdabasCreationDialog");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.AdabasCreationDialog"));
     return aSupported;
 }
 
@@ -159,3 +148,4 @@ void OAdabasCreateDialog::executedDialog(sal_Int16 _nExecutionResult)
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,23 +28,15 @@
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #define DBACCESS_CORE_API_ROWSETROW_HXX
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include <rtl/ref.hxx>
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "connectivity/FValue.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 
 namespace dbaccess
 {
     typedef connectivity::ORowVector< connectivity::ORowSetValue >  ORowSetValueVector;
-    typedef ::vos::ORef< ORowSetValueVector >                       ORowSetRow;
+    typedef ::rtl::Reference< ORowSetValueVector >                      ORowSetRow;
     typedef ::std::vector< ORowSetRow >                             ORowSetMatrix;
 
     class ORowSetOldRowHelper
@@ -59,10 +52,6 @@ namespace dbaccess
             : m_refCount(0)
             , m_aRow(_rRow)
         {}
-//      ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh)
-//          : m_refCount(0)
-//          , m_aRow(_rRh.m_aRow)
-//      {}
 
         void acquire()
         {
@@ -78,7 +67,7 @@ namespace dbaccess
         inline void setRow(const ORowSetRow& _rRow) { m_aRow = _rRow; }
     };
 
-    typedef ::vos::ORef< ORowSetOldRowHelper >  TORowSetOldRowHelperRef;
+    typedef ::rtl::Reference< ORowSetOldRowHelper > TORowSetOldRowHelperRef;
 
     class ORowSetValueCompare
     {
@@ -106,3 +95,4 @@ namespace dbaccess
 }
 #endif // DBACCESS_CORE_API_ROWSETROW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

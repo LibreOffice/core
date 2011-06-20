@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #define _DBAUI_COMMON_TYPES_HXX_
 
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
 #include <unotools/sharedunocomponent.hxx>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace sdbc {
@@ -58,3 +55,4 @@ namespace dbaui
 
 #endif // _DBAUI_COMMON_TYPES_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

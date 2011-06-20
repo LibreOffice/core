@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define DBACCESS_ASYNCMODALDIALOG_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
 /** === end UNO includes === **/
 
 //........................................................................
@@ -65,3 +64,4 @@ namespace dbaui
 
 #endif // DBACCESS_ASYNCMODALDIALOG_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

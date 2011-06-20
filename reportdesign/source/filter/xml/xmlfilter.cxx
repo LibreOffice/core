@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include "xmlEnums.hxx"
 #include "xmlStyleImport.hxx"
@@ -84,8 +85,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::report;
 using namespace ::com::sun::star::xml::sax;
 using namespace xmloff;
-    sal_Char __READONLY_DATA sXML_np__rpt[] = "_report";
-    sal_Char __READONLY_DATA sXML_np___rpt[] = "__report";
+    sal_Char const sXML_np__rpt[] = "_report";
+    sal_Char const sXML_np___rpt[] = "__report";
 
     using namespace ::com::sun::star::util;
 
@@ -137,9 +138,9 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference< XDocumentHandler >& _xFilter,
     sal_Bool /*bEncrypted*/ )
 {
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "rptxml", "oj", "ReadThroughComponent" );
 
@@ -150,15 +151,15 @@ sal_Int32 ReadThroughComponent(
     // get parser
     uno::Reference< XParser > xParser(
         rFactory->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
         return 1;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
-    DBG_ASSERT( _xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
     if( !_xFilter.is() )
         return 1;
 
@@ -195,7 +196,7 @@ r
         aError += ',';
         aError += ByteString::CreateFromInt32( r.ColumnNumber );
 
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return 1;
     }
@@ -232,8 +233,8 @@ sal_Int32 ReadThroughComponent(
     const ::rtl::OUString& _sFilterName
     ,const uno::Reference<beans::XPropertySet>& _xProp)
 {
-    DBG_ASSERT( xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE( xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     if ( xStorage.is() )
     {
@@ -481,11 +482,11 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     const PropertyValue* pEnd   = pIter + rDescriptor.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if( pIter->Name.equalsAscii( "FileName" ) )
+        if( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
             pIter->Value >>= sFileName;
-        else if( pIter->Name.equalsAscii( "Storage" ) )
+        else if( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Storage" ) ) )
             pIter->Value >>= xStorage;
-        else if( pIter->Name.equalsAscii( "ComponentData" ) )
+        else if( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ComponentData" ) ) )
         {
             Sequence< PropertyValue > aComponent;
             pIter->Value >>= aComponent;
@@ -493,7 +494,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             const PropertyValue* pComponentEnd  = pComponentIter + aComponent.getLength();
             for(;pComponentIter != pComponentEnd;++pComponentIter)
             {
-                if( pComponentIter->Name.equalsAscii( "ActiveConnection" ) )
+                if( pComponentIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ActiveConnection" ) ) )
                 {
                     uno::Reference<sdbc::XConnection> xCon(pComponentIter->Value,uno::UNO_QUERY);
                     xNumberFormatsSupplier = ::dbtools::getNumberFormats(xCon);
@@ -515,13 +516,12 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             try
             {
                 xStorage = pMedium->GetStorage();
-                //  nError = pMedium->GetError();
             }
             catch(const Exception&)
             {
             }
-        } // if( pMedium )
-    } // if ( bRet = (sFileName.getLength() != 0) )
+        }
+    }
     sal_Bool bRet = xStorage.is();
     if ( bRet )
     {
@@ -741,20 +741,16 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 {
     if ( !m_pDocElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            //{ XML_NAMESPACE_OOO,    XML_SETTINGS,         XML_TOK_DOC_SETTINGS    },
             { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
-            //{ XML_NAMESPACE_OOO,    XML_STYLES,               XML_TOK_DOC_STYLES      },
             { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            //{ XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES  },
             { XML_NAMESPACE_OFFICE, XML_REPORT,             XML_TOK_DOC_REPORT      },
             { XML_NAMESPACE_OOO,    XML_REPORT,             XML_TOK_DOC_REPORT      },
             { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS   },
             { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
             { XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,      XML_TOK_DOC_META        },
-            //{ XML_NAMESPACE_OOO,    XML_FONT_FACE_DECLS,  XML_TOK_DOC_FONTDECLS   },
             XML_TOKEN_MAP_END
         };
         m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -780,7 +776,7 @@ const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
 {
     if ( !m_pFunctionElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_REPORT, XML_NAME,           XML_TOK_FUNCTION_NAME   },
             { XML_NAMESPACE_REPORT, XML_FORMULA,        XML_TOK_FUNCTION_FORMULA},
@@ -798,11 +794,11 @@ const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
 {
     if ( !m_pFormatElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_REPORT, XML_ENABLED                     ,   XML_TOK_ENABLED                     },
-            { XML_NAMESPACE_REPORT, XML_FORMULA                     ,   XML_TOK_FORMULA                     },
-            { XML_NAMESPACE_REPORT, XML_STYLE_NAME                  ,   XML_TOK_FORMAT_STYLE_NAME           },
+            { XML_NAMESPACE_REPORT, XML_ENABLED     , XML_TOK_ENABLED           },
+            { XML_NAMESPACE_REPORT, XML_FORMULA     , XML_TOK_FORMULA           },
+            { XML_NAMESPACE_REPORT, XML_STYLE_NAME  , XML_TOK_FORMAT_STYLE_NAME },
             XML_TOKEN_MAP_END
         };
         m_pFormatElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -814,7 +810,7 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
 {
     if ( !m_pGroupElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_REPORT, XML_START_NEW_COLUMN            ,   XML_TOK_START_NEW_COLUMN            },
             { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
@@ -828,7 +824,6 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
             { XML_NAMESPACE_REPORT, XML_SORT_ASCENDING              ,   XML_TOK_SORT_ASCENDING              },
             { XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER               ,   XML_TOK_GROUP_KEEP_TOGETHER         },
             { XML_NAMESPACE_REPORT, XML_FUNCTION                    ,   XML_TOK_GROUP_FUNCTION              },
-            //{ XML_NAMESPACE_REPORT,   XML_            ,   XML_TOK_            },
             XML_TOKEN_MAP_END
         };
         m_pGroupElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -840,7 +835,7 @@ const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
 {
     if ( !m_pElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_REPORT, XML_PRINT_REPEATED_VALUES       ,XML_TOK_PRINT_REPEATED_VALUES              },
             { XML_NAMESPACE_REPORT, XML_PRINT_ONLY_WHEN_GROUP_CHANGE,XML_TOK_PRINT_ONLY_WHEN_GROUP_CHANGE       },
@@ -858,7 +853,7 @@ const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
 {
     if ( !m_pControlElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_FORM,   XML_LABEL               ,XML_TOK_LABEL              },
             { XML_NAMESPACE_FORM,   XML_PROPERTIES          ,XML_TOK_PROPERTIES         },
@@ -880,7 +875,7 @@ const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
 {
     if ( !m_pControlElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_FORM,   XML_PROPERTY_NAME   ,XML_TOK_PROPERTY_NAME          },
             { XML_NAMESPACE_OOO,    XML_VALUE_TYPE      ,XML_TOK_VALUE_TYPE             },
@@ -902,7 +897,7 @@ const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
 {
     if ( !m_pComponentElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DRAW,   XML_NAME                        ,   XML_TOK_NAME                        },
             { XML_NAMESPACE_DRAW,   XML_TEXT_STYLE_NAME             ,   XML_TOK_TEXT_STYLE_NAME             },
@@ -918,7 +913,7 @@ const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
 {
     if ( !m_pColumnTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_NAME                        },
             { XML_NAMESPACE_TABLE,  XML_STYLE_NAME                  ,   XML_TOK_COLUMN_STYLE_NAME           },
@@ -942,7 +937,7 @@ const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
 {
     if ( !m_pSectionElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_TABLE,  XML_TABLE                       ,   XML_TOK_TABLE                       },
             { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_SECTION_NAME                },
@@ -965,7 +960,7 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
 {
     if ( !m_pCellElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_TEXT,   XML_P                           ,   XML_TOK_P                           },
             { XML_NAMESPACE_REPORT, XML_FIXED_CONTENT               ,   XML_TOK_FIXED_CONTENT               },
@@ -994,10 +989,8 @@ SvXMLImportContext* ORptFilter::CreateStylesContext(const ::rtl::OUString& rLoca
     {
         pContext = new OReportStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
-            //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
         else
-            //xStyles = pContext;
             SetStyles((SvXMLStylesContext*)pContext);
     }
     return pContext;
@@ -1041,20 +1034,6 @@ void ORptFilter::FinishStyles()
 // -----------------------------------------------------------------------------
 ::rtl::OUString ORptFilter::convertFormula(const ::rtl::OUString& _sFormula)
 {
-    //sal_Int32 nLen = _sFormula.getLength();
-    //if ( nLen )
-    //{
-    //    const static ::rtl::OUString s_sField(RTL_CONSTASCII_USTRINGPARAM("field:["));
-    //    sal_Int32 nPos = _sFormula.indexOf(s_sField);
-    //    if ( nPos == -1 )
-    //        nPos = 4; // "rpt:"
-    //    else
-    //    {
-    //        nPos = s_sField.getLength();
-    //        --nLen; // eat "]"
-    //    }
-    //    return _sFormula.copy(nPos,nLen-nPos);
-    //}
     return _sFormula;
 }
 // -----------------------------------------------------------------------------
@@ -1075,12 +1054,12 @@ void SAL_CALL ORptFilter::startDocument( void )
 void ORptFilter::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    DBG_ASSERT( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
+    OSL_ENSURE( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
     if( !GetModel().is() )
         return;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // Clear the shape import to sort the shapes  (and not in the
     // destructor that might be called after the import has finished
     // for Java filters.
@@ -1108,8 +1087,8 @@ SvXMLImportContext* ORptFilter::CreateMetaContext(const ::rtl::OUString& rLocalN
     if ( (getImportFlags() & IMPORT_META) )
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            getServiceFactory()->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            getServiceFactory()->createInstance(::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.SAXDocumentBuilder"))),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
         pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties(), xDocBuilder);
@@ -1128,10 +1107,12 @@ sal_Bool ORptFilter::isOldFormat() const
         {
             xProp->getPropertyValue(s_sOld) >>= bOldFormat;
         }
-    } // if ( xProp.is() )
+    }
     return bOldFormat;
 }
 
 // -----------------------------------------------------------------------------
 }// rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

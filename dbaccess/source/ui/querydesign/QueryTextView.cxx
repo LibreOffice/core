@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,48 +28,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
-#endif
-#ifndef DBAUI_QUERYVIEWSWITCH_HXX
 #include "QueryViewSwitch.hxx"
-#endif
-#ifndef DBAUI_SQLEDIT_HXX
 #include "sqledit.hxx"
-#endif
-#ifndef DBAUI_UNDOSQLEDIT_HXX
 #include "undosqledit.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -89,7 +62,6 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     m_pEdit->SaveValue();
     m_pEdit->SetPosPixel( Point( 0, 0 ) );
     m_pEdit->Show();
-    //  m_pEdit->GrabFocus();
 }
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()
@@ -177,3 +149,5 @@ void OQueryTextView::paste()
     getContainerWindow()->getDesignView()->getController().setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

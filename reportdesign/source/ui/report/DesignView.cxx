@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -170,14 +171,11 @@ ODesignView::ODesignView(   Window* pParent,
 
     // now create the task pane on the right side :-)
     m_pTaskPane = new OTaskWindow(this);
-    //m_pTaskPane->Show();
 
     m_aSplitWin.InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE | SWIB_COLSET );
-    m_aSplitWin.InsertItem( REPORT_ID, &m_aScrollWindow, 100/*m_aScrollWindow.getMaxMarkerWidth(sal_False)*/, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE  /*SWIB_COLSET*/);
-    //m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
+    m_aSplitWin.InsertItem( REPORT_ID, &m_aScrollWindow, 100, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE);
 
     // Splitter einrichten
-    //m_aSplitter.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
     m_aSplitWin.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
     m_aSplitWin.ShowAutoHideButton();
     m_aSplitWin.SetAlign(WINDOWALIGN_LEFT);
@@ -295,7 +293,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
                 nSplitPos = static_cast<sal_Int32>(_rPlayground.Right() - nMinWidth);
                 getController().setSplitPos(nSplitPos);
             }
-        } // if ( 0 != _rPlaygroundSize.Width() )
+        }
 
         Size aReportWindowSize(aPlaygroundSize);
         if ( m_aSplitWin.IsItemValid(TASKPANE_ID) )
@@ -474,11 +472,7 @@ void ODesignView::GetFocus()
 // -----------------------------------------------------------------------------
 void ODesignView::ImplInitSettings()
 {
-//#if OSL_DEBUG_LEVEL > 0
-//    SetBackground( Wallpaper( COL_RED ));
-//#else
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-//#endif
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
@@ -531,12 +525,10 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
         m_pTaskPane->Invalidate();
 
         if ( bWillBeVisible )
-            m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE/*|SWIB_COLSET */);
+            m_aSplitWin.InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE);
         else
             m_aSplitWin.RemoveItem(TASKPANE_ID);
 
-        // TRY
-        // Invalidate(/*INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE*/);
         if ( bWillBeVisible )
             m_aMarkTimer.Start();
     }
@@ -620,12 +612,6 @@ uno::Reference< report::XSection > ODesignView::getCurrentSection() const
     if ( m_pCurrentView )
         xSection = m_pCurrentView->getReportSection()->getSection();
 
-    // why do we need the code below?
-    //else
- //   {
- //       OReportController& rReportController = getController();
- //       xSection = rReportController.getReportDefinition()->getDetail();
- //   }
     return xSection;
 }
 // -----------------------------------------------------------------------------
@@ -679,14 +665,6 @@ void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlig
 {
     m_aScrollWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
 }
-#if 0
-// -----------------------------------------------------------------------------
-sal_Bool ODesignView::isAlignPossible() const
-{
-    ::boost::shared_ptr<OSectionWindow> pMarkedSection = getMarkedSection();
-    return pMarkedSection.get() && pMarkedSection->getReportSection().getSectionView().IsAlignPossible();
-}
-#endif
 //------------------------------------------------------------------------------
 sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
@@ -787,3 +765,5 @@ sal_uInt16 ODesignView::getZoomFactor(SvxZoomType _eType) const
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

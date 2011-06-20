@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,13 +31,11 @@
 
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-//#define ITEMID_ORIENTATION     SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
 
 #include "FieldDescControl.hxx"
 #include "FieldControls.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "TableDesignHelpBar.hxx"
 #include <vcl/scrbar.hxx>
@@ -71,6 +70,7 @@
 #include <memory>
 #include "dbu_control.hrc"
 #include "dbu_tbl.hrc"
+#include <osl/diagnose.h>
 
 
 using namespace dbaui;
@@ -312,7 +312,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
     static String aOne('1');
     static String aNone(ModuleRes(STR_VALUE_NONE));
 
-    // FS - 66161 - 14.05.1999 - aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
+    // aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
     if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
         return rPersistentString;
 
@@ -367,7 +367,7 @@ void OFieldDescControl::CheckScrollBars()
     // horizontal :
     long lMaxXPosition = 0;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
         getMaxXPosition(ppAggregates[i],lMaxXPosition);
 
     if (m_pHorzScroll)
@@ -410,7 +410,6 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pVertScroll->Show();
         m_pVertScroll->SetRangeMax(nActive - nLastVisible);
-//      m_pVertScroll->SetThumbPos(0);
 
         m_pVertScroll->SetPosSizePixel( Point(nNewHWidth, 0), Size(nVScrollWidth, szOverallSize.Height()) );
     }
@@ -425,7 +424,6 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pHorzScroll->Show();
         m_pHorzScroll->SetRangeMax((lMaxXPosition - lMaxXAvailable + HSCROLL_STEP - 1 )/HSCROLL_STEP);
-//      m_pHorzScroll->SetThumbPos(0);
 
         m_pHorzScroll->SetPosSizePixel( Point(0, nNewVHeight), Size(bNeedVScrollBar ? nNewHWidth : szOverallSize.Width(), nHScrollHeight) );
     }
@@ -485,9 +483,9 @@ void OFieldDescControl::ScrollAllAggregates()
                                         , pTextLenText, pLengthText
                                         , pScaleText, m_pColumnNameText
                                         , m_pTypeText, m_pAutoIncrementValueText};
-        OSL_ENSURE(sizeof(ppAggregates)/sizeof(ppAggregates[0]) == sizeof(ppAggregatesText)/sizeof(ppAggregatesText[0]),"Lists are not identical!");
+        OSL_ENSURE(SAL_N_ELEMENTS(ppAggregates) == SAL_N_ELEMENTS(ppAggregatesText),"Lists are not identical!");
 
-        for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+        for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
             ScrollAggregate(ppAggregatesText[i],ppAggregates[i],NULL,nDeltaX, nDeltaY);
 
         ScrollAggregate(pFormatText,pFormatSample,pFormat,nDeltaX, nDeltaY);
@@ -499,7 +497,7 @@ sal_uInt16 OFieldDescControl::CountActiveAggregates() const
 {
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
     sal_uInt16 nVisibleAggregates = 0;
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
         if (ppAggregates[i])
             ++nVisibleAggregates;
     return nVisibleAggregates;
@@ -509,14 +507,14 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
 {
     Size aHeight;
     Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
     {
         if ( ppAggregates[i] )
         {
             const Size aTemp( ppAggregates[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
             if ( aTemp.Height() > aHeight.Height() )
                 aHeight.Height() = aTemp.Height();
-        } // if ( ppAggregates[i] )
+        }
     }
 
     return aHeight.Height();
@@ -540,9 +538,9 @@ void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
                                         , m_pTypeText, m_pAutoIncrementValueText
                                         , pFormatText};
 
-    OSL_ENSURE(sizeof(ppAggregates)/sizeof(ppAggregates[0]) == sizeof(ppAggregatesText)/sizeof(ppAggregatesText[0]),"Lists are not identical!");
+    OSL_ENSURE(SAL_N_ELEMENTS(ppAggregates) == SAL_N_ELEMENTS(ppAggregatesText),"Lists are not identical!");
 
-    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(ppAggregates); ++i)
     {
         if ( ppAggregatesText[i] )
             ppAggregatesText[i]->Enable( !bReadOnly );
@@ -834,7 +832,7 @@ void OFieldDescControl::ArrangeAggregates()
     };
 
     long nMaxWidth = 0;
-    for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
+    for (size_t i=0; i < SAL_N_ELEMENTS(adAggregates); i++)
     {
         if (adAggregates[i].pctrlTextControl)
         {
@@ -847,7 +845,7 @@ void OFieldDescControl::ArrangeAggregates()
     // und los ...
     int nCurrentControlPos = 0;
     Control* pZOrderPredecessor = NULL;
-    for (size_t i=0; i<sizeof(adAggregates)/sizeof(adAggregates[0]); i++)
+    for (size_t i=0; i < SAL_N_ELEMENTS(adAggregates); i++)
     {
         if (adAggregates[i].pctrlInputControl)
         {
@@ -1194,7 +1192,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         case 4:
             aSize.Width()  = CONTROL_WIDTH_4;
             break;
-        } // switch( nCol )
+        }
     }
 
 
@@ -1426,7 +1424,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
                 break;
             default:
-                OSL_ENSURE(0,"Unknown type");
+                OSL_FAIL("Unknown type");
         }
         m_pPreviousType = pFieldType;
     }
@@ -1520,7 +1518,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pNumType )
     {
-        OSL_ENSURE(sal_False, "OFieldDescControl::DisplayData: invalid num type!");
+        OSL_FAIL("OFieldDescControl::DisplayData: invalid num type!");
     }
 
     if( pLength )
@@ -1733,7 +1731,7 @@ void OFieldDescControl::GetFocus()
 void OFieldDescControl::implFocusLost(Window* _pWhich)
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    DBG_ASSERT(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
+    OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
     //////////////////////////////////////////////////////////////////////
     // Das aktive Control merken
@@ -1879,7 +1877,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             ::rtl::OUString sFormat;
-            xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
+            xFormSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatString"))) >>= sFormat;
 
             if ( !bTextFormat )
             {
@@ -1911,3 +1909,5 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
     return sDefault;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

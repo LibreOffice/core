@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -368,7 +369,7 @@ namespace rptui
 
         aPos += LogicToPixel( Point( 0 , UNRELATED_CONTROLS ), MAP_APPFONT );
         Window* pWindows[] = { &m_aPB_OK, &m_aPB_CANCEL, &m_aPB_Help };
-        for ( size_t i= 0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i )
+        for ( size_t i= 0; i < SAL_N_ELEMENTS(pWindows); ++i )
         {
             pWindows[i]->SetPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
         }
@@ -393,7 +394,7 @@ namespace rptui
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"Can not access format condition!");
+            OSL_FAIL("Can not access format condition!");
         }
 
         impl_conditionCountChanged();
@@ -623,3 +624,5 @@ namespace rptui
 // .............................................................................
 } // rptui
 // .............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,8 @@
 #include <com/sun/star/report/XReportControlFormat.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef RPT_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include "xmlStyleImport.hxx"
 #include <tools/debug.hxx>
 
@@ -98,7 +95,7 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling the report definition props");
+        OSL_FAIL("Exception catched while filling the report definition props");
     }
 }
 // -----------------------------------------------------------------------------
@@ -116,3 +113,5 @@ void OXMLFormatCondition::EndElement()
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

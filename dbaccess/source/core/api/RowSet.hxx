@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,8 +100,8 @@ namespace dbaccess
         */
         ORowSetValueVector                          m_aPrematureParamValues;
         ORowSetValueVector                          m_aParameterValueForCache;
-        ::std::bit_vector                           m_aParametersSet;
-        ::std::bit_vector                           m_aReadOnlyDataColumns;
+        ::std::vector<bool>                         m_aParametersSet;
+        ::std::vector<bool>                         m_aReadOnlyDataColumns;
 
         ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
         ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
@@ -145,6 +146,7 @@ namespace dbaccess
         sal_Bool                    m_bNew ;
         sal_Bool                    m_bCanUpdateInsertedRows;
         sal_Bool                    m_bOwnConnection;
+        sal_Bool                    m_bPropChangeNotifyEnabled;
 
     private:
         /** builds m_aActiveCommand from our settings
@@ -177,7 +179,7 @@ namespace dbaccess
                 m_xActiveConnection points to a valid SDB-level connection
 
             @throws com::sun::star::sdb::SQLException
-                if an database-related error occured
+                if an database-related error occurred
 
             @throws com::sun::star::uno::RuntimeException
                 if any of the components involved throws a com::sun::star::uno::RuntimeException
@@ -248,6 +250,7 @@ namespace dbaccess
         virtual sal_Bool    isModification( );
         virtual sal_Bool    isModified( );
         virtual sal_Bool    isNew( );
+        virtual sal_Bool    isPropertyChangeNotificationEnabled() const;
 
         virtual ~ORowSet();
 
@@ -542,3 +545,4 @@ namespace dbaccess
 }
 #endif // DBACCESS_CORE_API_ROWSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -42,9 +43,8 @@
 
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
-#include <hash_map>
 #include <algorithm>
 #include <functional>
 
@@ -179,7 +179,7 @@ namespace dbaui
         //..............................................................................................................
         struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
         {
-            Reference< XComponent > operator()( const SubComponentDescriptor _desc ) const
+            Reference< XComponent > operator()( const SubComponentDescriptor &_desc ) const
             {
                 if ( _desc.xModel.is() )
                     return _desc.xModel.get();
@@ -463,7 +463,7 @@ namespace dbaui
     //------------------------------------------------------------------------------------------------------------------
     sal_Bool SubComponentManager::closeSubComponents()
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
 
         try
@@ -610,3 +610,5 @@ namespace dbaui
 //......................................................................................................................
 } // namespace dbaui
 //......................................................................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -142,7 +143,6 @@ namespace dbaccess
         DECLARE_SERVICE_INFO();
 
     // com::sun::star::beans::XPropertySet
-        //  virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
 
     // ::com::sun::star::sdbcx::XRename,
@@ -162,3 +162,4 @@ namespace dbaccess
 #endif // _DBA_CORE_TABLE_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

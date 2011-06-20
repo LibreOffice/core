@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 #ifndef DBAUI_SCROLLHELPER_HXX
 #define DBAUI_SCROLLHELPER_HXX
 
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
 
 namespace dbaui
 {
@@ -79,3 +74,4 @@ namespace dbaui
 }
 #endif // DBAUI_SCROLLHELPER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

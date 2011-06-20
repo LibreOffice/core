@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,6 @@ void OReportControlModel::insertByIndex( ::sal_Int32 Index, const uno::Any& Elem
         if ( Index > static_cast<sal_Int32>(m_aFormatConditions.size()) )
             throw lang::IndexOutOfBoundsException();
 
-        //m_aFormatConditions.resize(m_aFormatConditions.size() + 1);
         m_aFormatConditions.insert(m_aFormatConditions.begin() + Index,xElement);
     }
 
@@ -157,3 +157,4 @@ bool OReportControlModel::isInterfaceForbidden(const uno::Type& _rType)
 // -----------------------------------------------------------------------------
 } // reportdesign
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

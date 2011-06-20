@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,76 +28,33 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_DBSETUPCONNECTIONPAGES_HXX
 #include "DBSetupConnectionPages.hxx"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
 #include "AutoControlsDef.hrc"
-#ifndef _DBAUI_DBADMINSETUP_HRC_
 #include "dbadminsetup.hrc"
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svl/itemset.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svl/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svl/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
-#endif
 #include "dsnItem.hxx"
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svl/cjkoptions.hxx>
-#endif
 #include <jvmaccess/virtualmachine.hxx>
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-#endif
-// #106016# ------------------------------------
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include "dbustrings.hrc"
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svl/filenotation.hxx>
-#endif
 
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -107,6 +65,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"
+#include <osl/diagnose.h>
 
 
 //.........................................................................
@@ -114,14 +73,6 @@ namespace dbaui
 {
 //.........................................................................
 using namespace ::com::sun::star;
-//  using namespace ::com::sun::star::ucb;
-//  using namespace ::com::sun::star::ui::dialogs;
-//  using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::lang;
-//  using namespace ::com::sun::star::container;
-//  using namespace ::dbtools;
-//  using namespace ::svt;
 
     OGenericAdministrationPage* OTextConnectionPageSetup::CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
@@ -251,7 +202,7 @@ DBG_NAME(OTextConnectionPageSetup)
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
-            DBG_ASSERT(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
+            OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
 
             String sUrl = pCollection->getPrefix( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap:")));
             sUrl += m_aETHostServer.GetText();
@@ -259,7 +210,6 @@ DBG_NAME(OTextConnectionPageSetup)
             bChangedSomething = sal_True;
         }
 
-        // fillString(_rSet,&m_aETHostServer, DSID_CONNECTURL, bChangedSomething);
         fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
@@ -385,7 +335,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     // -----------------------------------------------------------------------
     sal_Bool OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
     {
-        OSL_ENSURE(sal_False,"Who called me?! Please ask oj for more information.");
+        OSL_FAIL("Who called me?! Please ask oj for more information.");
         return sal_True;
     }
 
@@ -705,8 +655,8 @@ DBG_NAME(OMySQLIntroPageSetup)
                 {
                     m_aETDriverClass.SetText(sDefaultJdbcDriverName);
                     m_aETDriverClass.SetModifyFlag();
-                } // if ( sDefaultJdbcDriverName.Len() )
-            } // if ( !pJdbcDrvItem->GetValue().Len() )
+                }
+            }
             else
             {
                 m_aETDriverClass.SetText(pDrvItem->GetValue());
@@ -727,7 +677,6 @@ DBG_NAME(OMySQLIntroPageSetup)
         sal_Bool bEnableTestConnection = !m_aConnectionURL.IsVisible() || (m_aConnectionURL.GetTextNoPrefix().Len() != 0);
         bEnableTestConnection = bEnableTestConnection && (m_aETDriverClass.GetText().Len() != 0);
         return bEnableTestConnection;
-//      m_aTestConnection.Enable(bEnableTestConnection);
     }
 
 
@@ -943,7 +892,7 @@ DBG_NAME(OFinalDBPageSetup)
         Point aPos(m_aFTFinalHeader.GetPosPixel());
         Size aStart(m_aFTFinalHeader.GetSizePixel());
         aPos.Y() += aStart.Height() + nUnrelatedHeight;
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        sal_Int32 nCount = SAL_N_ELEMENTS(pWindows);
         for (sal_Int32 i=0; i < nCount; ++i)
         {
             aPos.X() = pWindows[i].first->GetPosPixel().X();
@@ -1025,3 +974,5 @@ DBG_NAME(OFinalDBPageSetup)
 }
 // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

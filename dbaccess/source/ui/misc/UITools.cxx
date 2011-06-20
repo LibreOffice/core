@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,272 +29,103 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
-#ifndef DBAUI_DLGSAVE_HXX
 #include "dlgsave.hxx"
-#endif
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
-#ifndef DBACCESS_SOURCE_UI_INC_DEFAULTOBJECTNAMECHECK_HXX
 #include "defaultobjectnamecheck.hxx"
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#endif
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTRELIEF_HPP_
 #include <com/sun/star/awt/FontRelief.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
 #include <com/sun/star/awt/FontWidth.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef DBAUI_SBATTRDLG_HRC
 #include "dlgattr.hrc"
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
 #include <comphelper/componentcontext.hxx>
-#endif
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-//#define ITEMID_ORIENTATION     SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
 #define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
 
-#ifndef _SFXITEMPOOL_HXX
 #include <svl/itempool.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svl/itemset.hxx>
-#endif
-#ifndef DBACCESS_SBA_GRID_HRC
 #include "sbagrid.hrc"
-#endif
-#ifndef _SFXRNGITEM_HXX
 #include <svl/rngitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
-#ifndef _SVX_ALGITEM_HXX
 #include <svx/algitem.hxx>
-#endif
-#ifndef _SVX_NUMINF_HXX
 #include <svx/numinf.hxx>
-#endif
 #define _ZFORLIST_DECLARE_TABLE
-#ifndef _SVX_NUMINF_HXX
 #include <svx/numinf.hxx>
-#endif
-#ifndef _ZFORLIST_HXX
 #include <svl/zforlist.hxx>
-#endif
-#ifndef DBAUI_SBATTRDLG_HXX
 #include "dlgattr.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _DBAUI_DLGSIZE_HXX
 #include "dlgsize.hxx"
-#endif
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
-#ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _NUMUNO_HXX
 #include <svl/numuno.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <unotools/pathoptions.hxx>
-#endif
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svl/filenotation.hxx>
-#endif
-#ifndef _SVT_FILEVIEW_HXX
 #include <svtools/fileview.hxx>
-#endif
-#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include <connectivity/FValue.hxx>
-#endif
+
+#include <editeng/justifyitem.hxx>
 
 // .........................................................................
 namespace dbaui
@@ -330,7 +162,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
     {
         xProp.set(_xDatabaseContext->getByName(_rsDataSourceName),UNO_QUERY);
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
     }
     SQLExceptionInfo aInfo;
@@ -346,7 +178,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     SQLExceptionInfo aInfo;
     if ( !_xDataSource.is() )
     {
-        OSL_ENSURE(0,"createConnection: coult not retrieve the data source!");
+        OSL_FAIL("createConnection: coult not retrieve the data source!");
         return aInfo;
     }
 
@@ -358,9 +190,9 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
         bPwdReq = ::cppu::any2bool(_xDataSource->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED));
         _xDataSource->getPropertyValue(PROPERTY_USER) >>= sUser;
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
-        OSL_ENSURE(0,"createConnection: error while retrieving data source properties!");
+        OSL_FAIL("createConnection: error while retrieving data source properties!");
     }
 
 
@@ -371,15 +203,14 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
             {
-                OSL_ENSURE(0,"createConnection: missing an interface ... need an error message here!");
+                OSL_FAIL("createConnection: missing an interface ... need an error message here!");
             }
             else
             {   // instantiate the default SDB interaction handler
                 Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
                 if (!xHandler.is())
                 {
-                    OSL_ENSURE(sal_False, "createConnection: could not instantiate an interaction handler!");
-                    // ShowServiceNotAvailableError(NULL, String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
+                    OSL_FAIL("createConnection: could not instantiate an interaction handler!");
                         // TODO: a real parent!
                 }
                 else
@@ -396,12 +227,10 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
         if (xComponent.is() && _rEvtLst.is())
             xComponent->addEventListener(_rEvtLst);
     }
-    catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
-    catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
-    catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(Exception&) { OSL_ENSURE(0,"SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
-
-    //  showError(aInfo);
+    catch(const SQLContext& e) { aInfo = SQLExceptionInfo(e); }
+    catch(const SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
+    catch(const SQLException& e) { aInfo = SQLExceptionInfo(e); }
+    catch(const Exception&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
     return aInfo;
 }
@@ -571,8 +400,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                 {
-                    OSL_ENSURE(sal_False,
-                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
+                    OSL_FAIL((  ::rtl::OString("getTypeInfoFromType: assuming column type ")
                         +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString("\" (expected type name ")
                         +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
@@ -587,11 +415,6 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
-            //OSL_ENSURE(sal_False,
-            //  (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-            //  +=  ::rtl::OString(" (expected type name: ")
-            //  +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-            //  +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
@@ -679,8 +502,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
     // Information for a single SQL type
     if(xRs.is())
     {
-        static const ::rtl::OUString aB1 = ::rtl::OUString::createFromAscii(" [ ");
-        static const ::rtl::OUString aB2 = ::rtl::OUString::createFromAscii(" ]");
+        static const ::rtl::OUString aB1(RTL_CONSTASCII_USTRINGPARAM(" [ "));
+        static const ::rtl::OUString aB2(RTL_CONSTASCII_USTRINGPARAM(" ]"));
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
@@ -954,7 +777,7 @@ sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const 
             {
                 bRet = xDataBaseContext->getByName(_sDataSourceName).hasValue();
             }
-            catch(Exception)
+            catch(const Exception&)
             {
             }
         }
@@ -972,7 +795,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
         case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
         case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
         default:
-            OSL_ENSURE(0,"Invalid TextAlign!");
+            OSL_FAIL("Invalid TextAlign!");
     }
     return nAlignment;
 }
@@ -986,7 +809,7 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
         case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
         case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
         default:
-            OSL_ENSURE(0,"Invalid TextAlign!");
+            OSL_FAIL("Invalid TextAlign!");
     }
     return eJustify;
 }
@@ -1014,7 +837,7 @@ float ConvertFontWeight( ::FontWeight eWeight )
     else if( eWeight == WEIGHT_BLACK )
         return ::com::sun::star::awt::FontWeight::BLACK;
 
-    OSL_ENSURE(0, "Unknown FontWeigth" );
+    OSL_FAIL("Unknown FontWeigth" );
     return ::com::sun::star::awt::FontWeight::DONTKNOW;
 }
 // -----------------------------------------------------------------------------
@@ -1041,7 +864,7 @@ float ConvertFontWidth( ::FontWidth eWidth )
     else if( eWidth == WIDTH_ULTRA_EXPANDED )
         return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
 
-    OSL_ENSURE(0, "Unknown FontWidth" );
+    OSL_FAIL("Unknown FontWidth" );
     return ::com::sun::star::awt::FontWidth::DONTKNOW;
 }
 // -----------------------------------------------------------------------------
@@ -1115,7 +938,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
                                 sal_Bool  _bHasFormat)
 {
     sal_Bool bRet = sal_False;
-    // the allowed format changes depend of the type of the field ...
+    // the allowed format changes depending on the type of the field ...
     _nFlags = TP_ATTR_ALIGN;
 
     if (_bHasFormat)
@@ -1220,7 +1043,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
 
     delete pFormatDescriptor;
     SfxItemPool::Free(pPool);
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(pDefaults); ++i)
         delete pDefaults[i];
 
     return bRet;
@@ -1253,7 +1076,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
             sal_Bool bHasToInsert = sal_True;
-            static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
+            static ::rtl::OUString sPattern(RTL_CONSTASCII_USTRINGPARAM("%"));
             const ::rtl::OUString* pBegin = aFilter.getConstArray();
             const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
             for (;pBegin != pEnd; ++pBegin)
@@ -1317,22 +1140,6 @@ void adjustToolBoxSize(ToolBox* _pToolBox)
         _pToolBox->Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
-sal_Bool isHiContrast(Window* _pWindow)
-{
-    OSL_ENSURE(_pWindow,"Window must be not null!");
-    Window* pIter = _pWindow;
-    //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
-    while( pIter )
-    {
-        if ( pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
-            pIter = pIter->GetParent();
-        else
-            break;
-    }
-    return pIter && pIter->GetSettings().GetStyleSettings().GetHighContrastMode();
-}
-
 // -----------------------------------------------------------------------------
 void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
 {
@@ -1399,7 +1206,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
             pValue->Value >>= _rsAutoIncrementValue;
         pValue =::std::find_if(aInfo.getConstArray(),
                                                     aInfo.getConstArray() + aInfo.getLength(),
-                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString::createFromAscii("IsAutoRetrievingEnabled") ));
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled")) ));
         if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
@@ -1437,29 +1244,29 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
     return sName;
 }
 // -----------------------------------------------------------------------------
-    void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
-    {
-        Any aLocale =
-            ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-        ::rtl::OUString sLocaleStr;
-        if ( !( aLocale >>= sLocaleStr ) )
-            // fallback is english
-            sLocaleStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
+{
+    Any aLocale =
+    ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+    ::rtl::OUString sLocaleStr;
+    if ( !( aLocale >>= sLocaleStr ) )
+        // fallback is english
+        sLocaleStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
 
-        // query part exists?
-        if ( _bQuestionMark )
-            // no, so start with '?'
-            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
-        else
-            // yes, so only append with '&'
-            _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+    // query part exists?
+    if ( _bQuestionMark )
+        // no, so start with '?'
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+    else
+        // yes, so only append with '&'
+        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
 
-        // set parameters
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
-        _rURL += sLocaleStr;
-        _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
-        _rURL += SvtHelpOptions().GetSystem();
-    }
+    // set parameters
+    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Language="));
+    _rURL += sLocaleStr;
+    _rURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&System="));
+    _rURL += SvtHelpOptions().GetSystem();
+}
 
 namespace
 {
@@ -1474,7 +1281,7 @@ namespace
         {
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                                  Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-            if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
+            if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
             {
 
                 if ( sAnchor.getLength() > 0 )
@@ -1632,20 +1439,20 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             break;
         default:
             ;
-    } // switch(_nDataType)
+    }
     if ( !pTypeInfo )
     {
         ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x")),sTypeName;
         sal_Bool bForce = sal_True;
         pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,sal_False,bForce);
-    } // if ( !pTypeInfo )
+    }
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
 sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     String aMsg = String(ModuleRes(_nText));
     aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(_sName));
     OSQLMessageBox aAsk(_pParent,String(ModuleRes(_nTitle )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
@@ -1886,3 +1693,5 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
 // .........................................................................
 } // dbaui
 // .........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

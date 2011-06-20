@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include "dbu_misc.hrc"
 #include "dbustrings.hrc"
 #include <sfx2/sfxhtml.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/tenccvt.hxx>
 #include "moduledbu.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -185,7 +186,7 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
                 {
-                    sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
+                    sal_uInt32 nTell = rInput.Tell(); // verï¿½ndert vielleicht die Position des Streams
                     if ( !m_xTable.is() )
                     {// erste Zeile als Header verwenden
                         m_bError = !CreateTable(nToken);
@@ -336,7 +337,6 @@ void OHTMLReader::fetchOptions()
             case HTML_O_SDVAL:
             {
                 m_sValToken = pOption->GetString();
-                //m_sTextToken = pOption->GetString();
                 m_bSDNum = sal_True;
             }
             break;
@@ -347,11 +347,10 @@ void OHTMLReader::fetchOptions()
     }
 }
 //---------------------------------------------------------------------------------
-void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
+void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableDataOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    sal_Bool bHorJustifyCenterTH = (nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions* pHtmlOptions = GetOptions();
     sal_Int16 nArrLen = pHtmlOptions->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
@@ -361,7 +360,6 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
         {
             case HTML_O_ALIGN:
             {
-                bHorJustifyCenterTH = sal_False;
                 const String& rOptVal = pOption->GetString();
                 if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ))
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
@@ -438,14 +436,14 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent
-        DBG_ASSERT( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
+        OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
         return (sal_Int16)((pOption->GetNumber() * m_nColumnWidth) / 100);
     }
     else
     {
         if ( rOptVal.Search('*') != STRING_NOTFOUND )
         {   // relativ zu was?!?
-//2do: ColArray aller relativen Werte sammeln und dann MakeCol
+//TODO: ColArray aller relativen Werte sammeln und dann MakeCol
             return 0;
         }
         else
@@ -488,15 +486,11 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 m_sTextToken.Erase();
                 break;
             case HTML_TABLEDATA_ON:
-                // m_bAppendFirstLine = true;
-                // run through
             case HTML_TABLEHEADER_ON:
-                TableDataOn(eVal,nTmpToken2);
+                TableDataOn(eVal);
                 bTableHeader = sal_True;
                 break;
             case HTML_TABLEDATA_OFF:
-                // m_bAppendFirstLine = true;
-                // run through
             case HTML_TABLEHEADER_OFF:
                 {
                     aColumnName.EraseLeadingChars();
@@ -596,3 +590,4 @@ TypeSelectionPageFactory OHTMLReader::getTypeSelectionPageFactory()
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

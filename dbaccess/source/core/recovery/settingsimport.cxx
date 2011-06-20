@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 *
@@ -117,7 +118,7 @@ namespace dbaccess
             o_rLocalName = i_rElementName.copy( nSeparatorPos + 1 );
         }
 
-        OSL_ENSURE( o_rNamespace.equalsAscii( "config" ), "SettingsImport::split: unexpected namespace!" );
+        OSL_ENSURE( o_rNamespace.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config" ) ), "SettingsImport::split: unexpected namespace!" );
             // our recovery file is kind of hand-made, so there shouldn't be anything else than "config".
             // If there is, then just ignore it ...
     }
@@ -154,14 +155,14 @@ namespace dbaccess
         ::rtl::OUString sLocalName;
         split( i_rElementName, sNamespace, sLocalName );
 
-        if ( sLocalName.equalsAscii( "config-item-set" ) )
+        if ( sLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config-item-set" ) ) )
             return new ConfigItemSetImport( m_rSettings );
 
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sMessage( "unknown (or unsupported at this place) element name '" );
         sMessage += ::rtl::OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
         sMessage += "', ignoring";
-        OSL_ENSURE( false, sMessage.getStr() );
+        OSL_FAIL( sMessage.getStr() );
 #endif
         return new IgnoringSettingsImport;
     }
@@ -183,7 +184,7 @@ namespace dbaccess
     //--------------------------------------------------------------------
     ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const ::rtl::OUString& i_rElementName )
     {
-        OSL_ENSURE( false, "ConfigItemImport::nextState: unexpected: this class is responsible for child-less items only!" );
+        OSL_FAIL( "ConfigItemImport::nextState: unexpected: this class is responsible for child-less items only!" );
         (void)i_rElementName;
         return new IgnoringSettingsImport;
     }
@@ -219,17 +220,17 @@ namespace dbaccess
                 o_rValue <<= nValue;
             else
             {
-                OSL_ENSURE( false, "ConfigItemImport::getItemValue: could not convert an int value!" );
+                OSL_FAIL( "ConfigItemImport::getItemValue: could not convert an int value!" );
             }
         }
         else if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_BOOLEAN ) )
         {
-            sal_Bool nValue( sal_False );
+            bool nValue( sal_False );
             if ( SvXMLUnitConverter::convertBool( nValue, sValue ) )
                 o_rValue <<= nValue;
             else
             {
-                OSL_ENSURE( false, "ConfigItemImport::getItemValue: could not convert a boolean value!" );
+                OSL_FAIL( "ConfigItemImport::getItemValue: could not convert a boolean value!" );
             }
         }
         else if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_STRING ) )
@@ -242,7 +243,7 @@ namespace dbaccess
             ::rtl::OString sMessage( "ConfigItemImport::getItemValue: unsupported item type '" );
             sMessage += ::rtl::OUStringToOString( rItemType, RTL_TEXTENCODING_UTF8 );
             sMessage += "', ignoring";
-            OSL_ENSURE( false, sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
 #endif
     }
@@ -269,16 +270,16 @@ namespace dbaccess
         ::rtl::OUString sLocalName;
         split( i_rElementName, sNamespace, sLocalName );
 
-        if ( sLocalName.equalsAscii( "config-item-set" ) )
+        if ( sLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config-item-set" ) ) )
             return new ConfigItemSetImport( m_aChildSettings );
-        if ( sLocalName.equalsAscii( "config-item" ) )
+        if ( sLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "config-item" ) ) )
             return new ConfigItemImport( m_aChildSettings );
 
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sMessage( "unknown element name '" );
         sMessage += ::rtl::OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
         sMessage += "', ignoring";
-        OSL_ENSURE( false, sMessage.getStr() );
+        OSL_FAIL( sMessage.getStr() );
 #endif
         return new IgnoringSettingsImport;
     }
@@ -292,3 +293,5 @@ namespace dbaccess
 //........................................................................
 } // namespace dbaccess
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

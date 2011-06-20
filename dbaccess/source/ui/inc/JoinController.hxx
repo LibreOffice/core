@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,14 +148,14 @@ namespace dbaui
         /** only defines a method to save a SQLException in d&d methods to show the error at a later state
             set the internal member m_aExceptionInfo to _rInfo
         */
-        void setErrorOccured(const ::dbtools::SQLExceptionInfo& _rInfo)
+        void setErrorOccurred(const ::dbtools::SQLExceptionInfo& _rInfo)
         {
             m_aExceptionInfo = _rInfo;
         }
         /**
             just returns the internal member and clears it
         */
-        ::dbtools::SQLExceptionInfo clearOccuredError()
+        ::dbtools::SQLExceptionInfo clearOccurredError()
         {
             ::dbtools::SQLExceptionInfo aInfo = m_aExceptionInfo;
             m_aExceptionInfo = ::dbtools::SQLExceptionInfo();
@@ -174,3 +175,4 @@ namespace dbaui
 }
 #endif // DBAUI_JOINCONTROLLER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

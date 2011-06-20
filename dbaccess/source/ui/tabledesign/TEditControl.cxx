@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,84 +28,32 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #include "TEditControl.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XALTERTABLE_HPP_
 #include <com/sun/star/sdbcx/XAlterTable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _DBU_TBL_HRC_
 #include "dbu_tbl.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 #include "FieldDescControl.hxx"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef DBAUI_TABLEUNDO_HXX
 #include "TableUndo.hxx"
-#endif
-#ifndef DBUI_TABLECONTROLLER_HXX
 #include "TableController.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBAUI_SQLNAMEEDIT_HXX
 #include "SqlNameEdit.hxx"
-#endif
-#ifndef DBAUI_TABLEROW_EXCHANGE_HXX
 #include "TableRowExchange.hxx"
-#endif
-#ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 #include "FieldDescControl.hxx"
-#endif
-#ifndef DBAUI_TABLEFIELDCONTROL_HXX
 #include "TableFieldControl.hxx"
-#endif
 #include "dsntypes.hxx"
 
 #include "dbaccess_slotid.hrc"
@@ -294,11 +243,6 @@ void OTableEditorCtrl::SetReadOnly( sal_Bool bRead )
     DeactivateCell();
 
     //////////////////////////////////////////////////////////////////////
-    // ::com::sun::star::beans::Property Controls disablen
-//  if (pDescrWin)
-//      pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
-
-    //////////////////////////////////////////////////////////////////////
     // Cursor des Browsers anpassen
     BrowserMode nMode(BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                       BROWSER_HLINESFULL      | BROWSER_VLINESFULL|BROWSER_AUTOSIZE_LASTCOL);
@@ -333,7 +277,7 @@ void OTableEditorCtrl::InitCellController()
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(!"getMaxColumnNameLength");
+        OSL_FAIL("getMaxColumnNameLength");
     }
 
     pNameCell = new OSQLNameEdit( &GetDataWindow(), sExtraNameChars,WB_LEFT );
@@ -361,12 +305,12 @@ void OTableEditorCtrl::InitCellController()
 
     Size aHeight;
     const Control* pControls[] = { pTypeCell,pDescrCell,pNameCell,pHelpTextCell};
-    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    for(sal_Size i= 0; i < SAL_N_ELEMENTS(pControls);++i)
     {
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    }
     SetDataRowHeight(aHeight.Height());
 
     ClearModified();
@@ -462,7 +406,7 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
     Reference<XPropertySet> xTable = GetView()->getController().getTable();
     if (IsReadOnly() || (   xTable.is() &&
                             xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE) &&
-                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
+                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
         return NULL;
 
     //////////////////////////////////////////////////////////////////////
@@ -757,15 +701,6 @@ sal_Bool OTableEditorCtrl::SaveModified()
 
     switch( nColId )
     {
-        //////////////////////////////////////////////////////////////
-        // NameCell
-        case FIELD_NAME:
-        {
-            // removed the former duplicate-check. this is done in OTableDocShell::CheckDefConsistency now.
-            // FS - 07.12.99 - 69575
-
-        } break;
-
         //////////////////////////////////////////////////////////////
         // TypeCell
         case FIELD_TYPE:
@@ -1183,7 +1118,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeIn
             SwitchType( _pTypeInfo );
             break;
         default:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
     }
     SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : ::rtl::OUString());
 }
@@ -1210,7 +1145,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_TYPE:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case COLUMN_DESCRIPTION:
@@ -1238,8 +1173,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            //  pFieldDescr->SetNumType( _rNewData );
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
+            OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
         case FIELD_PROPERTY_AUTOINC:
@@ -1322,8 +1256,8 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
-            OSL_ENSURE(sal_False, "OTableEditorCtrl::GetCellData: invalid column!");
-            //  return pFieldDescr->GetNumType();
+            OSL_FAIL("OTableEditorCtrl::GetCellData: invalid column!");
+            break;
 
         case FIELD_PROPERTY_AUTOINC:
             sValue = pFieldDescr->IsAutoIncrement() ? strYes : strNo;
@@ -1369,7 +1303,7 @@ OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
         m_pRowList->size());
     if( (nRow<0) || (sal::static_int_cast< unsigned long >(nRow)>=nListCount) )
     {
-        OSL_ENSURE(0,"(nRow<0) || (nRow>=nListCount)");
+        OSL_FAIL("(nRow<0) || (nRow>=nListCount)");
         return NULL;
     }
      ::boost::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];
@@ -1407,11 +1341,6 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
         }
     }
 
-//  Reference<XPropertySet> xTable = GetView()->getController().getTable();
-//  if( !IsCopyAllowed(nRow) || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
-//      return sal_False;
-
-    //  return bCutAllowed && IsDeleteAllowed( nRow );
     return bIsCutAllowed;
 }
 
@@ -1429,7 +1358,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
     else if(m_eChildFocus == ROW)
     {
         Reference<XPropertySet> xTable = GetView()->getController().getTable();
-        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
+        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
             return sal_False;
 
         //////////////////////////////////////////////////////////////////////
@@ -1596,9 +1525,9 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     Reference<XPropertySet> xTable = rController.getTable();
     //////////////////////////////////////////////////////////////
     // Key darf nicht veraendert werden
-    // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgeführt
+    // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgefï¿½hrt
 
-    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW"))
+    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")))
         return sal_False;
     //////////////////////////////////////////////////////////////
     // Wenn leeres Feld, kein PrimKey
@@ -1618,7 +1547,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
         {
             //////////////////////////////////////////////////////////////
             // Wenn Feldtyp Memo oder Image, kein PrimKey
-            // oder wenn Spalten nicht gedroped werden können und das Required Flag ist nicht gesetzt
+            // oder wenn Spalten nicht gedroped werden kï¿½nnen und das Required Flag ist nicht gesetzt
             // oder wenn eine ::com::sun::star::sdbcx::View vorhanden ist und das Required Flag nicht gesetzt ist
             TOTypeInfoSP pTypeInfo = pFieldDescr->getTypeInfo();
             if(     pTypeInfo->nSearchType == ColumnSearch::NONE
@@ -1826,7 +1755,7 @@ void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
     {
         _pFieldDesc->SetIsNullable(ColumnValue::NO_NULLS);
         _pFieldDesc->SetControlDefault(Any());
-    } // if(!_bSet && _pFieldDesc->getTypeInfo()->bNullable)
+    }
     if ( _pFieldDesc->IsAutoIncrement() && !_bPrimaryKey )
     {
         OTableController& rController = GetView()->getController();
@@ -1850,7 +1779,6 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     // Evtl. vorhandene Primary Keys loeschen
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
-    long nIndex = 0;
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
@@ -1869,7 +1797,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     aInsertedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
     if( bSet )
     {
-        nIndex = FirstSelectedRow();
+        long nIndex = FirstSelectedRow();
         while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
             //////////////////////////////////////////////////////////////////////
@@ -2009,3 +1937,4 @@ long OTableEditorCtrl::PreNotify( NotifyEvent& rNEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

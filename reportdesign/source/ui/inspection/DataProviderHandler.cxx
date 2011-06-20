@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@
 #include <tools/fldunit.hxx>
 #include "metadata.hxx"
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include "helpids.hrc"
 #include "uistrings.hrc"
 #include "RptResId.hrc"
@@ -168,13 +169,6 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
 
             m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
         }
-
-        //const ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
-        //if ( xNameCont->hasByName(sRowSet) )
-        //{
-        //    uno::Reference<beans::XPropertySet> xProp(m_xFormComponentHandler,uno::UNO_QUERY);
-        //    xProp->setPropertyValue(sRowSet,xNameCont->getByName(sRowSet));
-        //}
     }
     catch(uno::Exception)
     {
@@ -270,7 +264,7 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
             aArgs[0] = xFormatted;
             xTitle->setText(aArgs);
         }
-    } // if ( xTitled.is() )
+    }
 }
 
 beans::PropertyState SAL_CALL DataProviderHandler::getPropertyState(const ::rtl::OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
@@ -329,7 +323,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToPropertyValue(const ::rtl::OUStr
             }
             catch( const uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "DataProviderHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         case PROPERTY_ID_MASTERFIELDS:
@@ -363,7 +357,7 @@ uno::Any SAL_CALL DataProviderHandler::convertToControlValue(const ::rtl::OUStri
             }
             catch( const uno::Exception& )
             {
-                OSL_ENSURE( sal_False, "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                OSL_FAIL( "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
             }
             break;
         default:
@@ -395,10 +389,9 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
             ,PROPERTY_MASTERFIELDS
             ,PROPERTY_DETAILFIELDS
             ,PROPERTY_PREVIEW_COUNT
-            //,PROPERTY_TITLE
         };
 
-        for (size_t nPos = 0; nPos < sizeof(s_pProperties)/sizeof(s_pProperties[0]) ;++nPos )
+        for (size_t nPos = 0; nPos < SAL_N_ELEMENTS(s_pProperties) ;++nPos )
         {
             aValue.Name = s_pProperties[nPos];
             aNewProps.push_back(aValue);
@@ -479,9 +472,9 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
             xReceiver->setArguments( aArgs.getPropertyValues() );
             if ( !bModified )
                 xReport->setModified(sal_False);
-        } // if ( NewValue != OldValue )
+        }
         m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, InspectorUI, FirstTimeInit);
-    } // if ( ActuatingPropertyName == PROPERTY_COMMAND )
+    }
     else if ( ActuatingPropertyName == PROPERTY_TITLE )
     {
         if ( NewValue != OldValue )
@@ -563,3 +556,4 @@ bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGua
 } // namespace rptui
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

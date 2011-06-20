@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,38 +28,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_CONTAINERMEDIATOR_HXX
 #include "ContainerMediator.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef DBA_PROPERTYSETFORWARD_HXX
 #include "PropertyForward.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
 #include <com/sun/star/sdbcx/XRename.hpp>
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
 
 //........................................................................
@@ -94,7 +75,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OContainerMediator::OContainerMediator: caught an exception!");
+            OSL_FAIL("OContainerMediator::OContainerMediator: caught an exception!");
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -242,7 +223,7 @@ void OContainerMediator::notifyElementCreated( const ::rtl::OUString& _sName, co
         &&  aFind->second->getDefinition().is()
         )
     {
-        OSL_ENSURE( false, "OContainerMediator::notifyElementCreated: is this really a valid case?" );
+        OSL_FAIL( "OContainerMediator::notifyElementCreated: is this really a valid case?" );
         return;
     }
 
@@ -279,3 +260,5 @@ void OContainerMediator::notifyElementCreated( const ::rtl::OUString& _sName, co
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

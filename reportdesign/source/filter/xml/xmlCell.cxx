@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,15 +38,11 @@
 #include "xmlStyleImport.hxx"
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
-#ifndef RPT_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include "xmlTable.hxx"
 #include "xmlFormattedField.hxx"
 #include "xmlImage.hxx"
@@ -248,7 +245,7 @@ void OXMLCell::EndElement()
                }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(0,"OXMLCell::EndElement -> exception catched");
+                OSL_FAIL("OXMLCell::EndElement -> exception catched");
             }
         }
     }
@@ -291,3 +288,4 @@ void OXMLCell::setContainsShape(bool _bContainsShape)
 } // namespace rptxml
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

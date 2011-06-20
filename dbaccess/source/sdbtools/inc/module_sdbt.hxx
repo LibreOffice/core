@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef DBACCESS_MODULE_SDBT_HXX
 #define DBACCESS_MODULE_SDBT_HXX
 
-#ifndef UNOTOOLS_INC_UNOTOOLS_COMPONENTRESMODULE_HXX
 #include <unotools/componentresmodule.hxx>
-#endif
 
 //........................................................................
 namespace sdbtools
@@ -45,3 +44,4 @@ namespace sdbtools
 
 #endif // DBACCESS_MODULE_SDBT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

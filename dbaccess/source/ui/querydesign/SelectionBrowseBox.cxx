@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,75 +28,29 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 #include "SelectionBrowseBox.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef DBAUI_TABLEFIELDINFO_HXX
 #include "TableFieldInfo.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #include "QTableWindow.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
 #include "QueryDesignFieldUndoAct.hxx"
-#endif
-#ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
+#include <osl/diagnose.h>
 
 using namespace ::svt;
 using namespace ::dbaui;
@@ -181,7 +136,6 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                 |   BROWSER_HEADERBAR_NEW   ;
 
     m_pTextCell     = new Edit(&GetDataWindow(), 0);
-    //  m_pTextCell->EnableSpecialCheck(sal_False);
     m_pVisibleCell  = new CheckBoxControl(&GetDataWindow());
     m_pTableCell    = new ListBoxControl(&GetDataWindow());     m_pTableCell->SetDropDownLineCount( 20 );
     m_pFieldCell    = new ComboBoxControl(&GetDataWindow());    m_pFieldCell->SetDropDownLineCount( 20 );
@@ -197,9 +151,6 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     //////////////////////////////////////////////////////////////////////
     // TriState der ::com::sun::star::form::CheckBox abschalten
     m_pVisibleCell->GetBox().EnableTriState( sal_False );
-
-//  m_pEmptyEntry = new OTableFieldDesc();
-//  m_pEmptyEntry->SetColWidth(DEFAULT_SIZE);
 
     Font aTitleFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE,Window::GetSettings().GetLanguage(),DEFAULTFONT_FLAGS_ONLYONE);
     aTitleFont.SetSize(Size(0, 6));
@@ -257,16 +208,16 @@ void OSelectionBrowseBox::initialize()
         String sGroup = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount() - 1);
         m_aFunctionStrings = m_aFunctionStrings.GetToken(0);
 
-        for (size_t i = 0; i < sizeof(eFunctions)/sizeof(eFunctions[0]) ; ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(eFunctions); ++i)
         {
             m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
             m_aFunctionStrings += String(ByteString(rContext.getIntlKeywordAscii(eFunctions[i])),RTL_TEXTENCODING_UTF8);
 
-        } // for (sal_Int32 i = 0; i < sizeof(eFunctions)/sizeof(eFunctions[0]) ; ++i)
+        }
         m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
         m_aFunctionStrings += sGroup;
 
-        // Diese Funktionen stehen nur unter CORE zur Verfügung
+        // Diese Funktionen stehen nur unter CORE zur Verfï¿½gung
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
             xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
@@ -381,11 +332,11 @@ void OSelectionBrowseBox::ColumnMoved( sal_uInt16 nColId,sal_Bool _bCreateUndo )
                 pUndoAct->SetTabFieldDescr(pOldEntry);
 
                 getDesignView()->getController().addUndoActionAndInvalidate(pUndoAct);
-            } // if ( !m_bInUndoMode && _bCreateUndo )
+            }
         }
     }
     else
-        OSL_ENSURE(0,"Invalid column id!");
+        OSL_FAIL("Invalid column id!");
 }
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::Init()
@@ -407,12 +358,12 @@ void OSelectionBrowseBox::Init()
 
     Size aHeight;
     const Control* pControls[] = { m_pTextCell,m_pVisibleCell,m_pTableCell,m_pFieldCell };
-    for(sal_Size i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i)
+    for(sal_Size i= 0; i < SAL_N_ELEMENTS(pControls);++i)
     {
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    } // for(int i= 0; i < sizeof(pControls)/sizeof(pControls[0]);++i
+    }
     SetDataRowHeight(aHeight.Height());
     SetTitleLines(1);
     // Anzahl der sichtbaren Zeilen ermitteln
@@ -436,7 +387,7 @@ void OSelectionBrowseBox::Init()
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Catched Exception when asking for database metadata options!");
+        OSL_FAIL("Catched Exception when asking for database metadata options!");
         m_nMaxColumns = 0;
     }
 }
@@ -500,9 +451,9 @@ CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
     if ( nColId > getFields().size() )
         return NULL;
     OTableFieldDescRef pEntry = getFields()[nColId-1];
-    DBG_ASSERT(pEntry.isValid(), "OSelectionBrowseBox::GetController : keine FieldDescription !");
+    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::GetController : keine FieldDescription !");
 
-    if (!pEntry.isValid())
+    if (!pEntry.is())
         return NULL;
 
     if (static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
@@ -537,7 +488,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
     if ( nPos == 0 || nPos == BROWSER_INVALIDID || nPos > getFields().size() )
         return;
     OTableFieldDescRef pEntry = getFields()[nPos-1];
-    DBG_ASSERT(pEntry.isValid(), "OSelectionBrowseBox::InitController : keine FieldDescription !");
+    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::InitController : keine FieldDescription !");
     long nCellIndex = GetRealRow(nRow);
 
     switch (nCellIndex)
@@ -689,7 +640,7 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
         if ( pTabWinList )
         {
             sal_uInt16 nTabCount = 0;
-            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occured: column not in table window
+            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occurred: column not in table window
             {
                 String sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
                 sErrorMsg.SearchAndReplaceAscii("$name$",_sColumnName);
@@ -761,7 +712,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
 
         if  ( _pEntry->isAggreateFunction() )
         {
-            DBG_ASSERT(_pEntry->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
+            OSL_ENSURE(_pEntry->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
             ::rtl::OUStringBuffer aTmpStr2( _pEntry->GetFunction());
             aTmpStr2.appendAscii("(");
             aTmpStr2.append(sSql);
@@ -812,7 +763,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
             {
                 sal_uInt16 nColumnPostion;
                 aSelEntry = FindFirstFreeCol(nColumnPostion);
-                if ( !aSelEntry.isValid() )
+                if ( !aSelEntry.is() )
                 {
                     AppendNewCol(1);
                     aSelEntry = FindFirstFreeCol(nColumnPostion);
@@ -895,7 +846,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                         notifyFunctionFieldChanged(sOldLocalizedFunctionName,sLocalizedFunctionName,_bListAction, nColumnId);
                     }
                     else
-                        OSL_ENSURE(0,"Unsupported function inserted!");
+                        OSL_FAIL("Unsupported function inserted!");
 
                 }
                 else
@@ -949,7 +900,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
                 }
 
             }
-            if ( i > 0 && InsertField(aSelEntry,BROWSER_INVALIDID,sal_True,sal_False).isEmpty() ) // may we have to append more than one field
+            if ( i > 0 && !InsertField(aSelEntry,BROWSER_INVALIDID,sal_True,sal_False).is() ) // may we have to append more than one field
             { // the field could not be isnerted
                 String sErrorMessage( ModuleRes( RID_STR_FIELD_DOESNT_EXIST ) );
                 sErrorMessage.SearchAndReplaceAscii("$name$",aSelEntry->GetField());
@@ -972,11 +923,11 @@ sal_Bool OSelectionBrowseBox::SaveModified()
     if(getFields().size() > static_cast<sal_uInt16>(nCurrentColumnPos - 1))
         pEntry = getEntry(nCurrentColumnPos - 1);
 
-    sal_Bool bWasEmpty = pEntry.isValid() ? pEntry->IsEmpty() : sal_False;
+    sal_Bool bWasEmpty = pEntry.is() ? pEntry->IsEmpty() : sal_False;
     sal_Bool bError         = sal_False;
     sal_Bool bListAction    = sal_False;
 
-    if (pEntry.isValid() && Controller().Is() && Controller()->IsModified())
+    if (pEntry.is() && Controller().Is() && Controller()->IsModified())
     {
         // fuer die Undo-Action
         String strOldCellContents,sNewValue;
@@ -1117,7 +1068,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 {
                     strOldCellContents = pEntry->GetFunction();
                     sal_uInt16 nPos = m_pFunctionCell->GetSelectEntryPos();
-                    // Diese Funktionen stehen nur unter CORE zur Verfügung
+                    // Diese Funktionen stehen nur unter CORE zur Verfï¿½gung
                     String sFunctionName        = m_pFunctionCell->GetEntry(nPos);
                     String sGroupFunctionName   = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
                     sal_Bool bGroupBy = sal_False;
@@ -1239,7 +1190,6 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             bError = sal_True;
                         }
                     }
-                    //  }
                 }
                 strOldCellContents = pEntry->GetCriteria(nIdx);
                 pEntry->SetCriteria(nIdx, aCrit);
@@ -1269,7 +1219,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
     }
 
     // habe ich Daten in einer FieldDescription gespeichert, die vorher leer war und es nach den Aenderungen nicht mehr ist ?
-    if ( pEntry.isValid() && bWasEmpty && !pEntry->IsEmpty() && !bError )
+    if ( pEntry.is() && bWasEmpty && !pEntry->IsEmpty() && !bError )
     {
         // Default auf sichtbar
         pEntry->SetVisible(sal_True);
@@ -1311,7 +1261,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const Rectangle& rRect, 
     if(getFields().size() > sal_uInt16(nPos - 1))
         pEntry = getFields()[nPos - 1];
 
-    if (!pEntry.isValid())
+    if (!pEntry.is())
         return;
 
     long nRow = GetRealRow(m_nSeekRow);
@@ -1346,7 +1296,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)
 
     sal_uInt16 nPos = GetColumnPos(_nColumnId);
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
-    DBG_ASSERT((nPos == 0) || (nPos <= getFields().size()), "OSelectionBrowseBox::RemoveColumn : invalid parameter nColId");
+    OSL_ENSURE((nPos == 0) || (nPos <= getFields().size()), "OSelectionBrowseBox::RemoveColumn : invalid parameter nColId");
         // ColId ist bei mir gleichbedeutend mit Position, und da sollte die Bedingung natuerlich zutreffen
 
     sal_uInt16 nCurCol = GetCurColumnId();
@@ -1402,7 +1352,7 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nColumnId )
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::adjustSelectionMode( sal_Bool _bClickedOntoHeader, sal_Bool _bClickedOntoHandleCol )
 {
-    // wenn ein Header selectiert wird, muß die selection angezeigt werden, sonst nicht)
+    // wenn ein Header selectiert wird, muï¿½ die selection angezeigt werden, sonst nicht)
     if ( _bClickedOntoHeader )
     {
         if (0 == GetSelectColumnCount() )
@@ -1476,7 +1426,7 @@ sal_Int8 OSelectionBrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     {
         if ( IsEditing() )
         {
-            // #100271# OJ allow the asterix again
+            // allow the asterix again
             m_bDisableErrorBox = sal_True;
             SaveModified();
             m_bDisableErrorBox = sal_False;
@@ -1498,7 +1448,7 @@ sal_Int8 OSelectionBrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& _rEvt 
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     if (!OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
     {
-        DBG_ERROR("OSelectionBrowseBox::ExecuteDrop: this should never have passed AcceptDrop!");
+        OSL_FAIL("OSelectionBrowseBox::ExecuteDrop: this should never have passed AcceptDrop!");
         return DND_ACTION_NONE;
     }
 
@@ -1573,7 +1523,7 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
 
     // der FieldDescription Bescheid sagen
     OTableFieldDescRef pEntry = getEntry(GetColumnPos(nColId) - 1);
-    if (pEntry.isValid())
+    if (pEntry.is())
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
 
     if (bWasEditing)
@@ -1601,7 +1551,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
         // das Control sollte immer genau eine Spalte mehr haben, naemlich die HandleColumn
-    DBG_ASSERT(_nColumnPostion == BROWSER_INVALIDID || (_nColumnPostion <= (long)getFields().size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
+    OSL_ENSURE(_nColumnPostion == BROWSER_INVALIDID || (_nColumnPostion <= (long)getFields().size()), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
         // -1 heisst ganz hinten, Count heisst ganz hinten, der Rest bezeichnet eine richtige Position
 
     sal_uInt16 nCurCol = GetCurColumnId();
@@ -1638,7 +1588,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, sal_uInt16& _n
             getFields()[nOldPosition - 1] = pEntry;
 
         ColumnMoved(pEntry->GetColumnId(),sal_False);
-    } // if ( pEntry->GetColumnId() != nColumnId )
+    }
 
     if ( pEntry->GetFunctionType() & (FKT_AGGREGATE) )
     {
@@ -1724,7 +1674,7 @@ sal_uInt16 OSelectionBrowseBox::FieldsCount()
 
     while (aIter != getFields().end())
     {
-        if ((*aIter).isValid() && !(*aIter)->IsEmpty())
+        if ((*aIter).is() && !(*aIter)->IsEmpty())
             ++nCount;
         ++aIter;
     }
@@ -1745,7 +1695,7 @@ OTableFieldDescRef OSelectionBrowseBox::FindFirstFreeCol(sal_uInt16& _rColumnPos
     {
         ++_rColumnPosition;
         OTableFieldDescRef pEntry = (*aIter);
-        if ( pEntry.isValid() && pEntry->IsEmpty() )
+        if ( pEntry.is() && pEntry->IsEmpty() )
             return pEntry;
         ++aIter;
     }
@@ -1761,7 +1711,7 @@ void OSelectionBrowseBox::CheckFreeColumns(sal_uInt16& _rColumnPosition)
     {
         // es ist voll, also einen Packen Spalten anhaengen
         AppendNewCol(DEFAULT_QUERY_COLS);
-        OSL_VERIFY(FindFirstFreeCol(_rColumnPosition).isValid());
+        OSL_VERIFY(FindFirstFreeCol(_rColumnPosition).is());
     }
 }
 //------------------------------------------------------------------------------
@@ -1771,7 +1721,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
     if(!xConnection.is())
         return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(!rInfo->IsEmpty(),"AddGroupBy:: OTableFieldDescRef sollte nicht Empty sein!");
+    OSL_ENSURE(!rInfo->IsEmpty(),"AddGroupBy:: OTableFieldDescRef sollte nicht Empty sein!");
     OTableFieldDescRef pEntry;
     const Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     const ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
@@ -1783,7 +1733,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
     for(;aIter != aEnd;++aIter)
     {
         pEntry = *aIter;
-        OSL_ENSURE(pEntry.isValid(),"OTableFieldDescRef was null!");
+        OSL_ENSURE(pEntry.is(),"OTableFieldDescRef was null!");
 
         const ::rtl::OUString   aField = pEntry->GetField();
         const ::rtl::OUString   aAlias = pEntry->GetAlias();
@@ -1843,8 +1793,8 @@ void OSelectionBrowseBox::DuplicateConditionLevel( const sal_uInt16 nLevel)
                 ++m_nVisibleCount;
             }
             m_bVisibleRow[BROW_CRIT1_ROW + nNewLevel] = sal_True;
-        } // if (!pEntry->GetCriteria(nLevel).getLength() )
-    } // for(;aIter != getFields().end();++aIter)
+        }
+    }
 }
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const String& rValue, const sal_uInt16 nLevel,bool _bAddOrOnOneLine )
@@ -1853,7 +1803,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
     if(!xConnection.is())
         return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(rInfo.isValid() && !rInfo->IsEmpty(),"AddCondition:: OTableFieldDescRef sollte nicht Empty sein!");
+    OSL_ENSURE(rInfo.is() && !rInfo->IsEmpty(),"AddCondition:: OTableFieldDescRef sollte nicht Empty sein!");
 
     OTableFieldDescRef pLastEntry;
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
@@ -1878,7 +1828,6 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 pEntry->SetGroupBy(sal_False);
             else
             {
-//              pEntry->SetGroupBy(rInfo->IsGroupBy());
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
@@ -1893,14 +1842,14 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 }
                 m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
                 break;
-            } // if (!pEntry->GetCriteria(nLevel).getLength() )
+            }
             if ( _bAddOrOnOneLine )
             {
                 pLastEntry = pEntry;
             }
         }
-    } // for(;aIter != getFields().end();++aIter)
-    if ( pLastEntry.isValid() )
+    }
+    if ( pLastEntry.is() )
     {
         String sCriteria = rValue;
         String sOldCriteria = pLastEntry->GetCriteria( nLevel );
@@ -1927,7 +1876,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
         if ( pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy() ) // das GroupBy wird bereits von rInfo "ubernommen
             pTmp->SetGroupBy(sal_False);
-        if ( pTmp.isValid() )
+        if ( pTmp.is() )
         {
             pTmp->SetCriteria( nLevel, rValue);
             if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
@@ -1947,7 +1896,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
     if(!xConnection.is())
         return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(!rInfo->IsEmpty(),"AddOrder:: OTableFieldDescRef sollte nicht Empty sein!");
+    OSL_ENSURE(!rInfo->IsEmpty(),"AddOrder:: OTableFieldDescRef sollte nicht Empty sein!");
     OTableFieldDescRef pEntry;
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
@@ -1982,7 +1931,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
     if (aIter == rFields.end())
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
-        if(pTmp.isValid())
+        if(pTmp.is())
         {
             if ( !m_bOrderByUnRelated && !bAppend )
                 pTmp->SetVisible(sal_True);
@@ -2040,7 +1989,7 @@ void OSelectionBrowseBox::CellModified()
 void OSelectionBrowseBox::Fill()
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(ColCount() >= 1, "OSelectionBrowseBox::Fill : please call only after inserting the handle column !");
+    OSL_ENSURE(ColCount() >= 1, "OSelectionBrowseBox::Fill : please call only after inserting the handle column !");
 
     sal_uInt16 nColCount = ColCount() - 1;
     if (nColCount < DEFAULT_QUERY_COLS)
@@ -2160,7 +2109,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
 //------------------------------------------------------------------------------
 sal_Bool OSelectionBrowseBox::IsRowVisible(sal_uInt16 _nWhich) const
 {
-    DBG_ASSERT(_nWhich<(m_bVisibleRow.size()), "OSelectionBrowseBox::IsRowVisible : invalid parameter !");
+    OSL_ENSURE(_nWhich<(m_bVisibleRow.size()), "OSelectionBrowseBox::IsRowVisible : invalid parameter !");
     return m_bVisibleRow[_nWhich];
 }
 
@@ -2168,7 +2117,7 @@ sal_Bool OSelectionBrowseBox::IsRowVisible(sal_uInt16 _nWhich) const
 void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, sal_Bool _bVis)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DBG_ASSERT(_nWhich<m_bVisibleRow.size(), "OSelectionBrowseBox::SetRowVisible : invalid parameter !");
+    OSL_ENSURE(_nWhich<m_bVisibleRow.size(), "OSelectionBrowseBox::SetRowVisible : invalid parameter !");
 
     sal_Bool bWasEditing = IsEditing();
     if (bWasEditing)
@@ -2218,7 +2167,7 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
                 break;
         }
     }
-    DBG_ASSERT(nErg <= long(m_bVisibleRow.size()),"nErg kann nicht groesser als BROW_ROW_CNT sein!");
+    OSL_ENSURE(nErg <= long(m_bVisibleRow.size()),"nErg kann nicht groesser als BROW_ROW_CNT sein!");
     return i;
 }
 static long nVisibleRowMask[] =
@@ -2241,7 +2190,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 {
     sal_Int32 nErg(0);
     // only the first 11 row are interesting
-    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
+    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
     for(sal_Int32 i=0;i<nSize;i++)
     {
         if(!m_bVisibleRow[i])
@@ -2253,7 +2202,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 void OSelectionBrowseBox::SetNoneVisbleRow(long nRows)
 {
     // only the first 11 row are interesting
-    sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
+    sal_Int32 nSize = SAL_N_ELEMENTS(nVisibleRowMask);
     for(sal_Int32 i=0;i< nSize;i++)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
 }
@@ -2265,7 +2214,7 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
     sal_uInt16 nPos = GetColumnPos(nColId);
 
     OTableFieldDescRef pEntry = getFields()[nPos-1];
-    DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
+    OSL_ENSURE(pEntry != NULL, "OSelectionBrowseBox::GetCellText : invalid column id, prepare for GPF ... ");
     if ( pEntry->IsEmpty() )
         return String();
 
@@ -2384,13 +2333,12 @@ sal_Bool OSelectionBrowseBox::GetFunctionName(sal_uInt32 _nFunctionTokenId,Strin
 String OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    //  DBG_ASSERT(nCellIndex < (GetRowCount()-1),"CellIndex ist zu gross");
     if ( GetCurColumnId() == nColId && !m_bInUndoMode )
         SaveModified();
 
     sal_uInt16 nPos = GetColumnPos(nColId);
     OTableFieldDescRef pEntry = getFields()[nPos - 1];
-    DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::GetCellContents : invalid column id, prepare for GPF ... ");
+    OSL_ENSURE(pEntry != NULL, "OSelectionBrowseBox::GetCellContents : invalid column id, prepare for GPF ... ");
 
     switch (nCellIndex)
     {
@@ -2418,7 +2366,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
 
     sal_uInt16 nPos = GetColumnPos(nColId);
     OTableFieldDescRef pEntry = getEntry(nPos - 1);
-    DBG_ASSERT(pEntry != NULL, "OSelectionBrowseBox::SetCellContents : invalid column id, prepare for GPF ... ");
+    OSL_ENSURE(pEntry != NULL, "OSelectionBrowseBox::SetCellContents : invalid column id, prepare for GPF ... ");
 
 
     switch (nRow)
@@ -2501,13 +2449,13 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
 
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     sal_uInt16 nPos = GetColumnPos(nColId);
-    DBG_ASSERT(nPos <= getFields().size(),"ColumnResized:: nColId sollte nicht groesser als List::count sein!");
+    OSL_ENSURE(nPos <= getFields().size(),"ColumnResized:: nColId sollte nicht groesser als List::count sein!");
     OTableFieldDescRef pEntry = getEntry(nPos-1);
-    DBG_ASSERT(pEntry.isValid(), "OSelectionBrowseBox::ColumnResized : keine FieldDescription !");
+    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::ColumnResized : keine FieldDescription !");
     static_cast<OQueryController&>(getDesignView()->getController()).setModified( sal_True );
     EditBrowseBox::ColumnResized(nColId);
 
-    if ( pEntry.isValid())
+    if ( pEntry.is())
     {
         if ( !m_bInUndoMode )
         {
@@ -2526,10 +2474,10 @@ sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRowId, sal_uInt16 nColId
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     sal_uInt16 nPos = GetColumnPos(nColId);
-    DBG_ASSERT((nPos == 0) || (nPos <= getFields().size()), "OSelectionBrowseBox::GetTotalCellWidth : invalid parameter nColId");
+    OSL_ENSURE((nPos == 0) || (nPos <= getFields().size()), "OSelectionBrowseBox::GetTotalCellWidth : invalid parameter nColId");
 
     OTableFieldDescRef pEntry = getFields()[nPos-1];
-    DBG_ASSERT(pEntry.isValid(), "OSelectionBrowseBox::GetTotalCellWidth : invalid FieldDescription !");
+    OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::GetTotalCellWidth : invalid FieldDescription !");
 
     long nRow = GetRealRow(nRowId);
     String strText(GetCellText(nRow, nColId));
@@ -2730,8 +2678,8 @@ OTableFieldDescRef OSelectionBrowseBox::getEntry(OTableFields::size_type _nPos)
     OSL_ENSURE(aFields.size() > _nPos,"ColID is to great!");
 
     OTableFieldDescRef pEntry = aFields[_nPos];
-    OSL_ENSURE(pEntry.isValid(),"Invalid entry!");
-    if ( !pEntry.isValid() )
+    OSL_ENSURE(pEntry.is(),"Invalid entry!");
+    if ( !pEntry.is() )
     {
         pEntry = new OTableFieldDesc();
         pEntry->SetColumnId(
@@ -2806,7 +2754,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
     if ( xConnection.is() )
     {
-        // Diese Funktionen stehen nur unter CORE zur Verfügung
+        // Diese Funktionen stehen nur unter CORE zur Verfï¿½gung
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
             // if we have an asterix, no other function than count is allowed
@@ -2859,7 +2807,7 @@ Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _n
     if(getFields().size() > sal_uInt16(_nColumnPos - 1))
         pEntry = getFields()[_nColumnPos - 1];
 
-    if ( _nRow == BROW_VIS_ROW && pEntry.isValid() )
+    if ( _nRow == BROW_VIS_ROW && pEntry.is() )
         return EditBrowseBox::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,pEntry->IsVisible() ? STATE_CHECK : STATE_NOCHECK );
 
     return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
@@ -2875,7 +2823,7 @@ bool OSelectionBrowseBox::HasFieldByAliasName(const ::rtl::OUString& rFieldName,
     {
         if ( (*aIter)->GetFieldAlias() == rFieldName )
         {
-            rInfo.getBody() = (*aIter).getBody();
+            *rInfo = *(*aIter);
             break;
         }
     }
@@ -2883,3 +2831,4 @@ bool OSelectionBrowseBox::HasFieldByAliasName(const ::rtl::OUString& rFieldName,
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

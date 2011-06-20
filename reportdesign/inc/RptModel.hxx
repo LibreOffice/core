@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@ public:
     virtual ~OReportModel();
 
     virtual void        SetChanged(sal_Bool bFlg = sal_True);
-    virtual SdrPage*    AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage*    AllocPage(bool bMasterPage);
     virtual Window*     GetCurDocViewWin();
     virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
     /** returns the numbering type that is used to format page fields in drawing shapes */
@@ -101,3 +102,4 @@ public:
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

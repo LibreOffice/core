@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,7 +117,7 @@ namespace dbaui
             )
             return;
 
-        OSL_ENSURE( false, "SetItemPropertyStorage::getPropertyValue: unsupported item type!" );
+        OSL_FAIL( "SetItemPropertyStorage::getPropertyValue: unsupported item type!" );
     }
 
     //--------------------------------------------------------------------
@@ -128,9 +129,11 @@ namespace dbaui
             )
             return;
 
-        OSL_ENSURE( false, "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
+        OSL_FAIL( "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
     }
 
 //........................................................................
 } // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,48 +28,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaxml.hxx"
-#ifndef DBA_XMLDATASOURCE_HXX
 #include "xmlDataSource.hxx"
-#endif
-#ifndef DBA_XMLLOGIN_HXX
 #include "xmlLogin.hxx"
-#endif
-#ifndef DBA_XMLTABLEFILTERLIST_HXX
 #include "xmlTableFilterList.hxx"
-#endif
-#ifndef DBA_XMLDATASOURCEINFO_HXX
 #include "xmlDataSourceInfo.hxx"
-#endif
-#ifndef DBA_XMLDATASOURCESETTINGS_HXX
 #include "xmlDataSourceSettings.hxx"
-#endif
-#ifndef DBA_XMLDATASOURCESETTING_HXX
 #include "xmlDataSourceSetting.hxx"
-#endif
-#ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 #include "xmlConnectionData.hxx"
 
 namespace dbaxml
@@ -115,7 +88,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 {
                     xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sValue));
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
@@ -126,7 +99,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                     xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sValue == s_sTRUE ? sal_True : sal_False));
                     bFoundSuppressVersionColumns = true;
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION();
                 }
@@ -173,13 +146,13 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 break;
             case XML_TOK_BOOLEAN_COMPARISON_MODE:
                 aProperty.Name = PROPERTY_BOOLEANCOMPARISONMODE;
-                if ( sValue.equalsAscii("equal-integer") )
+                if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-integer")) )
                     aProperty.Value <<= sal_Int32(0);
-                else if ( sValue.equalsAscii("is-boolean") )
+                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("is-boolean")) )
                     aProperty.Value <<= sal_Int32(1);
-                else if ( sValue.equalsAscii("equal-boolean") )
+                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-boolean")) )
                     aProperty.Value <<= sal_Int32(2);
-                else if ( sValue.equalsAscii("equal-use-only-zero") )
+                else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-use-only-zero")) )
                     aProperty.Value <<= sal_Int32(3);
                 break;
             case XML_TOK_USE_CATALOG:
@@ -230,7 +203,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
             {
                 xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sal_True));
             }
-            catch(Exception)
+            catch(const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -307,3 +280,5 @@ ODBFilter& OXMLDataSource::GetOwnImport()
 //----------------------------------------------------------------------------
 } // namespace dbaxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

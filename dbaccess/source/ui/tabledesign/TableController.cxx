@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,13 +145,13 @@ namespace
 //------------------------------------------------------------------------------
 ::rtl::OUString OTableController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OTableDesign"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.TableDesign");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TableDesign"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -348,7 +349,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             {
                 String aName = String(ModuleRes(STR_TBL_TITLE));
                 aDefaultName = aName.GetToken(0,' ');
-                //aDefaultName = getPrivateTitle();
                 aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
             }
 
@@ -368,7 +368,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "OTableController::doSaveDoc: nothing is expected to happen here!");
+        OSL_FAIL("OTableController::doSaveDoc: nothing is expected to happen here!");
     }
 
     sal_Bool bAlter = sal_False;
@@ -379,7 +379,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         // check the columns for double names
         if(!checkColumns(bNew || !xTables->hasByName(m_sName)))
         {
-            // #105323# OJ
             return sal_False;
         }
 
@@ -474,7 +473,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             stopTableListening();
             m_xTable = NULL;
         }
-        //  reload(); // a error occured so we have to reload
     }
     return ! (aInfo.isValid() || bError);
 }
@@ -507,7 +505,7 @@ void OTableController::doEditIndexes()
             OSL_ENSURE(xIndexes.is(), "OTableController::doEditIndexes: no keys got from the indexes supplier!");
         }
         else
-            OSL_ENSURE(sal_False, "OTableController::doEditIndexes: should never have reached this (no indexes supplier)!");
+            OSL_FAIL("OTableController::doEditIndexes: should never have reached this (no indexes supplier)!");
 
         // get the field names
         Reference< XColumnsSupplier > xColSupp(m_xTable, UNO_QUERY);
@@ -581,8 +579,6 @@ sal_Bool OTableController::Construct(Window* pParent)
 {
     setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
-//  m_pView->Construct();
-//  m_pView->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -591,7 +587,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
 
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
@@ -633,7 +629,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
                         }
                         catch(const Exception&)
                         {
-                            OSL_ENSURE(sal_False, "OTableController::suspend: nothing is expected to happen here!");
+                            OSL_FAIL("OTableController::suspend: nothing is expected to happen here!");
                         }
 
                     }
@@ -645,10 +641,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
             }
         }
     }
-/*
-    if ( bCheck )
-        OSingleDocumentController::suspend(_bSuspend);
-*/
+
     return bCheck;
 }
 // -----------------------------------------------------------------------------
@@ -770,7 +763,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OTableController::appendColumns: invalid field name!");
+                    OSL_FAIL("OTableController::appendColumns: invalid field name!");
                 }
 
             }
@@ -906,7 +899,6 @@ void OTableController::loadData()
             {
                 pActFieldDescr->SetName(sName);
                 pActFieldDescr->SetFormatKey(nFormatKey);
-                //  pActFieldDescr->SetPrimaryKey(pPrimary->GetValue());
                 pActFieldDescr->SetDescription(sDescription);
                 pActFieldDescr->SetHelpText(sHelpText);
                 pActFieldDescr->SetAutoIncrement(bIsAutoIncrement);
@@ -1018,10 +1010,10 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             pNewRow->SetFieldType( pTypeInfo );
             OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
 
-            pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
+            pActFieldDescr->SetAutoIncrement(sal_False);
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
-            pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
+            pActFieldDescr->SetName( createUniqueName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) ));
             pActFieldDescr->SetPrimaryKey( sal_True );
             m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
@@ -1097,14 +1089,13 @@ void OTableController::alterColumns()
             try { xColumn->getPropertyValue(PROPERTY_TYPENAME) >>= sTypeName; }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "no TypeName property?!" );
+                OSL_FAIL( "no TypeName property?!" );
                 // since this is a last minute fix for #i41785#, I want to be on the safe side,
                 // and catch errors here as early as possible (instead of the whole process of altering
                 // the columns failing)
                 // Normally, sdbcx::Column objects are expected to have a TypeName property
             }
 
-            //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
             // check if something changed
             if((nType != pField->GetType()                  ||
                 sTypeName != pField->GetTypeName()         ||
@@ -1150,7 +1141,7 @@ void OTableController::alterColumns()
                         xAppend->appendByDescriptor(xNewColumn);
                     }
                     catch(const SQLException&)
-                    { // an error occured so we try to reactivate the old one
+                    { // an error occurred so we try to reactivate the old one
                         xAppend->appendByDescriptor(xColumn);
                         throw;
                     }
@@ -1181,7 +1172,7 @@ void OTableController::alterColumns()
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OTableController::alterColumns: invalid column (2)!");
+                    OSL_FAIL("OTableController::alterColumns: invalid column (2)!");
                 }
             }
             catch(const SQLException&)
@@ -1208,7 +1199,7 @@ void OTableController::alterColumns()
         }
         else
             bReload = sal_True;
-    } // for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
+    }
     // alter column settings
     aIter = m_vRowList.begin();
 
@@ -1239,7 +1230,7 @@ void OTableController::alterColumns()
                 xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
             if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
                 xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
-        } // if ( xColumns->hasByName(pField->GetName()) )
+        }
     }
     // second drop all columns which could be found by name
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
@@ -1281,7 +1272,7 @@ void OTableController::alterColumns()
 
                     SQLException aNewException;
                     aNewException.Message = sError;
-                    aNewException.SQLState = ::rtl::OUString::createFromAscii( "S1000" );
+                    aNewException.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
                     aNewException.NextException = ::cppu::getCaughtException();
 
                     throw aNewException;
@@ -1317,7 +1308,7 @@ void OTableController::alterColumns()
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OTableController::alterColumns: invalid column!");
+                    OSL_FAIL("OTableController::alterColumns: invalid column!");
                 }
             }
         }
@@ -1452,7 +1443,6 @@ void OTableController::assignTable()
             }
         }
     }
-    //updateTitle();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::isAddAllowed() const
@@ -1606,3 +1596,5 @@ bool OTableController::isAutoIncrementPrimaryKey() const
     return getSdbMetaData().isAutoIncrementPrimaryKey();
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

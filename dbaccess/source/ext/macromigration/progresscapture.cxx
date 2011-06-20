@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 /** === end UNO includes === **/
 
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 //........................................................................
 namespace dbmm
@@ -88,14 +89,14 @@ namespace dbmm
     //--------------------------------------------------------------------
     void ProgressCapture::dispose()
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         m_pData->bDisposed = true;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::start( const ::rtl::OUString& _rText, ::sal_Int32 _nRange ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.startObject( m_pData->sObjectName, _rText, _nRange );
     }
@@ -103,7 +104,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::end(  ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.endObject();
     }
@@ -111,7 +112,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::setText( const ::rtl::OUString& _rText ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.setObjectProgressText( _rText );
     }
@@ -119,7 +120,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::setValue( ::sal_Int32 _nValue ) throw (RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aGuard;
         if ( !m_pData->bDisposed )
             m_pData->rMasterProgress.setObjectProgressValue( _nValue );
     }
@@ -127,9 +128,11 @@ namespace dbmm
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::reset(  ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "ProgressCapture::reset: not implemented!" );
+        OSL_FAIL( "ProgressCapture::reset: not implemented!" );
     }
 
 //........................................................................
 } // namespace dbmm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

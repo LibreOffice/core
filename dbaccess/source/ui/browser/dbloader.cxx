@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,6 +60,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/macros.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -91,7 +93,7 @@ public:
     // static methods
     static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.DBContentLoader");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.DBContentLoader"));
     }
     static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -159,8 +161,8 @@ Sequence< ::rtl::OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(v
 Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader");
-    aSNS.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ContentLoader");
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.FrameLoader"));
+    aSNS.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ContentLoader"));
     return aSNS;
 }
 // -------------------------------------------------------------------------
@@ -169,17 +171,17 @@ extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey)
     Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
 
     // register content loader for dispatch
-    ::rtl::OUString aImpl = ::rtl::OUString::createFromAscii("/");
+    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += DBContentLoader::getImplementationName_Static();
 
     ::rtl::OUString aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString::createFromAscii("/UNO/Loader");
+    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
     Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
     aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString::createFromAscii("/Loader");
+    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
     Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii("Pattern") );
-    xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii(".component:DB*") );
+    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
+    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB*")) );
 }
 
 // -----------------------------------------------------------------------
@@ -216,7 +218,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     Reference< XController2 > xController;
 
     const ::rtl::OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
-    for ( size_t i=0; i < sizeof( aImplementations ) / sizeof( aImplementations[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aImplementations ); ++i )
     {
         if ( sComponentURL.equalsAscii( aImplementations[i].pAsciiServiceName ) )
         {
@@ -227,7 +229,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
     // if a data source browser is loaded without its tree pane, then we assume it to be a
     // table data view, effectively. In this case, we need to adjust the module identifier.
-    // 2008-02-05 / i85879 / frank.schoenheit@sun.com
+    // #i85879#
     ::comphelper::NamedValueCollection aLoadArgs( rArgs );
 
     if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
@@ -301,11 +303,11 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
 
         // init controller
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         try
         {
             Reference<XInitialization > xIni(xController,UNO_QUERY);
-            PropertyValue aFrame(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
+            PropertyValue aFrame(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Frame")),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
             Sequence< Any > aInitArgs(m_aArgs.getLength()+1);
 
             Any* pBegin = aInitArgs.getArray();
@@ -356,3 +358,4 @@ void DBContentLoader::cancel(void) throw()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

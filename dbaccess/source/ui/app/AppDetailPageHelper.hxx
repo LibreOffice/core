@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,42 +30,18 @@
 
 #include <vector>
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_NAMEDDATABASEOBJECT_HPP_
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-#ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef SVTOOLS_DOCUMENTINFOPREVIEW_HXX
 #include <svtools/DocumentInfoPreview.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _GRFMGR_HXX
 #include <svtools/grfmgr.hxx>
-#endif
 #include "callbacks.hxx"
 #include <memory>
 
@@ -142,7 +119,7 @@ namespace dbaui
 
         /** retrieves the resource ids of the images representing elements of the given type
         */
-        void getElementIcons( ElementType _eType, sal_uInt16& _rImageId, sal_uInt16& _rHighContrastImageId );
+        void getElementIcons( ElementType _eType, sal_uInt16& _rImageId);
 
         /** fills the names in the listbox
             @param  _xContainer
@@ -151,15 +128,12 @@ namespace dbaui
                 the type of elements which are being filled
             @param _nImageId
                 the resource id of the image to use for non-container entries
-            @param _nHighContrastImageId
-                the resource id of the high contrast image to use for non-container entries
             @param  _pParent
                 The parent of the entries to be inserted.
         */
         void fillNames( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
                         const sal_uInt16 _nImageId,
-                        const sal_uInt16 _nHighContrastImageId,
                         SvLBoxEntry* _pParent );
 
         /** sets the detail page
@@ -173,24 +147,20 @@ namespace dbaui
                 The newly created DBTreeListBox
             @param  _rImage
                 the resource id of the default icon
-            @param  _rImageHC
-                the resource id of the default icon (HC version)
             @return
                 The new tree.
         */
-        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage, const Image& _rImageHC );
+        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage );
 
         /** creates the tree and sets all HandleCallbacks
             @param  _nHelpId
                 The help id of the control
             @param  _nCollapsedBitmap
-                The image to use for tree entries.
-            @param  _rImageHC
                 The image to use in high contrast mode.
             @return
                 The new tree.
         */
-        DBTreeListBox* createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage, const Image& _rImageHC );
+        DBTreeListBox* createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage);
 
         DECL_LINK( OnEntryDoubleClick,          SvTreeListBox* );
         DECL_LINK( OnEntrySelChange,            void* );
@@ -401,3 +371,4 @@ namespace dbaui
 }
 #endif // DBAUI_APPDETAILPAGEHELPER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

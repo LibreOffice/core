@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,7 +122,7 @@ protected:
     ::connectivity::DriversConfig m_aDriverConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
 #endif
 
@@ -239,3 +240,4 @@ protected:
 
 #endif // _DBACCESS_DSNTYPES_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

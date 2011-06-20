@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #define _DBAUI_PROPERTYSETITEM_HXX_
 
-#ifndef _SFXPOOLITEM_HXX
 #include <svl/poolitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
 //.........................................................................
 namespace dbaui
@@ -69,3 +66,4 @@ namespace dbaui
 
 #endif // _DBAUI_PROPERTYSETITEM_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

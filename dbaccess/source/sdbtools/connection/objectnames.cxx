@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_OBJECTNAMES_HXX
 #include "objectnames.hxx"
-#endif
 
-#ifndef DBACCESS_MODULE_SDBT_HXX
 #include "module_sdbt.hxx"
-#endif
-#ifndef DBACCESS_SDBT_RESOURCE_HRC
 #include "sdbt_resource.hrc"
-#endif
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -207,7 +202,7 @@ namespace sdbtools
                 ||  ( _rName.indexOf( (sal_Unicode)96  ) >= 0 )  //
                 ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )  //
                 ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )  //
-                ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // #86621# removed unparsable chars
+                ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // removed unparsable chars
                 )
                 return ErrorCondition::DB_QUERY_NAME_WITH_QUOTES;
 
@@ -496,3 +491,4 @@ namespace sdbtools
 } // namespace sdbtools
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

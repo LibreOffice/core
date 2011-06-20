@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,66 +29,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_INTERACTION_HXX_
 #include "dbinteraction.hxx"
-#endif
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _SV_MSGBOX_HXX
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionApprove.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONRETRY_HPP_
 #include <com/sun/star/task/XInteractionRetry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XINTERACTIONDOCUMENTSAVE_HPP_
 #include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
-#endif
-#ifndef SFX_QUERYSAVEDOCUMENT_HXX
 #include <sfx2/QuerySaveDocument.hxx>
-#endif
-#ifndef _DBU_UNO_HRC_
 #include "dbu_uno.hrc"
-#endif
-#ifndef _DBAUI_PARAMDIALOG_HXX_
 #include "paramdialog.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#ifndef DBAUI_COLLECTIONVIEW_HXX
+#include <osl/mutex.hxx>
 #include "CollectionView.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 
 
 //==========================================================================
@@ -138,7 +99,7 @@ namespace dbaui
     sal_Bool BasicInteractionHandler::impl_handle_throw( const Reference< XInteractionRequest >& i_Request )
     {
         Any aRequest( i_Request->getRequest() );
-        DBG_ASSERT(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
+        OSL_ENSURE(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
         if ( !aRequest.hasValue() )
             // no request -> no handling
             return sal_False;
@@ -176,7 +137,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
@@ -185,12 +146,7 @@ namespace dbaui
         Reference< XInteractionSupplyParameters > xParamCallback;
         if (-1 != nParamPos)
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
-        DBG_ASSERT(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
-
-        // determine the style of the dialog, dependent on the present continuation types
-        WinBits nDialogStyle = WB_OK | WB_DEF_OK;
-        if (-1 != nAbortPos)
-            nDialogStyle = WB_OK_CANCEL;
+        OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
         OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xORB);
         sal_Int16 nResult = aDlg.Execute();
@@ -220,7 +176,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
@@ -247,7 +203,7 @@ namespace dbaui
             nDialogStyle = WB_RETRY_CANCEL | WB_DEF_RETRY;
         }
 
-        // excute the dialog
+        // execute the dialog
         OSQLMessageBox aDialog(NULL, _rSqlInfo, nDialogStyle);
             // TODO: need a way to specify the parent window
         sal_Int16 nResult = aDialog.Execute();
@@ -267,7 +223,7 @@ namespace dbaui
                     if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for NO!" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: no handler for NO!" );
                     break;
 
                 case RET_CANCEL:
@@ -276,13 +232,13 @@ namespace dbaui
                     else if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for CANCEL!" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: no handler for CANCEL!" );
                     break;
                 case RET_RETRY:
                     if ( nRetryPos != -1 )
                         _rContinuations[ nRetryPos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: where does the RETRY come from?" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: where does the RETRY come from?" );
                     break;
             }
         }
@@ -294,7 +250,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
             // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
@@ -321,12 +277,7 @@ namespace dbaui
             if (-1 != nDocuPos)
             {
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
-                DBG_ASSERT(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
-
-                // determine the style of the dialog, dependent on the present continuation types
-                WinBits nDialogStyle = WB_OK | WB_DEF_OK;
-                if (-1 != nAbortPos)
-                    nDialogStyle = WB_OK_CANCEL;
+                OSL_ENSURE(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
                 OCollectionView aDlg(NULL,_rDocuRequest.Content,_rDocuRequest.Name,m_xORB);
                 sal_Int16 nResult = aDlg.Execute();
@@ -425,3 +376,4 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,19 +28,11 @@
 #ifndef DBAUI_TABLEDESIGNCONTROL_HXX
 #define DBAUI_TABLEDESIGNCONTROL_HXX
 
-#ifndef _TABBAR_HXX //autogen
 #include <svtools/tabbar.hxx>
-#endif
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
 
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
 
 #define TABPAGESIZE 70
 namespace dbaui
@@ -106,3 +99,4 @@ namespace dbaui
 #endif // DBAUI_TABLEDESIGNCONTROL_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

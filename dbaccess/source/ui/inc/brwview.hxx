@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,23 +29,13 @@
 #ifndef _SBX_BRWVIEW_HXX
 #define _SBX_BRWVIEW_HXX
 
-#ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
 
-#ifndef _TOOLS_RESID_HXX //autogen wg. ResId
 #include <tools/resid.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
-#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
 #include <unotools/eventlisteneradapter.hxx>
-#endif
 
 
 namespace com { namespace sun { namespace star { namespace awt {
@@ -123,3 +114,4 @@ namespace dbaui
 }
 #endif // _SBX_BRWVIEW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

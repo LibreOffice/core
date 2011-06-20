@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: KeySet.hxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +51,6 @@ namespace dbaccess
         ::std::map<sal_Int32,sal_Int32>                         m_aJoinedColumns;
         ::std::map<sal_Int32,sal_Int32>                         m_aJoinedKeyColumns;
 
-
         mutable bool m_bResultSetChanged;
 
         /**
@@ -86,7 +83,6 @@ namespace dbaccess
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
 
-        // -------------------------------------------------------------------------
         // ::com::sun::star::sdbcx::XDeleteRows
         virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ,const connectivity::OSQLTable& _xTable) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // ::com::sun::star::sdbc::XResultSetUpdate
@@ -109,3 +105,4 @@ namespace dbaccess
 }
 #endif // DBACCESS_CORE_API_OPTIMISTICSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

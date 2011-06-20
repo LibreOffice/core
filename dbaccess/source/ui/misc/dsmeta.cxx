@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -153,9 +154,9 @@ namespace dbaui
                 {
                     ::rtl::OUString sAuth;
                     aMetaData.get("Authentication") >>= sAuth;
-                    if ( sAuth.equalsAscii("UserPassword") )
+                    if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserPassword")) )
                         aInit = AuthUserPwd;
-                    else if ( sAuth.equalsAscii("Password") )
+                    else if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Password")) )
                         aInit = AuthPwd;
                 }
                 s_aSupport.insert(Supported::value_type(*pIter,aInit));
@@ -214,3 +215,5 @@ namespace dbaui
 //........................................................................
 } // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

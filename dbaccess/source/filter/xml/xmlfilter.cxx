@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,105 +29,44 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaxml.hxx"
 
-#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#endif
-#ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
-#endif
-#ifndef _FLT_REGHELPER_HXX_
 #include "flt_reghelper.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_XMLSCRIPTI_HXX
 #include <xmloff/xmlscripti.hxx>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_TEXTIMP_HXX_
 #include <xmloff/txtimp.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
-#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef DBA_XMLDATABASE_HXX
 #include "xmlDatabase.hxx"
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
-#endif
-#ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
-#ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 #include <xmloff/DocumentSettingsContext.hxx>
-#endif
-#ifndef DBA_XMLSTYLEIMPORT_HXX
 #include "xmlStyleImport.hxx"
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef DBA_XMLHELPER_HXX
 #include "xmlHelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/moduleoptions.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -185,8 +125,8 @@ namespace dbaxml
                         (void)ex;
                         OSL_ASSERT(0);
                     }
-                } // if ( s_bFirstTime )
-            } // if ( m_eWhat == E_JAVA )
+                }
+            }
             else if ( m_eWhat == E_CALC )
             {
                 static bool s_bFirstTime = true;
@@ -260,7 +200,7 @@ namespace dbaxml
                 if ( m_aTypeCollection.needsJVM(sURL) )
                 {
                     pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_JAVA);
-                } // if ( m_aTypeCollection.needsJVM(sURL) )
+                }
                 else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
                 {
                     pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_CALC);
@@ -278,8 +218,8 @@ namespace dbaxml
             }
         };
     }
-    sal_Char __READONLY_DATA sXML_np__db[] = "_db";
-    sal_Char __READONLY_DATA sXML_np___db[] = "__db";
+    sal_Char const sXML_np__db[] = "_db";
+    sal_Char const sXML_np___db[] = "__db";
 
     using namespace ::com::sun::star::util;
     /// read a component (file + filter version)
@@ -289,9 +229,9 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XMultiServiceFactory> & rFactory,
     const uno::Reference< XDocumentHandler >& _xFilter )
 {
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "dbaxml", "oj", "ReadThroughComponent" );
 
@@ -302,15 +242,15 @@ sal_Int32 ReadThroughComponent(
     // get parser
     uno::Reference< XParser > xParser(
         rFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
         return 1;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
-    DBG_ASSERT( _xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
     if( !_xFilter.is() )
         return 1;
 
@@ -337,7 +277,7 @@ sal_Int32 ReadThroughComponent(
         aError += ',';
         aError += ByteString::CreateFromInt32( r.ColumnNumber );
 
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
         return 1;
     }
 #else
@@ -372,8 +312,8 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XMultiServiceFactory> & rFactory,
     const uno::Reference< XDocumentHandler >& _xFilter)
 {
-    DBG_ASSERT( xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE( xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     if ( xStorage.is() )
     {
@@ -470,7 +410,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 {
     uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Window*     pFocusWindow = Application::GetFocusWindow();
         xWindow = VCLUnoHelper::GetInterface( pFocusWindow );
         if( pFocusWindow )
@@ -483,7 +423,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 
     if ( xWindow.is() )
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Window* pFocusWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pFocusWindow )
             pFocusWindow->LeaveWait();
@@ -668,7 +608,7 @@ const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
 {
     if ( !m_pDocElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
             { XML_NAMESPACE_OOO,    XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
@@ -690,7 +630,7 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseElemTokenMap() const
 {
     if ( !m_pDatabaseElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_DATASOURCE,             XML_TOK_DATASOURCE  },
             { XML_NAMESPACE_DB, XML_FORMS,                  XML_TOK_FORMS},
@@ -710,7 +650,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceElemTokenMap() const
 {
     if ( !m_pDataSourceElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB,     XML_CONNECTION_RESOURCE,            XML_TOK_CONNECTION_RESOURCE},
             { XML_NAMESPACE_DB,     XML_SUPPRESS_VERSION_COLUMNS,       XML_TOK_SUPPRESS_VERSION_COLUMNS},
@@ -761,7 +701,7 @@ const SvXMLTokenMap& ODBFilter::GetLoginElemTokenMap() const
 {
     if ( !m_pLoginElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_USER_NAME,              XML_TOK_USER_NAME},
             { XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,   XML_TOK_IS_PASSWORD_REQUIRED},
@@ -778,7 +718,7 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseDescriptionElemTokenMap() const
 {
     if ( !m_pDatabaseDescriptionElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE,    XML_TOK_FILE_BASED_DATABASE},
             { XML_NAMESPACE_DB, XML_SERVER_DATABASE,        XML_TOK_SERVER_DATABASE},
@@ -793,7 +733,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceInfoElemTokenMap() const
 {
     if ( !m_pDataSourceInfoElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,XML_TOK_ADDITIONAL_COLUMN_STATEMENT},
             { XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,   XML_TOK_ROW_RETRIEVING_STATEMENT},
@@ -819,7 +759,7 @@ const SvXMLTokenMap& ODBFilter::GetDocumentsElemTokenMap() const
 {
     if ( !m_pDocumentsElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_COMPONENT,              XML_TOK_COMPONENT},
             { XML_NAMESPACE_DB, XML_COMPONENT_COLLECTION,   XML_TOK_COMPONENT_COLLECTION},
@@ -839,7 +779,7 @@ const SvXMLTokenMap& ODBFilter::GetComponentElemTokenMap() const
 {
     if ( !m_pComponentElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_HREF    },
             { XML_NAMESPACE_XLINK,  XML_TYPE,           XML_TOK_TYPE    },
@@ -858,7 +798,7 @@ const SvXMLTokenMap& ODBFilter::GetQueryElemTokenMap() const
 {
     if ( !m_pQueryElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_COMMAND,            XML_TOK_COMMAND },
             { XML_NAMESPACE_DB, XML_ESCAPE_PROCESSING,  XML_TOK_ESCAPE_PROCESSING   },
@@ -882,7 +822,7 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
 {
     if ( !m_pColumnElemTokenMap.get() )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        static SvXMLTokenMapEntry aElemTokenMap[]=
         {
             { XML_NAMESPACE_DB, XML_NAME,                       XML_TOK_COLUMN_NAME             },
             { XML_NAMESPACE_DB, XML_STYLE_NAME,                 XML_TOK_COLUMN_STYLE_NAME       },
@@ -907,10 +847,8 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const ::r
     {
         pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
-            //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
         else
-            //xStyles = pContext;
             SetStyles((SvXMLStylesContext*)pContext);
     }
     return pContext;
@@ -970,7 +908,7 @@ void ODBFilter::setPropertyInfo()
         {
             xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
         }
-        catch(Exception)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -979,3 +917,5 @@ void ODBFilter::setPropertyInfo()
 // -----------------------------------------------------------------------------
 }// dbaxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

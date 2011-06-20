@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,56 +29,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
-#endif
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURELISTENER_HDL_
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hdl>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTOR_HPP_
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-#endif
 #include <com/sun/star/frame/XFrame.hpp>
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _DBAUI_TABLETREE_HRC_
 #include "tabletree.hrc"
-#endif
-#ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
-#endif
-#ifndef __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
 #include <framework/actiontriggerhelper.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <framework/imageproducer.hxx>
 #include <vcl/svapp.hxx>
 #include <memory>
@@ -157,10 +126,10 @@ SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry*
     SvLBoxEntry* pEntry = NULL;
     if ( pChilds )
     {
-        sal_uLong nCount = pChilds->Count();
-        for (sal_uLong i=0; i < nCount; ++i)
+        size_t nCount = pChilds->size();
+        for (size_t i = 0; i < nCount; ++i)
         {
-            pEntry = static_cast<SvLBoxEntry*>(pChilds->GetObject(i));
+            pEntry = static_cast<SvLBoxEntry*>((*pChilds)[ i ]);
             SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
             if ( pItem->GetText().Equals(aName) )
             {
@@ -188,7 +157,7 @@ void DBTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
     {
         if (!m_aPreExpandHandler.Call(pParent))
         {
-            // an error occured. The method calling us will reset the entry flags, so it can't be expanded again.
+            // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
             // But we want that the user may do a second try (i.e. because he misstypes a password in this try), so
             // we have to reset these flags controlling the expand ability
             PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent);
@@ -436,8 +405,6 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         // is used by the document will raise a similar bug once somebody discovers it.
         // If this is the case, we should discuss a real solution with the framework (SFX) and the
         // applications.
-        //
-        // 2002-12-02 - 105831 - fs@openoffice.org
     }
 
     if ( !bHandled )
@@ -548,7 +515,7 @@ namespace
             {
                 lcl_adjustMenuItemIDs( *pPopup, _rCommandController );
                 continue;
-            } // if ( pPopup )
+            }
 
             const sal_uInt16 nCommandId = _rCommandController.registerCommandURL( aCommand );
             _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
@@ -566,8 +533,6 @@ namespace
     }
     void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
     {
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        const sal_Bool bHiContrast = rSettings.GetHighContrastMode();
         uno::Reference< frame::XController > xController = _rCommandController.getXController();
         uno::Reference< frame::XFrame> xFrame;
         if ( xController.is() )
@@ -586,10 +551,10 @@ namespace
             {
                 lcl_insertMenuItemImages( *pPopup, _rCommandController );
                 continue;
-            } // if ( pPopup )
+            }
 
             if ( xFrame.is() )
-                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,sal_False,bHiContrast));
+                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,sal_False));
         }
     }
     // =========================================================================
@@ -635,14 +600,14 @@ namespace
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "SelectionSupplier::removeSelectionChangeListener: no support!" );
+        OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
         // API bug: this should be a NoSupportException
     }
 }
@@ -702,7 +667,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
                     break;
 
                 default:
-                    DBG_ERROR( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
+                    OSL_FAIL( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
 
                 case ContextMenuInterceptorAction_IGNORED:
                     break;
@@ -727,7 +692,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
         // the interceptors only know command URLs, but our menus primarily work
         // with IDs -> we need to translate the commands to IDs
         lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
-    } // if ( bModifiedMenu )
+    }
 
     return pContextMenu.release();
 }
@@ -756,3 +721,5 @@ void DBTreeListBox::StateChanged( StateChangedType nStateChange )
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

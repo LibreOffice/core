@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,9 @@
 #include "com/sun/star/inspection/XPropertyHandler.hpp"
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
-#ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
-#endif
-#ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
-#endif
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 
 #include <functional>
 #include <algorithm>
@@ -178,9 +173,8 @@ namespace rptui
         };
 
         s_pPropertyInfos = aPropertyInfos;
-        s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
-
-        ::std::sort( aPropertyInfos, aPropertyInfos + s_nCount, PropertyInfoLessByName() );
+        s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
+        ::std::sort( aPropertyInfos, aPropertyInfos + SAL_N_ELEMENTS(aPropertyInfos), PropertyInfoLessByName() );
 
         return s_pPropertyInfos;
     }
@@ -325,9 +319,9 @@ namespace rptui
         for (; pPropsIter != pPropsEnd; ++pPropsIter)
         {
             size_t nPos = 0;
-            for (; nPos < sizeof(pExcludeProperties)/sizeof(pExcludeProperties[0]) && pExcludeProperties[nPos] != pPropsIter->Name;++nPos )
+            for (; nPos < SAL_N_ELEMENTS(pExcludeProperties) && pExcludeProperties[nPos] != pPropsIter->Name;++nPos )
                 ;
-            if ( nPos == sizeof(pExcludeProperties)/sizeof(pExcludeProperties[0]) )
+            if ( nPos == SAL_N_ELEMENTS(pExcludeProperties) )
                 _rExcludeProperties.push_back(*pPropsIter);
         }
     }
@@ -337,3 +331,4 @@ namespace rptui
 } // namespace pcr
 //............................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 #ifndef DBAUI_ICONTROLLER_HXX
 #define DBAUI_ICONTROLLER_HXX
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef DBAUI_IREFERENCE_HXX
 #include "IReference.hxx"
-#endif
 #include "dbaccessdllapi.h"
 
 namespace com { namespace sun { namespace star {
@@ -138,3 +133,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_ICONTROLLER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

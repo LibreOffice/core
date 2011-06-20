@@ -30,15 +30,6 @@
 #endif
 #include "dbaccess_helpid.hrc"
 
-/*
-#define STRLST_AND_OR \
-    StringList [ en-US ] = \
-    {\
-        < "AND" ; Default ; > ; \
-        < "OR" ; Default ; > ; \
-    };\
-*/
-
 ModalDialog DLG_FILTERCRIT
 {
     OutputSize = TRUE ;
@@ -88,7 +79,6 @@ ModalDialog DLG_FILTERCRIT
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-//      STRLST_AND_OR
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -132,7 +122,6 @@ ModalDialog DLG_FILTERCRIT
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-//      STRLST_AND_OR
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -192,7 +181,6 @@ ModalDialog DLG_FILTERCRIT
     {
         Pos = MAP_APPFONT ( 15 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung : Verkn³pfung */
         Center = TRUE ;
         Text [ en-US ] = "Operator" ;
     };
@@ -230,4 +218,3 @@ ModalDialog DLG_FILTERCRIT
         Text [ en-US ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
     };
 };
-

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #include "ReportComponentHandler.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/sequence.hxx>
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
-#endif
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
@@ -48,7 +47,6 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
-// using namespace comphelper;
 
 ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > const & context)
     :ReportComponentHandler_Base(m_aMutex)
@@ -230,3 +228,4 @@ void SAL_CALL ReportComponentHandler::actuatingPropertyChanged(const ::rtl::OUSt
 } // namespace rptui
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

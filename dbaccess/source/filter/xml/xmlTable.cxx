@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,48 +28,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaxml.hxx"
-#ifndef DBA_XMLTABLE_HXX
 #include "xmlTable.hxx"
-#endif
-#ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef DBA_XMLSTYLEIMPORT_HXX
 #include "xmlStyleImport.hxx"
-#endif
-#ifndef DBA_XMLHIERARCHYCOLLECTION_HXX
 #include "xmlHierarchyCollection.hxx"
-#endif
-#ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #include <comphelper/namecontainer.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 namespace dbaxml
 {
@@ -120,10 +93,10 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 m_sStyleName = sValue;
                 break;
             case XML_TOK_APPLY_FILTER:
-                m_bApplyFilter = sValue.equalsAscii("true");
+                m_bApplyFilter = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
                 break;
             case XML_TOK_APPLY_ORDER:
-                m_bApplyOrder = sValue.equalsAscii("true");
+                m_bApplyOrder = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
                 break;
         }
     }
@@ -213,7 +186,7 @@ void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"OXMLTable::EndElement -> exception catched");
+        OSL_FAIL("OXMLTable::EndElement -> exception catched");
     }
 }
 // -----------------------------------------------------------------------------
@@ -246,7 +219,7 @@ void OXMLTable::EndElement()
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"OXMLQuery::EndElement -> exception catched");
+            OSL_FAIL("OXMLQuery::EndElement -> exception catched");
         }
     }
 
@@ -293,3 +266,5 @@ void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
 //----------------------------------------------------------------------------
 } // namespace dbaxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

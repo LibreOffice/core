@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,43 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_DBFINDEX_HXX_
 #include "dbfindex.hxx"
-#endif
 
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_DBF_INDEXES_HRC_
 #include "dbfindex.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <osl/diagnose.h>
 #include <unotools/localfilehelper.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <unotools/pathoptions.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svl/filenotation.hxx>
-#endif
 
 
 //.........................................................................
@@ -117,12 +94,6 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     Init();
     SetCtrls();
     FreeResource();
-
-    // set Hi contrast bitmaps
-    aIB_Add.SetModeImage(       ModuleRes(IMG_ONE_LEFT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_AddAll.SetModeImage(    ModuleRes(IMG_ALL_LEFT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_Remove.SetModeImage(    ModuleRes(IMG_ONE_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
-    aIB_RemoveAll.SetModeImage( ModuleRes(IMG_ALL_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
 }
 
 //-------------------------------------------------------------------------
@@ -195,7 +166,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
     }
 
     (void)_bMustExist;
-    DBG_ASSERT(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
+    OSL_ENSURE(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
     return aReturn;
 }
 
@@ -377,8 +348,8 @@ void ODbaseIndexDialog::Init()
 
     Sequence< ::rtl::OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
-    ::rtl::OUString aIndexExt = ::rtl::OUString::createFromAscii("ndx");
-    ::rtl::OUString aTableExt = ::rtl::OUString::createFromAscii("dbf");
+    ::rtl::OUString aIndexExt(RTL_CONSTASCII_USTRINGPARAM("ndx"));
+    ::rtl::OUString aTableExt(RTL_CONSTASCII_USTRINGPARAM("dbf"));
 
     ::std::vector< String > aUsedIndexes;
 
@@ -564,7 +535,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         try
         {
             ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),makeAny( sal_Bool( sal_True ) ) );
+            aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),makeAny( sal_Bool( sal_True ) ) );
         }
         catch (const Exception& e )
         {
@@ -572,7 +543,6 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
             // simply silent this. The strange algorithm here does a lot of things even if no files at all were
             // created or accessed, so it's possible that the file we're trying to delete does not even exist,
             // and this is a valid condition.
-            // 2003-05-15 - #109677# - fs@openoffice.org
         }
     }
 }
@@ -581,3 +551,4 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

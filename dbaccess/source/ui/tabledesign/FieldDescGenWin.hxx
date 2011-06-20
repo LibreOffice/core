@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
 #define DBAUI_TABLEFIELDDESCGENPAGE_HXX
 
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
 
 namespace dbaui
 {
@@ -86,3 +83,4 @@ namespace dbaui
 }
 #endif // DBAUI_TABLEFIELDDESCGENPAGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

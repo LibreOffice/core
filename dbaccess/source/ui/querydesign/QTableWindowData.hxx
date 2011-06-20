@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,19 +28,13 @@
 #ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
 #define DBAUI_QUERY_TABLEWINDOWDATA_HXX
 
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
-#endif
 #ifndef INCLUDED_VECTOR
 #define INCLUDED_VECTOR
 #include <vector>
 #endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
 
 
 namespace dbaui
@@ -57,3 +52,4 @@ namespace dbaui
 #endif // DBAUI_QUERY_TABLEWINDOWDATA_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

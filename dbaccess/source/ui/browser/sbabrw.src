@@ -33,7 +33,6 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
-//  #include <sfx2/sfx.hrc>
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
 #endif
@@ -43,14 +42,12 @@ QueryBox QUERY_BRW_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der geänderte Datensatz gespeichert werden? : Soll der geänderte Datensatz gespeichert werden? */
     Message [ en-US ] = "The current record has been changed.\nDo you want to save the changes?" ;
 };
 
 QueryBox QUERY_BRW_DELETE_ROWS
 {
     Buttons = WB_YES_NO ;
-    /* ### ACHTUNG: Neuer Text in Resource? Sollen die selektierten Daten gelöscht werden? : Sollen die selektierten Daten gel÷scht werden? */
     Message [ en-US ] = "Do you want to delete the selected data?" ;
 };
 
@@ -63,6 +60,7 @@ String SBA_BROWSER_SETTING_ORDER
 {
     Text [ en-US ] = "Error setting the sort criteria";
 };
+
 String SBA_BROWSER_SETTING_FILTER
 {
     Text [ en-US ] = "Error setting the filter criteria";
@@ -140,13 +138,13 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
 {
     Buttons = WB_YES_NO ;
     Message [ en-US ] = "The query already exists. Do you want to delete it?" ;
-    };
+};
 
 QueryBox QUERY_CONNECTION_LOST
 {
     Buttons = WB_YES_NO ;
     Message [ en-US ] = "The connection to the database has been lost. Do you want to reconnect?" ;
-    };
+};
 
 String STR_OPENTABLES_WARNINGS
 {
@@ -161,22 +159,22 @@ String STR_OPENTABLES_WARNINGS_DETAILS
 String STR_CONNECTING_DATASOURCE
 {
     Text [ en-US ] = "Connecting to \"$name$\" ...";
-    };
+};
 
 String STR_LOADING_QUERY
 {
     Text [ en-US ] = "Loading query $name$ ...";
-    };
+};
 
 String STR_LOADING_TABLE
 {
     Text [ en-US ] = "Loading table $name$ ...";
-    };
+};
 
 String STR_NO_TABLE_FORMAT_INSIDE
 {
     Text [ en-US ] = "No table format could be found." ;
-    };
+};
 
 String STR_COULDNOTCONNECT_DATASOURCE
 {
@@ -200,4 +198,3 @@ Menu RID_MENU_REFRESH_DATA
         };
     };
 };
-

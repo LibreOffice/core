@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ namespace rptui
 
             if ( pReplace == NULL )
             {
-                OSL_ENSURE( false, "ConditionalExpression::assembleExpression: illegal pattern!" );
+                OSL_FAIL( "ConditionalExpression::assembleExpression: illegal pattern!" );
                 break;
             }
 
@@ -103,16 +104,16 @@ namespace rptui
         sal_Int32 nLHSIndex( sMatchExpression.indexOf( sLHSPattern ) );
         sal_Int32 nRHSIndex( sMatchExpression.indexOf( sRHSPattern ) );
 
-        // now we should have at most one occurance of $1 and $2, resp.
+        // now we should have at most one occurrence of $1 and $2, resp.
         OSL_ENSURE( sMatchExpression.indexOf( sLHSPattern, nLHSIndex + 1 ) == -1,
-            "ConditionalExpression::matchExpression: unsupported pattern (more than one LHS occurance)!" );
+            "ConditionalExpression::matchExpression: unsupported pattern (more than one LHS occurrence)!" );
         OSL_ENSURE( sMatchExpression.indexOf( sRHSPattern, nRHSIndex + 1 ) == -1,
-            "ConditionalExpression::matchExpression: unsupported pattern (more than one RHS occurance)!" );
+            "ConditionalExpression::matchExpression: unsupported pattern (more than one RHS occurrence)!" );
         // Also, an LHS must be present, and precede the RHS (if present)
         OSL_ENSURE( ( nLHSIndex != -1 ) && ( ( nLHSIndex < nRHSIndex ) || ( nRHSIndex == -1 ) ),
             "ConditionalExpression::matchExpression: no LHS, or an RHS preceeding the LHS - this is not supported!" );
 
-        // up to the occurance of the LHS (which must exist, see above), the two expressions
+        // up to the occurrence of the LHS (which must exist, see above), the two expressions
         // must be identical
         if ( _rExpression.getLength() < nLHSIndex )
             return false;
@@ -122,7 +123,7 @@ namespace rptui
             // the left-most expression parts do not match
             return false;
 
-        // after the occurance of the RHS (or the LHS, if there is no RHS), the two expressions
+        // after the occurrence of the RHS (or the LHS, if there is no RHS), the two expressions
         // must be identical, too
         bool bHaveRHS( nRHSIndex != -1 );
         sal_Int32 nRightMostIndex( bHaveRHS ? nRHSIndex : nLHSIndex );
@@ -202,3 +203,5 @@ namespace rptui
 //........................................................................
 } // namespace rptui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

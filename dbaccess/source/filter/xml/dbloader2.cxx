@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,7 +122,7 @@ public:
     // static methods
     static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbflt.DBTypeDetection");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbflt.DBTypeDetection"));
     }
     static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -167,7 +168,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         {
             ::rtl::OUString sMediaType;
             xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
-            if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) || sMediaType.equalsAscii(MIMETYPE_VND_SUN_XML_BASE_ASCII) )
+            if ( sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII)) || sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_VND_SUN_XML_BASE_ASCII)) )
             {
                 if ( bStreamFromDescr && sURL.compareTo( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ), 14 ) != COMPARE_EQUAL )
                 {
@@ -230,7 +231,7 @@ Sequence< ::rtl::OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(v
 Sequence< ::rtl::OUString > DBTypeDetection::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExtendedTypeDetection");
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExtendedTypeDetection"));
     return aSNS;
 }
 // -------------------------------------------------------------------------
@@ -261,7 +262,7 @@ public:
     // static methods
     static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbflt.DBContentLoader2");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbflt.DBContentLoader2"));
     }
     static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -329,7 +330,7 @@ Sequence< ::rtl::OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(v
 Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader");
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.FrameLoader"));
     return aSNS;
 }
 
@@ -348,12 +349,12 @@ namespace
                 URL aURL;
                 aURL.Complete = _rURL;
                 xTransformer->parseStrict( aURL );
-                bDoesAllow = aURL.Arguments.equalsAscii( "Interactive" );
+                bDoesAllow = aURL.Arguments.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Interactive" ) );
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_urlAllowsInteraction: caught an exception while analyzing the URL!" );
+            OSL_FAIL( "lcl_urlAllowsInteraction: caught an exception while analyzing the URL!" );
         }
         return bDoesAllow;
     }
@@ -618,14 +619,14 @@ IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
         aValue.Value <<= m_sCurrentURL;
         aWizArgs[0] <<= aValue;
 
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         Reference< XJobExecutor > xTableWizard;
         if ( m_aContext.createComponentWithArguments( "com.sun.star.wizards.table.CallTableWizard", aWizArgs, xTableWizard ) )
             xTableWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "caught an exception while starting the table wizard!");
+        OSL_FAIL("caught an exception while starting the table wizard!");
     }
     m_xMySelf = NULL;
     return 0L;
@@ -642,17 +643,18 @@ extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey)
     Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
 
     // register content loader for dispatch
-    ::rtl::OUString aImpl = ::rtl::OUString::createFromAscii("/");
+    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += ::dbaxml::DBContentLoader::getImplementationName_Static();
 
     ::rtl::OUString aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString::createFromAscii("/UNO/Loader");
+    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
     Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
     aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString::createFromAscii("/Loader");
+    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
     Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii("Pattern") );
-    xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii("private:factory/sdatabase") );
+    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
+    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase")) );
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

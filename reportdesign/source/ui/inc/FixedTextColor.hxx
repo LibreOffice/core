@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,6 @@
 /** === end UNO includes === **/
 
 #include <IReportControllerObserver.hxx>
-
-//#include <boost/noncopyable.hpp>
 #include <vector>
 
 namespace rptui
@@ -55,8 +54,6 @@ namespace rptui
 
         void setPropertyTextColor(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nFormatKey);
 
-        // sal_Int32 getTextColor();
-
     public:
         FixedTextColor(const OReportController & _aObserver);
         virtual ~FixedTextColor();
@@ -71,3 +68,5 @@ namespace rptui
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,22 +28,15 @@
 #ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #define DBAUI_TABLECONNECTIONDATA_HXX
 
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
 #include "TableWindowData.hxx"
 #include <vector>
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
 #include <boost/shared_ptr.hpp>
 
 namespace dbaui
 {
-#define MAX_CONN_COUNT 2
     //==================================================================
     // ConnData     ---------->*    ConnLineData
     //    ^1                            ^1
@@ -117,3 +111,4 @@ namespace dbaui
 #endif // DBAUI_TABLECONNECTIONDATA_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

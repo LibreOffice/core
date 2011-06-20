@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,12 @@
 #ifndef _DBAUI_ADMINPAGES_HXX_
 #define _DBAUI_ADMINPAGES_HXX_
 
-#ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
-#ifndef _SVTOOLS_WIZARDMACHINE_HXX_
 #include <svtools/wizardmachine.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 
 
 class NumericField;
@@ -162,7 +151,7 @@ namespace dbaui
             @param  _sReturn
                 <OUT/> contains the selected name.
             @return
-                <FALSE/> if an error occured, otherwise <TRUE/>
+                <FALSE/> if an error occurred, otherwise <TRUE/>
         */
         sal_Bool getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
 
@@ -301,3 +290,4 @@ namespace dbaui
 #endif // _DBAUI_ADMINPAGES_HXX_
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,25 +28,11 @@
 #ifndef DBAUI_TABLECONNECTION_HXX
 #define DBAUI_TABLECONNECTION_HXX
 
-//#ifndef _SV_GEN_HXX
-//#include <tools/gen.hxx>
-//#endif
-//#ifndef DBAUI_CONNECTIONLINE_HXX
-//#include "ConnectionLine.hxx"
-//#endif
 #include <vector>
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
-#endif
 #include "TableConnectionData.hxx"
 
 class Point;
@@ -121,3 +108,4 @@ namespace dbaui
 }
 #endif // DBAUI_TABLECONNECTION_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

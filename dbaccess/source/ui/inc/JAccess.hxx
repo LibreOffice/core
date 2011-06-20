@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBACCESS_JACCESS_HXX
 #define DBACCESS_JACCESS_HXX
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 namespace dbaui
 {
@@ -88,3 +85,5 @@ namespace dbaui
     };
 }
 #endif // DBACCESS_JACCESS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

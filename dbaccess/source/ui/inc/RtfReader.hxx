@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,9 @@
 #ifndef _VECTOR_
 #include <vector>
 #endif
-#ifndef _PARRTF_HXX //autogen
 #include <svtools/parrtf.hxx>
-#endif
-#ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 
 namespace dbaui
 {
@@ -82,3 +77,4 @@ namespace dbaui
 #endif // DBAUI_RTFREADER_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

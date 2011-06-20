@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _DBAUI_USERSETTINGSDLG_HXX
 #include "UserSettingsDlg.hxx"
-#endif
-#ifndef DBAUI_USERADMINDLG_HXX
 #include "UserAdminDlg.hxx"
-#endif
 
 
 using namespace dbaui;
@@ -131,3 +126,4 @@ Dialog* OUserSettingsDialog::createDialog(Window* _pParent)
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

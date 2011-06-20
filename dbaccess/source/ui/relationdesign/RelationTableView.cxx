@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,33 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-
 #include "RelationTableView.hxx"
-
-
 #include "JoinExchange.hxx"
-
-
 #include <comphelper/extract.hxx>
-
-
 #include "browserids.hxx"
-
-
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-
-
 #include <com/sun/star/sdbc/XConnection.hpp>
-
-
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-
-
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-
-
 #include <com/sun/star/sdbcx/KeyType.hpp>
-
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -179,7 +162,7 @@ void ORelationTableView::ReSync()
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
-        } // if ( !arrInvalidTables.empty() )
+        }
 
         addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
     }
@@ -251,7 +234,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"ORelationTableView::AddConnection: Exception oocured!");
+            OSL_FAIL("ORelationTableView::AddConnection: Exception oocured!");
         }
     }
 }
@@ -318,7 +301,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ORelationTableView::RemoveConnection: Something other than SQLException occured!");
+        OSL_FAIL("ORelationTableView::RemoveConnection: Something other than SQLException occurred!");
     }
     return false;
 }
@@ -384,7 +367,6 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     }
 }
 
-// -----------------------------------------------------------------------------
 void ORelationTableView::lookForUiActivities()
 {
     if(m_pExistingConnection)
@@ -453,7 +435,7 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
             m_pView->getController().InvalidateFeature(ID_BROWSER_UNDO);
             m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
         }
-    } // if ( _rEvent.Accessor >>= sName )
+    }
     m_bInRemove = false;
 }
 // -----------------------------------------------------------------------------
@@ -461,3 +443,4 @@ void ORelationTableView::_elementReplaced( const container::ContainerEvent& /*_r
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

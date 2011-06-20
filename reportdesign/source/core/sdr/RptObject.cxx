@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -171,7 +172,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             pNewObj = OOle2Obj::Create( _xComponent,nType );
             break;
         default:
-            OSL_ENSURE(0,"Unknown object id");
+            OSL_FAIL("Unknown object id");
             break;
     }
 
@@ -204,9 +205,9 @@ namespace
                         nTextAlign = style::ParagraphAdjust_RIGHT;
                         break;
                     default:
-                        OSL_ENSURE(0,"Illegal text alignment value!");
+                        OSL_FAIL("Illegal text alignment value!");
                         break;
-                } // switch(nTextAlign)
+                }
                 aRet <<= (style::ParagraphAdjust)nTextAlign;
             }
             else
@@ -227,9 +228,9 @@ namespace
                         nTextAlign = awt::TextAlign::RIGHT;
                         break;
                     default:
-                        OSL_ENSURE(0,"Illegal text alignment value!");
+                        OSL_FAIL("Illegal text alignment value!");
                         break;
-                } // switch(eParagraphAdjust)
+                }
                 aRet <<= nTextAlign;
             }
             return aRet;
@@ -250,7 +251,6 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
-                    //s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,PROPERTY_ALIGN));
                 }
                 return s_aNameMap;
             }
@@ -291,7 +291,6 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
-                    //s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter)));
                     ::boost::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
                 }
@@ -397,7 +396,7 @@ void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
             }
             catch(uno::Exception)
             {
-                OSL_ENSURE(0,"OObjectBase::EndListening: Exception caught!");
+                OSL_FAIL("OObjectBase::EndListening: Exception caught!");
             }
         }
         m_xPropertyChangeListener.clear();
@@ -533,7 +532,7 @@ sal_Int32 OCustomShape::GetStep() const
 {
     // get step property
     sal_Int32 nStep = 0;
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return nStep;
 }
 //----------------------------------------------------------------------------
@@ -573,9 +572,9 @@ void OCustomShape::NbcSetLogicRect(const Rectangle& rRect)
     SetPropsFromRect(rRect);
 }
 //----------------------------------------------------------------------------
-FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    FASTBOOL bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
+    bool bResult = SdrObjCustomShape::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
@@ -719,7 +718,7 @@ sal_Int32 OUnoObject::GetStep() const
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
     // get step property
     sal_Int32 nStep = 0;
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return nStep;
 }
 
@@ -748,11 +747,6 @@ void OUnoObject::NbcMove( const Size& rSize )
 
             // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
             int nNewX = m_xReportComponent->getPositionX() + rSize.A();
-            // can this hinder us to set components outside the area?
-            // if (nNewX < 0)
-            // {
-            //     nNewX = 0;
-            // }
             m_xReportComponent->setPositionX(nNewX);
             int nNewY = m_xReportComponent->getPositionY() + rSize.B();
             if (nNewY < 0 && !bUndoMode)
@@ -808,10 +802,10 @@ void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
 }
 //----------------------------------------------------------------------------
 
-FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
+    bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         impl_setReportComponent_nothrow();
@@ -948,16 +942,16 @@ uno::Reference< uno::XInterface > OUnoObject::getUnoShape()
     return OObjectBase::getUnoShapeOf( *this );
 }
 // -----------------------------------------------------------------------------
-SdrObject* OUnoObject::Clone() const
+OUnoObject* OUnoObject::Clone() const
 {
-    SdrObject* pClone = SdrUnoObj::Clone();
+    OUnoObject* pClone = CloneHelper< OUnoObject >();
     if ( pClone )
     {
         Reference<XPropertySet> xSource(const_cast<OUnoObject*>(this)->getUnoShape(),uno::UNO_QUERY);
         Reference<XPropertySet> xDest(pClone->getUnoShape(),uno::UNO_QUERY);
         if ( xSource.is() && xDest.is() )
             comphelper::copyProperties(xSource.get(),xDest.get());
-    } // if ( pClone )
+    }
     return pClone;
 }
 //----------------------------------------------------------------------------
@@ -1019,7 +1013,7 @@ sal_Int32 OOle2Obj::GetStep() const
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
     // get step property
     sal_Int32 nStep = 0;
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return nStep;
 }
 
@@ -1108,10 +1102,10 @@ void OOle2Obj::NbcSetLogicRect(const Rectangle& rRect)
 }
 //----------------------------------------------------------------------------
 
-FASTBOOL OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+bool OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    FASTBOOL bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
+    bool bResult = SdrOle2Obj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
         OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
@@ -1157,14 +1151,14 @@ uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const 
         {
             xSource.set(xChartDoc->getDataProvider(),uno::UNO_QUERY);
         }
-    } // if( xCompSupp.is())
+    }
     return xSource;
 }
 // -----------------------------------------------------------------------------
 // Clone() soll eine komplette Kopie des Objektes erzeugen.
-SdrObject* OOle2Obj::Clone() const
+OOle2Obj* OOle2Obj::Clone() const
 {
-    OOle2Obj* pObj = static_cast<OOle2Obj*>(SdrOle2Obj::Clone());
+    OOle2Obj* pObj = CloneHelper< OOle2Obj >();
     OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
     svt::EmbeddedObjectRef::TryRunningState( pObj->GetObjRef() );
     pObj->impl_createDataProvider_nothrow(pRptModel->getReportDefinition().get());
@@ -1193,7 +1187,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
             uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
             uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))),uno::UNO_QUERY);
             xReceiver->attachDataProvider( xDataProvider.get() );
-        } // if( xReceiver.is() )
+        }
     }
     catch(uno::Exception)
     {
@@ -1273,3 +1267,5 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

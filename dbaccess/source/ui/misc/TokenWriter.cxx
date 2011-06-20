@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 #include "TokenWriter.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "RtfReader.hxx"
 #include "HtmlReader.hxx"
 #include "dbustrings.hrc"
@@ -81,15 +83,15 @@ using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XModel;
 
 #if defined(UNX)
-const char __FAR_DATA ODatabaseImportExport::sNewLine = '\012';
+const char ODatabaseImportExport::sNewLine = '\012';
 #else
-const char __FAR_DATA ODatabaseImportExport::sNewLine[] = "\015\012";
+const char ODatabaseImportExport::sNewLine[] = "\015\012";
 #endif
 
-const static char __FAR_DATA sMyBegComment[]    = "<!-- ";
-const static char __FAR_DATA sMyEndComment[]    = " -->";
-const static char __FAR_DATA sFontFamily[]      = "font-family: ";
-const static char __FAR_DATA sFontSize[]        = "font-size: ";
+const static char sMyBegComment[]   = "<!-- ";
+const static char sMyEndComment[]   = " -->";
+const static char sFontFamily[]     = "font-family: ";
+const static char sFontSize[]       = "font-size: ";
 
 #define SBA_FORMAT_SELECTION_COUNT  4
 #define CELL_X                      1437
@@ -200,8 +202,6 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
         m_xConnection.clear();
         dispose();
         m_bNeedToReInitialize = true;
-        //if(!m_bInInitialize)
-        //  initialize();
     }
 }
 // -----------------------------------------------------------------------------
@@ -248,7 +248,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             if ( !m_xResultSet.is() )
             {
-                OSL_ENSURE( false, "ODatabaseImportExport::impl_initFromDescriptor: selection without result set is nonsense!" );
+                OSL_FAIL( "ODatabaseImportExport::impl_initFromDescriptor: selection without result set is nonsense!" );
                 m_aSelection.realloc( 0 );
             }
         }
@@ -257,7 +257,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             if ( m_bBookmarkSelection && !m_xRowLocate.is() )
             {
-                OSL_ENSURE( false, "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
+                OSL_FAIL( "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
                 m_aSelection.realloc( 0 );
             }
         }
@@ -331,7 +331,7 @@ void ODatabaseImportExport::initialize()
             // the result set may be already set with the datadescriptor
             if ( !m_xResultSet.is() )
             {
-                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.RowSet" ) ), UNO_QUERY );
+                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RowSet")) ), UNO_QUERY );
                 Reference< XPropertySet > xProp( m_xResultSet, UNO_QUERY_THROW );
                 xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
                 xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( m_nCommandType ) );
@@ -368,7 +368,7 @@ sal_Bool ODatabaseImportExport::Write()
     {
         if ( !m_bInInitialize )
             initialize();
-    } // if ( m_bNeedToReInitialize )
+    }
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -378,7 +378,7 @@ sal_Bool ODatabaseImportExport::Read()
     {
         if ( !m_bInInitialize )
             initialize();
-    } // if ( m_bNeedToReInitialize )
+    }
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -403,54 +403,6 @@ sal_Bool ORTFImportExport::Write()
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << ODatabaseImportExport::sNewLine;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
-    /*
-    // Access RTF Export Beispiel
-    {\rtf1\ansi
-        {\colortbl\red0\green0\blue0;\red255\green255\blue255;\red192\green192\blue192;}
-        {\fonttbl\f0\fcharset0\fnil MS Sans Serif;\f1\fcharset0\fnil Arial;\f2\fcharset0\fnil Arial;}
-        \trowd\trgaph40
-                \clbrdrl\brdrs\brdrcf0\clbrdrt\brdrs\brdrcf0\clbrdrb\brdrs\brdrcf0\clbrdrr\brdrs\brdrcf0\clshdng10000\clcfpat2\cellx1437
-                \clbrdrl\brdrs\brdrcf0\clbrdrt\brdrs\brdrcf0\clbrdrb\brdrs\brdrcf0\clbrdrr\brdrs\brdrcf0\clshdng10000\clcfpat2\cellx2874
-        {
-            \trrh-270\pard\intbl
-                {\qc\fs20\b\f1\cf0\cb2 text\cell}
-                \pard\intbl
-                {\qc\fs20\b\f1\cf0\cb2 datum\cell}
-                \pard\intbl\row
-        }
-        \trowd\trgaph40\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx1437\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 heute\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 10.11.98\cell}
-            \pard\intbl\row
-        }
-        \trowd\trgaph40\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx1437\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 morgen\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 11.11.98\cell}
-            \pard\intbl\row
-        }
-        \trowd\trgaph40\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx1437\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 bruder\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 21.04.98\cell}
-            \pard\intbl\row
-        }
-        \trowd\trgaph40
-        \clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx
-        \clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 vater\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 28.06.98\cell}
-            \pard\intbl\row
-        }
-    }
-    */
-
     sal_Bool bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
     sal_Bool bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
     sal_Bool bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
@@ -472,10 +424,10 @@ sal_Bool ORTFImportExport::Write()
 
     (*m_pStream)    << "{\\fonttbl";
     xub_StrLen nTokenCount = aFonts.GetTokenCount();
-    for(xub_StrLen j=0;j<nTokenCount;++j)
+    for(sal_uInt32 j=0;j<nTokenCount;++j)
     {
         (*m_pStream) << "\\f";
-        m_pStream->WriteNumber(j);
+        m_pStream->WriteNumber(static_cast<sal_Int32>(j));
         (*m_pStream) << aFormat;
         (*m_pStream) << aFonts.GetToken(j).GetBuffer();
         (*m_pStream) << ';';
@@ -484,11 +436,11 @@ sal_Bool ORTFImportExport::Write()
     (*m_pStream) << ODatabaseImportExport::sNewLine;
     // write the rtf color table
     (*m_pStream) << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL << OOO_STRING_SVTOOLS_RTF_RED;
-    m_pStream->WriteNumber(aColor.GetRed());
+    m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetRed()));
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_GREEN;
-    m_pStream->WriteNumber(aColor.GetGreen());
+    m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetGreen()));
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_BLUE;
-    m_pStream->WriteNumber(aColor.GetBlue());
+    m_pStream->WriteNumber(static_cast<sal_uInt32>(aColor.GetBlue()));
 
     (*m_pStream) << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"
                  << ODatabaseImportExport::sNewLine;
@@ -498,7 +450,7 @@ sal_Bool ORTFImportExport::Write()
     ::rtl::OString aCell1("\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx");
 
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
-    m_pStream->WriteNumber(40);
+    m_pStream->WriteNumber(static_cast<sal_Int32>(40));
     (*m_pStream) << ODatabaseImportExport::sNewLine;
 
     if(m_xObject.is())
@@ -628,7 +580,7 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
     {
         ++kk;
         (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
-        m_pStream->WriteNumber(40);
+        m_pStream->WriteNumber(static_cast<sal_Int32>(40));
         (*m_pStream) << ODatabaseImportExport::sNewLine;
 
         static const ::rtl::OString aCell2("\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx");
@@ -670,14 +622,12 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
                 Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
                 dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
                 ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
-                // m_xRow->getString(i);
-                //if (!m_xRow->wasNull())
                 if ( sValue.getLength() )
                     RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
             }
             catch (Exception&)
             {
-                OSL_ENSURE(0,"RTF WRITE!");
+                OSL_FAIL("RTF WRITE!");
             }
 
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
@@ -711,7 +661,7 @@ sal_Bool ORTFImportExport::Read()
 }
 //-------------------------------------------------------------------
 //===================================================================
-const sal_Int16 __FAR_DATA OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZES] =
+const sal_Int16 OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZES] =
 {
     HTMLFONTSZ1_DFLT, HTMLFONTSZ2_DFLT, HTMLFONTSZ3_DFLT, HTMLFONTSZ4_DFLT,
     HTMLFONTSZ5_DFLT, HTMLFONTSZ6_DFLT, HTMLFONTSZ7_DFLT
@@ -720,10 +670,10 @@ const sal_Int16 __FAR_DATA OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZE
 sal_Int16 OHTMLImportExport::nFontSize[SBA_HTML_FONTSIZES] = { 0 };
 
 const sal_Int16 OHTMLImportExport::nCellSpacing = 0;
-const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
+const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 //========================================================================
-// Makros fuer HTML-Export
+// Macros for HTML-Export
 //========================================================================
 #define OUT_PROLOGUE()      ((*m_pStream) << sHTML30_Prologue << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine)
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
@@ -744,14 +694,14 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
                                      const String& rExchange)
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ,m_bCheckFont(sal_False)
 #endif
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::OHTMLImportExport" );
     // set HTML configuration
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-    m_eDestEnc = pHtmlOptions->GetTextEncoding();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+    m_eDestEnc = rHtmlOptions.GetTextEncoding();
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
     sIndent[0] = 0;
 }
@@ -786,9 +736,7 @@ sal_Bool OHTMLImportExport::Read()
         ((OHTMLReader*)m_pReader)->AddRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
-        //dyf add 20070601
         m_pReader->SetTableName(m_sDefaultTableName);
-        //dyf add end
         eState = ((OHTMLReader*)m_pReader)->CallParser();
         m_pReader->release();
         m_pReader = NULL;
@@ -801,8 +749,8 @@ void OHTMLImportExport::WriteHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
-        m_xFactory->createInstance(::rtl::OUString::createFromAscii(
-            "com.sun.star.document.DocumentProperties")),
+        m_xFactory->createInstance(::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties"))),
         uno::UNO_QUERY);
     if (xDocProps.is()) {
         xDocProps->setTitle(m_sName);
@@ -826,7 +774,7 @@ void OHTMLImportExport::WriteBody()
     (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body << " { " << sFontFamily << '\"' << ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding()) << '\"';
         // TODO : think about the encoding of the font name
     (*m_pStream) << "; " << sFontSize;
-    m_pStream->WriteNumber(m_aFont.Height);
+    m_pStream->WriteNumber(static_cast<sal_Int32>(m_aFont.Height));
     (*m_pStream) << '}';
 
     OUT_LF();
@@ -834,7 +782,7 @@ void OHTMLImportExport::WriteBody()
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
     OUT_LF();
 
-    // default Textfarbe schwarz
+    // default Textcolour black
     (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_body << ' ' << OOO_STRING_SVTOOLS_HTML_O_text << '=';
     sal_Int32 nColor = 0;
     if(m_xObject.is())
@@ -1056,13 +1004,13 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + pChar;
 
-    double fVal = 0.0;
-
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
     if(pFormatter)
     {
+        double fVal = 0.0;
+
         try
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
@@ -1091,7 +1039,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     if ( bStrikeout )   TAG_ON( OOO_STRING_SVTOOLS_HTML_strike );
 
     if ( !rValue.Len() )
-        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // #42573# keine komplett leere Zelle
+        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // keine komplett leere Zelle
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
 
@@ -1109,7 +1057,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
 void OHTMLImportExport::FontOn()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOn" );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         m_bCheckFont = sal_True;
 #endif
 
@@ -1140,9 +1088,9 @@ void OHTMLImportExport::FontOn()
 inline void OHTMLImportExport::FontOff()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOff" );
-    DBG_ASSERT(m_bCheckFont,"Kein FontOn() gerufen");
+    OSL_ENSURE(m_bCheckFont,"Kein FontOn() gerufen");
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     m_bCheckFont = sal_False;
 #endif
 }
@@ -1159,3 +1107,5 @@ void OHTMLImportExport::IncIndent( sal_Int16 nVal )
     sIndent[m_nIndent] = 0;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

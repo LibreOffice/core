@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -160,7 +161,7 @@ protected:
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
@@ -203,7 +204,7 @@ protected:
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
@@ -220,7 +221,7 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
-    virtual SdrObject* Clone() const;
+    virtual OOle2Obj* Clone() const;
     virtual void initializeOle();
 
     void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
@@ -249,7 +250,7 @@ protected:
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
-    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
 
     virtual void SetSnapRectImpl(const Rectangle& _rRect);
     virtual SdrPage* GetImplPage() const;
@@ -272,7 +273,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual sal_uInt32 GetObjInventor() const;
-    virtual SdrObject* Clone() const;
+    virtual OUnoObject* Clone() const;
 
 private:
     void    impl_setReportComponent_nothrow();
@@ -284,3 +285,4 @@ private:
 //============================================================================
 #endif // _REPORT_RPTUIOBJ_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

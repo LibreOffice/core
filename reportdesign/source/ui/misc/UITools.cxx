@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>
+#include <sal/macros.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -69,6 +71,7 @@
 #include <editeng/flstitem.hxx>
 #include <editeng/akrnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charreliefitem.hxx>
@@ -172,14 +175,14 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
         ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPHEADER));
         sName += ::rtl::OUString::valueOf(_nPos);
         _xGroup->getHeader()->setName(sName);
-    } // if ( _xGroup->getHeaderOn() )
+    }
 
     if ( _xGroup->getFooterOn() && !_xGroup->getFooter()->getName().getLength()  )
     {
         ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPFOOTER));
         sName += ::rtl::OUString::valueOf(_nPos);
         _xGroup->getFooter()->setName(sName);
-    } // if ( _xGroup->getHeaderOn() )
+    }
 }
 // -----------------------------------------------------------------------------
 ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> addStyleListener(const uno::Reference< report::XReportDefinition >& _xReportDefinition,::comphelper::OPropertyChangeListener* _pListener)
@@ -258,7 +261,7 @@ namespace
             case COMPLEX:
                 aLocale = _rxReportControlFormat->getCharLocaleComplex();
                 break;
-        } // switch(_nWhich)
+        }
 
         _rItemSet.Put(SvxLanguageItem(MsLangId::convertLocaleToLanguageWithFallback(aLocale),_nLanguage));
 
@@ -285,7 +288,7 @@ namespace
                     pClone->PutValue(_xShape->getPropertyValue(aIt->sName), aIt->nMemberId);
                     _rItemSet.Put(*pClone, aIt->nWID);
                 }
-            } // if ( xInfo->hasPropertyByName(sPropertyName) )
+            }
             ++aIt;
         }
     }
@@ -316,11 +319,11 @@ namespace
                         catch(uno::Exception&)
                         { // shapes have a bug so we ignore this one.
                         }
-                    } // if ( pItem )
+                    }
                 }
             }
             ++aIt;
-        } // while ( pPropertyMap->pName )
+        }
     }
     // -------------------------------------------------------------------------
     void lcl_CharPropertiesToItems( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
@@ -350,7 +353,6 @@ namespace
         _rItemSet.Put(aUnderLineItem);
         _rItemSet.Put(SvxKerningItem(_rxReportControlFormat->getCharKerning(),ITEMID_KERNING));
         _rItemSet.Put(SvxEmphasisMarkItem(static_cast<FontEmphasisMark>(_rxReportControlFormat->getCharEmphasis()),ITEMID_EMPHASISMARK));
-        //_rItemSet.Put(SvxTwoLinesItem());
         _rItemSet.Put(SvxCharReliefItem(static_cast<FontRelief>(_rxReportControlFormat->getCharRelief()),ITEMID_CHARRELIEF));
         _rItemSet.Put(SvxColorItem(::Color(_rxReportControlFormat->getCharColor()),ITEMID_COLOR));
         _rItemSet.Put(SvxCharRotateItem(_rxReportControlFormat->getCharRotation(),sal_False,ITEMID_CHARROTATE));
@@ -359,11 +361,9 @@ namespace
         SvxHorJustifyItem aHorJustifyItem(ITEMID_HORJUSTIFY);
         aHorJustifyItem.PutValue(xSet->getPropertyValue(PROPERTY_PARAADJUST),MID_HORJUST_ADJUST);
         _rItemSet.Put(aHorJustifyItem);
-        //_rItemSet.Put(SfxInt32Item(ITEMID_DEGREES,_rxReportControlFormat->getCharRotation()));
         SvxVerJustifyItem aVerJustifyItem(ITEMID_VERJUSTIFY);
         aVerJustifyItem.PutValue(xSet->getPropertyValue(PROPERTY_VERTICALALIGN),MID_HORJUST_ADJUST);
         _rItemSet.Put(aVerJustifyItem);
-        //_rItemSet.Put(SfxInt32Item(ITEMID_IDENT,_rxReportControlFormat->getCharRotation()));
 
         uno::Reference< report::XShape> xShape(_rxReportControlFormat,uno::UNO_QUERY);
         if ( !xShape.is() )
@@ -395,7 +395,7 @@ namespace
             aNewFont.SetFamily(pFontItem->GetFamily());
             aNewFont.SetPitch(pFontItem->GetPitch());
             aNewFont.SetCharSet(pFontItem->GetCharSet());
-        } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_FONT,sal_True,&pItem) && pItem->ISA(SvxFontItem))
+        }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( _nFontHeight,sal_True,&pItem) && pItem->ISA(SvxFontHeightItem))
         {
             const SvxFontHeightItem* pFontItem = static_cast<const SvxFontHeightItem*>(pItem);
@@ -541,7 +541,7 @@ namespace
         {
             const SvxCaseMapItem* pFontItem = static_cast<const SvxCaseMapItem*>(pItem);
             lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pFontItem->GetValue() ) );
-        } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CASEMAP,sal_True,&pItem) && pItem->ISA(SvxCaseMapItem))
+        }
         struct Items {
                 sal_uInt16 nWhich;
                 ::rtl::OUString sPropertyName;
@@ -550,7 +550,7 @@ namespace
                                 ,{ITEMID_LANGUAGE_ASIAN,PROPERTY_CHARLOCALEASIAN}
                                 ,{ITEMID_LANGUAGE_COMPLEX,PROPERTY_CHARLOCALECOMPLEX}
         };
-        for(size_t k = 0; k < sizeof(pItems)/sizeof(pItems[0]);++k)
+        for(size_t k = 0; k < SAL_N_ELEMENTS(pItems);++k)
         {
             if ( SFX_ITEM_SET == _rItemSet.GetItemState( pItems[k].nWhich,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
             {
@@ -558,7 +558,7 @@ namespace
                 lang::Locale aCharLocale;
                 MsLangId::convertLanguageToLocale( pFontItem->GetLanguage(), aCharLocale );
                 lcl_pushBack( _out_rProperties, pItems[k].sPropertyName, uno::makeAny( aCharLocale ) );
-            } // if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_LANGUAGE,sal_True,&pItem) && pItem->ISA(SvxLanguageItem))
+            }
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_ESCAPEMENT,sal_True,&pItem) && pItem->ISA(SvxEscapementItem))
         {
@@ -638,7 +638,6 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },
-        //{ SID_ATTR_BRUSH_CHAR, SFX_ITEM_POOLABLE },
         { SID_ATTR_BRUSH, SFX_ITEM_POOLABLE },
         { SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEM_POOLABLE },
         { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },
@@ -705,7 +704,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     };
 
-    OSL_ASSERT((sizeof(pDefaults)/sizeof(pDefaults[0])) == (sizeof(aItemInfos)/sizeof(aItemInfos[0])));
+    OSL_ASSERT((SAL_N_ELEMENTS(pDefaults)) == (SAL_N_ELEMENTS(aItemInfos)));
 
     static sal_uInt16 pRanges[] =
     {
@@ -742,7 +741,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     }
 
     SfxItemPool::Free(pPool);
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+    for (sal_uInt16 i=0; i < SAL_N_ELEMENTS(pDefaults); ++i)
         delete pDefaults[i];
 
     return bSuccess;
@@ -758,12 +757,6 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
 
     Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
 
-    //static sal_uInt16 pRanges[] =
-    //{
-    //  XATTR_START,XATTR_END,
- //       0
-    //};
-
     bool bSuccess = false;
     try
     {
@@ -778,7 +771,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
             // #i74099# by default, the dialog deletes the current color table if a different one is loaded
             // (see SwDrawShell::ExecDrawDlg)
             const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
-            if (pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+            if (pColorItem && pColorItem->GetColorTable() == &XColorTable::GetStdColorTable())
                 pDialog->DontDeleteColorTable();
             bSuccess = ( RET_OK == pDialog->Execute() );
             if ( bSuccess )
@@ -810,14 +803,14 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
             aAwtFont.Name = ::rtl::OUString(); // hack to
             _rxReportControlFormat->setFontDescriptor( aAwtFont );
             _rxReportControlFormat->setCharFontName( sTemp );
-        } // if ( aSettings.get( "Font" ) >>= aAwtFont )
+        }
         if ( aSettings.get( "FontAsian" ) >>= aAwtFont )
         {
             ::rtl::OUString sTemp = aAwtFont.Name;
             aAwtFont.Name = ::rtl::OUString(); // hack to
             _rxReportControlFormat->setFontDescriptorAsian( aAwtFont );
             _rxReportControlFormat->setCharFontNameAsian( sTemp );
-        } // if ( aSettings.get( "Font" ) >>= aAwtFont )
+        }
         if ( aSettings.get( "FontComplex" ) >>= aAwtFont )
         {
             ::rtl::OUString sTemp = aAwtFont.Name;
@@ -894,7 +887,7 @@ SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, boo
     return pOverlappedObj;
 }
 // -----------------------------------------------------------------------------
-bool checkArrayForOccurance(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
+bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
 {
     for(int i=0;i<_nListLength;i++)
     {
@@ -915,7 +908,7 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
 
     while( !pOverlappedObj && (pObjIter = aIter.Next()) != NULL )
     {
-        if (checkArrayForOccurance(pObjIter, _pIgnoreList, _nIgnoreListLength))
+        if (checkArrayForOccurrence(pObjIter, _pIgnoreList, _nIgnoreListLength))
         {
             continue;
         }
@@ -996,9 +989,6 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
 {
     OSectionView& rSectionView = _aReportSection.getSectionView();
     uno::Reference< report::XReportComponent> xComponent(_pControl->getUnoShape(),uno::UNO_QUERY);
-    // Rectangle aRet(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
-    // aRet.setHeight(aRet.getHeight() + 1);
-    // aRet.setWidth(aRet.getWidth() + 1);
     Rectangle aRect = getRectangleFromControl(_pControl);
 
     bool bOverlapping = true;
@@ -1034,7 +1024,6 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
     OSL_PRECOND( _xInspectorWindow.is(), "openDialogFormula_nothrow: invalid parameters!" );
     if ( !_xInspectorWindow.is() )
         return false;
-    // _out_rFormula = ::rtl::OUString();
     bool bSuccess = false;
     ::dbtools::SQLExceptionInfo aErrorInfo;
     uno::Reference< awt::XWindow > xInspectorWindow;
@@ -1068,7 +1057,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
     catch (sdbc::SQLException& e) { aErrorInfo = e; }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
+        OSL_FAIL( "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
     }
 
     if ( aErrorInfo.isValid() )
@@ -1079,3 +1068,5 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
 // -----------------------------------------------------------------------------
 } // namespace rptui
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

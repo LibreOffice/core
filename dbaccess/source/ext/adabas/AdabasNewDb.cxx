@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,95 +26,39 @@
  *
  ************************************************************************/
 
-#ifndef adabasui_ADABAS_CREATEDB_HXX
 #include "AdabasNewDb.hxx"
-#endif
-#ifndef adabasui_ADABASNEWDB_HRC
 #include "AdabasNewDb.hrc"
-#endif
 
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
-#endif
-#ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _BIGINT_HXX
 #include <tools/bigint.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _EXTENSIONS_COMPONENT_MODULE_HXX_
 #include "Acomponentmodule.hxx"
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef _ADABASUI_RESOURCE_HRC_
 #include "adabasui_resource.hrc"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <unotools/pathoptions.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
-#endif
-#ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
 #include "adabasuistrings.hrc"
-#ifndef _THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 
 
 using namespace adabasui;
 using namespace ucbhelper;
 using namespace utl;
-using namespace vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -162,7 +107,6 @@ namespace adabasui
         catch(Exception&)
         {
             OSL_ASSERT(0);
-            //  showError(::dbtools::SQLExceptionInfo(e),this,);
         }
     }
     void SAL_CALL ODatabaseCreator::onTerminated()
@@ -271,8 +215,6 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
         m_ET_CONUSR.SetModifyHdl(               LINK(this,OAdabasNewDbDlg,LoseFocusHdl));
         m_ET_DOMAIN_USR.Enable(sal_False);
 
-        //  m_ET_SYSUSR.setUpperCase();
-        //  m_ET_CONUSR.setUpperCase();
     }
 
 
@@ -304,7 +246,7 @@ OAdabasNewDbDlg::OAdabasNewDbDlg( Window* pParent,
     m_NF_DATADEVSPACE_SIZE.SetDecimalDigits(0);
     m_NF_CACHE_SIZE.SetDecimalDigits(0);
 
-    m_ET_DATABASENAME.SetMaxTextLen( 8 ); //98292
+    m_ET_DATABASENAME.SetMaxTextLen( 8 );
 
     m_PB_CONPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));
     m_PB_SYSPWD.SetClickHdl(            LINK(this,OAdabasNewDbDlg,PwdClickHdl));
@@ -803,3 +745,5 @@ sal_Bool OAdabasNewDbDlg::fillEnvironmentVariable(const ::rtl::OUString& _sVaria
     return bError;
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

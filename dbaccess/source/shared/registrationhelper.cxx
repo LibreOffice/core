@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,7 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
 {
     if (!s_pImplementationNames)
     {
-        OSL_ENSURE(sal_False, "OModuleRegistration::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
+        OSL_FAIL("OModuleRegistration::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
         return;
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -125,7 +126,7 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
 
     if (!s_pImplementationNames)
     {
-        OSL_ENSURE(sal_False, "OModuleRegistration::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
+        OSL_FAIL("OModuleRegistration::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
         return NULL;
     }
     OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
@@ -165,3 +166,4 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

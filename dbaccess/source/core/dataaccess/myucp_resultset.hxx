@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 #ifndef DBA_UCPRESULTSET_HXX
 #define DBA_UCPRESULTSET_HXX
 
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-#ifndef _UCBHELPER_RESULTSETHELPER_HXX
 #include <ucbhelper/resultsethelper.hxx>
-#endif
-#ifndef _DBA_COREDATAACCESS_DOCUMENTCONTAINER_HXX_
 #include "documentcontainer.hxx"
-#endif
 
 
 // @@@ Adjust namespace name.
@@ -65,3 +60,5 @@ public:
 }
 
 #endif // DBA_UCPRESULTSET_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

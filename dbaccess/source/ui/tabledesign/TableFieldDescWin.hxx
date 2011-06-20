@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 #ifndef DBAUI_TABLEFIELDDESCRIPTION_HXX
 #define DBAUI_TABLEFIELDDESCRIPTION_HXX
 
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
 #include "FieldDescGenWin.hxx"
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
 
 class FixedText;
 namespace dbaui
@@ -45,7 +40,7 @@ namespace dbaui
     class OFieldDescription;
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
+    // um Aenderungen der Systemfarben zu bemerken
     class OTableFieldDescWin : public TabPage
                                 ,public IClipboardTest
     {
@@ -113,3 +108,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

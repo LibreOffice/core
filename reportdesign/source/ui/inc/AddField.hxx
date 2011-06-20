@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,10 +110,8 @@ public:
     /** will be called when the id of the image list is needed.
         @param  _eBitmapSet
             <svtools/imgdef.hxx>
-        @param  _bHiContast
-            <TRUE/> when in high contrast mode.
     */
-    virtual ImageList getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
+    virtual ImageList getImageList(sal_Int16 _eBitmapSet) const;
 
     /** will be called when the controls need to be resized.
     */
@@ -141,3 +140,4 @@ private:
 //==============================================================================
 #endif // RPTUI_ADDFIELDWINDOW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

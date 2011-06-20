@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBA_XMLSERVERDATABASE_HXX_INCLUDED
 #define DBA_XMLSERVERDATABASE_HXX_INCLUDED
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #include <vector>
 
 namespace dbaxml
@@ -53,3 +50,4 @@ namespace dbaxml
 
 #endif // DBA_XMLSERVERDATABASE_HXX_INCLUDED
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

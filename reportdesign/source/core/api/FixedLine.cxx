@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #include "precompiled_reportdesign.hxx"
 #include "FixedLine.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include "core_resource.hxx"
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
@@ -138,7 +135,7 @@ uno::Sequence< ::rtl::OUString > lcl_getLineOptionals()
 
 
     };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 DBG_NAME(rpt_OFixedLine)
 // -----------------------------------------------------------------------------
@@ -192,7 +189,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"OFixedLine::OFixedLine: Exception caught!");
+        OSL_FAIL("OFixedLine::OFixedLine: Exception caught!");
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -202,7 +199,6 @@ OFixedLine::~OFixedLine()
     DBG_DTOR(rpt_OFixedLine,NULL);
 }
 // -----------------------------------------------------------------------------
-//IMPLEMENT_FORWARD_XINTERFACE2(OFixedLine,FixedLineBase,FixedLinePropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OFixedLine, FixedLineBase )
 // --------------------------------------------------------------------------------
 uno::Any SAL_CALL OFixedLine::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
@@ -584,3 +580,4 @@ void SAL_CALL OFixedLine::setPrintRepeatedValues( ::sal_Bool /*_printrepeatedval
 } // namespace reportdesign
 // =============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

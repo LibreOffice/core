@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,42 +28,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_QUERYDLG_HXX
 #include "querydlg.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef DBAUI_QUERYDLG_HRC
 #include "querydlg.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef DBAUI_QTABLECONNECTIONDATA_HXX
 #include "QTableConnectionData.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef DBAUI_RELATIONCONTROL_HXX
 #include "RelationControl.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -278,12 +255,12 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     String sHelpText = String( ModuleRes( nResId ) );
     if( nPos )
     {
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%1" ) ), sFirstWinName );
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%2" ) ), sSecondWinName );
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%1" ) ), sFirstWinName );
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%2" ) ), sSecondWinName );
     }
     if ( bAddHint )
     {
-        sHelpText += String( RTL_CONSTASCII_STRINGPARAM( "\n" ) );
+        sHelpText += String( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
         sHelpText += String( ModuleRes( STR_JOIN_TYPE_HINT ) );
     }
 
@@ -343,8 +320,6 @@ TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
 // -----------------------------------------------------------------------------
 void DlgQryJoin::setValid(sal_Bool _bValid)
 {
-    //LBChangeHdl(&aLB_JoinType);
-
     aPB_OK.Enable(_bValid || eJoinType == CROSS_JOIN );
 }
 // -----------------------------------------------------------------------------
@@ -397,3 +372,4 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

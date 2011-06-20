@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
 #include <svl/smplhint.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -48,8 +49,6 @@ namespace rptui
 {
 
     using namespace ::com::sun::star;
-
-    // const OReportController *& m_pReportController;
 
 DECLARE_STL_USTRINGACCESS_MAP(bool, AllProperties);
 DECLARE_STL_STDKEY_MAP(uno::Reference< beans::XPropertySet >, AllProperties, PropertySetInfoCache);
@@ -110,31 +109,6 @@ public:
         if ( _pEvt )
         {
             sal_Int32 nEvent = _pEvt->GetId();
-            /*
-              // just for debug
-            if (nEvent == VCLEVENT_WINDOW_CHILDCREATED ||
-                nEvent == VCLEVENT_WINDOW_PAINT ||
-                nEvent == VCLEVENT_WINDOW_MOVE ||
-                nEvent == VCLEVENT_WINDOW_RESIZE ||
-                nEvent == VCLEVENT_WINDOW_SHOW ||
-                nEvent == VCLEVENT_WINDOW_MOUSEMOVE ||
-                nEvent == VCLEVENT_WINDOW_FRAMETITLECHANGED ||
-                nEvent == VCLEVENT_WINDOW_HIDE ||
-                nEvent == VCLEVENT_EDIT_MODIFY ||
-                nEvent == VCLEVENT_SCROLLBAR_ENDSCROLL ||
-                nEvent == VCLEVENT_EDIT_SELECTIONCHANGED ||
-                nEvent == VCLEVENT_TABPAGE_INSERTED ||
-                nEvent == VCLEVENT_TABPAGE_REMOVED ||
-                nEvent == VCLEVENT_TOOLBOX_FORMATCHANGED ||
-                nEvent == VCLEVENT_TOOLBOX_ITEMADDED ||
-                nEvent == VCLEVENT_TOOLBOX_ALLITEMCHANGED ||
-                nEvent == VCLEVENT_MENUBARADDED ||
-                nEvent == 1
-                )
-            {
-                return 0L;
-            }
-            */
 
             if (nEvent == VCLEVENT_APPLICATION_DATACHANGED )
             {
@@ -145,13 +119,11 @@ public:
                 {
                     OEnvLock aLock(*this);
 
-                    // sal_uInt32 nCount = m_pImpl->m_aSections.size();
-
                     // send all Section Objects a 'tingle'
                     // maybe they need a change in format, color, etc
                     ::std::vector< uno::Reference< container::XChild > >::const_iterator aIter = m_pImpl->m_aSections.begin();
                     ::std::vector< uno::Reference< container::XChild > >::const_iterator aEnd = m_pImpl->m_aSections.end();
-                    for (;aIter != aEnd; aIter++)
+                    for (;aIter != aEnd; ++aIter)
                     {
                         const uno::Reference<container::XChild> xChild (*aIter);
                         if (xChild.is())
@@ -199,7 +171,6 @@ public:
     void OXReportControllerObserver::Clear()
     {
         OEnvLock aLock(*this);
-        // sal_uInt32 nDebugValue = m_pImpl->m_aSections.size();
         m_pImpl->m_aSections.clear();
     }
 
@@ -315,7 +286,6 @@ void OXReportControllerObserver::switchListening( const uno::Reference< containe
 
         // be notified of any changes in the container elements
         uno::Reference< container::XContainer > xSimpleContainer( _rxContainer, uno::UNO_QUERY );
-        // OSL_ENSURE( xSimpleContainer.is(), "OXReportControllerObserver::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
         {
             if ( _bStartListening )
@@ -367,17 +337,13 @@ void OXReportControllerObserver::switchListening( const uno::Reference< uno::XIn
 //------------------------------------------------------------------------------
 void SAL_CALL OXReportControllerObserver::modified( const lang::EventObject& /*aEvent*/ ) throw (uno::RuntimeException)
 {
-    // implSetModified();
 }
 
 //------------------------------------------------------------------------------
 void OXReportControllerObserver::AddElement(const uno::Reference< uno::XInterface >& _rxElement )
 {
-    // if ( !IsLocked() )
-    // {
     m_aFormattedFieldBeautifier.notifyElementInserted(_rxElement);
     m_aFixedTextColor.notifyElementInserted(_rxElement);
-    // }
 
     // if it's a container, start listening at all elements
     uno::Reference< container::XIndexAccess > xContainer( _rxElement, uno::UNO_QUERY );
@@ -417,7 +383,7 @@ void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInter
 //------------------------------------------------------------------------------
 void SAL_CALL OXReportControllerObserver::elementInserted(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     // neues Object zum lauschen
@@ -431,7 +397,7 @@ void SAL_CALL OXReportControllerObserver::elementInserted(const container::Conta
 //------------------------------------------------------------------------------
 void SAL_CALL OXReportControllerObserver::elementReplaced(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     uno::Reference< uno::XInterface >  xIface(evt.ReplacedElement,uno::UNO_QUERY);
@@ -445,7 +411,7 @@ void SAL_CALL OXReportControllerObserver::elementReplaced(const container::Conta
 //------------------------------------------------------------------------------
 void SAL_CALL OXReportControllerObserver::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     uno::Reference< uno::XInterface >  xIface( evt.Element, uno::UNO_QUERY );
@@ -460,3 +426,4 @@ void SAL_CALL OXReportControllerObserver::elementRemoved(const container::Contai
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

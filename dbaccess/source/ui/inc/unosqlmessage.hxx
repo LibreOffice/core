@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef _DBAUI_UNOSQLMESSAGE_HXX_
 #define _DBAUI_UNOSQLMESSAGE_HXX_
 
-#ifndef _SVT_GENERICUNODIALOG_HXX_
 #include <svtools/genericunodialog.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 //.........................................................................
 namespace dbaui
 {
@@ -90,3 +87,4 @@ protected:
 
 #endif // _DBAUI_UNOSQLMESSAGE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

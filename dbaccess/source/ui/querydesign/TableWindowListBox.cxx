@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,36 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_JOINEXCHANGE_HXX
 #include "JoinExchange.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
+#include <osl/diagnose.h>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
@@ -96,7 +77,7 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
 void OTableWindowListBox::dragFinished( )
 {
     // first show the error msg when existing
-    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccuredError());
+    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccurredError());
     // second look for ui activities which should happen after d&d
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
@@ -185,7 +166,6 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
                 if(m_pTabWin)
                 {
                     bHandled = m_pTabWin->HandleKeyInput(*pKeyEvent);
-                    //  bHandled = sal_True;
                 }
                 break;
             }
@@ -215,7 +195,6 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
         ScrollOutputArea( -1 );
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, sal_True );
-//      m_aScrollTimer.Start();
     }
 
     return 0;
@@ -233,7 +212,6 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
         ScrollOutputArea( 1 );
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, sal_True );
-//      m_aScrollTimer.Start();
     }
 
     return 0;
@@ -245,7 +223,7 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
     OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
     {
-        // #100271# OJ asterix was not allowed to be copied to selection browsebox
+        // asterix was not allowed to be copied to selection browsebox
         sal_Bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
         EndSelection();
         // create a description of the source
@@ -265,7 +243,6 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
     {   // don't drop into the window if it's the drag source itself
-
 
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)
@@ -345,7 +322,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
     catch(const SQLException& e)
     {
         // remember the exception so that we can show them later when d&d is finished
-        m_pTabWin->getDesignView()->getController().setErrorOccured(::dbtools::SQLExceptionInfo(e));
+        m_pTabWin->getDesignView()->getController().setErrorOccurred(::dbtools::SQLExceptionInfo(e));
     }
     return 0L;
 }
@@ -400,7 +377,7 @@ IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
     // meinem Elter Bescheid sagen
     Window* pParent = Window::GetParent();
-    DBG_ASSERT(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
+    OSL_ENSURE(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 
@@ -421,3 +398,5 @@ void OTableWindowListBox::Command(const CommandEvent& rEvt)
     }
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

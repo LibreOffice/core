@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef DBACCESS_CORE_API_STATICSET_HXX
 #define DBACCESS_CORE_API_STATICSET_HXX
 
-#ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
-#endif
 
 namespace dbaccess
 {
@@ -91,3 +90,4 @@ namespace dbaccess
 }
 #endif //DBACCESS_CORE_API_STATICSET_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

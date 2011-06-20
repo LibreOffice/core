@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -238,7 +239,7 @@ namespace dbaui
         {
             if ( _rData.m_xDocEventBroadcaster.is() )
             {
-                ::rtl::OUString sEventName( ::rtl::OUString::createFromAscii( _bActive ? "OnFocus" : "OnUnfocus" ) );
+                ::rtl::OUString sEventName = _bActive ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnFocus")) : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnfocus"));
                 Reference< XController2 > xController( _rData.m_rController.getXController(), UNO_QUERY_THROW );
                 _rData.m_xDocEventBroadcaster->notifyDocumentEvent( sEventName, xController, Any() );
             }
@@ -296,11 +297,6 @@ namespace dbaui
             {
                 const Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                 ENSURE_OR_THROW( pContainerWindow, "no Window implementation for the frame's container window!" );
-
-                /*const Window* pContainerParentWindow = pContainerWindow->GetParent();
-                if ( pContainerParentWindow && ( pContainerParentWindow->GetType() == WINDOW_BORDERWINDOW ) )
-                    pContainerParentWindow = pContainerParentWindow->GetParent();
-                m_pData->m_bIsTopLevelDocumentWindow = ( pContainerParentWindow == NULL );*/
 
                 m_pData->m_bIsTopLevelDocumentWindow = ( pContainerWindow->GetExtendedStyle() & WB_EXT_DOCUMENT ) != 0;
             }
@@ -444,3 +440,5 @@ namespace dbaui
 //........................................................................
 } // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

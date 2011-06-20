@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef INCLUDED_DBACCESSDLLAPI_H
 #include "dbaccessdllapi.h"
-#endif
 
 /********************************************************************************************/
 
@@ -115,7 +108,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **
             )
@@ -125,7 +118,7 @@ extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironme
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" DBACCESS_DLLPUBLIC void* SAL_CALL component_getFactory(
+extern "C"  SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
@@ -142,3 +135,5 @@ extern "C" DBACCESS_DLLPUBLIC void* SAL_CALL component_getFactory(
         xRet->acquire();
     return xRet.get();
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

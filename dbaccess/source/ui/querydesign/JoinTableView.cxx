@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,76 +28,29 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_QUERYCONTROLLER_HXX
+#include <osl/diagnose.h>
 #include "querycontroller.hxx"
-#endif
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-//#ifndef DBAUI_QUERY_TABLEWINDOWDATA_HXX
-//#include "QTableWindowData.hxx"
-//#endif
-#ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINE_HXX
 #include "ConnectionLine.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _URLBMK_HXX
 #include <svl/urlbmk.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
 #include "QueryMoveTabWinUndoAct.hxx"
-#endif
-#ifndef DBAUI_QUERYSIZETABWINUNDOACT_HXX
 #include "QuerySizeTabWinUndoAct.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
-#endif
-#ifndef DBACCESS_JACCESS_HXX
 #include "JAccess.hxx"
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
 #include <boost/bind.hpp>
@@ -217,8 +171,6 @@ void OScrollWindowHelper::Resize()
 // class OJoinTableView
 //==================================================================
 
-//const long WINDOW_WIDTH = 1000;
-//const long WINDOW_HEIGHT = 1000;
 DBG_NAME(OJoinTableView);
 //------------------------------------------------------------------------------
 OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView )
@@ -480,7 +432,6 @@ namespace
     // -----------------------------------------------------------------------------
     sal_Bool isScrollAllowed( OJoinTableView* _pView,long nDelta, sal_Bool bHoriz)
     {
-        sal_Bool bRet = sal_True;
         //////////////////////////////////////////////////////////////////////
         // adjust ScrollBar-Positions
         ScrollBar* pBar = _pView->GetVScrollBar();
@@ -490,9 +441,9 @@ namespace
         long nOldThumbPos = pBar->GetThumbPos();
         long nNewThumbPos = nOldThumbPos + nDelta;
         if( nNewThumbPos < 0 )
-            nNewThumbPos = 0;// bRet = sal_False;
+            nNewThumbPos = 0;
         else if( nNewThumbPos > pBar->GetRangeMax() )
-            nNewThumbPos = pBar->GetRangeMax();// bRet = sal_False;
+            nNewThumbPos = pBar->GetRangeMax();
 
         if ( bHoriz )
         {
@@ -502,7 +453,7 @@ namespace
         else if ( nNewThumbPos == _pView->GetScrollOffset().Y() )
             return sal_False;
 
-        return bRet;
+        return sal_True;
     }
     // -----------------------------------------------------------------------------
     sal_Bool getMovementImpl(OJoinTableView* _pView,const Point& _rPoint,const Size& _rSize,long& _nScrollX,long& _nScrollY)
@@ -512,7 +463,6 @@ namespace
         Point aUpperLeft = _rPoint;
         // normalize with respect to visibility
         aUpperLeft -= _pView->GetScrollOffset();
-        //  aUpperLeft.Y() -= _pView->GetScrollOffset().Y();
         Point aLowerRight(aUpperLeft.X() + _rSize.Width(), aUpperLeft.Y() + _rSize.Height());
 
         // data about ourself
@@ -523,7 +473,6 @@ namespace
         sal_Bool bFitsVert= (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
         if (!bFitsHor || !bFitsVert)
         {
-            // #100386# OJ
             if (!bFitsHor)
             {
                 // ensure the visibility of the right border
@@ -531,7 +480,6 @@ namespace
                     _nScrollX = aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X;
 
                 // ensure the visibility of the left border (higher priority)
-                //  if ( (aUpperLeft.X() - _nScrollX) < 0 )
                 if ( aUpperLeft.X() < 0 )
                     _nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
             }
@@ -542,7 +490,6 @@ namespace
                 if ( aLowerRight.Y() > aSize.Height() )
                     _nScrollY = aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y;
                 // upper border
-                //  if ( (aUpperLeft.Y() - _nScrollY) < 0 )
                 if ( aUpperLeft.Y() < 0 )
                     _nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
             }
@@ -580,7 +527,6 @@ void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
 {
     // data about the tab win
     TTableWindowData::value_type pData = _pWin->GetData();
-    //  Point aUpperLeft = pData->GetPosition();
     EnsureVisible( pData->GetPosition() , pData->GetSize());
     Invalidate(INVALIDATE_NOCHILDREN);
 }
@@ -628,7 +574,7 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
 
         //////////////////////////////////////////////////////////////////
         // Belegte Bereiche dieser Zeile pruefen
-        OTableWindow* pOtherTabWin;// = GetTabWinMap()->First();
+        OTableWindow* pOtherTabWin;
         OTableWindowMapIterator aIter = m_aTableMap.begin();
         OTableWindowMapIterator aEnd = m_aTableMap.end();
         for(;aIter != aEnd;++aIter)
@@ -1142,7 +1088,7 @@ void OJoinTableView::ClearAll()
 sal_Bool OJoinTableView::ScrollWhileDragging()
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    DBG_ASSERT(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging darf nur waehrend Dragging eines Fensters aufgerufen werden !");
+    OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging darf nur waehrend Dragging eines Fensters aufgerufen werden !");
 
     // den Timer schon mal killen
     if (m_aDragScrollTimer.IsActive())
@@ -1274,10 +1220,6 @@ sal_Bool OJoinTableView::IsAddAllowed()
         return sal_False;
     }
 
-    // nicht wenn keine Joins moeglich
-//  if (!GetDatabase()->IsCapable(SDB_CAP_JOIN) && nMax <= GetTabWinCount())
-//      return sal_False;
-
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -1349,7 +1291,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
 OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin,const OTableConnection* _rpFirstAfter) const
 {
     OTableConnection* pConn = NULL;
-    DBG_ASSERT(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
+    OSL_ENSURE(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
         // only one NULL-arg allowed
 
     if ((!pLhs || pLhs->ExistsAConn()) && (!pRhs || pRhs->ExistsAConn()))
@@ -1763,7 +1705,7 @@ bool OJoinTableView::allowQueries() const
 // -----------------------------------------------------------------------------
 void OJoinTableView::onNoColumns_throw()
 {
-    OSL_ENSURE( false, "OTableWindow::onNoColumns_throw: cannot really handle this!" );
+    OSL_FAIL( "OTableWindow::onNoColumns_throw: cannot really handle this!" );
     throw SQLException();
 }
 //------------------------------------------------------------------------------
@@ -1771,3 +1713,5 @@ bool OJoinTableView::supressCrossNaturalJoin(const TTableConnectionData::value_t
 {
     return false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

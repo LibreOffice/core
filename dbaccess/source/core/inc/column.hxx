@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <osl/diagnose.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace dbaccess
 {
@@ -73,7 +74,6 @@ namespace dbaccess
                                                 ::com::sun::star::container::XNamed
                                             >   OColumnBase;
 
-    //------------------------------------------------------------
     class OColumn   :public comphelper::OBaseMutex
                     ,public OColumnBase
                     ,public ::comphelper::OPropertyContainer
@@ -157,13 +157,13 @@ namespace dbaccess
     //= general columns map, could be used for readonly access
     //= no appending and dropping is supported
     //============================================================
-    typedef ::std::hash_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
+    typedef ::boost::unordered_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
     typedef ::std::vector<OColumn*> OColumnArray;
 
     class OContainerMediator;
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
     typedef connectivity::OColumnsHelper OColumns_BASE;
-    //------------------------------------------------------------
+
     class OColumns : public OColumns_BASE
                     ,public TXChild
     {
@@ -256,3 +256,4 @@ namespace dbaccess
 }
 #endif // _DBA_COREAPI_COLUMN_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

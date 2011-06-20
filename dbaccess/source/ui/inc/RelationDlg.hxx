@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,31 +28,14 @@
 #ifndef DBAUI_RELATIONDIALOG_HXX
 #define DBAUI_RELATIONDIALOG_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-//#ifndef _EDIT_HXX //autogen
-//#include <vcl/edit.hxx>
-//#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef DBAUI_RELCONTROLIFACE_HXX
 #include "RelControliFace.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 
 
 namespace dbaui
@@ -128,3 +112,4 @@ namespace dbaui
 #endif // DBAUI_RELATIONDIALOG_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

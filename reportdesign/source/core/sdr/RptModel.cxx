@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,13 +71,6 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     m_pUndoEnv = new OXUndoEnvironment(*this);
     m_pUndoEnv->acquire();
     SetSdrUndoFactory(new OReportUndoFactory);
-
- //   SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT);
-    //SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT);
-    //SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR);
-    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2);
-    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND);
-    //SvxColorToolBoxControl::RegisterControl(SID_BACKGROUND_COLOR);
 }
 
 //----------------------------------------------------------------------------
@@ -96,10 +90,10 @@ void OReportModel::detachController()
     m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
 //----------------------------------------------------------------------------
-SdrPage* OReportModel::AllocPage(FASTBOOL /*bMasterPage*/)
+SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     DBG_CHKTHIS( rpt_OReportModel, 0);
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return NULL;
 }
 
@@ -133,10 +127,6 @@ void OReportModel::SetModified(sal_Bool _bModified)
 SdrPage* OReportModel::RemovePage(sal_uInt16 nPgNum)
 {
     OReportPage* pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum));
-    //if ( pPage )
-    //{
-    //    m_pUndoEnv->RemoveSection(pPage);
-    //}
     return pPage;
 }
 // -----------------------------------------------------------------------------
@@ -231,3 +221,5 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const ::rtl::OUStrin
 //==================================================================
 }   //rptui
 //==================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

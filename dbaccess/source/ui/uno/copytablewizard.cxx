@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -329,7 +330,7 @@ namespace dbaui
                     const Reference< XPropertySet >& _rxDestTable
                 );
 
-        /** processes an error which occured during copying
+        /** processes an error which occurred during copying
 
             First, all listeners are ask. If a listener tells to cancel or continue copying, this is reported to the
             method's caller. If a listener tells to ask the user, this is done, and the user's decision is
@@ -748,7 +749,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     const ::rtl::OUString aSettings[] = {
         PROPERTY_FILTER, PROPERTY_ORDER, PROPERTY_HAVING_CLAUSE, PROPERTY_GROUP_BY
     };
-    for ( size_t i=0; i < sizeof( aSettings ) / sizeof( aSettings[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aSettings ); ++i )
     {
         if ( lcl_hasNonEmptyStringValue_throw( _rxSourceDescriptor, xPSI, aSettings[i] ) )
         {
@@ -1096,7 +1097,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             case CopyTableContinuation::AskUser:            break;          // stop asking the listeners, ask the user
 
             default:
-                OSL_ENSURE( false, "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
+                OSL_FAIL( "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
                 // ask next listener
                 continue;
             }
@@ -1113,7 +1114,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
     {
         SQLContext aError;
         aError.Context = *this;
-        aError.Message = String( ModuleRes( STR_ERROR_OCCURED_WHILE_COPYING ) );
+        aError.Message = String( ModuleRes( STR_ERROR_OCCURRED_WHILE_COPYING ) );
 
         ::dbtools::SQLExceptionInfo aInfo( _rEvent.Error );
         if ( aInfo.isValid() )
@@ -1398,7 +1399,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if( !xTable.is() )
                 {
-                    OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                    OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                     break;
                 }
 
@@ -1415,7 +1416,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     xTable = rWizard.createTable();
                     if ( !xTable.is() )
                     {
-                        OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                        OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                         break;
                     }
                 }
@@ -1463,7 +1464,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                 break;
 
             default:
-                OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
+                OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
                 break;
         }
     }
@@ -1516,7 +1517,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
             sColumns.append(aDestColumnNames[aPosIter->second - 1]);
             sColumns.append(sQuote);
         }
-    } // for ( ; aPosIter != aColumnMapping.end() ; ++aPosIter )
+    }
     ::rtl::OUStringBuffer sSql;
     sSql.appendAscii("INSERT INTO ");
     const ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::eInDataManipulation, false, false, true );
@@ -1640,3 +1641,5 @@ extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::CopyTableWizard > aAutoRegistration;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

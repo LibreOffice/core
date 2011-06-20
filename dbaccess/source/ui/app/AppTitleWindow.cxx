@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,19 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_TITLE_WINDOW_HXX
 #include "AppTitleWindow.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
 #include "memory"
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 namespace dbaui
 {
@@ -60,7 +53,7 @@ OTitleWindow::OTitleWindow(Window* _pParent,sal_uInt16 _nTitleId,WinBits _nBits,
     ImplInitSettings( sal_True, sal_True, sal_True );
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };
-    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
         pWindows[i]->Show();
 }
 // -----------------------------------------------------------------------------
@@ -84,8 +77,7 @@ void OTitleWindow::setChildWindow(Window* _pChild)
 // -----------------------------------------------------------------------------
 void OTitleWindow::Resize()
 {
-    //////////////////////////////////////////////////////////////////////
-    // Abmessungen parent window
+    // parent window dimension
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
@@ -174,7 +166,7 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
 
 
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
-    for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+    for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
     {
         Font aFont = pWindows[i]->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);
@@ -186,3 +178,5 @@ void OTitleWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
 // .............................................................
 } // namespace dbaui
 // .............................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

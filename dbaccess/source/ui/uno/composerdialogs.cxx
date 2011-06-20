@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,36 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBACCESS_SOURCE_UI_UNO_COMPOSERDIALOGS_HXX
 #include "composerdialogs.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
 /** === end UNO includes === **/
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_QUERYFILTER_HXX
 #include "queryfilter.hxx"
-#endif
-#ifndef DBAUI_QUERYORDER_HXX
 #include "queryorder.hxx"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
+#include <osl/diagnose.h>
 
 extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs()
 {
@@ -141,13 +124,13 @@ namespace dbaui
             if ( !xColumns.is() || !xColumns->hasElements() )
             {   // perhaps the composer can supply us with columns? This is necessary for cases
                 // where the dialog is invoked for a rowset which is not yet loaded
-                // #i22878# - 2003-12-16 - fs@openoffice.org
+                // #i22878#
                 xSuppColumns = xSuppColumns.query( m_xComposer );
                 if ( xSuppColumns.is() )
                     xColumns = xSuppColumns->getColumns();
             }
 
-            DBG_ASSERT( xColumns.is() && xColumns->hasElements(), "ComposerDialog::createDialog: not much fun without any columns!" );
+            OSL_ENSURE( xColumns.is() && xColumns->hasElements(), "ComposerDialog::createDialog: not much fun without any columns!" );
         }
         catch( const Exception& )
         {
@@ -225,3 +208,4 @@ namespace dbaui
 //.........................................................................
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

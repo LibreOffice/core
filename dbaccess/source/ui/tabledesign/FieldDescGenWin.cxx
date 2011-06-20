@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,27 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_TABLEFIELDDESCGENPAGE_HXX
 #include "FieldDescGenWin.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #include "TableDesignHelpBar.hxx"
-#endif
-#ifndef DBAUI_TABLEFIELDCONTROL_HXX
 #include "TableFieldControl.hxx"
-#endif
-#ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #include "TableDesignView.hxx"
-#endif
-#ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #include "TEditControl.hxx"
-#endif
 using namespace dbaui;
 
 //==================================================================
@@ -75,7 +62,7 @@ OFieldDescGenWin::~OFieldDescGenWin()
 //------------------------------------------------------------------------------
 void OFieldDescGenWin::Init()
 {
-    DBG_ASSERT(GetEditorCtrl() != NULL, "OFieldDescGenWin::Init : have no editor control !");
+    OSL_ENSURE(GetEditorCtrl() != NULL, "OFieldDescGenWin::Init : have no editor control !");
 
     m_pFieldControl->Init();
 }
@@ -122,11 +109,6 @@ OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
     return pDesignWin->GetEditorCtrl();
 }
 #endif
-//------------------------------------------------------------------------------
-//short OFieldDescGenWin::GetFormatCategory(OFieldDescription* pFieldDescr)
-//{
-//  return m_pFieldControl->GetFormatCategory(pFieldDescr);
-//}
 //------------------------------------------------------------------------------
 void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
 {
@@ -197,7 +179,4 @@ void OFieldDescGenWin::paste()
 }
 // -----------------------------------------------------------------------------
 
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

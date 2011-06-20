@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef DBAUI_TABLEWINDOWDATA_HXX
 #define DBAUI_TABLEWINDOWDATA_HXX
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -104,3 +103,4 @@ namespace dbaui
 }
 #endif // DBAUI_TABLEWINDOWDATA_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

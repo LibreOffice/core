@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef DBAUI_RELCONTROLIFACE_HXX
 #define DBAUI_RELCONTROLIFACE_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 #include "TableConnectionData.hxx"
 
 namespace dbaui
@@ -58,3 +57,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_RELCONTROLIFACE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 #ifndef DBA_XMLDOCUMENTS_HXX
 #define DBA_XMLDOCUMENTS_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
 
 namespace dbaxml
 {
@@ -77,3 +72,5 @@ namespace dbaxml
 // -----------------------------------------------------------------------------
 
 #endif // DBA_XMLDOCUMENTS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

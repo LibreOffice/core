@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,13 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_HELPERCOLLECTIONS_HXX
 #include "HelperCollections.hxx"
-#endif
 
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
 
 namespace dbaccess
 {
@@ -50,8 +47,8 @@ namespace dbaccess
     using namespace ::com::sun::star::script;
     using namespace ::cppu;
     using namespace ::osl;
-    // -----------------------------------------------------------------------------
-    OPrivateColumns::OPrivateColumns(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+
+    OPrivateColumns::OPrivateColumns(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
@@ -62,8 +59,7 @@ namespace dbaccess
     {
     }
 
-    // -------------------------------------------------------------------------
-    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::vos::ORef< ::connectivity::OSQLColumns >& _rColumns,
+    OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         sal_Bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
         ::std::vector< ::rtl::OUString > aNames; aNames.reserve( _rColumns->get().size() );
@@ -81,7 +77,6 @@ namespace dbaccess
         return new OPrivateColumns( _rColumns, _bCase, _rParent, _rMutex, aNames, sal_False );
     }
 
-    // -------------------------------------------------------------------------
     void SAL_CALL OPrivateColumns::disposing(void)
     {
         m_aColumns = NULL;
@@ -90,10 +85,10 @@ namespace dbaccess
             // So we're not allowed to dispose our elements.
         OPrivateColumns_Base::disposing();
     }
-    // -------------------------------------------------------------------------
+
     connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
-        if ( m_aColumns.isValid() )
+        if ( m_aColumns.is() )
         {
             ::connectivity::OSQLColumns::Vector::const_iterator aIter = find(m_aColumns->get().begin(),m_aColumns->get().end(),_rName,isCaseSensitive());
             if(aIter == m_aColumns->get().end())
@@ -102,11 +97,11 @@ namespace dbaccess
             if(aIter != m_aColumns->get().end())
                 return connectivity::sdbcx::ObjectType(*aIter,UNO_QUERY);
 
-            OSL_ENSURE(0,"Column not found in collection!");
+            OSL_FAIL("Column not found in collection!");
         }
         return NULL;
     }
-    // -------------------------------------------------------------------------
+
     connectivity::sdbcx::ObjectType OPrivateTables::createObject(const ::rtl::OUString& _rName)
     {
         if ( !m_aTables.empty() )
@@ -114,9 +109,11 @@ namespace dbaccess
             OSQLTables::iterator aIter = m_aTables.find(_rName);
             OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
             OSL_ENSURE(aIter->second.is(),"Table is null!");
+            (void)aIter;
             return connectivity::sdbcx::ObjectType(m_aTables.find(_rName)->second,UNO_QUERY);
         }
         return NULL;
     }
-    // -----------------------------------------------------------------------------
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include <sal/macros.h>
+
 #include "dsntypes.hxx"
 #include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
 #include "dbastrings.hrc"
@@ -48,7 +52,6 @@ namespace dbaccess
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
-    //using namespace ::com::sun::star::sdbc;
 
     namespace
     {
@@ -69,7 +72,7 @@ DBG_NAME(ODsnTypeCollection)
 ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory)
 :m_aDriverConfig(_xFactory)
 ,m_xFactory(_xFactory)
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 ,m_nLivingIterators(0)
 #endif
 {
@@ -83,7 +86,7 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
         m_aDsnTypesDisplayNames.push_back(m_aDriverConfig.getDriverTypeDisplayName(*pIter));
     }
 
-    DBG_ASSERT(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
+    OSL_ENSURE(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
         "ODsnTypeCollection::ODsnTypeCollection : invalid resources !");
 }
 
@@ -91,7 +94,7 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
 ODsnTypeCollection::~ODsnTypeCollection()
 {
     DBG_DTOR(ODsnTypeCollection,NULL);
-    DBG_ASSERT(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
+    OSL_ENSURE(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
 }
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeDisplayName(const ::rtl::OUString& _sURL) const
@@ -170,7 +173,7 @@ bool ODsnTypeCollection::isConnectionUrlRequired(const ::rtl::OUString& _sURL) c
             sRet = *aIter;
             sOldPattern = *aIter;
         }
-    } // for(;aIter != aEnd;++aIter)
+    }
     return sRet.GetChar(sRet.Len()-1) == '*';
 }
 // -----------------------------------------------------------------------------
@@ -200,7 +203,7 @@ String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const ::rtl::OUStrin
             if ( !sFileExtension.getLength() && _sExtension.getLength() )
                 sFallbackURL = *pIter;
         }
-    } // for(;pIter != pEnd;++pIter )
+    }
 
     if ( !sURL.Len() && sFallbackURL.Len() )
         sURL = sFallbackURL;
@@ -236,7 +239,7 @@ void ODsnTypeCollection::extractHostNamePort(const ::rtl::OUString& _rDsn,String
         if ( _rsHostname.Len() )
             _rsHostname = _rsHostname.GetToken(_rsHostname.GetTokenCount('@') - 1,'@');
         _sDatabaseName = sUrl.GetToken(sUrl.GetTokenCount(':') - 1,':');
-    } // if ( _rDsn.matchIgnoreAsciiCaseAsciiL("jdbc:oracle:thin:",sizeof("jdbc:oracle:thin:")-1) )
+    }
     else if ( _rDsn.matchIgnoreAsciiCaseAsciiL("sdbc:address:ldap:",sizeof("sdbc:address:ldap:")-1) )
     {
         lcl_extractHostAndPort(sUrl,_sDatabaseName,_nPortNumber);
@@ -331,7 +334,7 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const ::rtl::OUString& _sURL ) cons
             if ( sEmbeddedDatabaseURL.getLength() )
                 aInstalled.getNodeValue(s_sValue + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sEmbeddedDatabaseURL + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"))) >>= sEmbeddedDatabaseURL;
         }
-    } // if ( aInstalled.isValid() )
+    }
     if ( !sEmbeddedDatabaseURL.getLength() )
         sEmbeddedDatabaseURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:embedded:hsqldb"));
     return sEmbeddedDatabaseURL;
@@ -356,7 +359,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
     if (STRING_NOTFOUND == nSeparator)
     {
         // there should be at least one such separator
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the colon !");
+        OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the colon !");
         return DST_UNKNOWN;
     }
     // find first :
@@ -379,7 +382,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
     if (STRING_NOTFOUND == nSeparator)
     {
         // at the moment only jdbc is allowed to have just one separator
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the second colon !");
+        OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the second colon !");
         return DST_UNKNOWN;
     }
 
@@ -440,7 +443,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
         KnownPrefix( "sdbc:address:macab",              DST_MACAB,              true )
     };
 
-    for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS( aKnowPrefixes ); ++i )
     {
         sal_uInt16 nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.Len() : (sal_uInt16)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
         if ( sDsn.EqualsIgnoreCaseAscii( aKnowPrefixes[i].pAsciiPrefix, 0, nMatchLen ) )
@@ -527,7 +530,7 @@ void ODsnTypeCollection::fillPageIds(const ::rtl::OUString& _sURL,::std::vector<
         {
             sOldPattern = *aIter;
         }
-    } // for(sal_Int32 i = 0;aIter != aEnd;++aIter,++i)
+    }
     return sOldPattern;
 }
 // -----------------------------------------------------------------------------
@@ -563,8 +566,8 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const ODsnTypeCollection* _pConta
     :m_pContainer(_pContainer)
     ,m_nPosition(_nInitialPos)
 {
-    DBG_ASSERT(m_pContainer, "ODsnTypeCollection::TypeIterator::TypeIterator : invalid container!");
-#ifdef DBG_UTIL
+    OSL_ENSURE(m_pContainer, "ODsnTypeCollection::TypeIterator::TypeIterator : invalid container!");
+#if OSL_DEBUG_LEVEL > 0
     ++const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif
 }
@@ -574,7 +577,7 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const TypeIterator& _rSource)
     :m_pContainer(_rSource.m_pContainer)
     ,m_nPosition(_rSource.m_nPosition)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ++const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif
 }
@@ -582,7 +585,7 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const TypeIterator& _rSource)
 //-------------------------------------------------------------------------
 ODsnTypeCollection::TypeIterator::~TypeIterator()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     --const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif
 }
@@ -590,19 +593,19 @@ ODsnTypeCollection::TypeIterator::~TypeIterator()
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::TypeIterator::getDisplayName() const
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
+    OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnTypesDisplayNames[m_nPosition];
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString ODsnTypeCollection::TypeIterator::getURLPrefix() const
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
+    OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnPrefixes[m_nPosition];
 }
 //-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator++()
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
+    OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
     if (m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size())
         ++m_nPosition;
     return *this;
@@ -611,7 +614,7 @@ const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operat
 //-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator--()
 {
-    DBG_ASSERT(m_nPosition >= 0, "ODsnTypeCollection::TypeIterator::operator-- : invalid position!");
+    OSL_ENSURE(m_nPosition >= 0, "ODsnTypeCollection::TypeIterator::operator-- : invalid position!");
     if (m_nPosition >= 0)
         --m_nPosition;
     return *this;
@@ -627,3 +630,4 @@ bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeColle
 }   // namespace dbaccess
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

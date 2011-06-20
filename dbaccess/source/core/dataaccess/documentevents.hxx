@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -38,10 +39,8 @@
 #include <map>
 #include <boost/noncopyable.hpp>
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >
             DocumentEventsData;
@@ -83,8 +82,8 @@ namespace dbaccess
         ::std::auto_ptr< DocumentEvents_Data >  m_pData;
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // DBACCESS_DOCUMENTEVENTS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

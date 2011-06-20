@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _DBAUI_INTERACTION_HXX_
 #define _DBAUI_INTERACTION_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 #include "moduledbu.hxx"
 #include "apitools.hxx"
@@ -125,7 +124,7 @@ namespace dbaui
             SUPPLY_DOCUMENTSAVE
         };
         /** check if a given continuation sequence contains a given continuation type<p/>
-            @return     the index within <arg>_rContinuations</arg> of the first occurence of a continuation
+            @return     the index within <arg>_rContinuations</arg> of the first occurrence of a continuation
                         of the requested type, -1 of no such continuation exists
         */
         sal_Int32 getContinuation(
@@ -186,3 +185,4 @@ namespace dbaui
 
 #endif // _DBAUI_INTERACTION_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

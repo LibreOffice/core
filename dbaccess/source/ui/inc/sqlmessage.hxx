@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,19 +29,11 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #define _DBAUI_SQLMESSAGE_HXX_
 
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BTNDLG_HXX
 #include <vcl/btndlg.hxx>
-#endif
 
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
 
 #include <memory>
 
@@ -141,3 +134,4 @@ public:
 
 #endif // _DBAUI_SQLMESSAGE_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

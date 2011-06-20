@@ -1,39 +1,41 @@
-#*************************************************************************
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
 #
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# The Initial Developer of the Original Code is
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
+# Portions created by the Initial Developer are Copyright (C) 2010 the
+# Initial Developer. All Rights Reserved.
 #
-# This file is part of OpenOffice.org.
+# Major Contributor(s):
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
+# For minor contributions see the git repository.
 #
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
 
 $(eval $(call gb_Package_Package,dbaccess_inc,$(SRCDIR)/dbaccess/inc))
 
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/AsyncronousLink.hxx ,AsyncronousLink.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IController.hxx ,IController.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IReference.hxx ,IReference.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/ToolBoxHelper.hxx ,ToolBoxHelper.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/controllerframe.hxx ,controllerframe.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dataview.hxx ,dataview.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbaundomanager.hxx ,dbaundomanager.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbaccessdllapi.h ,dbaccessdllapi.h ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbsubcomponentcontroller.hxx ,dbsubcomponentcontroller.hxx ))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/genericcontroller.hxx ,genericcontroller.hxx ))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/AsyncronousLink.hxx,AsyncronousLink.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IController.hxx,IController.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IReference.hxx,IReference.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/ToolBoxHelper.hxx,ToolBoxHelper.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/controllerframe.hxx,controllerframe.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dataview.hxx,dataview.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbaccessdllapi.h,dbaccessdllapi.h))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbaundomanager.hxx,dbaundomanager.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbsubcomponentcontroller.hxx,dbsubcomponentcontroller.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/genericcontroller.hxx,genericcontroller.hxx))
+
+# vim: set noet ts=4 sw=4:

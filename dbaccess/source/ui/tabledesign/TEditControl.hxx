@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,24 +28,12 @@
 #ifndef DBAUI_TABLEEDITORCONTROL_HXX
 #define DBAUI_TABLEEDITORCONTROL_HXX
 
-#ifndef DBAUI_TABLEDESIGNCONTROL_HXX
 #include "TableDesignControl.hxx"
-#endif
-#ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #include "TableDesignView.hxx"
-#endif
-#ifndef DBAUI_TABLEFIELDDESCRIPTION_HXX
 #include "TableFieldDescWin.hxx"
-#endif
-#ifndef DBAUI_TABLEROW_HXX
 #include "TableRow.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
 
 class Edit;
 class SfxUndoManager;
@@ -230,3 +219,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

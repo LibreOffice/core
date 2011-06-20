@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@
 #include <tools/debug.hxx>
 #include "xmlfilter.hxx"
 #include "xmlHelper.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -71,7 +72,7 @@ public:
     {
     }
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-    virtual sal_Bool handleSpecialItem(
+    virtual bool handleSpecialItem(
             XMLPropertyState& /*rProperty*/,
             ::std::vector< XMLPropertyState >& /*rProperties*/,
             const ::rtl::OUString& /*rValue*/,
@@ -128,7 +129,7 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
                         pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
                     else {
-                        DBG_ERROR("not possible to get style");
+                        OSL_FAIL("not possible to get style");
                     }
                 }
                 if ( pStyle )
@@ -150,7 +151,7 @@ void OControlStyleContext::SetDefaults()
 void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
     sal_Int32 nIndex(static_cast<OReportStylesContext *>(pStyles)->GetIndex(nContextID));
-    DBG_ASSERT(nIndex != -1, "Property not found in Map");
+    OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }
@@ -256,7 +257,6 @@ UniReference < SvXMLImportPropertyMapper >
                 {
                     UniReference < XMLPropertyHandlerFactory> xFac = new ::xmloff::OControlPropertyHandlerFactory();
                     m_xTableImpPropMapper = new SvXMLImportPropertyMapper( new XMLPropertySetMapper(OXMLHelper::GetTableStyleProps(), xFac), m_rImport );
-                    //m_xTableImpPropMapper = new SvXMLImportPropertyMapper( rImport.GetTableStylesPropertySetMapper(), m_rImport );
                 }
                 xMapper = m_xTableImpPropMapper;
             }
@@ -311,7 +311,7 @@ SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
                                                xAttrList, *this, nFamily );
             break;
         default:
-            OSL_ENSURE(0,"OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
+            OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
             break;
         }
     }
@@ -368,7 +368,7 @@ Reference < XNameContainer >
                 xStyles = ((SvXMLImport *)&GetImport())->GetTextImport()->GetFrameStyles();
                 break;
             default:
-                OSL_ENSURE(0,"OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
+                OSL_FAIL("OReportStylesContext::CreateStyleStyleChildContext: Unknown style family. PLease check.");
                 break;
         }
         if( !xStyles.is() && sName.getLength() && GetOwnImport().GetModel().is() )
@@ -457,3 +457,5 @@ sal_uInt16 OReportStylesContext::GetFamily( const ::rtl::OUString& rFamily ) con
 // -----------------------------------------------------------------------------
 } // rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

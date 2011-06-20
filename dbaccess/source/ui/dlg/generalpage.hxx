@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,21 +29,11 @@
 #ifndef _DBAUI_GENERALPAGE_HXX_
 #define _DBAUI_GENERALPAGE_HXX_
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef DBACCESS_SOURCE_UI_INC_OPENDOCCONTROLS_HXX
 #include "opendoccontrols.hxx"
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
 #include <svtools/dialogcontrolling.hxx>
 #include <memory>
 
@@ -175,3 +166,5 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 #endif // _DBAUI_GENERALPAGE_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

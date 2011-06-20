@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,46 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
 #include "WColumnSelect.hxx"
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_WIZARD_PAGES_HRC
+#include <osl/diagnose.h>
 #include "WizardPages.hrc"
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_COPYTABLEOPERATION_HPP_
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -150,8 +126,6 @@ void OWizColumnSelect::Reset()
         m_lbOrgColumnNames.SetEntryData(nPos,(*aIter)->second);
     }
 
-    // m_pParent->clearDestColumns();
-
     if(m_lbOrgColumnNames.GetEntryCount())
         m_lbOrgColumnNames.SelectEntryPos(0);
 
@@ -186,7 +160,6 @@ sal_Bool OWizColumnSelect::LeavePage()
 {
     DBG_CHKTHIS(OWizColumnSelect,NULL);
 
-    //  m_pParent->getColumns()->clear();
     m_pParent->clearDestColumns();
 
     for(sal_uInt16 i=0 ; i< m_lbNewColumnNames.GetEntryCount();++i)
@@ -364,12 +337,12 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     {
         // find the new column in the dest name mapping to obtain the old column
         OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                ::std::compose1(
+                                                                ::o3tl::compose1(
                                                                     ::std::bind2nd(_aCase, _sColumnName),
-                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
-        DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+        OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
         if ( aIter == m_pParent->m_mNameMapping.end() )
             return; // do nothing
         const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
@@ -414,12 +387,12 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
         {
             // find the new column in the dest name mapping to obtain the old column
             OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                    ::std::compose1(
+                                                                    ::o3tl::compose1(
                                                                     ::std::bind2nd(_aCase, sColumnString),
-                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
-            DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+            OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
             const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
             ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
             if ( aSrcIter != pSrcColumns->end() )
@@ -450,3 +423,4 @@ void OWizColumnSelect::enableButtons()
 }
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

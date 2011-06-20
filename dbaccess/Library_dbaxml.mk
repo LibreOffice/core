@@ -1,95 +1,93 @@
-#*************************************************************************
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
 #
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# The Initial Developer of the Original Code is
+#       David Tardon, Red Hat Inc. <dtardon@redhat.com>
+# Portions created by the Initial Developer are Copyright (C) 2010 the
+# Initial Developer. All Rights Reserved.
 #
-# This file is part of OpenOffice.org.
+# Major Contributor(s):
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
+# For minor contributions see the git repository.
 #
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
 
 $(eval $(call gb_Library_Library,dbaxml))
-$(eval $(call gb_Library_add_precompiled_header,dbaxml,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaxml))
 
-$(eval $(call gb_Library_set_componentfile,dbaxml,dbaccess/source/filter/xml/dbaxml))
+$(eval $(call gb_Library_add_precompiled_header,dbaxml,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
 
 $(eval $(call gb_Library_set_include,dbaxml,\
-	-I$(SRCDIR)/dbaccess/inc \
-	-I$(SRCDIR)/dbaccess/source/filter/xml \
-	-I$(SRCDIR)/dbaccess/source/inc \
-	-I$(SRCDIR)/dbaccess/inc/pch \
-	$$(SOLARINC) \
-	-I$(OUTDIR)/inc/offuh \
+    $$(INCLUDE) \
+    -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
+    -I$(realpath $(SRCDIR)/dbaccess/source/inc) \
+    -I$(OUTDIR)/inc \
+    -I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,dbaxml,\
-	tl \
-	svl \
-	cppuhelper \
-	cppu \
-	comphelper \
-	utl \
-	vcl \
-	sal \
-	sfx \
-	dbtools \
-	xo \
-	sot \
-	tk \
-	dba \
-	stl \
+    comphelper \
+    cppu \
+    cppuhelper \
+    dba \
+    dbtools \
+    sal \
+    sfx \
+    svl \
+    tk \
+    tl \
+    utl \
+    vcl \
+    xo \
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_set_componentfile,dbaxml,dbaccess/source/filter/xml/dbaxml))
+
 $(eval $(call gb_Library_add_exception_objects,dbaxml,\
-	dbaccess/source/filter/xml/xmlfilter                           \
-	dbaccess/source/filter/xml/dbloader2                           \
-	dbaccess/source/filter/xml/xmlDatabase                         \
-	dbaccess/source/filter/xml/xmlDataSource                       \
-	dbaccess/source/filter/xml/xmlTableFilterPattern       \
-	dbaccess/source/filter/xml/xmlTableFilterList          \
-	dbaccess/source/filter/xml/xmlDataSourceInfo           \
-	dbaccess/source/filter/xml/xmlDataSourceSetting        \
-	dbaccess/source/filter/xml/xmlDataSourceSettings       \
-	dbaccess/source/filter/xml/xmlDocuments                        \
-	dbaccess/source/filter/xml/xmlComponent                        \
-	dbaccess/source/filter/xml/xmlHierarchyCollection      \
-	dbaccess/source/filter/xml/xmlLogin                            \
-	dbaccess/source/filter/xml/xmlExport                           \
-	dbaccess/source/filter/xml/xmlQuery                            \
-	dbaccess/source/filter/xml/xmlTable                            \
-	dbaccess/source/filter/xml/xmlColumn                           \
-	dbaccess/source/filter/xml/xmlStyleImport                      \
-	dbaccess/source/filter/xml/xmlHelper                           \
-	dbaccess/source/filter/xml/xmlAutoStyle                        \
-	dbaccess/source/filter/xml/xmlConnectionData           \
-	dbaccess/source/filter/xml/xmlDatabaseDescription      \
-	dbaccess/source/filter/xml/xmlFileBasedDatabase        \
-	dbaccess/source/filter/xml/xmlServerDatabase           \
-	dbaccess/source/filter/xml/xmlConnectionResource       \
-	dbaccess/source/filter/xml/xmlservices \
+    dbaccess/source/filter/xml/dbloader2 \
+    dbaccess/source/filter/xml/xmlAutoStyle \
+    dbaccess/source/filter/xml/xmlColumn \
+    dbaccess/source/filter/xml/xmlComponent \
+    dbaccess/source/filter/xml/xmlConnectionData \
+    dbaccess/source/filter/xml/xmlConnectionResource \
+    dbaccess/source/filter/xml/xmlDatabase \
+    dbaccess/source/filter/xml/xmlDatabaseDescription \
+    dbaccess/source/filter/xml/xmlDataSource \
+    dbaccess/source/filter/xml/xmlDataSourceInfo \
+    dbaccess/source/filter/xml/xmlDataSourceSetting \
+    dbaccess/source/filter/xml/xmlDataSourceSettings \
+    dbaccess/source/filter/xml/xmlDocuments \
+    dbaccess/source/filter/xml/xmlExport \
+    dbaccess/source/filter/xml/xmlFileBasedDatabase \
+    dbaccess/source/filter/xml/xmlfilter \
+    dbaccess/source/filter/xml/xmlHelper \
+    dbaccess/source/filter/xml/xmlHierarchyCollection \
+    dbaccess/source/filter/xml/xmlLogin \
+    dbaccess/source/filter/xml/xmlQuery \
+    dbaccess/source/filter/xml/xmlServerDatabase \
+    dbaccess/source/filter/xml/xmlservices \
+    dbaccess/source/filter/xml/xmlStyleImport \
+    dbaccess/source/filter/xml/xmlTable \
+    dbaccess/source/filter/xml/xmlTableFilterList \
+    dbaccess/source/filter/xml/xmlTableFilterPattern \
+    dbaccess/source/shared/flt_reghelper \
 ))
 
-$(eval $(call gb_Library_add_noexception_objects,dbaxml, \
-	dbaccess/source/shared/flt_reghelper \
-	dbaccess/source/shared/xmlstrings \
+$(eval $(call gb_Library_add_noexception_objects,dbaxml,\
+    dbaccess/source/shared/xmlstrings \
 ))
 
-# vim: set noet sw=4 ts=4:
+# vim: set noet ts=4 sw=4:

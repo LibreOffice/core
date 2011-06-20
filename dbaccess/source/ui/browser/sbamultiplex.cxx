@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _SBA_MULTIPLEX_HXX
 #include "sbamultiplex.hxx"
-#endif
 using namespace dbaui;
 
 //==================================================================
@@ -109,3 +108,4 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const ::com::sun::star::u
         ((::com::sun::star::beans::XPropertiesChangeListener*)aIt.next())->propertiesChange(aMulti);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

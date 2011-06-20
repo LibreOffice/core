@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,13 +56,6 @@ OObjectListener::~OObjectListener()
 
 void SAL_CALL OObjectListener::disposing( const  ::com::sun::star::lang::EventObject& ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    /*
-    // disconnect the listener
-    if (m_pObject)
-    {
-        (m_pObject->m_xPropertyChangeListener).clear();
-    }
-    */
 }
 
 // XPropertyChangeListener
@@ -93,3 +87,5 @@ DlgEdHint::~DlgEdHint()
 }
 //----------------------------------------------------------------------------
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

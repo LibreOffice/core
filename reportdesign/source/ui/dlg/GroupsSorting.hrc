@@ -50,17 +50,7 @@
 #define PB_DOWN             (21)
 #define FL_SEPARATOR2       (22)
 #define FL_SEPARATOR3       (23)
-//BTN #define IMG_UP_H          (24)
-//BTN #define IMG_DOWN_H            (25)
-//BTN #define PB_DELETE         (26)
 #define TB_TOOLBOX                      (27)
-
-// #define IMG_GROUPSORT_MOVE_DOWN     (28)
-// #define IMG_GROUPSORT_MOVE_UP       (29)
-// #define IMG_GROUPSORT_DELETE        (30)
-// #define IMG_GROUPSORT_MOVE_DOWN_H   (31)
-// #define IMG_GROUPSORT_MOVE_UP_H     (32)
-// #define IMG_GROUPSORT_DELETE_H      (33)
 
 
 #define CHECKBOX_HEIGHT      8

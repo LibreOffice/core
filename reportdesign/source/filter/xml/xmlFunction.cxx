@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -100,7 +101,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception catched while putting Function props!");
+            OSL_FAIL("Exception catched while putting Function props!");
         }
     }
 }
@@ -131,7 +132,7 @@ void OXMLFunction::EndElement()
             m_xFunction.clear();
         }catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"Exception catched!");
+            OSL_FAIL("Exception catched!");
         }
     }
 }
@@ -139,3 +140,5 @@ void OXMLFunction::EndElement()
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

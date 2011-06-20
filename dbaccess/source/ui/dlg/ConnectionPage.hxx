@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,10 @@
 #ifndef DBAUI_CONNECTIONPAGE_HXX
 #define DBAUI_CONNECTIONPAGE_HXX
 
-#ifndef DBAUI_CONNECTIONHELPER_HXX
 #include "ConnectionHelper.hxx"
-#endif
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _DBAUI_CURLEDIT_HXX_
 #include "curledit.hxx"
-#endif
 
 //.........................................................................
 namespace dbaui
@@ -112,3 +105,5 @@ namespace dbaui
 //.........................................................................
 
 #endif // _DBAUI_DETAILPAGES_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

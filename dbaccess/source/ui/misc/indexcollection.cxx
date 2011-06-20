@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,33 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_INDEXCOLLECTION_HXX_
 #include "indexcollection.hxx"
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
 
 //......................................................................
 namespace dbaui
@@ -80,12 +63,6 @@ namespace dbaui
     {
         *this = _rSource;
     }
-
-    //------------------------------------------------------------------
-//  OIndexCollection::OIndexCollection(const Reference< XNameAccess >& _rxIndexes)
-//  {
-//      implConstructFrom(_rxIndexes);
-//  }
 
     //------------------------------------------------------------------
     const OIndexCollection& OIndexCollection::operator=(const OIndexCollection& _rSource)
@@ -180,7 +157,7 @@ namespace dbaui
             Reference< XAppend > xAppendIndex(xIndexFactory, UNO_QUERY);
             if (!xAppendIndex.is())
             {
-                OSL_ENSURE(sal_False, "OIndexCollection::commitNewIndex: missing an interface of the index container!");
+                OSL_FAIL("OIndexCollection::commitNewIndex: missing an interface of the index container!");
                 return;
             }
 
@@ -194,14 +171,14 @@ namespace dbaui
             Reference< XAppend > xAppendCols(xColumnFactory, UNO_QUERY);
             if (!xAppendCols.is())
             {
-                OSL_ENSURE(sal_False, "OIndexCollection::commitNewIndex: invalid index descriptor returned!");
+                OSL_FAIL("OIndexCollection::commitNewIndex: invalid index descriptor returned!");
                 return;
             }
 
             // set the properties
-            static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString::createFromAscii("IsUnique");
-            static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString::createFromAscii("IsAscending");
-            static const ::rtl::OUString s_sNamePropertyName = ::rtl::OUString::createFromAscii("Name");
+            static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUnique"));
+            static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAscending"));
+            static const ::rtl::OUString s_sNamePropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
             // the index' own props
             xIndexDescriptor->setPropertyValue(s_sUniquePropertyName, ::cppu::bool2any(_rPos->bUnique));
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
@@ -249,7 +226,7 @@ namespace dbaui
             Reference< XDrop > xDropIndex(m_xIndexes, UNO_QUERY);
             if (!xDropIndex.is())
             {
-                OSL_ENSURE(sal_False, "OIndexCollection::drop: no XDrop interface!");
+                OSL_FAIL("OIndexCollection::drop: no XDrop interface!");
                 return sal_False;
             }
 
@@ -296,7 +273,7 @@ namespace dbaui
         m_xIndexes->getByName(_rIndex.getOriginalName()) >>= xIndex;
         if (!xIndex.is())
         {
-            OSL_ENSURE(sal_False, "OIndexCollection::implFillIndexInfo: got an invalid index object!");
+            OSL_FAIL("OIndexCollection::implFillIndexInfo: got an invalid index object!");
         }
         else
             implFillIndexInfo(_rIndex, xIndex);
@@ -305,10 +282,10 @@ namespace dbaui
     //------------------------------------------------------------------
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor) SAL_THROW((Exception))
     {
-        static const ::rtl::OUString s_sPrimaryIndexPropertyName = ::rtl::OUString::createFromAscii("IsPrimaryKeyIndex");
-        static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString::createFromAscii("IsUnique");
-        static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString::createFromAscii("IsAscending");
-        static const ::rtl::OUString s_sCatalogPropertyName = ::rtl::OUString::createFromAscii("Catalog");
+        static const ::rtl::OUString s_sPrimaryIndexPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsPrimaryKeyIndex"));
+        static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUnique"));
+        static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAscending"));
+        static const ::rtl::OUString s_sCatalogPropertyName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Catalog"));
 
         _rIndex.bPrimaryKey = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sPrimaryIndexPropertyName));
         _rIndex.bUnique = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sUniquePropertyName));
@@ -337,7 +314,7 @@ namespace dbaui
                 xCols->getByName(*pFieldNames) >>= xIndexColumn;
                 if (!xIndexColumn.is())
                 {
-                    OSL_ENSURE(sal_False, "OIndexCollection::implFillIndexInfo: invalid index column!");
+                    OSL_FAIL("OIndexCollection::implFillIndexInfo: invalid index column!");
                     --aCopyTo;
                     continue;
                 }
@@ -406,7 +383,7 @@ namespace dbaui
                 m_xIndexes->getByName(*pNames) >>= xIndex;
                 if (!xIndex.is())
                 {
-                    OSL_ENSURE(sal_False, "OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
+                    OSL_FAIL("OIndexCollection::implConstructFrom: got an invalid index object ... ignoring!");
                     continue;
                 }
 
@@ -422,3 +399,4 @@ namespace dbaui
 }   // namespace dbaui
 //......................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

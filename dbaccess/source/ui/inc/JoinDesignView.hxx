@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,12 @@
 #ifndef DBAUI_JOINDESIGNVIEW_HXX
 #define DBAUI_JOINDESIGNVIEW_HXX
 
-#ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
-#endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
 
 #include <memory>
 
@@ -89,3 +84,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

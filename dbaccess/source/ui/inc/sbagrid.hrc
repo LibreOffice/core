@@ -29,24 +29,6 @@
 #define DBACCESS_SBA_GRID_HRC
 
 //----------------Menueitems-------------------------------------------------
-//#define SID_SBA_BRW_DELETEROWS                    (SID_SBA_START + 34) // Zeilen loeschen
-//#define SID_SBA_BRW_HIDECOL                       (SID_SBA_START + 35) // Spalten verstecken
-//#define SID_SBA_BRW_SHOWCOL                       (SID_SBA_START + 36) // Spalten wieder zeigen
-//#define SID_SBA_BRW_SHOWALLCOLS                   (SID_SBA_START + 37) // Alle Spalten wieder zeigen
-//#define SID_SBA_BRW_INSERTROWS                    (SID_SBA_START + 38) // Zeilen einfuegen
-//#define SID_SBA_BRW_DELETEROW                 (SID_SBA_START + 39) // Zeilen loeschen
-//#define SID_SBA_TABED_PRIMARYKEY              (SID_SBA_START + 40) // Primary key vergeben
-//#define SID_QRY_FUNCTION                      (SID_SBA_START + 41) // Funktionen anzeigen
-//#define SID_QRY_TABLENAME                     (SID_SBA_START + 42) // Tabellennamen anzeigen
-//#define SID_QRY_ALIASNAME                     (SID_SBA_START + 43) // Aliasnamen anzeigen
-//#define SID_QRY_DISTINCT                      (SID_SBA_START + 44) // Distinct anzeigen
-//#define SID_TBL_SORT_ASC                      (SID_SBA_START + 45) // Aufsteigen Sortieren
-//#define SID_TBL_SORT_DESC                     (SID_SBA_START + 46) // Absteigen Sortieren
-
-//#define SID_DBSTATE_ACTUALIZE                 (SID_SBA_START + 48) // actualize dbstate
-//#define SID_DBSTATE_SHUTDOWN                  (SID_SBA_START + 49) // shutdown db
-//#define SID_DBSTATE_RESTART                   (SID_SBA_START + 50) // restart db
-
 // Tabelle
 #define SBA_WHICHID_START       100
 // Zeilenhoehe

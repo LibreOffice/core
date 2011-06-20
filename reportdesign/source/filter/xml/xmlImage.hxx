@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define RPT_XMLIMAGE_HXX
 
 #include "xmlReportElementBase.hxx"
-#ifndef _COM_SUN_STAR_REPORT_XImageControl_HPP_
 #include <com/sun/star/report/XImageControl.hpp>
-#endif
 
 namespace rptxml
 {
@@ -53,3 +52,5 @@ namespace rptxml
 // -----------------------------------------------------------------------------
 
 #endif // RPT_XMLIMAGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

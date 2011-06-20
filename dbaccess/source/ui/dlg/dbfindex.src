@@ -35,62 +35,6 @@
 #define WIN_X   264
 #define WIN_Y   149
 
-Image IMG_ONE_LEFT_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "one_left_h.bmp" ;
-    };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
-};
-
-Image IMG_ALL_LEFT_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "all_left_h.bmp" ;
-    };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
-};
-
-Image IMG_ONE_RIGHT_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "one_right_h.bmp" ;
-    };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
-};
-
-Image IMG_ALL_RIGHT_H
-{
-    ImageBitmap = Bitmap
-    {
-        File = "all_right_h.bmp" ;
-    };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
-};
-
 ModalDialog DLG_DBASE_INDEXES
 {
     HelpID = "dbaccess:ModalDialog:DLG_DBASE_INDEXES";
@@ -180,7 +124,7 @@ ModalDialog DLG_DBASE_INDEXES
         {
             ImageBitmap = Bitmap
             {
-                File = "one_left.bmp" ;
+                File = "one_left.png" ;
             };
             MaskColor = Color
             {
@@ -200,7 +144,7 @@ ModalDialog DLG_DBASE_INDEXES
         {
             ImageBitmap = Bitmap
             {
-                File = "all_left.bmp" ;
+                File = "all_left.png" ;
             };
             MaskColor = Color
             {
@@ -220,7 +164,7 @@ ModalDialog DLG_DBASE_INDEXES
         {
             ImageBitmap = Bitmap
             {
-                File = "one_right.bmp" ;
+                File = "one_right.png" ;
             };
             MaskColor = Color
             {
@@ -240,7 +184,7 @@ ModalDialog DLG_DBASE_INDEXES
         {
             ImageBitmap = Bitmap
             {
-                File = "all_right.bmp" ;
+                File = "all_right.png" ;
             };
             MaskColor = Color
             {
@@ -250,5 +194,4 @@ ModalDialog DLG_DBASE_INDEXES
             };
         };
     };
-
 };

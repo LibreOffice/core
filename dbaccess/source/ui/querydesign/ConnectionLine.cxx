@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,30 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_CONNECTIONLINE_HXX
 #include "ConnectionLine.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
-#endif
-#ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #include "TableWindowListBox.hxx"
-#endif
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #ifndef _INC_MATH
 #include <math.h>
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
+#include <osl/diagnose.h>
 #include <vcl/lineinfo.hxx>
 
 
@@ -77,7 +64,7 @@ namespace
     Rectangle GetTextPos(const OTableWindow* _pWin, const Point& _aConnPos,const Point& _aDescrLinePos)
     {
         OTableWindowListBox* pListBox = _pWin ? _pWin->GetListBox() : NULL;
-        DBG_ASSERT(_pWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
+        OSL_ENSURE(_pWin && pListBox, "OConnectionLine::GetSourceTextPos : invalid call !");
 
         Rectangle aReturn;
         if ( pListBox )
@@ -339,7 +326,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
 // -----------------------------------------------------------------------------
 sal_Bool OConnectionLine::IsValid() const
 {
-    return m_pData.isValid();
+    return m_pData.is();
 }
 //------------------------------------------------------------------------
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
@@ -395,3 +382,4 @@ Point OConnectionLine::getMidPoint() const
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,26 +31,32 @@ String RID_STR_DETAIL
 {
     Text [ en-US ] = "Detail";
 };
+
 String RID_STR_PAGE_HEADER
 {
     Text [ en-US ] = "Page Header";
 };
+
 String RID_STR_PAGE_FOOTER
 {
     Text [ en-US ] = "Page Footer";
 };
+
 String RID_STR_GROUP_HEADER
 {
     Text [ en-US ] = "Group Header";
 };
+
 String RID_STR_GROUP_FOOTER
 {
     Text [ en-US ] = "Group Footer";
 };
+
 String RID_STR_REPORT_HEADER
 {
     Text [ en-US ] = "Report Header";
 };
+
 String RID_STR_REPORT_FOOTER
 {
     Text [ en-US ] = "Report Footer";
@@ -65,30 +71,37 @@ String RID_STR_ERROR_WRONG_ARGUMENT
 {
     Text [ en-US ] = "You tried to set an illegal argument. Please have a look at '#1' for valid arguments.";
 };
+
 String RID_STR_ARGUMENT_IS_NULL
 {
     Text [ en-US ] = "The element is invalid.";
 };
+
 String RID_STR_FIXEDTEXT
 {
     Text [ en-US ] = "Label field" ;
 };
+
 String RID_STR_FORMATTEDFIELD
 {
     Text [ en-US ] = "Formatted field";
 };
+
 String RID_STR_IMAGECONTROL
 {
     Text [ en-US ] = "Image control" ;
 };
+
 String RID_STR_REPORT
 {
     Text [ en-US ] = "Report";
 };
+
 String RID_STR_SHAPE
 {
     Text [ en-US ] = "Shape";
 };
+
 String RID_STR_FIXEDLINE
 {
     Text [ en-US ] = "Fixed line";

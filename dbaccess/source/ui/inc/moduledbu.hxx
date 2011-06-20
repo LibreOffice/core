@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,9 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #define _DBAUI_MODULE_DBU_HXX_
 
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
-#endif
+#include <sal/macros.h>
 
 class ResMgr;
 
@@ -105,3 +103,4 @@ public:
 
 #endif // _DBAUI_MODULE_DBU_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

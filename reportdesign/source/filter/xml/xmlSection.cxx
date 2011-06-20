@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,19 +34,13 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
-#ifndef RPT_XMLCOLUMN_HXX
 #include "xmlColumn.hxx"
-#endif
-#ifndef RPT_XMLCondPrtExpr_HXX
 #include "xmlCondPrtExpr.hxx"
-#endif
 #include "xmlStyleImport.hxx"
 #include <connectivity/dbtools.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/report/ReportPrintOption.hpp>
-#ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include "xmlTable.hxx"
 
 
@@ -107,13 +102,13 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                     break;
 
                 default:
-                    OSL_ENSURE(0,"OXMLSection: Unknown attribute!");
+                    OSL_FAIL("OXMLSection: Unknown attribute!");
             }
         }
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling the section props");
+        OSL_FAIL("Exception catched while filling the section props");
     }
 }
 // -----------------------------------------------------------------------------
@@ -156,3 +151,5 @@ ORptFilter& OXMLSection::GetOwnImport()
 // -----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

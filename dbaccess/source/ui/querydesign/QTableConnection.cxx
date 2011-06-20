@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_QUERYTABLECONNECTION_HXX
 #include "QTableConnection.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
+#include <osl/diagnose.h>
 #include "QueryTableView.hxx"
-#endif
-#ifndef DBAUI_CONNECTIONLINE_HXX
 #include "ConnectionLine.hxx"
-#endif
 using namespace dbaui;
 //========================================================================
 // class OQueryTableConnection
@@ -52,7 +45,6 @@ OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const 
 {
     DBG_CTOR(OQueryTableConnection,NULL);
 }
-
 
 //------------------------------------------------------------------------
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
@@ -81,7 +73,7 @@ OQueryTableConnection& OQueryTableConnection::operator=(const OQueryTableConnect
 //------------------------------------------------------------------------
 sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare)
 {
-    DBG_ASSERT(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : einer der beiden Teilnehmer hat keine Daten !");
+    OSL_ENSURE(GetData() && rCompare.GetData(), "OQueryTableConnection::operator== : einer der beiden Teilnehmer hat keine Daten !");
 
     // allzuviel brauche ich nicht vergleichen (schon gar nicht alle Member) : lediglich die Fenster, an denen wir haengen, und
     // die Indizies in der entsprechenden Tabelle muessen uebereinstimmen
@@ -104,8 +96,4 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
 }
 // -----------------------------------------------------------------------------
 
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

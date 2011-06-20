@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef DBAUI_DBSETUPCONNECTIONPAGES_HXX
 #define DBAUI_DBSETUPCONNECTIONPAGES_HXX
 
-#ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #include "ConnectionPageSetup.hxx"
-#endif
 
 #include "adminpages.hxx"
 #include "admincontrols.hxx"
@@ -49,7 +48,6 @@ namespace dbaui
 //.........................................................................
 
     class IDatabaseSettingsDialog;
-//      static  OGenericAdministrationPage* CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
        //========================================================================
@@ -342,3 +340,5 @@ namespace dbaui
 //.........................................................................
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,9 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <svtools/treelist.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 #include <functional>
 // .........................................................................
@@ -136,7 +137,7 @@ namespace dbaui
         EntryType eEntryType = getEntryType( pHitEntry );
         if (!isContainer(eEntryType))
         {
-            DBG_ERROR("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
+            OSL_FAIL("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
                 // queryDrop shoud not have allowed us to reach this situation ....
             return DND_ACTION_NONE;
         }
@@ -241,7 +242,7 @@ namespace dbaui
     IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )
     {
         m_nAsyncDrop = 0;
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
 
         if ( m_aAsyncDrop.nType == E_TABLE )
@@ -277,7 +278,7 @@ namespace dbaui
 
                     if ( pData->xConnection.is() )
                     {
-                        DBG_ASSERT( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
+                        OSL_ENSURE( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
                         // connections are to be stored *only* at the data source entries
                         impl_releaseConnection( pData->xConnection );
                     }
@@ -293,3 +294,4 @@ namespace dbaui
 }   // namespace dbaui
 // .........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,54 +28,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
-#endif
-#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
 #include <ucbhelper/cancelcommandexecution.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDCOMMANDEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _UCBHELPER_PROPERTYVALUESET_HXX
 #include <ucbhelper/propertyvalueset.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
-#endif
-#ifndef DBA_UCPRESULTSET_HXX
 #include "myucp_resultset.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 
 namespace dbaccess
@@ -91,18 +60,16 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-// -----------------------------------------------------------------------------
 DBG_NAME(OContentHelper_Impl)
 OContentHelper_Impl::OContentHelper_Impl()
 {
     DBG_CTOR(OContentHelper_Impl,NULL);
 }
-// -----------------------------------------------------------------------------
+
 OContentHelper_Impl::~OContentHelper_Impl()
 {
     DBG_DTOR(OContentHelper_Impl,NULL);
 }
-// -----------------------------------------------------------------------------
 
 OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
                                ,const Reference< XInterface >&  _xParentContainer
@@ -117,21 +84,21 @@ OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
     ,m_nCommandId(0)
 {
 }
-//--------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // say our listeners goobye
+    // say goodbye to our listeners
     EventObject aEvt(*this);
     m_aContentListeners.disposeAndClear(aEvt);
 
     m_xParentContainer = NULL;
 }
-// -----------------------------------------------------------------------------
+
 IMPLEMENT_SERVICE_INFO1(OContentHelper,"com.sun.star.comp.sdb.Content","com.sun.star.ucb.Content");
 IMPLEMENT_IMPLEMENTATION_ID(OContentHelper)
-// -----------------------------------------------------------------------------
+
 // XContent
 Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw (RuntimeException)
 {
@@ -141,7 +108,7 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     aIdentifier.append( impl_getHierarchicalName( true ) );
     return new ::ucbhelper::ContentIdentifier( m_aContext.getLegacyServiceFactory(), aIdentifier.makeStringAndClear() );
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer ) const
 {
     ::rtl::OUStringBuffer aHierarchicalName( m_pImpl->m_aProps.aTitle );
@@ -168,7 +135,6 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     return sHierarchicalName;
 }
 
-// -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -180,21 +146,20 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
 
     return *m_pImpl->m_aProps.aContentType;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::addContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( _rxListener.is() )
         m_aContentListeners.addInterface(_rxListener);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::removeContentEventListener( const Reference< XContentEventListener >& _rxListener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (_rxListener.is())
         m_aContentListeners.removeInterface(_rxListener);
 }
-// -----------------------------------------------------------------------------
 
 // XCommandProcessor
 sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeException)
@@ -203,7 +168,7 @@ sal_Int32 SAL_CALL OContentHelper::createCommandIdentifier(  ) throw (RuntimeExc
     // Just increase counter on every call to generate an identifier.
     return ++m_nCommandId;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*CommandId*/, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
@@ -216,7 +181,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         Sequence< Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -236,7 +201,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         Sequence< PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -248,7 +213,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
 
         if ( !aProperties.getLength() )
         {
-            OSL_ENSURE( sal_False, "No properties!" );
+            OSL_FAIL( "No properties!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -277,7 +242,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         // Unsupported command
         //////////////////////////////////////////////////////////////////
 
-        OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
+        OSL_FAIL( "Content::execute - unsupported command!" );
 
         ucbhelper::cancelCommandExecution(
             makeAny( UnsupportedCommandException(
@@ -289,11 +254,10 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
 
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ ) throw (RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
 
 // XPropertiesChangeNotifier
 void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< ::rtl::OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
@@ -317,7 +281,7 @@ void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< ::rtl
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::rtl::OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -339,19 +303,18 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 // XPropertyContainer
 void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
-    DBG_ERROR( "OContentHelper::addProperty: not implemented!" );
+    OSL_FAIL( "OContentHelper::addProperty: not implemented!" );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::removeProperty( const ::rtl::OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
-    DBG_ERROR( "OContentHelper::removeProperty: not implemented!" );
+    OSL_FAIL( "OContentHelper::removeProperty: not implemented!" );
 }
-// -----------------------------------------------------------------------------
+
 // XInitialization
 void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) throw(Exception, RuntimeException)
 {
@@ -361,7 +324,7 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) t
     for(;pBegin != pEnd;++pBegin)
     {
         *pBegin >>= aValue;
-        if ( aValue.Name.equalsAscii("Parent") )
+        if ( aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Parent")) )
         {
             m_xParentContainer.set(aValue.Value,UNO_QUERY);
         }
@@ -375,7 +338,7 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) t
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue >& rValues,const Reference< XCommandEnvironment >& /*xEnv*/ )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -400,24 +363,27 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
@@ -441,7 +407,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
+                        OSL_FAIL( "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
                     }
                 }
                 else
@@ -452,33 +418,25 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
             else
             {
                 aRet[ n ] <<= IllegalTypeException(
-                                rtl::OUString::createFromAscii(
-                                    "Property value has wrong type!" ),
+                                ::rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM("Property value has wrong type!")
+                                ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
 
-        // @@@ Process other properties supported directly.
-#if 0
-        else if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-        {
-        }
-#endif
         else
         {
             aRet[ n ] <<= Exception(
-                            rtl::OUString::createFromAscii(
-                                "No property set for storing the value!" ),
+                            ::rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM("No property set for storing the value!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
     }
 
     if ( nChanged > 0 )
     {
-        // @@@ Save changes.
-//      storeData();
-
         notifyDataSourceModified();
         aGuard.clear();
         aChanges.realloc( nChanged );
@@ -487,7 +445,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
 
     return aRet;
 }
-// -----------------------------------------------------------------------------
+
 //=========================================================================
 // static
 Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >& rProperties)
@@ -524,41 +482,33 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
             }
             else
                 xRow->appendVoid(rProp);
-
-            // @@@ Process other properties supported directly.
-#if 0
-            else if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "xxxxxx" ) ) )
-            {
-            }
-#endif
         }
     }
     else
     {
         // Append all Core Properties.
         xRow->appendString (
-            Property( rtl::OUString::createFromAscii( "ContentType" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             getContentType() );
         xRow->appendString (
-            Property( rtl::OUString::createFromAscii( "Title" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title" )),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             m_pImpl->m_aProps.aTitle );
         xRow->appendBoolean(
-            Property( rtl::OUString::createFromAscii( "IsDocument" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                       -1,
                       getCppuBooleanType(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             m_pImpl->m_aProps.bIsDocument );
         xRow->appendBoolean(
-            Property( rtl::OUString::createFromAscii( "IsFolder" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
                       -1,
                       getCppuBooleanType(),
                       PropertyAttribute::BOUND
@@ -570,8 +520,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 
     return Reference< XRow >( xRow.get() );
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
 void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent >& evt ) const
 {
 
@@ -595,7 +544,6 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         typedef Sequence< PropertyChangeEvent > PropertyEventSequence;
         typedef ::std::map< XPropertiesChangeListener*, PropertyEventSequence* > PropertiesEventListenerMap;
         PropertiesEventListenerMap aListeners;
-
 
         const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();
 
@@ -649,9 +597,8 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 // com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -660,7 +607,6 @@ sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw
     return 0;
 }
 
-// -----------------------------------------------------------------------------
 OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >& _rxComponent )
 {
     OContentHelper* pContent( NULL );
@@ -672,20 +618,18 @@ OContentHelper* OContentHelper::getImplementation( const Reference< XInterface >
     return pContent;
 }
 
-// -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OContentHelper::getParent(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xParentContainer;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xParentContainer = _xParent;
 }
 
-// -----------------------------------------------------------------------------
 void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify )
 {
     osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
@@ -714,49 +658,18 @@ void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bN
         throw ElementExistException(_sNewName,*this);
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
 
     impl_rename_throw(newName);
-    //Reference<XNameContainer> xNameCont(m_xParentContainer,UNO_QUERY);
-    //if ( xNameCont.is() )
-    //{
-    //  if ( xNameCont->hasByName(newName) )
-    //      throw ElementExistException(newName,*this);
-
-    //  try
-    //  {
-    //      if ( xNameCont->hasByName(m_pImpl->m_aProps.aTitle) )
-    //          xNameCont->removeByName(m_pImpl->m_aProps.aTitle);
-
-    //      m_pImpl->m_aProps.aTitle = newName;
-    //      xNameCont->insertByName(m_pImpl->m_aProps.aTitle,makeAny(Reference<XContent>(*this,UNO_QUERY)));
-    //      notifyDataSourceModified();
-    //  }
-    //  catch(IllegalArgumentException)
-    //  {
-    //      throw SQLException();
-    //  }
-    //  catch(NoSuchElementException)
-    //  {
-    //      throw SQLException();
-    //  }
-    //  catch(WrappedTargetException)
-    //  {
-    //      throw SQLException();
-    //  }
-    //}
-    //else
-    //  m_pImpl->m_aProps.aTitle = newName;
 
 }
-// -----------------------------------------------------------------------------
+
 void OContentHelper::notifyDataSourceModified()
 {
     ::dbaccess::notifyDataSourceModified(m_xParentContainer,sal_True);
 }
-//........................................................................
-}   // namespace dbaccess
-//........................................................................
 
+}   // namespace dbaccess
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

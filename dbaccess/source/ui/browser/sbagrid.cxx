@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,206 +29,88 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBACCESS_SBA_GRID_HRC
 #include "sbagrid.hrc"
-#endif
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
-//#define ITEMID_ORIENTATION     SID_ATTR_ALIGN_ORIENTATION
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
 #define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
 
 
 #define _ZFORLIST_DECLARE_TABLE
-#ifndef _SVX_NUMINF_HXX
 #include <svx/numinf.hxx>
-#endif
-#ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
 
-#ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
-#endif
-#ifndef DBAUI_SBATTRDLG_HXX
 #include "dlgattr.hxx"
-#endif
-#ifndef _DBAUI_DLGSIZE_HXX
 #include "dlgsize.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_DATASELECTIONTYPE_HPP_
 #include <com/sun/star/form/DataSelectionType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
-#ifndef _SFXINTITEM_HXX
 #include <svl/intitem.hxx>
-#endif
 
-#ifndef _SVX_ALGITEM_HXX //autogen
 #include <svx/algitem.hxx>
-#endif
 
-#ifndef _SV_MULTISEL_HXX //autogen
 #include <tools/multisel.hxx>
-#endif
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 
-#ifndef _NUMUNO_HXX
 #include <svl/numuno.hxx>
-#endif
 
-#ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemInfo
 #include <svl/itempool.hxx>
-#endif
 
-#ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svl/itemset.hxx>
-#endif
 
-#ifndef _SFXRNGITEM_HXX
 #include <svl/rngitem.hxx>
-#endif
 
-#ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 
-#ifndef _ZFORLIST_HXX
 #include <svl/zforlist.hxx>
-#endif
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _RTL_UUID_H_
-#include <rtl/uuid.h>
-#endif
-#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
-#endif
-#ifndef _DBU_BRW_HRC_
 #include "dbu_brw.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
-#endif
-#ifndef DBAUI_TABLEROW_EXCHANGE_HXX
 #include "TableRowExchange.hxx"
-#endif
-#ifndef DBAUI_TABLEROW_HXX
 #include "TableRow.hxx"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef DBAUI_TOKENWRITER_HXX
 #include "TokenWriter.hxx"
-#endif
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -278,16 +161,16 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 //------------------------------------------------------------------------------
 ::rtl::OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dbu.SbaXGridControl");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dbu.SbaXGridControl"));
 }
 
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(3);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.InteractionGridControl");
-    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.GridControl");
-    aSupported[2] = ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControl");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.InteractionGridControl"));
+    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.GridControl"));
+    aSupported[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControl"));
     return aSupported;
 }
 DBG_NAME(SbaXGridControl );
@@ -369,14 +252,11 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
 
-    DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
+    OSL_ENSURE(!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
         // see the base class' createPeer for a comment on this
-        // 14.05.2001 - 86836 - frank.schoenheit@germany.sun.com
 
     // TODO: why the hell this whole class does not use any mutex?
 
-//  if (0 == m_nPeerCreationLevel)
-    {
         Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
@@ -385,7 +265,6 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
             if ((*aIter).second && (*aIter).second->getLength())
                 xDisp->addStatusListener((*aIter).second, (*aIter).first);
         }
-    }
 }
 
 //---------------------------------------------------------------------------------------
@@ -447,7 +326,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun:
 //---------------------------------------------------------------------------------------
 void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     EventObject aEvt;
     aEvt.Source = *this;
@@ -541,10 +420,10 @@ Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeExce
 //---------------------------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
-    if  (   (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/BrowserAttribs")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/RowHeight")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnAttribs")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnWidth")))
+    if  (   (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/BrowserAttribs"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/RowHeight"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnAttribs"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnWidth"))))
         )
     {
         return (::com::sun::star::frame::XDispatch*)this;
@@ -559,7 +438,7 @@ IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
     SbaGridControl* pGrid = static_cast< SbaGridControl* >( GetWindow() );
     if ( pGrid )    // if this fails, we were disposing before arriving here
     {
-        if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+        if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
         {
             // still not in the main thread (see SbaXGridPeer::dispatch). post an event, again
             // without moving the special even to the back of the queue
@@ -581,13 +460,13 @@ IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
 SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
 {
     DispatchType eURLType = dtUnknown;
-    if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/BrowserAttribs" ) )
+    if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/BrowserAttribs" ) ) )
         eURLType = dtBrowserAttribs;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/RowHeight" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/RowHeight" ) ) )
         eURLType = dtRowHeight;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnAttribs" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/ColumnAttribs" ) ) )
         eURLType = dtColumnAttribs;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnWidth" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/ColumnWidth" ) ) )
         eURLType = dtColumnWidth;
     return eURLType;
 }
@@ -599,7 +478,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     if (!pGrid)
         return;
 
-    if ( Application::GetMainThreadIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+    if ( Application::GetMainThreadIdentifier() != ::osl::Thread::getCurrentIdentifier() )
     {
         // we're not in the main thread. This is bad, as we want to raise windows here,
         // and VCL does not like windows to be opened in non-main threads (at least on Win32).
@@ -622,22 +501,22 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
         return;
     }
 
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int16 nColId = -1;
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
     {
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnViewPos"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnViewPos")))
         {
             nColId = pGrid->GetColumnIdFromViewPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnModelPos"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnModelPos")))
         {
             nColId = pGrid->GetColumnIdFromModelPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnId"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnId")))
         {
             nColId = ::comphelper::getINT16(pArgs->Value);
             break;
@@ -665,7 +544,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
             case dtColumnAttribs:
             {
-                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
                 if (nColId != -1)
                     break;
                 pGrid->SetColAttrs(nColId);
@@ -674,7 +553,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
             case dtColumnWidth:
             {
-                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
                 if (nColId != -1)
                     break;
                 pGrid->SetColWidth(nColId);
@@ -710,24 +589,16 @@ void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::st
         pCont->removeInterface(xControl);
 }
 
-//---------------------------------------------------------------------------------------
-const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
+namespace
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-                rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,sal_True );
-                pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    class theSbaXGridPeerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSbaXGridPeerUnoTunnelId > {};
 }
 
-//---------------------------------------------------------------------------------------
+const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
+{
+    return theSbaXGridPeerUnoTunnelId::get().getSeq();
+}
+
 Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException)
 {
     Sequence< Type > aTypes = FmXGridPeer::getTypes();
@@ -778,7 +649,7 @@ SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
 //---------------------------------------------------------------------------------------
 void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
     ImplStartColumnDrag( _nAction, _rPosPixel );
@@ -793,10 +664,6 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
             // the base class will start a column move here, which we don't want to allow
             // (at the moment. If we store relative positions with the columns, we can allow column moves ....)
 
-//          sal_uInt16  nPos(0);
-//          sal_uInt16  nHitTest = ImplHitTest( _rMEvt.GetPosPixel(), mnMouseOff, nPos );
-//          if (!nHitTest & HEAD_HITTEST_DIVIDER)
-//              return;
         }
 
     FmGridHeader::MouseButtonDown(_rMEvt);
@@ -981,7 +848,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
         rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), 0, nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
         rMenu.InsertSeparator(nPos++);
-    } // if (!IsReadOnlyDB())
+    }
 
     if ( GetSelectRowCount() > 0 )
     {
@@ -1076,7 +943,7 @@ void SbaGridControl::SetRowHeight()
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
+            OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
         }
     }
 }
@@ -1112,13 +979,13 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         PropertyValue aArg;
-        aArg.Name = ::rtl::OUString::createFromAscii("IntrospectedObject");
+        aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IntrospectedObject"));
         aArg.Value <<= xGridModel;
         Sequence< Any > aDialogArgs(1);
         aDialogArgs[0] <<= aArg;
 
         Reference< XInterface > xDialog = getServiceManager()->createInstanceWithArguments(
-            ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.ControlFontDialog")),
             aDialogArgs
             );
         if (!xDialog.is())
@@ -1234,11 +1101,11 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
                 xEmptyReturn.set(xCol->getPropertyValue(PROPERTY_BOUNDFIELD),UNO_QUERY);
         }
         else
-            OSL_ENSURE(0,"SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
+            OSL_FAIL("SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"SbaGridControl::getField Exception occured!");
+        OSL_FAIL("SbaGridControl::getField Exception occurred!");
     }
 
     return xEmptyReturn;
@@ -1290,7 +1157,7 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 //---------------------------------------------------------------------------------------
 void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
     sal_Bool bHandled = sal_False;
@@ -1324,14 +1191,14 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // check which kind of dragging has to be initiated
         if  (   bHitHandle                          //  the handle column
                                                     // AND
-            &&  (   GetSelectRowCount()                     //  at least one row is selected
-                                                        // OR
-                ||  (   (nRow >= 0)                         //  a row below the header
-                    &&  !bCurrentRowVirtual                 //  we aren't appending a new record
-                    &&  (nRow != GetCurrentPos())           //  a row which is not the current one
-                    )                                   // OR
-                ||  (   (0 == GetSelectRowCount())          // no rows selected
-                    &&  (-1 == nRow)                        // hit the header
+            &&  (   GetSelectRowCount()             //  at least one row is selected
+                                                    // OR
+                ||  (   (nRow >= 0)                 //  a row below the header
+                    &&  !bCurrentRowVirtual         //  we aren't appending a new record
+                    &&  (nRow != GetCurrentPos())   //  a row which is not the current one
+                    )                               // OR
+                ||  (   (0 == GetSelectRowCount())  // no rows selected
+                    &&  (-1 == nRow)                // hit the header
                     )
                 )
             )
@@ -1391,7 +1258,7 @@ void SbaGridControl::Command(const CommandEvent& rEvt)
 void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
+    OSL_ENSURE(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
 
     Reference< XPropertySet > xAffectedCol;
     Reference< XPropertySet > xAffectedField;
@@ -1414,7 +1281,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
+        OSL_FAIL("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
     }
     if (0 == sField.getLength())
         return;
@@ -1427,7 +1294,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 // -----------------------------------------------------------------------
 void SbaGridControl::CopySelectedRowsToClipboard()
 {
-    DBG_ASSERT( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
+    OSL_ENSURE( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
     implTransferSelectedRows( (sal_Int16)FirstSelectedRow(), true );
 }
 
@@ -1441,7 +1308,7 @@ void SbaGridControl::DoRowDrag( sal_Int16 nRowPos )
 void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
 {
     Reference< XPropertySet > xForm( getDataSource(), UNO_QUERY );
-    DBG_ASSERT( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
+    OSL_ENSURE( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
 
     // build the sequence of numbers of selected rows
     Sequence< Any > aSelectedRows;
@@ -1497,7 +1364,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
+        OSL_FAIL("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
         return;
     }
 
@@ -1515,8 +1382,6 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
         {
             switch (_aType.mnSotId)
             {
-//              case SOT_FORMAT_RTF:                    // RTF data descriptions
-//              case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
@@ -1658,7 +1523,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
-        DBG_ASSERT((nCol != BROWSER_INVALIDID) && (nRow < nCorrectRowCount), "SbaGridControl::Drop : dropped on an invalid position !");
+        OSL_ENSURE((nCol != BROWSER_INVALIDID) && (nRow < nCorrectRowCount), "SbaGridControl::Drop : dropped on an invalid position !");
             // AcceptDrop should have caught this
 
         // from now we work with ids instead of positions
@@ -1770,7 +1635,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
     ::rtl::OUString sRet;
     if ( ::svt::BBTYPE_BROWSEBOX == eObjType )
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sRet = String(ModuleRes(STR_DATASOURCE_GRIDCONTROL_DESC));
     }
     else
@@ -1784,3 +1649,4 @@ void SbaGridControl::DeleteSelectedRows()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

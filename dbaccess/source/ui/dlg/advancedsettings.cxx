@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -313,7 +314,7 @@ namespace dbaui
                 aValue = PTR_CAST( OptionalBoolItem, pItem )->GetFullValue();
             }
             else
-                DBG_ERROR( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
+                OSL_FAIL( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
 
             if ( !aValue )
             {
@@ -602,3 +603,5 @@ namespace dbaui
 //........................................................................
 } // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "corestrings.hrc"
+#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace rptui
@@ -94,7 +96,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
             DBG_UNHANDLED_EXCEPTION();
             (void)e;
         }
-    } // if ( m_xDest.is() && m_xSource.is() )
+    }
     osl_decrementInterlockedCount(&m_refCount);
 }
 // -----------------------------------------------------------------------------
@@ -131,9 +133,9 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                             aFind = ::std::find_if(
                                 m_aNameMap.begin(),
                                 m_aNameMap.end(),
-                                ::std::compose1(
+                                ::o3tl::compose1(
                                 ::std::bind2nd(::std::equal_to< ::rtl::OUString >(), evt.PropertyName),
-                                    ::std::compose1(::std::select1st<TPropertyConverter>(),::std::select2nd<TPropertyNamePair::value_type>())
+                                    ::o3tl::compose1(::o3tl::select1st<TPropertyConverter>(),::o3tl::select2nd<TPropertyNamePair::value_type>())
                                 )
                             );
                             if ( aFind != m_aNameMap.end() )
@@ -163,7 +165,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"Exception catched!");
+            OSL_FAIL("Exception catched!");
         }
         m_bInChange = sal_False;
     }
@@ -204,3 +206,4 @@ void OPropertyMediator::startListening()
 }   // namespace dbaccess
 //........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

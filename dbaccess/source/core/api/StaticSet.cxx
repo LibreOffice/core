@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,33 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_CORE_API_STATICSET_HXX
 #include "StaticSet.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 #include <rtl/logfile.hxx>
 
 using namespace dbaccess;
@@ -62,41 +45,38 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//  using namespace ::cppu;
 using namespace ::osl;
 
-// -------------------------------------------------------------------------
 void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 /*_nPosition*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::fillValueRow" );
     _rRow = *m_aSetIter;
 }
-// -------------------------------------------------------------------------
+
 // ::com::sun::star::sdbcx::XRowLocate
 Any SAL_CALL OStaticSet::getBookmark() throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::getBookmark" );
     return makeAny(getRow());
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::moveToBookmark" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return absolute(::comphelper::getINT32(bookmark));
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::moveRelativeToBookmark" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     return absolute(::comphelper::getINT32(bookmark)+rows);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::compareBookmarks" );
@@ -105,19 +85,19 @@ sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _
     _second >>= nSecond;
     return (nFirst < nSecond) ? CompareBookmark::LESS : ((nFirst > nSecond) ? CompareBookmark::GREATER : CompareBookmark::EQUAL);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::hasOrderedBookmarks" );
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OStaticSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::hashBookmark" );
     return ::comphelper::getINT32(bookmark);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool OStaticSet::fetchRow()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::fetchRow" );
@@ -135,7 +115,7 @@ sal_Bool OStaticSet::fetchRow()
         m_bEnd = sal_True;
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 void OStaticSet::fillAllRows()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::fillAllRows" );
@@ -153,7 +133,7 @@ void OStaticSet::fillAllRows()
         m_bEnd = sal_True;
     }
 }
-// -------------------------------------------------------------------------
+
 // XResultSet
 sal_Bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
 {
@@ -172,38 +152,38 @@ sal_Bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
         ++m_aSetIter;
     return !isAfterLast();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::isBeforeFirst" );
     return m_aSetIter == m_aSet.begin();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::isAfterLast" );
     return m_aSetIter == m_aSet.end() && m_bEnd;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::isFirst" );
     return m_aSetIter == m_aSet.begin()+1;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::isLast" );
     return m_aSetIter == m_aSet.end()-1 && m_bEnd;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::beforeFirst" );
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aSetIter = m_aSet.begin();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::afterLast" );
@@ -211,7 +191,7 @@ void SAL_CALL OStaticSet::afterLast(  ) throw(SQLException, RuntimeException)
     fillAllRows();
     m_aSetIter = m_aSet.end();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::first(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::first" );
@@ -222,7 +202,7 @@ sal_Bool SAL_CALL OStaticSet::first(  ) throw(SQLException, RuntimeException)
 
     return m_aSetIter != m_aSet.end();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::last(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::last" );
@@ -232,7 +212,7 @@ sal_Bool SAL_CALL OStaticSet::last(  ) throw(SQLException, RuntimeException)
 
     return !isBeforeFirst() && !isAfterLast();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OStaticSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::getRow" );
@@ -243,7 +223,7 @@ sal_Int32 SAL_CALL OStaticSet::getRow(  ) throw(SQLException, RuntimeException)
     OSL_ENSURE(nPos > 0,"RowPos is < 0");
     return nPos;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::absolute" );
@@ -284,7 +264,7 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
 
     return m_aSetIter != m_aSet.end() && m_aSetIter != m_aSet.begin();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::relative" );
@@ -294,7 +274,7 @@ sal_Bool SAL_CALL OStaticSet::relative( sal_Int32 rows ) throw(SQLException, Run
     sal_Int32 nCurPos = getRow();
     return absolute(nCurPos+rows);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::previous(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::previous" );
@@ -305,30 +285,30 @@ sal_Bool SAL_CALL OStaticSet::previous(  ) throw(SQLException, RuntimeException)
 
     return m_aSetIter != m_aSet.begin();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::refreshRow" );
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::rowUpdated" );
     return m_bUpdated;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::rowInserted" );
     return m_bInserted;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OStaticSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::rowDeleted" );
     return m_bDeleted;
 }
-// -------------------------------------------------------------------------
+
 Sequence< sal_Int32 > SAL_CALL OStaticSet::deleteRows( const Sequence< Any >& rows,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::deleteRows" );
@@ -342,7 +322,7 @@ Sequence< sal_Int32 > SAL_CALL OStaticSet::deleteRows( const Sequence< Any >& ro
     }
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::insertRow" );
@@ -355,13 +335,13 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
         m_bEnd = sal_False;
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::updateRow" );
     OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::deleteRow" );
@@ -374,20 +354,19 @@ void SAL_CALL OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connect
         m_aSet.erase(aPos);
     }
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::cancelRowUpdates" );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::moveToInsertRow" );
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStaticSet::moveToCurrentRow" );
 }
-// -------------------------------------------------------------------------
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

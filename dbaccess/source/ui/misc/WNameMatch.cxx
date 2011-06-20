@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,36 +28,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
 #include "WNameMatch.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef DBAUI_WIZARD_PAGES_HRC
 #include "WizardPages.hrc"
-#endif
-#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
 
 using namespace ::dbaui;
 //========================================================================
@@ -100,12 +81,6 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_sDestText     = m_FT_TABLE_RIGHT.GetText();
     m_sDestText.AppendAscii("\n");
 
-    // set hiContrast
-    m_ibColumn_up.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_up_right.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down_right.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
-
     FreeResource();
 }
 // -----------------------------------------------------------------------
@@ -130,7 +105,6 @@ void OWizNameMatching::Reset()
         m_bFirstTime = sal_False;
     }
 
-    //  m_CTRL_LEFT.Clear();
 }
 // -----------------------------------------------------------------------
 void OWizNameMatching::ActivatePage( )
@@ -181,7 +155,7 @@ sal_Bool OWizNameMatching::LeavePage()
     while(pLeftEntry && pRightEntry)
     {
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeftEntry->GetUserData());
-        DBG_ASSERT(pSrcField,"OWizNameMatching: OColumn can not be null!");
+        OSL_ENSURE(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
         ODatabaseExport::TColumnVector::const_iterator aSrcIter = pSrcColumns->begin();
         ODatabaseExport::TColumnVector::const_iterator aSrcEnd  = pSrcColumns->end();
@@ -189,11 +163,10 @@ sal_Bool OWizNameMatching::LeavePage()
             ;
         const sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
 
-        //  sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
-            DBG_ASSERT(pDestField,"OWizNameMatching: OColumn can not be null!");
+            OSL_ENSURE(pDestField,"OWizNameMatching: OColumn can not be null!");
             const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
             ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
             ODatabaseExport::TColumnVector::const_iterator aDestEnd = pDestColumns->end();
@@ -247,7 +220,6 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
         if(pButton == &m_ibColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
             m_CTRL_LEFT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
-            //  m_CTRL_LEFT.MakeVisible(pEntry,sal_True);
         }
 
         TableListClickHdl(&m_CTRL_LEFT);
@@ -376,18 +348,7 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    //virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
 };
-
-
-
-//------------------------------------------------------------------------
-/*
-void OColumnString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
-{
-    SvLBoxString::InitViewData(pView,pEntry,pViewData);
-}
-*/
 //------------------------------------------------------------------------
 void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
@@ -448,3 +409,4 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

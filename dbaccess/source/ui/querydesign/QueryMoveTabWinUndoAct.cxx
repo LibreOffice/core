@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
 #include "QueryMoveTabWinUndoAct.hxx"
-#endif
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #include "QTableWindow.hxx"
-#endif
 using namespace dbaui;
 //------------------------------------------------------------------------------
 void OJoinMoveTabWinUndoAct::TogglePosition()
@@ -54,3 +49,4 @@ void OJoinMoveTabWinUndoAct::TogglePosition()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

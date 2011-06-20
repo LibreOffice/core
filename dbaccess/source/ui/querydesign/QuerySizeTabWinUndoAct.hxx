@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBAUI_QUERYSIZETABWINUNDOACT_HXX
 #define DBAUI_QUERYSIZETABWINUNDOACT_HXX
 
-#ifndef DBAUI_QUERYDESIGNUNDOACTION_HXX
 #include "QueryDesignUndoAction.hxx"
-#endif
-#ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
 
 namespace dbaui
 {
@@ -86,3 +83,4 @@ namespace dbaui
 #endif //DBAUI_QUERYSIZETABWINUNDOACT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

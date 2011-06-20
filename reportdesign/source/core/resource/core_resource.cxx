@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/uri.hxx>
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
 #include "ModuleHelper.hxx"
 //.........................................................................
 namespace reportdesign
@@ -67,8 +66,7 @@ namespace reportdesign
 
             ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-            rtl::OString sResLibName = rtl::OString( "rpt" );
-            m_pImpl = SimpleResMgr::Create(sResLibName, aLocale);
+            m_pImpl = SimpleResMgr::Create("rpt", aLocale);
         }
     }
 
@@ -88,3 +86,4 @@ namespace reportdesign
 }
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

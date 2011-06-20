@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,8 @@
 #ifndef DBAUI_FILEPICKER_INTERACTION_HXX
 #define DBAUI_FILEPICKER_INTERACTION_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
 //........................................................................
 namespace dbaui
@@ -73,3 +70,4 @@ namespace dbaui
 
 #endif // DBAUI_FILEPICKER_INTERACTION_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

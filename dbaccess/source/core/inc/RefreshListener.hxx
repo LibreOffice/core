@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef DBA_CORE_REFRESHLISTENER_HXX
 #define DBA_CORE_REFRESHLISTENER_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
-#endif
 
 namespace com { namespace sun { namespace star { namespace container
 {
@@ -38,10 +37,8 @@ namespace com { namespace sun { namespace star { namespace container
 }
 }}}
 
-//.........................................................................
 namespace dbaccess
 {
-//.........................................................................
 
     //=====================================================================
     //= IRefreshListener
@@ -51,9 +48,9 @@ namespace dbaccess
     public:
         virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed) = 0;
     };
-//.........................................................................
+
 }   // namespace dbaccess
-//.........................................................................
 
 #endif // DBA_CORE_REFRESHLISTENER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

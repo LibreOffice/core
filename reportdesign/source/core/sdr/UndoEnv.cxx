@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +57,7 @@
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace rptui
 {
@@ -87,7 +88,7 @@ struct PropertyInfo
     }
 };
 
-typedef ::std::hash_map< ::rtl::OUString, PropertyInfo, ::rtl::OUStringHash >    PropertiesInfo;
+typedef ::boost::unordered_map< ::rtl::OUString, PropertyInfo, ::rtl::OUStringHash >    PropertiesInfo;
 
 struct ObjectInfo
 {
@@ -244,8 +245,6 @@ void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeE
             RemoveSection(xSection);
         else
             RemoveElement(xSourceSet);
-        /*if (!m_pImpl->m_aPropertySetCache.empty())
-            m_pImpl->m_aPropertySetCache.erase(xSourceSet);*/
     }
 }
 
@@ -253,6 +252,7 @@ void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeE
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEvent ) throw(uno::RuntimeException)
 {
+
     ::osl::ClearableMutexGuard aGuard( m_pImpl->m_aMutex );
 
     if ( IsLocked() )
@@ -358,7 +358,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     // TODO: this is a potential race condition: two threads here could in theory
     // add their undo actions out-of-order
 
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ORptUndoPropertyAction* pUndo = NULL;
     try
     {
@@ -403,7 +403,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     // neues Object zum lauschen
@@ -454,14 +454,13 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void OXUndoEnvironment::implSetModified()
 {
-    //if ( !IsLocked() )
     m_pImpl->m_rModel.SetModified( sal_True );
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     Reference< XInterface >  xIface(evt.ReplacedElement,uno::UNO_QUERY);
@@ -477,7 +476,7 @@ void SAL_CALL OXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
 
     Reference< uno::XInterface >  xIface( evt.Element, UNO_QUERY );
@@ -608,7 +607,6 @@ void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxCon
 
         // be notified of any changes in the container elements
         Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
-        // OSL_ENSURE( xSimpleContainer.is(), "OXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
         {
             if ( _bStartListening )
@@ -653,7 +651,6 @@ void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObjec
     }
     catch( const Exception& )
     {
-        //OSL_ENSURE( sal_False, "OXUndoEnvironment::switchListening: caught an exception!" );
     }
 }
 
@@ -696,3 +693,5 @@ sal_Bool OXUndoEnvironment::IsUndoMode() const
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

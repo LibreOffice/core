@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBAUI_COLUMNCONTROL_HXX
 #define DBAUI_COLUMNCONTROL_HXX
 
-#ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
 #include <toolkit/controls/unocontrol.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
 
 namespace dbaui
 {
@@ -55,3 +52,5 @@ namespace dbaui
 //.........................................................................
 
 #endif // DBAUI_COLUMNCONTROL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

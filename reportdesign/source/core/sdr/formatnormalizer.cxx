@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,9 +127,9 @@ namespace rptui
     //--------------------------------------------------------------------
     void FormatNormalizer::impl_onDefinitionPropertyChange( const ::rtl::OUString& _rChangedPropName )
     {
-        if  (   !_rChangedPropName.equalsAscii( "Command" )
-            &&  !_rChangedPropName.equalsAscii( "CommandType" )
-            &&  !_rChangedPropName.equalsAscii( "EscapeProcessing" )
+        if  (   !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Command" ) )
+            &&  !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandType" ) )
+            &&  !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EscapeProcessing" ) )
             )
             // nothing we're interested in
             return;
@@ -138,7 +139,7 @@ namespace rptui
     //--------------------------------------------------------------------
     void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, const ::rtl::OUString& _rChangedPropName )
     {
-        if  ( !_rChangedPropName.equalsAscii( "DataField" ) )
+        if  ( !_rChangedPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
             // nothing we're interested in
             return;
 
@@ -246,7 +247,7 @@ namespace rptui
             if ( sDataField.getStr()[ sDataField.getLength() - 1 ] != ']' )
             {
                 // last character is not the closing brace
-                OSL_ENSURE( false, "FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow: suspicious data field value!" );
+                OSL_FAIL( "FormatNormalizer::impl_adjustFormatToDataFieldType_nothrow: suspicious data field value!" );
                 return;
             }
             sDataField = sDataField.copy( sFieldPrefix.getLength(), sDataField.getLength() - sFieldPrefix.getLength() - 1 );
@@ -277,3 +278,5 @@ namespace rptui
 //........................................................................
 } // namespace rptui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,12 +29,9 @@
 #ifndef _DBAUI_ADO_DATALINK_HXX_
 #define _DBAUI_ADO_DATALINK_HXX_
 
-#ifndef _OSL_MODULE_H_
 #include <osl/module.h>
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
 
 ::rtl::OUString getAdoDatalink(long hWnd,::rtl::OUString& oldLink);
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

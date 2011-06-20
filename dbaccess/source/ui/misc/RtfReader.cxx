@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,6 @@ void ORTFReader::NextToken( int nToken )
                 {
 
                     int nTmpToken2 = GetNextToken();
-                    sal_Bool bNext = sal_True;
                     do
                     {
                         Color aColor;
@@ -140,8 +140,7 @@ void ORTFReader::NextToken( int nToken )
                                 case RTF_RED:   aColor.SetRed((sal_uInt8)nTokenValue); break;
                                 case RTF_BLUE:  aColor.SetBlue((sal_uInt8)nTokenValue); break;
                                 case RTF_GREEN: aColor.SetGreen((sal_uInt8)nTokenValue); break;
-                                default:
-                                    bNext = sal_False;
+                                default: break;
                             }
                             nTmpToken2 = GetNextToken();
                         }
@@ -163,7 +162,7 @@ void ORTFReader::NextToken( int nToken )
                     bool bInsertRow = true;
                     if ( !m_xTable.is() ) // erste Zeile als Header verwenden
                     {
-                        sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
+                        sal_uInt32 nTell = rInput.Tell(); // verï¿½ndert vielleicht die Position des Streams
 
                         m_bError = !CreateTable(nToken);
                         bInsertRow = m_bAppendFirstLine;
@@ -216,7 +215,7 @@ void ORTFReader::NextToken( int nToken )
                 }
                 break;
             case RTF_ROW:
-                // es kann vorkommen, daß die letzte Celle nicht mit \cell abgeschlossen ist
+                // es kann vorkommen, daï¿½ die letzte Celle nicht mit \cell abgeschlossen ist
                 try
                 {
                     insertValueIntoColumn();
@@ -314,8 +313,6 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 }
                 break;
             case RTF_CF:
-                //  if(nTokenValue < m_vecColor.size())
-                    //  m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[nTokenValue]));
                 break;
             case RTF_B:
                 aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;
@@ -375,3 +372,4 @@ TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

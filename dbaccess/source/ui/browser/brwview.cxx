@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,49 +29,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _SBA_BWRCTRLR_HXX
 #include "brwctrlr.hxx"
-#endif
-#ifndef _SBX_BRWVIEW_HXX
 #include "brwview.hxx"
-#endif
-#ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
-#endif
-#ifndef DBACCESS_UI_DBTREEVIEW_HXX
 #include "dbtreeview.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBU_BRW_HRC_
 #include "dbu_brw.hrc"
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
+#include <osl/diagnose.h>
 
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::form;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -128,7 +105,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
         // create the (UNO-) control
         m_xGrid = new SbaXGridControl(getORB());
-        DBG_ASSERT(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
+        OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
         m_xGrid->setDesignMode(sal_True);
 
@@ -146,9 +123,9 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         m_pVclControl = NULL;
         getVclControl();
 
-        DBG_ASSERT(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
+        OSL_ENSURE(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         ::comphelper::disposeComponent(m_xGrid);
         throw;
@@ -174,7 +151,7 @@ UnoDataBrowserView::~UnoDataBrowserView()
         ::comphelper::disposeComponent(m_xGrid);
         ::comphelper::disposeComponent(m_xMe);
     }
-    catch(Exception)
+    catch(const Exception&)
     {}
 
     DBG_DTOR(UnoDataBrowserView,NULL);
@@ -393,3 +370,5 @@ BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
     DBG_DTOR(BrowserViewStatusDisplay,NULL);
 }
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

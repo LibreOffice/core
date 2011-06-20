@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/waitobj.hxx>
 #include <osl/thread.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 #define MAX_THREADS 10
@@ -95,8 +96,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::util;
-//  using namespace ::com::sun::star::sdbcx;
-//  using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
@@ -111,13 +110,13 @@ using namespace ::osl;
 //------------------------------------------------------------------------------
 ::rtl::OUString ORelationController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ORelationDesign"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> ORelationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.RelationDesign");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RelationDesign"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -347,7 +346,7 @@ namespace
                 {
                     ::comphelper::disposeComponent(xResult);
                     loadTableData(m_xTables->getByName(*pIter));
-                } // if ( xResult.is() && xResult->next() )
+                }
             }
             catch( const Exception& )
             {
@@ -366,12 +365,10 @@ namespace
         Reference<XPropertySet> xTableProp(_aTable,UNO_QUERY);
         const ::rtl::OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
         TTableDataHelper::iterator aFind = m_aTableData.find(sSourceName);
-        bool bNotFound = true, bAdded = false;
         if ( aFind == m_aTableData.end() )
         {
             aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
             aFind->second->ShowAll(sal_False);
-            bAdded = true;
         }
         TTableWindowData::value_type pReferencingTable = aFind->second;
         Reference<XIndexAccess> xKeys = pReferencingTable->getKeys();
@@ -393,7 +390,6 @@ namespace
                 xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                 if ( KeyType::FOREIGN == nKeyType )
                 {
-                    bNotFound = false;
                     ::rtl::OUString sReferencedTable;
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                     //////////////////////////////////////////////////////////////////////
@@ -409,7 +405,7 @@ namespace
                         }
                         else
                             continue; // table name could not be found so we do not show this table releation
-                    } // if ( aFind == m_aTableData.end() )
+                    }
                     TTableWindowData::value_type pReferencedTable = aRefFind->second;
 
                     ::rtl::OUString sKeyName;
@@ -453,7 +449,7 @@ namespace
                     pTabConnData->SetCardinality();
                 }
             }
-        } // if ( xKeys.is() )
+        }
     }
 }
 
@@ -477,7 +473,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
         {
             m_vTableData.push_back((*aConnDataIter)->getReferencedTable());
         }
-    } // for(;aConnDataIter != aConnDataEnd;++aConnDataIter)
+    }
     if ( m_nThreadEvent )
     {
         --m_nThreadEvent;
@@ -488,7 +484,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
 // -----------------------------------------------------------------------------
 IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
 {
-    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
@@ -534,8 +530,8 @@ void ORelationController::loadData()
                 nStart = nEnd;
                 nEnd += nMaxElements;
                 nEnd = ::std::min(nEnd,nCount);
-            } // for(;pIter != pEnd;++pIter)
-        } // if ( aMeta.supportsThreads() )
+            }
+        }
         else
         {
             RelationLoader* pThread = new RelationLoader(this,xMetaData,m_xTables,aNames,0,nCount);
@@ -613,3 +609,4 @@ bool ORelationController::allowQueries() const
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

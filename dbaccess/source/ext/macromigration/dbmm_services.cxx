@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,15 +41,8 @@ namespace dbmm
 
     static void initializeModule()
     {
-        static bool bInitialized( false );
-        if ( !bInitialized )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !bInitialized )
-            {
-                createRegistryInfo_MacroMigrationDialogService();
-            }
-        }
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        createRegistryInfo_MacroMigrationDialogService();
     }
 
 //........................................................................
@@ -56,3 +50,5 @@ namespace dbmm
 //........................................................................
 
 IMPLEMENT_COMPONENT_LIBRARY_API( ::dbmm::MacroMigrationModule, ::dbmm::initializeModule )
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

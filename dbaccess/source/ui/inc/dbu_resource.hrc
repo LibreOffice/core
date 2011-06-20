@@ -249,48 +249,23 @@
 // free
 // free
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
-#define REPORTFOLDER_TREE_ICON_SCH      RID_IMAGE_START + 13
-#define FORMFOLDER_TREE_ICON_SCH        RID_IMAGE_START + 14
+// free
+// free
 #define IMG_DATABASE_CONNECTED          RID_IMAGE_START + 15
-#define QUERYFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 16
-#define TABLEFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 17
 // free
-#define DATABASE_TREE_ICON_SCH          RID_IMAGE_START + 19
-#define IMG_DATABASE_CONNECTED_SCH      RID_IMAGE_START + 20
-#define TABLE_TREE_ICON_SCH             RID_IMAGE_START + 21
-#define VIEW_TREE_ICON_SCH              RID_IMAGE_START + 22
-#define QUERY_TREE_ICON_SCH             RID_IMAGE_START + 23
+//  ...
+// free
 #define REPORTFOLDER_TREE_ICON          RID_IMAGE_START + 24
-// free
-// free
-// free
-#define BMP_EXCEPTION_ERROR_SCH         RID_IMAGE_START + 28
-#define BMP_EXCEPTION_WARNING_SCH       RID_IMAGE_START + 29
-#define BMP_EXCEPTION_INFO_SCH          RID_IMAGE_START + 30
-#define IMG_PKEYICON_SCH                RID_IMAGE_START + 31
-#define IMG_JOINS_H                     RID_IMAGE_START + 32
-#define IMG_ALL_LEFT_H                  RID_IMAGE_START + 33
-#define IMG_ONE_LEFT_H                  RID_IMAGE_START + 34
-#define IMG_ONE_RIGHT_H                 RID_IMAGE_START + 35
-#define IMG_ALL_RIGHT_H                 RID_IMAGE_START + 36
-#define IMG_SORTUP_H                    RID_IMAGE_START + 37
-#define IMG_SORTDOWN_H                  RID_IMAGE_START + 38
 #define IMG_FORMFOLDER_TREE_L           RID_IMAGE_START + 39
 #define IMG_REPORTFOLDER_TREE_L         RID_IMAGE_START + 40
 #define IMG_QUERYFOLDER_TREE_L          RID_IMAGE_START + 41
 #define IMG_TABLEFOLDER_TREE_L          RID_IMAGE_START + 42
-#define IMG_FORMFOLDER_TREE_LHC         RID_IMAGE_START + 43
-#define IMG_REPORTFOLDER_TREE_LHC       RID_IMAGE_START + 44
-#define IMG_QUERYFOLDER_TREE_LHC        RID_IMAGE_START + 45
-#define IMG_TABLEFOLDER_TREE_LHC        RID_IMAGE_START + 46
 #define IMG_NAVIGATION_BTN_UP_SC        RID_IMAGE_START + 47
-#define IMG_NAVIGATION_BTN_UP_SCH       RID_IMAGE_START + 48
 #define IMG_NAVIGATION_CREATEFOLDER_SC  RID_IMAGE_START + 49
-#define IMG_NAVIGATION_CREATEFOLDER_SCH RID_IMAGE_START + 50
 #define FORM_TREE_ICON                  RID_IMAGE_START + 51
 #define REPORT_TREE_ICON                RID_IMAGE_START + 52
-#define FORM_TREE_ICON_SCH              RID_IMAGE_START + 53
-#define REPORT_TREE_ICON_SCH            RID_IMAGE_START + 54
+// free
+// free
 #define FORMFOLDER_TREE_ICON            RID_IMAGE_START + 55
 
 
@@ -298,17 +273,17 @@
 // image lists
 #define IMG_JOINS                       RID_IMAGELIST_START +  0
 #define IMG_INDEX_DLG_SC                RID_IMAGELIST_START +  1
-#define IMG_INDEX_DLG_SCH               RID_IMAGELIST_START +  2
+// free
 #define IMG_INDEX_DLG_LC                RID_IMAGELIST_START +  3
-#define IMG_INDEX_DLG_LCH               RID_IMAGELIST_START +  4
+// free
 #define IMP_FORM_SC                     RID_IMAGELIST_START +  5
-#define IMP_FORM_SCH                    RID_IMAGELIST_START +  6
+// free
 #define IMP_FORM_LC                     RID_IMAGELIST_START +  7
-#define IMP_FORM_LCH                    RID_IMAGELIST_START +  8
+// free
 #define IMP_REPORT_SC                   RID_IMAGELIST_START +  9
-#define IMP_REPORT_SCH                  RID_IMAGELIST_START + 10
+// free
 #define IMP_REPORT_LC                   RID_IMAGELIST_START + 11
-#define IMP_REPORT_LCH                  RID_IMAGELIST_START + 12
+// free
 
 //========================================================================
 // menues
@@ -353,7 +328,7 @@
 #define STR_TABLEDESIGN_DBFIELDTYPES        RID_STR_GEN_START + 8
 #define STR_QRY_CONTINUE                    RID_STR_GEN_START + 9
 #define STR_COLUMN_NAME                     RID_STR_GEN_START + 10
-#define STR_ERROR_OCCURED_WHILE_COPYING     RID_STR_GEN_START + 11
+#define STR_ERROR_OCCURRED_WHILE_COPYING        RID_STR_GEN_START + 11
 #define STR_MISSING_TABLES_XDROP            RID_STR_GEN_START + 12
 #define STR_QUERY_DELETE_TABLE              RID_STR_GEN_START + 13
 #define STR_BUTTON_TEXT_ALL                 RID_STR_GEN_START + 14
@@ -393,17 +368,17 @@
 // free
 #define RSC_QUERY_OBJECT_TYPE           RID_UNTYPED_START +  4
 #define IMG_TABLESUBCRIPTION_SC         RID_UNTYPED_START +  5
-#define IMG_TABLESUBCRIPTION_SCH        RID_UNTYPED_START +  6
+// free
 #define IMG_TABLESUBCRIPTION_LC         RID_UNTYPED_START +  7
-#define IMG_TABLESUBCRIPTION_LCH        RID_UNTYPED_START +  8
+// free
 #define IMG_QUERYADMINISTRATION_SC      RID_UNTYPED_START +  9
-#define IMG_QUERYADMINISTRATION_SCH     RID_UNTYPED_START + 10
+// free
 #define IMG_QUERYADMINISTRATION_LC      RID_UNTYPED_START + 11
-#define IMG_QUERYADMINISTRATION_LCH     RID_UNTYPED_START + 12
+// free
 #define IMG_DOCUMENTLINKS_SC            RID_UNTYPED_START + 13
-#define IMG_DOCUMENTLINKS_SCH           RID_UNTYPED_START + 14
+// free
 #define IMG_DOCUMENTLINKS_LC            RID_UNTYPED_START + 15
-#define IMG_DOCUMENTLINKS_LCH           RID_UNTYPED_START + 16
+// free
 
 //========================================================================
 // various

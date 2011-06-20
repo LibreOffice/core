@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBA_XMLQUERY_HXX
 #define DBA_XMLQUERY_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef DBA_XMLTABLE_HXX
 #include "xmlTable.hxx"
-#endif
 
 
 namespace dbaxml
@@ -64,3 +61,5 @@ namespace dbaxml
 // -----------------------------------------------------------------------------
 
 #endif // DBA_XMLQUERY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

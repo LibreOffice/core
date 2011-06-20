@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,36 +29,16 @@
 #ifndef DBA_XMLSTYLEIMPORT_HXX
 #define DBA_XMLSTYLEIMPORT_HXX
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
-#endif
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
 #include <xmloff/maptype.hxx>
-#endif
-#ifndef _XMLOFF_PRSTYLEI_HXX_
 #include <xmloff/prstylei.hxx>
-#endif
-#ifndef _XMLOFF_XMLIMPPR_HXX
 #include <xmloff/xmlimppr.hxx>
-#endif
-#ifndef _XMLTEXTMASTERPAGECONTEXT_HXX
 #include <xmloff/XMLTextMasterPageContext.hxx>
-#endif
-#ifndef _XMLTEXTMASTERSTYLESCONTEXT_HXX
 #include <xmloff/XMLTextMasterStylesContext.hxx>
-#endif
-#ifndef _XMLOFF_CONTEXTID_HXX_
 #include <xmloff/contextid.hxx>
-#endif
-#ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include <xmloff/controlpropertyhdl.hxx>
-#endif
 #include <vector>
 
 namespace dbaxml
@@ -70,7 +51,6 @@ namespace dbaxml
         ::rtl::OUString             sPageStyle;
         const rtl::OUString         sNumberFormat;
         SvXMLStylesContext*         pStyles;
-        //  std::vector<ScXMLMapContent>    aMaps;
         com::sun::star::uno::Any    aConditionalFormat;
         sal_Int32                   m_nNumberFormat;
         sal_Bool                    bConditionalFormatCreated : 1;
@@ -155,3 +135,5 @@ namespace dbaxml
 } // dbaxml
 // -----------------------------------------------------------------------------
 #endif // DBA_XMLSTYLEIMPORT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

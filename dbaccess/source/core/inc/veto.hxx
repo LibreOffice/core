@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,19 +30,13 @@
 #define DBACCESS_VETO_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_UTIL_XVETO_HPP_
 #include <com/sun/star/util/XVeto.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     //====================================================================
     //= Veto
@@ -71,9 +66,8 @@ namespace dbaccess
         Veto& operator=( const Veto& ); // never implemented
     };
 
-//........................................................................
 } // namespace dbaccess
-//........................................................................
 
 #endif // DBACCESS_VETO_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

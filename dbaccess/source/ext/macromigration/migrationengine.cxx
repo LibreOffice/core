@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -214,7 +215,7 @@ namespace dbmm
                 break;
             }
 
-            OSL_ENSURE( false, "lcl_getScriptsSubStorageName: illegal type!" );
+            OSL_FAIL( "lcl_getScriptsSubStorageName: illegal type!" );
             static ::rtl::OUString s_sEmpty;
             return s_sEmpty;
         }
@@ -241,7 +242,7 @@ namespace dbmm
                 LanguageMapping( "Python",     ePython ),          // TODO: is this correct?
                 LanguageMapping( "Basic",      eBasic )
             };
-            for ( size_t i=0; i < sizeof( aLanguageMapping ) / sizeof( aLanguageMapping[0] ); ++i )
+            for ( size_t i=0; i < SAL_N_ELEMENTS( aLanguageMapping ); ++i )
             {
                 if ( _rLanguage.equalsAscii( aLanguageMapping[i].pAsciiLanguage ) )
                 {
@@ -249,7 +250,7 @@ namespace dbmm
                     return true;
                 }
             }
-            OSL_ENSURE( false, "lcl_getScriptTypeFromLanguage: unknown language!" );
+            OSL_FAIL( "lcl_getScriptTypeFromLanguage: unknown language!" );
             return false;
         }
 
@@ -332,7 +333,7 @@ namespace dbmm
                 bool bCausedByNewStyleReport =
                         ( _rDocument.eType == eReport )
                     &&  ( aError.isExtractableTo( ::cppu::UnoType< WrongFormatException >::get() ) )
-                    &&  ( lcl_getMimeType_nothrow( _rDocument.xCommandProcessor ).equalsAscii( "application/vnd.sun.xml.report" ) );
+                    &&  ( lcl_getMimeType_nothrow( _rDocument.xCommandProcessor ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "application/vnd.sun.xml.report" ) ) );
 
                 if ( bCausedByNewStyleReport )
                 {
@@ -1019,7 +1020,7 @@ namespace dbmm
     {
         if  ( m_aSubDocs.empty() )
         {
-            OSL_ENSURE( false, "MigrationEngine_Impl::migrateAll: no forms/reports found!" );
+            OSL_FAIL( "MigrationEngine_Impl::migrateAll: no forms/reports found!" );
             // The whole migration wizard is not expected to be called when there are no forms/reports
             // with macros, not to mention when there are no forms/reports at all.
             return false;
@@ -1162,7 +1163,7 @@ namespace dbmm
         aProgressMixer.registerPhase( PHASE_PYTHON, 1 );
         aProgressMixer.registerPhase( PHASE_JAVA, 1 );
         aProgressMixer.registerPhase( PHASE_BASIC, 5 );
-            // more weight than then others, assuming that usually, there are much more Basic macros than any other scripts
+            // more weight than the others, assuming that usually, there are many more Basic macros than any other scripts
         aProgressMixer.registerPhase( PHASE_DIALOGS, 1 );
 
         bool bSuccess = impl_checkScriptStorageStructure_nothrow( aSubDocument );
@@ -1222,7 +1223,7 @@ namespace dbmm
             const ::rtl::OUString& _rSourceLibName, const Reference< XNameAccess >& _rxTargetContainer )
         {
             // The new library name is composed from the prefix, the base name, and the old library name.
-            const ::rtl::OUString sPrefix( ::rtl::OUString::createFromAscii( _rDocument.eType == eForm ? "Form_" : "Report_" ) );
+            const ::rtl::OUString sPrefix = (_rDocument.eType == eForm)?rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Form_")): rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Report_"));
 
             ::rtl::OUString sBaseName( _rDocument.sHierarchicalName.copy(
                 _rDocument.sHierarchicalName.lastIndexOf( '/' ) + 1 ) );
@@ -1231,8 +1232,8 @@ namespace dbmm
             // The bug requesting to change this is #i95409#.
             // Unfortunately, the storage implementation does not complain if you use invalid characters/names, but instead
             // it silently accepts them, and produces garbage in the file (#i95408).
-            // So, until especially the former is fixed, we need to strip the name from all invalid characters.
-            // #i95865# / 2008-11-06 / frank.schoenheit@sun.com
+            // So, until especially the former is fixed, we need to strip all invalid characters from the name.
+            // #i95865#
 
             // The general idea is to replace invalid characters with '_'. However, since "valid" essentially means
             // ASCII only, this implies that for a lot of languages, we would simply replace everything with '_',
@@ -1305,7 +1306,7 @@ namespace dbmm
             ScriptType aKnownStorageBasedTypes[] = {
                 eBeanShell, eJavaScript, ePython, eJava
             };
-            for ( size_t i=0; i<sizeof( aKnownStorageBasedTypes ) / sizeof( aKnownStorageBasedTypes[0] ); ++i )
+            for ( size_t i=0; i< SAL_N_ELEMENTS( aKnownStorageBasedTypes ); ++i )
                 aElementNames.erase( lcl_getScriptsSubStorageName( aKnownStorageBasedTypes[i] ) );
 
             if ( !aElementNames.empty() )
@@ -1638,7 +1639,7 @@ namespace dbmm
                 ||  !_rScriptType.getLength()
                 )
             {
-                OSL_ENSURE( false,
+                OSL_FAIL(
                     "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: no or unknown script type!" );
                 m_rLogger.logRecoverable( MigrationError(
                     ERR_UNKNOWN_SCRIPT_TYPE,
@@ -1656,7 +1657,7 @@ namespace dbmm
             ScriptType eScriptType = eBasic;
             if ( !lcl_getScriptTypeFromLanguage( sScriptLanguage, eScriptType ) )
             {
-                OSL_ENSURE( false,
+                OSL_FAIL(
                     "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: unknown script language!" );
                 m_rLogger.logRecoverable( MigrationError(
                     ERR_UNKNOWN_SCRIPT_LANGUAGE,
@@ -1667,7 +1668,7 @@ namespace dbmm
 
             ::rtl::OUString sLocation = xUri->getParameter(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "location" ) ) );
-            if ( !sLocation.equalsAscii( "document" ) )
+            if ( !sLocation.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "document" ) ) )
             {
                 // only document libraries must be migrated, of course
                 return false;
@@ -1677,7 +1678,7 @@ namespace dbmm
             sal_Int32 nLibModuleSeparator = sScriptName.indexOf( '.' );
             if ( nLibModuleSeparator < 0 )
             {
-                OSL_ENSURE( false,
+                OSL_FAIL(
                     "MigrationEngine_Impl::impl_adjustScriptLibrary_nothrow: invalid/unknown location format!" );
                 m_rLogger.logRecoverable( MigrationError(
                     ERR_UNKNOWN_SCRIPT_NAME_FORMAT,
@@ -1835,7 +1836,7 @@ namespace dbmm
             Reference< XInputStream > xInput( xISP->createInputStream(), UNO_QUERY_THROW );
 
             Reference< XNameContainer > xDialogModel( m_aContext.createComponent( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
-            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext() );
+            ::xmlscript::importDialogModel( xInput, xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
 
             // adjust the events of the dialog
             impl_adjustDialogElementEvents_throw( xDialogModel );
@@ -1850,7 +1851,7 @@ namespace dbmm
             }
 
             // export dialog model
-            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext() );
+            xISP = ::xmlscript::exportDialogModel( xDialogModel, m_aContext.getUNOContext(), m_xDocumentModel );
             _inout_rDialogLibraryElement <<= xISP;
         }
         catch( const Exception& )
@@ -1988,3 +1989,5 @@ namespace dbmm
 //........................................................................
 } // namespace dbmm
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ namespace rptui
             return;
 
         Reference< XReportControlModel > xRptControlModel( _rEvent.Source, UNO_QUERY );
-        if ( xRptControlModel.is() && _rEvent.PropertyName.equalsAscii( "DataField" ) )
+        if ( xRptControlModel.is() && _rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
         {
             ::rtl::OUString sOldDataSource, sNewDataSource;
             OSL_VERIFY( _rEvent.OldValue >>= sOldDataSource );
@@ -133,3 +134,5 @@ namespace rptui
 //........................................................................
 } // namespace rptui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,35 +29,19 @@
 #ifndef DBAUI_QUERYFILTER_HXX
 #define DBAUI_QUERYFILTER_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include <connectivity/sqliterator.hxx>
-#endif
 
-#ifndef CONNECTIVITY_PREDICATEINPUT_HXX
 #include <connectivity/predicateinput.hxx>
-#endif
-#ifndef SVX_QUERYDESIGNCONTEXT_HXX
 #include "svx/ParseContext.hxx"
-#endif
 
 namespace rtl
 {
@@ -161,3 +146,4 @@ namespace dbaui
 #endif // DBAUI_QUERYFILTER_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

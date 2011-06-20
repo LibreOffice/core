@@ -47,9 +47,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 
-// import util.BasicMacroTools;
-// import util.DesktopTools;
-// import util.dbg;
 // import complexlib.ComplexTestCase;
 // import util.utils;
 import helper.OfficeProvider;
@@ -58,24 +55,6 @@ import helper.URLHelper;
 
 import convwatch.DB;
 
-// import java.util.Date;
-// import java.text.SimpleDateFormat;
-// import java.text.ParsePosition;
-// import java.sql.Time;
-//
-// import java.io.BufferedReader;
-// import java.io.File;
-// import java.io.FileReader;
-// import java.io.IOException;
-// import java.io.FilenameFilter;
-//
-// import java.util.Vector;
-//
-// import helper.AppProvider;
-// import java.text.DecimalFormat;
-// import util.DynamicClassLoader;
-// import java.util.StringTokenizer;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -83,7 +62,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
-
 
 class PropertySetHelper
 {
@@ -295,18 +273,12 @@ public class ReportDesignerTest
 
             m_sUPDMinor = System.getProperty("UPDMINOR");
             m_sCWS_WORK_STAMP = System.getProperty("CWS_WORK_STAMP");
-            // createDBEntry();
             System.out.println("Current CWS: " + m_sCWS_WORK_STAMP);
             System.out.println("Current MWS: " + m_sUPDMinor);
-
-            // System.exit(1);
 
 //                sAppExecutionCommand = sAppExecutionCommand.replaceAll( "\\$\\{USERNAME\\}", sUser);
 //                System.out.println("sAppExecutionCommand='" + sAppExecutionCommand + "'");
 //
-            // an other way to replace strings
-            // sAppExecutionCommand = utils.replaceAll13(sAppExecutionCommand, "${USERNAME}", sUser);
-
 //                checkIfOfficeExists(sAppExecutionCommand);
 //                param.put("AppExecutionCommand", new String(sAppExecutionCommand));
 
@@ -347,15 +319,6 @@ public class ReportDesignerTest
             System.out.println("Load done");
             assertNotNull("Can't load document ", xDocComponent);
 
-            //  context = createUnoService("com.sun.star.sdb.DatabaseContext")
-//     oDataBase = context.getByName("hh")
-//     oDBDoc = oDataBase.DatabaseDocument
-//
-//  dim args(1) as new com.sun.star.beans.PropertyValue
-//  args(0).Name = "ActiveConnection"
-//  args(0).Value = oDBDoc.getCurrentController().getPropertyValue("ActiveConnection")
-//  reportContainer = oDBDoc.getReportDocuments()
-//     report = reportContainer.loadComponentFromURL("Report40","",0,args)
 
             try
             {
@@ -366,47 +329,26 @@ public class ReportDesignerTest
                 XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, x);
                 showElements(xNameAccess);
                 Object aObj = xNameAccess.getByName(sFileURL);
-//                    System.out.println("1");
 
-                    // PropertySetHelper aHelper = new PropertySetHelper(aObj);
                 XDocumentDataSource xDataSource = UnoRuntime.queryInterface(XDocumentDataSource.class, aObj);
-//                    Object aDatabaseDocmuent = aHelper.getPropertyValueAsObject("DatabaseDocument");
                 XOfficeDatabaseDocument xOfficeDBDoc = xDataSource.getDatabaseDocument();
 
-                // XOfficeDatabaseDocument xOfficeDBDoc = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class, aDatabaseDocument);
                 assertNotNull("can't access DatabaseDocument", xOfficeDBDoc);
-//                    System.out.println("2");
 
                 XModel xDBSource = UnoRuntime.queryInterface(XModel.class, xOfficeDBDoc);
                 Object aController = xDBSource.getCurrentController();
                 assertNotNull("Controller of xOfficeDatabaseDocument is empty!", aController);
-//                     System.out.println("3");
 
                 XDatabaseDocumentUI aDBDocUI = UnoRuntime.queryInterface(XDatabaseDocumentUI.class, aController);
                 /* boolean isConnect = */
 // TODO: throws an exception in DEV300m78
                 aDBDocUI.connect();
-//                     if (isConnect)
-//                     {
-//                         System.out.println("true");
-//                     }
-//                     else
-//                     {
-//                         System.out.println("false");
-//                     }
-//                     System.out.println("4");
-
-                // aHelper = new PropertySetHelper(aController);
-
-                // Object aActiveConnectionObj = aHelper.getPropertyValueAsObject("ActiveConnection");
                 Object aActiveConnectionObj = aDBDocUI.getActiveConnection();
                 assertNotNull("ActiveConnection is empty", aActiveConnectionObj);
-//                     System.out.println("5");
 
                 XReportDocumentsSupplier xSupplier = UnoRuntime.queryInterface(XReportDocumentsSupplier.class, xOfficeDBDoc);
                 xNameAccess = xSupplier.getReportDocuments();
                 assertNotNull("xOfficeDatabaseDocument returns no Report Document", xNameAccess);
-//                     System.out.println("5");
 
                 showElements(xNameAccess);
 
@@ -424,11 +366,6 @@ public class ReportDesignerTest
             {
                 fail("ERROR: Exception caught" + e.getMessage());
             }
-
-                // String mTestDocumentPath = (String) param.get("TestDocumentPath");
-                // System.out.println("mTestDocumentPath: '" + mTestDocumentPath + "'");
-                // // workaround for issue using deprecated "DOCPTH" prop
-                // System.setProperty("DOCPTH", mTestDocumentPath);
 
                 // Close the document
                 closeComponent(xDocComponent);
@@ -462,8 +399,6 @@ public class ReportDesignerTest
 //                                          sDestinationVersion, sDestinationName, sDestinationCreatorType,
 //                                          sDocumentPoolDir, sDocumentPoolName, m_sMailAddress,
 //                                          sSpecial);
-            // DB.test();
-            // System.exit(1);
         }
 
     private void loadAndStoreReports(XNameAccess _xNameAccess, ArrayList _aPropertyList, int _nType)
@@ -526,9 +461,6 @@ public class ReportDesignerTest
             }
             sOutputPath += "tmp_123";
             sOutputPath += System.getProperty("file.separator");
-
-            // sOutputPath += getFileFormat(_nType);
-            // sOutputPath += System.getProperty("file.separator");
 
             File aOutputFile = new File(sOutputPath); // create the directory of the given output path
             aOutputFile.mkdirs();

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,10 +74,10 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
                 {
                     ::rtl::OUString sMediaType;
                     xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
-                    if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII) )
+                    if ( sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII)) )
                         return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBaseReport"));
                     ::comphelper::disposeComponent(xProp);
-                } // if ( xProp.is() )
+                }
             }
             catch(Exception&)
             {
@@ -115,7 +116,7 @@ Sequence< ::rtl::OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames
 Sequence< ::rtl::OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExtendedTypeDetection");
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExtendedTypeDetection"));
     return aSNS;
 }
 // -----------------------------------------------------------------------------
@@ -123,3 +124,4 @@ Sequence< ::rtl::OUString > ORptTypeDetection::getSupportedServiceNames_Static(v
 }//rptxml
 // -----------------------------------------------------------------------------
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

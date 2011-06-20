@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,48 +28,20 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_WIZ_TYPESELECT_HXX
 #include "WTypeSelect.hxx"
-#endif
-#ifndef DBAUI_WIZARD_PAGES_HRC
 #include "WizardPages.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _SVPARSER_HXX
 #include <svtools/svparser.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef DBAUI_FIELDCONTROLS_HXX
 #include "FieldControls.hxx"
-#endif
 
 #include "dbaccess_slotid.hrc"
 
@@ -78,7 +51,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdbcx;
 
 //========================================================================
 // OWizTypeSelectControl
@@ -127,7 +99,7 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
-    DBG_ASSERT(nRow == -1,"nRow muss -1 sein!");
+    OSL_ENSURE(nRow == -1,"nRow muss -1 sein!");
     (void)nRow;
 
     MultiListBox &aListBox = ((OWizTypeSelect*)GetParent())->m_lbColumnNames;
@@ -275,7 +247,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ModuleRes aModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS);
+    ModuleRes aModuleRes(IMG_JOINS);
     ImageList aImageList(aModuleRes);
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 
@@ -493,7 +465,7 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
     DBG_CHKTHIS(OWizTypeSelect,NULL);
     if(m_pParserStream)
     {
-        sal_uInt32 nTell = m_pParserStream->Tell(); // verändert vielleicht die Position des Streams
+        sal_uInt32 nTell = m_pParserStream->Tell(); // might change seek position of stream
 
         SvParser *pReader = createReader(nRows);
         if(pReader)
@@ -508,3 +480,4 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
 // -----------------------------------------------------------------------------
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_TABLEROW_HXX
 #include "TableRow.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
 #include <algorithm>
 #include <comphelper/types.hxx>
 
@@ -161,7 +156,7 @@ namespace dbaui
             _rStr << sal_Int32(pFieldDesc->IsAutoIncrement() ? 1 : 0);
             _rStr << sal_Int32(pFieldDesc->IsPrimaryKey() ? 1 : 0);
             _rStr << sal_Int32(pFieldDesc->IsCurrency() ? 1 : 0);
-        } // if(pFieldDesc)
+        }
         else
             _rStr << (sal_Int32)0;
         return _rStr;
@@ -231,5 +226,4 @@ namespace dbaui
     // -----------------------------------------------------------------------------
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

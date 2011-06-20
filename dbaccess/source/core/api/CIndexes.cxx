@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,30 +28,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBACCESS_INDEXES_HXX_
 #include "CIndexes.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_INDEXTYPE_HPP_
 #include <com/sun/star/sdbc/IndexType.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 
 using namespace connectivity;
@@ -75,7 +60,7 @@ ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OIndexes::createDescriptor()
 {
     Reference<XDataDescriptorFactory> xData( m_xIndexes,UNO_QUERY);
@@ -84,7 +69,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
     else
         return OIndexesHelper::createDescriptor();
 }
-// -------------------------------------------------------------------------
+
 // XAppend
 ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -95,7 +80,7 @@ ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Refer
     xData->appendByDescriptor(descriptor);
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
+
 // XDrop
 void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
@@ -108,7 +93,7 @@ void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     else
         OIndexesHelper::dropObject(_nPos,_sElementName);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OIndexes::disposing(void)
 {
     if ( m_xIndexes.is() )
@@ -116,8 +101,4 @@ void SAL_CALL OIndexes::disposing(void)
     else
         OIndexesHelper::disposing();
 }
-// -----------------------------------------------------------------------------
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

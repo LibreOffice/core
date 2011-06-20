@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,75 +29,28 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_QUERYFILTER_HXX
 #include "queryfilter.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
+#include <osl/diagnose.h>
 #include "moduledbu.hxx"
-#endif
-#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include <connectivity/sqliterator.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBAUI_QUERYFILTER_HRC
 #include "queryfilter.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#endif
 
 using namespace dbaui;
 using namespace connectivity;
@@ -235,7 +189,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         fillLines(aValues);
 
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
         FreeResource();
         throw;
@@ -314,7 +268,7 @@ sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate
         nPredicateType = SQLFilterOperator::NOT_SQLNULL;
         break;
     default:
-        OSL_ENSURE( false, "DlgFilterCrit::GetOSQLPredicateType: unknown predicate string!" );
+        OSL_FAIL( "DlgFilterCrit::GetOSQLPredicateType: unknown predicate string!" );
         break;
     }
 
@@ -408,10 +362,10 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;
                 }
-            } // if ( !bFunction )
+            }
         }
     }
-    catch(Exception)
+    catch(const Exception&)
     {
     }
 
@@ -500,7 +454,7 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
         sField = aLB_WHEREFIELD3.GetSelectEntry();
     }
     else {
-        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
+        OSL_FAIL( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
     }
 
     // the field itself
@@ -510,7 +464,7 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
 //------------------------------------------------------------------------------
 IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 {
-    DBG_ASSERT( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
+    OSL_ENSURE( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
     if ( _pField )
     {
         // retrieve the field affected
@@ -631,11 +585,9 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
     sal_uInt16 nCnt = rBox.GetEntryCount();
-    //  sal_Bool bCase = m_rIterator.TablesAreSensitive();
 
     for( sal_uInt16 i=0 ; i<nCnt ; i++ )
     {
-        //  if(bCase ? rBox.GetEntry(i) == rField : rBox.GetEntry(i).EqualsIgnoreCaseAscii(rField))
         if(rBox.GetEntry(i) == rField)
         {
             rBox.SelectEntryPos(i);
@@ -801,7 +753,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         }
         else
         {
-            DBG_ASSERT(0,"DlgFilterCrit::ListSelectHdl: Diese Column d�rfte garnicht vorhanden sein!");
+            OSL_FAIL("DlgFilterCrit::ListSelectHdl: Diese Column d�rfte garnicht vorhanden sein!");
         }
     }
     pComp->SelectEntryPos(0);
@@ -826,7 +778,6 @@ void DlgFilterCrit::BuildWherePart()
     Sequence<Sequence<PropertyValue> > aFilter,aHaving;
     aFilter.realloc(1);
     aHaving.realloc(1);
-    //  ::rtl::OUString aFilter;
 
     if( LbPos(aLB_WHEREFIELD1) != 0 )
     {
@@ -895,7 +846,7 @@ void DlgFilterCrit::BuildWherePart()
         m_xQueryComposer->setStructuredFilter(aFilter);
         m_xQueryComposer->setStructuredHavingClause(aHaving);
     }
-    catch(Exception)
+    catch(const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -919,3 +870,4 @@ void DlgFilterCrit::fillLines(const Sequence<Sequence<PropertyValue > >& _aValue
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

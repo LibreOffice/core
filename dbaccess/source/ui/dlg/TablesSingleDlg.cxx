@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,25 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_TABLESSINGLEDLG_HXX_
 #include "TablesSingleDlg.hxx"
-#endif
-#ifndef _DBAUI_DBADMINIMPL_HXX_
 #include "DbAdminImpl.hxx"
-#endif
-#ifndef _DBAUI_TABLESPAGE_HXX_
 #include "tablespage.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
-#endif
 
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #include "propertysetitem.hxx"
-#endif
 
 #include "dbu_dlg.hrc"
 
@@ -148,3 +137,4 @@ SfxItemSet* OTableSubscriptionDialog::getWriteOutputSet()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

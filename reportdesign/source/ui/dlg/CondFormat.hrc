@@ -67,8 +67,6 @@
 #define BTN_MOVE_DOWN               21
 #define BTN_ADD_CONDITION           22
 #define BTN_REMOVE_CONDITION        23
-#define IMG_MOVE_UP_HC              24
-#define IMG_MOVE_DOWN_HC            25
 
 #define ROW_0_POS       ( RELATED_CONTROLS )
 #define ROW_0_HEIGTH    ( FIXEDTEXT_HEIGHT )

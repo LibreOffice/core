@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,33 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _SBA_UNODATBR_HXX_
 #include "unodatbr.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
-#endif
-#ifndef DBACCESS_IMAGEPROVIDER_HXX
 #include "imageprovider.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef DBACCESS_UI_DBTREEVIEW_HXX
+#include <osl/diagnose.h>
 #include "dbtreeview.hxx"
-#endif
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
-#ifndef _DBU_BRW_HRC_
 #include "dbu_brw.hrc"
-#endif
-#ifndef DBAUI_DBTREEMODEL_HXX
 #include "dbtreemodel.hxx"
-#endif
 
 using namespace ::com::sun::star::frame;
 using namespace ::dbtools;
@@ -67,7 +50,7 @@ namespace dbaui
 // -----------------------------------------------------------------------------
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const
 {
-    DBG_ASSERT(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
+    OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
     switch (getEntryType(_pEntry))
     {
         case etTableContainer:
@@ -142,7 +125,7 @@ void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
         m_pTreeModel->InvalidateEntry(_pEntry);
     }
     else {
-        DBG_ERROR("SbaTableQueryBrowser::select: invalid entry!");
+        OSL_FAIL("SbaTableQueryBrowser::select: invalid entry!");
     }
 }
 
@@ -162,7 +145,7 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
     if (pTextItem)
         return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
     else {
-        DBG_ERROR("SbaTableQueryBrowser::isSelected: invalid entry!");
+        OSL_FAIL("SbaTableQueryBrowser::isSelected: invalid entry!");
     }
     return sal_False;
 }
@@ -174,7 +157,7 @@ void SbaTableQueryBrowser::SelectionChanged()
         InvalidateFeature(ID_BROWSER_INSERTCOLUMNS);
         InvalidateFeature(ID_BROWSER_INSERTCONTENT);
         InvalidateFeature(ID_BROWSER_FORMLETTER);
-    } // if ( !m_bShowMenu )
+    }
     InvalidateFeature(ID_BROWSER_COPY);
     InvalidateFeature(ID_BROWSER_CUT);
 }
@@ -217,7 +200,7 @@ sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
     default:
         break;
     }
-    OSL_ENSURE( false, "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
+    OSL_FAIL( "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
     return DatabaseObject::TABLE;
 }
 
@@ -241,25 +224,21 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
 
             // the images for this entry
-            Image aImage, aImageHC;
+            Image aImage;
             if ( pData->eType == etDatasource )
-            {
-                aImage = pImageProvider->getDatabaseImage( false );
-                aImageHC = pImageProvider->getDatabaseImage( true );
-            }
+                aImage = pImageProvider->getDatabaseImage();
             else
             {
                 bool bIsFolder = !isObject( pData->eType );
                 if ( bIsFolder )
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    aImage = pImageProvider->getFolderImage( nObjectType, false );
-                    aImageHC = pImageProvider->getFolderImage( nObjectType, true );
+                    aImage = pImageProvider->getFolderImage( nObjectType );
                 }
                 else
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage, aImageHC );
+                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage );
                 }
             }
 
@@ -273,10 +252,8 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
 
-                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
-                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                pContextBitmapItem->SetBitmap1( aImage );
+                pContextBitmapItem->SetBitmap2( aImage );
                 break;
             }
 
@@ -289,3 +266,4 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 }   // namespace dbaui
 // .........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

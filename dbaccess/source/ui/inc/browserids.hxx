@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #define DBACCESS_UI_BROWSER_ID_HXX
 
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _DBACCESS_SLOTID_HRC_
 #include "dbaccess_slotid.hrc"
-#endif
 
 #define ID_BROWSER_COPY                     SID_COPY
 #define ID_BROWSER_CUT                      SID_CUT
@@ -120,3 +117,5 @@
 
 
 #endif // DBACCESS_UI_BROWSER_ID_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

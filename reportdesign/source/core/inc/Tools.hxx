@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,6 +38,7 @@
 #include <com/sun/star/report/XFixedText.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 
+#include <sal/macros.h>
 
 #include "Section.hxx"
 #include "corestrings.hrc"
@@ -48,7 +50,6 @@ namespace reportdesign
         if ( _bOn && !_xSection.is() )
             _xSection = new OSection(_xParent,_xParent->getContext(),_bPageSection);
         else if ( !_bOn )
-            //_xSection.clear();
             ::comphelper::disposeComponent(_xSection);
     }
 
@@ -94,7 +95,7 @@ namespace reportdesign
     public:
         template<typename T> static void setSize(const ::com::sun::star::awt::Size& aSize,T* _pShape)
         {
-            OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal with or height!");
+            OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal width or height!");
 
             ::osl::MutexGuard aGuard(_pShape->m_aMutex);
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
@@ -116,7 +117,7 @@ namespace reportdesign
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 ::com::sun::star::awt::Size aSize = _pShape->m_aProps.aComponent.m_xShape->getSize();
-                OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal with or height!");
+                OSL_ENSURE(aSize.Width >= 0 && aSize.Height >= 0,"Illegal width or height!");
                 return aSize;
             }
             return ::com::sun::star::awt::Size(_pShape->m_aProps.aComponent.m_nWidth,_pShape->m_aProps.aComponent.m_nHeight);
@@ -152,7 +153,6 @@ namespace reportdesign
             if ( _pShape->m_aProps.aComponent.m_xShape.is() )
             {
                 ::com::sun::star::awt::Point aPosition = _pShape->m_aProps.aComponent.m_xShape->getPosition();
-//                OSL_ENSURE(aPosition.X >= 0 && aPosition.Y >= 0,"Illegal position!");
                 return aPosition;
             }
             return ::com::sun::star::awt::Point(_pShape->m_aProps.aComponent.m_nPosX,_pShape->m_aProps.aComponent.m_nPosY);
@@ -181,3 +181,4 @@ namespace reportdesign
 // =============================================================================
 #endif // REPORTDESIGN_TOOLS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

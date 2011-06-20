@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -251,7 +252,6 @@ namespace rptui
         /** returns the report section window for the given xsection
             @param  _xSection   the section
         */
-        // ::boost::shared_ptr<OSectionWindow>  getReportSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
         /** checks if the keycode is known by the child windows
@@ -327,7 +327,6 @@ namespace rptui
         OSectionView* getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt);
 
         void MovAction(const Point& rPnt,const OSectionView* _pSection,bool _bMove /*= true */, bool _bControlKeySet);
-        // void MovAction2(const Point& rPnt,const OSectionView* _pSection);
 
         sal_uInt32 getMarkedObjectCount() const;
 
@@ -359,3 +358,4 @@ namespace rptui
 //==============================================================================
 #endif // RPTUI_VIEWSWINDOW_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

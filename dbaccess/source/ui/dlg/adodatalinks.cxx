@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,7 @@
 #include <adoid.h>     // needed for CLSID_CADOConnection
 #include <adoint.h>    // needed for ADOConnection
 
-#ifndef _DBAUI_ADO_DATALINK_HXX_
 #include "adodatalinks.hxx"
-#endif
 
 BSTR PromptEdit(long hWnd,BSTR connstr);
 BSTR PromptNew(long hWnd);
@@ -209,3 +208,5 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
     return _result;
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_TABLEFIELDDESC_HXX
 #include "TableFieldDescription.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <functional>
@@ -65,7 +60,7 @@ OTableFieldDesc::OTableFieldDesc()
 }
 //------------------------------------------------------------------------------
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
-    : ::vos::OReference()
+    : ::salhelper::SimpleReferenceObject()
 
 {
     DBG_CTOR(OTableFieldDesc,NULL);
@@ -244,3 +239,4 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

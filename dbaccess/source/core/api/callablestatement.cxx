@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,24 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef _DBA_COREAPI_CALLABLESTATEMENT_HXX_
 #include <callablestatement.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
 #include <rtl/logfile.hxx>
 
 using namespace dbaccess;
@@ -57,7 +46,6 @@ using namespace ::cppu;
 using namespace ::osl;
 
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< Type > OCallableStatement::getTypes() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getTypes" );
@@ -68,7 +56,6 @@ Sequence< Type > OCallableStatement::getTypes() throw (RuntimeException)
     return aTypes.getTypes();
 }
 
-//--------------------------------------------------------------------------
 Sequence< sal_Int8 > OCallableStatement::getImplementationId() throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getImplementationId" );
@@ -86,7 +73,6 @@ Sequence< sal_Int8 > OCallableStatement::getImplementationId() throw (RuntimeExc
 }
 
 // com::sun::star::uno::XInterface
-//--------------------------------------------------------------------------
 Any OCallableStatement::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::queryInterface" );
@@ -99,27 +85,23 @@ Any OCallableStatement::queryInterface( const Type & rType ) throw (RuntimeExcep
     return aIface;
 }
 
-//--------------------------------------------------------------------------
 void OCallableStatement::acquire() throw ()
 {
     OPreparedStatement::acquire();
 }
 
-//--------------------------------------------------------------------------
 void OCallableStatement::release() throw ()
 {
     OPreparedStatement::release();
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OCallableStatement::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getImplementationName" );
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OCallableStatement");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OCallableStatement"));
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OCallableStatement::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getSupportedServiceNames" );
@@ -130,7 +112,6 @@ Sequence< ::rtl::OUString > OCallableStatement::getSupportedServiceNames(  ) thr
 }
 
 // XOutParameters
-//------------------------------------------------------------------------------
 void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::registerOutParameter" );
@@ -138,11 +119,9 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
 
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
 
-
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY)->registerOutParameter( parameterIndex, sqlType, typeName );
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::registerNumericOutParameter" );
@@ -153,7 +132,6 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 }
 
 // XRow
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::wasNull" );
@@ -163,7 +141,6 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeExc
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->wasNull();
 }
 
-//------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getString" );
@@ -173,7 +150,6 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeExc
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getString( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getBoolean" );
@@ -183,7 +159,6 @@ sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex ) throw(
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBoolean( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getByte" );
@@ -193,7 +168,6 @@ sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex ) throw(SQL
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getByte( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getShort" );
@@ -202,7 +176,6 @@ sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(S
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getShort( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getInt" );
@@ -211,7 +184,6 @@ sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex ) throw(SQL
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getInt( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getLong" );
@@ -220,7 +192,6 @@ sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex ) throw(SQ
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getLong( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getFloat" );
@@ -229,7 +200,6 @@ float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex ) throw(SQLEx
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getFloat( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getDouble" );
@@ -238,7 +208,6 @@ double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex ) throw(SQL
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getDouble( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getBytes" );
@@ -247,7 +216,6 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBytes( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 ::com::sun::star::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getDate" );
@@ -256,7 +224,6 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getDate( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 ::com::sun::star::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getTime" );
@@ -265,7 +232,6 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getTime( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 ::com::sun::star::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getTimestamp" );
@@ -275,7 +241,6 @@ Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnInde
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getTimestamp( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getBinaryStream" );
@@ -285,7 +250,6 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::get
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBinaryStream( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getCharacterStream" );
@@ -295,7 +259,6 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCallableStatement::get
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getCharacterStream( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getObject" );
@@ -305,7 +268,6 @@ Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Referen
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getObject( columnIndex, typeMap );
 }
 
-//------------------------------------------------------------------------------
 Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getRef" );
@@ -314,7 +276,6 @@ Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 columnIndex ) t
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getRef( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getBlob" );
@@ -323,7 +284,6 @@ Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 columnIndex )
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBlob( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getClob" );
@@ -332,7 +292,6 @@ Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 columnIndex )
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getClob( columnIndex );
 }
 
-//------------------------------------------------------------------------------
 Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getArray" );
@@ -342,3 +301,4 @@ Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 columnIndex
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

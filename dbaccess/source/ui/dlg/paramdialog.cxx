@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,49 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef _DBAUI_PARAMDIALOG_HXX_
 #include "paramdialog.hxx"
-#endif
-#ifndef _DBAUI_PARAMDIALOG_HRC_
 #include "paramdialog.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
+#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <unotools/syslocale.hxx>
-#endif
 
 #define EF_VISITED      0x0001
 #define EF_DIRTY        0x0002
@@ -122,7 +95,7 @@ DBG_NAME(OParameterDialog)
             m_xFormatter = Reference< XNumberFormatter>(_rxORB->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
         else {
-            DBG_ERROR("OParameterDialog::OParameterDialog: need a service factory!");
+            OSL_FAIL("OParameterDialog::OParameterDialog: need a service factory!");
         }
 
         Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats(m_xConnection, sal_True);
@@ -132,7 +105,7 @@ DBG_NAME(OParameterDialog)
             m_xFormatter->attachNumberFormatsSupplier(xNumberFormats);
         try
         {
-            DBG_ASSERT(rParamContainer->getCount(), "OParameterDialog::OParameterDialog : can't handle empty containers !");
+            OSL_ENSURE(rParamContainer->getCount(), "OParameterDialog::OParameterDialog : can't handle empty containers !");
 
             m_aFinalValues.realloc(rParamContainer->getCount());
             PropertyValue* pValues = m_aFinalValues.getArray();
@@ -325,7 +298,7 @@ DBG_NAME(OParameterDialog)
         {
             sal_uInt16 nCurrent = m_aAllParams.GetSelectEntryPos();
             sal_uInt16 nCount = m_aAllParams.GetEntryCount();
-            DBG_ASSERT(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
+            OSL_ENSURE(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
             // search the next entry in list we haven't visited yet
             sal_uInt16 nNext = (nCurrent + 1) % nCount;
@@ -370,13 +343,13 @@ DBG_NAME(OParameterDialog)
 
         // initialize the controls with the new values
         sal_uInt16 nSelected = m_aAllParams.GetSelectEntryPos();
-        DBG_ASSERT(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
+        OSL_ENSURE(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
 
         m_aParam.SetText(::comphelper::getString(m_aFinalValues[nSelected].Value));
         m_nCurrentlySelected = nSelected;
 
         // with this the value isn't dirty
-        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
+        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
         m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
 
         m_aResetVisitFlag.SetTimeout(1000);
@@ -388,10 +361,10 @@ DBG_NAME(OParameterDialog)
     //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnVisitedTimeout, Timer*, /*pTimer*/)
     {
-        DBG_ASSERT(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
+        OSL_ENSURE(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
         // mark the currently selected entry as visited
-        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
+        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_VISITED;
 
         // was it the last "not visited yet" entry ?
@@ -438,7 +411,7 @@ DBG_NAME(OParameterDialog)
     IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)
     {
         // mark the currently selected entry as dirty
-        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
+        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
 
         m_bNeedErrorOnCurrent = sal_True;
@@ -450,3 +423,5 @@ DBG_NAME(OParameterDialog)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,9 +55,7 @@ TabPage PAGE_CONNECTION
         Text[ en-US ] = "General";
     };
 
-
     AUTO_BROWSECONTROLGROUP( 6, UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS, PAGE_X, HID_DSADMIN_URL_GENERAL, HID_DSADMIN_BROWSECONN)
-
 
     FixedText FT_NO_ADDITIONAL_SETTINGS
     {
@@ -67,7 +65,6 @@ TabPage PAGE_CONNECTION
         Size = MAP_APPFONT ( PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
     };
 
-
     FixedText FT_HOSTNAME
     {
         Hide = TRUE;
@@ -75,7 +72,6 @@ TabPage PAGE_CONNECTION
         Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
         Text[ en-US ] = "~Host name";
     };
-
 
     FixedLine FL_SEPARATOR2
     {
@@ -90,6 +86,7 @@ TabPage PAGE_CONNECTION
         Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "~User name" ;
     };
+
     Edit ET_USERNAME
     {
         HelpID = "dbaccess:Edit:PAGE_CONNECTION:ET_USERNAME";
@@ -98,6 +95,7 @@ TabPage PAGE_CONNECTION
         Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
         TabStop = TRUE ;
     };
+
     CheckBox CB_PASSWORD_REQUIRED
     {
         HelpID = "dbaccess:CheckBox:PAGE_CONNECTION:CB_PASSWORD_REQUIRED";
@@ -121,6 +119,7 @@ TabPage PAGE_CONNECTION
         Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "~JDBC driver class" ;
     };
+
     Edit ET_JDBCDRIVERCLASS
     {
         Border = TRUE ;
@@ -189,4 +188,3 @@ String STR_MSACCESS_2007_FILTERNAME
 {
     Text [ en-US ] = "MS Access 2007 file";
 };
-

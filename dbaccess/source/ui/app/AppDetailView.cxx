@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,75 +28,29 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_APPDETAILVIEW_HXX
 #include "AppDetailView.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
-#endif
-#ifndef DBAUI_APPVIEW_HXX
 #include "AppView.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
 #include <com/sun/star/ui/XImageManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
 #include <com/sun/star/ui/ImageType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
-#endif
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef DBAUI_APPDETAILPAGEHELPER_HXX
 #include "AppDetailPageHelper.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
-#ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
-#endif
 #include <algorithm>
 #include "dbtreelistbox.hxx"
 #include "IApplicationController.hxx"
@@ -185,7 +140,7 @@ void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
 void OCreationList::SelectSearchEntry( const void* _pEntry )
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
-    DBG_ASSERT( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
+    OSL_ENSURE( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
 
     if ( pEntry )
         setCurrentEntryInvalidate( pEntry );
@@ -198,8 +153,8 @@ void OCreationList::SelectSearchEntry( const void* _pEntry )
 void OCreationList::ExecuteSearchEntry( const void* _pEntry ) const
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
-    DBG_ASSERT( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
-    DBG_ASSERT( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
+    OSL_ENSURE( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
+    OSL_ENSURE( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
 
     if ( pEntry )
         onSelected( pEntry );
@@ -215,7 +170,7 @@ Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
     SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP );
     SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : NULL;
     SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : NULL;
-    DBG_ASSERT( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
+    OSL_ENSURE( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
     if ( pTab && pItemData )
         aRect.Left() = pTab->GetPos() - pItemData->aSize.Width() / 2;
 
@@ -259,7 +214,7 @@ void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
 {
     SvTreeListBox::MouseButtonDown( rMEvt );
 
-    DBG_ASSERT( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
+    OSL_ENSURE( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
     m_pMouseDownEntry = GetCurEntry();
     if ( m_pMouseDownEntry )
     {
@@ -281,14 +236,14 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
         if ( m_pMouseDownEntry )
         {
             // we're currently in a "mouse down" phase
-            DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
+            OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
             if ( pEntry == m_pMouseDownEntry )
             {
                 setCurrentEntryInvalidate( m_pMouseDownEntry );
             }
             else
             {
-                DBG_ASSERT( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
+                OSL_ENSURE( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
                     "OCreationList::MouseMove: inconsistence (2)!" );
                 setCurrentEntryInvalidate( NULL );
             }
@@ -321,7 +276,7 @@ void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( m_pMouseDownEntry )
     {
-        DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm .... no mouse captured, but an active entry?" );
+        OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm .... no mouse captured, but an active entry?" );
         ReleaseMouse();
 
         InvalidateEntry( m_pMouseDownEntry );
@@ -362,7 +317,7 @@ void OCreationList::updateHelpText()
 // -----------------------------------------------------------------------------
 void OCreationList::onSelected( SvLBoxEntry* _pEntry ) const
 {
-    DBG_ASSERT( _pEntry, "OCreationList::onSelected: invalid entry!" );
+    OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
     URL aCommand;
     aCommand.Complete = reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
     m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
@@ -393,7 +348,7 @@ void OCreationList::KeyInput( const KeyEvent& rKEvt )
         {
             InvalidateEntry( pNewCurrent );
             CallEventListeners( VCLEVENT_LISTBOX_SELECT, pNewCurrent );
-        } // if ( pNewCurrent )
+        }
         updateHelpText();
     }
 }
@@ -416,7 +371,7 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
     m_aDescription.SetText(ModuleRes(STR_DESCRIPTION));
 
     ImageProvider aImageProvider;
-    Image aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM, false );
+    Image aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM );
     m_aCreation.SetDefaultCollapsedEntryBmp( aFolderImage );
     m_aCreation.SetDefaultExpandedEntryBmp( aFolderImage );
 
@@ -462,8 +417,6 @@ void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
         m_aHelpText.SetTextFillColor();
         m_aDescription.SetTextColor( rStyleSettings.GetFieldTextColor() );
         m_aDescription.SetTextFillColor();
-        //m_aFL.SetTextColor( rStyleSettings.GetFieldTextColor() );
-        //m_aFL.SetTextFillColor();
     }
 
     if( bBackground )
@@ -486,11 +439,6 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
     {
         String sText = ModuleRes(_nId);
 
-        // calulate the size of the text field
-        // Size aHelpTextSize = m_aHelpText.GetSizePixel();
-        // Size aHelpTextPixelSize = LogicToPixel( aHelpTextSize, MAP_APPFONT );
-        // Rectangle aPrimaryRect( Point(0,0), aHelpTextSize );
-        // Rectangle aSuggestedRect( GetTextRect( aPrimaryRect, sText, TEXT_DRAW_MULTILINE | TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK ) );
         m_aHelpText.SetText(sText);
     }
     else
@@ -511,8 +459,8 @@ IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
 void OTasksWindow::Resize()
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // Abmessungen parent window
+
+    // parent window dimension
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
@@ -524,9 +472,6 @@ void OTasksWindow::Resize()
     m_aCreation.SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
     // i77897 make the m_aHelpText a little bit smaller. (-5)
     sal_Int32 nNewWidth = nOutputWidth - nHalfOutputWidth - aFLSize.Width() - 5;
-    // m_aHelpText.SetBackground( MAKE_SALCOLOR( 0xe0, 0xe0, 0xe0 ) );
-    // Wallpaper aLightGray(Color(0xe0, 0xe0, 0xe0));
-    // m_aHelpText.SetBackground( aLightGray );
     m_aDescription.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, 0), Size(nNewWidth, nOutputHeight) );
     Size aDesc = m_aDescription.CalcMinimumSize();
     m_aHelpText.SetPosSizePixel( Point(nHalfOutputWidth + n6PPT, aDesc.Height() ), Size(nNewWidth, nOutputHeight - aDesc.Height() - n6PPT) );
@@ -541,9 +486,16 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 
     try
     {
-        Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getDetailView()->getBorderWin().getView()->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
-        Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")));
-        Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
+        Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
+            getDetailView()->getBorderWin().getView()->getORB()->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ) )
+            ) ,
+            UNO_QUERY
+        );
+        Reference< XUIConfigurationManager > xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.OfficeDatabaseDocument" ) )
+        );
+        Reference< XImageManager > xImageMgr( xUIConfigMgr->getImageManager(), UNO_QUERY );
 
         // copy the commands so we can use them with the config managers
         Sequence< ::rtl::OUString > aCommands( _rList.size() );
@@ -552,24 +504,21 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         for ( TaskEntryList::const_iterator pCopyTask = _rList.begin(); pCopyTask != aEnd; ++pCopyTask, ++pCommands )
             *pCommands = pCopyTask->sUNOCommand;
 
-        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL, aCommands );
-        Sequence< Reference< XGraphic> > aHCImages = xImageMgr->getImages( ImageType::SIZE_DEFAULT | ImageType::COLOR_HIGHCONTRAST, aCommands );
+        Sequence< Reference< XGraphic> > aImages = xImageMgr->getImages(
+            ImageType::SIZE_DEFAULT | ImageType::COLOR_NORMAL ,
+            aCommands
+        );
 
         const Reference< XGraphic >* pImages( aImages.getConstArray() );
-        const Reference< XGraphic >* pHCImages( aHCImages.getConstArray() );
 
-        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages, ++pHCImages )
+        for ( TaskEntryList::const_iterator pTask = _rList.begin(); pTask != aEnd; ++pTask, ++pImages )
         {
             SvLBoxEntry* pEntry = m_aCreation.InsertEntry( pTask->sTitle );
             pEntry->SetUserData( reinterpret_cast< void* >( new TaskEntry( *pTask ) ) );
 
             Image aImage = Image( *pImages );
-            m_aCreation.SetExpandedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage, BMP_COLOR_NORMAL );
-
-            Image aHCImage = Image( *pHCImages );
-            m_aCreation.SetExpandedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
-            m_aCreation.SetCollapsedEntryBmp( pEntry, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            m_aCreation.SetExpandedEntryBmp(  pEntry, aImage );
+            m_aCreation.SetCollapsedEntryBmp( pEntry, aImage );
         }
     }
     catch(Exception&)
@@ -664,7 +613,6 @@ void OApplicationDetailView::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
     if( bBackground )
         SetBackground( rStyleSettings.GetFieldColor() );
 
-    //SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetDialogColor() ) );
     m_aHorzSplitter.SetBackground( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter.SetFillColor( rStyleSettings.GetDialogColor() );
     m_aHorzSplitter.SetTextFillColor(rStyleSettings.GetDialogColor() );
@@ -757,7 +705,6 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
     OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
     TaskPaneData& rData = m_aTaskPaneData[ _eType ];
 
-//    if ( rData.aTasks.empty() )
     //oj: do not check, otherwise extensions will only be visible after a reload.
     impl_fillTaskPaneData( _eType, rData );
 
@@ -799,7 +746,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
         break;
 
     default:
-        OSL_ENSURE( false, "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
+        OSL_FAIL( "OApplicationDetailView::impl_fillTaskPaneData: illegal element type!" );
     }
 
     MnemonicGenerator aAllMnemonics( m_aExternalMnemonics );
@@ -1013,3 +960,4 @@ Window* OApplicationDetailView::getTreeWindow() const
     return m_pControlHelper->getCurrentView();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

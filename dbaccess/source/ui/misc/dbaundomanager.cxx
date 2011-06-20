@@ -34,7 +34,6 @@
 
 #include <svl/undo.hxx>
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
 #include <framework/undomanagerhelper.hxx>
 
 //......................................................................................................................
@@ -263,7 +262,7 @@ namespace dbaui
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::undo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // (all our UndoActions work directly on VCL code, usually, so ...)
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.undo( aGuard );
@@ -272,7 +271,7 @@ namespace dbaui
     //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL UndoManager::redo(  ) throw (EmptyUndoStackException, UndoContextNotClosedException, UndoFailedException, RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        SolarMutexGuard aSolarGuard;
             // (all our UndoActions work directly on VCL code, usually, so ...)
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.redo( aGuard );

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
+#include <osl/diagnose.h>
 
 //........................................................................
 namespace dbaui
@@ -72,7 +74,7 @@ namespace dbaui
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
         if (aFind == m_aCharSets.end())
         {
-            DBG_ERROR( "CharSetListBox::SelectEntryByIanaName: unknown charset falling back to system language!" );
+            OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: unknown charset falling back to system language!" );
             aFind = m_aCharSets.findEncoding( RTL_TEXTENCODING_DONTKNOW );
         }
 
@@ -88,7 +90,7 @@ namespace dbaui
                 // in our settings, there was an encoding selected which is not valid for the current
                 // data source type
                 // This is worth at least an assertion.
-                DBG_ERROR( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
+                OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
                 sDisplayName = String();
             }
 
@@ -103,7 +105,7 @@ namespace dbaui
         if ( GetSelectEntryPos() != GetSavedValue() )
         {
             OCharsetDisplay::const_iterator aFind = m_aCharSets.findDisplayName( GetSelectEntry() );
-            DBG_ASSERT( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
+            OSL_ENSURE( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
             if ( aFind != m_aCharSets.end() )
             {
                 _rSet.Put( SfxStringItem( _nItemId, (*aFind).getIanaName() ) );
@@ -116,3 +118,5 @@ namespace dbaui
 //........................................................................
 } // namespace dbaui
 //........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

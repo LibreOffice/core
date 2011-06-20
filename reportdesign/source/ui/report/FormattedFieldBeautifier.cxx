@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,7 +150,7 @@ namespace rptui
     // -----------------------------------------------------------------------------
     void FormattedFieldBeautifier::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
-        if  ( !_rEvent.PropertyName.equalsAscii( "DataField" ) )
+        if  ( !_rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
             // not interested in
             return;
 
@@ -186,7 +187,6 @@ namespace rptui
                 OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObject);
                 if ( pUnoObj ) // this doesn't need to be done for shapes
                 {
-                    // Rectangle aRect = pUnoObj->GetCurrentBoundRect();
                     ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_rReportController.getSectionWindow(xSection);
                     if (pSectionWindow != NULL)
                     {
@@ -201,3 +201,5 @@ namespace rptui
         return xVclWindowPeer;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

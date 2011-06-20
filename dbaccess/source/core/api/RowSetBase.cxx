@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,6 @@ namespace dbaccess
 // =========================================================================
 // = OEmptyCollection
 // =========================================================================
-// -------------------------------------------------------------------------
 class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
@@ -79,22 +79,21 @@ protected:
 public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< ::rtl::OUString>()){}
 };
-// -----------------------------------------------------------------------------
+
 void OEmptyCollection::impl_refresh() throw(RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
+
 connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUString& /*_rName*/)
 {
     return connectivity::sdbcx::ObjectType();
 }
-// -----------------------------------------------------------------------------
 
 // =========================================================================
 // = ORowSetBase
 // =========================================================================
 DBG_NAME(ORowSetBase)
-// -------------------------------------------------------------------------
+
 ORowSetBase::ORowSetBase( const ::comphelper::ComponentContext& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
     :OPropertyStateContainer(_rBHelper)
     ,m_pMutex(_pMutex)
@@ -124,7 +123,7 @@ ORowSetBase::ORowSetBase( const ::comphelper::ComponentContext& _rContext, ::cpp
     registerPropertyNoMember( PROPERTY_ROWCOUNT,        PROPERTY_ID_ROWCOUNT,        nRBT, ::getCppuType( &nInitialRowCountValue ), &nInitialRowCountValue );
     registerPropertyNoMember( PROPERTY_ISROWCOUNTFINAL, PROPERTY_ID_ISROWCOUNTFINAL, nRBT, ::getBooleanCppuType(),                  &bInitialRowCountFinalValue );
 }
-// -----------------------------------------------------------------------------
+
 ORowSetBase::~ORowSetBase()
 {
     if(m_pColumns)
@@ -141,15 +140,15 @@ ORowSetBase::~ORowSetBase()
 
     DBG_DTOR(ORowSetBase,NULL);
 }
+
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< Type > ORowSetBase::getTypes() throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getTypes" );
     return ::comphelper::concatSequences(ORowSetBase_BASE::getTypes(),OPropertyStateContainer::getTypes());
 }
+
 // com::sun::star::uno::XInterface
-//--------------------------------------------------------------------------
 Any ORowSetBase::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::queryInterface" );
@@ -158,7 +157,7 @@ Any ORowSetBase::queryInterface( const Type & rType ) throw (RuntimeException)
         aRet = OPropertyStateContainer::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getFastPropertyValue" );
@@ -179,7 +178,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
     else
         OPropertyStateContainer::getFastPropertyValue(rValue,nHandle);
 }
-// -------------------------------------------------------------------------
+
 // OComponentHelper
 void SAL_CALL ORowSetBase::disposing(void)
 {
@@ -198,7 +197,7 @@ void SAL_CALL ORowSetBase::disposing(void)
     }
     m_pCache = NULL;
 }
-// -------------------------------------------------------------------------
+
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSetBase::createArrayHelper( ) const
 {
@@ -207,14 +206,14 @@ void SAL_CALL ORowSetBase::disposing(void)
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
+
 // cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& SAL_CALL ORowSetBase::getInfoHelper()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getInfoHelper" );
     return *const_cast<ORowSetBase*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 // XRow
 sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
 {
@@ -223,27 +222,26 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     checkCache();
     return impl_wasNull();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool ORowSetBase::impl_wasNull()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::impl_wasNull" );
-    return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid()) ? ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull() : sal_True;
+    return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is()) ? ((*m_aCurrentRow)->get())[m_nLastColumnIndex].isNull() : sal_True;
 }
 
-// -----------------------------------------------------------------------------
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getValue" );
     checkCache();
     return impl_getValue(columnIndex);
 }
-// -----------------------------------------------------------------------------
+
 const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::impl_getValue" );
     if ( m_bBeforeFirst || m_bAfterLast )
     {
-        OSL_ENSURE(0,"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
+        OSL_FAIL("ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
@@ -252,7 +250,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         return m_aEmptyValue;
     }
 
-    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     if ( !bValidCurrentRow )
     {
         // currentrow is null when the clone moves the window
@@ -261,7 +259,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
 
-        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     }
 
     if ( bValidCurrentRow )
@@ -278,14 +276,14 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
         ORowSetMatrix::iterator k = aHelper.aIterator;
         for (; k != m_pCache->getEnd(); ++k)
         {
-            ORowSetValueVector* pTemp = k->getBodyPtr();
+            ORowSetValueVector* pTemp = k->get();
             OSL_ENSURE( pTemp != (void*)0xfeeefeee,"HALT!" );
         }
 #endif
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
 #if OSL_DEBUG_LEVEL > 0
         ORowSetRow rRow = (*m_aCurrentRow);
-        OSL_ENSURE(rRow.isValid() && static_cast<sal_uInt16>(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
+        OSL_ENSURE(rRow.is() && static_cast<sal_uInt16>(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
 #endif
         return ((*m_aCurrentRow)->get())[m_nLastColumnIndex = columnIndex];
     }
@@ -293,91 +291,91 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     // we should normally never reach this
     return m_aEmptyValue;
 }
-// -------------------------------------------------------------------------
+
 ::rtl::OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getString" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getBoolean" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int8 SAL_CALL ORowSetBase::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getByte" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL ORowSetBase::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getShort" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ORowSetBase::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getInt" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL ORowSetBase::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getLong" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 float SAL_CALL ORowSetBase::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getFloat" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 double SAL_CALL ORowSetBase::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getDouble" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getBytes" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::Date SAL_CALL ORowSetBase::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getDate" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::Time SAL_CALL ORowSetBase::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getTime" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::DateTime SAL_CALL ORowSetBase::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getTimestamp" );
     ::osl::MutexGuard aGuard( *m_pMutex );
     return getValue(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getBinaryStream" );
@@ -386,7 +384,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
 
     if ( m_bBeforeFirst || m_bAfterLast )
     {
-        OSL_ENSURE(0,"ORowSetBase::getBinaryStream: Illegal call here (we're before first or after last)!");
+        OSL_FAIL("ORowSetBase::getBinaryStream: Illegal call here (we're before first or after last)!");
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_CURSOR_BEFORE_OR_AFTER ), SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
     }
 
@@ -395,7 +393,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
         return NULL;
     }
 
-    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     if ( !bValidCurrentRow )
     {
         positionCache( MOVE_NONE_REFRESH_ONLY );
@@ -403,7 +401,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
         m_bIsInsertRow  = sal_False;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getBinaryStream: we don't stand on a valid row! Row is null.");
 
-        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     }
 
     if ( bValidCurrentRow )
@@ -412,13 +410,13 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     // we should normally never reach this
     return Reference< ::com::sun::star::io::XInputStream >();
 }
-// -------------------------------------------------------------------------
+
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getCharacterStream" );
     return getBinaryStream(columnIndex);
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getObject" );
@@ -427,38 +425,38 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
 
     return getValue(columnIndex).makeAny();
 }
-// -------------------------------------------------------------------------
+
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getRef" );
     ::dbtools::throwFeatureNotImplementedException( "XRow::getRef", *m_pMySelf );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getBlob" );
     return Reference< XBlob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
-// -------------------------------------------------------------------------
+
 Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getClob" );
     return Reference< XClob >(getValue(columnIndex).makeAny(),UNO_QUERY);
 }
-// -------------------------------------------------------------------------
+
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getArray" );
     ::dbtools::throwFeatureNotImplementedException( "XRow::getArray", *m_pMySelf );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 // ::com::sun::star::sdbcx::XRowLocate
 Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getBookmark" );
-    DBG_TRACE2("DBACCESS ORowSetBase::getBookmark() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::getBookmark() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -472,20 +470,20 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
     OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::getBookmark: bookmark has no value!" );
     return m_aBookmark;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::moveToBookmark" );
-    DBG_TRACE2("DBACCESS ORowSetBase::moveToBookmark(Any) Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::moveToBookmark(Any) Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
     if(!bookmark.hasValue() || m_nResultSetType == ResultSetType::FORWARD_ONLY)
     {
         if(bookmark.hasValue())
-            OSL_ENSURE(0,"MoveToBookmark is not possible when we are only forward");
+            OSL_FAIL("MoveToBookmark is not possible when we are only forward");
         else
-            OSL_ENSURE(0,"Bookmark is not valid");
+            OSL_FAIL("Bookmark is not valid");
         throwFunctionSequenceException(*m_pMySelf);
     }
 
@@ -521,14 +519,14 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         // - IsNew
         aNotifier.fire( );
     }
-    DBG_TRACE2("DBACCESS ORowSetBase::moveToBookmark(Any) = %i Clone = %i\n",bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::moveToBookmark(Any) = %i Clone = %i\n",bRet,m_bClone);
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::moveRelativeToBookmark" );
-    DBG_TRACE2("DBACCESS ORowSetBase::moveRelativeToBookmark(Any,%i) Clone = %i\n",rows,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::moveRelativeToBookmark(Any,%i) Clone = %i\n",rows,m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -565,10 +563,10 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
         // RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::moveRelativeToBookmark(Any,%i) = %i Clone = %i\n",rows,bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::moveRelativeToBookmark(Any,%i) = %i Clone = %i\n",rows,bRet,m_bClone);
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::compareBookmarks" );
@@ -576,7 +574,7 @@ sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& _first, const Any& 
     checkCache();
     return m_pCache->compareBookmarks(_first,_second);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::hasOrderedBookmarks" );
@@ -584,7 +582,7 @@ sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  ) throw(SQLException, Runti
     checkCache();
     return m_pCache->hasOrderedBookmarks();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::hashBookmark" );
@@ -592,8 +590,7 @@ sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark ) throw(SQLExc
     checkCache();
     return m_pCache->hashBookmark(bookmark);
 }
-// -------------------------------------------------------------------------
-// -------------------------------------------------------------------------
+
 // XResultSetMetaDataSupplier
 Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLException, RuntimeException)
 {
@@ -606,7 +603,6 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
 
     return xMeta;
 }
-// -------------------------------------------------------------------------
 
 // XColumnLocate
 sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
@@ -615,10 +611,9 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) 
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    // it is possible to save some time her when we remember the names - position relation in a map
+    // it is possible to save some time here when we remember the names - position relation in a map
     return m_pColumns ? m_pColumns->findColumn(columnName) : sal_Int32(0);
 }
-// -------------------------------------------------------------------------
 
 // ::com::sun::star::sdbcx::XColumnsSupplier
 Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeException)
@@ -636,12 +631,12 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeExcep
 
     return m_pColumns;
 }
-// -------------------------------------------------------------------------
+
 // XResultSet
 sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::next" );
-    DBG_TRACE2("DBACCESS ORowSetBase::next() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::next() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkCache();
 
@@ -660,7 +655,6 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         sal_Bool bAfterLast = m_pCache->isAfterLast();
         bRet = m_pCache->next();
         doCancelModification( );
-
 
         if ( bRet || bAfterLast != m_pCache->isAfterLast() )
         {
@@ -684,10 +678,10 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::next() = %i Clone = %i ID = %i\n",bRet,m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::next() = %i Clone = %i ID = %i\n",bRet,m_bClone,osl_getThreadIdentifier(NULL));
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::isBeforeFirst" );
@@ -695,32 +689,32 @@ sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  ) throw(SQLException, RuntimeExce
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    DBG_TRACE2("DBACCESS ORowSetBase::isBeforeFirst() = %i Clone = %i\n",m_bBeforeFirst,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::isBeforeFirst() = %i Clone = %i\n",m_bBeforeFirst,m_bClone);
 
     return m_bBeforeFirst;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::isAfterLast" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
-    DBG_TRACE2("DBACCESS ORowSetBase::isAfterLast() = %i Clone = %i\n",m_bAfterLast,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::isAfterLast() = %i Clone = %i\n",m_bAfterLast,m_bClone);
 
     return m_bAfterLast;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetBase::isOnFirst()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::isOnFirst" );
     return isFirst();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::isFirst" );
-    DBG_TRACE2("DBACCESS ORowSetBase::isFirst() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::isFirst() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -735,20 +729,20 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
     positionCache( MOVE_NONE_REFRESH_ONLY );
     sal_Bool bIsFirst = m_pCache->isFirst();
 
-    DBG_TRACE2("DBACCESS ORowSetBase::isFirst() = %i Clone = %i\n",bIsFirst,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::isFirst() = %i Clone = %i\n",bIsFirst,m_bClone);
     return bIsFirst;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetBase::isOnLast()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::isOnLast" );
     return isLast();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::isLast" );
-    DBG_TRACE2("DBACCESS ORowSetBase::isLast() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::isLast() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
@@ -767,14 +761,14 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
     positionCache( MOVE_NONE_REFRESH_ONLY );
     sal_Bool bIsLast = m_pCache->isLast();
 
-    DBG_TRACE2("DBACCESS ORowSetBase::isLast() = %i Clone = %i\n",bIsLast,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::isLast() = %i Clone = %i\n",bIsLast,m_bClone);
     return bIsLast;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::beforeFirst" );
-    DBG_TRACE2("DBACCESS ORowSetBase::beforeFirst() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::beforeFirst() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
@@ -810,13 +804,13 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
         // to be done _after_ the notifications!
         m_aOldRow->clearRow();
     }
-    DBG_TRACE2("DBACCESS ORowSetBase::beforeFirst() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::beforeFirst() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::afterLast" );
-    DBG_TRACE2("DBACCESS ORowSetBase::afterLast() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::afterLast() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -850,14 +844,14 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
             fireRowcount();
         }
     }
-    DBG_TRACE2("DBACCESS ORowSetBase::afterLast() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::afterLast() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<sal_Bool,ORowSetBase>& _aCheckFunctor,
                                         ::std::mem_fun_t<sal_Bool,ORowSetCache>& _aMovementFunctor)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::move" );
-    DBG_TRACE2("DBACCESS ORowSetBase::move() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::move() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
@@ -897,38 +891,38 @@ sal_Bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<sal_Bool,ORowSetBase>& 
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE2("DBACCESS ORowSetBase::move() = %i Clone = %i\n",bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::move() = %i Clone = %i\n",bRet,m_bClone);
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::first" );
-    DBG_TRACE2("DBACCESS ORowSetBase::first() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::first() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::std::mem_fun_t<sal_Bool,ORowSetBase> ioF_tmp(&ORowSetBase::isOnFirst);
     ::std::mem_fun_t<sal_Bool,ORowSetCache> F_tmp(&ORowSetCache::first);
     return move(ioF_tmp,F_tmp);
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::last" );
-    DBG_TRACE2("DBACCESS ORowSetBase::last() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::last() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::std::mem_fun_t<sal_Bool,ORowSetBase> ioL_tmp(&ORowSetBase::isOnLast);
     ::std::mem_fun_t<sal_Bool,ORowSetCache> L_tmp(&ORowSetCache::last);
     return move(ioL_tmp,L_tmp);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getRow" );
-    DBG_TRACE2("DBACCESS ORowSetBase::getRow() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::getRow() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::osl::MutexGuard aGuard( *m_pMutex );
 
     checkCache();
     return impl_getRow();
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 ORowSetBase::impl_getRow()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::impl_getRow" );
@@ -952,14 +946,14 @@ sal_Int32 ORowSetBase::impl_getRow()
         }
         nPos = m_pCache->getRow();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::impl_getRow() = %i Clone = %i ID = %i\n",nPos,m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::impl_getRow() = %i Clone = %i ID = %i\n",nPos,m_bClone,osl_getThreadIdentifier(NULL));
     return nPos;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::absolute" );
-    DBG_TRACE2("DBACCESS ORowSetBase::absolute(%i) Clone = %i\n",row,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::absolute(%i) Clone = %i\n",row,m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
@@ -998,14 +992,14 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::absolute(%i) = %i Clone = %i\n",row,bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::absolute(%i) = %i Clone = %i\n",row,bRet,m_bClone);
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::relative" );
-    DBG_TRACE2("DBACCESS ORowSetBase::relative(%i) Clone = %i\n",rows,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::relative(%i) Clone = %i\n",rows,m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
@@ -1054,14 +1048,14 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE3("DBACCESS ORowSetBase::relative(%i) = %i Clone = %i\n",rows,bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::relative(%i) = %i Clone = %i\n",rows,bRet,m_bClone);
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::previous" );
-    DBG_TRACE2("DBACCESS ORowSetBase::previous() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::previous() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
 
@@ -1094,7 +1088,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         }
         else
         {
-            DBG_ERROR( "ORowSetBase::previous: inconsistency!" );
+            OSL_FAIL( "ORowSetBase::previous: inconsistency!" );
                 // we should never reach this place, as we should not get into this whole branch if m_bBeforeFirst
                 // was |true| from the beginning
             movementFailed();
@@ -1107,17 +1101,16 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
-    DBG_TRACE2("DBACCESS ORowSetBase::previous() = %i Clone = %i\n",bRet,m_bClone);
+    OSL_TRACE("DBACCESS ORowSetBase::previous() = %i Clone = %i\n",bRet,m_bClone);
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::setCurrentRow" );
-    DBG_TRACE2("DBACCESS ORowSetBase::setCurrentRow() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::setCurrentRow() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
     m_bAfterLast    = m_pCache->isAfterLast();
-    //m_pCache->resetInsertRow(sal_True);
 
     if(!(m_bBeforeFirst || m_bAfterLast))
     {
@@ -1128,7 +1121,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is null!");
         m_aCurrentRow.setBookmark(m_aBookmark);
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
-        OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
+        OSL_ENSURE(m_aCurrentRow->is(),"Currentrow isn't valid");
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1144,10 +1137,9 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
 #if OSL_DEBUG_LEVEL > 0
         ORowSetRow rRow = (*m_aCurrentRow);
-        OSL_ENSURE(rRow.isValid() ,"Invalid size of vector!");
+        OSL_ENSURE(rRow.is() ,"Invalid size of vector!");
 #endif
         // the cache could repositioned so we need to adjust the cache
-        // #104144# OJ
         if ( _bMoved && m_aCurrentRow.isNull() )
         {
             positionCache( MOVE_NONE_REFRESH_ONLY );
@@ -1170,29 +1162,29 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         firePropertyChange(_rOldValues);
 
     // TODO: can this be done before the notifications?
-    if(!(m_bBeforeFirst || m_bAfterLast) && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid() && m_aCurrentRow != m_pCache->getEnd())
-        m_aOldRow->setRow(new ORowSetValueVector(m_aCurrentRow->getBody()));
+    if(!(m_bBeforeFirst || m_bAfterLast) && !m_aCurrentRow.isNull() && m_aCurrentRow->is() && m_aCurrentRow != m_pCache->getEnd())
+        m_aOldRow->setRow(new ORowSetValueVector( *(*m_aCurrentRow) ));
 
     if ( _bMoved && _bDoNotify )
         // - cursorMoved
         notifyAllListenersCursorMoved( _rGuard );
 
-    DBG_TRACE2("DBACCESS ORowSetBase::setCurrentRow() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::setCurrentRow() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::checkPositioningAllowed() throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::checkPositioningAllowed" );
     if(!m_pCache || m_nResultSetType == ResultSetType::FORWARD_ONLY)
         throwFunctionSequenceException(*m_pMySelf);
 }
-//------------------------------------------------------------------------------
+
 Reference< XInterface >  ORowSetBase::getStatement(void) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getStatement" );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::refreshRow" );
@@ -1211,7 +1203,7 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
         firePropertyChange(aOldValues);
     }
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::rowUpdated" );
@@ -1223,7 +1215,7 @@ sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeExcepti
 
     return m_pCache->rowUpdated();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::rowInserted" );
@@ -1236,7 +1228,7 @@ sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeExcept
 
     return m_pCache->rowInserted();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::rowDeleted" );
@@ -1244,12 +1236,12 @@ sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeExcepti
     checkCache();
     return impl_rowDeleted();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool ORowSetBase::impl_rowDeleted(  )
 {
     return !m_aBookmark.hasValue() && !m_bBeforeFirst && !m_bAfterLast;
 }
-// -------------------------------------------------------------------------
+
 // XWarningsSupplier
 Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 {
@@ -1265,7 +1257,7 @@ Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 
     return Any();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::clearWarnings" );
@@ -1278,11 +1270,14 @@ void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeExceptio
             xWarnings->clearWarnings();
     }
 }
-// -------------------------------------------------------------------------
+
 void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
 {
+    if (!isPropertyChangeNotificationEnabled())
+        return;
+
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::firePropertyChange" );
-    DBG_TRACE2("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     OSL_ENSURE(m_pColumns,"Columns can not be NULL here!");
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bNull;
@@ -1294,47 +1289,48 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     try
     {
         TDataColumns::iterator aEnd = m_aDataColumns.end();
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i) // #104278# OJ ++i inserted
-            (*aIter)->fireValueChange(_rOldRow.isValid() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
+            (*aIter)->fireValueChange(_rOldRow.is() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"firePropertyChange: Exception");
+        OSL_FAIL("firePropertyChange: Exception");
     }
-    DBG_TRACE2("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
-// -------------------------------------------------------------------------
+
 void ORowSetBase::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
 {
     OSL_ENSURE(_nPos < (sal_Int32)m_aDataColumns.size(),"nPos is invalid!");
     m_aDataColumns[_nPos]->fireValueChange(_rOldValue);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::fireRowcount()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::fireRowcount" );
 }
 
-// -----------------------------------------------------------------------------
 sal_Bool ORowSetBase::notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::notifyAllListenersCursorBeforeMove" );
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
 void ORowSetBase::notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::notifyAllListenersCursorMoved" );
 }
 
-// -----------------------------------------------------------------------------
 void ORowSetBase::notifyAllListeners(::osl::ResettableMutexGuard& /*_rGuard*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::notifyAllListeners" );
 }
 
-// -----------------------------------------------------------------------------
+sal_Bool ORowSetBase::isPropertyChangeNotificationEnabled() const
+{
+    return sal_True;
+}
+
 void ORowSetBase::fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::fireProperty" );
@@ -1343,11 +1339,10 @@ void ORowSetBase::fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _
     fire( &_nProperty, &aNew, &aOld, 1, sal_False );
 }
 
-// -----------------------------------------------------------------------------
 void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::positionCache" );
-    DBG_TRACE2("DBACCESS ORowSetBase::positionCache() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::positionCache() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 
     sal_Bool bSuccess = sal_False;
     if ( m_aBookmark.hasValue() )
@@ -1396,10 +1391,11 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
         }
     }
     OSL_ENSURE( bSuccess, "ORowSetBase::positionCache: failed!" );
+    (void)bSuccess;
 
-    DBG_TRACE2("DBACCESS ORowSetBase::positionCache() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::positionCache() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::checkCache()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::checkCache" );
@@ -1407,11 +1403,11 @@ void ORowSetBase::checkCache()
     if(!m_pCache)
         throwFunctionSequenceException(*m_pMySelf);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::movementFailed()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::movementFailed" );
-    DBG_TRACE2("DBACCESS ORowSetBase::movementFailed() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::movementFailed() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     m_aOldRow->clearRow();
     m_aCurrentRow   = m_pCache->getEnd();
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
@@ -1419,25 +1415,25 @@ void ORowSetBase::movementFailed()
     m_aBookmark     = Any();
     m_aCurrentRow.setBookmark(m_aBookmark);
     OSL_ENSURE(m_bBeforeFirst || m_bAfterLast,"BeforeFirst or AfterLast is wrong!");
-    DBG_TRACE2("DBACCESS ORowSetBase::movementFailed() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
+    OSL_TRACE("DBACCESS ORowSetBase::movementFailed() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
-// -----------------------------------------------------------------------------
+
 ORowSetRow ORowSetBase::getOldRow(sal_Bool _bWasNew)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getOldRow" );
-    OSL_ENSURE(m_aOldRow.isValid(),"RowSetRowHElper isn't valid!");
+    OSL_ENSURE(m_aOldRow.is(),"RowSetRowHElper isn't valid!");
     ORowSetRow aOldValues;
-    if ( !_bWasNew && m_aOldRow->getRow().isValid() )
-        aOldValues = new ORowSetValueVector( m_aOldRow->getRow().getBody());     // remember the old values
+    if ( !_bWasNew && m_aOldRow->getRow().is() )
+        aOldValues = new ORowSetValueVector( *(m_aOldRow->getRow()));    // remember the old values
     return aOldValues;
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, Any& _rDefault ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getPropertyDefaultByHandle" );
     _rDefault.clear();
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::onDeleteRow( const Any& _rBookmark )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::onDeleteRow" );
@@ -1453,7 +1449,7 @@ void ORowSetBase::onDeleteRow( const Any& _rBookmark )
         m_nDeletedPosition = m_pCache->getRow();
     }
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetBase::onDeletedRow( const Any& _rBookmark, sal_Int32 _nPos )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::onDeletedRow" );
@@ -1476,7 +1472,7 @@ void ORowSetBase::onDeletedRow( const Any& _rBookmark, sal_Int32 _nPos )
         m_aCurrentRow.setBookmark( m_aBookmark );
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ORowSetBase::impl_getRowCount() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::impl_getRowCount" );
@@ -1494,7 +1490,7 @@ struct ORowSetNotifierImpl
 
 };
 DBG_NAME(ORowSetNotifier)
-// -----------------------------------------------------------------------------
+
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     :m_pRowSet( _pRowSet )
     ,m_bWasNew( sal_False )
@@ -1515,7 +1511,7 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     if ( m_pRowSet->isModification( ORowSetBase::GrantNotifierAccess() ) )
         m_pRowSet->doCancelModification( ORowSetBase::GrantNotifierAccess() );
 }
-// -----------------------------------------------------------------------------
+
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector::Vector& i_aRow )
     :m_pImpl(new ORowSetNotifierImpl)
     ,m_pRowSet( _pRowSet )
@@ -1530,14 +1526,13 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
     m_pImpl->aRow = i_aRow; // yes, create a copy to store the old values
 }
-// -----------------------------------------------------------------------------
+
 ORowSetNotifier::~ORowSetNotifier( )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetNotifier::~ORowSetNotifier" );
     DBG_DTOR(ORowSetNotifier,NULL);
 }
 
-// -----------------------------------------------------------------------------
 void ORowSetNotifier::fire()
 {
     // we're not interested in firing changes FALSE->TRUE, only TRUE->FALSE.
@@ -1557,19 +1552,19 @@ void ORowSetNotifier::fire()
     m_bNotifyCalled = sal_True;
 #endif
 }
-// -----------------------------------------------------------------------------
+
 ::std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns() const
 {
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
     return m_pImpl->aChangedColumns;
 }
-// -----------------------------------------------------------------------------
+
 ::std::vector<Any>& ORowSetNotifier::getChangedBookmarks() const
 {
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
     return m_pImpl->aChangedBookmarks;
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetNotifier::firePropertyChange()
 {
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
@@ -1585,3 +1580,5 @@ void ORowSetNotifier::firePropertyChange()
     }
 }
 }   // namespace dbaccess
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

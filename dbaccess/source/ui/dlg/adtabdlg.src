@@ -69,6 +69,7 @@ ModelessDialog DLG_JOIN_TABADD
         Hide = TRUE;
         Group = TRUE;
     };
+
     PushButton PB_ADDTABLE
     {
         HelpID = "dbaccess:PushButton:DLG_JOIN_TABADD:PB_ADDTABLE";
@@ -78,6 +79,7 @@ ModelessDialog DLG_JOIN_TABADD
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
+
     CancelButton PB_CLOSE
     {
         Pos = MAP_APPFONT ( 123 , 22 ) ;
@@ -86,6 +88,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
     };
+
     HelpButton PB_HELP
     {
         Pos = MAP_APPFONT ( 123 , 43 ) ;

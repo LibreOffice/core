@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,9 @@
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
 #include "core_resource.hxx"
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include <tools/debug.hxx>
 #include "Tools.hxx"
 #include "RptModel.hxx"
@@ -64,7 +61,7 @@ uno::Sequence< ::rtl::OUString> lcl_getGroupAbsent()
                 ,PROPERTY_CANSHRINK
         };
 
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
 // -----------------------------------------------------------------------------
@@ -105,7 +102,7 @@ uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
                 ,PROPERTY_CANSHRINK
                 ,PROPERTY_REPEATSECTION
         };
-        return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+        return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
     }
 
     ::rtl::OUString pProps[] = {
@@ -114,7 +111,7 @@ uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
                 ,PROPERTY_REPEATSECTION
         };
 
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< ::rtl::OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 // -----------------------------------------------------------------------------
 OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
@@ -140,7 +137,6 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
 {
     DBG_CTOR( rpt_OSection,NULL);
     init();
-    //.getSdrModel()->createNewPage(m_xSection);
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
@@ -183,28 +179,6 @@ void SAL_CALL OSection::disposing()
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
-    //m_xDrawPage.clear();
-
-    /*uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
-    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
-    osl_incrementInterlockedCount( &m_refCount );
-    while( m_xDrawPage.is() && m_xDrawPage->hasElements() )
-    {
-        try
-        {
-            uno::Reference< drawing::XShape> xShape(m_xDrawPage->getByIndex(0),uno::UNO_QUERY);
-            m_xDrawPage->remove(xShape);
-            ::comphelper::disposeComponent(xShape);
-        }
-        catch(const uno::Exception&)
-        {}
-    }
-    if ( pModel )
-    {
-        uno::Reference< report::XSection> xSection = this;
-        pModel->DeletePage(pModel->getPage(xSection)->GetPageNum());
-    }
-    osl_decrementInterlockedCount( &m_refCount );*/
 }
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
@@ -475,7 +449,7 @@ const ::std::vector< ::rtl::OUString >& lcl_getControlModelMap()
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageControl")) );
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField")) );
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shape")) );
-    } // if ( s_sMap.empty() )
+    }
     return s_sControlModels;
 
 }
@@ -508,9 +482,8 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
             xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"))),uno::UNO_QUERY);
             break;
         default:
-            //xRet = new OShape(m_xContext);
             break;
-    } // switch( aRet.begin() - aFind  )
+    }
     return xRet;
 }
 // -----------------------------------------------------------------------------
@@ -722,3 +695,5 @@ void OSection::notifyElementRemoved(const uno::Reference< drawing::XShape >& xSh
 // =============================================================================
 } // namespace reportdesign
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

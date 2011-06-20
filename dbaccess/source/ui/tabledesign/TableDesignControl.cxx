@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,30 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
 
-#ifndef DBAUI_TABLEDESIGNCONTROL_HXX
 #include "TableDesignControl.hxx"
-#endif
-#ifndef _DBU_TBL_HRC_
 #include "dbu_tbl.hrc"
-#endif
-#ifndef DBAUI_TABLEDESIGNVIEW_HXX
 #include "TableDesignView.hxx"
-#endif
-#ifndef DBUI_TABLECONTROLLER_HXX
 #include "TableController.hxx"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
 
 using namespace ::dbaui;
 using namespace ::svt;
@@ -90,9 +75,6 @@ void OTableRowView::Init()
 {
     EditBrowseBox::Init();
 
-//  SetMapMode( MapMode(MAP_TWIP) );
-//  GetDataWindow().SetMapMode( GetMapMode() );
-
     Font aFont( GetDataWindow().GetFont() );
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
@@ -128,7 +110,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
         if( rEvt.GetKeyCode().GetCode() == KEY_F2 )
         {
             ::com::sun::star::util::URL aUrl;
-            aUrl.Complete =::rtl::OUString::createFromAscii(".uno:DSBEditDoc");
+            aUrl.Complete =::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBEditDoc"));
             GetView()->getController().dispatch( aUrl,Sequence< PropertyValue >() );
         }
     }
@@ -219,7 +201,7 @@ void OTableRowView::copy()
 //------------------------------------------------------------------------------
 void OTableRowView::paste()
 {
-    OSL_ENSURE(0,"OTableRowView::Paste : (pseudo-) abstract method called !");
+    OSL_FAIL("OTableRowView::Paste : (pseudo-) abstract method called !");
 }
 
 //------------------------------------------------------------------------------
@@ -239,3 +221,4 @@ EditBrowseBox::RowStatus OTableRowView::GetRowStatus(long nRow) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

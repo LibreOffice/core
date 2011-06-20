@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,25 +28,17 @@
 #ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
 #define DBAUI_TABLEDESIGNHELPBAR_HXX
 
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
-#endif
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX
 #include "IClipBoardTest.hxx"
-#endif
 
 class MultiLineEdit;
 namespace dbaui
 {
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
+    // um Aenderungen der Systemfarben zu bemerken
     class OTableDesignHelpBar : public TabPage
                                 ,public IClipboardTest
     {
@@ -79,3 +72,4 @@ namespace dbaui
 }
 #endif // DBAUI_TABLEDESIGNHELPBAR_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

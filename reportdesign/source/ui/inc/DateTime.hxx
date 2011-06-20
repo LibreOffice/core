@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,17 +28,11 @@
 #ifndef RPTUI_DATETIME_HXX
 #define RPTUI_DATETIME_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -54,7 +49,6 @@ class OReportController;
 \************************************************************************/
 class ODateTimeDialog : public ModalDialog
 {
-    // FixedLine                            m_aFLDate;
     CheckBox                                m_aDate;
     FixedText                               m_aFTDateFormat;
     ListBox                                 m_aDateListBox;
@@ -107,3 +101,5 @@ public:
 } // namespace rptui
 // =============================================================================
 #endif // RPTUI_DATETIME_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ namespace dbaui
         else
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
-            // excute the select dialog
+            // execute the select dialog
             ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, false);
             if (_sCurr.getLength())
                 aSelector.Select(_sCurr);
@@ -352,3 +353,4 @@ namespace dbaui
 }   // namespace dbaui
 //.........................................................................
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

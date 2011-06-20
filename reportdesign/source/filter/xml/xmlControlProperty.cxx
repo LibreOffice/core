@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -81,7 +82,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
             case XML_TOK_LIST_PROPERTY:
-                m_bIsList = sValue.equalsAscii("true");
+                m_bIsList = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
                 break;
             case XML_TOK_VALUE_TYPE:
                 {
@@ -164,7 +165,7 @@ void OXMLControlProperty::EndElement()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Unknown property found!");
+            OSL_FAIL("Unknown property found!");
         }
     }
 }
@@ -204,7 +205,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     {
         case TypeClass_BOOLEAN:     // sal_Bool
         {
-            sal_Bool bValue;
+            bool bValue;
         #if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
         #endif
@@ -236,7 +237,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
             }
         case TypeClass_HYPER:
         {
-            OSL_ENSURE(sal_False, "OXMLControlProperty::convertString: 64-bit integers not implemented yet!");
+            OSL_FAIL("OXMLControlProperty::convertString: 64-bit integers not implemented yet!");
         }
         break;
         case TypeClass_DOUBLE:
@@ -320,11 +321,11 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                     }
                 }
                 else
-                    OSL_ENSURE(sal_False, "OPropertyImport::convertString: unsupported property type!");
+                    OSL_FAIL("OPropertyImport::convertString: unsupported property type!");
             }
             break;
         default:
-            OSL_ENSURE(sal_False, "OXMLControlProperty::convertString: invalid type class!");
+            OSL_FAIL("OXMLControlProperty::convertString: invalid type class!");
     }
 
     return aReturn;
@@ -358,3 +359,5 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

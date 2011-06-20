@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,33 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbui.hxx"
-#ifndef DBAUI_APPSWAPWINDOW_HXX
 #include "AppSwapWindow.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
-#endif
-#ifndef DBAUI_APPVIEW_HXX
 #include "AppView.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SYSWIN_HXX
 #include <vcl/syswin.hxx>
-#endif
-#ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
 #include "IApplicationController.hxx"
 
 #include <memory>
@@ -75,7 +58,6 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     ,m_rBorderWin( _rBorderWindow )
 {
     DBG_CTOR(OApplicationSwapWindow,NULL);
-//  SetCompoundControl( sal_True );
 
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -83,7 +65,6 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     m_aIconControl.setControlActionListener( &m_rBorderWin.getView()->getAppController() );
     m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl.Show();
-    //m_aIconControl.Enable(sal_True);
 }
 // -----------------------------------------------------------------------------
 OApplicationSwapWindow::~OApplicationSwapWindow()
@@ -186,7 +167,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
         if ( _eType != E_NONE )
             m_eLastType = _eType;
         return true;
-    } // if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
+    }
 
     PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ) );
     return false;
@@ -230,3 +211,5 @@ void OApplicationSwapWindow::selectContainer(ElementType _eType)
     else
         onContainerSelected( _eType );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

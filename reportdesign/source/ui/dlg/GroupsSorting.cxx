@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
+#include <sal/macros.h>
 #include <tools/debug.hxx>
 #include "RptResId.hrc"
 #include "rptui_slotid.hrc"
@@ -106,7 +108,6 @@ class OFieldExpressionControl : public TContainerListenerBase
     OGroupsSortingDialog*           m_pParent;
     bool                            m_bIgnoreEvent;
 
-
     void fillListBox(const uno::Reference< beans::XPropertySet>& _xDest,long nRow,sal_uInt16 nColumnId);
     sal_Bool SaveModified(bool _bAppend);
 
@@ -135,7 +136,6 @@ public:
 
     inline ::svt::ComboBoxControl*  getExpressionControl() const { return m_pComboCell; }
 
-
     /** returns the sequence with the selected groups
     */
     uno::Sequence<uno::Any> fillSelectedGroups();
@@ -148,7 +148,6 @@ public:
     using OFieldExpressionControl_Base::GetRowCount;
 protected:
     virtual sal_Bool IsTabAllowed(sal_Bool bForward) const;
-
 
     virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol );
     virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol );
@@ -244,12 +243,12 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
             }
             catch(uno::Exception&)
             {
-                OSL_ENSURE(0,"Can not access group!");
+                OSL_FAIL("Can not access group!");
             }
         }
         if ( !vClipboardList.empty() )
             aList = uno::Sequence< uno::Any >(&vClipboardList[0], vClipboardList.size());
-    } // if ( nCount > 1 )
+    }
     return aList;
 }
 //------------------------------------------------------------------------------
@@ -265,7 +264,7 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
             OGroupExchange* pData = new OGroupExchange(aClipboardList);
             uno::Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
             pData->StartDrag(this, DND_ACTION_MOVE );
-        } // if(!vClipboardList.empty())
+        }
     }
 }
 //------------------------------------------------------------------------------
@@ -342,11 +341,11 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
                     m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
                     ++nRow;
                 }
-            } // for(;pIter != pEnd;++pIter)
+            }
         }
         m_bIgnoreEvent = false;
         Invalidate();
-    } // if ( _aGroups.getLength() )
+    }
 }
 // -----------------------------------------------------------------------------
 void OFieldExpressionControl::fillColumns(const uno::Reference< container::XNameAccess>& _xColumns)
@@ -384,7 +383,7 @@ void OFieldExpressionControl::lateInit()
         m_pComboCell->SetHelpId(HID_RPT_FIELDEXPRESSION);
 
         Control* pControls[] = {m_pComboCell};
-        for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         {
             pControls[i]->SetGetFocusHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusGot));
             pControls[i]->SetLoseFocusHdl(LINK(m_pParent, OGroupsSortingDialog, OnControlFocusLost));
@@ -515,7 +514,7 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"OFieldExpressionControl::SaveModified: Exception caught!");
+            OSL_FAIL("OFieldExpressionControl::SaveModified: Exception caught!");
         }
     }
 
@@ -546,9 +545,9 @@ String OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) 
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"Exception caught while getting expression value from the group");
+            OSL_FAIL("Exception caught while getting expression value from the group");
         }
-    } // if ( nRow != BROWSER_ENDOFSELECTION && nRow < m_pParent->getGroups()->getCount() )
+    }
     return sText;
 }
 
@@ -627,7 +626,7 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
         }
         catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"Exception cathced while try to get a group!");
+            OSL_FAIL("Exception cathced while try to get a group!");
         }
     }
     return EditBrowseBox::CLEAN;
@@ -644,7 +643,7 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
 {
     if ( m_bIgnoreEvent )
         return;
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_Int32 nGroupPos = 0;
     if ( evt.Accessor >>= nGroupPos )
@@ -674,13 +673,6 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
                 for(++aFind;aFind != aEnd;++aFind)
                     if ( *aFind != NO_GROUP )
                         ++*aFind;
-
-                //::std::vector<sal_Int32>::reverse_iterator aRIter = m_aGroupPositions.rbegin();
-                //::std::vector<sal_Int32>::reverse_iterator aREnd = m_aGroupPositions.rend();
-                //for (; aRIter != aREnd && *aRIter != NO_GROUP; ++aRIter)
-                //    continue;
-                //if ( aRIter != aREnd )
-                //    m_aGroupPositions.erase(m_aGroupPositions.begin() + (m_aGroupPositions.size() - 1 - (aRIter - m_aGroupPositions.rbegin())));
             }
         }
         Invalidate();
@@ -693,7 +685,7 @@ void SAL_CALL OFieldExpressionControl::elementReplaced(const container::Containe
 //------------------------------------------------------------------------------
 void SAL_CALL OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException)
 {
-    ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( m_bIgnoreEvent )
@@ -710,7 +702,6 @@ void SAL_CALL OFieldExpressionControl::elementRemoved(const container::Container
             for(++aFind;aFind != aEnd;++aFind)
                 if ( *aFind != NO_GROUP )
                     --*aFind;
-            //PaintCell(*this,GetFieldRect(FIELD_EXPRESSION),FIELD_EXPRESSION);
             Invalidate();
         }
     }
@@ -752,7 +743,6 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
 
             if ( nColId == HANDLE_ID )
             {
-                //long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
                 PopupMenu aContextMenu(ModuleRes(RID_GROUPSROWPOPUPMENU));
                 sal_Bool bEnable = sal_False;
                 long nIndex = FirstSelectedRow();
@@ -762,10 +752,6 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                         bEnable = sal_True;
                     nIndex = NextSelectedRow();
                 }
-                //aContextMenu.EnableItem( SID_CUT, IsDeleteAllowed() && bEnable);
-                //aContextMenu.EnableItem( SID_COPY, bEnable);
-                //TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-                //aContextMenu.EnableItem( SID_PASTE, aTransferData.HasFormat(SOT_FORMATSTR_ID_RPT_GRPED) );
                 aContextMenu.EnableItem( SID_DELETE, IsDeleteAllowed() && bEnable );
                 switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
                 {
@@ -787,7 +773,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                     default:
                         break;
                 }
-            } // if ( nColId == HANDLE_ID )
+            }
             // run through
         }
         default:
@@ -841,7 +827,7 @@ void OFieldExpressionControl::DeleteRows()
                     --*aFind;
         }
         nIndex = NextSelectedRow();
-    } // while( nIndex >= 0 )
+    }
 
     if ( !bFirstTime )
         m_pParent->m_pController->getUndoManager().LeaveListAction();
@@ -983,11 +969,6 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     ,OPropertyChangeListener(m_aMutex)
     ,m_aFL2(this, ModuleRes(FL_SEPARATOR2) )
     ,m_aMove(this, ModuleRes(FT_MOVELABEL) )
-/*
-    ,m_aPB_Up(this, ModuleRes(PB_UP) )
-    ,m_aPB_Down(this, ModuleRes(PB_DOWN) )
-    ,m_aPB_Delete(this, ModuleRes(PB_DELETE) )
-*/
     ,m_aToolBox(this, ModuleRes(TB_TOOLBOX) )
 
     ,m_aFL3(this, ModuleRes(FL_SEPARATOR3) )
@@ -1013,26 +994,25 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
 {
     DBG_CTOR( rpt_OGroupsSortingDialog,NULL);
 
-
     Control* pControlsLst[] = { &m_aHeaderLst, &m_aFooterLst, &m_aGroupOnLst, &m_aKeepTogetherLst, &m_aOrderLst, &m_aGroupIntervalEd};
-    for (size_t i = 0; i < sizeof(pControlsLst)/sizeof(pControlsLst[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst); ++i)
     {
         pControlsLst[i]->SetGetFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusGot));
         pControlsLst[i]->SetLoseFocusHdl(LINK(this, OGroupsSortingDialog, OnControlFocusLost));
         pControlsLst[i]->Show(sal_True);
-    } // for (int i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    }
 
-    for (size_t i = 0; i < (sizeof(pControlsLst)/sizeof(pControlsLst[0]))-1; ++i)
+    for (size_t i = 0; i < (SAL_N_ELEMENTS(pControlsLst))-1; ++i)
         static_cast<ListBox*>(pControlsLst[i])->SetSelectHdl(LINK(this,OGroupsSortingDialog,LBChangeHdl));
 
     Control* pControls[]    = { &m_aHeader, &m_aFooter, &m_aGroupOn, &m_aGroupInterval, &m_aKeepTogether, &m_aOrder
                                 , &m_aMove,&m_aFL2};
     sal_Int32 nMaxTextWidth = 0;
     MnemonicGenerator aMnemonicGenerator;
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         aMnemonicGenerator.RegisterMnemonic( pControls[i]->GetText() );
 
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         pControls[i]->Show(sal_True);
         String sText = pControls[i]->GetText();
@@ -1047,7 +1027,6 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     Size aOutSize(nMaxTextWidth + m_aHeader.GetSizePixel().Width() + 3*aSpace.Width(),aSpace.Height());
     SetMinOutputSizePixel(aOutSize);
     SetOutputSizePixel(aOutSize);
-//  Resize();
 
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_pController->getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_COMMAND);
@@ -1057,20 +1036,11 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     fillColumns();
     m_pFieldExpression->Show();
 
-    //m_aHelpWindow.SetReadOnly();
     m_aHelpWindow.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
-    //BTN m_aPB_Up.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
-    //BTN m_aPB_Down.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
-    //BTN m_aPB_Delete.SetClickHdl(LINK(this,OGroupsSortingDialog,ClickHdl));
 
     m_pFieldExpression->SetZOrder(&m_aFL2, WINDOW_ZORDER_BEHIND);
 
     m_aMove.SetZOrder(m_pFieldExpression, WINDOW_ZORDER_BEHIND);
-    //BTN m_aPB_Up.SetZOrder(&m_aMove, WINDOW_ZORDER_BEHIND);
-    //BTN m_aPB_Down.SetZOrder(&m_aPB_Up, WINDOW_ZORDER_BEHIND);
-    // set Hi contrast bitmaps
-    //BTN m_aPB_Up.SetModeImage(        ModuleRes(IMG_UP_H),BMP_COLOR_HIGHCONTRAST);
-    //BTN m_aPB_Down.SetModeImage(  ModuleRes(IMG_DOWN_H),BMP_COLOR_HIGHCONTRAST);
     m_aToolBox.SetStyle(m_aToolBox.GetStyle()|WB_LINESPACING);
     m_aToolBox.SetSelectHdl(LINK(this, OGroupsSortingDialog, OnFormatAction));
     m_aToolBox.SetImageListProvider(this);
@@ -1172,7 +1142,7 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         xGroup->setSortAscending( m_aOrderLst.GetSelectEntryPos() == 0 );
 
     ListBox* pControls[] = { &m_aHeaderLst,&m_aFooterLst,&m_aGroupOnLst,&m_aKeepTogetherLst,&m_aOrderLst};
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         pControls[i]->SaveValue();
 }
 
@@ -1193,7 +1163,7 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const ::rtl::OUString& _sColum
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Eception caught while getting the type of a column");
+        OSL_FAIL("Eception caught while getting the type of a column");
     }
 
     return nDataType;
@@ -1204,7 +1174,7 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control*, pControl )
     if ( m_pFieldExpression && m_pFieldExpression->getExpressionControl() )
     {
         Control* pControls[] = { m_pFieldExpression->getExpressionControl(),&m_aHeaderLst,&m_aFooterLst,&m_aGroupOnLst,&m_aGroupIntervalEd,&m_aKeepTogetherLst,&m_aOrderLst};
-        for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         {
             if ( pControl == pControls[i] )
             {
@@ -1233,7 +1203,6 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control*, pControl )
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
-// IMPL_LINK( OGroupsSortingDialog, ClickHdl, ImageButton*, _pButton )
 {
     DBG_CHKTHIS( rpt_OGroupsSortingDialog,NULL);
 
@@ -1249,22 +1218,17 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
             aClipboardList.realloc(1);
             aClipboardList[0] = m_xGroups->getByIndex(nGroupPos);
         }
-        //BTN if ( _pButton == &m_aPB_Up )
         if ( nCommand == SID_RPT_GROUPSORT_MOVE_UP )
         {
             --nIndex;
         }
-        //BTN if ( _pButton == &m_aPB_Down )
         if ( nCommand == SID_RPT_GROUPSORT_MOVE_DOWN )
         {
             ++nIndex;
         }
-        //BTN if ( _pButton == &m_aPB_Delete )
         if ( nCommand == SID_RPT_GROUPSORT_DELETE )
         {
-            // m_pFieldExpression->DeleteCurrentRow();
             Application::PostUserEvent( LINK(m_pFieldExpression, OFieldExpressionControl, DelayedDelete) );
-            // UpdateData( );
         }
         else
         {
@@ -1274,7 +1238,6 @@ IMPL_LINK( OGroupsSortingDialog, OnFormatAction, ToolBox*, /*NOTINTERESTEDIN*/ )
                 m_pFieldExpression->moveGroups(aClipboardList,nIndex,sal_False);
                 m_pFieldExpression->DeactivateCell();
                 m_pFieldExpression->GoToRow(nIndex);
-                //long nCurRow = m_pFieldExpression->GetCurRow();
                 m_pFieldExpression->ActivateCell(nIndex, m_pFieldExpression->GetCurColumnId());
                 DisplayData(nIndex);
             }
@@ -1363,7 +1326,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case sdbc::DataType::TIMESTAMP:
             {
                 sal_uInt16 nIds[] = { STR_RPT_YEAR, STR_RPT_QUARTER,STR_RPT_MONTH,STR_RPT_WEEK,STR_RPT_DAY,STR_RPT_HOUR,STR_RPT_MINUTE };
-                for (sal_uInt16 i = 0; i < sizeof(nIds)/sizeof(nIds[0]); ++i)
+                for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(nIds); ++i)
                 {
                     m_aGroupOnLst.InsertEntry(String(ModuleRes(nIds[i])));
                     m_aGroupOnLst.SetEntryData(i+1,reinterpret_cast<void*>(i+2));
@@ -1374,7 +1337,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
             m_aGroupOnLst.InsertEntry(String(ModuleRes(STR_RPT_INTERVAL)));
             m_aGroupOnLst.SetEntryData(1,reinterpret_cast<void*>(report::GroupOn::INTERVAL));
             break;
-    } // switch(nDataType)
+    }
     sal_uInt16 nPos = 0;
     switch(_xGroup->getGroupOn())
     {
@@ -1419,12 +1382,12 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
     m_aOrderLst.SelectEntryPos(_xGroup->getSortAscending() ? 0 : 1);
 
     ListBox* pControls[] = { &m_aHeaderLst,&m_aFooterLst,&m_aGroupOnLst,&m_aKeepTogetherLst,&m_aOrderLst};
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
         pControls[i]->SaveValue();
 
     ListBox* pControlsLst2[] = { &m_aHeaderLst, &m_aFooterLst,  &m_aGroupOnLst, &m_aKeepTogetherLst,&m_aOrderLst};
     sal_Bool bReadOnly = !m_pController->isEditable();
-    for (size_t i = 0; i < sizeof(pControlsLst2)/sizeof(pControlsLst2[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControlsLst2); ++i)
         pControlsLst2[i]->SetReadOnly(bReadOnly);
     m_aGroupIntervalEd.SetReadOnly(bReadOnly);
 }
@@ -1439,13 +1402,12 @@ void OGroupsSortingDialog::Resize()
     Control* pControlsLst[] = { &m_aHeaderLst,  &m_aFooterLst,  &m_aGroupOnLst, &m_aGroupIntervalEd,&m_aKeepTogetherLst,&m_aOrderLst};
     Control* pControls[]    = { &m_aHeader,     &m_aFooter,     &m_aGroupOn,    &m_aGroupInterval,  &m_aKeepTogether,   &m_aOrder};
     sal_Int32 nMaxTextWidth = 0;
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         nMaxTextWidth = ::std::max<sal_Int32>(static_cast<sal_Int32>(GetTextWidth(pControls[i]->GetText())),nMaxTextWidth);
-    } // for (int i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    }
 
-    // aTotalOutputSize.Width() - m_aHeaderLst.GetSizePixel().Width() - 3*aSpace.Width()
-    for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(pControls); ++i)
     {
         pControls[i]->SetSizePixel(Size(nMaxTextWidth,pControls[i]->GetSizePixel().Height()));
         Point aPos = pControls[i]->GetPosPixel();
@@ -1453,20 +1415,11 @@ void OGroupsSortingDialog::Resize()
         aPos.Y() = pControlsLst[i]->GetPosPixel().Y();
 
         pControlsLst[i]->SetPosSizePixel(aPos,Size(aTotalOutputSize.Width() - aPos.X() - aSpace.Width(),pControlsLst[i]->GetSizePixel().Height()));
-    } // for (int i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
+    }
 
     m_aFL.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL.GetSizePixel().Height()));
     m_aFL2.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL2.GetSizePixel().Height()));
     m_aFL3.SetSizePixel(Size(aTotalOutputSize.Width() - aSpace.Width(),m_aFL3.GetSizePixel().Height()));
-
-//BTN   sal_Int32 nPos = aTotalOutputSize.Width() - aSpace.Width() - m_aPB_Up.GetSizePixel().Width();
-//BTN   m_aPB_Delete.SetPosPixel(Point(nPos,m_aPB_Delete.GetPosPixel().Y()));
-//BTN
-//BTN   nPos -= (m_aPB_Up.GetSizePixel().Width() + LogicToPixel( Size( UNRELATED_CONTROLS, 0 ), MAP_APPFONT ).Width());
-//BTN   m_aPB_Down.SetPosPixel(Point(nPos,m_aPB_Down.GetPosPixel().Y()));
-//BTN
-//BTN   nPos -= (m_aPB_Up.GetSizePixel().Width() + LogicToPixel( Size( RELATED_CONTROLS, 0 ), MAP_APPFONT ).Width());
-//BTN   m_aPB_Up.SetPosPixel(Point(nPos,m_aPB_Up.GetPosPixel().Y()));
     sal_Int32 nPos = aTotalOutputSize.Width() - aSpace.Width() - m_aToolBox.GetSizePixel().Width();
     m_aToolBox.SetPosPixel(Point(nPos,m_aToolBox.GetPosPixel().Y()));
 
@@ -1480,7 +1433,7 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     sal_Int32 nRowCount = m_pFieldExpression->GetRowCount();
     sal_Bool bEnabled = nGroupCount > 1;
 
-    if (bEnabled && _nRow > 0 /* && _nRow < nGroupCount */ )
+    if (bEnabled && _nRow > 0 )
     {
         m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, sal_True);
     }
@@ -1488,7 +1441,7 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     {
         m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_UP, sal_False);
     }
-    if (bEnabled && _nRow < (nRowCount - 1) /* && _nRow < (nGroupCount - 1) */ )
+    if (bEnabled && _nRow < (nRowCount - 1) )
     {
         m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, sal_True);
     }
@@ -1496,34 +1449,25 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     {
         m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, sal_False);
     }
-    //BTN m_aPB_Up.Enable(bEnable && _nRow > 0 );
-    //BTN m_aPB_Down.Enable(bEnable && _nRow < (m_pFieldExpression->GetRowCount()-1) );
-    // m_aToolBox.EnableItem(SID_RPT_GROUPSORT_MOVE_DOWN, bEnable && _nRow < (-1) );
 
     sal_Int32 nGroupPos = m_pFieldExpression->getGroupPosition(_nRow);
     if ( nGroupPos != NO_GROUP )
     {
         sal_Bool bEnableDelete = nGroupCount > 0;
-        //BTN m_aPB_Delete.Enable(bEnableDelete );
         m_aToolBox.EnableItem(SID_RPT_GROUPSORT_DELETE, bEnableDelete);
     }
     else
     {
-        //BTN m_aPB_Delete.Enable( sal_False );
         m_aToolBox.EnableItem(SID_RPT_GROUPSORT_DELETE, sal_False);
     }
 }
 
-ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet) const
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
-    sal_Int16 nH = IMG_CONDFORMAT_DLG_SCH;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
-    {
         nN = IMG_CONDFORMAT_DLG_LC;
-        nH = IMG_CONDFORMAT_DLG_LCH;
-    }
-    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
+    return ImageList(ModuleRes( nN ));
 }
 
 //------------------------------------------------------------------
@@ -1532,31 +1476,19 @@ void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
     // we use large images so we must change them
     if ( _rDiff.Width() || _rDiff.Height() )
     {
-        Point aPos = LogicToPixel( Point( 2*RELATED_CONTROLS , 0), MAP_APPFONT );
         Invalidate();
     }
 }
 
 //------------------------------------------------------------------
 // load the images
-ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType _eType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException ))
+ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException ))
 {
-    if (_eType == vcl::HIGHCONTRAST_NO)
-    {
-        return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SC));
-    }
-    else if (_eType == vcl::HIGHCONTRAST_YES)
-    {
-        return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SCH));
-    }
-    else
-    {
-        throw com::sun::star::lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("High contrast parameter is wrong.")), NULL, 0);
-    }
+    return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SC));
 }
-
-
 
 // =============================================================================
 } // rptui
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

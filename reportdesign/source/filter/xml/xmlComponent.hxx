@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@ namespace rptxml
         ::rtl::OUString m_sTextStyleName;
 
         OXMLComponent(const OXMLComponent&);
-        void operator =(const OXMLComponent&);
+        OXMLComponent operator =(const OXMLComponent&);
     public:
 
         OXMLComponent( ORptFilter& rImport
@@ -58,3 +59,5 @@ namespace rptxml
 // -----------------------------------------------------------------------------
 
 #endif // RPT_XMLCOMPONENT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

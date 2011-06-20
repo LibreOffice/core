@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,45 +28,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef _DBACORE_RESULTCOLUMN_HXX_
 #include "resultcolumn.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
-#endif
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -78,7 +53,7 @@ using namespace ::cppu;
 using namespace dbaccess;
 
 DBG_NAME(OResultColumn)
-//--------------------------------------------------------------------------
+
 OResultColumn::OResultColumn( const Reference < XResultSetMetaData >& _xMetaData, sal_Int32 _nPos,
         const Reference< XDatabaseMetaData >& _rxDBMeta )
     :OColumn( true )
@@ -88,7 +63,7 @@ OResultColumn::OResultColumn( const Reference < XResultSetMetaData >& _xMetaData
 {
     DBG_CTOR(OResultColumn,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OResultColumn::impl_determineIsRowVersion_nothrow()
 {
     if ( m_aIsRowVersion.hasValue() )
@@ -133,13 +108,13 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 OResultColumn::~OResultColumn()
 {
     DBG_DTOR(OResultColumn,NULL);
 }
+
 // com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
 Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeException)
 {
     static OImplementationId * pId = 0;
@@ -156,13 +131,11 @@ Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeExceptio
 }
 
 // XServiceInfo
-//------------------------------------------------------------------------------
 rtl::OUString OResultColumn::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OResultColumn");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OResultColumn"));
 }
 
-//------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OResultColumn::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
@@ -172,7 +145,6 @@ Sequence< ::rtl::OUString > OResultColumn::getSupportedServiceNames(  ) throw (R
 }
 
 // OComponentHelper
-//------------------------------------------------------------------------------
 void OResultColumn::disposing()
 {
     OColumn::disposing();
@@ -182,7 +154,6 @@ void OResultColumn::disposing()
 }
 
 // comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OResultColumn::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(21)
@@ -211,13 +182,11 @@ void OResultColumn::disposing()
 }
 
 // cppu::OPropertySetHelper
-//------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OResultColumn::getInfoHelper()
 {
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OResultColumn >* >(this)->getArrayHelper();
 }
 
-//------------------------------------------------------------------------------
 namespace
 {
     template< typename TYPE >
@@ -229,7 +198,6 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
 void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     try
@@ -304,7 +272,7 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
                     rValue <<= m_xMetaData->getColumnTypeName(m_nPos);
                     break;
                 default:
-                    OSL_ENSURE( false, "OResultColumn::getFastPropertyValue: unknown property handle!" );
+                    OSL_FAIL( "OResultColumn::getFastPropertyValue: unknown property handle!" );
                     break;
             }
         }
@@ -354,4 +322,4 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         }
     }
 }
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

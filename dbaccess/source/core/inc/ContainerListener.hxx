@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,24 +28,14 @@
 #ifndef DBA_CONTAINERLISTENER_HXX
 #define DBA_CONTAINERLISTENER_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERAPPROVELISTENER_HPP_
 #include <com/sun/star/container/XContainerApproveListener.hpp>
-#endif
 
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
 
-//........................................................................
 namespace dbaccess
 {
-//........................................................................
 
     //==========================================================================
     //= OContainerListener
@@ -90,8 +81,9 @@ namespace dbaccess
     protected:
         virtual ~OContainerListener();
     };
-//........................................................................
+
 }   // namespace dbaccess
-//........................................................................
+
 #endif // DBA_CONTAINERLISTENER_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

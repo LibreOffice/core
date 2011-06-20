@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,30 +28,14 @@
 #ifndef _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
 #define _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _DBA_COREAPI_STATEMENT_HXX_
 #include <statement.hxx>
-#endif
-#ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
-#endif
 
 namespace dbaccess
 {
@@ -130,3 +115,4 @@ namespace dbaccess
 }
 #endif // _DBA_COREAPI_PREPAREDSTATEMENT_HXX_
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

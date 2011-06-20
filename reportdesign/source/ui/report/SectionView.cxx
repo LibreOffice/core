@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -76,7 +77,6 @@ void OSectionView::MarkListHasChanged()
 
     if ( m_pReportWindow && m_pSectionWindow && !m_pSectionWindow->getPage()->getSpecialMode() )
     {
-        //m_pReportWindow->unmarkAllObjects(this); // WHY
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         m_pReportWindow->getReportView()->Broadcast( aHint );
         m_pReportWindow->getReportView()->UpdatePropertyBrowserDelayed(*this);
@@ -210,7 +210,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 
         EndUndo();
 
-        //  #84073# check mark list now instead of later in a timer
+        // check mark list now instead of later in a timer
         CheckMarked();
         MarkListHasChanged();
     }
@@ -230,7 +230,7 @@ bool OSectionView::OnlyShapesMarked() const
         {
             break;
         }
-    } // for (sal_uLong i=0; i<nCount; i++)
+    }
     return i == nCount;
 }
 
@@ -273,3 +273,5 @@ short OSectionView::GetLayerIdOfMarkedObjects() const
 //============================================================================
 } // rptui
 //============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

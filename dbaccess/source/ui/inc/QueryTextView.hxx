@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,8 @@
 #ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #define DBAUI_QUERYVIEW_TEXT_HXX
 
-#ifndef DBAUI_QUERYVIEW_HXX
 #include "queryview.hxx"
-#endif
-#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
-#endif
 
 class Splitter;
 namespace dbaui
@@ -74,3 +71,4 @@ namespace dbaui
 #endif // DBAUI_QUERYVIEW_TEXT_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

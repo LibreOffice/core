@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 namespace rptui
 {
@@ -223,13 +224,13 @@ void OUndoContainerAction::Undo()
                 implReInsert();
                 break;
             default:
-                OSL_ENSURE(0,"Illegal case value");
+                OSL_FAIL("Illegal case value");
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OUndoContainerAction::Undo: caught an exception!" );
+            OSL_FAIL( "OUndoContainerAction::Undo: caught an exception!" );
         }
     }
 }
@@ -251,13 +252,13 @@ void OUndoContainerAction::Redo()
                 implReRemove();
                 break;
             default:
-                OSL_ENSURE(0,"Illegal case value");
+                OSL_FAIL("Illegal case value");
                 break;
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OUndoContainerAction::Redo: caught an exception!" );
+            OSL_FAIL( "OUndoContainerAction::Redo: caught an exception!" );
         }
     }
 }
@@ -396,7 +397,7 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ORptUndoPropertyAction::Redo: caught an exception!" );
+            OSL_FAIL( "ORptUndoPropertyAction::Redo: caught an exception!" );
         }
     }
 }
@@ -447,3 +448,4 @@ Reference< XPropertySet> OUndoPropertyReportSectionAction::getObject()
 } // rptui
 //============================================================================
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
 #include "xmlHelper.hxx"
-#ifndef RPT_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
 #include "xmlStyleImport.hxx"
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
@@ -43,9 +42,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <tools/debug.hxx>
 
 namespace rptxml
@@ -101,7 +98,7 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception catched while putting props into report component!");
+            OSL_FAIL("Exception catched while putting props into report component!");
         }
     }
 }
@@ -115,3 +112,5 @@ OXMLComponent::~OXMLComponent()
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

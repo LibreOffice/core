@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,45 +28,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaxml.hxx"
-#ifndef DBA_XMLHIERARCHYCOLLECTION_HXX
 #include "xmlHierarchyCollection.hxx"
-#endif
-#ifndef DBA_XMLCOMPONENT_HXX
 #include "xmlComponent.hxx"
-#endif
-#ifndef DBA_XMLQUERY_HXX
 #include "xmlQuery.hxx"
-#endif
-#ifndef DBA_XMLCOLUMN_HXX
 #include "xmlColumn.hxx"
-#endif
-#ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 
 namespace dbaxml
@@ -134,7 +109,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"OXMLHierarchyCollection::OXMLHierarchyCollection -> exception catched");
+            OSL_FAIL("OXMLHierarchyCollection::OXMLHierarchyCollection -> exception catched");
         }
     }
 }
@@ -169,9 +144,6 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-//      case XML_TOK_QUERY:
-//          pContext = new OXMLQuery( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer );
-//          break;
         case XML_TOK_COMPONENT:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLComponent( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sComponentServiceName );
@@ -180,7 +152,6 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLColumn( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_xTable);
             break;
-        //  case XML_TOK_QUERY_COLLECTION:
         case XML_TOK_COMPONENT_COLLECTION:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sCollectionServiceName,m_sComponentServiceName);
@@ -201,3 +172,5 @@ ODBFilter& OXMLHierarchyCollection::GetOwnImport()
 //----------------------------------------------------------------------------
 } // namespace dbaxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

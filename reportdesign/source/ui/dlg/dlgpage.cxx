@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 #include "dlgpage.hxx"
 #include "ModuleHelper.hxx"
 #include "RptResId.hrc"
-#include <svl/intitem.hxx> //add CHINA001
+#include <svl/intitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/aeitem.hxx>
 
@@ -52,15 +53,13 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
         rOutAttrs           ( *pAttr )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     switch( _nPageId )
     {
         case RID_PAGEDIALOG_BACKGROUND:
             AddTabPage( RID_SVXPAGE_BACKGROUND,String(ModuleRes(1)));
             break;
         case RID_PAGEDIALOG_PAGE:
-            //AddTabPage( RID_SVXPAGE_PAGE,String(ModuleRes(1)));
-   //         AddTabPage( RID_SVXPAGE_BACKGROUND,String(ModuleRes(1)));
             AddTabPage(RID_SVXPAGE_PAGE, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );
             AddTabPage(RID_SVXPAGE_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
             break;
@@ -75,11 +74,9 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
             break;
         case RID_PAGEDIALOG_LINE:
             AddTabPage( RID_SVXPAGE_LINE,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), 0 );
-            //AddTabPage( RID_SVXPAGE_LINE_DEF,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE_DEF ), 0 );
-            //AddTabPage( RID_SVXPAGE_LINEEND_DEF,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINEEND_DEF ), 0 );
             break;
         default:
-            OSL_ENSURE(0,"Unknown page id");
+            OSL_FAIL("Unknown page id");
     }
 
     SvtCJKOptions aCJKOptions;
@@ -91,3 +88,5 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
 // =============================================================================
 } // namespace rptui
 // =============================================================================
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

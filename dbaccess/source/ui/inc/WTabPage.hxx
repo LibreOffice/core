@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef DBAUI_WIZ_TABBPAGE_HXX
 #define DBAUI_WIZ_TABBPAGE_HXX
 
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
 
 namespace dbaui
 {
@@ -44,7 +43,7 @@ namespace dbaui
         OCopyTableWizard*           m_pParent;
         sal_Bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
 
-        OWizardPage( Window* pParent, const ResId& rResId );// : TabPage(pParent,rResId),m_pParent((OCopyTableWizard*)pParent),m_bFirstTime(sal_True) {};
+        OWizardPage( Window* pParent, const ResId& rResId );
 
     public:
         virtual void        Reset ( )           = 0;
@@ -58,3 +57,4 @@ namespace dbaui
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

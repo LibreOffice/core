@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 #ifndef DBAUI_QUERYTABLECONNECTION_HXX
 #define DBAUI_QUERYTABLECONNECTION_HXX
 
-#ifndef DBAUI_TABLECONNECTION_HXX
 #include "TableConnection.hxx"
-#endif
-#ifndef DBAUI_QTABLECONNECTIONDATA_HXX
 #include "QTableConnectionData.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
 
 namespace dbaui
 {
@@ -60,3 +55,5 @@ namespace dbaui
     };
 }
 #endif // DBAUI_QUERYTABLECONNECTION_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

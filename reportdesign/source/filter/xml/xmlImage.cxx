@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling the image props");
+        OSL_FAIL("Exception catched while filling the image props");
     }
 }
 // -----------------------------------------------------------------------------
@@ -128,3 +129,5 @@ OXMLImage::~OXMLImage()
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
