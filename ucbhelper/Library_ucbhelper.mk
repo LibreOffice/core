@@ -43,10 +43,9 @@ $(eval $(call gb_Library_add_defs,ucbhelper,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,ucbhelper,\
-	stl \
-	sal \
 	cppu \
 	cppuhelper \
+	sal \
 	salhelper \
     $(gb_STDLIBS) \
 ))

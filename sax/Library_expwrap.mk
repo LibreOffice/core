@@ -36,10 +36,9 @@ $(eval $(call gb_Library_set_include,expwrap,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,expwrap,\
-	sal \
 	cppu \
 	cppuhelper \
-	stl \
+	sal \
     $(gb_STDLIBS) \
 ))
 

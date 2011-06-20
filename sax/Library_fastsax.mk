@@ -36,11 +36,10 @@ $(eval $(call gb_Library_set_include,fastsax,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,fastsax,\
-	sal \
 	cppu \
 	cppuhelper \
+	sal \
 	sax \
-	stl \
     $(gb_STDLIBS) \
 ))
 

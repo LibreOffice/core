@@ -24,6 +24,6 @@
 # instead of those above.
 
 $(eval $(call gb_Package_Package,vcl_afmhash,$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager))
-$(eval $(call gb_Package_add_customtarget,vcl_afmhash,vcl/unx/generic/fontmanager))
+$(eval $(call gb_Package_add_customtarget,vcl_afmhash,vcl/unx/generic/fontmanager,SRCDIR))
 
 # vim: set noet sw=4:

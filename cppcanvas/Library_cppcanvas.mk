@@ -44,44 +44,45 @@ $(eval $(call gb_Library_add_defs,cppcanvas,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,cppcanvas,\
-	tl \
-	cppu \
-	sal \
-	vcl \
-	stl \
-	comphelper \
-	canvastools \
-	cppuhelper \
 	basegfx \
+	canvastools \
+	comphelper \
+	cppu \
+	cppuhelper \
 	i18nisolang1 \
+	sal \
+	svt \
+	tl \
+	vcl \
     $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
-	cppcanvas/source/wrapper/vclfactory \
-	cppcanvas/source/wrapper/implcolor \
-	cppcanvas/source/wrapper/basegfxfactory \
-	cppcanvas/source/wrapper/implcustomsprite \
-	cppcanvas/source/wrapper/implspritecanvas \
-	cppcanvas/source/wrapper/implsprite \
-	cppcanvas/source/wrapper/implpolypolygon \
-	cppcanvas/source/wrapper/implcanvas \
-	cppcanvas/source/wrapper/implbitmap \
-	cppcanvas/source/wrapper/implfont \
-	cppcanvas/source/wrapper/impltext \
-	cppcanvas/source/wrapper/implbitmapcanvas \
-	cppcanvas/source/tools/tools \
-	cppcanvas/source/tools/canvasgraphichelper \
-	cppcanvas/source/mtfrenderer/transparencygroupaction \
+	cppcanvas/source/mtfrenderer/bitmapaction \
 	cppcanvas/source/mtfrenderer/cachedprimitivebase \
+	cppcanvas/source/mtfrenderer/emfplus \
+	cppcanvas/source/mtfrenderer/implrenderer \
 	cppcanvas/source/mtfrenderer/lineaction \
+	cppcanvas/source/mtfrenderer/mtftools \
 	cppcanvas/source/mtfrenderer/pointaction \
 	cppcanvas/source/mtfrenderer/polypolyaction \
 	cppcanvas/source/mtfrenderer/rendergraphicaction \
 	cppcanvas/source/mtfrenderer/textaction \
-	cppcanvas/source/mtfrenderer/implrenderer \
-	cppcanvas/source/mtfrenderer/mtftools \
-	cppcanvas/source/mtfrenderer/bitmapaction \
+	cppcanvas/source/mtfrenderer/transparencygroupaction \
+	cppcanvas/source/tools/canvasgraphichelper \
+	cppcanvas/source/tools/tools \
+	cppcanvas/source/wrapper/basegfxfactory \
+	cppcanvas/source/wrapper/implbitmap \
+	cppcanvas/source/wrapper/implbitmapcanvas \
+	cppcanvas/source/wrapper/implcanvas \
+	cppcanvas/source/wrapper/implcolor \
+	cppcanvas/source/wrapper/implcustomsprite \
+	cppcanvas/source/wrapper/implfont \
+	cppcanvas/source/wrapper/implpolypolygon \
+	cppcanvas/source/wrapper/implsprite \
+	cppcanvas/source/wrapper/implspritecanvas \
+	cppcanvas/source/wrapper/impltext \
+	cppcanvas/source/wrapper/vclfactory \
 ))
 
 # vim: set noet sw=4 ts=4:

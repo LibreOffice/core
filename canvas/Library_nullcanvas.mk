@@ -41,13 +41,12 @@ $(eval $(call gb_Library_add_defs,nullcanvas,\
 endif
 
 $(eval $(call gb_Library_add_linked_libs,nullcanvas,\
-	cppu \
-	sal \
-	comphelper \
-	cppuhelper \
-	stl \
 	basegfx \
 	canvastools \
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
 	vcl \
     $(gb_STDLIBS) \
 ))

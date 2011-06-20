@@ -43,18 +43,17 @@ $(eval $(call gb_Library_add_defs,vclcanvas,\
 endif
 
 $(eval $(call gb_Library_add_linked_libs,vclcanvas,\
-	sal \
-	stl \
-	cppu \
 	basegfx \
-	cppuhelper \
+	canvastools \
 	comphelper \
-	vcl \
+	cppu \
+	cppuhelper \
+	i18nisolang1 \
+	sal \
+	svt \
 	tk \
 	tl \
-	svt \
-	i18nisolang1 \
-	canvastools \
+	vcl \
     $(gb_STDLIBS) \
 ))
 

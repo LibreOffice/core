@@ -41,9 +41,8 @@ $(eval $(call gb_Library_add_defs,basebmp,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,basebmp,\
-    sal \
     basegfx \
-    stl \
+    sal \
     $(gb_STDLIBS) \
 ))
 

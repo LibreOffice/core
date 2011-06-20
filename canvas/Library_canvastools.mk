@@ -55,15 +55,14 @@ $(eval $(call gb_Library_add_defs,canvastools,\
 endif
 
 $(eval $(call gb_Library_add_linked_libs,canvastools,\
-	sal \
-	stl \
-	cppu \
 	basegfx \
-	cppuhelper \
 	comphelper \
-	vcl \
+	cppu \
+	cppuhelper \
+	sal \
 	tk \
 	tl \
+	vcl \
     $(gb_STDLIBS) \
 ))
 

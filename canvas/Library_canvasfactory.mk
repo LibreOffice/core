@@ -37,10 +37,9 @@ $(eval $(call gb_Library_set_include,canvasfactory,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,canvasfactory,\
-	sal \
-	stl \
 	cppu \
 	cppuhelper \
+	sal \
     $(gb_STDLIBS) \
 ))
 

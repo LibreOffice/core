@@ -40,11 +40,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basegfx_test, \
 
 $(eval $(call gb_CppunitTest_add_linked_libs,basegfx_test, \
 	basegfx \
-	sal \
-	stl \
+	cppu \
 	cppuhelper \
 	cppunit \
-	cppu \
+	sal \
     $(gb_STDLIBS) \
 ))
 

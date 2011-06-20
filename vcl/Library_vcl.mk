@@ -28,11 +28,11 @@
 $(eval $(call gb_Library_Library,vcl))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx,vcl/vcl))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
 else ifeq ($(OS),WNT)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows,vcl/vcl))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
 else
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx,vcl/vcl))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))

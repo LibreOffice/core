@@ -43,13 +43,12 @@ $(eval $(call gb_Library_add_defs,simplecanvas,\
 endif
 
 $(eval $(call gb_Library_add_linked_libs,simplecanvas,\
-	sal \
-	stl \
-	cppu \
 	basegfx \
-	cppuhelper \
-	comphelper \
 	canvastools \
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
     $(gb_STDLIBS) \
 ))
 
