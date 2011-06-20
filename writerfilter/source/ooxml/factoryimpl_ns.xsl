@@ -873,7 +873,7 @@ TokenToIdMapPointer </xsl:text>
       <xsl:text>
 void </xsl:text>
 <xsl:call-template name="factoryclassname"/>
-<xsl:text>::attributeAction(OOXMLFastContextHandler * _pHandler, sal_Int32 nToken, OOXMLValue::Pointer_t pValue)
+<xsl:text>::attributeAction(OOXMLFastContextHandler * _pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue)
 {
     switch(_pHandler->getDefine())
     {</xsl:text>
@@ -889,7 +889,7 @@ void </xsl:text>
       <xsl:text>
 void </xsl:text>
 <xsl:call-template name="factoryclassname"/>
-<xsl:text>::attributeAction(OOXMLFastContextHandler *, sal_Int32, OOXMLValue::Pointer_t)
+<xsl:text>::attributeAction(OOXMLFastContextHandler *, Token_t, OOXMLValue::Pointer_t)
 {
 }
 </xsl:text>

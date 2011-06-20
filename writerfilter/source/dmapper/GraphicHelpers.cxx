@@ -107,7 +107,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
             break;
         default:
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("PositionHandler.unhandled");
+            dmapper_logger->element("unhandled");
 #endif
             break;
     }

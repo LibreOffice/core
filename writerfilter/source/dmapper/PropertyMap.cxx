@@ -132,7 +132,6 @@ static void lcl_AnyToTag(const uno::Any & rAny)
         dmapper_logger->attribute("stringValue", aStr);
     }
     catch (...) {
-        pTag->addAttr("exception", "true");
     }
 }
 #endif
@@ -200,7 +199,6 @@ void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
                     pLogger->attribute("stringValue", aStr);
                 }
                 catch (...) {
-                    pTag->addAttr("exception", "true");
                 }
             }
                 break;
@@ -254,7 +252,7 @@ const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
 
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {
-#ifdef DEBUG_DMAPPER_PROPERTY_MAP
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->element("PropertyMap.insertTableProperties");
 #endif
 }
@@ -419,9 +417,8 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         }
 
     }
-    catch( const uno::Exception& e)
+    catch( const uno::Exception& )
     {
-        (void) e;
     }
 
     return xRet;
@@ -646,8 +643,8 @@ bool SectionPropertyMap::HasFooter(bool bFirstPage) const
 
 void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
 {
-#if DEBUG_DMAPPER_PROPERTY_MAP
-    dmapper_logger->startElement(__FUNCTION__);
+#if DEBUG
+    clog << "START>>> SectionPropertyMap::CopyLastHeaderFooter()" << endl;
 #endif
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext( );
     if ( pLastContext )
@@ -702,10 +699,9 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 
                 if ( ( bIsHeader && bCopyHeader ) || ( !bIsHeader && bCopyFooter ) )
                 {
-#if DEBUG_DMAPPER_PROPERTY_MAP
-                    dmapper_logger->startElement("copy");
-                    dmapper_logger->chars(sName);
-                    dmapper_logger->endElement("copy");
+#if DEBUG
+                    clog << "Copying ";
+                    clog << rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
 #endif
                     // TODO has to be copied
                     uno::Reference< text::XTextCopy > xTxt(
@@ -722,11 +718,12 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
         {
 #if DEBUG
             clog << "An exception occurred in SectionPropertyMap::CopyLastHeaderFooter( ) - ";
+            clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
 #endif
         }
     }
-#if DEBUG_DMAPPER_PROPERTY_MAP
-    dmapper_logger->endElement(__FUNCTION__);
+#if DEBUG
+    clog << "END>>> SectionPropertyMap::CopyLastHeaderFooter()" << endl;
 #endif
 }
 
@@ -1198,7 +1195,7 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
 
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
-#ifdef DEBUG_DMAPPER_PROPERTY_MAP
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
     pMap->dumpXml(dmapper_logger);
 #endif
@@ -1216,7 +1213,7 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
             }
         }
     }
-#ifdef DEBUG_DMAPPER_PROPERTY_MAP
+#ifdef DEBUG_DOMAINMAPPER
     dumpXml( dmapper_logger );
     dmapper_logger->endElement();
 #endif

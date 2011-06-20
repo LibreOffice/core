@@ -4,7 +4,7 @@ QNameToString::QNameToString()
     init_ooxml();
 }
 
-void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC analyzerIds()
+void WRITERFILTER_DLLPUBLIC analyzerIds()
 {
     cout << "<ids type=\"sprm\">" << endl;
     

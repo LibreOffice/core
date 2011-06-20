@@ -911,7 +911,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                     }
                     catch( const beans::UnknownPropertyException )
                     {
-                        (void) e;
                         // It isn't a graphic image
                     }
 
@@ -962,8 +961,8 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             //TODO: does it need to be handled?
         break;
         default:
-#ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("GraphicImport.unhandled");
+#ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
+            dmapper_logger->element("unhandled");
 #endif
             ;
     }
@@ -1495,24 +1494,16 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                         xNamed->setName( m_pImpl->sName );
                     }
                 }
-                catch( const uno::Exception& e)
+                catch( const uno::Exception& )
                 {
-                    (void) e;
                 }
             }
         }
     }
     catch( const uno::Exception& e )
     {
-        (void) e;
-
-#ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
-        dmapper_logger->startElement("exception");
-        dmapper_logger->attribute("file", __FILE__);
-        dmapper_logger->attribute("line", __LINE__);
-        dmapper_logger->chars(e.Message);
-        dmapper_logger->endElement("exceptiion");
-#endif
+        clog << __FILE__ << ":" << __LINE__ << " failed. Message :" ;
+        clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( )  << endl;
     }
     return xGraphicObject;
 }

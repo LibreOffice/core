@@ -79,7 +79,6 @@ void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger, beans::PropertyV
         }
         catch (...)
         {
-            pTag->addAttr("exception", "true");
         }
 
         if (pValues[n].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TableColumnSeparators")))

@@ -198,7 +198,6 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     }
     catch (ExceptionNotFound)
     {
-        (void) e;
     }
 
     try
@@ -208,7 +207,6 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     }
     catch (ExceptionNotFound)
     {
-        (void) e;
     }
 
     mpCHPFKPCache =
@@ -299,6 +297,8 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
                                (*mpTableStream,
                                 mpFib->get_fcPlcfbtePapx(),
                                 mpFib->get_lcbPlcfbtePapx()));
+
+    //clog << "BinTable(PAP):" << mpBinTablePAPX->toString();
 
     parseBinTableCpAndFcs(*mpBinTablePAPX, PROP_PAP);
 
@@ -648,13 +648,13 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                 }
                 catch (ExceptionNotFound &e)
                 {
-                    (void) e;
+                    clog << e.getText() << endl;
                 }
             }
         }
         catch (ExceptionNotFound &e)
         {
-            (void) e;
+            clog << e.getText() << endl;
         }
     }
 }
@@ -861,7 +861,6 @@ writerfilter::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
             }
             catch (ExceptionOutOfBounds)
             {
-                (void) e;
             }
         }
 
@@ -1001,8 +1000,6 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
             pResult = writerfilter::Reference<Table>::Pointer_t(pList);
         }
         catch (ExceptionOutOfBounds) {
-        {
-            (void) aException;
         }
     }
 
@@ -1028,7 +1025,7 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
         }
         catch (Exception &e)
         {
-            (void) e;
+            clog << e.getText() << endl;
         }
     }
 
@@ -1648,6 +1645,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 {
     if (! bSubDocument)
     {
+#if 1
         output.addItem("<substream-names>");
         output.addItem(mpStream->getSubStreamNames());
         output.addItem("</substream-names>");
@@ -1661,6 +1659,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         {
             mpSummaryInformationStream->dump(output);
         }
+#endif
 
         writerfilter::Reference<Properties>::Pointer_t pFib
             (new WW8Fib(*mpFib));
@@ -1673,11 +1672,24 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             rStream.props(pFibRgFcLcb2000);
         }
 
+#if 0
+        if (mpTextBoxStories.get() != NULL)
+        {
+            output.addItem("<textbox.boxes>");
+            mpTextBoxStories->dump(output);
+            output.addItem("</textbox.boxes>");
+        }
+#endif
         if (mpFib->get_lcbPlcftxbxBkd() > 0)
         {
             PLCF<WW8BKD> aPLCF(*mpTableStream,
                                mpFib->get_fcPlcftxbxBkd(),
                                mpFib->get_lcbPlcftxbxBkd());
+#if 0
+            output.addItem("<textbox.breaks>");
+            aPLCF.dump(output);
+            output.addItem("</textbox.breaks>");
+#endif
         }
 
         if (mpDffBlock.get() != NULL)
@@ -1699,6 +1711,33 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             rStream.info("/headers");
         }
 
+#if 0
+        {
+            sal_uInt32 nFootnoteCount = getFootnoteCount();
+            for (sal_uInt32 n = 0; n < nFootnoteCount; ++n)
+            {
+                //clog << "<footnote num=\"" << n << "\"/>" << endl;
+
+                writerfilter::Reference<Stream>::Pointer_t pFootnote(getFootnote(n));
+
+                if (pFootnote.get() != NULL)
+                    rStream.substream(NS_rtf::LN_footnote, pFootnote);
+            }
+        }
+        {
+            sal_uInt32 nEndnoteCount = getEndnoteCount();
+            for (sal_uInt32 n = 0; n < nEndnoteCount; ++n)
+            {
+                //clog << "<endnote num=\"" << n << "\"/>" << endl;
+
+                writerfilter::Reference<Stream>::Pointer_t pEndnote(getEndnote(n));
+
+                if (pEndnote.get() != NULL)
+                    rStream.substream(NS_rtf::LN_endnote, pEndnote);
+            }
+        }
+#endif
+
         writerfilter::Reference<Table>::Pointer_t pSttbRgtplc = getListTplcs();
 
         if (pSttbRgtplc.get() != NULL)
@@ -1718,7 +1757,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         }
         catch (Exception &e)
         {
-            (void) e;
+            clog << e.getText() << endl;
         }
 
         writerfilter::Reference<Table>::Pointer_t pAssocTable = getAssocTable();
@@ -2166,7 +2205,7 @@ BookmarkHelper::getBookmark(const CpAndFc & rCpAndFc)
     }
     catch (ExceptionNotFound &e)
     {
-        (void) e;
+        clog << e.getText() << endl;
     }
 
     return pResult;

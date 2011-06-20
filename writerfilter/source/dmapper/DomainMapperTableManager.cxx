@@ -60,7 +60,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
 {
     m_pTablePropsHandler->SetTableManager( this );
 
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
 #ifdef DEBUG_TABLE
     setTagLogger(dmapper_logger);
 #endif
@@ -70,14 +70,14 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
 
 DomainMapperTableManager::~DomainMapperTableManager()
 {
-    delete m_pTablePropsHandler;
-  m_pTablePropsHandler = NULL;
+    if ( m_pTablePropsHandler )
+        delete m_pTablePropsHandler, m_pTablePropsHandler = NULL;
 }
 
 
 bool DomainMapperTableManager::sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("tablemanager.sprm");
     string sSprm = rSprm.toString();
     dmapper_logger->chars(sSprm);
@@ -119,7 +119,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         if( m_nTableWidth )
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
                     }
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
                     pPropMap->dumpXml( dmapper_logger );
 #endif
                     insertTableProps(pPropMap);
@@ -239,7 +239,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             case NS_ooxml::LN_CT_TcPrBase_gridSpan: //number of grid positions spanned by this cell
             {
-#if DEBUG_DMAPPER_TABLE_HANDLER
+#if DEBUG_DOMAINMAPPER
                 dmapper_logger->startElement("tablemanager.GridSpan");
                 dmapper_logger->attribute("gridSpan", nIntValue);
                 dmapper_logger->endElement();
@@ -309,7 +309,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 bRet = false;
 
 #ifdef DEBUG_DOMAINMAPPER
-                dmapper_logger->element("TableManager.unhandled");
+                dmapper_logger->element("unhandled");
 #endif
         }
     }
@@ -344,7 +344,7 @@ void DomainMapperTableManager::endLevel( )
     m_nTableWidth = 0;
 
     DomainMapperTableManager_Base_t::endLevel( );
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("dmappertablemanager.endLevel");
     PropertyMapPtr pProps = getTableProps();
     if (pProps.get() != NULL)
@@ -358,7 +358,7 @@ void DomainMapperTableManager::endLevel( )
 
 void DomainMapperTableManager::endOfCellAction()
 {
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->element("endOFCellAction");
 #endif
 
@@ -370,7 +370,7 @@ void DomainMapperTableManager::endOfCellAction()
 
 void DomainMapperTableManager::endOfRowAction()
 {
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("endOfRowAction");
 #endif
 
@@ -379,13 +379,13 @@ void DomainMapperTableManager::endOfRowAction()
     {
         ::std::vector<sal_Int32>::const_iterator aCellIter = pTableGrid->begin();
 
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->startElement("tableWidth");
 #endif
 
         while( aCellIter != pTableGrid->end() )
         {
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->startElement("col");
             dmapper_logger->attribute("width", *aCellIter);
             dmapper_logger->endElement();
@@ -401,7 +401,7 @@ void DomainMapperTableManager::endOfRowAction()
             insertTableProps(pPropMap);
         }
 
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->endElement();
 #endif
     }
@@ -413,7 +413,7 @@ void DomainMapperTableManager::endOfRowAction()
         pCurrentSpans->insert( pCurrentSpans->end( ), m_nCell - pCurrentSpans->size(), 1 );
     }
 
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("gridSpans");
     {
         ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
@@ -469,7 +469,7 @@ void DomainMapperTableManager::endOfRowAction()
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
 
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->startElement("rowProperties");
         pPropMap->dumpXml( dmapper_logger );
         dmapper_logger->endElement();
@@ -482,7 +482,7 @@ void DomainMapperTableManager::endOfRowAction()
     m_nCellBorderIndex = 0;
     pCurrentSpans->clear();
 
-#ifdef DEBUG_DMAPPER_TABLE_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
 #endif
 }

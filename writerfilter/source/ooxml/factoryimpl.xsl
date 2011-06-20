@@ -69,7 +69,7 @@
 <xsl:template name="factorycreatecontextfromfactory">
     <xsl:text>
 uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastChildContextFromFactory
-(OOXMLFastContextHandler * pHandler, OOXMLFactory_ns::Pointer_t pFactory, sal_Int32 Element)
+(OOXMLFastContextHandler * pHandler, OOXMLFactory_ns::Pointer_t pFactory, Token_t Element)
 {
     uno::Reference &lt; xml::sax::XFastContextHandler &gt; aResult;
     Id nDefine = pHandler->getDefine();
@@ -178,7 +178,7 @@ OOXMLFactory_ns::Pointer_t OOXMLFactory::getFactoryForNamespace(Id nId)
 <xsl:template name="factorycreatefromstart">
     <xsl:text>
 uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastChildContextFromStart
-(OOXMLFastContextHandler * pHandler, sal_Int32 Element)
+(OOXMLFastContextHandler * pHandler, Token_t Element)
 {
 #ifdef DEBUG_FACTORY
     debug_logger->startElement("factory.createFastChildContextFromStart");
@@ -211,7 +211,7 @@ uno::Reference&lt; xml::sax::XFastContextHandler &gt; OOXMLFactory::createFastCh
 <xsl:template name="fasttokentoid">
   <xsl:text>
 namespace tokenmap {
-struct token { const char * name; sal_Int32 nToken; };
+struct token { const char * name; Token_t nToken; };
 class Perfect_Hash
 {
 private:

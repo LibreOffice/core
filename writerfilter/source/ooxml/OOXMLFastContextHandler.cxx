@@ -181,7 +181,7 @@ OOXMLFastContextHandler::~OOXMLFastContextHandler()
 
 // ::com::sun::star::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastContextHandler::startFastElement
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -216,7 +216,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 #endif
 }
 
-void SAL_CALL OOXMLFastContextHandler::endFastElement(sal_Int32 Element)
+void SAL_CALL OOXMLFastContextHandler::endFastElement(Token_t Element)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
@@ -236,7 +236,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 }
 
 void OOXMLFastContextHandler::lcl_startFastElement
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -249,7 +249,7 @@ void OOXMLFastContextHandler::lcl_startFastElement
 }
 
 void OOXMLFastContextHandler::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     OOXMLFactory::getInstance()->endAction(this, Element);
@@ -267,7 +267,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  OOXMLFastContextHandler::createFastChildContext
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -289,7 +289,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
 uno::Reference< xml::sax::XFastContextHandler >
  OOXMLFastContextHandler::lcl_createFastChildContext
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -346,7 +346,7 @@ sal_Int64 SAL_CALL OOXMLFastContextHandler::getSomething( const uno::Sequence< s
 {
     if( rId.getLength() == 16
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-                                   rId.getConstArray(), 16 ) )
+                                        rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>
             (reinterpret_cast<sal_IntPtr>(this));
@@ -372,7 +372,7 @@ void OOXMLFastContextHandler::attributes
     OOXMLFactory::getInstance()->attributes(this, Attribs);
 }
 
-void OOXMLFastContextHandler::startAction(sal_Int32 Element)
+void OOXMLFastContextHandler::startAction(Token_t Element)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.startAction");
@@ -383,12 +383,12 @@ void OOXMLFastContextHandler::startAction(sal_Int32 Element)
 #endif
 }
 
-void OOXMLFastContextHandler::lcl_startAction(sal_Int32 Element)
+void OOXMLFastContextHandler::lcl_startAction(Token_t Element)
 {
     OOXMLFactory::getInstance()->startAction(this, Element);
 }
 
-void OOXMLFastContextHandler::endAction(sal_Int32 Element)
+void OOXMLFastContextHandler::endAction(Token_t Element)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.endAction");
@@ -399,7 +399,7 @@ void OOXMLFastContextHandler::endAction(sal_Int32 Element)
 #endif
 }
 
-void OOXMLFastContextHandler::lcl_endAction(sal_Int32 Element)
+void OOXMLFastContextHandler::lcl_endAction(Token_t Element)
 {
     OOXMLFactory::getInstance()->endAction(this, Element);
 }
@@ -479,6 +479,10 @@ OOXMLParserState::Pointer_t OOXMLFastContextHandler::getParserState() const
 void OOXMLFastContextHandler::setToken(Token_t nToken)
 {
     mnToken = nToken;
+
+#ifdef DEBUG_CONTEXT_HANDLER
+    msTokenString = fastTokenToId(mnToken);
+#endif
 }
 
 Token_t OOXMLFastContextHandler::getToken() const
@@ -819,7 +823,6 @@ void OOXMLFastContextHandler::text(const ::rtl::OUString & sText)
     debug_logger->chars(sText);
     debug_logger->endElement();
 #endif
-
     if (isForwardEvents())
         mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                         (sText.getStr()),
@@ -1281,7 +1284,7 @@ OOXMLFastContextHandlerProperties::~OOXMLFastContextHandlerProperties()
 }
 
 void OOXMLFastContextHandlerProperties::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     endAction(Element);
@@ -1392,7 +1395,7 @@ void OOXMLFastContextHandlerProperties::handleHdrFtr()
 
 void OOXMLFastContextHandlerProperties::handleComment()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("handleComment");
 #endif
 
@@ -1402,7 +1405,7 @@ void OOXMLFastContextHandlerProperties::handleComment()
 
 void OOXMLFastContextHandlerProperties::handlePicture()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("handlePicture");
 #endif
 
@@ -1412,7 +1415,7 @@ void OOXMLFastContextHandlerProperties::handlePicture()
 
 void OOXMLFastContextHandlerProperties::handleBreak()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("handleBreak");
 #endif
 
@@ -1422,7 +1425,7 @@ void OOXMLFastContextHandlerProperties::handleBreak()
 
 void OOXMLFastContextHandlerProperties::handleOLE()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("handleOLE");
 #endif
 
@@ -1433,7 +1436,7 @@ void OOXMLFastContextHandlerProperties::handleOLE()
 void OOXMLFastContextHandlerProperties::setParent
 (OOXMLFastContextHandler * pParent)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->startElement("setParent");
     debug_logger->chars("OOXMLFastContextHandlerProperties");
     debug_logger->endElement();
@@ -1473,7 +1476,7 @@ OOXMLFastContextHandlerPropertyTable::~OOXMLFastContextHandlerPropertyTable()
 }
 
 void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     OOXMLPropertySet::Pointer_t pPropSet(mpPropertySet->clone());
@@ -1529,7 +1532,7 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerValue::getValue() const
 }
 
 void OOXMLFastContextHandlerValue::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
     sendPropertyToParent();
@@ -1539,7 +1542,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 
 void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("setDefaultBooleanValue");
 #endif
 
@@ -1552,7 +1555,7 @@ void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 
 void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("setDefaultIntegerValue");
 #endif
 
@@ -1565,7 +1568,7 @@ void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 
 void OOXMLFastContextHandlerValue::setDefaultHexValue()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("setDefaultHexValue");
 #endif
 
@@ -1578,7 +1581,7 @@ void OOXMLFastContextHandlerValue::setDefaultHexValue()
 
 void OOXMLFastContextHandlerValue::setDefaultStringValue()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->element("setDefaultStringValue");
 #endif
 
@@ -1604,7 +1607,7 @@ OOXMLFastContextHandlerTable::~OOXMLFastContextHandlerTable()
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandlerTable::createFastChildContext
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -1617,7 +1620,7 @@ OOXMLFastContextHandlerTable::createFastChildContext
 }
 
 void OOXMLFastContextHandlerTable::lcl_endFastElement
-(sal_Int32 /*Element*/)
+(Token_t /*Element*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     addCurrentChild();
@@ -1672,7 +1675,7 @@ OOXMLFastContextHandlerXNote::~OOXMLFastContextHandlerXNote()
 }
 
 void OOXMLFastContextHandlerXNote::lcl_startFastElement
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -1687,7 +1690,7 @@ void OOXMLFastContextHandlerXNote::lcl_startFastElement
 }
 
 void OOXMLFastContextHandlerXNote::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     endAction(Element);
@@ -1697,7 +1700,7 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
 
 void OOXMLFastContextHandlerXNote::checkId(OOXMLValue::Pointer_t pValue)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->startElement("checkId");
     debug_logger->attribute("myId", sal_Int32(pValue->getInt()));
     debug_logger->attribute("id", getXNoteId());
@@ -1844,7 +1847,7 @@ OOXMLFastContextHandlerTextTable::~OOXMLFastContextHandlerTextTable()
 }
 
 void OOXMLFastContextHandlerTextTable::lcl_startFastElement
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -1865,7 +1868,7 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
 }
 
 void OOXMLFastContextHandlerTextTable::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     endAction(Element);
@@ -1909,7 +1912,7 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
             mrShapeContext->setDrawPage(getDocument()->getDrawPage());
             mrShapeContext->setInputStream(getDocument()->getStorageStream());
 
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
             debug_logger->startElement("setRelationFragmentPath");
             debug_logger->attribute("path", mpParserState->getTarget());
             debug_logger->endElement();
@@ -1917,7 +1920,7 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
             mrShapeContext->setRelationFragmentPath
                 (mpParserState->getTarget());
         }
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_CONTEXT_STACK
         else
         {
             debug_logger->startElement("error");
@@ -1933,7 +1936,7 @@ OOXMLFastContextHandlerShape::~OOXMLFastContextHandlerShape()
 }
 
 void OOXMLFastContextHandlerShape::lcl_startFastElement
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -1988,7 +1991,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 }
 
 void OOXMLFastContextHandlerShape::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if (mrShapeContext.is())
@@ -2016,7 +2019,7 @@ void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
 
 uno::Reference< xml::sax::XFastContextHandler >
 OOXMLFastContextHandlerShape::lcl_createFastChildContext
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -2167,7 +2170,7 @@ void OOXMLFastContextHandlerWrapper::addToken( Token_t Token )
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_startFastElement
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -2176,7 +2179,7 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_endFastElement
-(sal_Int32 Element)
+(Token_t Element)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if (mxContext.is())
@@ -2185,7 +2188,7 @@ void OOXMLFastContextHandlerWrapper::lcl_endFastElement
 
 uno::Reference< xml::sax::XFastContextHandler >
 OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
-(sal_Int32 Element,
+(Token_t Element,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -2193,7 +2196,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 
     Id nNameSpace = Element & 0xffff0000;
 
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_ELEMENT
     debug_logger->startElement("Wrapper-createChildContext");
     debug_logger->attribute("token", fastTokenToId(Element));
 

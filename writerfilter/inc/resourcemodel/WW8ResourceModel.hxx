@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_WW8RESOURCEMODEL_HXX
-#define INCLUDED_WW8RESOURCEMODEL_HXX
+#ifndef INCLUDED_WW8_EVENT_HANDLER_HXX
+#define INCLUDED_WW8_EVENT_HANDLER_HXX
 
 #include <string>
 #include <memory>
@@ -90,7 +89,7 @@ using namespace ::std;
 */
 
 template <class T>
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Reference
+class WRITERFILTER_DLLPUBLIC Reference
 {
 public:
     /**
@@ -125,7 +124,7 @@ class Sprm;
 /**
    Handler for properties.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Properties
+class WRITERFILTER_DLLPUBLIC Properties
 {
 public:
     /**
@@ -148,7 +147,7 @@ public:
 /**
    Handler for tables.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Table
+class WRITERFILTER_DLLPUBLIC Table
 {
 public:
     typedef boost::shared_ptr<Table> Pointer_t;
@@ -164,7 +163,7 @@ public:
 /**
    Handler for binary objects.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC BinaryObj
+class WRITERFILTER_DLLPUBLIC BinaryObj
 {
 public:
     /**
@@ -181,7 +180,7 @@ public:
 /**
    Handler for a stream.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Stream
+class WRITERFILTER_DLLPUBLIC Stream
 {
 public:
     /**
@@ -285,7 +284,7 @@ public:
    makes no sense for a certain value, e.g. the integer value of a
    string.
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Value
+class WRITERFILTER_DLLPUBLIC Value
 {
 public:
     /**
@@ -333,7 +332,7 @@ public:
    An SPRM.
 
  */
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Sprm
+class WRITERFILTER_DLLPUBLIC Sprm
 {
 public:
     typedef auto_ptr<Sprm> Pointer_t;
@@ -383,18 +382,18 @@ public:
 /**
    Creates handler for a stream.
 */
-Stream::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC createStreamHandler();
+Stream::Pointer_t WRITERFILTER_DLLPUBLIC createStreamHandler();
 
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC analyzerIds();
-    Stream::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC createAnalyzer();
+void WRITERFILTER_DLLPUBLIC analyzerIds();
+Stream::Pointer_t WRITERFILTER_DLLPUBLIC createAnalyzer();
 
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC logger(string prefix, string message);
+void WRITERFILTER_DLLPUBLIC logger(string prefix, string message);
 
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
                                  const rtl::OUString & /*str*/);
-    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
+void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
 
 class Token_t
 {
@@ -426,6 +425,5 @@ struct TokenHash
 
 }
 
-#endif // INCLUDED_WW8RESOURCEMODEL_HXX
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+#endif // INCLUDED_WW8_EVENT_HANDLER_HXX

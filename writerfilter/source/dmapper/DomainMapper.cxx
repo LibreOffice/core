@@ -2780,9 +2780,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_DISTANCE ), uno::makeAny(aSettings.nDistance) );
             xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_RESTART_AT_EACH_PAGE ), uno::makeAny(aSettings.bRestartAtEachPage) );
         }
-        catch( const uno::Exception& e)
+        catch( const uno::Exception& )
         {
-            (void) e;
         }
 
     }
@@ -3049,9 +3048,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                                                                     uno::makeAny( nNumType ));
             }
         }
-        catch( const uno::Exception& e)
+        catch( const uno::Exception& )
         {
-            (void) e;
         }
     }
     break;
@@ -3315,12 +3313,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
     }
     catch( const uno::RuntimeException& )
     {
-#ifdef DEBUG_DOMAINMAPPER
-        dmapper_logger->startElement("exception");
-        dmapper_logger->attribute("file", __FILE__);
-        dmapper_logger->attribute("line", __LINE__);
-        dmapper_logger->endElement("exception");
-#endif
+        std::clog << __FILE__ << "(l" << __LINE__ << ")" << std::endl;
     }
 }
 
@@ -3372,9 +3365,8 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
         }
     }
-    catch( const uno::RuntimeException& e)
+    catch( const uno::RuntimeException& )
     {
-        (void) e;
     }
 }
 

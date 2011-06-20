@@ -34,8 +34,8 @@ $(eval $(call \
 $(eval $(call \
 	gb_CustomTarget_add_outdir_dependencies,writerfilter/source,\
 		$(gb_XSLTPROCTARGET) \
-		$(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt \
-		$(OUTDIR)/inc$(UPDMINOREXT)/oox/token/namespaces.txt \
+		$(OUTDIR)/inc/oox/tokens.txt \
+		$(OUTDIR)/inc/oox/namespaces.txt \
 ))
 
 $(eval $(call \

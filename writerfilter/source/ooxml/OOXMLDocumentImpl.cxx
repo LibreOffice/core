@@ -150,7 +150,7 @@ writerfilter::Reference<Stream>::Pointer_t
 OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rType,
                                   const sal_Int32 nId)
 {
-#ifdef DEBUG_DOCUMENT
+#ifdef DEBUG_ELEMENT
     debug_logger->startElement("getXNoteStream");
     debug_logger->attribute("id", nId);
     debug_logger->endElement();
@@ -310,7 +310,7 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
-#ifdef DEBUG_DOCUMENT
+#ifdef DEBUG_RESOLVE
     debug_logger->startElement("OOXMLDocumentImpl.resolve");
 #endif
 
@@ -348,13 +348,13 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             xParser->parseStream(aParserInput);
         }
         catch (...) {
-#ifdef DEBUG_DOCUMENT
+#ifdef DEBUG_ELEMENT
             debug_logger->element("exception");
 #endif
         }
     }
 
-#ifdef DEBUG_DOCUMENT
+#ifdef DEBUG_RESOLVE
     debug_logger->endElement();
 #endif
 }

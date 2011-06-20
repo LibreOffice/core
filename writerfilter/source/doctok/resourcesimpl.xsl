@@ -484,8 +484,7 @@ using namespace ::std;
                    rHandler.entry(n, pEntry);
                }
                catch (const ExceptionOutOfBounds&amp;)
-               {    
-                   (void) e;
+               {                
                }
            }
        }

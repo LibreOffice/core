@@ -53,6 +53,10 @@ public:
     RefAndPointer(ChildClass * pHandler)
     : mpHandler(pHandler), mRef(pHandler)
     {
+#ifdef DEBUG_MEMORY
+        clog << "MEMORY:" << mpHandler->getInstanceNumber() << ":RefAndPointer"
+             << endl;
+#endif
     }
 
     RefAndPointer(uno::Reference<Interface> xRef)
@@ -60,11 +64,19 @@ public:
     {
         mpHandler = dynamic_cast<ChildClass *>(xRef.get());
 #ifdef DEBUG_MEMORY
+        if (mpHandler != NULL)
+            clog << "MEMORY:" << mpHandler->getInstanceNumber()
+                 << ":RefAndPointer" << endl;
 #endif
     }
 
     virtual ~RefAndPointer()
     {
+#ifdef DEBUG_MEMORY
+        if (mpHandler != NULL)
+            clog << "MEMORY:" << mpHandler->getInstanceNumber()
+                 << ":~RefAndPointer" << endl;
+#endif
     }
 
     void set(ChildClass * pHandler)

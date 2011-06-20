@@ -31,9 +31,6 @@
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #endif
-#ifdef DEBUG_DMAPPER_THEME_TABLE
-#include <resourcemodel/QNameToString.hxx>
-#endif
 #include "dmapperLoggers.hxx"
 
 #if DEBUG_DOMAINMAPPER
@@ -69,7 +66,7 @@ ThemeTable::~ThemeTable()
 
 void ThemeTable::lcl_attribute(Id Name, Value & val)
 {
-#ifdef DEBUG_DMAPPER_THEME_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
     dmapper_logger->attribute("value", val.toString());
@@ -84,18 +81,18 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
         default:
         {
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("ThemeTable.unhandled");
+            dmapper_logger->element("unhandled");
 #endif
         }
     }
-#ifdef DEBUG_DMAPPER_THEME_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
 #endif
 }
 
 void ThemeTable::lcl_sprm(Sprm& rSprm)
 {
-#ifdef DEBUG_DMAPPER_THEME_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.sprm");
     dmapper_logger->chars(rSprm.toString());
 #endif
@@ -139,25 +136,25 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     break;
     default:
         {
-#ifdef DEBUG_DMAPPER_THEME_TABLE
-            dmapper_logger->element("ThemeTable.unhandled");
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->element("unhandled");
 #endif
         }
     }
-#ifdef DEBUG_DMAPPER_THEME_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
 #endif
 }
 
 void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-#ifdef DEBUG_DMAPPER_THEME_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("ThemeTable.entry");
 #endif
 
     ref->resolve(*this);
 
-#ifdef DEBUG_DMAPPER_THEME_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
 #endif
 }

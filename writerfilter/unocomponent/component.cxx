@@ -26,9 +26,14 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#ifndef _CPPUHELPTER_FACTORY_
 #include <cppuhelper/factory.hxx>
+#endif
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_
 #include <cppuhelper/implementationentry.hxx>
+#endif
 #include <debugservices/doctok/DocTokTestService.hxx>
 #include <debugservices/doctok/DocTokAnalyzeService.hxx>
 #include <debugservices/ooxml/OOXMLTestService.hxx>

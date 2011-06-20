@@ -28,13 +28,14 @@
 $(eval $(call gb_Module_Module,writerfilter))
 
 $(eval $(call gb_Module_add_targets,writerfilter,\
-    Library_doctok \
-    Library_ooxml \
-    Library_resourcemodel \
     Library_writerfilter \
-    Library_writerfilter_uno \
-    Package_generated \
+    Package_inc \
+    Package_writerfilter_generated \
 ))
+#    Library_doctok \
+#    Library_ooxml \
+#    Library_resourcemodel \
+#    Library_writerfilter_uno \
 
 	# not used
     # Library_rtftok

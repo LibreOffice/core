@@ -75,7 +75,7 @@
 
 namespace writerfilter { namespace ooxml { namespace tokenmap {
 %}
-struct token { const char * name; sal_Int32 nToken; };
+struct token { const char * name; Token_t nToken; };
 %%</xsl:text>
     <xsl:for-each select=".//rng:element|.//rng:attribute">
       <xsl:if test="generate-id(.) = generate-id(key('same-token-name', @localname)[1])">

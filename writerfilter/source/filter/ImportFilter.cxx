@@ -79,9 +79,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             ::oox::core::FilterDetect aDetector( m_xContext );
             xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
         }
-        catch( uno::Exception& e)
+        catch( uno::Exception& )
         {
-            (void) e;
         }
 
         if ( !xInputStream.is() )

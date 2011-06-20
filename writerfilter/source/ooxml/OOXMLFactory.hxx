@@ -108,7 +108,7 @@ public:
     virtual void startAction(OOXMLFastContextHandler * pHandler);
     virtual void charactersAction(OOXMLFastContextHandler * pHandler, const ::rtl::OUString & rString);
     virtual void endAction(OOXMLFastContextHandler * pHandler);
-    virtual void attributeAction(OOXMLFastContextHandler * pHandler, sal_Int32 nToken, OOXMLValue::Pointer_t pValue);
+    virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
     virtual string getDefineName(Id nId) const;
 #ifdef DEBUG_FACTORY
     virtual string getName() const;
@@ -141,10 +141,10 @@ public:
     static Pointer_t getInstance();
 
     uno::Reference< xml::sax::XFastContextHandler> createFastChildContext
-    (OOXMLFastContextHandler * pHandler, sal_Int32 Element);
+    (OOXMLFastContextHandler * pHandler, Token_t Element);
 
     uno::Reference< xml::sax::XFastContextHandler> createFastChildContextFromStart
-    (OOXMLFastContextHandler * pHandler, sal_Int32 Element);
+    (OOXMLFastContextHandler * pHandler, Token_t Element);
 
     void attributes(OOXMLFastContextHandler * pHandler,
                     const uno::Reference< xml::sax::XFastAttributeList > & Attribs);
@@ -152,8 +152,8 @@ public:
     void characters(OOXMLFastContextHandler * pHandler,
                     const ::rtl::OUString & rString);
 
-    void startAction(OOXMLFastContextHandler * pHandler, sal_Int32 nToken);
-    void endAction(OOXMLFastContextHandler * pHandler, sal_Int32 nToken);
+    void startAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
+    void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
     virtual ~OOXMLFactory();
 
@@ -166,7 +166,7 @@ private:
     uno::Reference< xml::sax::XFastContextHandler>
     createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler,
                                       OOXMLFactory_ns::Pointer_t pFactory,
-                                      sal_Int32 Element);
+                                      Token_t Element);
 };
 
 }

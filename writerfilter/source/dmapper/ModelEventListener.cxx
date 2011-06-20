@@ -84,9 +84,8 @@ void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno
         uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
             uno::Reference<document::XEventListener>(this));
     }
-    catch( const uno::Exception& e)
+    catch( const uno::Exception& )
     {
-        (void) e;
     }
 }
 

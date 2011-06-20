@@ -179,7 +179,7 @@ wf_SRC_doctok_QNameToStr_xsl=$(WFDIR)doctok/qnametostr.xsl
 wf_SRC_ooxml_QNameToStr_xsl=$(WFDIR)ooxml/qnametostr.xsl
 wf_SRC_model_NamespacePreprocess=$(WFDIR)resourcemodel/namespace_preprocess.pl
 wf_GEN_ooxml_Namespacesmap_xsl=namespacesmap.xsl
-wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc$(UPDMINOREXT)/oox/token/namespaces.txt
+wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc/oox/namespaces.txt
 wf_GEN_ooxml_preprocess_xsl=modelpreprocess.xsl
 
 $(wf_GEN_ooxml_QNameToStr_tmp): $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)
@@ -223,8 +223,9 @@ all : \
 	$(wf_GEN_ooxml_FastTokens_hxx) \
 	$(wf_GEN_ooxml_GperfFastToken_hxx) \
 	$(wf_GEN_ooxml_NamespaceIds_hxx) \
-	$(wf_GEN_ooxml_Status_efforts) \
 	$(wf_GEN_model_QNameToStr_cxx) \
 	$(wf_GEN_model_SprmCodeToStr_cxx) \
 	$(patsubst %,OOXMLFactory_%.hxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
 	$(patsubst %,OOXMLFactory_%.cxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
+	
+#    $(wf_GEN_ooxml_Status_efforts) \

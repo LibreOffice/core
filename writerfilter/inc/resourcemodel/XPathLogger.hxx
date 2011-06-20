@@ -41,7 +41,7 @@ using ::std::stack;
 using ::std::string;
 using ::std::vector;
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC XPathLogger
+class WRITERFILTER_DLLPUBLIC XPathLogger
 {
     typedef boost::unordered_map<string, unsigned int> TokenMap_t;
     typedef boost::shared_ptr<TokenMap_t> TokenMapPointer_t;

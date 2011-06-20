@@ -39,7 +39,7 @@ namespace writerfilter
 {
 using namespace ::std;
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC QNameToString
+class WRITERFILTER_DLLPUBLIC QNameToString
 {
     typedef boost::shared_ptr<QNameToString> Pointer_t;
     typedef map < Id, string > Map;
@@ -63,7 +63,7 @@ public:
     string operator()(Id qName);
 };
 
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC SprmIdToString
+class WRITERFILTER_DLLPUBLIC SprmIdToString
 {
     typedef boost::shared_ptr<SprmIdToString> Pointer_t;
 

@@ -100,6 +100,7 @@ SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang:
 , LoggedTable(dmapper_logger, "SettingsTable")
 , m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
 {
+
 }
 
 SettingsTable::~SettingsTable()
@@ -114,6 +115,7 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
     (void)sValue;
+
 #if 0 //no values known, yet
 
     switch(Name)
@@ -195,8 +197,8 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         break;
     default:
     {
-#ifdef DEBUG_DOMAINMAPPER
-        dmapper_logger->element("SettingsTable.unhandled");
+#ifdef DEBUG_DMAPPER_SETTINGS_TABLE
+        dmapper_logger->element("unhandled");
 #endif
     }
     }

@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <resourcemodel/QNameToString.hxx>
 

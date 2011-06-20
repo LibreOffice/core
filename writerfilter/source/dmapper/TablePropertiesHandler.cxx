@@ -33,7 +33,7 @@ namespace dmapper {
 
     bool TablePropertiesHandler::sprm(Sprm & rSprm)
     {
-#ifdef DEBUG_DMAPPER_TABLE_PROPERTIES_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->startElement("TablePropertiesHandler.sprm");
         dmapper_logger->attribute("sprm", rSprm.toString());
 #endif
@@ -130,7 +130,7 @@ namespace dmapper {
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     pTablePropMap->insert( pBorderHandler->getProperties() );
 
-#ifdef DEBUG_DMAPPER_TABLE_PROPERTIES_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
                     pTablePropMap->dumpXml( dmapper_logger );
 #endif
                     insertTableProps( pTablePropMap );
@@ -221,7 +221,7 @@ namespace dmapper {
             default: bRet = false;
         }
 
-#ifdef DEBUG_DMAPPER_TABLE_PROPERTIES_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->endElement();
 #endif
 
