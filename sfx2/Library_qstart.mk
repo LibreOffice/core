@@ -44,6 +44,13 @@ $(eval $(call gb_Library_set_defs,qstart_gtk,\
     -DENABLE_QUICKSTART_APPLET \
 ))
 
+ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
+$(eval $(call gb_Library_set_defs,qstart_gtk,\
+    $$(DEFS) \
+    -DENABLE_SYSTRAY_GTK \
+))
+endif
+
 $(eval $(call gb_Library_set_cflags,qstart_gtk,\
     $$(CFLAGS) \
     $(filter-out -I%,$(GTK_CFLAGS)) \
