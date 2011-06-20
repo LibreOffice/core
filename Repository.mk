@@ -42,17 +42,20 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    adabasui \
-    AppleRemote \
 	adabas \
 	adabasui \
 	agg \
-    avmedia \
 	basebmp \
-    basegfx \
-    basebmp \
 	canvastools \
-	cppcanvas \
+	forui \
+	odbc \
+	odbcbase \
+	oox \
+	ooxml \
+	sdbc \
+    AppleRemote \
+    avmedia \
+    basegfx \
     chartcontroller \
     chartmodel \
     charttools \
@@ -64,13 +67,11 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbmm \
     dbtools \
     dbu \
-
     desktop_detector \
     doctok \
     drawinglayer \
     editeng \
     for \
-	forui \
     frm \
     fwe \
     fwi \
@@ -84,10 +85,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lwpft \
     msfilter \
     msword \
-	odbc \
-	odbcbase \
-	oox \
-	ooxml \
     qstart_gtk \
     resourcemodel \
     rpt \
@@ -97,8 +94,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sb \
     sc \
     scd \
-	sdbc \
-	sdbt \
     scfilt \
     scui \
     sd \
@@ -125,7 +120,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unoxml \
     utl \
     vbahelper \
-	writerfilter \
     vcl \
     vclplug_gen \
     vclplug_gtk \
@@ -146,12 +140,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	test \
     cppunit \
-    crypto \
     fileacc \
     icui18n \
-    icule \
-    graphite2_off \
-    ssl \
 ))
 
 
@@ -202,13 +192,10 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	basegfx_s \
-    crypto \
-    graphite2_off \
     libeay32 \
     ssleay32 \
     ooopathutils \
     salcpprt \
-    ssl \
     toolshelpers \
 	vclmain \
 ))

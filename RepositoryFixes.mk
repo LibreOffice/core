@@ -36,35 +36,27 @@ gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_c
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
-
-
-endif # ifeq ($(OS),LINUX)
+endif
 
 ifeq ($(OS),SOLARIS)
-
 gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
-#$(info libnames: $(gb_Library_FILENAMES))
-
 endif
 
 ifeq ($(OS),MACOSX)
-
 gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
-
 endif # ifeq ($(OS),MACOSX)
 
 ifeq ($(OS),WNT)
 
 ifneq ($(USE_MINGW),)
-
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:libcppunit.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cui:icui%,cui:icuin%,$(gb_Library_FILENAMES))
@@ -112,7 +104,6 @@ gb_Library_DLLFILENAMES := $(patsubst ssl:ssl%,ssl:ssleay32%,$(gb_Library_DLLFIL
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
-
 else #ifneq ($(USE_MINGW),)
 
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
@@ -159,24 +150,5 @@ endif # ifneq ($(USE_MINGW),)
 
 endif # ifeq ($(OS),WNT)
 
-gb_Library_FILENAMES := $(patsubst writerfilter_uno:writerfilter_uno%,writerfilter_uno:writerfilter%,$(gb_Library_FILENAMES))
-
-# we do not require a known rule for these, when using system libs
-ifeq ($(SYSTEM_OPENSSL),YES)
-gb_Library_TARGETS := $(filter-out crypto,$(gb_Library_TARGETS))
-gb_Library_TARGETS := $(filter-out ssl,$(gb_Library_TARGETS))
-endif
-
-gb_Library_TARGETS := $(filter-out icudata,$(gb_Library_TARGETS))
-gb_Library_TARGETS := $(filter-out icui18n,$(gb_Library_TARGETS))
-gb_Library_TARGETS := $(filter-out icuio,$(gb_Library_TARGETS))
-gb_Library_TARGETS := $(filter-out icule,$(gb_Library_TARGETS))
-gb_Library_TARGETS := $(filter-out iculx,$(gb_Library_TARGETS))
-gb_Library_TARGETS := $(filter-out icutu,$(gb_Library_TARGETS))
-endif
-
-ifeq ($(SYSTEM_CPPUNIT),YES)
-gb_Library_TARGETS := $(filter-out cppunit,$(gb_Library_TARGETS))
-endif
 
 # vim: set noet sw=4 ts=4:

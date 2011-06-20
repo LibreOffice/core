@@ -272,11 +272,11 @@ endef
 else # !SYSTEM_GRAPHITE
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-    graphite \
+	graphite2_off \
 ))
 define gb_LinkTarget__use_graphite
 $(call gb_LinkTarget_add_linked_static_libs,$(1),\
-    graphite \
+    graphite2_off \
 )
 endef
 
