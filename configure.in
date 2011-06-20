@@ -580,9 +580,9 @@ AC_ARG_WITH(afms,
 
 AC_ARG_WITH(agfa-monotype-fonts,
      AS_HELP_STRING([--with-agfa-monotype-fonts],
-          [Do not include the proprietary Agfa Monotype fonts
-           (even if present) in the LibreOffice installation
-           set.])
+          [This switch should only be enabled for those who have the right
+           to use or distribute the proprietary Agfa Monotype
+           fonts.])
 ,)
 
 AC_ARG_WITH(epm,
