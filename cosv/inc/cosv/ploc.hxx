@@ -79,7 +79,6 @@ class Path
     const DirectoryChain &
                         DirChain() const        { return aPath; }
     const String  &     File() const            { return sFile; }
-    const char *        FileExtension() const;
     bool                IsValid() const;
     bool                IsDirectory() const     { return sFile.length() == 0; }
     bool                IsFile() const          { return sFile.length() > 0; }

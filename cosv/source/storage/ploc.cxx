@@ -106,18 +106,6 @@ Path::SetFile( const String & i_sName )
     sFile = i_sName;
 }
 
-const char *
-Path::FileExtension() const
-{
-    const char *
-        ext = strrchr(sFile, '.');
-    if (ext != 0)
-        ++ext;
-    else
-        ext = "";
-    return ext;
-}
-
 bool
 Path::IsValid() const
 {
