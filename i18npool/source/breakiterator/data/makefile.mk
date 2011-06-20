@@ -34,7 +34,7 @@ LIBTARGET=NO
 .INCLUDE :  settings.mk
 
 # Fix heap limit problem on MSC
-.IF "$(OS)" == "WNT"
+.IF "$(COM)" == "MSC"
 .IF  "$(COMEX)" != "8"
 CDEFS+=-Zm300
 .ENDIF
