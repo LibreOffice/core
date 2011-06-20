@@ -82,7 +82,6 @@ class SvIdlDataBase
 
 protected:
 #ifdef IDL_COMPILER
-    ByteString                      aModulePrefix;
     SvMetaObjectMemberStack     aContextStack;
     String                      aPath;
     SvIdlError                  aError;
@@ -117,7 +116,6 @@ public:
     void                    SetExportFile( const String& rName )
                             { aExportFile = rName; }
     void                    AppendAttr( SvMetaAttribute *pSlot );
-    const ByteString&           GetActModulePrefix() const { return aModulePrefix; }
     const SvIdlError &      GetError() const { return aError; }
     void                    SetError( const SvIdlError & r )
                             { aError = r; }
