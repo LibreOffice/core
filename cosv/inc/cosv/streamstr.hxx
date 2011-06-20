@@ -235,9 +235,6 @@ class StreamStr : public bostream
     void                replace_all(
                             char                i_cCarToSearch,
                             char                i_cReplacement );
-    void                replace_all(
-                            Area                i_aStrToSearch,
-                            Area                i_aReplacement );
 
     StreamStr &         to_upper(
                             position_type       i_nStart = 0,

@@ -668,28 +668,6 @@ StreamStr::replace_all( char i_cCarToSearch,
    }
 }
 
-void
-StreamStr::replace_all( Area                i_aStrToSearch,
-                        Area                i_aReplacement )
-{
-    position_type p = 0;
-    const char *  pSearch = i_aStrToSearch.sStr;
-    size_type     nSearch = i_aStrToSearch.nLength;
-
-    while ( p <= length() - nSearch )
-    {
-        if ( strncmp(dpData+p, pSearch, nSearch) == 0 )
-        {
-            replace( p, nSearch, i_aReplacement );
-            p += i_aReplacement.nLength;
-        }
-        else
-        {
-            ++p;
-        }
-   }    // end while
-}
-
 StreamStr &
 StreamStr::to_upper( position_type       i_nStart,
                      size_type           i_nLength )
