@@ -212,10 +212,6 @@ class StreamStr : public bostream
     self &              operator_read_line(
                             bstream &           i_src );
 
-    void                strip_front(
-                            char                i_cToRemove );
-    void                strip_back(
-                            char                i_cToRemove );
     void                strip_front_whitespace();    /// removes space, tab and crlf.
     void                strip_back_whitespace();
     void                strip_frontback_whitespace();
