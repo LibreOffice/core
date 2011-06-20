@@ -523,6 +523,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("txtSenderFax",
             PropertyNames.PROPERTY_ENABLED, True)
+
+        self.myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
+            self.xTextDocument)
         self.txtSenderNameTextChanged()
         self.txtSenderStreetTextChanged()
         self.txtSenderPostCodeTextChanged()
@@ -545,39 +548,28 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.bEditTemplate = True
 
     def txtSenderNameTextChanged(self):
-        myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("Company",
-            self.txtSenderName.Text)
+        self.myFieldHandler.changeUserFieldContent(
+            "Company", self.txtSenderName.Text)
 
     def txtSenderStreetTextChanged(self):
-        myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("Street",
-            self.txtSenderStreet.Text)
+        self.myFieldHandler.changeUserFieldContent(
+            "Street", self.txtSenderStreet.Text)
 
     def txtSenderCityTextChanged(self):
-        myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("City",
-            self.txtSenderCity.Text)
+        self.myFieldHandler.changeUserFieldContent(
+            "City", self.txtSenderCity.Text)
 
     def txtSenderPostCodeTextChanged(self):
-        myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("PostCode",
-            self.txtSenderPostCode.Text)
+        self.myFieldHandler.changeUserFieldContent(
+            "PostCode", self.txtSenderPostCode.Text)
 
     def txtSenderStateTextChanged(self):
-        myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            self.xTextDocument)
-        myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE,
-            self.txtSenderState.Text)
+        self.myFieldHandler.changeUserFieldContent(
+            PropertyNames.PROPERTY_STATE, self.txtSenderState.Text)
 
     def txtSenderFaxTextChanged(self):
-        myFieldHandler = TextFieldHandler(self.myFaxDoc.xMSF,
-            self.xTextDocument)
-        myFieldHandler.changeUserFieldContent("Fax", self.txtSenderFax.Text)
+        self.myFieldHandler.changeUserFieldContent(
+            "Fax", self.txtSenderFax.Text)
 
     #switch Elements on/off --------------------------------------------------
 

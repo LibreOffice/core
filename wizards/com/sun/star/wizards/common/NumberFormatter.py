@@ -59,7 +59,6 @@ class NumberFormatter(object):
             Type, Locale())
 
     def convertNumberToString(self, _nkey, _dblValue, _xNumberFormatter=None):
-        print "yepa"
         if _xNumberFormatter is None:
             return self.xNumberFormatter.convertNumberToString(
                 _nkey, _dblValue)

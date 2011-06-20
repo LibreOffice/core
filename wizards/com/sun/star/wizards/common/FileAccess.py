@@ -109,15 +109,9 @@ class FileAccess(object):
             Template_user = xPathInterface.getPropertyValue(
                 sPath + "_user")
             if type(Template_internal) is not types.InstanceType:
-                if isinstance(Template_internal,tuple):
-                    ReadPaths = ReadPaths + Template_internal
-                else:
-                    ReadPaths = ReadPaths + (Template_internal,)
+                ReadPaths = ReadPaths + Template_internal
             if type(Template_user) is not types.InstanceType:
-                if isinstance(Template_user,tuple):
-                    ReadPaths = ReadPaths + Template_user
-                else:
-                    ReadPaths = ReadPaths + (Template_internal,)
+                ReadPaths = ReadPaths + Template_user
             ReadPaths = ReadPaths + (Template_writable,)
             if sType.lower() == "user":
                 ResultPath = Template_writable

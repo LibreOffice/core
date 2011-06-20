@@ -14,6 +14,7 @@ class TextFieldHandler(object):
     '''
 
     xTextFieldsSupplierAux = None
+    arrayTextFields = None
     dictTextFields = None
 
     def __init__(self, xMSF, xTextDocument):
@@ -73,10 +74,12 @@ class TextFieldHandler(object):
         try:
             if self.xTextFieldsSupplier.TextFields.hasElements():
                 TextFieldHandler.dictTextFields = {}
+                TextFieldHandler.arrayTextFields = []
                 xEnum = \
                     self.xTextFieldsSupplier.TextFields.createEnumeration()
                 while xEnum.hasMoreElements():
                     oTextField = xEnum.nextElement()
+                    TextFieldHandler.arrayTextFields.append(oTextField)
                     xPropertySet = oTextField.TextFieldMaster
                     if len(xPropertySet.Name) is not 0:
                         TextFieldHandler.dictTextFields[xPropertySet.Name] = \
@@ -118,47 +121,41 @@ class TextFieldHandler(object):
 
     def updateDocInfoFields(self):
         try:
-            xEnum = self.xTextFieldsSupplier.TextFields.createEnumeration()
-            while xEnum.hasMoreElements():
-                oTextField = xEnum.nextElement()
-                if oTextField.supportsService(
+            for i in TextFieldHandler.arrayTextFields:
+                if i.supportsService(
                     "com.sun.star.text.TextField.ExtendedUser"):
-                    oTextField.update()
+                    i.update()
 
-                if oTextField.supportsService(
+                if i.supportsService(
                     "com.sun.star.text.TextField.User"):
-                    oTextField.update()
+                    i.update()
 
         except Exception, e:
             traceback.print_exc()
 
     def updateDateFields(self):
         try:
-            xEnum = self.xTextFieldsSupplier.TextFields.createEnumeration()
             now = time.localtime(time.time())
             dt = DateTime()
             dt.Day = time.strftime("%d", now)
             dt.Year = time.strftime("%Y", now)
             dt.Month = time.strftime("%m", now)
             dt.Month += 1
-            while xEnum.hasMoreElements():
-                oTextField = xEnum.nextElement()
-                if oTextField.supportsService(
+            for i in TextFieldHandler.arrayTextFields:
+                if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
-                    oTextField.setPropertyValue("IsFixed", False)
-                    oTextField.setPropertyValue("DateTimeValue", dt)
+                    i.setPropertyValue("IsFixed", False)
+                    i.setPropertyValue("DateTimeValue", dt)
 
         except Exception, e:
             traceback.print_exc()
 
     def fixDateFields(self, _bSetFixed):
         try:
-            xEnum = self.xTextFieldsSupplier.TextFields.createEnumeration()
-            while xEnum.hasMoreElements():
-                oTextField = xEnum.nextElement()
-                if oTextField.supportsService(
+            for i in TextFieldHandler.arrayTextFields:
+                if i.supportsService(
                     "com.sun.star.text.TextField.DateTime"):
-                    oTextField.setPropertyValue("IsFixed", _bSetFixed)
+                    i.setPropertyValue("IsFixed", _bSetFixed)
 
         except Exception, e:
             traceback.print_exc()

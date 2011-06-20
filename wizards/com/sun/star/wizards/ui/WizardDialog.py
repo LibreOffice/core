@@ -161,14 +161,13 @@ class WizardDialog(UnoDialog2):
 
     def getRoadmapItemByID(self, _ID):
         try:
-            i = 0
-            while i < self.oRoadmap.Count:
-                CurRoadmapItem = self.oRoadmap.getByIndex(i)
+            getByIndex = self.oRoadmap.getByIndex
+            for i in xrange(self.oRoadmap.Count):
+                CurRoadmapItem = getByIndex(i)
                 CurID = int(Helper.getUnoPropertyValue(CurRoadmapItem, "ID"))
                 if CurID == _ID:
                     return CurRoadmapItem
 
-                i += 1
             return None
         except UnoException, exception:
             traceback.print_exc()
