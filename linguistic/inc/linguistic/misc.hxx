@@ -101,16 +101,6 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
 
 rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage );
 
-inline ::rtl::OUString BS2OU(const ByteString &rText, rtl_TextEncoding nEnc)
-{
-    return ::rtl::OUString( rText.GetBuffer(), rText.Len(), nEnc );
-}
-
-inline ByteString OU2BS(const ::rtl::OUString &rText, rtl_TextEncoding nEnc)
-{
-    return ByteString( rText.getStr(), nEnc );
-}
-
 rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar );
 
 sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
