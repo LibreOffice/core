@@ -41,7 +41,6 @@ $(eval $(call gb_Library_add_defs,xmlreader,\
 
 $(eval $(call gb_Library_add_linked_libs,xmlreader,\
 	sal \
-	stl \
     $(gb_STDLIBS) \
 ))
 
