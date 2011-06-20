@@ -107,7 +107,7 @@ RTFSprms_t& lcl_getCellBordersAttributes(std::stack<RTFParserState>& aStates)
 void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, RTFValue::Pointer_t pValue)
 {
     // Paragraph or cell property?
-    if (!aStates.top().aTableCellsAttributes.size())
+    if (!aStates.top().aTableCellSprms.size())
         for (int i = 0; i < 4; i++)
         {
             RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aParagraphSprms, lcl_getBorderTable(i));
