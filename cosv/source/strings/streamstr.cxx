@@ -699,13 +699,6 @@ StreamStr::to_upper( position_type       i_nStart,
     return *this;
 }
 
-
-StreamStr::size_type
-StreamStr::token_count( char i_cSplit ) const
-{
-    return count_chars(dpData, i_cSplit) + 1;
-}
-
 String
 StreamStr::token( position_type i_nNr,
                   char          i_cSplit ) const

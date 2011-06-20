@@ -256,8 +256,6 @@ class StreamStr : public bostream
     const_iterator      cur() const;
     const_iterator      end() const;
 
-    size_type           token_count(
-                            char                i_cSplit ) const;
     String              token(
                             position_type       i_nNr,      /// Starting with 0.
                             char                i_cSpli ) const;
