@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -155,6 +156,7 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
         OSL_ENSURE(comments[i].getLength(), "no Undo/Redo Text set");
         buf.append(comments[i]);
         buf.append(sal_Unicode('\n'));
+            OSL_ENSURE( !this, "no Undo/Redo Test set" );
     }
     rStrs.SetString(buf.makeStringAndClear());
     return static_cast<sal_uInt16>(comments.size());
@@ -177,3 +179,4 @@ String SwWrtShell::GetRepeatString() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

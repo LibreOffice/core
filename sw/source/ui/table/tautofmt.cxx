@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,8 @@
 
 
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,18 +48,12 @@
 #include <svx/framelinkarray.hxx>
 #include "swmodule.hxx"
 #include "swtypes.hxx"
-#ifndef _VIEW_HXX
 #include "view.hxx"
-#endif
 #include "wrtsh.hxx"
 #include "tblafmt.hxx"
-#ifndef _TAUTOFMT_HXX
 #include "tautofmt.hxx"
-#endif
 #include "shellres.hxx"
-#ifndef _TAUTOFMT_HRC
 #include "tautofmt.hrc"
-#endif
 
 using namespace com::sun::star;
 
@@ -170,7 +161,7 @@ void SwStringInputDlg::GetInputString( String& rString ) const
 }
 
 
-__EXPORT SwStringInputDlg::~SwStringInputDlg()
+SwStringInputDlg::~SwStringInputDlg()
 {
 }
 
@@ -224,7 +215,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
 //------------------------------------------------------------------------
 
 
-__EXPORT SwAutoFormatDlg::~SwAutoFormatDlg()
+SwAutoFormatDlg::~SwAutoFormatDlg()
 {
     delete pWndPreview;
 
@@ -337,8 +328,6 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
         pData->SetBackground( bCheck );
     else if ( pBtn == &aBtnAlignment )
         pData->SetJustify( bCheck );
-//    else if ( pBtn == &aBtnAdjust )
-//        pData->SetIncludeWidthHeight( bCheck );
     else
         bDataChgd = sal_False;
 
@@ -608,12 +597,12 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
     else
         mbRTL = pWrtShell->IsTableRightToLeft();
 
-    DBG_ASSERT( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
+    OSL_ENSURE( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
     if ( m_xMSF.is() )
     {
         m_xBreak = uno::Reference< i18n::XBreakIterator >(
             m_xMSF->createInstance (
-                rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),
             uno::UNO_QUERY);
     }
     pNumFmt = new SvNumberFormatter( m_xMSF, LANGUAGE_SYSTEM );
@@ -623,7 +612,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
 
 //------------------------------------------------------------------------
 
-__EXPORT AutoFmtPreview::~AutoFmtPreview()
+AutoFmtPreview::~AutoFmtPreview()
 {
     delete pNumFmt;
 }
@@ -764,9 +753,6 @@ MAKENUMSTR:
         Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
         Point               aPos            = cellRect.TopLeft();
         sal_uInt16              nRightX         = 0;
-//            sal_Bool                bJustify        = aCurData.IsJustify();
-//            ScHorJustifyAttr    aHorJustifyItem;
-//          CellHorJustify    eJustification;
 
         Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
                             cellRect.GetHeight() - FRAME_OFFSET );
@@ -795,9 +781,6 @@ MAKENUMSTR:
         while( theMaxStrSize.Width() <= aStrSize.Width() &&
                 cellString.Len() > 1 )
         {
-//                  if( eJustification == SVX_HOR_JUSTIFY_RIGHT )
-//                          cellString.Erase( 0, 1 );
-//                  else
             cellString.Erase( cellString.Len() - 1 );
             aScriptedText.SetText( cellString, m_xBreak );
             aStrSize = aScriptedText.GetTextSize();
@@ -806,18 +789,6 @@ MAKENUMSTR:
         nRightX  = (sal_uInt16)(  cellRect.GetWidth()
                                 - aStrSize.Width()
                                 - FRAME_OFFSET );
-        //-------------
-        // Ausrichtung:
-        //-------------
-        /*   if ( bJustify )
-        {
-            aCurData.GetHorJustify( nFmtIndex, aHorJustifyItem );
-            eJustification = (CellHorJustify)aHorJustifyItem.GetValue();
-        }
-        else
-        {
-            eJustification = SC_HOR_JUSTIFY_STANDARD;
-        }*/
 
         //-----------------------------
         // vertikal (immer zentrieren):
@@ -827,7 +798,6 @@ MAKENUMSTR:
         //-----------
         // horizontal
         //-----------
-/*        if ( eJustification != SC_HOR_JUSTIFY_STANDARD )*/
         if( mbRTL )
             aPos.X() += nRightX;
         else if (aCurData.IsJustify())
@@ -922,7 +892,7 @@ void AutoFmtPreview::PaintCells()
 //------------------------------------------------------------------------
 
 
-void __EXPORT AutoFmtPreview::Init()
+void AutoFmtPreview::Init()
 {
     SetBorderStyle( GetBorderStyle() | WINDOW_BORDER_MONO );
     maArray.Initialize( 5, 5 );
@@ -950,7 +920,7 @@ void AutoFmtPreview::CalcCellArray( sal_Bool _bFitWidth )
 
 //------------------------------------------------------------------------
 
-inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const SvxBorderLine* pBorder )
+inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
     rStyle.Set( pBorder, 0.05, 5 );
 }
@@ -1051,7 +1021,9 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
 
 //------------------------------------------------------------------------
 
-void __EXPORT AutoFmtPreview::Paint( const Rectangle& rRect )
+void AutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

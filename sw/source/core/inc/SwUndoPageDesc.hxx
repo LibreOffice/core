@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,14 +57,14 @@ public:
 
 class SwUndoPageDescCreate : public SwUndo
 {
-    const SwPageDesc * pDesc; // #116530#
+    const SwPageDesc * pDesc;
     SwPageDescExt aNew;
     SwDoc * pDoc;
 
     void DoImpl();
 
 public:
-    SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc * pDoc); // #116530#
+    SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc * pDoc);
     virtual ~SwUndoPageDescCreate();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
@@ -91,3 +92,5 @@ public:
     virtual SwRewriter GetRewriter() const;
 };
 #endif // _SW_UNDO_PAGE_DESC_CHANGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

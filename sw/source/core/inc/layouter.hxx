@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,27 +38,22 @@ class SwPageFrm;
 class SwLooping;
 class IDocumentLayoutAccess;
 
-// --> OD 2004-06-23 #i28701#
+// --> #i28701#
 class SwMovedFwdFrmsByObjPos;
 class SwTxtFrm;
-// <--
-// --> OD 2004-10-05 #i26945#
+// --> #i26945#
 class SwRowFrm;
-// <--
-// --> OD 2004-10-22 #i35911#
+// --> #i35911#
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
-// <--
-// --> OD 2005-01-12 #i40155#
+// --> #i40155#
 #include <vector>
 class SwFrm;
-// <--
-// --> OD 2006-05-10 #i65250#
+// --> #i65250#
 #include <swtypes.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 class SwFlowFrm;
 class SwLayoutFrm;
-// <--
 
 #define LOOP_PAGE 1
 
@@ -68,19 +64,16 @@ class SwLayouter
     void _CollectEndnotes( SwSectionFrm* pSect );
     sal_Bool StartLooping( SwPageFrm* pPage );
 
-    // --> OD 2004-06-23 #i28701#
+    // --> #i28701#
     SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
-    // <--
-    // --> OD 2004-10-22 #i35911#
+    // --> #i35911#
     SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
-    // <--
-    // --> OD 2005-01-12 #i40155# - data structure to collect frames, which are
+    // --> #i40155# - data structure to collect frames, which are
     // marked not to wrap around objects.
     std::vector< const SwFrm* > maFrmsNotToWrap;
-    // <--
 
 public:
-    // --> OD 2006-05-10 #i65250#
+    // --> #i65250#
     // - data structure to collect moving backward layout information
     struct tMoveBwdLayoutInfoKey
     {
@@ -117,10 +110,9 @@ private:
                    p_key1.mnFreeSpaceInNewUpper == p_key2.mnFreeSpaceInNewUpper;
         }
     };
-    std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
+    boost::unordered_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
                    fMoveBwdLayoutInfoKeyHash,
                    fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
-    // <--
 public:
     SwLayouter();
     ~SwLayouter();
@@ -136,7 +128,7 @@ public:
     static sal_Bool Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
     static sal_Bool StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
 
-    // --> OD 2004-06-23 #i28701#
+    // --> #i28701#
     static void ClearMovedFwdFrms( const SwDoc& _rDoc );
     static void InsertMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTxtFrm& _rMovedFwdFrmByObjPos,
@@ -144,35 +136,29 @@ public:
     static bool FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                      const SwTxtFrm& _rTxtFrm,
                                      sal_uInt32& _ornToPageNum );
-    // <--
-    // --> OD 2005-01-12 #i40155# - ummark given frame as to be moved forward.
+    // --> #i40155# - ummark given frame as to be moved forward.
     static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTxtFrm& _rTxtFrm );
-    // <--
-    // --> OD 2004-10-05 #i26945#
+    // --> #i26945#
     static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                            const SwRowFrm& _rRowFrm );
-    // <--
 
-    // --> OD 2004-10-22 #i35911#
+    // --> #i35911#
     static void ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc );
     static void InsertObjForTmpConsiderWrapInfluence(
                                         const SwDoc& _rDoc,
                                         SwAnchoredObject& _rAnchoredObj );
-    // <--
-    // --> OD 2005-01-12 #i40155#
+    // --> #i40155#
     static void ClearFrmsNotToWrap( const SwDoc& _rDoc );
     static void InsertFrmNotToWrap( const SwDoc& _rDoc,
                                     const SwFrm& _rFrm );
     static bool FrmNotToWrap( const IDocumentLayoutAccess& _rIDLA,
                               const SwFrm& _rFrm );
-    // <--
-    // --> OD 2006-05-10 #i65250#
+    // --> #i65250#
     static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
                                    const SwFlowFrm& p_rFlowFrm,
                                    const SwLayoutFrm& p_rNewUpperFrm );
     static void ClearMoveBwdLayoutInfo( const SwDoc& p_rDoc );
-    // <--
 };
 
 
@@ -181,3 +167,4 @@ extern void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm );
 #endif  //_LAYOUTER_HXX
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

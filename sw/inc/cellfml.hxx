@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,9 +47,9 @@ class SwTblCalcPara
     sal_uInt16 nStackCnt, nMaxSize;
 
 public:
-    SwTableSortBoxes *pBoxStk;  // Stack fuers erkennen von Rekursionen !
-    SwCalc& rCalc;              // akt. Calculator
-    const SwTable* pTbl;        // akt. Tabelle
+    SwTableSortBoxes *pBoxStk;  // stack for recognizing recursion
+    SwCalc& rCalc;              // current Calculator
+    const SwTable* pTbl;        // current table
 
     SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
     ~SwTblCalcPara();
@@ -96,14 +97,14 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };
 
-    String      sFormel;            // akt. Formel
-    NameType    eNmType;            // akt. Darstellungs Art
-    sal_Bool        bValidValue;        // sal_True: Formel neu berechnen
+    String      sFormel;            // current formula
+    NameType    eNmType;            // current display method
+    sal_Bool        bValidValue;        // sal_True: recalculate formula
 
-    // suche den Node, in dem die Formel steht:
+    // find the node in which the formula is located
     //  TextFeld    -> TextNode,
     //  BoxAttribut -> BoxStartNode
-    // !!! MUSS VON JEDER ABLEITUNG UEBERLADEN WERDEN !!!
+    // !!! has to be overloaded by every derivation !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 
     SwTableFormula( const String& rFormel );
@@ -128,37 +129,36 @@ public:
                                     return *this;
         }
 
-    // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
+    // create from the internal formula (for CORE) the external formula (for UI)
     void PtrToBoxNm( const SwTable* pTbl );
-    // erzeuge aus der externen (fuer UI) die interne (fuer CORE) Formel
+    // create from the external formula the internal
     void BoxNmToPtr( const SwTable* pTbl );
-    // erzeuge aus der externen/internen Formel die relative Formel
+    // create from the external/internal formula the relative formula
     void ToRelBoxNm( const SwTable* pTbl );
-    // wird vorm/nach dem mergen/splitten von Tabellen rerufen
+    // gets called before/after merging/splitting of tables
     void ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd );
 
-    // ist gerade eine intern Darstellung aktiv
-    sal_Bool IsIntrnlName() const           { return eNmType == INTRNL_NAME; }
-    // erfrage die akt. Darstellung der Formel
+    bool IsIntrnlName() const                  { return eNmType == INTRNL_NAME; }
     NameType GetNameType() const        { return eNmType; }
 
-    // erfrage/setze das Flag, ob der akt. Wert gueltig ist
-    sal_Bool        IsValid() const             { return bValidValue; }
-    inline void ChgValid( sal_Bool bNew )       { bValidValue = bNew; }
+    bool               IsValid() const                         { return bValidValue; }
+    inline void        ChgValid( bool bNew )           { bValidValue = bNew; }
 
     const String& GetFormula() const        { return sFormel; }
     void SetFormula( const String& rNew )
         {
             sFormel = rNew;
-            bValidValue = sal_False;
+            bValidValue = false;
             eNmType = EXTRNL_NAME;
         }
 
     sal_uInt16 GetBoxesOfFormula( const SwTable& rTbl, SwSelBoxes& rBoxes );
-    // sind alle Boxen gueltig, auf die sich die Formel bezieht?
-    sal_Bool HasValidBoxes() const;
+    // are all boxes valid which this formula relies on?
+    bool HasValidBoxes() const;
 };
 
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

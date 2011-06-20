@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <pam.hxx>
 #include <boost/operators.hpp>
 #include <map>
+#include "swdll.hxx"
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
@@ -43,7 +45,7 @@ struct SwPosition;
 
 namespace sw { namespace mark
 {
-    class IMark
+    class SAL_DLLPUBLIC_EXPORT IMark
         : virtual public SwModify // inherited as interface
         , public ::boost::totally_ordered<IMark>
     {
@@ -81,7 +83,7 @@ namespace sw { namespace mark
             virtual rtl::OUString ToString( ) const =0;
     };
 
-    class IBookmark
+    class SAL_DLLPUBLIC_EXPORT IBookmark
         : virtual public IMark
     {
         public:
@@ -91,7 +93,7 @@ namespace sw { namespace mark
             virtual void SetKeyCode(const KeyCode&) =0;
     };
 
-    class IFieldmark
+    class SAL_DLLPUBLIC_EXPORT IFieldmark
         : virtual public IMark
     {
         public:
@@ -108,7 +110,7 @@ namespace sw { namespace mark
             virtual void Invalidate() = 0;
     };
 
-    class ICheckboxFieldmark
+    class SAL_DLLPUBLIC_EXPORT ICheckboxFieldmark
         : virtual public IFieldmark
     {
         public:
@@ -117,3 +119,5 @@ namespace sw { namespace mark
     };
 }}
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

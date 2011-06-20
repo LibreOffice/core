@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,14 +40,10 @@
 #define _JAVAEDIT_CXX
 #include <hintids.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <docsh.hxx>
@@ -55,16 +52,10 @@
 #include <fldmgr.hxx>
 #include <docufld.hxx>
 #include <uitool.hxx>
-#ifndef _JAVAEDIT_HXX
 #include <javaedit.hxx>
-#endif
 
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _JAVAEDIT_HRC
 #include <javaedit.hrc>
-#endif
 
 // static ----------------------------------------------------------------
 
@@ -98,7 +89,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     pFileDlg(NULL),
     pOldDefDlgParent(NULL)
 {
-    // Handler installieren
+    // install handler
     aPrevBtn.SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
     aNextBtn.SetClickHdl( LINK( this, SwJavaEditDialog, NextHdl ) );
     aOKBtn.SetClickHdl( LINK( this, SwJavaEditDialog, OKHdl ) );
@@ -122,7 +113,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     if( !bNew )
         SetText( SW_RES( STR_JAVA_EDIT ) );
     else
-        // neu anlegen
+        // newly create
         SetText( SW_RES( STR_JAVA_INSERT ) );
 
     FreeResource();
@@ -130,24 +121,12 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     RadioButtonHdl(NULL);
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
-
 SwJavaEditDialog::~SwJavaEditDialog()
 {
     delete pMgr;
     delete pFileDlg;
     Application::SetDefDialogParent( pOldDefDlgParent );
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 
 IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 {
@@ -161,12 +140,6 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
-
 IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 {
     SetFld();
@@ -179,12 +152,6 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwJavaEditDialog, OKHdl, Button *, EMPTYARG )
 {
     SetFld();
@@ -192,21 +159,9 @@ IMPL_LINK( SwJavaEditDialog, OKHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
-
 void SwJavaEditDialog::Apply()
 {
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 
 void SwJavaEditDialog::CheckTravel()
 {
@@ -215,7 +170,7 @@ void SwJavaEditDialog::CheckTravel()
 
     if(!bNew)
     {
-        // Traveling nur bei mehr als einem Feld
+        // Traveling only when more than one field
         pSh->StartAction();
         pSh->CreateCrsr();
 
@@ -264,12 +219,6 @@ void SwJavaEditDialog::CheckTravel()
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
-
 void SwJavaEditDialog::SetFld()
 {
     if( !aOKBtn.IsEnabled() )
@@ -304,10 +253,6 @@ sal_Bool SwJavaEditDialog::IsUpdate()
     return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
 {
     sal_Bool bEnable = aUrlRB.IsChecked();
@@ -327,10 +272,6 @@ IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
     }
     return 0;
 }
-
-/***************************************************************************
-    Beschreibung:
-***************************************************************************/
 
 IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
 {
@@ -364,3 +305,4 @@ IMPL_LINK( SwJavaEditDialog, DlgClosedHdl, sfx2::FileDialogHelper *, EMPTYARG )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

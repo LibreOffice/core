@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -152,7 +153,7 @@ sal_Bool SwWrtShell::_PrvWrd()
     return bRet;
 }
 
-// --> OD 2008-08-06 #i92468#
+// #i92468#
 // method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
 sal_Bool SwWrtShell::_NxtWrdForDelete()
 {
@@ -198,8 +199,6 @@ sal_Bool SwWrtShell::_PrvWrdForDelete()
     Combine();
     return sal_True;
 }
-// <--
-
 
 sal_Bool SwWrtShell::_FwdSentence()
 {
@@ -218,8 +217,6 @@ sal_Bool SwWrtShell::_FwdSentence()
     return 1;
 }
 
-
-
 sal_Bool SwWrtShell::_BwdSentence()
 {
     Push();
@@ -229,12 +226,7 @@ sal_Bool SwWrtShell::_BwdSentence()
         Pop(sal_False);
         return 0;
     }
-    if(IsSttPara())
-    {
-        Pop();
-        return 1;
-    }
-    if( !GoPrevSentence()  && !IsSttPara() )
+    if( !GoStartSentence()  && !IsSttPara() )
             // nicht gefunden --> an den Absatz Anfang
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
@@ -242,21 +234,10 @@ sal_Bool SwWrtShell::_BwdSentence()
     return 1;
 }
 
-
 sal_Bool SwWrtShell::_FwdPara()
 {
     Push();
     ClearMark();
-    // --> OD 2009-01-06 #i81824#
-    // going right and back again left not needed and causes too much
-    // accessibility events due to the cursor movements.
-//    if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))
-//    {
-//        Pop(sal_False);
-//        return 0;
-//    }
-//    SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
-    // <--
     sal_Bool bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
@@ -269,28 +250,12 @@ sal_Bool SwWrtShell::_BwdPara()
 {
     Push();
     ClearMark();
-    // --> OD 2009-01-06 #i81824#
-    // going left and back again right not needed and causes too much
-    // accessibility events due to the cursor movements.
-//    if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
-//    {
-//        Pop(sal_False);
-//        return 0;
-//    }
-//    SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
-    // <--
-    // --> OD 2009-01-06 #i81824#
-    // going to start of paragraph only needed, if move to previous paragraph
-    // does not happen. Otherwise, useless accessibility events are triggered
-    // due to cursor movements.
-//    if(!IsSttOfPara())
-//        SttPara();
+
     sal_Bool bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
     if ( !bRet && !IsSttOfPara() )
     {
         SttPara();
     }
-    // <--
 
     ClearMark();
     Combine();
@@ -298,3 +263,4 @@ sal_Bool SwWrtShell::_BwdPara()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,8 +41,6 @@ class SdrObjGroup;
 class SdrUndoAction;
 class SwDrawFrmFmt;
 
-
-
 //--------------------------------------------------------------------
 // ----------- Undo for Draw Objects ---------------------------------
 
@@ -79,7 +77,6 @@ public:
     void SetGroupFmt( SwDrawFrmFmt* );
 };
 
-// --> OD 2006-11-01 #130889#
 // Action "ungroup drawing object" is now splitted into three parts - see
 // method <SwDoc::UnGroupSelection(..)>:
 // - creation for <SwDrawFrmFmt> instances for the group members of the
@@ -108,7 +105,6 @@ public:
     void AddObj( sal_uInt16 nPos, SwDrawFrmFmt* );
 };
 
-// --> OD 2006-11-01 #130889#
 class SwUndoDrawUnGroupConnectToLayout : public SwUndo
 {
     private:
@@ -125,8 +121,6 @@ class SwUndoDrawUnGroupConnectToLayout : public SwUndo
         void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
                            SdrObject* pDrawObject );
 };
-// <--
-
 
 class SwUndoDrawDelete : public SwUndo
 {

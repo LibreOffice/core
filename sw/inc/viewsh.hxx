@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,8 +36,8 @@
 #include <swtypes.hxx>
 #include <ring.hxx>
 #include <swrect.hxx>
-#include <errhdl.hxx>
-#include <boost/shared_ptr.hpp>// swmod 080115
+#include <boost/shared_ptr.hpp> // swmod 080115
+#include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
 
@@ -56,10 +57,8 @@ class IDocumentContentOperations;
 class IDocumentStylePoolAccess;
 class IDocumentStatistics;
 class IDocumentUndoRedo;
-// --> OD 2007-11-14 #i83479#
 class IDocumentListItems;
 class IDocumentOutlineNodes;
-// <--
 class SfxPrinter;
 class SfxProgress;
 class SwRootFrm;
@@ -94,10 +93,8 @@ namespace vcl
 }
 
 
-//JP 19.07.98: - Bug 52312
-// define fuer Flags, die im CTOR oder den darunter liegenden Schichten
-// benoetigt werden.
-// Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
+// Define for flags needed in ctor or layers below.
+// Currently the PreView flag is needed for DrawPage.
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
 #define VSHELLFLAG_SHARELAYOUT          ((long)0x2)//swmod 080125 flag
 typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
@@ -111,31 +108,28 @@ class SW_DLLPUBLIC ViewShell : public Ring
     friend class SwViewImp;
     friend class SwLayIdle;
 
-    // OD 12.12.2002 #103492# - for setting visible area for page preview paint
+    // For setting visible area for page preview paint.
     friend class SwPagePreviewLayout;
 
-    //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
-    //werden kann.
+
+    // Set SwVisArea in order to enable clean formatting before printing.
     friend void SetSwVisArea( ViewShell *pSh, const SwRect &, sal_Bool bPDFExport = sal_False );
 
-    // --> PB 2007-05-30 #146850#
     static BitmapEx*    pReplaceBmp;    // replaced display of still loaded images
     static BitmapEx*    pErrorBmp;      // error display of missed images
-    // <--
 
-    static sal_Bool bLstAct;            // sal_True wenn Das EndAction der letzten Shell
-                                    // laeuft; also die EndActions der
-                                    // anderen Shells auf das Dokument
-                                    // abgearbeitet sind.
+    static sal_Bool bLstAct;        // sal_True if EndAction of last Shell
+                                    // i.e. if the EndActions of the other
+                                    // Shells on the document are through.
 
-    Point         aPrtOffst;         //Ofst fuer den Printer,
-                                     //nicht bedruckbarer Rand.
-     Size         aBrowseBorder;    //Rand fuer Framedokumente
+    Point         aPrtOffst;         // Ofst for Printer,
+                                     // non-printable margin.
+     Size         aBrowseBorder;     // Border for frame documents.
     SwRect        aInvalidRect;
 
     SfxViewShell *pSfxViewShell;
-    SwViewImp    *pImp;             //Core-Interna der ViewShell.
-                                    //Der Pointer ist niemals 0.
+    SwViewImp    *pImp;             // Core-internals of ViewShell.
+                                    // The pointer is never 0.
 
     Window       *pWin;              // = 0 during printing or pdf export
     OutputDevice *pOut;              // Window, Printer, VirtDev, ...
@@ -149,59 +143,57 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SwAccessibilityOptions* pAccOptions;
 
 
-    sal_Bool  bDocSizeChgd     :1;  //Fuer DocChgNotify(): Neue DocGroesse bei
-                                //EndAction an das DocMDI melden.
-    sal_Bool  bPaintWorks      :1;  //Normal Painten wenn sal_True,
-                                //Paint merken wenn sal_False
-    sal_Bool  bPaintInProgress :1;  //Kein zweifaches Paint durchlassen.
-    sal_Bool  bViewLocked      :1;  //Lockt den sichtbaren Bereich,
-                                //MakeVisible laeuft dann in's leere.
-    sal_Bool  bInEndAction     :1;  //Fiese unstaende vermeiden, siehe viewsh.cxx
-    sal_Bool  bPreView         :1;  //Ist sal_True wenns eine PreView-ViewShell ist.
-    sal_Bool  bFrameView       :1;  //sal_True wenn es ein (HTML-)Frame ist.
-    sal_Bool  bEnableSmooth    :1;  //Disable des SmoothScroll z.B. fuer
-                                //Drag der Scrollbars.
-    sal_Bool  bEndActionByVirDev:1; //Paints aus der EndAction immer ueber virtuelles
+    sal_Bool  bDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
+                                    // at EndAction to DocMDI.
+    sal_Bool  bPaintWorks      :1;  // Normal Painting if sal_True,
+                                    // remember Paint if sal_False.
+    sal_Bool  bPaintInProgress :1;  // Block any double paint.
+    sal_Bool  bViewLocked      :1;  // Lock visible range;
+                                    // in this case MakeVisible is ineffectual.
+    sal_Bool  bInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
+    sal_Bool  bPreView         :1;  // If sal_True it is a PreView-ViewShell.
+    sal_Bool  bFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
+    sal_Bool  bEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
+                                    // of scrollbars.
+    sal_Bool  bEndActionByVirDev:1; // Paints from EndAction always via virtual device
+                                    // (e.g. when browsing).
 
-                                //Device (etwa beim Browsen)
-
-    // OD 2004-06-01 #i26791# - boolean, indicating that class in in constructor
+    // boolean, indicating that class in in constructor.
     bool mbInConstructor:1;
 
-    // #i74769#
     SdrPaintWindow*         mpTargetPaintWindow;
     OutputDevice*           mpBufferedOut;
 
     SwRootFrmPtr            pLayout;            //swmod 080116
 
-    //Initialisierung, wird von den verschiedenen Konstruktoren gerufen.
+    // Initialization; called by the diverse constructors.
     SW_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
 
     inline void ResetInvalidRect();
 
-    SW_DLLPRIVATE void Reformat();          //Invalidert das ges. Layout (ApplyViewOption)
+    SW_DLLPRIVATE void Reformat();          // Invalidates complete Layout (ApplyViewOption).
 
-    SW_DLLPRIVATE void PaintDesktop( const SwRect & );      // sammeln der Werte fuers
-                                                // Malen der Wiese und rufen
-    // PaintDesktop gesplittet, dieser Teil wird auch von PreViewPage benutzt
+    SW_DLLPRIVATE void PaintDesktop( const SwRect & );  // Collect values for painting of desktop
+                                                        // and calling.
+    // PaintDesktop split. This pars is also used by PreViewPage.
     SW_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
 
-    SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );//Direkt Paint oder lieber
-                                                //eine Aktion ausloesen.
+    SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );  // Direct Paint or rather
+                                                                    // trigger an action.
 
     SW_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
 
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
-    static ShellResource*   pShellRes;      // Resourcen fuer die Shell
-    static Window*          pCareWindow;    // diesem Fenster ausweichen
+    static ShellResource*   pShellRes;      // Resources for the Shell.
+    static Window*          pCareWindow;    // Avoid this window.
 
-    SwRect                  aVisArea;       //Die moderne Ausfuerung der VisArea
-    SwDoc                   *pDoc;          //Das Dokument, niemals 0
+    SwRect                  aVisArea;       // The modern version of VisArea.
+    SwDoc                   *pDoc;          // The document; never 0.
 
-    sal_uInt16 nStartAction; //ist != 0 wenn mindestens eine ::com::sun::star::chaos::Action laeuft
-    sal_uInt16 nLockPaint;   //ist != 0 wenn das Paint gelocked ist.
+    sal_uInt16 nStartAction; // != 0 if at least one ::com::sun::star::chaos::Action is active.
+    sal_uInt16 nLockPaint;   // != 0 if Paint is locked.
 
 public:
     TYPEINFO();
@@ -211,10 +203,10 @@ public:
 
     const SwNodes& GetNodes() const;
 
-    //Nach Druckerwechsel, vom Doc
+    // After change of printer; by Doc.
     void            InitPrt( OutputDevice *pOutDev );
 
-    //Klammerung von zusammengehoerenden Aktionen.
+    // Bracketing of actions belonging together.
     inline void StartAction();
            void ImplStartAction();
     inline void EndAction( const sal_Bool bIdleEnd = sal_False );
@@ -226,8 +218,8 @@ public:
     void SetEndActionByVirDev( sal_Bool b ) { bEndActionByVirDev = b; }
     sal_Bool IsEndActionByVirDev()          { return bEndActionByVirDev; }
 
-    //  Per UNO wird am RootFrame fuer alle shells der ActionCount kurzfristig
-    //  auf Null gesetzt und wieder restauriert
+    // The ActionCount for all Shells is temporarily set to zero and then
+    // restored at the RootFrame via UNO.
     void    SetRestoreActions(sal_uInt16 nSet);
     sal_uInt16  GetRestoreActions() const;
 
@@ -242,7 +234,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////
     // #i72754# set of Pre/PostPaints with lock counter and initial target OutDev
 protected:
-    sal_uInt32              mnPrePostPaintCount;
+    std::stack<Region>          mPrePostPaintRegions; // acts also as a lock counter (empty == not locked)
     OutputDevice*           mpPrePostOutDev;
     MapMode                 maPrePostMapMode;
 public:
@@ -254,46 +246,45 @@ public:
 
     virtual void Paint(const Rectangle &rRect);
     sal_Bool IsPaintInProgress() const { return bPaintInProgress; }
-    bool IsDrawingLayerPaintInProgress() const { return 0 != mnPrePostPaintCount; }
+    bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }
 
-    //Benachrichtung, dass sich der sichtbare Bereich geaendert hat.
-    //VisArea wird neu gesetzt, anschliessend wird gescrollt.
-    //Das uebergebene Rect liegt auf Pixelgrenzen,
-    //um Pixelfehler beim Scrollen zu vermeiden.
+    // Notification that visible area has been changed.
+    // VisArea is reset, after that scrolling takes place.
+    // The passed rect is situated on pixel borders
+    // in order to avoid pixel errors when scrolling.
     virtual void VisPortChgd( const SwRect & );
     sal_Bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
     void EnableSmooth( sal_Bool b ) { bEnableSmooth = b; }
 
     const SwRect& VisArea() const { return aVisArea; }
-        //Es wird, wenn notwendig, soweit gescrollt, dass das
-        //uebergebene Rect im sichtbaren Ausschnitt liegt.
+
+    // If necessary scroll until passed Rect is situated in visible sector.
     void MakeVisible( const SwRect & );
 
-    //Bei naechster Gelegenheit die neue Dokuemntgroesse an das UI weiterreichen.
+    // At nearest occasion pass new document size to UI.
     void SizeChgNotify();
-    void UISizeNotify();            //Das weiterreichen der aktuellen groesse.
+    void UISizeNotify();            // Passing of current size.
 
     Point GetPagePos( sal_uInt16 nPageNum ) const;
 
-    sal_uInt16 GetNumPages();   //Anzahl der aktuellen Seiten Layout erfragen.
+    sal_uInt16 GetNumPages();   // Ask count of current pages from layout.
     sal_Bool   IsDummyPage( sal_uInt16 nPageNum ) const;  // An empty page?
 
-    //Invalidierung der ersten Sichtbaren Seite fuer alle Shells im Ring.
+    // Invalidate first visible page for all Shells in ring.
     void SetFirstVisPageInvalid();
 
-    SwRootFrm   *GetLayout() const;//swmod 080116
-    sal_Bool         IsNewLayout() const; //Wurde das Layout geladen oder neu
-                                      //erzeugt?
+    SwRootFrm   *GetLayout() const;// swmod 080116
+    sal_Bool         IsNewLayout() const; // Has Layout been loaded or created?
 
-     Size GetDocSize() const;// erfrage die Groesse des Dokuments
+     Size GetDocSize() const;   // Get document size.
 
-    void CalcLayout();  //Durchformatierung des Layouts erzwingen.
+    void CalcLayout();  // Force complete formatting of layout.
 
     sal_uInt16 GetPageCount() const;
 
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
-    inline SwDoc *GetDoc()  const { return pDoc; }  //niemals 0.
+    inline SwDoc *GetDoc()  const { return pDoc; }  //Never 0.
 
     /** Provides access to the document setting interface
      */
@@ -346,10 +337,8 @@ public:
     IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
     IDocumentUndoRedo      & GetIDocumentUndoRedo();
 
-    // --> OD 2007-11-14 #i83479#
     const IDocumentListItems* getIDocumentListItemsAccess() const;
     const IDocumentOutlineNodes* getIDocumentOutlineNodesAccess() const;
-    // <--
 
     // 1. GetRefDev:   Either the printer or the virtual device from the doc
     // 2. GetWin:      Available if we not printing
@@ -360,91 +349,83 @@ public:
 
     static inline sal_Bool IsLstEndAction() { return ViewShell::bLstAct; }
 
-    //Andern alle PageDescriptoren
+    // Change of all page descriptors.
     void   ChgAllPageOrientation( sal_uInt16 eOri );
     void   ChgAllPageSize( Size &rSz );
 
-    // printing of one page.
+    // Printing of one page.
     // bIsPDFExport == true is: do PDF Export (no printing!)
     sal_Bool PrintOrPDFExport( OutputDevice *pOutDev,
             SwPrintData const& rPrintData,
             sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
-    // printing of one brochure page
+    // Printing of one brochure page.
     void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
             sal_Int32 nRenderer /* offset in vector of page pairs for prospect printing */ );
 
-    // printing for OLE 2.0
+    // Printing for OLE 2.0.
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
-    /// fill temporary doc with selected text for Print or PDF export
+    // Fill temporary doc with selected text for Print or PDF export.
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
-    //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
+    // Called internally for Shell. Formats pages.
     void CalcPagesForPrint( sal_uInt16 nMax );
 
-    //All about fields.
+    // All about fields.
     void UpdateFlds(sal_Bool bCloseDB = sal_False);
     sal_Bool IsAnyFieldInDoc() const;
-    // update all charts, for that exists any table
+    // Update all charts, for that exists any table.
     void UpdateAllCharts();
     sal_Bool HasCharts() const;
 
-    //
     // DOCUMENT COMPATIBILITY FLAGS START
-    //
 
-    // Sollen Absatzabstaende addiert oder maximiert werden?
+    // Add or maximize paragraph spacing?
     void SetParaSpaceMax( bool bNew );
 
-    // Sollen Absatzabstaende addiert oder maximiert werden?
+    // Add or maximize paragraph spacing?
     void SetParaSpaceMaxAtPages( bool bNew );
 
-    // compatible behaviour of tabs
+    // Compatible behaviour of tabs.
     void SetTabCompat( bool bNew );
 
-    // font metric attribute "External Leading" should be considered
+    // Font metric attribute "External Leading" should be considered.
     void SetAddExtLeading( bool bNew );
 
-    // formatting by virtual device or printer
+    // Formatting by virtual device or printer.
     void SetUseVirDev( bool nNew );
 
-    // OD 2004-02-16 #106629# - adding paragraph and table spacing at bottom
-    // of table cells
+    // Adding paragraph and table spacing at bottom
+    // of table cells.
     void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );
 
-    // OD 06.01.2004 #i11859# - former formatting of text lines with
-    // proportional line spacing or not
+    // Former formatting of text lines with
+    // proportional line spacing or not.
     void SetUseFormerLineSpacing( bool _bUseFormerLineSpacing );
 
-    // OD 2004-03-12 #i11860# - former object positioning
+    // Former object positioning.
     void SetUseFormerObjectPositioning( bool _bUseFormerObjPos );
 
-    // OD 2004-05-05 #i28701#
     void SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos );
 
-    // --> FME #108724#
     void SetUseFormerTextWrapping( bool _bUseFormerTextWrapping );
 
-    // -> PB 2007-06-11 #i45491#
     void SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak );
-    // <--
 
-    //
     // DOCUMENT COMPATIBILITY FLAGS END
-    //
 
-    //Ruft den Idle-Formatierer des Layouts
+    // Calls Idle-formatter of Layout.
     void LayoutIdle();
 
     inline const SwViewOption *GetViewOptions() const { return pOpt; }
     virtual void  ApplyViewOptions( const SwViewOption &rOpt );
            void  SetUIOptions( const SwViewOption &rOpt );
-           void  SetReadonlyOption(sal_Bool bSet);   // Readonly-Bit d. ViewOptions setzen
-           void  SetPDFExportOption(sal_Bool bSet);   // set/reset PDF export mode
-           void  SetPrtFormatOption(sal_Bool bSet);  // PrtFormat-Bit d. ViewOptions setzen
-           void  SetReadonlySelectionOption(sal_Bool bSet);//change the selection mode in readonly docs
+           void  SetReadonlyOption(sal_Bool bSet);          // Set readonly-bit of ViewOptions.
+           void  SetPDFExportOption(sal_Bool bSet);         // Set/reset PDF export mode.
+           void  SetPrtFormatOption(sal_Bool bSet);         // Set PrtFormat-Bit of ViewOptions.
+           void  SetReadonlySelectionOption(sal_Bool bSet); // Change the selection mode in readonly docs.
 
     const SwAccessibilityOptions* GetAccessibilityOptions() const { return pAccOptions;}
 
@@ -459,15 +440,13 @@ public:
     inline SfxViewShell   *GetSfxViewShell() { return pSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { pSfxViewShell = pNew; }
 
-    // Selektion der Draw ::com::sun::star::script::Engine geaendert
+    // Selection of  Draw ::com::sun::star::script::Engine has been changed.
     virtual void DrawSelChanged();
 
-    // OD 12.12.2002 #103492#
     SwPagePreviewLayout* PagePreviewLayout();
 
     /** adjust view options for page preview
 
-        OD 09.01.2003 #i6467#
         Because page preview should show the document as it is printed -
         page preview is print preview -, the view options are adjusted to the
         same as for printing.
@@ -487,18 +466,18 @@ public:
            void ImplUnlockPaint( sal_Bool bVirDev );
            sal_Bool IsPaintLocked() const { return nLockPaint != 0; }
 
-    // Abfragen/Erzeugen DrawView + PageView
+    // Get/set DrawView and PageView.
     sal_Bool HasDrawView() const;
     void MakeDrawView();
 
-    //DrawView darf u.U. am UI benutzt werden.
+    // DrawView may be used at UI.
           SdrView *GetDrawView();
     const SdrView *GetDrawView() const { return ((ViewShell*)this)->GetDrawView(); }
 
-    //sorge dafuer, das auf jedenfall die MarkListe aktuell ist (Bug 57153)
+    // Take care that MarkList is up-to-date in any case (Bug 57153).
     SdrView *GetDrawViewWithValidMarkList();
 
-    // erfrage den Attribut Pool
+    // Query attribute pool.
     inline const SfxItemPool& GetAttrPool() const;
                  SfxItemPool& GetAttrPool();
 
@@ -508,10 +487,10 @@ public:
     void SetFrameView( const Size& rBrowseBorder )
            { bFrameView = sal_True; aBrowseBorder = rBrowseBorder; }
 
-    //Nimmt die notwendigen Invalidierungen vor,
-    //wenn sich der BrowdseModus aendert, bBrowseChgd == sal_True
-    //oder, im BrowseModus, wenn sich die Groessenverhaeltnisse
-    //aendern (bBrowseChgd == sal_False)
+    // Makes the necessary invalidations:
+    // If BrowseMode has changed bBrowseChgd == sal_True
+    // or bBrowseChgd == sal_False in BrowseMode
+    // if proportions have changed.
     void CheckBrowseView( sal_Bool bBrowseChgd );
 
     const Size& GetBrowseBorder() const;
@@ -520,8 +499,6 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    // OD 15.01.2003 #103492# - change method signature due to new page preview
-    // functionality.
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >
             CreateAccessiblePreview();
@@ -529,12 +506,10 @@ public:
     void ShowPreViewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();
 
-    //apply Accessiblity options
+    // Apply Accessiblity options.
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
-
-        OD 2005-12-01 #i27138#
 
         @author OD
 
@@ -553,16 +528,13 @@ public:
 
     /** invalidate text selection for paragraphs
 
-        OD 2005-12-12 #i27301#
-
         @author OD
     */
     void InvalidateAccessibleParaTextSelection();
 
     /** invalidate attributes for paragraphs and paragraph's characters
 
-        OD 2009-01-06 #i88069#
-        OD 2010-02-16 #i104008# - usage also for changes of the attributes of
+        usage also for changes of the attributes of
         paragraph's characters.
 
         @author OD
@@ -581,22 +553,18 @@ public:
                long nFlags = 0 );
     virtual ~ViewShell();
 
-    // --> FME 2004-06-15 #i12836# enhanced pdf export
     sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
-    // <--
 
     inline bool IsInConstructor() const { return mbInConstructor; }
 
-    // --> PB 2007-05-30 #146850#
     static const BitmapEx& GetReplacementBitmap( bool bIsErrorState );
     static void DeleteReplacementBitmaps();
-    // <--
 
     const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();
 };
 
-//---- class CurrShell verwaltet den globalen ShellPointer -------------------
+//---- class CurrShell manages global ShellPointer -------------------
 
 class CurrShell
 {
@@ -643,3 +611,5 @@ inline const SfxItemPool& ViewShell::GetAttrPool() const
 
 
 #endif // SW_VIEWSH_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

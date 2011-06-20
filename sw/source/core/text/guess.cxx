@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <ctype.h>
 #include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
-#include <errhdl.hxx>   // ASSERTs
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <txtcfg.hxx>
 #include <guess.hxx>
 #include <inftxt.hxx>
 #include <pagefrm.hxx>
@@ -46,6 +44,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/charclass.hxx>
 #include <porfld.hxx>
+#include <paratr.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -69,14 +68,14 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 {
     nCutPos = rInf.GetIdx();
 
-    // Leere Strings sind immer 0
+    // Empty strings are always 0
     if( !rInf.GetLen() || !rInf.GetTxt().Len() )
         return sal_False;
 
-    ASSERT( rInf.GetIdx() < rInf.GetTxt().Len(),
+    OSL_ENSURE( rInf.GetIdx() < rInf.GetTxt().Len(),
             "+SwTxtGuess::Guess: invalid SwTxtFormatInfo" );
 
-    ASSERT( nPorHeight, "+SwTxtGuess::Guess: no height" );
+    OSL_ENSURE( nPorHeight, "+SwTxtGuess::Guess: no height" );
 
     sal_uInt16 nMinSize;
     sal_uInt16 nMaxSizeDiff;
@@ -122,9 +121,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nLineWidth -= nItalic;
 
-        // --> FME 2005-05-13 #i46524# LineBreak bug with italics
+        // #i46524# LineBreak bug with italics
         if ( nLineWidth < 0 ) nLineWidth = 0;
-        // <--
     }
 
     // first check if everything fits to line
@@ -142,10 +140,9 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             nCutPos = rInf.GetIdx() + nMaxLen;
             if( nItalic &&
                 ( nCutPos >= rInf.GetTxt().Len() ||
-                  // --> FME 2005-05-13 #i48035# Needed for CalcFitToContent
+                  // #i48035# Needed for CalcFitToContent
                   // if first line ends with a manual line break
                   rInf.GetTxt().GetChar( nCutPos ) == CH_BREAK ) )
-                  // <--
                 nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use
@@ -173,12 +170,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if ( STRING_LEN != nCutPos )
         {
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
                              nMaxComp, nMinSize, nMaxSizeDiff );
-            ASSERT( nMinSize <= nLineWidth, "What a Guess!!!" );
+            OSL_ENSURE( nMinSize <= nLineWidth, "What a Guess!!!" );
         }
 #endif
     }
@@ -192,8 +189,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nBreakWidth = nMinSize;
 
-        // Der folgende Vergleich sollte eigenlich immer sal_True ergeben, sonst
-        // hat es wohl bei GetTxtBreak einen Pixel-Rundungsfehler gegeben...
+        // The following comparison should always give sal_True, otherwise
+        // a pixel rounding error in GetTxtBreak will appear
         if ( nBreakWidth <= nLineWidth )
         {
             if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().Len() )
@@ -224,12 +221,23 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         nBreakPos = nCutPos;
         xub_StrLen nX = nBreakPos;
 
-        // we step back until a non blank character has been found
-        // or there is only one more character left
-        while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
-               ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
-                 CH_FULL_BLANK == cCutChar ) )
-            --nBreakPos;
+        const SvxAdjust& rAdjust = rInf.GetTxtFrm()->GetTxtNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+        if ( rAdjust == SVX_ADJUST_LEFT )
+        {
+            // we step back until a non blank character has been found
+            // or there is only one more character left
+            while( nX && nBreakPos > rInf.GetTxt().Len() &&
+                   ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
+                     CH_FULL_BLANK == cCutChar ) )
+                --nBreakPos;
+        }
+        else
+        {
+            while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
+                   ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
+                     CH_FULL_BLANK == cCutChar ) )
+                --nBreakPos;
+        }
 
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();
@@ -329,7 +337,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             {
                 sal_uInt16 nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
                                                                 nLangIndex );
-                ASSERT( nScript, "Script is not between 1 and 4" );
+                OSL_ENSURE( nScript, "Script is not between 1 and 4" );
 
                 // compare current script with script from last "real" character
                 if ( nScript - 1 != rInf.GetFont()->GetActual() )
@@ -422,7 +430,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         }
         else if ( !bHyph && nBreakPos >= rInf.GetLineStart() )
         {
-            ASSERT( nBreakPos != STRING_LEN, "we should have found a break pos" );
+            OSL_ENSURE( nBreakPos != STRING_LEN, "we should have found a break pos" );
 
             // found break position within line
             xHyphWord = NULL;
@@ -433,16 +441,20 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
                 nBreakPos = rInf.GetIdx() - 1;
 
-            // Delete any blanks at the end of a line, but be careful:
-            // If a field has been expanded, we do not want to delete any
-            // blanks inside the field portion. This would cause an unwanted
-            // underflow
-            xub_StrLen nX = nBreakPos;
-            while( nX > rInf.GetLineStart() &&
-                   ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
-                   ( CH_BLANK == rInf.GetChar( --nX ) ||
-                     CH_FULL_BLANK == rInf.GetChar( nX ) ) )
-                nBreakPos = nX;
+            const SvxAdjust& rAdjust = rInf.GetTxtFrm()->GetTxtNode()->GetSwAttrSet().GetAdjust().GetAdjust();
+            if( rAdjust != SVX_ADJUST_LEFT )
+            {
+                // Delete any blanks at the end of a line, but be careful:
+                // If a field has been expanded, we do not want to delete any
+                // blanks inside the field portion. This would cause an unwanted
+                // underflow
+                xub_StrLen nX = nBreakPos;
+                while( nX > rInf.GetLineStart() &&
+                       ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
+                       ( CH_BLANK == rInf.GetChar( --nX ) ||
+                         CH_FULL_BLANK == rInf.GetChar( nX ) ) )
+                    nBreakPos = nX;
+            }
             if( nBreakPos > rInf.GetIdx() )
                 nPorLen = nBreakPos - rInf.GetIdx();
         }
@@ -451,7 +463,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // no line break found, setting nBreakPos to STRING_LEN
             // causes a break cut
             nBreakPos = STRING_LEN;
-            ASSERT( nCutPos >= rInf.GetIdx(), "Deep cut" );
+            OSL_ENSURE( nCutPos >= rInf.GetIdx(), "Deep cut" );
             nPorLen = nCutPos - rInf.GetIdx();
         }
 
@@ -460,7 +472,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             const xub_StrLen nHangingLen = nBreakPos - nCutPos;
             SwPosSize aTmpSize = rInf.GetTxtSize( &rSI, nCutPos,
                                                   nHangingLen, 0 );
-            ASSERT( !pHanging, "A hanging portion is hanging around" );
+            OSL_ENSURE( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );
             pHanging->SetLen( nHangingLen );
             nPorLen = nCutPos - rInf.GetIdx();
@@ -477,11 +489,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 nBreakPos = nOldIdx - 1;
             else if ( STRING_LEN != nBreakPos )
             {
-                ASSERT( nBreakPos >= nFieldDiff, "I've got field trouble!" );
+                OSL_ENSURE( nBreakPos >= nFieldDiff, "I've got field trouble!" );
                 nBreakPos = nBreakPos - nFieldDiff;
             }
 
-            ASSERT( nCutPos >= rInf.GetIdx() && nCutPos >= nFieldDiff,
+            OSL_ENSURE( nCutPos >= rInf.GetIdx() && nCutPos >= nFieldDiff,
                     "I've got field trouble, part2!" );
             nCutPos = nCutPos - nFieldDiff;
 
@@ -491,7 +503,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             rInf.SetIdx( nOldIdx );
 
 #if OSL_DEBUG_LEVEL > 1
-            ASSERT( aDebugString == rInf.GetTxt(),
+            OSL_ENSURE( aDebugString == rInf.GetTxt(),
                     "Somebody, somebody, somebody put something in my string" );
 #endif
         }
@@ -544,7 +556,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
 
     // check, if word has alternative spelling
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
-    ASSERT( xHyph.is(), "Hyphenator is missing");
+    OSL_ENSURE( xHyph.is(), "Hyphenator is missing");
     //! subtract 1 since the UNO-interface is 0 based
     xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
                         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
@@ -552,3 +564,4 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     return xHyphWord.is() && xHyphWord->isAlternativeSpelling();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

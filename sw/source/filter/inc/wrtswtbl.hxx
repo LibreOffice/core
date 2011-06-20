@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,8 @@ class SwTableLines;
 class SwTable;
 class SwHTMLTableLayout;
 class SvxBrushItem;
-class SvxBorderLine;
+
+namespace editeng { class SvxBorderLine; }
 
 //---------------------------------------------------------------------------
 //       Code aus dem HTML-Filter fuers schreiben von Tabellen
@@ -54,7 +56,7 @@ class SvxBorderLine;
 
 //-----------------------------------------------------------------------
 
-class SwWriteTableCell
+class SW_DLLPUBLIC SwWriteTableCell
 {
     const SwTableBox *pBox;     // SwTableBox der Zelle
     const SvxBrushItem *pBackground;    // geerbter Hintergrund einer Zeile
@@ -109,7 +111,7 @@ SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5, 5 )
 
 //-----------------------------------------------------------------------
 
-class SwWriteTableRow
+class SW_DLLPUBLIC SwWriteTableRow
 {
     SwWriteTableCells aCells;       // Alle Zellen der Rows
     const SvxBrushItem *pBackground;// Hintergrund
@@ -178,7 +180,7 @@ SV_DECL_PTRARR_SORT_DEL( SwWriteTableRows, SwWriteTableRowPtr, 5, 5 )
 
 //-----------------------------------------------------------------------
 
-class SwWriteTableCol
+class SW_DLLPUBLIC SwWriteTableCol
 {
     sal_uInt32 nPos;                        // End Position der Spalte
 
@@ -259,7 +261,7 @@ protected:
 
     sal_Bool bRelWidths : 1;        // Breiten relativ ausgeben?
     sal_Bool bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bGetLineHeightCalled : 1;
 #endif
 
@@ -286,7 +288,7 @@ protected:
                             sal_uInt16 nDepth,
                             sal_uInt16 nNumOfHeaderRows );
 
-    void MergeBorders( const SvxBorderLine* pBorderLine, sal_Bool bTable );
+    void MergeBorders( const editeng::SvxBorderLine* pBorderLine, sal_Bool bTable );
 
     sal_uInt16 MergeBoxBorders( const SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
@@ -332,3 +334,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

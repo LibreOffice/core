@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,12 @@
 #ifndef _STMENU_HXX
 #define _STMENU_HXX
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 
 #include <vector>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 
-#ifndef _COM_SUN_STAR_SMARTTAGS_XSTRINGKEYMAP_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
-#endif
 #include <com/sun/star/text/XTextRange.hpp>
 
 class SwView;
@@ -83,3 +80,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include <tools/globname.hxx>
 class SwModuleOptions;
 
-//-----------------------------------------------------------------------------
 class InsCaptionOpt;
 typedef InsCaptionOpt* InsCaptionOptPtr;
 SV_DECL_PTRARR_SORT_DEL(InsCapOptArr, InsCaptionOptPtr, 0, 5)
@@ -53,9 +53,6 @@ protected:
     InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = 0) const;
 };
 
-/* -----------------------------10.10.00 16:14--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwRevisionConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -79,9 +76,7 @@ class SwRevisionConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------11.10.00 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwInsertConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -91,12 +86,9 @@ class SwInsertConfig : public utl::ConfigItem
 
     SvGlobalName        aGlobalNames[5];
 
-    sal_Bool            bInsWithCaption;       //Insert/Caption/Automatic   // Objekte beschriftet einfuegen
+    sal_Bool            bInsWithCaption;       //Insert/Caption/Automatic
     sal_Bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
-//  sal_uInt16          nInsTblFlags;           //Insert/Table/Header       // Flags fuer Tabellen einfuegen
-                                                //Insert/Table/RepeatHeader
-                                                //Insert/Table/Split
-                                                //Insert/Table/Border
+
     SwInsertTableOptions    aInsTblOpts;
     sal_Bool            bIsWeb;
 
@@ -110,9 +102,7 @@ class SwInsertConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------11.10.00 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -123,9 +113,9 @@ class SwTableConfig : public utl::ConfigItem
     sal_uInt16      nTblVInsert;        //int Table/Insert/Column
     TblChgMode  eTblChgMode;        //int Table/Change/Effect
 
-    sal_Bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatische Zahlenerkennung
-    sal_Bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatische Zahlenformaterkennung
-    sal_Bool    bInsTblAlignNum;        // Table/Input/Alignment                // Zahlen ausrichten
+    sal_Bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatic recognition of numbers.
+    sal_Bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
+    sal_Bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
 
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
     public:
@@ -137,9 +127,7 @@ class SwTableConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------18.01.01 16:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwMiscConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -168,9 +156,6 @@ class SwMiscConfig : public utl::ConfigItem
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwModuleOptions
 {
     SwRevisionConfig                aRevisionConfig;
@@ -341,3 +326,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

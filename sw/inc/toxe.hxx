@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,7 +98,6 @@ enum ToxAuthorityField
     AUTH_FIELD_HOWPUBLISHED,
     AUTH_FIELD_INSTITUTION,
     AUTH_FIELD_JOURNAL,
-//  AUTH_FIELD_KEY, // BiBTeX - Field
     AUTH_FIELD_MONTH,
     AUTH_FIELD_NOTE,
     AUTH_FIELD_NUMBER,
@@ -123,3 +123,5 @@ enum ToxAuthorityField
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

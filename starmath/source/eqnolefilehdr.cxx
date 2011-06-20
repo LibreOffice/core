@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,30 +33,6 @@
 
 //////////////////////////////////////////////////////////////////////
 
-void EQNOLEFILEHDR::Read(SvStorageStream *pS)
-{
-    *pS >> nCBHdr;
-    *pS >> nVersion;
-    *pS >> nCf;
-    *pS >> nCBObject;
-    *pS >> nReserved1;
-    *pS >> nReserved2;
-    *pS >> nReserved3;
-    *pS >> nReserved4;
-}
-
-
-void EQNOLEFILEHDR::Write(SvStorageStream *pS)
-{
-    *pS << nCBHdr;
-    *pS << nVersion;
-    *pS << nCf;
-    *pS << nCBObject;
-    *pS << nReserved1;
-    *pS << nReserved2;
-    *pS << nReserved3;
-    *pS << nReserved4;
-}
 
 
 sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
@@ -64,7 +41,7 @@ sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
     sal_Bool bSuccess = sal_False;
 
     //
-    // code sniplet copied from MathType::Parse
+    // code snippet copied from MathType::Parse
     //
     SvStorageStreamRef xSrc = pStor->OpenSotStream(
         String::CreateFromAscii("Equation Native"),
@@ -88,3 +65,4 @@ sal_Bool GetMathTypeVersion( SotStorage* pStor, sal_uInt8 &nVersion )
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

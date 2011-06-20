@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <crsskip.hxx>
 
@@ -523,7 +522,6 @@ sal_Bool SwWrtShell::PushCrsr(SwTwips lOffset, sal_Bool bSelect)
 
         if( bIsFrmSel )
         {
-//          CallChgLnk();
             // bei Frames immer nur die obere Ecke nehmen, damit dieser
             // wieder selektiert werden kann
             aOldRect.SSize( 5, 5 );
@@ -670,7 +668,97 @@ sal_Bool SwWrtShell::GotoPage(sal_uInt16 nPage, sal_Bool bRecord)
 sal_Bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark, sal_Bool bSelect, sal_Bool bStart )
 {
     ShellMoveCrsr aTmp( this, bSelect );
-    return SwCrsrShell::GotoMark( pMark, bStart );
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoMark( pMark, bStart );
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+sal_Bool SwWrtShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bSelFrame )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwFEShell::GotoFly(rName, eType, bSelFrame);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+sal_Bool SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoINetAttr(rAttr);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+void SwWrtShell::GotoOutline( sal_uInt16 nIdx )
+{
+    addCurrentPosition();
+    return SwCrsrShell::GotoOutline (nIdx);
+}
+
+sal_Bool SwWrtShell::GotoOutline( const String& rName )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoOutline (rName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+sal_Bool SwWrtShell::GotoRegion( const String& rName )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoRegion (rName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+ }
+
+sal_Bool SwWrtShell::GotoRefMark( const String& rRefMark, sal_uInt16 nSubType,
+                                    sal_uInt16 nSeqNo )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoRefMark(rRefMark, nSubType, nSeqNo);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+sal_Bool SwWrtShell::GotoNextTOXBase( const String* pName )
+{
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoNextTOXBase(pName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+sal_Bool SwWrtShell::GotoTable( const String& rName )
+{
+   SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoTable(rName);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+sal_Bool SwWrtShell::GotoFld( const SwFmtFld& rFld ) {
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    bool bRet = SwCrsrShell::GotoFld(rFld);
+    if (bRet)
+        aNavigationMgr.addEntry(aPos);
+    return bRet;
+}
+
+const SwRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect ) {
+    SwPosition aPos = *GetCrsr()->GetPoint();
+    const SwRedline *pRedline = SwCrsrShell::GotoRedline(nArrPos, bSelect);
+    if (pRedline)
+        aNavigationMgr.addEntry(aPos);
+    return pRedline;
 }
 
 
@@ -689,3 +777,4 @@ sal_Bool SwWrtShell::SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

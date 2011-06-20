@@ -33,15 +33,12 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
 
+#include <vector>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
-
 
 class SfxItemSet;
 
@@ -188,7 +185,7 @@ class SwUndoTblNdsChg : public SwUndo
         SvULongs* pNewSttNds;
         SwUndoSaveSections* pDelSects;
     } Ptrs;
-    SvBools aMvBoxes;       // for SplitRow (split Nodes of Box)
+    std::vector<bool> aMvBoxes;       // for SplitRow (split Nodes of Box)
     long nMin, nMax;        // for redo of delete column
     sal_uLong nSttNode, nCurrBox;
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;

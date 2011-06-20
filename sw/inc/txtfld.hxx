@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,18 +56,16 @@ public:
     // enable notification that field content has changed and needs reformatting
     void NotifyContentChange(SwFmtFld& rFmtFld);
 
-    // #111840#
     /**
        Returns position of this field.
 
        @return position of this field. Has to be deleted explicitly.
     */
-//    SwPosition * GetPosition() const;
 };
 
 inline SwTxtNode& SwTxtFld::GetTxtNode() const
 {
-    ASSERT( m_pTxtNode, "SwTxtFld:: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFld:: where is my TxtNode?" );
     return *m_pTxtNode;
 }
 
@@ -78,3 +77,4 @@ inline void SwTxtFld::ExpandAlways()
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

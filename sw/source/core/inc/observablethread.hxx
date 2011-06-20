@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _OBSERVABLETHREAD_HXX
 #define _OBSERVABLETHREAD_HXX
 
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <rtl/ref.hxx>
 #include <osl/interlck.h>
 
@@ -103,3 +102,5 @@ class ObservableThread : public osl::Thread,
 
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

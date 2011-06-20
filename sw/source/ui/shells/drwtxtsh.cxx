@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,19 +68,13 @@
 
 #include <cmdid.h>
 #include <helpid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 
 #define SwDrawTextShell
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
 #include <uitool.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
@@ -88,20 +83,15 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-
 #include <cppuhelper/bootstrap.hxx>
 
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 #include "misc.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
-
-
 
 SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 {
@@ -111,12 +101,6 @@ SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 }
 
 TYPEINIT1(SwDrawTextShell,SfxShell)
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::Init()
 {
@@ -146,11 +130,6 @@ void SwDrawTextShell::Init()
     pOLV->ShowCursor();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SfxShell(&rV),
     rView(rV)
@@ -165,28 +144,10 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SetHelpId(SW_DRWTXTSHELL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
-__EXPORT SwDrawTextShell::~SwDrawTextShell()
+SwDrawTextShell::~SwDrawTextShell()
 {
     if ( GetView().GetCurShell() == this )
         rView.ResetSubShell();
-
-    //MA 13. Nov. 96: Das kommt durchaus vor #33141#:
-    //(doppel-)Klick von einem Texteditmode in ein anderes Objekt, zwischendurch
-    //wird eine andere (Draw-)Shell gepusht, die alte aber noch nicht deletet.
-    //Dann wird vor dem Flush wieder ein DrawTextShell gepusht und der Mode ist
-    //eingeschaltet. In diesem Moment wird der Dispatcher geflusht und die alte
-    //DrawTextShell zerstoert.
-//  ASSERT( !pSdrView->IsTextEdit(), "TextEdit in DTor DrwTxtSh?" );
-//    if (pSdrView->IsTextEdit())
-//      GetShell().EndTextEdit();   // Danebengeklickt, Ende mit Edit
-
-//    GetShell().Edit();
 }
 
 SwWrtShell& SwDrawTextShell::GetShell()
@@ -194,11 +155,9 @@ SwWrtShell& SwDrawTextShell::GetShell()
     return rView.GetWrtShell();
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -211,15 +170,11 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-
 /*************************************************************************
 |*
 |* Attribute setzen
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
     Rectangle aNullRect;
@@ -233,22 +188,10 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 sal_Bool SwDrawTextShell::IsTextEdit()
 {
     return pSdrView->IsTextEdit();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 {
@@ -268,12 +211,6 @@ void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
     pVFrame->GetBindings().Invalidate(SID_FONTWORK);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 {
     const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
@@ -285,9 +222,6 @@ void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 |* SfxRequests fuer FontWork bearbeiten
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -337,9 +271,6 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
 |* Statuswerte fuer FontWork zurueckgeben
 |*
 \************************************************************************/
-
-
-
 void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -373,17 +304,11 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     else
     {
         if ( pDlg )
-            pDlg->SetColorTable(XColorTable::GetStdColorTable());
+            pDlg->SetColorTable(&XColorTable::GetStdColorTable());
 
         pDrView->GetAttributes( rSet );
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
@@ -414,7 +339,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
                                     , xContext), UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -424,7 +349,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );
@@ -473,14 +398,11 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, "unexpected slot-id");
+            OSL_ENSURE(!this, "unexpected slot-id");
         }
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -589,7 +511,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, "unexpected slot-id");
+            OSL_ENSURE(!this, "unexpected slot-id");
             return;
     }
 
@@ -602,9 +524,6 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Undo ausfuehren
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
     if( IsTextEdit() )
@@ -650,9 +569,6 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Zustand Undo
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 {
     if ( !IsTextEdit() )
@@ -712,58 +628,79 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 
 void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 {
+    if (!pSdrView)
+        return;
+
     using namespace i18n;
+
+    sal_uInt32 nMode = 0;
+
+    switch( rReq.GetSlot() )
     {
-        sal_uInt32 nMode = 0;
+    case SID_TRANSLITERATE_SENTENCE_CASE:
+        nMode = TransliterationModulesExtra::SENTENCE_CASE;
+        break;
+    case SID_TRANSLITERATE_TITLE_CASE:
+        nMode = TransliterationModulesExtra::TITLE_CASE;
+        break;
+    case SID_TRANSLITERATE_TOGGLE_CASE:
+        nMode = TransliterationModulesExtra::TOGGLE_CASE;
+        break;
+    case SID_TRANSLITERATE_UPPER:
+        nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+        break;
+    case SID_TRANSLITERATE_LOWER:
+        nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+        break;
 
-        switch( rReq.GetSlot() )
-        {
-        case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
-            break;
-        case SID_TRANSLITERATE_TITLE_CASE:
-            nMode = TransliterationModulesExtra::TITLE_CASE;
-            break;
-        case SID_TRANSLITERATE_TOGGLE_CASE:
-            nMode = TransliterationModulesExtra::TOGGLE_CASE;
-            break;
-        case SID_TRANSLITERATE_UPPER:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-            break;
-        case SID_TRANSLITERATE_LOWER:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-            break;
+    case SID_TRANSLITERATE_HALFWIDTH:
+        nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+        break;
+    case SID_TRANSLITERATE_FULLWIDTH:
+        nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+        break;
 
-        case SID_TRANSLITERATE_HALFWIDTH:
-            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
-            break;
-        case SID_TRANSLITERATE_FULLWIDTH:
-            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
-            break;
+    case SID_TRANSLITERATE_HIRAGANA:
+        nMode = TransliterationModules_KATAKANA_HIRAGANA;
+        break;
+    case SID_TRANSLITERATE_KATAGANA:
+        nMode = TransliterationModules_HIRAGANA_KATAKANA;
+        break;
 
-        case SID_TRANSLITERATE_HIRAGANA:
-            nMode = TransliterationModules_KATAKANA_HIRAGANA;
-            break;
-        case SID_TRANSLITERATE_KATAGANA:
-            nMode = TransliterationModules_HIRAGANA_KATAKANA;
-            break;
+    default:
+        OSL_ENSURE(!this, "wrong dispatcher");
+    }
 
-        default:
-            ASSERT(!this, "falscher Dispatcher");
-        }
+    if( nMode )
+    {
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
 
-        if( nMode )
-        {
-            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-            pOLV->TransliterateText( nMode );
-        }
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText( nMode );
+    }
+}
+
+void SwDrawTextShell::ExecRotateTransliteration( SfxRequest & rReq )
+{
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+    {
+        if (!pSdrView)
+            return;
+
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText( m_aRotateCase.getNextMode() );
     }
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:   Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -896,9 +833,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         rReq.Done();
     }
 }
-/*-- 22.10.2003 14:26:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::svl::IUndoManager* SwDrawTextShell::GetUndoManager()
 {
     SwWrtShell &rSh = GetShell();
@@ -908,5 +843,4 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     return &pOutliner->GetUndoManager();
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

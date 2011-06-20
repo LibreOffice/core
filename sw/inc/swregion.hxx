@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,19 +36,21 @@ SV_DECL_VARARR( SwRects, SwRect, 20, 8 )
 
 class SwRegionRects : public SwRects
 {
-    SwRect aOrigin; // die Kopie des StartRects
+    SwRect aOrigin; // Copy of StartRect.
 
     inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, sal_Bool &rDel);
 
 public:
     SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20,
                                              sal_uInt16 nGrow = 8 );
-    // Zum Ausstanzen aus aOrigin.
+
+    // For punching from aOrigin.
     void operator-=( const SwRect& rRect );
 
-    // Aus Loechern werden Flaechen, aus Flaechen werden Loecher.
+    // From holes to areas, from areas to holes.
     void Invert();
-    // Benachbarte Rechtecke zusammenfassen.
+
+    // Combine adjacent rectangles.
     void Compress( sal_Bool bFuzzy = sal_True );
 
     inline const SwRect &GetOrigin() const { return aOrigin; }
@@ -55,3 +58,5 @@ public:
 };
 
 #endif  //_SWREGION_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

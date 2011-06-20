@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,16 +38,10 @@
 #include <tools/urlobj.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <vcl/lstbox.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <swtypes.hxx>
@@ -57,12 +52,8 @@
 #include <gloslst.hxx>
 #include <swunohelper.hxx>
 
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _GLOSLST_HRC
 #include <gloslst.hrc>
-#endif
 
 
 #define STRING_DELIM (char)0x0A
@@ -97,10 +88,6 @@ class SwGlossDecideDlg : public ModalDialog
     ListBox&    GetListBox() {return aListLB;}
 };
 
-/*-----------------21.01.97 13.25-------------------
-
---------------------------------------------------*/
-
 SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_GLOSSARY_DECIDE_DLG)),
     aOk(this,       SW_RES(PB_OK)),
@@ -114,18 +101,11 @@ SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     aListLB.SetSelectHdl(LINK(this, SwGlossDecideDlg, SelectHdl));
 }
 
-/*-----------------21.01.97 13.25-------------------
-
---------------------------------------------------*/
-
 IMPL_LINK(SwGlossDecideDlg, DoubleClickHdl, ListBox*, EMPTYARG)
 {
     EndDialog(RET_OK);
     return 0;
 }
-/*-----------------21.01.97 13.29-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SwGlossDecideDlg, SelectHdl, ListBox*, EMPTYARG)
 {
@@ -246,7 +226,7 @@ sal_uInt16  SwGlossaryList::GetGroupCount()
 
 String SwGlossaryList::GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath, String* pTitle)
 {
-    DBG_ASSERT(aGroupArr.Count() > nPos, "Gruppe nicht vorhanden");
+    OSL_ENSURE(aGroupArr.Count() > nPos, "group not available");
     String sRet(aEmptyStr);
     if(nPos < aGroupArr.Count())
     {
@@ -268,7 +248,7 @@ String SwGlossaryList::GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath, String* p
 
 sal_uInt16  SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
 {
-    DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden");
+    OSL_ENSURE(aGroupArr.Count() > nGroup, "group not available");
     if(nGroup < aGroupArr.Count())
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(nGroup);
@@ -284,7 +264,7 @@ sal_uInt16  SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
 
 String  SwGlossaryList::GetBlockName(sal_uInt16 nGroup, sal_uInt16 nBlock, String& rShortName)
 {
-    DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden");
+    OSL_ENSURE(aGroupArr.Count() > nGroup, "group not available");
     if(nGroup < aGroupArr.Count())
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(nGroup);
@@ -512,3 +492,4 @@ void    SwGlossaryList::ClearGroups()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

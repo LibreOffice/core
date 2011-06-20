@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,13 +45,9 @@
 #include <unotools/localedatawrapper.hxx>
 #include <sdrhhcwrap.hxx>
 #include <frmfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        //     "     "     "
-#endif
 #include <wrtsh.hxx>        //  MakeVisible
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <dcontact.hxx>     // Spelling von DrawObj
 #include <doc.hxx>        //     "     "     "
 #include <docary.hxx>
@@ -90,8 +87,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pOutlView = new OutlinerView( this, &(pView->GetEditWin()) );
     pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( false ));
 
-    // Hack: Es sollten alle SdrTextObj-Attribute an die EditEngine
-    //       uebertragen werden.
+    // Hack: all SdrTextObj attributes should be transferred to EditEngine
     pOutlView->SetBackgroundColor( Color( COL_WHITE ) );
 
 
@@ -108,13 +104,10 @@ SdrHHCWrapper::~SdrHHCWrapper()
     if (pTextObj)
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-        ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+        OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
-//      SetPaperSize( Size(1, 1) );
-//      SetText(NULL);
-//      pTextObj = NULL;
     }
     RemoveView( pOutlView );
     delete pOutlView;
@@ -134,7 +127,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
     if ( pTextObj )
     {
         SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-        ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+        OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
@@ -147,7 +140,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
     std::list<SdrTextObj*> aTextObjs;
     SwDrawContact::GetTextObjectsFromFmt( aTextObjs, pView->GetDocShell()->GetDoc() );
-    for ( std::list<SdrTextObj*>::iterator aIt = aTextObjs.begin(); aIt != aTextObjs.end(); aIt++ )
+    for ( std::list<SdrTextObj*>::iterator aIt = aTextObjs.begin(); aIt != aTextObjs.end(); ++aIt )
     {
         pTextObj = (*aIt);
         if ( pTextObj )
@@ -169,7 +162,7 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                 if (HasConvertibleTextPortion( nSourceLang ))
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
-                    ASSERT( pSdrView, "SdrHHCWrapper without DrawView?" );
+                    OSL_ENSURE( pSdrView, "SdrHHCWrapper without DrawView?" );
                     SdrPageView* pPV = pSdrView->GetSdrPageView();
                     nDocIndex = n;
                     bNextDoc = sal_True;
@@ -198,3 +191,4 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

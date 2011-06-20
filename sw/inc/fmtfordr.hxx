@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <hintids.hxx>
 #include <format.hxx>
 
-//Die FillOrder ---------------------------------
 
 enum SwFillOrder
 {
@@ -49,7 +49,7 @@ public:
     SwFmtFillOrder( SwFillOrder = ATT_TOP_DOWN );
     inline SwFmtFillOrder &operator=( const SwFmtFillOrder &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual sal_uInt16          GetValueCount() const;
 
@@ -70,3 +70,4 @@ inline const SwFmtFillOrder &SwFmt::GetFillOrder(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

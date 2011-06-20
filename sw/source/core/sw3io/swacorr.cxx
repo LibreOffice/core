@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,12 +34,8 @@
 #include <swacorr.hxx>
 #include <swblocks.hxx>
 #include "SwXMLTextBlocks.hxx"
-#ifndef _SWSERROR_H
 #include <swerror.h>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>
 #include <sot/storage.hxx>
 
@@ -62,7 +59,7 @@ sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& r
         nRet = aBlk.GetText( rShort, rLong );
     }
     else {
-        ASSERT ( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
+       OSL_ENSURE( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
     }
     return !IsError( nRet ) && rLong.Len();
 }
@@ -104,3 +101,5 @@ SwAutoCorrect::SwAutoCorrect( const SvxAutoCorrect& rACorr )
 SwAutoCorrect::~SwAutoCorrect()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

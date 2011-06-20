@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
-#ifndef _TOOLS_STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
 #include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
 #include <drawfont.hxx>     // SwDrawTextInfo
@@ -59,8 +58,9 @@ class SwSubFont : public SvxFont
     sal_uInt16      nOrgHeight;     // Hoehe inkl. Escapement/Proportion
     sal_uInt16      nOrgAscent;     // Ascent inkl. Escapement/Proportion
     sal_uInt16      nPropWidth;     // proportional width
+    bool smallCapsPercentage66;
     inline SwSubFont() : aSize(0,0)
-    { pMagic = NULL; nFntIndex = nOrgHeight = nOrgAscent = 0; nPropWidth =100; }
+    { pMagic = NULL; nFntIndex = nOrgHeight = nOrgAscent = 0; nPropWidth =100; smallCapsPercentage66 = false; }
 
     sal_uInt16 CalcEscAscent( const sal_uInt16 nOldAscent ) const;
     sal_uInt16 CalcEscHeight( const sal_uInt16 nOldHeight,
@@ -832,7 +832,7 @@ public:
 
     SwFont& GetFont()
     {
-        ASSERT( pFnt, "No underline font" )
+        OSL_ENSURE( pFnt, "No underline font" );
         return *pFnt;
     }
     const Point& GetPos() const { return aPos; }
@@ -845,9 +845,7 @@ public:
  *                      class SvStatistics
  *************************************************************************/
 
-#ifndef DBG_UTIL
-#define SV_STAT(nWhich)
-#else
+#if OSL_DEBUG_LEVEL > 1
 
 class SvStatistics
 {
@@ -893,7 +891,10 @@ inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
         rOS << "\tnDrawStretchText: "   << nDrawStretchText << '\n';        if( nChangeFont )
         rOS << "\tnChangeFont: "    << nChangeFont  << '\n';        if( nGetFontMetric  )
         rOS << "\tnGetFontMetric: " << nGetFontMetric   << '\n';        rOS << "}"  << '\n';    }
-#endif  /*  PRODUCT */
+#else
+#define SV_STAT(nWhich)
+#endif  /*  DEBUG   */
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

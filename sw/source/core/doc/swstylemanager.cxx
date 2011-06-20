@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 
 #include "swstylemanager.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <svl/stylepool.hxx>
 #include <doc.hxx>
 #include <charfmt.hxx>
@@ -38,7 +39,7 @@
 #include <swtypes.hxx>
 #include <istyleaccess.hxx>
 
-typedef ::std::hash_map< const ::rtl::OUString,
+typedef ::boost::unordered_map< const ::rtl::OUString,
                          StylePool::SfxItemSet_Pointer_t,
                          ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > SwStyleNameCache;
@@ -75,7 +76,6 @@ class SwStyleManager : public IStyleAccess
     SwStyleCache *mpParaCache;
 
 public:
-    // --> OD 2008-03-07 #refactorlists#
     // accept empty item set for ignorable paragraph items.
     SwStyleManager( SfxItemSet* pIgnorableParagraphItems )
         : aAutoCharPool(),
@@ -83,7 +83,6 @@ public:
           mpCharCache(0),
           mpParaCache(0)
     {}
-    // <--
     virtual ~SwStyleManager();
     virtual StylePool::SfxItemSet_Pointer_t getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily );
@@ -147,7 +146,7 @@ StylePool::SfxItemSet_Pointer_t SwStyleManager::getByName( const rtl::OUString& 
     {
         // Ok, ok, it's allowed to ask for uncached styles (from UNO) but it should not be done
         // during loading a document
-        ASSERT( false, "Don't ask for uncached styles" );
+        OSL_FAIL( "Don't ask for uncached styles" );
         rpCache->addCompletePool( rAutoPool );
         pStyle = rpCache->getByName( rName );
     }
@@ -158,10 +157,8 @@ void SwStyleManager::getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> 
                                    IStyleAccess::SwAutoStyleFamily eFamily )
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;
-    // --> OD 2008-03-07 #refactorlists#
     // setup <StylePool> iterator, which skips unused styles and ignorable items
     IStylePoolIteratorAccess *pIter = rAutoPool.createIterator( true, true );
-    // <--
     StylePool::SfxItemSet_Pointer_t pStyle = pIter->getNext();
     while( pStyle.get() )
     {
@@ -171,3 +168,5 @@ void SwStyleManager::getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> 
     }
     delete pIter;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

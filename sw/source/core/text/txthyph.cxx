@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,18 +36,12 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <viewopt.hxx>  // SwViewOptions
 #include <viewsh.hxx>
-#include <errhdl.hxx>
-#include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porhyph.hxx>  //
 #include <inftxt.hxx>
 #include <itrform2.hxx> //
 #include <guess.hxx>    //
 #include <splargs.hxx>  // SwInterHyphInfo
-
-#ifdef DBG_UTIL
-extern const sal_Char *GetLangName( const MSHORT nLang );
-#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -64,7 +59,6 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 {
     if( rTxt.Len() < 4 || pFnt->IsSymbol(pVsh) )
         return 0;
-//  ASSERT( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
 
@@ -84,12 +78,12 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
 sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
     if( !pBreakIt->GetBreakIter().is() )
         return sal_False;;
     // Wir machen den Laden erstmal dicht:
-    ASSERT( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
+    OSL_ENSURE( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
     // 4935: Der frame::Frame muss eine gueltige SSize haben!
     Calc();
     GetFormatted();
@@ -123,7 +117,6 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         const xub_StrLen nEnd = rHyphInf.GetEnd();
         while( !bRet && aLine.GetStart() < nEnd )
         {
-            DBG_LOOP;
             bRet = aLine.Hyphenate( rHyphInf );
             if( !aLine.Next() )
                 break;
@@ -148,7 +141,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 
 void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot )
 {
-    ASSERT( pRoot, "SetParaPortion: no root anymore" );
+    OSL_ENSURE( pRoot, "SetParaPortion: no root anymore" );
     pInf->pPara = pRoot;
 }
 
@@ -181,7 +174,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         SwParaPortion *pPara = new SwParaPortion();
         SetParaPortion( &rInf, pPara );
         pCurr = pPara;
-        ASSERT( IsParaLine(), "SwTxtFormatter::Hyphenate: not the first" );
+        OSL_ENSURE( IsParaLine(), "SwTxtFormatter::Hyphenate: not the first" );
     }
     else
         pCurr = new SwLineLayout();
@@ -234,7 +227,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pOldCurr->IsParaPortion() )
     {
         SetParaPortion( &rInf, (SwParaPortion*)pOldCurr );
-        ASSERT( IsParaLine(), "SwTxtFormatter::Hyphenate: even not the first" );
+        OSL_ENSURE( IsParaLine(), "SwTxtFormatter::Hyphenate: even not the first" );
     }
 
     if( nWrdStart )
@@ -259,22 +252,6 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         if( bRet )
         {
             XubString aSelTxt( rInf.GetTxt().Copy(nWrdStart, nLen) );
-            xub_StrLen nCnt = 0;
-
-// these things should be handled by the dialog
-//            for( xub_StrLen i = 0; i < nLen; ++i )
-//            {
-//                sal_Unicode cCh = aSelTxt.GetChar(i);
-//                if( (CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
-//                     && rInf.HasHint( nWrdStart + i ) )
-//                {
-//                    aSelTxt.Erase( i , 1 );
-//                    nCnt++;
-//                    --nLen;
-//                    if( i )
-//                        --i;
-//                }
-//            }
 
             {
                 MSHORT nMinTrail = 0;
@@ -292,21 +269,10 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
             {
                 rHyphInf.SetHyphWord( xHyphWord );
                 rHyphInf.nWordStart = nWrdStart;
-                rHyphInf.nWordLen   = nLen+nCnt;
+                rHyphInf.nWordLen = nLen;
                 rHyphInf.SetNoLang( sal_False );
                 rHyphInf.SetCheck( sal_True );
             }
-#ifdef DEBUGGY
-            if( OPTDBG( rInf ) )
-            {
-                ASSERT( aSelTxt == aHyphWord,
-                        "!SwTxtFormatter::Hyphenate: different words, different planets" );
-                aDbstream << "Diff: \"" << aSelTxt.GetStr() << "\" != \""
-                          << aHyphWord.GetStr() << "\"" << endl;
-                ASSERT( bRet, "!SwTxtFormatter::Hyphenate: three of a perfect pair" );
-                aDbstream << "Hyphenate: ";
-            }
-#endif
         }
     }
     return bRet;
@@ -320,8 +286,8 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 {
     Reference< XHyphenatedWord >  xHyphWord = rGuess.HyphWord();
 
-    ASSERT( !pPortion, "SwTxtPortion::CreateHyphen(): another portion, another planet..." )
-    ASSERT( xHyphWord.is(), "SwTxtPortion::CreateHyphen(): You are lucky! The code is robust here." )
+    OSL_ENSURE( !pPortion, "SwTxtPortion::CreateHyphen(): another portion, another planet..." );
+    OSL_ENSURE( xHyphWord.is(), "SwTxtPortion::CreateHyphen(): You are lucky! The code is robust here." );
 
     if( rInf.IsHyphForbud() ||
         pPortion || // robust
@@ -339,7 +305,7 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     {
         SvxAlternativeSpelling aAltSpell;
         aAltSpell = SvxGetAltSpelling( xHyphWord );
-        ASSERT( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
+        OSL_ENSURE( aAltSpell.bIsAltSpelling, "no alternatve spelling" );
 
         XubString  aAltTxt   = aAltSpell.aReplacement;
         nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();
@@ -420,13 +386,12 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 
 sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
 {
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     const sal_Unicode cChar = rInf.GetVsh() &&
                               rInf.GetVsh()->GetViewOptions()->IsPDFExport() &&
                               SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut() ) ?
                               0xad :
                               '-';
-    // <--
 
     rTxt = cChar;
     return sal_True;
@@ -693,3 +658,4 @@ SwSoftHyphStrPortion::SwSoftHyphStrPortion( const XubString &rStr )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

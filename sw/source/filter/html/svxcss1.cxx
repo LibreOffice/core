@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <stdlib.h>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <i18npool/mslangid.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/urihelper.hxx>
@@ -77,7 +76,7 @@ SV_IMPL_PTRARR( CSS1Selectors, CSS1Selector* )
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aFontSizeTable[] =
+static CSS1PropertyEnum const aFontSizeTable[] =
 {
     { sCSS1_PV_xx_small,    0                   },
     { sCSS1_PV_x_small,     1                   },
@@ -89,7 +88,7 @@ static CSS1PropertyEnum __READONLY_DATA aFontSizeTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontFamilyTable[] =
+static CSS1PropertyEnum const aFontFamilyTable[] =
 {
     { sCSS1_PV_serif,       FAMILY_ROMAN        },
     { sCSS1_PV_sans_serif,  FAMILY_SWISS        },
@@ -99,7 +98,7 @@ static CSS1PropertyEnum __READONLY_DATA aFontFamilyTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontWeightTable[] =
+static CSS1PropertyEnum const aFontWeightTable[] =
 {
     { sCSS1_PV_extra_light, WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
     { sCSS1_PV_light,       WEIGHT_NORMAL       }, // WEIGHT_LIGHT (OBSOLETE)
@@ -114,7 +113,7 @@ static CSS1PropertyEnum __READONLY_DATA aFontWeightTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontStyleTable[] =
+static CSS1PropertyEnum const aFontStyleTable[] =
 {
     { sCSS1_PV_normal,      ITALIC_NONE         },
     { sCSS1_PV_italic,      ITALIC_NORMAL       },
@@ -122,14 +121,14 @@ static CSS1PropertyEnum __READONLY_DATA aFontStyleTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontVariantTable[] =
+static CSS1PropertyEnum const aFontVariantTable[] =
 {
     { sCSS1_PV_normal,      SVX_CASEMAP_NOT_MAPPED      },
     { sCSS1_PV_small_caps,  SVX_CASEMAP_KAPITAELCHEN    },
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aDirectionTable[] =
+static CSS1PropertyEnum const aDirectionTable[] =
 {
     { sCSS1_PV_ltr,         FRMDIR_HORI_LEFT_TOP        },
     { sCSS1_PV_rtl,         FRMDIR_HORI_RIGHT_TOP       },
@@ -139,7 +138,7 @@ static CSS1PropertyEnum __READONLY_DATA aDirectionTable[] =
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aBGRepeatTable[] =
+static CSS1PropertyEnum const aBGRepeatTable[] =
 {
     { sCSS1_PV_repeat,      GPOS_TILED                  },
     { sCSS1_PV_repeat_x,    GPOS_TILED                  },
@@ -148,7 +147,7 @@ static CSS1PropertyEnum __READONLY_DATA aBGRepeatTable[] =
     { 0,                    0                           }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aBGHoriPosTable[] =
+static CSS1PropertyEnum const aBGHoriPosTable[] =
 {
     { sCSS1_PV_left,        GPOS_LT                 },
     { sCSS1_PV_center,      GPOS_MT                 },
@@ -156,7 +155,7 @@ static CSS1PropertyEnum __READONLY_DATA aBGHoriPosTable[] =
     { 0,                    0                       }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aBGVertPosTable[] =
+static CSS1PropertyEnum const aBGVertPosTable[] =
 {
     { sCSS1_PV_top,         GPOS_LT                 },
     { sCSS1_PV_middle,      GPOS_LM                 },
@@ -166,7 +165,7 @@ static CSS1PropertyEnum __READONLY_DATA aBGVertPosTable[] =
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aTextAlignTable[] =
+static CSS1PropertyEnum const aTextAlignTable[] =
 {
     { sCSS1_PV_left,        SVX_ADJUST_LEFT     },
     { sCSS1_PV_center,      SVX_ADJUST_CENTER   },
@@ -177,7 +176,7 @@ static CSS1PropertyEnum __READONLY_DATA aTextAlignTable[] =
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aBorderWidthTable[] =
+static CSS1PropertyEnum const aBorderWidthTable[] =
 {
     { sCSS1_PV_thin,        0   },  // DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
     { sCSS1_PV_medium,      1   },  // DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
@@ -185,23 +184,23 @@ static CSS1PropertyEnum __READONLY_DATA aBorderWidthTable[] =
     { 0,                    0   }
 };
 
-enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE };
+enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOTTED, CSS1_BS_DASHED, CSS1_BS_GROOVE, CSS1_BS_RIDGE, CSS1_BS_INSET, CSS1_BS_OUTSET };
 
-static CSS1PropertyEnum __READONLY_DATA aBorderStyleTable[] =
+static CSS1PropertyEnum const aBorderStyleTable[] =
 {
     { sCSS1_PV_none,        CSS1_BS_NONE        },
-    { sCSS1_PV_dotted,      CSS1_BS_SINGLE      },
-    { sCSS1_PV_dashed,      CSS1_BS_SINGLE      },
+    { sCSS1_PV_dotted,      CSS1_BS_DOTTED      },
+    { sCSS1_PV_dashed,      CSS1_BS_DASHED      },
     { sCSS1_PV_solid,       CSS1_BS_SINGLE      },
     { sCSS1_PV_double,      CSS1_BS_DOUBLE      },
-    { sCSS1_PV_groove,      CSS1_BS_SINGLE      },
-    { sCSS1_PV_ridge,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_inset,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_outset,      CSS1_BS_SINGLE      },
+    { sCSS1_PV_groove,      CSS1_BS_GROOVE      },
+    { sCSS1_PV_ridge,       CSS1_BS_RIDGE       },
+    { sCSS1_PV_inset,       CSS1_BS_INSET       },
+    { sCSS1_PV_outset,      CSS1_BS_OUTSET      },
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFloatTable[] =
+static CSS1PropertyEnum const aFloatTable[] =
 {
     { sCSS1_PV_left,    SVX_ADJUST_LEFT         },
     { sCSS1_PV_right,   SVX_ADJUST_RIGHT        },
@@ -209,7 +208,7 @@ static CSS1PropertyEnum __READONLY_DATA aFloatTable[] =
     { 0,                0                       }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aPositionTable[] =
+static CSS1PropertyEnum const aPositionTable[] =
 {
     { sCSS1_PV_absolute,    SVX_CSS1_POS_ABSOLUTE   },
     { sCSS1_PV_relative,    SVX_CSS1_POS_RELATIVE   },
@@ -218,7 +217,7 @@ static CSS1PropertyEnum __READONLY_DATA aPositionTable[] =
 };
 
 // Feature: PrintExt
-static CSS1PropertyEnum __READONLY_DATA aSizeTable[] =
+static CSS1PropertyEnum const aSizeTable[] =
 {
     { sCSS1_PV_auto,        SVX_CSS1_STYPE_AUTO         },
     { sCSS1_PV_landscape,   SVX_CSS1_STYPE_LANDSCAPE    },
@@ -226,7 +225,7 @@ static CSS1PropertyEnum __READONLY_DATA aSizeTable[] =
     { 0,                    0                           }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aPageBreakTable[] =
+static CSS1PropertyEnum const aPageBreakTable[] =
 {
     { sCSS1_PV_auto,        SVX_CSS1_PBREAK_AUTO        },
     { sCSS1_PV_always,      SVX_CSS1_PBREAK_ALWAYS      },
@@ -240,50 +239,11 @@ static CSS1PropertyEnum __READONLY_DATA aPageBreakTable[] =
 
 /*  */
 
-// Ein Eintrag besteht aus vier USHORTs. Der erste ist die Gesamtbreite,
-// die anderen sind die 3 Einzelbreiten
-
-#define SBORDER_ENTRY( n ) \
-    DEF_LINE_WIDTH_##n, DEF_LINE_WIDTH_##n, 0, 0
-
-#define DBORDER_ENTRY( n ) \
-    DEF_DOUBLE_LINE##n##_OUT + DEF_DOUBLE_LINE##n##_IN + \
-    DEF_DOUBLE_LINE##n##_DIST, \
-    DEF_DOUBLE_LINE##n##_OUT, \
-    DEF_DOUBLE_LINE##n##_IN, \
-    DEF_DOUBLE_LINE##n##_DIST
-
-#define TDBORDER_ENTRY( n ) \
-    DEF_DOUBLE_LINE##n##_OUT, \
-    DEF_DOUBLE_LINE##n##_OUT, \
-    DEF_DOUBLE_LINE##n##_IN, \
-    DEF_DOUBLE_LINE##n##_DIST
-
-
-static sal_uInt16 __READONLY_DATA aSBorderWidths[] =
+static sal_uInt16 const aBorderWidths[] =
 {
-    SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 1 ), SBORDER_ENTRY( 2 ),
-    SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
-};
-
-static sal_uInt16 __READONLY_DATA aDBorderWidths[] =
-{
-    DBORDER_ENTRY( 0 ),
-    DBORDER_ENTRY( 7 ),
-    DBORDER_ENTRY( 1 ),
-    DBORDER_ENTRY( 8 ),
-    DBORDER_ENTRY( 4 ),
-    DBORDER_ENTRY( 9 ),
-    DBORDER_ENTRY( 3 ),
-    DBORDER_ENTRY( 10 ),
-    DBORDER_ENTRY( 2 ),
-    DBORDER_ENTRY( 5 )
-};
-
-static sal_uInt16 __READONLY_DATA aTDBorderWidths[] =
-{
-    TDBORDER_ENTRY( 7 ), TDBORDER_ENTRY( 8 ), TDBORDER_ENTRY( 9 ),
-    TDBORDER_ENTRY( 10 )
+    DEF_LINE_WIDTH_0,
+    DEF_LINE_WIDTH_5,
+    DEF_LINE_WIDTH_1
 };
 
 #undef SBORDER_ENTRY
@@ -365,24 +325,45 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
         return;
     }
 
-    SvxBorderLine aBorderLine( &aColor );
+    ::editeng::SvxBorderLine aBorderLine( &aColor );
 
     // Linien-Stil doppelt oder einfach?
-    sal_Bool bDouble = eStyle == CSS1_BS_DOUBLE;
+    switch ( eStyle )
+    {
+        case CSS1_BS_SINGLE:
+            aBorderLine.SetStyle( ::editeng::SOLID );
+            break;
+        case CSS1_BS_DOUBLE:
+            aBorderLine.SetStyle( ::editeng::DOUBLE );
+            break;
+        case CSS1_BS_DOTTED:
+            aBorderLine.SetStyle( ::editeng::DOTTED );
+            break;
+        case CSS1_BS_DASHED:
+            aBorderLine.SetStyle( ::editeng::DASHED );
+            break;
+        case CSS1_BS_GROOVE:
+            aBorderLine.SetStyle( ::editeng::ENGRAVED );
+            break;
+        case CSS1_BS_RIDGE:
+            aBorderLine.SetStyle( ::editeng::EMBOSSED );
+            break;
+        case CSS1_BS_INSET:
+            aBorderLine.SetStyle( ::editeng::INSET );
+            break;
+        case CSS1_BS_OUTSET:
+            aBorderLine.SetStyle( ::editeng::OUTSET );
+            break;
+        default:
+            aBorderLine.SetStyle( ::editeng::NO_STYLE );
+            break;
+    }
 
     // benannte Breite umrechnenen, wenn keine absolute gegeben ist
     if( nAbsWidth==USHRT_MAX )
-    {
-        const sal_uInt16 *aWidths = bDouble ? aDBorderWidths : aSBorderWidths;
-        sal_uInt16 nNWidth = nNamedWidth * 4;
-        aBorderLine.SetOutWidth( aWidths[nNWidth+1] );
-        aBorderLine.SetInWidth( aWidths[nNWidth+2] );
-        aBorderLine.SetDistance( aWidths[nNWidth+3] );
-    }
+        aBorderLine.SetWidth( aBorderWidths[ nNamedWidth ] );
     else
-    {
-        SvxCSS1Parser::SetBorderWidth( aBorderLine, nAbsWidth, bDouble );
-    }
+        aBorderLine.SetWidth( nAbsWidth );
 
     rBoxItem.SetLine( &aBorderLine, nLine );
 }
@@ -707,7 +688,7 @@ SvxCSS1MapEntry::SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet
     aKey.ToUpperAscii();
 }
 
-#if defined( ICC ) || defined( BLC )
+#if defined( ICC )
 sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;
@@ -736,7 +717,7 @@ sal_Bool SvxCSS1Parser::SelectorParsed( const CSS1Selector *pSelector,
 {
     if( bFirst )
     {
-        DBG_ASSERT( pSheetItemSet, "Wo ist der Item-Set fuer Style-Sheets?" );
+        OSL_ENSURE( pSheetItemSet, "Where is the Item-Set for Style-Sheets?" );
 
         // Dieses ist der erste Selektor einer Rule, also muessen
         // die bisher geparsten Items auf die Styles verteilt werden
@@ -762,7 +743,7 @@ sal_Bool SvxCSS1Parser::SelectorParsed( const CSS1Selector *pSelector,
 sal_Bool SvxCSS1Parser::DeclarationParsed( const String& rProperty,
                                        const CSS1Expression *pExpr )
 {
-    DBG_ASSERT( pExpr, "DeclarationParsed() ohne Expression" );
+    OSL_ENSURE( pExpr, "DeclarationParsed() without Expression" );
 
     if( !pExpr )
         return sal_True;
@@ -851,8 +832,6 @@ sal_Bool SvxCSS1Parser::ParseStyleSheet( const String& rIn )
 
     sal_Bool bSuccess = CSS1Parser::ParseStyleSheet( rIn );
 
-    // die bisher geparsten Items auf die Styles verteilt werden
-//  pSheetPropInfo->CreateBoxItem( *pSheetItemSet, GetDfltBorderDist() );
     for( sal_uInt16 i=0; i<aSelectors.Count(); i++ )
     {
         StyleParsed( aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
@@ -879,7 +858,6 @@ sal_Bool SvxCSS1Parser::ParseStyleOption( const String& rIn,
 
     sal_Bool bSuccess = CSS1Parser::ParseStyleOption( rIn );
     rItemSet.ClearItem( aItemIds.nDirection );
-//  pPropInfo->CreateBoxItem( *pItemSet, GetDfltBorderDist() );
 
     pItemSet = 0;
     pPropInfo = 0;
@@ -919,41 +897,6 @@ void SvxCSS1Parser::PixelToTwip( long &rWidth, long &rHeight )
         rWidth = aTwipSz.Width();
         rHeight = aTwipSz.Height();
     }
-}
-
-void SvxCSS1Parser::SetBorderWidth( SvxBorderLine& aBorderLine, sal_uInt16 nWidth,
-                                    sal_Bool bDouble, sal_Bool bTable )
-{
-    const sal_uInt16 *aWidths;
-    sal_uInt16 nSize;
-    if( !bDouble )
-    {
-        aWidths = aSBorderWidths;
-        nSize = sizeof( aSBorderWidths );
-    }
-    else if( bTable )
-    {
-        aWidths = aTDBorderWidths;
-        nSize = sizeof( aTDBorderWidths );
-    }
-    else
-    {
-        aWidths = aDBorderWidths;
-        nSize = sizeof( aDBorderWidths );
-    }
-
-    sal_uInt16 i = (nSize / sizeof(sal_uInt16)) - 4;
-    while( i>0 &&
-           nWidth <= ((aWidths[i] + aWidths[i-4]) / 2)  )
-    {
-        DBG_ASSERT( aWidths[i] > aWidths[i-4],
-                "Linienbreiten sind nicht sortiert!" );
-        i -= 4;
-    }
-
-    aBorderLine.SetOutWidth( aWidths[i+1] );
-    aBorderLine.SetInWidth( aWidths[i+2] );
-    aBorderLine.SetDistance( aWidths[i+3] );
 }
 
 sal_uInt32 SvxCSS1Parser::GetFontHeight( sal_uInt16 nSize ) const
@@ -1074,7 +1017,7 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
                                  SvxCSS1PropertyInfo& /*rPropInfo*/,
                                  const SvxCSS1Parser& rParser )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_uLong nHeight = 0;
     sal_uInt16 nPropHeight = 100;
@@ -1092,33 +1035,19 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
             nHeight = (sal_uLong)nPHeight;
         }
         break;
-//#ifdef PERCENTAGE_POSSIBLE
     case CSS1_PERCENTAGE:
         // nur fuer Drop-Caps!
         nPropHeight = (sal_uInt16)pExpr->GetNumber();
         break;
-//#endif
     case CSS1_IDENT:
         {
             sal_uInt16 nSize;
-#ifdef PERCENTAGE_POSSIBLE
-            const String& rValue = pExpr->GetString();
-#endif
+
             if( SvxCSS1Parser::GetEnum( aFontSizeTable, pExpr->GetString(),
                                         nSize ) )
             {
                 nHeight = rParser.GetFontHeight( nSize );
             }
-#ifdef PERCENTAGE_POSSIBLE
-            else if( rValue.EqualsIgnoreCaseAscii( sCSS1_PV_larger ) )
-            {
-                nPropHeight = 150;
-            }
-            else if( rValue.EqualsIgnoreCaseAscii( sCSS1_PV_smaller ) )
-            {
-                nPropHeight = 67;
-            }
-#endif
         }
         break;
 
@@ -1153,7 +1082,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& rParser )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     String aName, aStyleName, aDfltName;
     FontFamily eFamily = FAMILY_DONTKNOW;
@@ -1234,7 +1163,7 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& rParser )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     switch( pExpr->GetType() )
     {
@@ -1293,7 +1222,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& rParser )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_Bool bPosture = sal_False;
     sal_Bool bCaseMap = sal_False;
@@ -1364,7 +1293,7 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
                                     SvxCSS1PropertyInfo& /*rPropInfo*/,
                                     const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     // normal | small-caps
 
@@ -1392,7 +1321,7 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& /*rPropInfo*/,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     switch( pExpr->GetType() )
     {
@@ -1416,7 +1345,7 @@ static void ParseCSS1_direction( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& /*rPropInfo*/,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_uInt16 nDir;
     switch( pExpr->GetType() )
@@ -1440,8 +1369,8 @@ static void ParseCSS1_direction( const CSS1Expression *pExpr,
 
 static void MergeHori( SvxGraphicPosition& ePos, SvxGraphicPosition eHori )
 {
-    DBG_ASSERT( GPOS_LT==eHori || GPOS_MT==eHori || GPOS_RT==eHori,
-                "vertikale Position nicht oben" );
+    OSL_ENSURE( GPOS_LT==eHori || GPOS_MT==eHori || GPOS_RT==eHori,
+                "vertical position not at the top" );
 
     switch( ePos )
     {
@@ -1470,8 +1399,8 @@ static void MergeHori( SvxGraphicPosition& ePos, SvxGraphicPosition eHori )
 
 static void MergeVert( SvxGraphicPosition& ePos, SvxGraphicPosition eVert )
 {
-    DBG_ASSERT( GPOS_LT==eVert || GPOS_LM==eVert || GPOS_LB==eVert,
-                "horizontale Position nicht links" );
+    OSL_ENSURE( GPOS_LT==eVert || GPOS_LM==eVert || GPOS_LB==eVert,
+                "horizontal position not on the left side" );
 
     switch( ePos )
     {
@@ -1503,7 +1432,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& rParser )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     Color aColor;
     String aURL;
@@ -1643,7 +1572,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     Color aColor;
 
@@ -1691,7 +1620,7 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& rParser )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_uInt16 nHeight = 0;
     sal_uInt8 nPropHeight = 0;
@@ -1731,10 +1660,8 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
             nHeight = rParser.GetMinFixLineSpace();
         SvxLineSpacingItem aLSItem( nHeight, aItemIds.nLineSpacing );
         aLSItem.SetLineHeight( nHeight );
-        // --> OD 2006-07-26 #138463#
         // interpret <line-height> attribute as minimum line height
         aLSItem.GetLineSpaceRule() = SVX_LINE_SPACE_MIN;
-        // <--
         aLSItem.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
         rItemSet.Put( aLSItem );
     }
@@ -1758,7 +1685,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
                             SvxCSS1PropertyInfo& rPropInfo,
                             const SvxCSS1Parser& rParser )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     FontItalic eItalic = ITALIC_NONE;
     SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
@@ -1868,7 +1795,7 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
                                       SvxCSS1PropertyInfo& /*rPropInfo*/,
                                       const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     switch( pExpr->GetType() )
     {
@@ -1913,7 +1840,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
                                        SvxCSS1PropertyInfo& /*rPropInfo*/,
                                        const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_Bool bUnderline = sal_False;
     sal_Bool bOverline = sal_False;
@@ -2023,7 +1950,7 @@ static void ParseCSS1_text_align( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     if( CSS1_IDENT==pExpr->GetType() ||
         CSS1_STRING==pExpr->GetType() ) // MS-IE, mal wieder
@@ -2045,7 +1972,7 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     short nIndent = 0;
     sal_Bool bSet = sal_False;
@@ -2098,7 +2025,7 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
                                    SvxCSS1PropertyInfo& rPropInfo,
                                    const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     long nLeft = 0;
     sal_Bool bSet = sal_False;
@@ -2155,7 +2082,7 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
                                     SvxCSS1PropertyInfo& rPropInfo,
                                     const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     long nRight = 0;
     sal_Bool bSet = sal_False;
@@ -2212,7 +2139,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
                                   SvxCSS1PropertyInfo& rPropInfo,
                                   const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_uInt16 nUpper = 0;
     sal_Bool bSet = sal_False;
@@ -2272,7 +2199,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
                                      SvxCSS1PropertyInfo& rPropInfo,
                                      const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_uInt16 nLower = 0;
     sal_Bool bSet = sal_False;
@@ -2332,7 +2259,7 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
                               SvxCSS1PropertyInfo& rPropInfo,
                               const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     long nMargins[4] = { 0, 0, 0, 0 };
     sal_Bool bSetMargins[4] = { sal_False, sal_False, sal_False, sal_False };
@@ -2475,7 +2402,7 @@ static sal_Bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
                                    const SvxCSS1Parser& /*rParser*/,
                                    sal_uInt16 nWhichLine )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_Bool bSet = sal_False;
     sal_uInt16 nDist = 0;
@@ -2597,7 +2524,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                                   const SvxCSS1Parser& /*rParser*/,
                                   sal_uInt16 nWhichLine, sal_Bool bAll )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_uInt16 nWidth = USHRT_MAX;      // die Linien-Dicke
     sal_uInt16 nNWidth = 1;             // benannte Linien-Dicke (und default)
@@ -2692,7 +2619,7 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
                                         const SvxCSS1Parser& /*rParser*/,
                                         sal_uInt16 nWhichLine )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     sal_uInt16 nWidth = USHRT_MAX;      // die Linien-Dicke
     sal_uInt16 nNWidth = 1;             // benannte Linien-Dicke (und default)
@@ -2884,7 +2811,7 @@ static void ParseCSS1_float( const CSS1Expression *pExpr,
                              SvxCSS1PropertyInfo& rPropInfo,
                              const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     if( CSS1_IDENT==pExpr->GetType() )
     {
@@ -2902,7 +2829,7 @@ static void ParseCSS1_position( const CSS1Expression *pExpr,
                                 SvxCSS1PropertyInfo& rPropInfo,
                                 const SvxCSS1Parser& /*rParser*/ )
 {
-    DBG_ASSERT( pExpr, "kein Ausdruck" );
+    OSL_ENSURE( pExpr, "no expression" );
 
     if( CSS1_IDENT==pExpr->GetType() )
     {
@@ -3183,7 +3110,7 @@ struct CSS1PropEntry
 
 
 // die Tabelle mit den Zuordnungen
-static CSS1PropEntry __FAR_DATA aCSS1PropFnTab[] =
+static CSS1PropEntry aCSS1PropFnTab[] =
 {
     CSS1_PROP_ENTRY(background),
     CSS1_PROP_ENTRY(background_color),
@@ -3241,18 +3168,11 @@ static CSS1PropEntry __FAR_DATA aCSS1PropFnTab[] =
 
 /*  */
 
-static int __FAR_DATA bSortedPropFns = sal_False;
+static int bSortedPropFns = sal_False;
 
 extern "C"
 {
-static int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC )
- _Optlink
-#endif
-    CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
+static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
 {
     int nRet;
     if( ((CSS1PropEntry*)pFirst)->pFunc )
@@ -3281,7 +3201,7 @@ static int
 void SvxCSS1Parser::ParseProperty( const String& rProperty,
                                    const CSS1Expression *pExpr )
 {
-    DBG_ASSERT( pItemSet, "DeclarationParsed() ohne ItemSet" );
+    OSL_ENSURE( pItemSet, "DeclarationParsed() without ItemSet" );
 
     if( !bSortedPropFns )
     {
@@ -3309,3 +3229,5 @@ void SvxCSS1Parser::ParseProperty( const String& rProperty,
         (((CSS1PropEntry*)pFound)->pFunc)( pExpr, *pItemSet, *pPropInfo, *this );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

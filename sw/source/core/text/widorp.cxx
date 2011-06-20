@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,6 @@
 #include <fmtftn.hxx>
 #include <rowfrm.hxx>
 
-#include "txtcfg.hxx"
 #include "widorp.hxx"
 #include "txtfrm.hxx"
 #include "itrtxt.hxx"
@@ -60,7 +60,7 @@
 // Ein Follow, der auf der selben Seite steht, wie sein Master ist nasty.
 inline sal_Bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
-    ASSERT( !pFrm->IsFollow() || !pFrm->GetPrev() ||
+    OSL_ENSURE( !pFrm->IsFollow() || !pFrm->GetPrev() ||
             ((const SwTxtFrm*)pFrm->GetPrev())->GetFollow() == pFrm,
             "IsNastyFollow: Was ist denn hier los?" );
     return  pFrm->IsFollow() && pFrm->GetPrev();
@@ -343,7 +343,7 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 {
     // OD 2004-02-25 #i16128# - Why member <pFrm> _*and*_ parameter <pFrame>??
     // Thus, assertion on situation, that these are different to figure out why.
-    ASSERT( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
+    OSL_ENSURE( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
 
     SWAP_IF_SWAPPED( pFrm )
 
@@ -398,8 +398,8 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 
 sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 {
-    ASSERT( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
-            "WidowsAndOrphans::FindWidows with swapped frame" )
+    OSL_ENSURE( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
+            "WidowsAndOrphans::FindWidows with swapped frame" );
 
     if( !nWidLines || !pFrame->IsFollow() )
         return sal_False;
@@ -408,7 +408,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 
     // Wir koennen noch was abzwacken
     SwTxtFrm *pMaster = pFrame->FindMaster();
-    ASSERT(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
+    OSL_ENSURE(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
     if( !pMaster )
         return sal_False;
 
@@ -504,7 +504,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     MSHORT nNeed = 1; // frueher: nWidLines - rLine.GetLineNr();
 
     // Special case: Master cannot give lines to follow
-    // --> FME 2008-09-16 #i91421#
+    // #i91421#
     if ( !pMaster->GetIndPrev() )
     {
         sal_uLong nLines = pMaster->GetThisLines();
@@ -532,7 +532,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     // IsInside() takes care for itself
 
     // Wir erwarten, dass rLine auf der letzten Zeile steht!!
-    ASSERT( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
+    OSL_ENSURE( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
     MSHORT nLineCnt = rLine.GetLineNr();
 
     // Erstmal die Orphansregel und den Initialenwunsch erfuellen ...
@@ -545,7 +545,6 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
 
     while( nMinLines > rLine.GetLineNr() )
     {
-        DBG_LOOP;
         if( !rLine.NextLine() )
             return sal_False;
         nLineSum += rLine.GetLineHeight();
@@ -585,3 +584,4 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

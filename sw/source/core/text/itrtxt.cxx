@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include "ndtxt.hxx"
 #include "flyfrm.hxx"
 #include "paratr.hxx"
-#include "errhdl.hxx"
 #include <vcl/outdev.hxx>
 #include <editeng/paravertalignitem.hxx>
 
@@ -42,13 +42,12 @@
 #include <tgrditem.hxx>
 #include <porfld.hxx>
 
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "porfly.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
-# include "txtfrm.hxx"      // GetFrmID,
+#include "txtfrm.hxx"      // GetFrmID,
 #endif
 
 /*************************************************************************
@@ -57,26 +56,15 @@
 
 void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 {
-#ifdef DBGTXT
-    // nStopAt laesst sich vom CV bearbeiten.
-    static MSHORT nStopAt = 0;
-    if( nStopAt == pNewFrm->GetFrmId() )
-    {
-        int i = pNewFrm->GetFrmId();
-    }
-#endif
-
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
 
-    ASSERT( pNewFrm->GetPara(), "No paragraph" );
+    OSL_ENSURE( pNewFrm->GetPara(), "No paragraph" );
 
     CtorInitAttrIter( *pNode, pNewFrm->GetPara()->GetScriptInfo(), pNewFrm );
 
     pFrm = pNewFrm;
     pInf = pNewInf;
-    // --> OD 2008-01-17 #newlistlevelattrs#
     aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
-    // <--
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
     SwTxtIter::Init();
     if( pNode->GetSwAttrSet().GetRegister().GetValue() )
@@ -187,7 +175,6 @@ const SwLineLayout *SwTxtIter::NextLine()
     const SwLineLayout *pNext = Next();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
-        DBG_LOOP;
         pNext = Next();
     }
     return pNext;
@@ -202,7 +189,6 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
     const SwLineLayout *pNext = pCurr->GetNext();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
-        DBG_LOOP;
         pNext = pNext->GetNext();
     }
     return (SwLineLayout*)pNext;
@@ -251,7 +237,6 @@ const SwLineLayout *SwTxtIter::PrevLine()
     const SwLineLayout *pLast = pMyPrev;
     while( pMyPrev && pMyPrev->IsDummy() )
     {
-        DBG_LOOP;
         pLast = pMyPrev;
         pMyPrev = Prev();
     }
@@ -266,7 +251,7 @@ void SwTxtIter::Bottom()
 {
     while( Next() )
     {
-        DBG_LOOP;
+        // nothing
     }
 }
 
@@ -358,7 +343,7 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 nOfst = nOfst + nPorAscent;
                 break;
             case SvxParaVertAlignItem::CENTER :
-                ASSERT( rLine.Height() >= nPorHeight, "Portion height > Line height");
+                OSL_ENSURE( rLine.Height() >= nPorHeight, "Portion height > Line height");
                 nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
                 break;
             case SvxParaVertAlignItem::BOTTOM :
@@ -488,7 +473,6 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
         return;
     while( pLay != pCurr )
     {
-        DBG_LOOP;
         if ( pLay->IsEndHyph() )
             nEndCnt++;
         else
@@ -513,7 +497,7 @@ SwHookOut::SwHookOut( SwTxtSizeInfo& rInfo ) :
      pOut( rInfo.GetOut() ),
      bOnWin( rInfo.OnWin() )
 {
-    ASSERT( rInfo.GetRefDev(), "No reference device for text formatting" )
+    OSL_ENSURE( rInfo.GetRefDev(), "No reference device for text formatting" );
 
     // set new values
     rInfo.SetOut( rInfo.GetRefDev() );
@@ -525,3 +509,5 @@ SwHookOut::~SwHookOut()
     pInf->SetOut( pOut );
     pInf->SetOnWin( bOnWin );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

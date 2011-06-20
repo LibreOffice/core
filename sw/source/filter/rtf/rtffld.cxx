@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,17 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <ctype.h>
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <sal/macros.h>
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svl/urihelper.hxx>
 #include <svtools/rtftoken.h>
 #include <svl/zforlist.hxx>
@@ -60,9 +57,7 @@
 #include <docufld.hxx>
 #include <flddat.hxx>
 #include <charfmt.hxx>
-#ifndef _fmtruby_HXX
 #include <fmtruby.hxx>
-#endif
 #include <breakit.hxx>
 #include <reffld.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -97,29 +92,29 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 {
     // Strings sind PascalStrings; Laenge steht an 1. Stellen, dadurch wird
     // sich der Aufruf von strlen erspart!!!
-    sal_Char __READONLY_DATA sTOC[]=        "\x03""toc";
-    sal_Char __READONLY_DATA sIMPORT[]=     "\x06""import";
-    sal_Char __READONLY_DATA sINDEX[]=      "\x05""index";
-    sal_Char __READONLY_DATA sSYMBOL[]=     "\x06""symbol";
-    sal_Char __READONLY_DATA sPAGE[]=       "\x04""page";
-    sal_Char __READONLY_DATA sNUMPAGES[]=   "\x08""numpages";
-    sal_Char __READONLY_DATA sDATE[]=       "\x04""date";
-    sal_Char __READONLY_DATA sTIME[]=       "\x04""time";
-    sal_Char __READONLY_DATA sDATA[]=       "\x04""data";
-    sal_Char __READONLY_DATA sMERGEFLD[]=   "\x0A""mergefield";
-    sal_Char __READONLY_DATA sIMPORT2[]=    "\x0E""includepicture";
-    sal_Char __READONLY_DATA sHYPERLINK[]=  "\x09""hyperlink";
-    sal_Char __READONLY_DATA sREF[]=        "\x03""ref";
-    sal_Char __READONLY_DATA sPAGEREF[]=    "\x07""pageref";
-    sal_Char __READONLY_DATA sEQ[]=         "\x02""eq";
-    sal_Char __READONLY_DATA sINCLUDETEXT[]="\x0B""includetext";
+    sal_Char const sTOC[]=      "\x03""toc";
+    sal_Char const sIMPORT[]=   "\x06""import";
+    sal_Char const sINDEX[]=        "\x05""index";
+    sal_Char const sSYMBOL[]=   "\x06""symbol";
+    sal_Char const sPAGE[]=     "\x04""page";
+    sal_Char const sNUMPAGES[]=   "\x08""numpages";
+    sal_Char const sDATE[]=     "\x04""date";
+    sal_Char const sTIME[]=     "\x04""time";
+    sal_Char const sDATA[]=     "\x04""data";
+    sal_Char const sMERGEFLD[]= "\x0A""mergefield";
+    sal_Char const sIMPORT2[]=  "\x0E""includepicture";
+    sal_Char const sHYPERLINK[]=    "\x09""hyperlink";
+    sal_Char const sREF[]=      "\x03""ref";
+    sal_Char const sPAGEREF[]=  "\x07""pageref";
+    sal_Char const sEQ[]=           "\x02""eq";
+    sal_Char const sINCLUDETEXT[]="\x0B""includetext";
 
     struct _Dummy_RTF_FLD_TYPES
     {
         RTF_FLD_TYPES eFldType;
         const sal_Char* pFldNm;
     };
-    __READONLY_DATA _Dummy_RTF_FLD_TYPES aFldNmArr[RTFFLD_INCLUDETEXT + 1] = {
+    const _Dummy_RTF_FLD_TYPES aFldNmArr[RTFFLD_INCLUDETEXT + 1] = {
             {RTFFLD_TOC,         sTOC},
             {RTFFLD_IMPORT,      sIMPORT},
             {RTFFLD_INDEX,       sINDEX},
@@ -144,14 +139,14 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 
     String sNm( rName );
     sNm = sNm.EraseLeadingChars().GetToken(0, ' ');
-    ASSERT( sNm.Len(), "Feldname hat keine Laenge!" );
+    OSL_ENSURE( sNm.Len(), "Feldname hat keine Laenge!" );
     if( !sNm.Len() )
         return RTFFLD_UNKNOWN;
 
     xub_StrLen nTokenStt = rName.Search( sNm );
     sNm.ToLowerAscii();
 
-    for (size_t n = 0; n < sizeof(aFldNmArr) / sizeof(aFldNmArr[0]); ++n)
+    for (size_t n = 0; n < SAL_N_ELEMENTS(aFldNmArr); ++n)
     {
         const sal_Char* pCmp = aFldNmArr[n].pFldNm;
         int nLen = *pCmp++;
@@ -160,7 +155,6 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             ( !nFndPos || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos-1) )) ) &&
             ( nFndPos+nLen == sNm.Len() || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos+nLen) ) ) ) )
         {
-//          rName = sNm.Copy( nFndPos, nLen );
             rName = rName.Copy( nFndPos, static_cast< xub_StrLen >(nLen) );
             nFndPos += nTokenStt + static_cast< xub_StrLen >(nLen);
             while( rNext.GetChar( nFndPos ) == ' ' )    ++nFndPos;
@@ -186,7 +180,7 @@ static sal_uInt16 CheckNumberFmtStr( const String& rNStr )
         "\x04""PAGE"              /* PAGEDESC          */
     };
 
-    ASSERT(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
+    OSL_ENSURE(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
            >= SVX_NUM_PAGEDESC - SVX_NUM_CHARS_UPPER_LETTER, "impossible");
 
     for (sal_uInt16 n = SVX_NUM_CHARS_UPPER_LETTER;  n <= SVX_NUM_PAGEDESC; ++n)
@@ -412,9 +406,6 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         break;
     case RTFFLD_IMPORT:
         {
-//JP 11.03.96: vertraegt sich nicht so ganz mit Internet!
-//            if( STRING_NOTFOUND != ( nPos = aSaveStr.Search( '.' )))
-//                aSaveStr.Erase( nPos+4 );
 
             aSaveStr.EraseLeadingAndTrailingChars();
             if( aSaveStr.Len() )
@@ -430,7 +421,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     INetURLObject(GetBaseURL()), aSaveStr,
                     URIHelper::GetMaybeFileHdl() );
             }
-//          SkipGroup();        // ueberlese den Rest
+
         }
         break;
 
@@ -491,7 +482,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 aSaveStr.SearchAndReplaceAscii( "AM", aEmptyStr );
                 aSaveStr.SearchAndReplaceAscii( "PM", aEmptyStr );
 
-                // #117892# M.M. Put the word date and time formatter stuff in a common area
+                // Put the word date and time formatter stuff in a common area
                 // and get the rtf filter to use it
                 SwField *pFld = 0;
                 short nNumFmtType = NUMBERFORMAT_UNDEFINED;
@@ -507,7 +498,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
                 if( pFormatter )
                 {
-                    nFmtIdx = sw::ms::MSDateTimeFormatToSwFormat(aSaveStr, pFormatter, rLang, bHijri);
+                    nFmtIdx = sw::ms::MSDateTimeFormatToSwFormat(aSaveStr, pFormatter, rLang, bHijri, rLang);
                     if (nFmtIdx)
                         nNumFmtType = pFormatter->GetType(nFmtIdx);
                 }
@@ -692,14 +683,19 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 case 1:     aData.nJustificationCode = 3;   break;
                 case 2:     aData.nJustificationCode = 4;   break;
                 case 4:     aData.nJustificationCode = 2;   break;
-//              case 3:
                 default:    aData.nJustificationCode = 0;   break;
                 }
 
                 SwFmtRuby aRuby( aData.sUp );
-                SwCharFmt * pCharFmt = -1 != aData.nStyleNo
-                                          ? aCharFmtTbl.Get( aData.nStyleNo )
-                                          : 0;
+                SwCharFmt * pCharFmt = NULL;
+
+                if ( aData.nStyleNo != -1)
+                {
+                    std::map<sal_Int32,SwCharFmt*>::iterator iter = aCharFmtTbl.find(aData.nStyleNo);
+
+                    if (iter != aCharFmtTbl.end())
+                        pCharFmt = iter->second;
+                }
 
                 if( !pCharFmt )
                 {
@@ -1053,7 +1049,7 @@ void SwRTFParser::ReadField()
                         {
                             const SwField *pFld = pFldAttr->GetFld().GetFld();
                             SwFieldType *pTyp = pFld ? pFld->GetTyp() : 0;
-                            ASSERT(pTyp->Which() == RES_USERFLD, "expected a user field");
+                            OSL_ENSURE(pTyp->Which() == RES_USERFLD, "expected a user field");
                             if (pTyp->Which() == RES_USERFLD)
                             {
                                 SwUserFieldType *pUsrTyp = (SwUserFieldType*)pTyp;
@@ -1093,6 +1089,9 @@ void SwRTFParser::ReadField()
                                             nsSetAttrMode::SETATTR_DONTEXPAND );
                             pPam->DeleteMark();
 
+                            // #i117947#: insert result only once in case
+                            // field result is followed by invalid tokens
+                            sFieldStr.Erase();
                         }
                         break;
                     }
@@ -1101,7 +1100,7 @@ void SwRTFParser::ReadField()
                 {
                     if(nRet == RTFFLD_PAGEREF)
                     {
-                        // #17371 Nasty hack to get a pageref within a hyperlink working
+                        // Nasty hack to get a pageref within a hyperlink working
                         sNestedFieldStr = sFieldStr;
                     }
 
@@ -1228,4 +1227,4 @@ INSINGLECHAR:
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

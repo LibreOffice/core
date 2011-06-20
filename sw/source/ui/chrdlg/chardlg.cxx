@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,48 +36,29 @@
 
 #include <hintids.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svl/cjkoptions.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <swtypes.hxx>
-#include <errhdl.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <uitool.hxx>
 #include <fmtinfmt.hxx>
 #include <macassgn.hxx>
-#ifndef _CHRDLG_HXX
-#include <chrdlg.hxx>       // der Dialog
-#endif
+#include <chrdlg.hxx>       // the dialog
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
 
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _CHRDLG_HRC
 #include <chrdlg.hrc>
-#endif
-#ifndef _CHARDLG_HRC
 #include <chardlg.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <SwStyleNameMapper.hxx>
@@ -93,11 +75,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
- --------------------------------------------------------------------*/
-
-
 SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
                      const String* pStr, sal_Bool bIsDrwTxtDlg) :
     SfxTabDialog(pParent, SW_RES(DLG_CHAR), &rCoreSet, pStr != 0),
@@ -105,8 +82,6 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     bIsDrwTxtMode(bIsDrwTxtDlg)
 {
     FreeResource();
-
-    // bspFonr fuer beide Bsp-TabPages
 
     if(pStr)
     {
@@ -117,7 +92,7 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
         SetText(aTmp);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
     AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
     AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
@@ -135,20 +110,14 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     else if(!aCJKOptions.IsDoubleLinesEnabled())
         RemoveTabPage( TP_CHAR_TWOLN );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwCharDlg::~SwCharDlg()
 {
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   FontList setzen
+    Description:    set FontList
  --------------------------------------------------------------------*/
-
-
 
 void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -185,10 +154,6 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         break;
     }
 }
-
-/*-----------------14.08.96 11.28-------------------
-
---------------------------------------------------*/
 
 SwCharURLPage::SwCharURLPage(   Window* pParent,
                                 const SfxItemSet& rCoreSet ) :
@@ -245,37 +210,27 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     TargetList* pList = new TargetList;
     const SfxFrame& rFrame = pView->GetViewFrame()->GetTopFrame();
     rFrame.GetTargetList(*pList);
-    sal_uInt16 nCount = (sal_uInt16)pList->Count();
-    if( nCount )
+    if ( !pList->empty() )
     {
-        sal_uInt16 i;
+        size_t nCount = pList->size();
+        size_t i;
 
         for ( i = 0; i < nCount; i++ )
         {
-            aTargetFrmLB.InsertEntry(*pList->GetObject(i));
+            aTargetFrmLB.InsertEntry( *pList->at( i ) );
         }
-        for ( i = nCount; i; i-- )
+        for ( i = nCount; i; )
         {
-            delete pList->GetObject( i - 1 );
+            delete pList->at( --i );
         }
     }
     delete pList;
-
-
 }
-
-/*-----------------15.08.96 09.04-------------------
-
---------------------------------------------------*/
 
 SwCharURLPage::~SwCharURLPage()
 {
     delete pINetItem;
 }
-
-/*-----------------14.08.96 11.31-------------------
-
---------------------------------------------------*/
 
 void SwCharURLPage::Reset(const SfxItemSet& rSet)
 {
@@ -315,10 +270,6 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
     }
 }
 
-/*-----------------14.08.96 11.32-------------------
-
---------------------------------------------------*/
-
 sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
    ::rtl::OUString sURL = aURLED.GetText();
@@ -338,7 +289,7 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     bModified |= aNameED.IsModified();
     bModified |= aTargetFrmLB.GetSavedValue() != aTargetFrmLB.GetText();
 
-    //zuerst die gueltigen Einstellungen setzen
+    // set valid settings first
     String sEntry = aVisitedLB.GetSelectEntry();
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtId(nId);
@@ -368,20 +319,11 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     return bModified;
 }
 
-
-/*-----------------14.08.96 11.30-------------------
-
---------------------------------------------------*/
-
 SfxTabPage* SwCharURLPage::Create(  Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwCharURLPage( pParent, rAttrSet ) );
 }
-
-/*-----------------14.08.96 15.00-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, EMPTYARG )
 {
@@ -393,9 +335,6 @@ IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, EMPTYARG )
     }
     return 0;
 }
-/*-----------------14.08.96 15.00-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
 {
@@ -405,3 +344,4 @@ IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

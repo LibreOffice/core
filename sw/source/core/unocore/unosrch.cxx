@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,24 +36,18 @@
 #include <unobaseclass.hxx>
 #include <unomid.h>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include "editeng/unolingu.hxx"
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-/******************************************************************************
- *
- ******************************************************************************/
-
-/* -----------------23.06.99 12:19-------------------
-
- --------------------------------------------------*/
 class SwSearchProperties_Impl
 {
     beans::PropertyValue**          pValueArr; //
@@ -69,9 +64,7 @@ public:
     void    FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const;
     sal_Bool    HasAttributes() const;
 };
-/* -----------------23.06.99 13:08-------------------
 
- --------------------------------------------------*/
 SwSearchProperties_Impl::SwSearchProperties_Impl() :
     nArrLen(0),
     aPropertyEntries( aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)->getPropertyMap()->getPropertyEntries())
@@ -81,18 +74,14 @@ SwSearchProperties_Impl::SwSearchProperties_Impl() :
     for(sal_uInt32 i = 0; i < nArrLen; i++)
         pValueArr[i] = 0;
 }
-/* -----------------23.06.99 13:08-------------------
 
- --------------------------------------------------*/
 SwSearchProperties_Impl::~SwSearchProperties_Impl()
 {
     for(sal_uInt32 i = 0; i < nArrLen; i++)
         delete pValueArr[i];
     delete[] pValueArr;
 }
-/* -----------------23.06.99 13:09-------------------
 
- --------------------------------------------------*/
 void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
                 throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException )
 {
@@ -121,9 +110,7 @@ void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Prope
         pValueArr[nIndex] = new beans::PropertyValue(pProps[i]);
     }
 }
-/* -----------------23.06.99 13:08-------------------
 
- --------------------------------------------------*/
 const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperties() const
 {
     sal_uInt32 nPropCount = 0;
@@ -144,9 +131,7 @@ const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperti
     }
     return aRet;
 }
-/* -----------------23.06.99 13:06-------------------
 
- --------------------------------------------------*/
 void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSearch) const
 {
     //
@@ -480,9 +465,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, sal_Bool bIsValueSea
     delete pCasemapItem  ;
     delete pBrushItem  ;
 }
-/* -----------------23.06.99 14:18-------------------
 
- --------------------------------------------------*/
 sal_Bool    SwSearchProperties_Impl::HasAttributes() const
 {
     for(sal_uInt32 i = 0; i < nArrLen; i++)
@@ -491,9 +474,6 @@ sal_Bool    SwSearchProperties_Impl::HasAttributes() const
     return sal_False;
 }
 
-/*-- 14.12.98 13:07:10    ---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextSearch::SwXTextSearch() :
     pSearchProperties( new SwSearchProperties_Impl),
     pReplaceProperties( new SwSearchProperties_Impl),
@@ -512,25 +492,23 @@ SwXTextSearch::SwXTextSearch() :
     bIsValueSearch(sal_True)
 {
 }
-/*-- 14.12.98 13:07:12    ---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextSearch::~SwXTextSearch()
 {
     delete pSearchProperties;
     delete pReplaceProperties;
 }
-/* -----------------------------10.03.00 18:02--------------------------------
 
- ---------------------------------------------------------------------------*/
+namespace
+{
+    class theSwXTextSearchUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextSearchUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextSearch::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextSearchUnoTunnelId::get().getSeq();
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw(uno::RuntimeException)
 {
@@ -542,55 +520,43 @@ sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >&
     }
     return 0;
 }
-/*-- 14.12.98 13:07:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwXTextSearch::getSearchString(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return sSearchText;
 }
-/*-- 14.12.98 13:07:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::setSearchString(const OUString& rString)
                                         throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sSearchText = String(rString);
 }
-/*-- 14.12.98 13:07:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwXTextSearch::getReplaceString(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return sReplaceText;
 }
-/*-- 14.12.98 13:07:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::setReplaceString(const OUString& rReplaceString) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sReplaceText = String(rReplaceString);
 }
-/*-- 14.12.98 13:07:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextSearch::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
     static uno::Reference< beans::XPropertySetInfo >  aRef = m_pPropSet->getPropertySetInfo();
     return aRef;
 }
-/*-- 14.12.98 13:07:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     if(pEntry)
     {
@@ -618,19 +584,17 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
     else
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 }
-/*-- 14.12.98 13:07:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap()->getByName(rPropertyName);
     sal_Bool bSet = sal_False;
-    sal_Int16 nSet = 0;
     if(pEntry)
     {
+        sal_Int16 nSet = 0;
         switch(pEntry->nWID)
         {
             case WID_SEARCH_ALL :           bSet = bAll; goto SET_BOOL;
@@ -657,127 +621,93 @@ SET_UINT16:
         throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     return aRet;
 }
-/*-- 14.12.98 13:07:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
-/*-- 14.12.98 13:07:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
-/*-- 14.12.98 13:07:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
-/*-- 14.12.98 13:07:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
-/*-- 14.12.98 13:07:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXTextSearch::getValueSearch(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return bIsValueSearch;
 }
-/*-- 14.12.98 13:07:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::setValueSearch(sal_Bool ValueSearch_) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     bIsValueSearch = ValueSearch_;
 }
-/*-- 14.12.98 13:07:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyValue > SwXTextSearch::getSearchAttributes(void) throw( uno::RuntimeException )
 {
     return  pSearchProperties->GetProperties();
 }
-/*-- 14.12.98 13:07:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::setSearchAttributes(const uno::Sequence< beans::PropertyValue >& rSearchAttribs)
     throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException )
 {
     pSearchProperties->SetProperties(rSearchAttribs);
 }
-/*-- 14.12.98 13:07:16---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyValue > SwXTextSearch::getReplaceAttributes(void)
     throw( uno::RuntimeException )
 {
     return pReplaceProperties->GetProperties();
 }
-/*-- 14.12.98 13:07:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextSearch::setReplaceAttributes(const uno::Sequence< beans::PropertyValue >& rReplaceAttribs)
     throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException )
 {
     pReplaceProperties->SetProperties(rReplaceAttribs);
 }
-/* -----------------23.06.99 14:13-------------------
 
- --------------------------------------------------*/
 void    SwXTextSearch::FillSearchItemSet(SfxItemSet& rSet) const
 {
     pSearchProperties->FillItemSet(rSet, bIsValueSearch);
 }
-/* -----------------23.06.99 14:14-------------------
 
- --------------------------------------------------*/
 void    SwXTextSearch::FillReplaceItemSet(SfxItemSet& rSet) const
 {
     pReplaceProperties->FillItemSet(rSet, bIsValueSearch);
 }
-/* -----------------23.06.99 14:17-------------------
 
- --------------------------------------------------*/
 sal_Bool    SwXTextSearch::HasSearchAttributes() const
 {
     return pSearchProperties->HasAttributes();
 }
-/* -----------------23.06.99 14:17-------------------
 
- --------------------------------------------------*/
 sal_Bool    SwXTextSearch::HasReplaceAttributes() const
 {
     return pReplaceProperties->HasAttributes();
 }
-/* -----------------------------19.04.00 14:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SwXTextSearch::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXTextSearch");
 }
-/* -----------------------------19.04.00 14:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.util.SearchDescriptor") == rServiceName ||
             C2U("com.sun.star.util.ReplaceDescriptor") == rServiceName;
 }
-/* -----------------------------19.04.00 14:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aRet(2);
@@ -818,5 +748,4 @@ void SwXTextSearch::FillSearchOptions( util::SearchOptions& rSearchOpt ) const
 //      aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

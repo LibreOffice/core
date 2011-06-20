@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -619,7 +620,6 @@ long SwWrtShell::SttLeaveSelect(const Point *, sal_Bool )
     if(SwCrsrShell::HasSelection() && !IsSelTblCells() && bClearMark) {
         return 0;
     }
-//  if( IsSelTblCells() ) aSelTblLink.Call(this);
     ClearMark();
     return 1;
 }
@@ -773,7 +773,7 @@ void SwWrtShell::LeaveSelFrmMode()
 IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFmt )
 {
     const SwFrmFmt *pFmt = pFlyFmt ? (SwFrmFmt*)pFlyFmt : GetFlyFrmFmt();
-    ASSERT(pFmt, kein FrameFormat.);
+    OSL_ENSURE(pFmt, "no frame format");
     const SvxMacroItem &rFmtMac = pFmt->GetMacro();
 
     if(rFmtMac.HasMacro(SW_EVENT_OBJECT_SELECT))
@@ -881,7 +881,7 @@ long SwWrtShell::EndDrag(const Point * /*pPt*/, sal_Bool )
     return 1;
 }
 
-// --> FME 2004-07-30 #i32329# Enhanced table selection
+// #i32329# Enhanced table selection
 sal_Bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag )
 {
     MV_KONTEXT(this);
@@ -894,7 +894,6 @@ sal_Bool SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd, boo
     }
     return sal_False;
 }
-// <--
 
 /*------------------------------------------------------------------------
  Beschreibung:  Selektion einer Tabellenzeile / Spalte
@@ -1070,3 +1069,4 @@ sal_Bool SwWrtShell::SelectNextPrevHyperlink( sal_Bool bNext )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

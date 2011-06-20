@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,23 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
-#ifndef _SFX_INIMGR_HXX
-#endif
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brshitem.hxx>
 
-
 #include <tools/resid.hxx>
 #include <fmtornt.hxx>
-#include <swtypes.hxx>      // Leerstring
+#include <swtypes.hxx>      // empty string
 #include <wrtsh.hxx>
 #include <uinums.hxx>
 #include <poolfmt.hxx>
@@ -66,21 +61,16 @@ using namespace ::com::sun::star;
 #define NUMRULE_FILENAME "numrule.cfg"
 #define CHAPTER_FILENAME "chapter.cfg"
 
-/*------------------------------------------------------------------------
- Beschreibung:  Ops. zum Laden / Speichern
-------------------------------------------------------------------------*/
-
-
 SV_IMPL_PTRARR( _SwNumFmtsAttrs, SfxPoolItem* )
 
 
 // SwNumRulesWithName ----------------------------------------------------
 // PUBLIC METHODES -------------------------------------------------------
 /*------------------------------------------------------------------------
- Beschreibung:  Speichern einer Regel
- Parameter:     rCopy -- die zu speichernde Regel
-                nIdx -- Position, an der die Regel zu speichern ist.
-                        Eine alte Regel an dieser Position wird ueberschrieben.
+ Description:   Saving a rule
+ Parameter:     rCopy -- the rule to save
+                    nIdx -- position, where the rule is to be saved.
+                        An old rule at that position will be overwritten.
 ------------------------------------------------------------------------*/
 
 SwBaseNumRules::SwBaseNumRules( const String& rFileName )
@@ -92,9 +82,6 @@ SwBaseNumRules::SwBaseNumRules( const String& rFileName )
     Init();
 }
 
-/*-----------------26.06.97 08.30-------------------
-
---------------------------------------------------*/
 SwBaseNumRules::~SwBaseNumRules()
 {
     if( bModified )
@@ -114,9 +101,6 @@ SwBaseNumRules::~SwBaseNumRules()
         delete pNumRules[i];
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 void  SwBaseNumRules::Init()
 {
     for(sal_uInt16 i = 0; i < nMaxRules; ++i )
@@ -131,29 +115,21 @@ void  SwBaseNumRules::Init()
     }
 }
 
-/*-----------------26.06.97 08.30-------------------
-
---------------------------------------------------*/
-
 void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
 {
-    ASSERT(nIdx < nMaxRules, Array der NumRules ueberindiziert.);
+    OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     if( !pNumRules[nIdx] )
         pNumRules[nIdx] = new SwNumRulesWithName( rCopy );
     else
         *pNumRules[nIdx] = rCopy;
 }
 
-// PROTECTED METHODES ----------------------------------------------------
-/*------------------------------------------------------------------------
- Beschreibung:  Speichern
-------------------------------------------------------------------------*/
-
-sal_Bool /**/ SwBaseNumRules::Store(SvStream &rStream)
+// PROTECTED METHODS ----------------------------------------------------
+sal_Bool SwBaseNumRules::Store(SvStream &rStream)
 {
     rStream << ACT_NUM_VERSION;
-        // Schreiben, welche Positionen durch eine Regel belegt sind
-        // Anschliessend Schreiben der einzelnen Rules
+        // Write, what positions are occupied by a rule
+        // Then write each of the rules
     for(sal_uInt16 i = 0; i < nMaxRules; ++i)
     {
         if(pNumRules[i])
@@ -167,24 +143,17 @@ sal_Bool /**/ SwBaseNumRules::Store(SvStream &rStream)
     return sal_True;
 }
 
-
-
-/*------------------------------------------------------------------------
- Beschreibung:  Speichern / Laden
-------------------------------------------------------------------------*/
-
-
 int SwBaseNumRules::Load(SvStream &rStream)
 {
     int         rc = 0;
 
     rStream >> nVersion;
 
-    // wegen eines kleinen aber schweren Fehlers schreibt die PreFinal die
-    // gleiche VERSION_40A wie das SP2 #55402#
+    // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
+    // #55402#
     if(VERSION_40A == nVersion)
     {
-        DBG_ERROR("Version 364 ist nicht eindeutig #55402#");
+        OSL_FAIL("Version 364 is not clear #55402#");
     }
     else if( VERSION_30B == nVersion || VERSION_31B == nVersion ||
              ACT_NUM_VERSION >= nVersion )
@@ -205,34 +174,20 @@ int SwBaseNumRules::Load(SvStream &rStream)
     return rc;
 }
 
-/*-----------------26.06.97 08.34-------------------
-
---------------------------------------------------*/
-
-/*------------------------------------------------------------------------*/
-
-
 SwChapterNumRules::SwChapterNumRules() :
     SwBaseNumRules(C2S(CHAPTER_FILENAME))
 {
 }
 
-/*------------------------------------------------------------------------*/
-
  SwChapterNumRules::~SwChapterNumRules()
 {
 }
 
-/*-----------------26.06.97 08.23-------------------
-
---------------------------------------------------*/
 void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
 {
     bModified = sal_True;
     SwBaseNumRules::ApplyNumRules(rCopy, nIdx);
 }
-
-/*------------------------------------------------------------------------*/
 
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
                                         const String &rName )
@@ -248,28 +203,18 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRulesWithName& rCopy )
 {
     memset( aFmts, 0, sizeof( aFmts ));
     *this = rCopy;
 }
 
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 SwNumRulesWithName::~SwNumRulesWithName()
 {
     for( int n = 0; n < MAXLEVEL; ++n )
         delete aFmts[ n ];
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCopy)
 {
     if( this != &rCopy )
@@ -289,9 +234,6 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
     return *this;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 {
     CharSet eEncoding = gsl_getSystemTextEncoding();
@@ -302,10 +244,9 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
     {
         if( VERSION_30B == nVersion )
             c = 1;
-        // wegen eines kleinen aber schweren Fehlers schreibt die PreFinal die
-        // gleiche VERSION_40A wie das SP2 #55402#
+        // due to a small but serious mistake, PreFinal writes the same VERION_40A as SP2
+        // #55402#
         else if(nVersion < VERSION_40A && n > 5)
-//      else if(nVersion < VERSION_50A && n > 5)
             c = 0;
         else
             rStream >> c;
@@ -317,16 +258,10 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 {
-    // --> OD 2008-02-11 #newlistlevelattrs#
-    // --> OD 2008-06-06 #i89178#
+    // #i89178#
     rChg = SwNumRule( aName, numfunc::GetDefaultPositionAndSpaceMode() );
-    // <--
     rChg.SetAutoRule( sal_False );
     _SwNumFmtGlobal* pFmt;
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -338,9 +273,6 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
         }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 void SwNumRulesWithName::Store( SvStream &rStream )
 {
     CharSet eEncoding = gsl_getSystemTextEncoding();
@@ -358,15 +290,11 @@ void SwNumRulesWithName::Store( SvStream &rStream )
             rStream << (char)0;
     }
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
     : aFmt( rFmt ), nCharPoolId( USHRT_MAX )
 {
-    // relative Abstaende ?????
+    // relative gaps?????
 
     SwCharFmt* pFmt = rFmt.GetCharFmt();
     if( pFmt )
@@ -390,10 +318,6 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const _SwNumFmtGlobal& rFmt )
     :
     aFmt( rFmt.aFmt ),
@@ -404,10 +328,6 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const _SwNumFmtGlobal& rFm
         aItems.Insert( rFmt.aItems[ --n ]->Clone(), aItems.Count() );
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
                                                         sal_uInt16 nVersion )
     : nCharPoolId( USHRT_MAX )
@@ -416,7 +336,6 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     {
         sal_uInt16 nUS;
         sal_Char cChar;
-        short nShort;
         sal_Bool bFlag;
         String sStr;
 
@@ -445,8 +364,9 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             rStream >> nL;          aFmt.SetLSpace( lNumIndent );
             rStream >> nL;          aFmt.SetFirstLineOffset( (short)nL );
         }
-        else                // alter StartWert war ein Byte
+        else                // old start-value was a Byte
         {
+            short nShort;
             rStream >> nUS;         aFmt.SetStart( nUS );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
@@ -538,18 +458,9 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
     }
 }
 
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 SwNumRulesWithName::_SwNumFmtGlobal::~_SwNumFmtGlobal()
 {
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 {
@@ -597,14 +508,14 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     {
         SfxPoolItem* pItem = aItems[ --n ];
         sal_uInt16 nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_50 );
-        ASSERT( nIVers != USHRT_MAX,
+        OSL_ENSURE( nIVers != USHRT_MAX,
                 "Was'n das: Item-Version USHRT_MAX in der aktuellen Version" );
         rStream << pItem->Which()
                 << nIVers;
         pItem->Store( rStream, nIVers );
     }
 
-    // Erweiterungen fuer Version 40A
+    // Extensions for 40A
 
     if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
@@ -629,23 +540,19 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     }
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
                             SwNumFmt& rNew ) const
 {
     SwCharFmt* pFmt = 0;
     if( sCharFmtName.Len() )
     {
-        // suche erstmal ueber den Namen
+        // at first, look for the name
         sal_uInt16 nArrLen = rSh.GetCharFmtCount();
         for( sal_uInt16 i = 1; i < nArrLen; ++i )
         {
             pFmt = &rSh.GetCharFmt( i );
             if( COMPARE_EQUAL == pFmt->GetName().CompareTo( sCharFmtName ))
-                // ist vorhanden, also belasse die Attribute wie sie sind!
+                // exists, so leave attributes as they are!
                 break;
             pFmt = 0;
         }
@@ -660,7 +567,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
             else
                 pFmt = rSh.GetCharFmtFromPool( nCharPoolId );
 
-            if( !pFmt->GetDepends() )       // Attribute setzen
+            if( !pFmt->GetDepends() )       // set attributes
                 for( sal_uInt16 n = aItems.Count(); n; )
                     pFmt->SetFmtAttr( *aItems[ --n ] );
         }
@@ -671,3 +578,4 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
         ((SwNumFmt&)aFmt).SetCharFmt( 0 );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

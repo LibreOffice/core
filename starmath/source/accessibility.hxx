@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,18 +33,13 @@
 #ifndef _ACCESSIBILITY_HXX_
 #define _ACCESSIBILITY_HXX_
 
-//#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-//#include <com/sun/star/lang/XComponent.hpp>
-//#endif
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#ifndef _COM_SUN_STAR_lang_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -85,7 +81,6 @@ SmGraphicAccessibleBaseClass;
 class SmGraphicAccessible :
     public SmGraphicAccessibleBaseClass
 {
-    //vos::ORefCount    aRefCount;  // number of references to object
     osl::Mutex                          aListenerMutex;
     String                              aAccName;
     /// client id in the AccessibleEventNotifier queue
@@ -349,11 +344,6 @@ class SmEditAccessible :
     SmEditAccessible( const SmEditAccessible & );
     SmEditAccessible & operator = ( const SmEditAccessible & );
 
-protected:
-#ifdef TL_NOT_YET_USED
-    SmDocShell *    GetDoc_Impl();
-#endif //TL_NOT_YET_USED
-
 public:
     SmEditAccessible( SmEditWindow *pEditWin );
     virtual ~SmEditAccessible();
@@ -409,3 +399,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,7 +1,9 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "vbafont.hxx"
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <ooo/vba/word/WdUnderline.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <sal/macros.h>
 #include <ooo/vba/word/WdColorIndex.hpp>
 
 using namespace ::ooo::vba;
@@ -37,7 +39,7 @@ static MapPair UnderLineTable[] = {
         { word::WdUnderline::wdUnderlineDashLongHeavy, com::sun::star::awt::FontUnderline::BOLDLONGDASH },
 };
 
-typedef std::hash_map< sal_Int32, sal_Int32 > ConstToConst;
+typedef boost::unordered_map< sal_Int32, sal_Int32 > ConstToConst;
 class UnderLineMapper
 {
     ConstToConst MSO2OOO;
@@ -45,7 +47,7 @@ class UnderLineMapper
 private:
     UnderLineMapper()
     {
-        sal_Int32 nLen = sizeof( UnderLineTable )/ sizeof( UnderLineTable[0] );
+        sal_Int32 nLen = SAL_N_ELEMENTS( UnderLineTable );
 
         for ( sal_Int32 index=0; index<nLen; ++index )
         {
@@ -214,3 +216,4 @@ SwVbaFont::getServiceNames()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

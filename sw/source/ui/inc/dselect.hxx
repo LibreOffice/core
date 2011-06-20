@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 
 /*************************************************************************
 |*
-|* Rechteck zeichnen
+|* draw rectangle
 |*
 \************************************************************************/
 
@@ -40,13 +41,14 @@ class DrawSelection : public SwDrawBase
  public:
     DrawSelection(SwWrtShell* pSh, SwEditWin* pWin, SwView* pView);
 
-                                       // Mouse- & Key-Events
+                                       // mouse- & key events
     virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
+    virtual void Activate(const sal_uInt16 nSlotId);    // activate function
 };
 
 
 
 #endif      // _SW_DSELECT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

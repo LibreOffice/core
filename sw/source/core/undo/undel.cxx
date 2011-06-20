@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include <UndoDelete.hxx>
-
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/brkitem.hxx>
@@ -54,13 +54,6 @@
 #include <fmtfld.hxx>
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
-
-// #include <editeng/svxacorr.hxx>
-// #include <comphelper/processfactory.hxx>
-// #include <editeng/unolingu.hxx>
-// #include <unotools/localedatawrapper.hxx>
-
-// using namespace comphelper;
 
 
 // DELETE
@@ -143,7 +136,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
     // Step 1. deletion/record of content indizes
     if( bDelFullPara )
     {
-        ASSERT( rPam.HasMark(), "PaM ohne Mark" );
+        OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                         DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
@@ -882,7 +875,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( bDelFullPara )
         {
-            ASSERT( rPam.HasMark(), "PaM ohne Mark" );
+            OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
@@ -898,7 +891,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         if( bDelFullPara )
         {
-            ASSERT( rPam.HasMark(), "PaM ohne Mark" );
+            OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
@@ -994,3 +987,5 @@ void SwUndoDelete::SetTableName(const String & rName)
 {
     sTableName = rName;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

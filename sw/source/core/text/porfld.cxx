@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <viewopt.hxx>  // SwViewOptions
-#include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <porfld.hxx>
@@ -72,10 +72,9 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
     {
         pNewFnt = new SwFont( *pFnt );
     }
-    // --> OD 2009-11-25 #i107143#
+    // #i107143#
     // pass placeholder property to created <SwFldPortion> instance.
     SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt, bPlaceHolder );
-    // <--
     pClone->SetNextOffset( nNextOffset );
     pClone->m_bNoLength = this->m_bNoLength;
     return pClone;
@@ -83,7 +82,7 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
 
 void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 {
-    ASSERT( pFld, "TakeNextOffset: Missing Source" );
+    OSL_ENSURE( pFld, "TakeNextOffset: Missing Source" );
     nNextOffset = pFld->GetNextOffset();
     aExpand.Erase( 0, nNextOffset );
     bFollow = sal_True;
@@ -243,12 +242,10 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 
         // #i16354# Change script type for RTL text to CTL.
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        // --> OD 2009-01-29 #i98418#
-//        const sal_uInt8 nFldDir = IsNumberPortion() ?
+        // #i98418#
         const sal_uInt8 nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
-        // <--
         if ( UBIDI_RTL == nFldDir )
         {
             UErrorCode nError = U_ZERO_ERROR;
@@ -283,11 +280,10 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 nTmp = SW_CTL;
         }
 
-        // --> OD 2009-01-29 #i98418#
+        // #i98418#
         // keep determined script type for footnote portions as preferred script type.
         // For footnote portions a font can not be created directly - see footnote
         // portion format method.
-//         if( !IsFtnPortion() && nTmp != nActual )
         if ( IsFtnPortion() )
         {
             dynamic_cast<SwFtnPortion*>(this)->SetPreferredScriptType( nTmp );
@@ -298,7 +294,6 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 pFnt = new SwFont( *rInf.GetFont() );
             pFnt->SetActual( nTmp );
         }
-        // <--
     }
 }
 
@@ -398,20 +393,16 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
                 case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 case CHAR_SOFTHYPHEN:
                 case CHAR_HARDBLANK:
-                // --> FME 2006-01-11 #i59759# Erase additional control
+                // #i59759# Erase additional control
                 // characters from field string, otherwise we get stuck in
                 // a loop.
                 case CHAR_ZWSP :
                 case CHAR_ZWNBSP :
-        //        case CHAR_RLM :
-        //        case CHAR_LRM :
-                // <--
-                // --> OD 2010-06-03 #i111750#
+                // #i111750#
                 // - Erasing further control characters from field string in
                 // to avoid loop.
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
-                // <--
                 {
                     aNew.Erase( 0, 1 );
                     ++nNextOfst;
@@ -454,7 +445,7 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     SwFontSave aSave( rInf, pFnt );
 
-    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
+    OSL_ENSURE( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
     if( Width() && ( !bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
         // Dies ist eine freizuegige Auslegung der Hintergrundbelegung ...
@@ -538,7 +529,6 @@ sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt 
  *                      class SwNumberPortion
  *************************************************************************/
 
-// --> OD 2008-01-23 #newlistlevelattrs#
 SwNumberPortion::SwNumberPortion( const XubString &rExpand,
                                   SwFont *pFont,
                                   const sal_Bool bLft,
@@ -548,9 +538,7 @@ SwNumberPortion::SwNumberPortion( const XubString &rExpand,
         : SwFldPortion( rExpand, pFont ),
           nFixWidth(0),
           nMinDist( nMinDst ),
-          // --> OD 2008-01-23 #newlistlevelattrs#
           mbLabelAlignmentPosAndSpaceModeActive( bLabelAlignmentPosAndSpaceModeActive )
-          // <--
 {
     SetWhichPor( POR_NUMBER );
     SetLeft( bLft );
@@ -568,10 +556,9 @@ SwFldPortion *SwNumberPortion::Clone( const XubString &rExpand ) const
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
         pNewFnt = new SwFont( *pFnt );
-    // --> OD 2008-01-23 #newlistlevelattrs#
+
     return new SwNumberPortion( rExpand, pNewFnt, IsLeft(), IsCenter(),
                                 nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
-    // <--
 }
 
 /*************************************************************************
@@ -594,16 +581,15 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
     if( rInf.IsNumDone() )
     {
 //        SetAscent( rInf.GetAscent() );
-        ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" );
+        OSL_ENSURE( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
         long nDiff( 0 );
-        // --> OD 2008-01-23 #newlistlevelattrs#
+
         if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
             if ( !rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) &&
-                 // --> FME 2004-08-13 #i32902#
+                 // #i32902#
                  !IsFtnNumPortion() )
-                 // <--
             {
                 nDiff = rInf.Left()
                     + rInf.GetTxtFrm()->GetTxtNode()->
@@ -616,7 +602,6 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
                 nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
             }
         }
-        // <--
         // Ein Vorschlag von Juergen und Volkmar:
         // Der Textteil hinter der Numerierung sollte immer
         // mindestens beim linken Rand beginnen.
@@ -770,16 +755,15 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( bPaintSpace && nOldWidth > nSpaceOffs )
             {
                 SwTxtPaintInfo aInf( rInf );
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+static sal_Char const sDoubleSpace[] = "  ";
                 aInf.X( aInf.X() + nSpaceOffs );
 
-                // --> FME 2005-08-12 #i53199# Adjust position of underline:
+                // #i53199# Adjust position of underline:
                 if ( rInf.GetUnderFnt() )
                 {
                     const Point aNewPos( aInf.GetPos().X(), rInf.GetUnderFnt()->GetPos().Y() );
                     rInf.GetUnderFnt()->SetPos( aNewPos );
                 }
-                // <--
 
                 pThis->Width( nOldWidth - nSpaceOffs + 12 );
                 {
@@ -797,7 +781,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
  *                      class SwBulletPortion
  *************************************************************************/
 
-// --> OD 2008-01-23 #newlistlevelattrs#
 SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
                                   const XubString& rBulletFollowedBy,
                                   SwFont *pFont,
@@ -808,7 +791,6 @@ SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
     : SwNumberPortion( XubString( rBulletFollowedBy ).Insert( cBullet, 0 ) ,
                        pFont, bLft, bCntr, nMinDst,
                        bLabelAlignmentPosAndSpaceModeActive )
-// <--
 {
     SetWhichPor( POR_BULLET );
 }
@@ -819,7 +801,6 @@ SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
 
 #define GRFNUM_SECURE 10
 
-// --> OD 2008-01-23 #newlistlevelattrs#
 SwGrfNumPortion::SwGrfNumPortion(
         SwFrm*,
         const XubString& rGraphicFollowedBy,
@@ -829,7 +810,6 @@ SwGrfNumPortion::SwGrfNumPortion(
         const bool bLabelAlignmentPosAndSpaceModeActive ) :
     SwNumberPortion( rGraphicFollowedBy, NULL, bLft, bCntr, nMinDst,
                      bLabelAlignmentPosAndSpaceModeActive ),
-// <--
     pBrush( new SvxBrushItem(RES_BACKGROUND) ), nId( 0 )
 {
     SetWhichPor( POR_GRFNUM );
@@ -877,7 +857,6 @@ void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
 sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
 {
     SetHide( sal_False );
-    // --> OD 2008-01-29 #newlistlevelattrs#
 //    Width( nFixWidth );
     KSHORT nFollowedByWidth( 0 );
     if ( mbLabelAlignmentPosAndSpaceModeActive )
@@ -887,7 +866,6 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 0 );
     }
     Width( nFixWidth + nFollowedByWidth );
-    // <--
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     const sal_Bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
@@ -907,12 +885,10 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
         }
     }
     rInf.SetNumDone( sal_True );
-    // --> OD 2008-01-23 #newlistlevelattrs#
 //    long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
     long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0
                  : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
-    // <--
     // Ein Vorschlag von Juergen und Volkmar:
     // Der Textteil hinter der Numerierung sollte immer
     // mindestens beim linken Rand beginnen.
@@ -957,11 +933,9 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     long nTmpWidth = Max( (long)0, (long)(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
-    // --> OD 2008-02-05 #newlistlevelattrs#
     const sal_Bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
                               ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
                               ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
-    // <--
 
     if( nFixWidth < Width() && !bTmpLeft )
     {
@@ -1017,9 +991,8 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
             else if ( pViewShell &&
                      !pViewShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                      !pViewShell->IsPreView() &&
-                      // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export.
+                      // #i9684# Stop animation during printing/pdf export.
                       pViewShell->GetWin() )
-                      // <--
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StartAnimation(
                     (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );
@@ -1092,7 +1065,7 @@ void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
 
 void SwTxtFrm::StopAnimation( OutputDevice* pOut )
 {
-    ASSERT( HasAnimation(), "SwTxtFrm::StopAnimation: Which Animation?" );
+    OSL_ENSURE( HasAnimation(), "SwTxtFrm::StopAnimation: Which Animation?" );
     if( HasPara() )
     {
         SwLineLayout *pLine = GetPara();
@@ -1155,7 +1128,7 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
 
 void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
+    OSL_ENSURE( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
     if( Width() )
     {
         rInf.DrawBackBrush( *this );
@@ -1168,7 +1141,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         sal_uInt16 nCount = aExpand.Len();
         if( !nCount )
             return;
-        ASSERT( nCount < 7, "Too much combined characters" );
+        OSL_ENSURE( nCount < 7, "Too much combined characters" );
 
         // the first character of the second row
         sal_uInt16 nTop = ( nCount + 1 ) / 2;
@@ -1220,7 +1193,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         return sal_False;
     }
 
-    ASSERT( nCount < 7, "Too much combined characters" );
+    OSL_ENSURE( nCount < 7, "Too much combined characters" );
     // If there are leading "weak"-scripttyped characters in this portion,
     // they get the actual scripttype.
     sal_uInt16 i = 0;
@@ -1232,7 +1205,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         i = 0;
         while( i < aExpand.Len() )
         {
-            ASSERT( aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
+            OSL_ENSURE( aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
             if( !aWidth[ aScrType[i] ] )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );
@@ -1383,3 +1356,5 @@ KSHORT SwCombinedPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
         return 0;   // the combined portion doesn't fit.
     return SwFldPortion::GetViewWidth( rInf );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

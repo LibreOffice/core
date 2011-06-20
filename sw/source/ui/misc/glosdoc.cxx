@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,15 +41,12 @@
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <svl/urihelper.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <swtypes.hxx>
-#include <errhdl.hxx>       // ASSERT
 #include <uitool.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
@@ -56,18 +54,12 @@
 
 #include <unoatxt.hxx>
 #include <swerror.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-
 // PUBLIC METHODES -------------------------------------------------------
-/* -----------------------------08.02.00 15:54--------------------------------
-
- ---------------------------------------------------------------------------*/
 String lcl_CheckFileName( const String& rNewFilePath,
                           const String& rNewGroupName )
 {
@@ -111,32 +103,31 @@ String lcl_CheckFileName( const String& rNewFilePath,
     }
     return sRet;
 }
+
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert den Namen der Default-Gruppe
+    Description: supplies the default group's name
 ------------------------------------------------------------------------*/
-
-
 String  SwGlossaries::GetDefName()
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "standard" ));
 
 }
+
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert die Anzahl der Textbausteingruppen
+    Description: supplies the number of text block groups
 ------------------------------------------------------------------------*/
-
-
 sal_uInt16 SwGlossaries::GetGroupCnt()
 {
     return  GetNameList()->Count();
 }
+
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert den Gruppennamen
+    Description: supplies the group's name
 ------------------------------------------------------------------------*/
 sal_Bool SwGlossaries::FindGroupName(String & rGroup)
 {
-    //  enthaelt der Gruppenname keinen Pfad, kann hier ein passender
-    // Gruppeneintrag gesucht werden;
+    // if the group name doesn't contain a path, a suitable group entry
+    // can the searched for here;
     sal_uInt16 nCount = GetGroupCnt();
     sal_uInt16 i;
     for(i= 0; i < nCount; i++)
@@ -148,8 +139,8 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
             return sal_True;
         }
     }
-    //man darf zweimal suchen, denn bei mehreren Verzeichnissen koennte
-    //der caseinsensitive Name mehrfach auftreten
+    // you can search two times because for more directories the case sensitive
+    // name could occur multiple times
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     for(i = 0; i < nCount; i++)
     {
@@ -165,18 +156,13 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
     }
     return sal_False;
 }
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 
 String SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
 {
-    ASSERT(nGroupId < m_pGlosArr->Count(), Textbausteinarray ueberindiziert);
+    OSL_ENSURE(nGroupId < m_pGlosArr->Count(), "Textbausteinarray ueberindiziert");
     return *(*m_pGlosArr)[nGroupId];
 }
-/* -----------------------------08.02.00 13:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 String  SwGlossaries::GetGroupTitle( const String& rGroupName )
 {
     String  sRet;
@@ -193,13 +179,12 @@ String  SwGlossaries::GetGroupTitle( const String& rGroupName )
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Liefert das Textbaustein-Dokument der Gruppe rName
+    Description: supplies the group rName's text block document
 ------------------------------------------------------------------------*/
-
 SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
                                         sal_Bool bCreate) const
 {
-        // gfs. in die Liste der Textbausteine eintragen
+        // insert to the list of text blocks if applicable
     if(bCreate && m_pGlosArr)
     {
         const String aName(rName);
@@ -213,7 +198,7 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
                 break;
         }
         if(i == nCount)
-        {   // Baustein nicht in der Liste
+        {   // block not in the list
             String *pTmp = new String(aName);
             m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
         }
@@ -222,19 +207,17 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Loeschen Textblock
+ Description:   delete a text block
 ------------------------------------------------------------------------*/
-
 void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
     delete pBlock;
 }
+
 /*------------------------------------------------------------------------
-    Beschreibung:   Erzeugt ein neues Dokument mit dem Gruppenname
-                    Wird temp. auch als File angelegt, damit die
-                    Gruppen auch spaeter (ohne Zugriff) vorhanden sind.
+    Description:   Creates a new document with the group name. temporarly
+                   also created as file so that groups remain there later
+                   (without access).
 ------------------------------------------------------------------------*/
-
-
 sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 {
     sal_uInt16 nNewPath = (sal_uInt16)rGroupName.GetToken(1, GLOS_DELIM).ToInt32();
@@ -256,9 +239,7 @@ sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
     }
     return sal_False;
 }
-/* -----------------23.11.98 13:13-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool    SwGlossaries::RenameGroupDoc(
     const String& rOldGroup, String& rNewGroup, const String& rNewTitle )
 {
@@ -271,7 +252,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
         sOldFileURL += SwGlossaries::GetExtension();
         sal_Bool bExist = FStatHelper::IsDocument( sOldFileURL );
-        DBG_ASSERT(bExist, "Gruppe existiert nicht!");
+        OSL_ENSURE(bExist, "group doesn't exist!");
         if(bExist)
         {
             sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
@@ -280,14 +261,13 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                 String sNewFilePath(*(*m_pPathArr)[nNewPath]);
                 String sNewFileName = lcl_CheckFileName(
                                     sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
-                //String aTmp( rNewGroup.GetToken(0, GLOS_DELIM));
                 const sal_uInt16 nFileNameLen = sNewFileName.Len();
                 sNewFileName += SwGlossaries::GetExtension();
                 String sTempNewFilePath(sNewFilePath);
                 sTempNewFilePath += INET_PATH_TOKEN;
                 sTempNewFilePath += sNewFileName ;
                 bExist = FStatHelper::IsDocument( sTempNewFilePath );
-                DBG_ASSERT(!bExist, "Gruppe existiert bereits!");
+                OSL_ENSURE(!bExist, "group already exists!");
                 if(!bExist)
                 {
                     sal_Bool bCopyCompleted = SWUnoHelper::UCB_CopyFile(
@@ -320,10 +300,8 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Loescht eine Textbausteingruppe
+    Description: Deletes a text block group
 ------------------------------------------------------------------------*/
-
-
 sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 {
     sal_uInt16 nPath = (sal_uInt16)rName.GetToken(1, GLOS_DELIM).ToInt32();
@@ -338,19 +316,18 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
     aTmp += SwGlossaries::GetExtension();
     sFileURL += INET_PATH_TOKEN;
     sFileURL += aTmp;
-        // Auch, wenn das File nicht existiert, muss es aus der Liste
-        // der Textbausteinbereiche entfernt werden
-    // Kein && wegen CFfront
+        // Even if the file doesn't exist it hast to be deleted from
+        // the list of text block regions
+    // no && because of CFfront
     sal_Bool bRemoved = SWUnoHelper::UCB_DeleteFile( sFileURL );
-    DBG_ASSERT(bRemoved, "file has not been removed");
+    OSL_ENSURE(bRemoved, "file has not been removed");
     RemoveFileFromList( aName );
     return bRemoved;
 }
+
 /*------------------------------------------------------------------------
-    Beschreibung: DTOR
+    Description: DTOR
 ------------------------------------------------------------------------*/
-
-
 SwGlossaries::~SwGlossaries()
 {
     sal_uInt16 nCount = m_pGlosArr? m_pGlosArr->Count() : 0;
@@ -372,11 +349,10 @@ SwGlossaries::~SwGlossaries()
 
     InvalidateUNOOjects();
 }
+
 /*------------------------------------------------------------------------
-    Beschreibung: Bausteindokument einlesen
+    Description: read a block document
 ------------------------------------------------------------------------*/
-
-
 SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) const
 {
     sal_uInt16 nPath = (sal_uInt16)rName.GetToken(1, GLOS_DELIM).ToInt32();
@@ -412,9 +388,8 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Zugriff auf die Liste der Name; diese wird gfs. eingelesen
+    Description: access to the list of names; read in if applicable
 ------------------------------------------------------------------------*/
-
 SvStrings* SwGlossaries::GetNameList()
 {
     if( !m_pGlosArr )
@@ -442,7 +417,7 @@ SvStrings* SwGlossaries::GetNameList()
         }
         if(!m_pGlosArr->Count())
         {
-            // Der Standard-Baustein steht im ersten Teil des Pfades
+            // the standard block is inside of the path's first part
             String *pTmp = new String( SwGlossaries::GetDefName() );
             (*pTmp) += GLOS_DELIM;
             (*pTmp) += '0';
@@ -453,10 +428,8 @@ SvStrings* SwGlossaries::GetNameList()
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: CTOR
+    Description: CTOR
 ------------------------------------------------------------------------*/
-
-
 SwGlossaries::SwGlossaries() :
     m_pPathArr(0),
     m_pGlosArr(0)
@@ -466,11 +439,11 @@ SwGlossaries::SwGlossaries() :
 }
 
 /*------------------------------------------------------------------------
-    Beschreibung: Neuen Pfad einstellen und internes Array neu aufbauen
+    Description: set new path and recreate internal array
 ------------------------------------------------------------------------*/
 
-/* -----------------21.01.99 15:36-------------------
-*   #61050# Doppelte Pfade fuehren zu Verwirrung - als raus damit
+/* --------------------------------------------------
+*   #61050# double paths cause irritation - get rid of it
  * --------------------------------------------------*/
 sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
 {
@@ -526,7 +499,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             (m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath)) )
         {
             m_sOldErrPath = m_sErrPath;
-            // Falscher Pfad, d.h. AutoText-Verzeichnis existiert nicht
+            // wrong path, that means AutoText directory doesn't exist
 
             ErrorHandler::HandleError( *new StringErrorInfo(
                                     ERR_AUTOPATH_ERROR, m_sErrPath,
@@ -548,26 +521,17 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
     }
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-
 void SwGlossaries::ShowError()
 {
     sal_uInt32 nPathError = *new StringErrorInfo(ERR_AUTOPATH_ERROR,
                                             m_sErrPath, ERRCODE_BUTTON_OK );
     ErrorHandler::HandleError( nPathError );
 }
-/* -----------------------------09.02.00 11:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwGlossaries::GetExtension()
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".bau" ));
 }
-
-
 
 void SwGlossaries::RemoveFileFromList( const String& rGroup )
 {
@@ -630,11 +594,10 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
     }
 }
 
-
 String SwGlossaries::GetCompleteGroupName( const rtl::OUString& GroupName )
 {
     sal_uInt16 nCount = GetGroupCnt();
-    //wenn der Gruppenname intern erzeugt wurde, dann steht auch hier der Pfad drin
+    // when the group name was created internally the path is here as well
     String sGroup(GroupName);
     String sGroupName(sGroup.GetToken(0, GLOS_DELIM));
     String sPath = sGroup.GetToken(1, GLOS_DELIM);
@@ -649,7 +612,6 @@ String SwGlossaries::GetCompleteGroupName( const rtl::OUString& GroupName )
     }
     return aEmptyStr;
 }
-
 
 void SwGlossaries::InvalidateUNOOjects()
 {
@@ -684,9 +646,6 @@ void SwGlossaries::InvalidateUNOOjects()
     UnoAutoTextEntries aTmpe = UnoAutoTextEntries();
     m_aGlossaryEntries.swap( aTmpe );
 }
-
-//-----------------------------------------------------------------------
-//--- 03.03.2003 14:15:32 -----------------------------------------------
 
 Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::OUString& _rGroupName, bool _bCreate )
 {
@@ -741,9 +700,6 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::O
 
     return xGroup;
 }
-
-//-----------------------------------------------------------------------
-//--- 03.03.2003 13:46:06 -----------------------------------------------
 
 Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& _rCompleteGroupName, const ::rtl::OUString& _rGroupName, const ::rtl::OUString& _rEntryName,
     bool _bCreate )
@@ -802,5 +758,4 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& 
     return xReturn;
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

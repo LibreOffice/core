@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,6 +61,7 @@
 #include <editeng/svxacorr.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
@@ -72,8 +74,8 @@
 #include <swunodef.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
-#include <view.hxx>         // fuer die aktuelle Sicht
-#include <docsh.hxx>        // Dokumenterzeugung
+#include <view.hxx>         // for the current view
+#include <docsh.hxx>        // creation of documents
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <viewopt.hxx>
@@ -110,16 +112,13 @@
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#ifdef FUTURE_VBA
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-#endif
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <sfx2/fcontnr.hxx>
 
-#include "swabstdlg.hxx"
 #include "dialog.hrc"
 #include "swabstdlg.hxx"
 
@@ -134,24 +133,24 @@ using namespace ::sfx2;
 extern sal_Bool FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
 /*--------------------------------------------------------------------
-    Beschreibung:   DocInfo kreieren (virtuell)
+    Description:    create DocInfo (virtual)
  --------------------------------------------------------------------*/
 
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
-    //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
-    //aus dem Doc-Manager
+    //only with statistics, when this document is being shown, not
+    //from within the Doc-Manager
     SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();
     if( pDocSh == this )
     {
-        //Nicht fuer SourceView.
+        //Not for SourceView.
         SfxViewShell *pVSh = SfxViewShell::Current();
         if ( pVSh && !pVSh->ISA(SwSrcView) )
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
             pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),0);
         }
     }
@@ -197,7 +196,7 @@ void    SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
 }
 // End of disabled "multiple layout"
 
-/// update text fields on document properties changes
+// update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
 {
     if ( !pDoc ) return;
@@ -219,7 +218,6 @@ void SwDocShell::DoFlushDocInfo()
     }
 }
 
-#ifdef FUTURE_VBA
 void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
@@ -238,31 +236,26 @@ void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventP
         }
     }
 }
-#endif
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Benachrichtigung bei geaenderter DocInfo
+    Description: Notification on DocInfo changes
  --------------------------------------------------------------------*/
 
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( !pDoc )
     {
-//MA: Kommt bei der OLE-Registration vor!
-//      ASSERT( !this, "DocShell ist nicht richtig initialisiert!" );
         return ;
     }
 
-#ifdef FUTURE_VBA
     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
-#endif
 
     sal_uInt16 nAction = 0;
     if( rHint.ISA(SfxSimpleHint) )
     {
-        // swithc for more actions
+        // switch for more actions
         switch( ((SfxSimpleHint&) rHint).GetId() )
         {
             case SFX_HINT_TITLECHANGED:
@@ -274,9 +267,8 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if( rHint.ISA(SfxEventHint) &&
         ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
     {
-        // --> OD 2004-12-03 #i38126# - own action id
+        // #i38126# - own action id
         nAction = 3;
-        // <--
     }
 
     if( nAction )
@@ -293,9 +285,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case 2:
             pDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
             break;
-        // --> OD 2004-12-03 #i38126# - own action for event LOADFINISHED
+        // #i38126# - own action for event LOADFINISHED
         // in order to avoid a modified document.
-        // --> OD 2005-02-01 #i41679# - Also for the instance of <SwDoc>
+        // #i41679# - Also for the instance of <SwDoc>
         // it has to be assured, that it's not modified.
         // Perform the same as for action id 1, but disable <SetModified>.
         case 3:
@@ -303,21 +295,18 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 const bool bResetModified = IsEnableSetModified();
                 if ( bResetModified )
                     EnableSetModified( sal_False );
-                // --> OD 2005-02-01 #i41679#
+                // #i41679#
                 const bool bIsDocModified = pDoc->IsModified();
-                // <--
 
                 pDoc->DocInfoChgd( );
 
-                // --> OD 2005-02-01 #i41679#
+                // #i41679#
                 if ( !bIsDocModified )
                     pDoc->ResetModified();
-                // <--
                 if ( bResetModified )
                     EnableSetModified( sal_True );
             }
             break;
-        // <--
         }
 
         if( pWrtShell )
@@ -330,17 +319,16 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Benachrichtigung Doc schliessen
+    Description:    Notification Close Doc
  --------------------------------------------------------------------*/
 
 sal_uInt16 SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     sal_uInt16 nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
 
-    if( sal_True == nRet ) //Unbedingt auf sal_True abfragen! (RET_NEWTASK)
+    if( sal_True == nRet ) //has to be queried against TRUE! (RET_NEWTASK)
         EndListening( *this );
 
-#ifdef FUTURE_VBA
     if( pDoc && IsInPrepareClose() )
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
@@ -351,28 +339,26 @@ sal_uInt16 SwDocShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
             xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
         }
     }
-#endif
     return nRet;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Organizer
+    Description:    Organizer
  --------------------------------------------------------------------*/
 
 sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
-    sal_uInt16  nSourceIdx1,        // SourcePool: oberste Inhaltsebene (Vorlagen/Makros)
-    sal_uInt16  nSourceIdx2,        // Index in den Inhalt
-    sal_uInt16  nSourceIdx3,        // Index in die Inhaltsebene
-    sal_uInt16 &rIdx1,              // und das gleiche fuer den DestinationPool
+    sal_uInt16  nSourceIdx1,        // SourcePool: uppermost content level (templates/macros)
+    sal_uInt16  nSourceIdx2,        // Index in the content
+    sal_uInt16  nSourceIdx3,        // Index in the content level
+    sal_uInt16 &rIdx1,              // and the same for the DestinationPool
     sal_uInt16 &rIdx2,              //      ""
     sal_uInt16 &rIdx3,              //      ""
-    sal_uInt16 &rRemovedIdx )       // falls doppelte geloescht werden, Pos zurueck
+    sal_uInt16 &rRemovedIdx )       // if doubles are being deleted, Pos back
 {
-    // --> OD 2005-05-10 #i48949# - actions aren't undoable. Thus, allow no undo
+    // #i48949# - actions aren't undoable. Thus, allow no undo
     // actions
     // Note: The undo action stack is cleared at the end of this method.
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
-    // <--
 
     sal_Bool bRet = sal_False;
 
@@ -385,22 +371,22 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
         SwDocStyleSheetPool* pMyPool =
             (SwDocStyleSheetPool*)GetStyleSheetPool();
 
-        //  wir koennen nicht in uns selbst hin und her moven
+        // we can't move back and forth within ourselves
         if( pHisPool == pMyPool )
             return sal_False;
 
         if( INDEX_IGNORE == rIdx2 )
             rIdx2 = pMyPool->Count();
 
-        // erstmal auf die Such-Maske "positionieren"
+        // firstly "position" to the search-mask
         pHisPool->First();
         SfxStyleSheetBase* pHisSheet = (*pHisPool)[nSourceIdx2];
 
-        // wenn so eine Vorlage schon existiert: loeschen!
+        // when such a template already exists: delete!
         const String& rOldName = pHisSheet->GetName();
         SfxStyleFamily eOldFamily( pHisSheet->GetFamily() );
 
-        // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
+        // never delete default PageDesc and Standard Charactertemplate !!!
         if( ( SFX_STYLE_FAMILY_PAGE == eOldFamily &&
               const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName() ==
               rOldName ) ||
@@ -415,20 +401,20 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
         SfxStyleSheetBase* pExist;
         if( ::FindPhyStyle( *pDoc, rOldName, eOldFamily ) )
         {
-            // Bug 20365: nur uebernehmen, wenn das gewuenscht ist!
+            // only take over, if desired!
             if( ERRCODE_BUTTON_OK != ErrorHandler::HandleError(
                 *new MessageInfo( ERRCODE_SFXMSG_STYLEREPLACE, rOldName )) )
             {
                 return sal_False;
             }
 
-            // Da Replace den aStyleSheet-Member selbst benoetigt, muss
-            // das Ergebnis vom Find kopiert werden (s.u.))
+            // Because Replace needs the aStyleSheet-Member itself, the result
+            // has to be copied from Find (see below))
             rtl::Reference< SwDocStyleSheet > xExist( new SwDocStyleSheet(
                     *(SwDocStyleSheet*)pMyPool->Find( rOldName, eOldFamily ) ) );
             pMyPool->Replace( *pHisSheet, *xExist.get() );
 
-            // An der Reihenfolge der Vorlagen im Pool aendert sich nichts.
+            // The ordering of the templates in the Pool is not changed.
             rIdx2 = rIdx1 = INDEX_IGNORE;
 
             GetDoc()->SetModified();
@@ -438,34 +424,32 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
 
         pMyPool->SetSearchMask( eOldFamily, nMySrchMask );
 
-        // MIB 18.12.98: SwDocStyleSheetPool::Make liefert einen
-        // Pointer auf SwDocStyleSheetPool::aStyleSheet zurueck.
-        // Der gleiche Member von SwDocStyleSheetPool::Find benutzt.
-        // Deshalb muss hier mit einer Kopie gearbeitet werden.
-        // Vorsicht: SfxStyleSheetBase::SetFollow ruft seinerseits
-        // ein SwDocStyleSheetPool::Find auf, do dass es nicht genuegt
-        // die Find-Aufrufe in dieser Methode zu eleminieren.
+        // SwDocStyleSheetPool::Make returns a pointer to
+        // SwDocStyleSheetPool::aStyleSheet that uses same members of
+        // SwDocStyleSheetPool::Find. Therefore a copy has to be used
+        // here. Attention: SfxStylessheetBase::SetFollow calls itself
+        // a SwDocStyleSheetPool::Find, so that it's not sufficiant to
+        // to eliminate the Find-calls in this method.
 
         rtl::Reference< SwDocStyleSheet > xNewSheet( new SwDocStyleSheet( (SwDocStyleSheet&)pMyPool
                 ->Make(rOldName, eOldFamily, pHisSheet->GetMask() ) ) );
         if( SFX_STYLE_FAMILY_PAGE == eOldFamily && rSource.ISA(SwDocShell) )
         {
-            // gesondert behandeln!!
+            // to deal with separately!!
             SwPageDesc* pDestDsc = (SwPageDesc*)xNewSheet->GetPageDesc();
             SwPageDesc* pCpyDsc = (SwPageDesc*)((SwDocStyleSheet*)pHisSheet)->GetPageDesc();
             pDoc->CopyPageDesc( *pCpyDsc, *pDestDsc );
         }
         else
-            // die neue Vorlage mit den Attributen fuellen
+            // populate the new templates with the attributes
             xNewSheet->SetItemSet( pHisSheet->GetItemSet() );
 
         pMyPool->SetSearchMask( SFX_STYLE_FAMILY_ALL, nMySrchMask );
 
         if( xNewSheet->IsUserDefined() || xNewSheet->IsUsed() )
         {
-            // Benutzte und Benutzer-definierte Vorlagen werden angezeigt.
-            // Dshalb muss hier der Index der neuen Vorlage im Pool
-            // ermittelt werden.
+            // Used and User-defined templates are being showed. That's why
+            // the Index of the template in the pool has to be found out.
             pExist = pMyPool->First();
             sal_uInt16 nIdx = 0;
             while( pExist )
@@ -482,18 +466,12 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
         }
         else
         {
-            // Andere Vorlagen werden nicht angezeigt.
+            // Other templates are not being showed.
             rIdx1 = rIdx2 = INDEX_IGNORE;
         }
 
-/*        pMyPool->Count();       //interne Liste neu fuellen lassen!!!!!
-
-        // suchen, um die richige Insert-Position returnen zu koennen
-        pMyPool->Find( rOldName, SFX_STYLE_FAMILY_ALL, nMySrchMask );
-        rIdx2 = pMyPool->GetFindPos();*/
-
-        // wer bekommt den Neuen als Parent? wer benutzt den Neuen als Follow?
-        // (immer nur ueber die Instanziierten!!!)
+        // who gets the new one as parent? who uses the new one as Follow?
+        // (always using the instanciated!!!)
         pMyPool->SetSearchMask( eOldFamily, nMySrchMask );
         pMyPool->SetOrganizerMode( sal_True );
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
@@ -503,21 +481,21 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
                 pTestSheet->HasParentSupport()        &&
                 pTestSheet->GetParent() == rOldName)
             {
-                pTestSheet->SetParent(rOldName); // Verknuepfung neu aufbauen
+                pTestSheet->SetParent(rOldName); // establish the link newly
             }
 
             if (pTestSheet->GetFamily() == eOldFamily &&
                 pTestSheet->HasFollowSupport()        &&
                 pTestSheet->GetFollow() == rOldName)
             {
-                pTestSheet->SetFollow(rOldName); // Verknuepfung neu aufbauen
+                pTestSheet->SetFollow(rOldName); // establish the link newly
             }
 
             pTestSheet = pMyPool->Next();
         }
         pMyPool->SetOrganizerMode( SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
 
-        // hat der Neue einen Parent? wenn ja, mit gleichem Namen bei uns suchen
+        // does the new one have a parent? if yes, search with the same name at our place.
         if (pHisSheet->HasParentSupport())
         {
             const String& rParentName = pHisSheet->GetParent();
@@ -533,7 +511,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
             }
         }
 
-        // hat der Neue einen Follow? wenn ja, mit gleichem Namen bei uns suchen
+        // does the new one have a Follow? if yes, search with the same name at our place.
         if (pHisSheet->HasFollowSupport())
         {
             const String& rFollowName = pHisSheet->GetFollow();
@@ -549,11 +527,11 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
             }
         }
 
-        // Bug 27347: alte Einstellung wieder setzen
+        // set old settings again
         pMyPool->SetSearchMask( eMyOldFamily, nMySrchMask );
 
-        // Model geaendert
-        ASSERT(pDoc, "Doc fehlt");
+        // Model changed
+        OSL_ENSURE(pDoc, "Doc missing");
         GetDoc()->SetModified();
 
         bRet = sal_True;
@@ -568,22 +546,21 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
                     rIdx3,
                     rRemovedIdx);
 
-    // --> OD 2005-05-10 #i48949# - actions aren't undoable and could have change
+    // #i48949# - actions aren't undoable and could have change
     // the document node array. Thus, clear the undo action stack.
     if (undoGuard.UndoWasEnabled())
     {
         GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
     }
-    // <--
 
     return bRet;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Vorlagen Remove
+    Description:    template Remove
  --------------------------------------------------------------------*/
 
-sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // siehe Insert
+sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // see Insert
                         sal_uInt16 nIdx2,
                         sal_uInt16 nIdx3)
 {
@@ -593,13 +570,13 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // siehe Insert
     {
         SwDocStyleSheetPool* pMyPool = (SwDocStyleSheetPool*)GetStyleSheetPool();
 
-        pMyPool->First();       // vorm Zugriff Pool aktualisieren!!
+        pMyPool->First();       // update Pool before access!!
         SfxStyleSheetBase* pMySheet = (*pMyPool)[nIdx2];
 
         String aName( pMySheet->GetName() );
         SfxStyleFamily eFamily( pMySheet->GetFamily() );
 
-        // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
+        // never delete default PageDesc and Standard Character template!!!
         if( ( SFX_STYLE_FAMILY_PAGE == eFamily &&
               const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName()
               == aName ) ||
@@ -608,10 +585,10 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // siehe Insert
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
             return sal_False;
 
-        // also loeschen
+        // so delete
         pMyPool->Remove( pMySheet );
 
-        // jetzt noch die Parents/Follows aller Instanziierten korrigieren
+        // now correct the Parents/Follows of all instanciated
         pMyPool->SetOrganizerMode( sal_True );
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
         while (pTestSheet)
@@ -620,14 +597,14 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // siehe Insert
                 pTestSheet->HasParentSupport()     &&
                 pTestSheet->GetParent() == aName)
             {
-                pTestSheet->SetParent( aEmptyStr ); // Verknuepfung aufloesen
+                pTestSheet->SetParent( aEmptyStr ); // resolve link
             }
 
             if (pTestSheet->GetFamily() == eFamily &&
                 pTestSheet->HasFollowSupport()        &&
                 pTestSheet->GetFollow() == aName)
             {
-                pTestSheet->SetFollow( aEmptyStr ); // Verknuepfung aufloesen
+                pTestSheet->SetFollow( aEmptyStr ); // resolve link
             }
 
             pTestSheet = pMyPool->Next();
@@ -642,16 +619,12 @@ sal_Bool SwDocShell::Remove(sal_uInt16 nIdx1,       // siehe Insert
                                         nIdx3 );
 
 
-    // Model geaendert
-    ASSERT(pDoc, "Doc fehlt");
+    // Model changed
+    OSL_ENSURE(pDoc, "Doc missing");
     GetDoc()->SetModified();
 
     return bRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDocShell::Execute(SfxRequest& rReq)
 {
@@ -663,13 +636,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
     {
         case SID_AUTO_CORRECT_DLG:
         {
-            SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
+            SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
             SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
-            sal_Bool bOldLocked = rACW.IsLockWordLstLocked(),
+            bool bOldLocked = rACW.IsLockWordLstLocked(),
                  bOldAutoCmpltCollectWords = pAFlags->bAutoCmpltCollectWords;
 
-            rACW.SetLockWordLstLocked( sal_True );
+            rACW.SetLockWordLstLocked( true );
 
             SvStringsISortDtor aTmpLst;
             aTmpLst.Insert( &rACW.GetWordList() );
@@ -682,8 +655,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             // SMARTTAGS
             pAFlags->pSmartTagMgr = &SwSmartTagMgr::Get();
-
-            //pApp->ExecuteSlot(aAppReq);
 
             SfxItemSet aSet( pApp->GetPool(), SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG, SID_OPEN_SMARTTAGOPTIONS, SID_OPEN_SMARTTAGOPTIONS, 0 );
             aSet.Put( aSwOptions );
@@ -758,15 +729,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bSet = !bCurrent;
 
                 sal_uInt16 nSlotId = 0;
-                if( bSet && !bFound )   // Keine gefunden, daher neue Preview anlegen
+                if( bSet && !bFound )   // Nothing found, so create new Preview
                         nSlotId = SID_VIEWSHELL1;
                 else if( bFound && !bSet )
                     nSlotId = bOnly ? SID_VIEWSHELL0 : SID_VIEWSHELL1;
 
                 if( nSlotId )
                 {
-                    //JP 23.8.2001: Bug 91360 - PagePreView in the WebDocShell
-                    //              is found under Id ViewShell2.
+                    // PagePreView in the WebDocShell
+                    // is found under Id ViewShell2.
                     if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
                         nSlotId = SID_VIEWSHELL2;
 
@@ -830,7 +801,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         SfxObjectFactory &rFact = GetFactory();
                         SfxFilterMatcher aMatcher( String::CreateFromAscii(rFact.GetShortName()) );
-                        SfxFilterMatcherIter aIter( &aMatcher );
+                        SfxFilterMatcherIter aIter( aMatcher );
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const SfxFilter* pFlt = aIter.First();
                         while( pFlt )
@@ -851,7 +822,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 SwDocShell::Factory().GetFilterContainer()->
                                 GetFilter4FilterName(String::CreateFromAscii("writer8"));
 
-                        //#b6439685# make sure the default file format is also available
+                        // make sure the default file format is also available
                         if(bWeb)
                         {
                             const String sWild = ((WildCard&)pOwnFlt->GetWildcard()).GetWildCard();
@@ -859,7 +830,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
 
                         bool bError = false;
-                        //#b6439685# catch expception if wrong filter is selected - should not happen anymore
+                        // catch expception if wrong filter is selected - should not happen anymore
                         try
                         {
                             xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
@@ -952,13 +923,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             break;
                     }
                 }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 {
                     sal_Bool bWeb = 0 != dynamic_cast<SwWebDocShell*>(this);
-                    DBG_ASSERT(bWeb == sal_True, "SourceView nur in der WebDocShell");
+                    OSL_ENSURE(bWeb == sal_True, "SourceView only in WebDocShell");
                 }
 #endif
-                // die SourceView ist fuer die SwWebDocShell die 1
+                // the SourceView is not the 1 for SwWebDocShell
                 sal_uInt16 nSlot = SID_VIEWSHELL1;
                 sal_Bool bSetModified = sal_False;
                 SfxPrinter* pSavePrinter = 0;
@@ -987,24 +958,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         nSlot = SID_VIEWSHELL0;
                     }
                 }
-/*   OS 10.04.97 14.20: Im Web-Writer gibt es keinen Unterschied zwischen
-                        Export in den SourceMode und dem Speichern des Docs
-                else if(IsModified())
-                {
-                    sal_uInt16 nRet = QueryBox( SFX_APPWINDOW ,SW_RES(MSG_SAVE_HTML_QUERY)).Execute();
-                    if(RET_YES == nRet)
-                    {
-                        S F X _DISPATCHER().Execute(SID_SAVEDOC,
-                                    SFX_CALLMODE_SYNCHRON);
-                        // der ReturnValue von SID_SAVEDOC ist etwas schwer verstaendlich
-                        if(IsModified())
-                            nSlot = 0;
-                    }
-                    else if( RET_CANCEL == nRet )
-                    {
-                        nSlot = 0;
-                    }
-                }*/
                 if(nSlot)
                     pViewFrm->GetDispatcher()->Execute(nSlot, SFX_CALLMODE_SYNCHRON);
                 if(bSetModified)
@@ -1012,7 +965,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if(pSavePrinter)
                 {
                     GetDoc()->setPrinter( pSavePrinter, true, true);
-                    //pSavePrinter darf nicht wieder geloescht werden
+                    //pSavePrinter must not be deleted again
                 }
                 pViewFrm->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));
                 pViewFrm->GetBindings().Invalidate( SID_NEWWINDOW );
@@ -1031,10 +984,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_ABSTRACT_NEWDOC:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0, DLG_INSERT_ABSTRACT );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(RET_OK == pDlg->Execute())
             {
                 sal_uInt8 nLevel = pDlg->GetLevel();
@@ -1058,12 +1011,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
                         uno::Reference< frame::XDispatchProvider > xProv(
-                            xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                            xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
                         if ( xProv.is() )
                         {
-                            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
+                            ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
                             uno::Reference< frame::XDispatchHelper > xHelper(
-                                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                             if ( xHelper.is() )
                             {
                                 pStrm->Seek( STREAM_SEEK_TO_END );
@@ -1081,7 +1034,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                                     uno::Sequence< beans::PropertyValue > aArgs(1);
-                                    aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
+                                    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
                                     aArgs[0].Value <<= aSeq;
                                     xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
                                 }
@@ -1093,11 +1046,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
                 else
                 {
-                    // Neues Dokument erzeugen.
+                    // Create new document
                     SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
                     SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
-                    // Dokumenttitel setzen
+                    // Set document's title
                     String aTmp( SW_RES(STR_ABSTRACT_TITLE) );
                     aTmp += GetTitle();
                     xDocSh->SetTitle( aTmp );
@@ -1132,12 +1085,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
                         uno::Reference< frame::XDispatchProvider > xProv(
-                            xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                            xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
                         if ( xProv.is() )
                         {
-                            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
+                            ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM("SendOutlineToImpress"));
                             uno::Reference< frame::XDispatchHelper > xHelper(
-                                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                             if ( xHelper.is() )
                             {
                                 pStrm->Seek( STREAM_SEEK_TO_END );
@@ -1155,7 +1108,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                                     uno::Sequence< beans::PropertyValue > aArgs(1);
-                                    aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
+                                    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RtfOutline"));
                                     aArgs[0].Value <<= aSeq;
                                     xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
                                 }
@@ -1274,7 +1227,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                     if( bCreateHtml )
                     {
-                        // fuer HTML gibts es nur einen Filter!!
+                        // for HTML there is only one filter!!
                         pFlt = SwIoSystem::GetFilterOfFormat(
                                 String::CreateFromAscii("HTML"),
                                 SwWebDocShell::Factory().GetFilterContainer() );
@@ -1282,8 +1235,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     else
                     {
-                        // Fuer Global-Dokumente bieten wir jetzt auch nur
-                        // noch den aktuellen an.
+                        // for Global-documents we now only offer the current one.
                         pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
                                     GetFilter4Extension( String::CreateFromAscii("odm")  );
                         nStrId = STR_LOAD_GLOBAL_DOC;
@@ -1306,44 +1258,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(!bError)
                     {
                         uno::Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
-
-                //#removed by zhaojianwei
-
-        //             const sal_uInt16 nCount = pDoc->GetTxtFmtColls()->Count();
-        //                Sequence<OUString> aListBoxEntries(nCount);
-        //                OUString* pEntries = aListBoxEntries.getArray();
-        //                sal_Int32 nIdx = 0;
-        //                sal_Int16 nSelect = 0;
-        //                OUString sStartTemplate;
-        //                SwTxtFmtColl *pFnd = 0, *pAny = 0;
-        //                for(sal_uInt16 i = 0; i < nCount; ++i)
-        //                {
-        //                    SwTxtFmtColl &rTxtColl =
-        //                                    *pDoc->GetTxtFmtColls()->GetObject( i );
-        //                    if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
-        //                    {
-        //                        //if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||            //#outline level,zhaojianwei
-                                //if(  rTxtColl.IsAssignedToListLevelOfOutlineStyle()  && ( !pFnd ||    //<-end,zhaojianwei
-        //                            pFnd->GetAssignedOutlineStyleLevel() > rTxtColl.GetAssignedOutlineStyleLevel() ))
-        //                        {
-        //                                nSelect = (sal_Int16)nIdx;
-        //                                pFnd = &rTxtColl;
-        //                                sStartTemplate = rTxtColl.GetName();
-        //                        }
-        //                        else if( !pAny )
-        //                            pAny = &rTxtColl;
-        //                        //pEntries[nIdx++] = rTxtColl.GetName();          //#outline level,remove by zhaojianwei
-        //                        pEntries[nIdx++] = sStyles + rTxtColl.GetName();  //#outline level,add by zhaojianwei
-        //                    }
-        //                }
-        //                if(!sStartTemplate.getLength() && pAny)
-        //                    sStartTemplate = pAny->GetName();
-        //                aListBoxEntries.realloc(nIdx);
-                //<-end,zhaojianwei
-
-
-                    //#outline level,add by zhaojianwei
-                    /////////////////////////////////////////////////////////////////////
 
                         bool    bOutline[MAXLEVEL] = {false};
                         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
@@ -1383,8 +1297,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         aListBoxEntries.realloc(nIdx);
                         sal_Int16 nSelect = 0;
-                     /////////////////////////////////////////////////////////////////////
-                    //<-end,zhaojianwei
 
                         try
                         {
@@ -1400,7 +1312,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                         catch(Exception& )
                         {
-                            DBG_ERROR("control acces failed");
+                            OSL_FAIL("control acces failed");
                         }
 
                         xFP->setTitle( SW_RESSTR( nStrId ));
@@ -1414,21 +1326,18 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 ListboxControlActions::GET_SELECTED_ITEM );
                             OUString sTmpl;
                             aTemplateValue >>= sTmpl;
-                            //aTemplateName = sTmpl;    //#outline level,removed by zhaojianwei
-                            //#outline level,add by zhaojianwei
 
                             sal_Int32 nColonPos = sTmpl.indexOf( sal_Unicode(':') );
                             OUString sPrefix = sTmpl.copy( 0L, nColonPos );
-                            if( sPrefix.equalsAscii("Style"))
+                            if( sPrefix.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Style")))
                             {
                                 aTemplateName = sTmpl.copy( 7L );   //get string behind "Style: "
                             }
-                            else if( sPrefix.equalsAscii("Outline"))
+                            else if( sPrefix.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Outline")))
                             {
                                 nTemplateOutlineLevel = ( sTmpl.copy( 15L )).toInt32(); //get string behind "Outline: Leve  ";
                                 bCreateByOutlineLevel = true;
                             }
-                            //<-end,zhaojianwei
 
                             if ( aFileName.Len() )
                             {
@@ -1440,22 +1349,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                 }
 
-                //const SwTxtFmtColl* pSplitColl = 0;       //#outline level,removed by zhaojianwei
-    //            if ( aTemplateName.Len() )
-    //                pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
-                                                            //<-end,zhaojianwei
                 if( aFileName.Len() )
                 {
                     if( PrepareClose( sal_False ) )
                     {
                         SwWait aWait( *this, sal_True );
 
-                        //bDone = bCreateHtml           //#outline level,removed by zhaojianwei
-                        //  ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
-                        //  : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
-                        if ( bCreateByOutlineLevel )    //add by zhaojianwei
+                        if ( bCreateByOutlineLevel )
                         {
-                            bDone = bCreateHtml         //#outline level,removed by zhaojianwei
+                            bDone = bCreateHtml
                                 ? pDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
                                 : pDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
                         }
@@ -1464,11 +1366,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             const SwTxtFmtColl* pSplitColl = 0;
                             if ( aTemplateName.Len() )
                                 pSplitColl = pDoc->FindTxtFmtCollByName(aTemplateName);
-                            bDone = bCreateHtml         //#outline level,removed by zhaojianwei
+                            bDone = bCreateHtml
                                 ? pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
                                 : pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
                         }
-                        //<-end,zhaojianwei
                         if( bDone )
                         {
                             SfxStringItem aName( SID_FILE_NAME, aFileName );
@@ -1512,9 +1413,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_ATTR_YEAR2000:
             if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , sal_False, &pItem ))
             {
-                DBG_ASSERT(pItem->ISA(SfxUInt16Item), "falsches Item");
+                OSL_ENSURE(pItem->ISA(SfxUInt16Item), "wrong Item");
                 sal_uInt16 nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
-                //ueber Views iterieren und den State an den FormShells setzen
+                // iterate over Views and put the State to FormShells
 
                 SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( this );
                 SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
@@ -1532,14 +1433,38 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
         break;
 
-        default: DBG_ERROR("falscher Dispatcher");
+        default: OSL_FAIL("wrong Dispatcher");
     }
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+ // #FIXME - align with NEW event stuff ( if possible )
+#if 0
+void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHelper >& xVbaEventsHelper, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxEventHint ) )
+    {
+        uno::Sequence< uno::Any > aArgs;
+        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        switch( nEventId )
+        {
+            case SFX_EVENT_CREATEDOC:
+            {
+                xVbaEventsHelper->ProcessCompatibleVbaEvent( VBAEVENT_DOCUMENT_NEW, aArgs );
+                break;
+            }
+            case SFX_EVENT_OPENDOC:
+            {
+                xVbaEventsHelper->ProcessCompatibleVbaEvent( VBAEVENT_DOCUMENT_OPEN, aArgs );
+                break;
+            }
+            default:
+            {
+                //do nothing
+            }
+        }
+    }
+}
+#endif
 
 long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
                                 uno::Any & rValue )
@@ -1547,30 +1472,24 @@ long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
     return pDoc->GetData( rItem, rMimeType, rValue );
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
                             const uno::Any & rValue )
 {
     return pDoc->SetData( rItem, rMimeType, rValue );
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
 {
     return pDoc->CreateLinkSource( rItem );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
+{
+    if ( pDoc ) {
+        ::sfx2::LinkManager& rLinkManager = pDoc->GetLinkManager();
+        rLinkManager.ReconnectDdeLink(rServer);
+    }
+}
 
 void SwDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
@@ -1592,14 +1511,15 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
         *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITER_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITER_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
+// #FIXME check with new Event handling
+#if 0
+    uno::Reference< document::XVbaEventsHelper > xVbaEventsHelper = pDoc->GetVbaEventsHelper();
+    if( xVbaEventsHelper.is() )
+        lcl_processCompatibleSfxHint( xVbaEventsHelper, rHint );
+#endif
 
     *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDocShell::SetModified( sal_Bool bSet )
 {
@@ -1629,13 +1549,9 @@ void SwDocShell::SetModified( sal_Bool bSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDocShell::UpdateChildWindows()
 {
-    // Flddlg ggf neu initialisieren (z.B. fuer TYP_SETVAR)
+    // if necessary newly initialize Flddlg (i.e. for TYP_SETVAR)
     if(!GetView())
         return;
     SfxViewFrame* pVFrame = GetView()->GetViewFrame();
@@ -1644,17 +1560,14 @@ void SwDocShell::UpdateChildWindows()
     if( pWrp )
         pWrp->ReInitDlg( this );
 
-    // RedlineDlg ggf neu initialisieren
+    // if necessary newly initialize RedlineDlg
     SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)pVFrame->
             GetChildWindow( SwRedlineAcceptChild::GetChildWindowId() );
     if( pRed )
         pRed->ReInitDlg( this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-// --> OD 2005-08-02 #i48748#
+// #i48748#
 class SwReloadFromHtmlReader : public SwReader
 {
     public:
@@ -1666,21 +1579,24 @@ class SwReloadFromHtmlReader : public SwReader
             SetBaseURL( _rFilename );
         }
 };
-// <--
+
 void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView )
 {
     sal_Bool bModified = IsModified();
 
-    // MIB 23.6.97: Die HTTP-Header-Felder muessen geloescht werden,
-    // sonst gibt es welche aus Meta-Tags hinter doppelt und dreifach.
+    // The HTTP-Header fields have to be removed, otherwise
+    // there are some from Meta-Tags dublicated or triplicated afterwards.
     ClearHeaderAttributesForSourceViewHack();
 
-    // MIB 24.07.97: Das Dokument-Basic muss auch noch d'ran glauben ...
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-    //#59620# HasBasic() zeigt an, dass es schon einen BasicManager an der DocShell
-    //          gibt. Der wurde im HTML-Import immer angelegt, wenn Macros im Quelltext
-    //          vorhanden sind.
-    if( pHtmlOptions && pHtmlOptions->IsStarBasic() && HasBasic())
+    // The Document-Basic also bites the dust ...
+    // A EnterBasicCall is not needed here, because nothing is called and
+    // there can't be any Dok-Basic, that has not yet been loaded inside
+    // of an HTML document.
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+    //#59620# HasBasic() shows, that there already is a BasicManager at the DocShell.
+    //          That was always generated in HTML-Import, when there are
+    //          Macros in the source code.
+    if( rHtmlOptions.IsStarBasic() && HasBasic())
     {
         BasicManager *pBasicMan = GetBasicManager();
         if( pBasicMan && (pBasicMan != SFX_APP()->GetBasicManager()) )
@@ -1691,7 +1607,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                 StarBASIC *pBasic = pBasicMan->GetLib( --nLibCount );
                 if( pBasic )
                 {
-                    // Die IDE benachrichtigen
+                    // Notify the IDE
                     SfxUsrAnyItem aShellItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( GetModel() ) );
                     String aLibName( pBasic->GetName() );
                     SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
@@ -1700,7 +1616,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                                             SFX_CALLMODE_SYNCHRON,
                                             &aShellItem, &aLibNameItem, 0L );
 
-                    // Aus der Standard-Lib werden nur die Module geloescht
+                    // Only the modules are deleted from the standard-lib
                     if( nLibCount )
                         pBasicMan->RemoveLib( nLibCount, sal_True );
                     else
@@ -1708,14 +1624,14 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                 }
             }
 
-            ASSERT( pBasicMan->GetLibCount() <= 1,
-                    "Loschen des Basics hat nicht geklappt" );
+            OSL_ENSURE( pBasicMan->GetLibCount() <= 1,
+                    "Deleting Basics didn't work" );
         }
     }
     sal_Bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
     RemoveLink();
 
-    //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
+    // now also the UNO-Model has to be informed about the new Doc #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();
     ((SwXTextDocument*)pxDoc)->InitNewDoc();
@@ -1729,8 +1645,8 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 
     const String& rMedname = GetMedium()->GetName();
 
-    // fix #51032#: Die HTML-Vorlage muss noch gesetzt werden
-    SetHTMLTemplate( *GetDoc() );   //Styles aus HTML.vor
+    // The HTML template still has to be set
+    SetHTMLTemplate( *GetDoc() );   //Styles from HTML.vor
 
     SfxViewShell* pViewShell = GetView() ? (SfxViewShell*)GetView()
                                          : SfxViewShell::Current();
@@ -1740,12 +1656,12 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     SubInitNew();
 
     SfxMedium aMed( rStreamName, STREAM_READ, sal_False );
-    // --> OD 2005-08-01 #i48748# - use class <SwReloadFromHtmlReader>, because
+    // #i48748# - use class <SwReloadFromHtmlReader>, because
     // the base URL has to be set to the filename of the document <rMedname>
     // and not to the base URL of the temporary file <aMed> in order to get
     // the URLs of the linked graphics correctly resolved.
     SwReloadFromHtmlReader aReader( aMed, rMedname, pDoc );
-    // <--
+
     aReader.Read( *ReadHTML );
 
     const SwView* pCurrView = GetView();
@@ -1759,9 +1675,9 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     }
 
 
-    // MIB 23.6.97: Die HTTP-Header-Attribute wieder in die DokInfo
-    // uebernehmen. Die Base-URL ist hier egal, da TLX zum absolutieren die
-    // vom Dokument nimmt.
+    // Take HTTP-Header-Attibutes over into the DokInfo again.
+    // The Base-URL doesn't matter here because TLX uses the one from the document
+    // for absolutization.
     SetHeaderAttributesForSourceViewHack();
 
     if(bModified && !IsReadOnly())
@@ -1779,12 +1695,11 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     INetURLObject aURLObj( rURL );
     String sURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    // Filter bestimmen:
-//  const SfxFilter* pFlt = SwIoSystem::GetFileFilter( rURL, aEmptyStr );
+    // Set filter:
     String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );
 
-    //#b6445961#  search for filter in WebDocShell, too
+    // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, STREAM_STD_READ, sal_False );
     const SfxFilter* pFlt = 0;
     aMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
@@ -1825,7 +1740,6 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     if ( bImport )
     // <--
     {
-        DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?");
         SwRead pRead =  ReadXML;
         SwReader* pReader = 0;
         SwPaM* pPam = 0;
@@ -1884,3 +1798,4 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
     return pResult;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

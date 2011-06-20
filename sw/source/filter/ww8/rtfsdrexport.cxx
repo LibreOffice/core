@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "rtfsdrexport.hxx"
 #include "rtfexport.hxx"
 #include "writerhelper.hxx"
+#include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <osl/diagnose.h>
@@ -473,7 +475,7 @@ sal_Int32 RtfSdrExport::StartShape()
     // Ignore \shpbypage, \shpbymargin, and \shpbycolumn, in favor of the posrelh property.
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
 
-    for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); i++)
+    for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); ++i)
         lcl_AppendSP(m_rAttrOutput.RunText(), (*i).first, (*i).second );
 
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", RtfExport::OutString( m_pSdrObject->GetDescription(), m_rExport.eCurrentEncoding));
@@ -583,4 +585,4 @@ sal_uInt32 RtfSdrExport::AddSdrObject( const SdrObject& rObj )
     return EscherEx::AddSdrObject(rObj);
 }
 
-/* vi:set shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

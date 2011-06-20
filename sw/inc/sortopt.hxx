@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
 enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
 
-/*--------------------------------------------------------------------
-    Beschreibung: SortierSchluessel
- --------------------------------------------------------------------*/
+
 struct SW_DLLPUBLIC SwSortKey
 {
     SwSortKey();
@@ -67,3 +66,5 @@ struct SW_DLLPUBLIC SwSortOptions
 };
 
 #endif  // _SORTOPT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

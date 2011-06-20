@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,14 +28,17 @@
 
 #include "docxexport.hxx"
 #include "docxexportfilter.hxx"
+#include "docxattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <oox/export/chartexport.hxx>
 
 #include <map>
 #include <algorithm>
@@ -48,6 +52,7 @@
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <section.hxx>
+#include <ftninfo.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
@@ -60,6 +65,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
 
+using namespace sax_fastparser;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::oox;
@@ -188,7 +194,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 }
 
 void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt )
+        const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 /*nBreakCode*/ )
 {
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
@@ -209,6 +215,13 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
+
+    if ( nHeadFootFlags & ( nsHdFtFlags::WW8_FOOTER_EVEN | nsHdFtFlags::WW8_HEADER_EVEN ))
+        settings.evenAndOddHeaders = true;
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
+#endif
 }
 
 void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, sal_uInt8 nMode )
@@ -216,9 +229,16 @@ void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const St
     m_pAttrOutput->WriteField_Impl( pFld, eFldType, rFldCmd, nMode );
 }
 
-void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
+void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 {
-    OSL_TRACE( "TODO DocxExport::WriteFormData()\n" );
+    m_pAttrOutput->WriteFormData_Impl( rFieldmark );
+}
+
+void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
+{
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
+#endif
 }
 
 void DocxExport::DoComboBox(const rtl::OUString& rName,
@@ -281,6 +301,33 @@ void DocxExport::DoFormText(const SwInputField* /*pFld*/)
     OSL_TRACE( "TODO DocxExport::ForFormText()\n" );
 }
 
+rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
+{
+    rtl::OUString aFileName = rtl::OUStringBuffer()
+                                .appendAscii("charts/chart")
+                                .append(nCount)
+                                .appendAscii( ".xml" )
+                                .makeStringAndClear();
+
+    OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+                    S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart" ),
+                    aFileName );
+
+    aFileName = rtl::OUStringBuffer()
+                  .appendAscii("word/charts/chart")
+                  .append(nCount)
+                  .appendAscii( ".xml" )
+                  .makeStringAndClear();
+
+    ::sax_fastparser::FSHelperPtr pChartFS =
+        m_pFilter->openFragmentStreamWithSerializer( aFileName,
+            S( "application/vnd.openxmlformats-officedocument.drawingml.chart" ) );
+
+    oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
+    aChartExport.ExportContent();
+    return ::rtl::OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+}
+
 void DocxExport::ExportDocument_Impl()
 {
     InitStyles();
@@ -295,6 +342,8 @@ void DocxExport::ExportDocument_Impl()
     WriteNumbering();
 
     WriteFonts();
+
+    WriteSettings();
 
     delete pStyles, pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
@@ -330,7 +379,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
         if ( rNd.IsEndNode() && rNd.StartOfSectionNode()->IsSectionNode() )
             return;
 
-        if ( !rNd.IsSectionNode() && !bIsInTable ) // No sections in table
+        if ( !rNd.IsSectionNode() && IsInTable() ) // No sections in table
         {
             const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
             if( !pParentFmt )
@@ -363,6 +412,11 @@ void DocxExport::OutputOLENode( const SwOLENode& )
     OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )\n" );
 }
 
+void DocxExport::OutputLinkedOLE( const OUString& )
+{
+    // Nothing to implement here: WW8 only
+}
+
 sal_uLong DocxExport::ReplaceCr( sal_uInt8 )
 {
     // Completely unused for Docx export... only here for code sharing
@@ -381,7 +435,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     const SwSectionFmt* pFmt = GetSectionFormat( rNd );
     const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
 
-    ASSERT( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
+    OSL_ENSURE( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
 
     if ( pNewPgDescFmt )
     {
@@ -404,7 +458,7 @@ void DocxExport::InitStyles()
             S( "styles.xml" ) );
 
     ::sax_fastparser::FSHelperPtr pStylesFS =
-        m_pFilter->openOutputStreamWithSerializer( S( "word/styles.xml" ),
+        m_pFilter->openFragmentStreamWithSerializer( S( "word/styles.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml" ) );
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -427,7 +481,7 @@ void DocxExport::WriteFootnotesEndnotes()
                 S( "footnotes.xml" ) );
 
         ::sax_fastparser::FSHelperPtr pFootnotesFS =
-            m_pFilter->openOutputStreamWithSerializer( S( "word/footnotes.xml" ),
+            m_pFilter->openFragmentStreamWithSerializer( S( "word/footnotes.xml" ),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml" ) );
 
         // switch the serializer to redirect the output to word/footnotes.xml
@@ -448,7 +502,7 @@ void DocxExport::WriteFootnotesEndnotes()
                 S( "endnotes.xml" ) );
 
         ::sax_fastparser::FSHelperPtr pEndnotesFS =
-            m_pFilter->openOutputStreamWithSerializer( S( "word/endnotes.xml" ),
+            m_pFilter->openFragmentStreamWithSerializer( S( "word/endnotes.xml" ),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml" ) );
 
         // switch the serializer to redirect the output to word/endnotes.xml
@@ -471,7 +525,7 @@ void DocxExport::WriteNumbering()
         S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" ),
         S( "numbering.xml" ) );
 
-    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openOutputStreamWithSerializer( S( "word/numbering.xml" ),
+    ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/numbering.xml" ),
         S( "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml" ) );
 
     // switch the serializer to redirect the output to word/nubering.xml
@@ -504,12 +558,10 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" ),
                 aName );
 
-        pFS = m_pFilter->openOutputStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" ) );
 
-        pFS->startElementNS( XML_w, XML_hdr,
-                FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-                FSEND );
+        pFS->startElementNS( XML_w, XML_hdr, MainXmlNamespaces( pFS ));
     }
     else
     {
@@ -519,12 +571,10 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
                 S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" ),
                 aName );
 
-        pFS = m_pFilter->openOutputStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().appendAscii( "word/" ).append( aName ).makeStringAndClear(),
                     S( "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" ) );
 
-        pFS->startElementNS( XML_w, XML_ftr,
-                FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-                FSEND );
+        pFS->startElementNS( XML_w, XML_ftr, MainXmlNamespaces( pFS ));
     }
 
     // switch the serializer to redirect the output to word/styles.xml
@@ -562,7 +612,7 @@ void DocxExport::WriteFonts()
             S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable" ),
             S( "fontTable.xml" ) );
 
-    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openOutputStreamWithSerializer(
+    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
             S( "word/fontTable.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" ) );
 
@@ -598,6 +648,34 @@ void DocxExport::WriteProperties( )
     m_pFilter->exportDocumentProperties( xDocProps );
 }
 
+void DocxExport::WriteSettings()
+{
+    if( !settings.hasData() && !m_pAttrOutput->HasFootnotes() && !m_pAttrOutput->HasEndnotes())
+        return;
+
+    m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
+            S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" ),
+            S( "settings.xml" ) );
+
+    ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
+            S( "word/settings.xml" ),
+            S( "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml" ) );
+
+    pFS->startElementNS( XML_w, XML_settings,
+            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSEND );
+
+    if( settings.evenAndOddHeaders )
+        pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
+
+    if( m_pAttrOutput->HasFootnotes())
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo(), XML_footnote );
+    if( m_pAttrOutput->HasEndnotes())
+        m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
+
+    pFS->endElementNS( XML_w, XML_settings );
+}
+
 VMLExport& DocxExport::VMLExporter()
 {
     return *m_pVMLExport;
@@ -606,14 +684,7 @@ VMLExport& DocxExport::VMLExporter()
 void DocxExport::WriteMainText()
 {
     // setup the namespaces
-    m_pDocumentFS->startElementNS( XML_w, XML_document,
-            FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office",
-            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-            FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml",
-            FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-            FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word",
-            FSNS( XML_xmlns, XML_wp ), "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing",
-            FSEND );
+    m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces( m_pDocumentFS ));
 
     // body
     m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
@@ -633,6 +704,25 @@ void DocxExport::WriteMainText()
     m_pDocumentFS->endElementNS( XML_w, XML_document );
 }
 
+XFastAttributeListRef DocxExport::MainXmlNamespaces( FSHelperPtr serializer )
+{
+    FastAttributeList* pAttr = serializer->createAttrList();
+    pAttr->add( FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office" );
+    pAttr->add( FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships" );
+    pAttr->add( FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml" );
+    pAttr->add( FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main" );
+    pAttr->add( FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word" );
+    pAttr->add( FSNS( XML_xmlns, XML_wp ), "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" );
+    return XFastAttributeListRef( pAttr );
+}
+
+bool DocxExport::ignoreAttributeForStyles( sal_uInt16 nWhich ) const
+{
+    if( nWhich == RES_TEXTGRID )
+        return true; // w:docGrid is written only to document.xml, not to styles.xml
+    return MSWordExportBase::ignoreAttributeForStyles( nWhich );
+}
+
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
@@ -650,7 +740,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
             S( "word/document.xml" ) );
 
     // the actual document
-    m_pDocumentFS = m_pFilter->openOutputStreamWithSerializer( S( "word/document.xml" ),
+    m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( S( "word/document.xml" ),
             S( "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ) );
 
     // the DrawingML access
@@ -670,4 +760,16 @@ DocxExport::~DocxExport()
     delete m_pDrawingML, m_pDrawingML = NULL;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+DocxSettingsData::DocxSettingsData()
+: evenAndOddHeaders( false )
+{
+}
+
+bool DocxSettingsData::hasData() const
+{
+    if( evenAndOddHeaders )
+        return true;
+    return false;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

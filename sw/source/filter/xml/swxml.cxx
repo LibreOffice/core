@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,7 +66,6 @@
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
-#include <errhdl.hxx>
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -75,25 +75,18 @@
 
 #include <statstr.hrc>
 
-// --> OD 2005-09-06 #i44177#
+// #i44177#
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
-// <--
 
-// --> OD 2006-02-22 #b6382898#
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-// <--
-
-// --> OD 2008-12-17 #i70748#
-#include <sfx2/docfilt.hxx>
-// <--
-
+#include <sfx2/docfilt.hxx> // #i70748#
 #include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -159,10 +152,10 @@ sal_Int32 ReadThroughComponent(
     sal_Bool bMustBeSuccessfull,
     sal_Bool bEncrypted )
 {
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
-    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sw", LOGFILE_AUTHOR, "ReadThroughComponent" );
 
@@ -174,9 +167,9 @@ sal_Int32 ReadThroughComponent(
     // get parser
     uno::Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
         return ERR_SWG_READ_ERROR;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
@@ -186,7 +179,7 @@ sal_Int32 ReadThroughComponent(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pFilterName), rFilterArguments),
         UNO_QUERY );
-    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( xFilter.is(), "Can't instantiate filter component." );
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );
@@ -235,9 +228,9 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX parse exception catched while importing:\n" );
+        ByteString aError( "SAX parse exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
 
         String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -254,7 +247,7 @@ sal_Int32 ReadThroughComponent(
         }
         else
         {
-            ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+            OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
             return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                              ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
@@ -269,9 +262,9 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX exception catched while importing:\n" );
+        ByteString aError( "SAX exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
 
         return ERR_SWG_READ_ERROR;
@@ -280,9 +273,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "Zip exception catched while importing:\n" );
+        ByteString aError( "Zip exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
@@ -290,9 +283,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "IO exception catched while importing:\n" );
+        ByteString aError( "IO exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERR_SWG_READ_ERROR;
     }
@@ -300,9 +293,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "uno exception catched while importing:\n" );
+        ByteString aError( "uno exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERR_SWG_READ_ERROR;
     }
@@ -323,8 +316,8 @@ sal_Int32 ReadThroughComponent(
     const OUString& rName,
     sal_Bool bMustBeSuccessfull)
 {
-    DBG_ASSERT(xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE(xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
@@ -364,7 +357,7 @@ sal_Int32 ReadThroughComponent(
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( rFilterArguments.getLength() > 0 )
         rFilterArguments.getConstArray()[0] >>= xInfoSet;
-    DBG_ASSERT( xInfoSet.is(), "missing property set" );
+    OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
         OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
@@ -401,14 +394,14 @@ sal_Int32 ReadThroughComponent(
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Error on import!\n" );
+        OSL_FAIL( "Error on import!\n" );
         // TODO/LATER: error handling
     }
 
     return ERR_SWG_READ_ERROR;
 }
 
-// --> OD 2005-09-06 #i44177#
+// #i44177#
 void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 {
     // array containing the names of the default outline styles ('Heading 1',
@@ -444,10 +437,8 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     for ( sal_uInt16 n = 1; n < rColls.Count(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
-        //if ( pColl->GetOutlineLevel() != NO_NUMBERING )       //#outline level zhaojianwei
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-        //  aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
             aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
         }
 
@@ -467,17 +458,14 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     const SwNumRule* pOutlineRule = _rDoc.GetOutlineNumRule();
     for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
     {
-        // --> OD 2007-01-11 #i73361#
+        // #i73361#
         // Do not change assignment of already created default outline style
         // to a certain outline level.
-//        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
         if ( !aOutlineLevelAssigned[ i ] &&
              aCreatedDefaultOutlineStyles[ i ] != 0 &&
              ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
-        // <--
         {
             // apply outline level at created default outline style
-            //aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
             aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);//#outline level added by zhaojianwei
 
             // apply outline numbering rule, if none is set.
@@ -492,9 +480,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     }
 
 }
-// <--
 
-// --> OD 2006-02-22 #b6382898#
 void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 {
     if ( _rDoc.GetDrawModel() &&
@@ -532,7 +518,6 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
         }
     }
 }
-// <--
 
 
 sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
@@ -540,7 +525,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
         return ERR_SWG_READ_ERROR;
@@ -579,11 +564,11 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     // Get the docshell, the model, and finally the model's component
     SwDocShell *pDocSh = rDoc.GetDocShell();
-    ASSERT( pDocSh, "XMLReader::Read: got no doc shell" );
+    OSL_ENSURE( pDocSh, "XMLReader::Read: got no doc shell" );
     if( !pDocSh )
         return ERR_SWG_READ_ERROR;
     uno::Reference< lang::XComponent > xModelComp( pDocSh->GetModel(), UNO_QUERY );
-    ASSERT( xModelComp.is(),
+    OSL_ENSURE( xModelComp.is(),
             "XMLReader::Read: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_READ_ERROR;
@@ -649,17 +634,18 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         { "OrganizerMode", sizeof("OrganizerMode")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2004-08-10 #i28749# - Add property, which indicates, if the
+
+        // #i28749# - Add property, which indicates, if the
         // shape position attributes are given in horizontal left-to-right layout.
         // This is the case for the OpenOffice.org file format.
         { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // <--
+
         { "BuildId", sizeof("BuildId")-1, 0,
               &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2007-12-19 #152540#
+
         // Add property, which indicates, if a text document in OpenOffice.org
         // file format is read.
         // Note: Text documents read via the binary filter are also finally
@@ -669,7 +655,6 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         { "TextDocInOOoFileFormat", sizeof("TextDocInOOoFileFormat")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -757,19 +742,19 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         OUString *pSeq = aFamiliesSeq.getArray();
         if( aOpt.IsFrmFmts() )
             // SFX_STYLE_FAMILY_FRAME;
-            *pSeq++ = OUString::createFromAscii("FrameStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("FrameStyles"));
         if( aOpt.IsPageDescs() )
             // SFX_STYLE_FAMILY_PAGE;
-            *pSeq++ = OUString::createFromAscii("PageStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"));
         if( aOpt.IsTxtFmts() )
         {
             // (SFX_STYLE_FAMILY_CHAR|SFX_STYLE_FAMILY_PARA);
-            *pSeq++ = OUString::createFromAscii("CharacterStyles");
-            *pSeq++ = OUString::createFromAscii("ParagraphStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles"));
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles"));
         }
         if( aOpt.IsNumRules() )
             // SFX_STYLE_FAMILY_PSEUDO;
-            *pSeq++ = OUString::createFromAscii("NumberingStyles");
+            *pSeq++ = OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"));
 
         OUString sStyleInsertModeFamilies(
                 RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeFamilies"));
@@ -840,7 +825,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         }
         else
         {
-            StreamPath = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            StreamPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dummyObjectName"));
         }
 
         if( StreamPath.getLength() )
@@ -873,22 +858,19 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
 
     const sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
-    // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
+    // #i28749# - set property <ShapePositionInHoriL2R>
     {
         const sal_Bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R")),
                 makeAny( bShapePositionInHoriL2R ) );
     }
-    // <--
-    // --> OD 2007-12-19 #152540#
     {
         const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat")),
                 makeAny( bTextDocInOOoFileFormat ) );
     }
-    // <--
 
     sal_uInt32 nWarnRDF = 0;
     if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
@@ -1008,8 +990,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     rDoc.SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
     rDoc.SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
 
-    // #103728# move Pam into valid content
-    lcl_EnsureValidPam( rPaM );
+    lcl_EnsureValidPam( rPaM ); // move Pam into valid content
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -1021,40 +1002,35 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     if ( !bOASIS )
     {
-        // --> OD 2005-09-06 #i44177# - assure that for documents in OpenOffice.org
+        // #i44177# - assure that for documents in OpenOffice.org
         // file format the relation between outline numbering rule and styles is
         // filled-up accordingly.
         // Note: The OpenOffice.org file format, which has no content that applys
         //       a certain style, which is related to the outline numbering rule,
         //       has lost the information, that this certain style is related to
         //       the outline numbering rule.
-        // --> OD 2008-12-17 #i70748# - only for templates
+        // #i70748# - only for templates
         if ( pMedium && pMedium->GetFilter() &&
              pMedium->GetFilter()->IsOwnTemplateFormat() )
         {
             lcl_AdjustOutlineStylesForOOo( rDoc );
         }
-        // <--
         // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
         // so we have to set a dynamic default after importing SO7
         rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, sal_False ) );
     }
-    // <--
 
     rDoc.PropagateOutlineRule();
 
-    // --> OD 2006-03-14 #i62875#
+    // #i62875#
     if ( rDoc.get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) && !docfunc::ExistsDrawObjs( rDoc ) )
     {
         rDoc.set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
-    // <--
 
-    // --> OD 2006-02-22 #b6382898#
     // Convert all instances of <SdrOle2Obj> into <SdrGrafObj>, because the
     // Writer doesn't support such objects.
     lcl_ConvertSdrOle2ObjsToSdrGrafObjs( rDoc );
-    // <--
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
@@ -1087,7 +1063,7 @@ sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     uno::Reference < embed::XStorage > xStg2;
     if( xServiceFactory.is() && ( xStg2 = rMedium.GetStorage() ).is() )
@@ -1104,13 +1080,12 @@ sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
 
             // get parser
             uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-            ASSERT( xXMLParser.is(),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+            OSL_ENSURE( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
             if( xXMLParser.is() )
             {
                 // get filter
-                // #110680#
                 // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
                 uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 
@@ -1142,3 +1117,4 @@ sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
     return rStrings.Count();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

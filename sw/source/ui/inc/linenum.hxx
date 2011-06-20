@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <vcl/field.hxx>
 #include <numberingtypelistbox.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
 class Window;
 class SfxItemSet;
@@ -43,9 +42,8 @@ class SwView;
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-   Beschreibung: SingleTabDialog
+   Description: SingleTabDialog
  --------------------------------------------------------------------*/
-
 class SwLineNumberingDlg : public SfxSingleTabDialog
 {
     SwWrtShell* pSh;
@@ -60,9 +58,8 @@ public:
 };
 
 /*--------------------------------------------------------------------
-   Beschreibung: TabPage
+   Description: TabPage
  --------------------------------------------------------------------*/
-
 class SwLineNumberingPage : public SfxTabPage
 {
     CheckBox        aNumberingOnCB;
@@ -107,4 +104,4 @@ public:
 
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

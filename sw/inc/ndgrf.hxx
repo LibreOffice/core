@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,34 +30,27 @@
 #include <sfx2/lnkbase.hxx>
 #include <svtools/grfmgr.hxx>
 #include <ndnotxt.hxx>
-// --> OD, MAV 2005-08-17 #i53025#
 #include <com/sun/star/embed/XStorage.hpp>
-// <--
-// --> OD 2007-03-28 #i73788#
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 class SwAsyncRetrieveInputStreamThreadConsumer;
-// <--
 
 class SwGrfFmtColl;
 class SwDoc;
 class GraphicAttr;
 class SvStorage;
-// --------------------
+
 // SwGrfNode
-// --------------------
 class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 {
     friend class SwNodes;
 
     GraphicObject aGrfObj;
-    ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
+    ::sfx2::SvBaseLinkRef refLink;       // If graphics only as link then pointer is set.
     Size nGrfSize;
-//  String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
     String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
                                 // name or package url)
-    String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
-                                //      die normale (HighRes) geladen ist.
+    String aLowResGrf;          // HTML: LowRes graphics (substitute until regular HighRes graphics is loaded).
     sal_Bool bTransparentFlagValid  :1;
     sal_Bool bInSwapIn              :1;
 
@@ -64,23 +58,20 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     sal_Bool bChgTwipSize           :1;
     sal_Bool bChgTwipSizeFromPixel  :1;
     sal_Bool bLoadLowResGrf         :1;
-    sal_Bool bFrameInPaint          :1; //Um Start-/EndActions im Paint (ueber
-                                    //SwapIn zu verhindern.
-    sal_Bool bScaleImageMap         :1; //Image-Map in SetTwipSize skalieren
+    sal_Bool bFrameInPaint          :1; // To avoid Start-/EndActions in Paint via SwapIn.
+    sal_Bool bScaleImageMap         :1; // Scale image map in SetTwipSize.
 
-    // --> OD 2007-01-19 #i73788#
     boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
     sal_Bool mbIsStreamReadOnly;
-    // <--
 
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
                const Graphic* pGraphic,
                SwGrfFmtColl* pGrfColl,
                SwAttrSet* pAutoAttr = 0 );
-    // Ctor fuer Einlesen (SW/G) ohne Grafik
+    // Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
                SwGrfFmtColl* pGrfColl,
@@ -93,21 +84,19 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     void InsertLink( const String& rGrfName, const String& rFltName );
     sal_Bool ImportGraphic( SvStream& rStrm );
     sal_Bool HasStreamName() const { return aGrfObj.HasUserData(); }
-    // --> OD 2005-05-04 #i48434# - adjust return type and rename method to
+    // adjust return type and rename method to
     // indicate that its an private one.
-    // --> OD 2005-08-17 #i53025#
+
     // embedded graphic stream couldn't be inside a 3.1 - 5.2 storage any more.
     // Thus, return value isn't needed any more.
     void _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
-    // <--
+
     void DelStreamName();
     DECL_LINK( SwapGraphic, GraphicObject* );
 
     /** helper method to determine stream for the embedded graphic.
 
-        OD 2005-05-04 #i48434#
         Important note: caller of this method has to handle the thrown exceptions
-        OD, MAV 2005-08-17 #i53025#
         Storage, which should contain the stream of the embedded graphic, is
         provided via parameter. Otherwise the returned stream will be closed
         after the the method returns, because its parent stream is closed and deleted.
@@ -132,7 +121,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
     /** helper method to get a substorage of the document storage for readonly access.
 
-        OD, MAV 2005-08-17 #i53025#
         A substorage with the specified name will be opened readonly. If the provided
         name is empty the root storage will be returned.
 
@@ -174,33 +162,34 @@ public:
     inline sal_Bool IsScaleImageMap() const         { return bScaleImageMap; }
     inline void SetScaleImageMap( sal_Bool b )      { bScaleImageMap = b; }
 #endif
-        // steht in ndcopy.cxx
+        // in ndcopy.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
 
-    // erneutes Einlesen, falls Graphic nicht Ok ist. Die
-    // aktuelle wird durch die neue ersetzt.
+    // Re-read in case graphic was not OK. The current one
+    // gets replaced by the new one.
     sal_Bool ReRead( const String& rGrfName, const String& rFltName,
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
                  sal_Bool bModify = sal_True );
-    // Laden der Grafik unmittelbar vor der Anzeige
+    // Loading of graphic immediately before displaying.
     short SwapIn( sal_Bool bWaitForData = sal_False );
-        // Entfernen der Grafik, um Speicher freizugeben
+    // Remove graphic in order to free memory.
     short SwapOut();
-        // Zugriff auf den Storage-Streamnamen
+    // Access to storage stream-name.
     void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
-    // is this node selected by any shell?
+    // Is this node selected by any shell?
     sal_Bool IsSelected() const;
 #endif
 
-        // Der Grafik sagen, dass sich der Node im Undobereich befindet
+    // Communicate to graphic that node is in Undo-range.
     virtual sal_Bool SavePersistentData();
     virtual sal_Bool RestorePersistentData();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-        // Abfrage der Link-Daten
+
+    // Query link-data.
     sal_Bool IsGrfLink() const                  { return refLink.Is(); }
     inline sal_Bool IsLinkedFile() const;
     inline sal_Bool IsLinkedDDE() const;
@@ -208,15 +197,14 @@ public:
     sal_Bool GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
-    // Skalieren einer Image-Map: Die Image-Map wird um den Faktor
-    // zwischen Grafik-Groesse und Rahmen-Groesse vergroessert/verkleinert
+    // Scale an image-map: the image-map becomes zoomed in / out by
+    // factor between graphic-size and border-size.
     void ScaleImageMap();
 
-    // returns the with our graphic attributes filled Graphic-Attr-Structure
+    // Returns the with our graphic attributes filled Graphic-Attr-Structure.
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
 #endif
-    // --> OD 2007-01-18 #i73788#
     boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer();
     bool IsLinkedInputStreamReady() const;
     void TriggerAsyncRetrieveInputStream();
@@ -224,15 +212,11 @@ public:
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
         const sal_Bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
-    // <--
-    // --> OD 2008-07-21 #i90395#
     bool IsAsyncRetrieveInputStreamPossible() const;
-    // <--
 };
 
 
-// ----------------------------------------------------------------------
-// Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
+// Inline methods from Node.hxx - it is only now that we know TxtNode!!
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
      return ND_GRFNODE == nNodeType ? (SwGrfNode*)this : 0;
@@ -253,5 +237,6 @@ inline sal_Bool SwGrfNode::IsLinkedDDE() const
 }
 #endif
 
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

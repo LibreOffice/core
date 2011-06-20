@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,8 @@ struct AutoTextGroup
     sal_uInt16      nCount;
     String      sName;
     String      sTitle;
-    String      sLongNames;   // durch 0x0A getrennte Langnamen
-    String      sShortNames;  // durch 0x0A getrennte Kurznamen
+    String      sLongNames;   // by 0x0A seperated long names
+    String      sShortNames;  // by 0x0A seperated short names
     DateTime    aDateModified;
 };
 
@@ -87,3 +88,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

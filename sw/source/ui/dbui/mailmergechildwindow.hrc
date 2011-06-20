@@ -27,7 +27,6 @@
 
 #define TB_BACK                     1
 #define ILIST_TBX                   90
-#define ILIST_TBX_HC                91
 
 #define FL_SEPARATOR                7
 
@@ -47,7 +46,6 @@
 #define ST_TASK                     73
 #define ST_STATUS                   74
 #define ILIST                       75
-#define ILIST_HC                    76
 #define ST_SEND                     77
 #define ST_SENDINGTO                78
 #define ST_COMPLETED                79

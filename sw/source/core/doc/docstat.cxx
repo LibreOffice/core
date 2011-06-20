@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,6 +46,7 @@ SwDocStat::SwDocStat() :
     nAllPara(1),
     nWord(0),
     nChar(0),
+    nCharExcludingSpaces(0),
     bModified(sal_True)
 {}
 
@@ -62,6 +64,8 @@ void SwDocStat::Reset()
     nAllPara= 1;
     nWord   = 0;
     nChar   = 0;
+    nCharExcludingSpaces = 0;
     bModified = sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// include ---------------------------------------------------------------
-
-
 #include <sot/formats.hxx>
 
-#ifndef _CONDEDIT_HXX
 #include <condedit.hxx>
-#endif
 #include <svx/dbaexchange.hxx>
 using namespace ::svx;
 using ::rtl::OUString;
@@ -43,10 +39,6 @@ using namespace ::com::sun::star::uno;
 #define DB_DD_DELIM 0x0b
 
 // STATIC DATA -----------------------------------------------------------
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId ),
@@ -58,7 +50,6 @@ ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
 /*--------------------------------------------------------------------
     Beschreibung: Drop moeglich, bzw Format bekannt?
  --------------------------------------------------------------------*/
-
 sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return OColumnTransferable::canExtractColumnDescriptor
@@ -106,3 +97,4 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

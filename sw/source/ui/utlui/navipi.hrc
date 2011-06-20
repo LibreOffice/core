@@ -31,7 +31,6 @@
 #define BT_UP               5
 #define BT_DOWN             6
 #define IL_CONTENT          7
-#define ILH_CONTENT         8
 #define FT_PAGE             10
 #define ED_PAGE             11
 #define LB_SELECT           22

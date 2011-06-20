@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@ class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
 class SwFtnPortion;
-class SvLongs;
 
 /*************************************************************************
  *                      class SwTxtFormatter
@@ -99,9 +99,6 @@ class SwTxtFormatter : public SwTxtPainter
 
     // determines, if a optimized repaint rectange is allowed
     sal_Bool AllowRepaintOpt() const;
-
-    // calculates and sets the optimized repaint offset
-    long CalcOptRepaint( xub_StrLen nOldLineEnd, const SvLongs* pFlyStart );
 
     // wird von FormatLine gerufen.
     void FormatReset( SwTxtFormatInfo &rInf );
@@ -212,3 +209,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

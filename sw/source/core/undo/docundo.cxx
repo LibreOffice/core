@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -301,7 +302,6 @@ UndoManager::GetLastUndoInfo(
     }
 
     SfxUndoAction *const pAction( SfxUndoManager::GetUndoAction(0) );
-
     if (o_pStr)
     {
         *o_pStr = pAction->GetComment();
@@ -334,7 +334,6 @@ SwUndoComments_t UndoManager::GetUndoComments() const
 
 
 /**************** REDO ******************/
-
 bool UndoManager::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
 {
     if (!SfxUndoManager::GetRedoActionCount(CurrentLevel))
@@ -580,3 +579,4 @@ UndoManager::Repeat(::sw::RepeatContext & rContext,
 
 } // namespace sw
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

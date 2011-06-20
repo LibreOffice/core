@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 
 #include <svl/srchitem.hxx>
 #include <sfx2/app.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 
 #include <sot/clsids.hxx>
 #include <sfx2/objface.hxx>
@@ -64,19 +63,11 @@ TYPEINIT1(SwWebDocShell, SwDocShell);
 
 SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SvGlobalName(SO3_SWWEB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/web" )
 
-/*-----------------22.01.97 09.29-------------------
-
---------------------------------------------------*/
-
 SwWebDocShell::SwWebDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode),
         nSourcePara(0)
 {
 }
-
-/*-----------------22.01.97 09.29-------------------
-
---------------------------------------------------*/
 
 SwWebDocShell::~SwWebDocShell()
 {
@@ -93,7 +84,7 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_Bool bTemplate /* = sal_False */) const
 {
     (void)bTemplate;
-    DBG_ASSERT( bTemplate == sal_False, "No template for Writer Web" );
+    OSL_ENSURE( bTemplate == sal_False, "No template for Writer Web" );
 
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
@@ -112,3 +103,4 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

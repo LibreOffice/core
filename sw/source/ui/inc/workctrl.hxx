@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,13 @@
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 class PopupMenu;
 class SwView;
 
-// doppelter Eintrag! hrc und hxx
-// diese Ids bestimmen, was die Buttons unter dem Scrollbar tun
+// double entry! hrc and hxx
+// these Ids say what the buttons below the scrollbar are doing
 #define NID_START   20000
 #define NID_NEXT    20000
 #define NID_PREV    20001
@@ -137,7 +136,6 @@ class SwScrollNaviPopup : public SfxPopupWindow
     FixedLine       aSeparator;
     FixedInfo       aInfoField;
     ImageList       aIList;
-    ImageList       aIListH;
 
     String          sQuickHelp[2 * NID_COUNT];
 
@@ -170,7 +168,6 @@ class SwNaviImageButton : public ImageButton
 {
         SwScrollNaviPopup*  pPopup;
         Image               aImage;
-        Image               aImageH;
         String              sQuickText;
         SfxPopupWindow*     pPopupWindow;
         SfxPopupWindow*     pFloatingWindow;
@@ -189,7 +186,7 @@ class SwNaviImageButton : public ImageButton
 };
 
 //----------------------------------------------------------------------------
-//  Die ImageButtons muessen sich bei Bedarf den HelpText selbst setzen
+//  ImageButtons have to set the HelpText themselves if needed
 //----------------------------------------------------------------------------
 
 class SwHlpImageButton : public ImageButton
@@ -202,9 +199,7 @@ class SwHlpImageButton : public ImageButton
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
 };
-/* -----------------26.11.2002 09:25-----------------
- *
- * --------------------------------------------------*/
+
 class SwPreviewZoomControl : public SfxToolBoxControl
 {
 public:
@@ -223,3 +218,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

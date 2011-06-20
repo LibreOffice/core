@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <hintids.hxx>
 
 #include <doc.hxx>
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -75,13 +76,12 @@
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>
 
-// --> OD 2009-08-18 #i104300#
+// #i104300#
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
-// <--
 
 /*--------------------------------------------------------------------
-    Beschreibung:   KeyEvents
+    Description:    KeyEvents
  --------------------------------------------------------------------*/
 static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool bBalloon )
 {
@@ -135,7 +135,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if( bWeiter && bQuickBalloon)
     {
         SwRect aFldRect;
-        sal_uInt16 nStyle = 0; // style of quick help
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
                                     SwContentAtPos::SW_INETATTR |
                                     SwContentAtPos::SW_FTN |
@@ -143,7 +142,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_TOXMARK |
                                     SwContentAtPos::SW_REFMARK |
                                     SwContentAtPos::SW_SMARTTAG |
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                                     SwContentAtPos::SW_TABLEBOXVALUE |
                         ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
 #endif
@@ -151,13 +150,14 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
         {
+             sal_uInt16 nStyle = 0; // style of quick help
              switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
                 sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
                 sTxt = UniString(
@@ -191,7 +191,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix.EqualsAscii( pMarkToOLE ))
                     sTxt = sTxt.Copy( 0, nFound - 1);
                 }
-                // --> OD 2009-08-18 #i104300#
+                // #i104300#
                 // special handling if target is a cross-reference bookmark
                 {
                     String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
@@ -222,8 +222,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                     }
                 }
-                // <--
-                // --> OD 2007-07-26 #i80029#
+                // #i80029#
                 sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
@@ -236,7 +235,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
                     }
                 }
-                // <--
                 break;
             }
             case SwContentAtPos::SW_SMARTTAG:
@@ -311,27 +309,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                         case RES_POSTITFLD:
                             {
-                                /*
-                                SwPostItMgr* pMgr = rView.GetPostItMgr();
-                                if (pMgr->ShowNotes())
-                                {
-                                    SwFmtFld* pSwFmtFld = 0;
-                                    if (pMgr->ShowPreview(pFld,pSwFmtFld))
-                                    {
-                                        SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr,PB_Preview);
-                                        pPostIt->InitControls();
-                                        pPostIt->SetReadonly(true);
-                                        pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
-                                        pPostIt->SetVirtualPosSize(rEvt.GetMousePosPixel(),Size(180,70));
-                                        pPostIt->ShowNote();
-                                        SetPointerPosPixel(pPostIt->GetPosPixel() + Point(20,20));
-                                    }
-                                    return;
-                                }
-                                */
                                 break;
                             }
-                        case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
+                        case RES_INPUTFLD:  // BubbleHelp, because the suggestion could be quite long
                             bBalloon = sal_True;
                             /* no break */
                         case RES_JUMPEDITFLD:
@@ -356,9 +336,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                         case RES_GETREFFLD:
                         {
-                            // --> OD 2008-01-09 #i85090#
+                            // #i85090#
                             const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
-                            ASSERT( pRefFld,
+                            OSL_ENSURE( pRefFld,
                                     "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
                             if ( pRefFld )
                             {
@@ -379,7 +359,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
                                 }
                             }
-                            // <--
                         }
                         break;
                         }
@@ -400,7 +379,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sTxt );
                 else
                 {
-                    // dann zeige die Hilfe mal an:
+                    // the show the help
                     Rectangle aRect( aFldRect.SVRect() );
                     Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
                     aRect.Left()   = aPt.X();
@@ -428,7 +407,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABROW_VERT:
                     nTabRes = STR_TABLE_ROW_ADJUST;
                     break;
-                // --> FME 2004-07-30 #i32329# Enhanced table selection
+                // #i32329# Enhanced table selection
                 case SW_TABSEL_HORI:
                 case SW_TABSEL_HORI_RTL:
                 case SW_TABSEL_VERT:
@@ -443,7 +422,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABCOLSEL_VERT:
                     nTabRes = STR_TABLE_SELECT_COL;
                     break;
-                // <--
             }
             if(nTabRes)
             {
@@ -456,14 +434,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
     }
 
-/*
-aktuelle Zeichenvorlage anzeigen?
-    if( bWeiter && rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
-    {
-        SwCharFmt* pChrFmt = rSh.GetCurCharFmt();
-
-    }
-*/
     if( bWeiter && pSdrView && bQuickBalloon)
     {
         SdrViewEvent aVEvt;
@@ -473,7 +443,7 @@ aktuelle Zeichenvorlage anzeigen?
 
         if ((pField = aVEvt.pURLField) != 0)
         {
-            // URL-Feld getroffen
+            // hit an URL field
             if (pField)
             {
                 pObj = aVEvt.pObj;
@@ -484,7 +454,7 @@ aktuelle Zeichenvorlage anzeigen?
         }
         if (bWeiter && eHit == SDRHIT_TEXTEDIT)
         {
-            // URL-Feld in zum Editieren ge?ffneten DrawText-Objekt suchen
+            // look for URL field in DrawText object that is opened for editing
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             const SvxFieldItem* pFieldItem;
 
@@ -540,16 +510,6 @@ void SwEditWin::PrePaint()
 
 void  SwEditWin::Paint(const Rectangle& rRect)
 {
-#if defined(MYDEBUG)
-    // StartUp-Statistik
-    if ( pTickList )
-    {
-        SYSTICK( "Start SwEditWin::Paint" );
-        READ_FIRST_TICKS()
-        FLUSH_TICKS()
-    }
-#endif
-
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
         return;
@@ -557,28 +517,19 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     if( pShadCrsr )
     {
         Rectangle aRect( pShadCrsr->GetRect());
-        // liegt vollstaendig drin?
+        // fully resides inside?
         if( rRect.IsInside( aRect ) )
             // dann aufheben
             delete pShadCrsr, pShadCrsr = 0;
         else if( rRect.IsOver( aRect ))
         {
-            // liegt irgendwie drueber, dann ist alles ausserhalb geclippt
-            // und wir muessen den "inneren Teil" am Ende vom Paint
-            // wieder sichtbar machen. Sonst kommt es zu Paintfehlern!
+            // resides somewhat above, then everything is clipped outside
+            // and we have to make the "inner part" at the end of the
+            // Paint visible again. Otherwise Paint errors occur!
             bPaintShadowCrsr = sal_True;
         }
     }
-/*
-    //TODO/LATER: what's the replacement for this? Do we need it?
-    SwDocShell* pDocShell = GetView().GetDocShell();
 
-  SvInPlaceEnvironment *pIpEnv =  pDocShell ?
-                                  pDocShell->GetIPEnv() : 0;
-    if ( pIpEnv && pIpEnv->GetRectsChangedLockCount() )
-        //Wir stehen in Groessenverhandlungen (MM), Paint verzoegern
-        Invalidate( rRect );
-    else */
     if ( GetView().GetVisArea().GetWidth()  <= 0 ||
               GetView().GetVisArea().GetHeight() <= 0 )
         Invalidate( rRect );
@@ -590,3 +541,4 @@ void  SwEditWin::Paint(const Rectangle& rRect)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

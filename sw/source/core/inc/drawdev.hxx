@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include "swrect.hxx"
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 
 /*************************************************************************
  *                          class SwDrawDev
@@ -138,3 +137,5 @@ inline void SwDrawDev::DrawRect( const SwRect& rRect,
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

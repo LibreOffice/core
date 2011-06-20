@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,8 @@
 #include "swrect.hxx"
 #include "paratr.hxx"   // pTabStop, ADJ*
 #include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"   // ASSERT
 #include <SwPortionHandler.hxx>
 
-#include "txtcfg.hxx"
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "porlay.hxx"   // SwParaPortion, SetFull
@@ -111,9 +110,9 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( rInf.OnWin() && rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         const xub_Unicode cChar = rInf.GetChar( rInf.GetIdx() );
-        ASSERT( CH_BLANK  == cChar || CH_BULLET == cChar,
+        OSL_ENSURE( CH_BLANK  == cChar || CH_BULLET == cChar,
                 "SwGluePortion::Paint: blank expected" );
 #endif
         if( 1 == GetLen() )
@@ -224,7 +223,6 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         SwGluePortion *pLeft = 0;
         while( pPos )
         {
-            DBG_LOOP;
             if( pPos->InFixMargGrp() )
                 pLeft = (SwGluePortion*)pPos;
             pPos = pPos->GetPortion();
@@ -268,8 +266,6 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
             }
             while( pPrev != pLeft )
             {
-                DBG_LOOP;
-
                 if( bNoMove || pPrev->PrtWidth() >= nRightGlue ||
                     pPrev->InHyphGrp() || pPrev->IsKernPortion() )
                 {
@@ -316,3 +312,4 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

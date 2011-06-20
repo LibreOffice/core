@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,13 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SYMBOL_HXX
 #define SYMBOL_HXX
 
-#include <vos/refernce.hxx>
 #include <vcl/font.hxx>
-#include <tools/list.hxx>
-#include <tools/debug.hxx>
 #include <tools/dynary.hxx>
 #include <svl/lstner.hxx>
 #include <svl/svarray.hxx>
@@ -46,7 +45,7 @@
 #include "smmod.hxx"
 
 
-#define SYMBOLSET_NONE  0xFFFF
+#define SYMBOLSET_NONE      0xFFFF
 #define SYMBOL_NONE     0xFFFF
 
 
@@ -78,18 +77,19 @@ inline const String GetUiSymbolSetName( const String &rExportSymbolSetName )
 
 class SmSym
 {
+private:
     SmFace              m_aFace;
     String              m_aName;
     String              m_aExportName;
     String              m_aSetName;
     sal_UCS4            m_cChar;
-    sal_Bool                m_bPredefined;
-    sal_Bool                m_bDocSymbol;
+    bool                m_bPredefined;
+    bool                m_bDocSymbol;
 
 public:
     SmSym();
     SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-          const String& rSet, sal_Bool bIsPredefined = sal_False);
+          const String& rSet, bool bIsPredefined = false);
     SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
@@ -105,14 +105,14 @@ public:
 //! because ten the key would not be the same as its supposed copy here
 //    void            SetName( const String &rTxt )       { m_aName = rTxt; }
 
-    sal_Bool            IsPredefined() const        { return m_bPredefined; }
+    bool            IsPredefined() const        { return m_bPredefined; }
     const String &  GetSymbolSetName() const    { return m_aSetName; }
     void            SetSymbolSetName( const String &rName )     { m_aSetName = rName; }
     const String &  GetExportName() const       { return m_aExportName; }
     void            SetExportName( const String &rName )        { m_aExportName = rName; }
 
-    sal_Bool            IsDocSymbol() const         { return m_bDocSymbol; }
-    void            SetDocSymbol( sal_Bool bVal )   { m_bDocSymbol = bVal; }
+    bool            IsDocSymbol() const         { return m_bDocSymbol; }
+    void            SetDocSymbol( bool bVal )   { m_bDocSymbol = bVal; }
 
     // true if rSymbol has the same name, font and character
     bool            IsEqualInUI( const SmSym& rSymbol ) const;
@@ -138,7 +138,7 @@ typedef std::vector< const SmSym * >            SymbolPtrVec_t;
 
 struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, bool >
 {
-    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 )
+    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 ) const
     {
         return pSym1->GetCharacter() < pSym2->GetCharacter();
     }
@@ -147,6 +147,7 @@ struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, 
 
 class SmSymbolManager : public SfxListener
 {
+private:
     SymbolMap_t         m_aSymbols;
     bool                m_bModified;
 
@@ -187,3 +188,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

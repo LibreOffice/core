@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,6 @@
  ************************************************************************/
 #ifndef _SWVSET_HXX
 #define _SWVSET_HXX
-#include <tools/list.hxx>
 #include <svx/numvset.hxx>
 
 class SwRulerValueSet : public SvxBmpNumValueSet
@@ -39,3 +39,4 @@ class SwRulerValueSet : public SvxBmpNumValueSet
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

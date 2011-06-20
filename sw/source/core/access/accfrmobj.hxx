@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,10 +74,7 @@ class SwAccessibleChild
         SwRect GetBounds( const SwAccessibleMap& rAccMap ) const;
 
         /** indicating, if accessible child is included even, if the corresponding
-            object is not visible.
-
-            @author OD
-        */
+            object is not visible. */
         bool AlwaysIncludeAsChild() const;
 
     private:
@@ -93,3 +91,5 @@ class SwAccessibleChild
 } } // eof of namespace sw::access
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

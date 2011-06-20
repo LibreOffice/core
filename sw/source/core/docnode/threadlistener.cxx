@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 
 /** helper class to observe threads
 
-    OD 2007-03-30 #i73788#
+    #i73788#
 
     @author OD
 */
@@ -55,3 +56,4 @@ void ThreadListener::NotifyAboutFinishedThread( const oslInterlockedCount nThrea
     mrThreadListenerOwner.NotifyAboutFinishedThread( nThreadID );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

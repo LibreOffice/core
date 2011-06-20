@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -94,7 +95,6 @@ class SwUndoRenameFmt : public SwUndo
 protected:
     String sOldName, sNewName;
     SwDoc * pDoc;
-//    SwUndoId nId;
 
 public:
     SwUndoRenameFmt(SwUndoId nUndoId, const String & sOldName,
@@ -251,3 +251,5 @@ class SwUndoNumruleRename : public SwUndo
 };
 
 #endif // SW_UNDO_TXT_FMT_COLL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

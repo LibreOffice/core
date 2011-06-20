@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,8 +61,9 @@ SwWebListShell::SwWebListShell(SwView &_rView) :
     SetHelpId(SW_LISTSHELL);
 }
 
-__EXPORT SwWebListShell::~SwWebListShell()
+SwWebListShell::~SwWebListShell()
 {
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,7 +70,7 @@ void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
  *************************************************************************/
 sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
 {
-    ASSERT( Fix() >= rInf.X(), "SwFlyPortion::Format: rush hour" );
+    OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format: rush hour" );
     // 8537: Tabs muessen expandiert werden.
     if( rInf.GetLastTab() )
         ((SwLinePortion*)rInf.GetLastTab())->FormatEOL( rInf );
@@ -79,7 +80,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     PrtWidth( static_cast<sal_uInt16>(Fix() - rInf.X() + PrtWidth()) );
     if( !Width() )
     {
-        ASSERT( Width(), "+SwFlyPortion::Format: a fly is a fly is a fly" );
+        OSL_ENSURE( Width(), "+SwFlyPortion::Format: a fly is a fly is a fly" );
         Width(1);
     }
 
@@ -171,7 +172,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
         for ( sal_uInt32 i = 0; GetDrawObjs() && i < pObjs->Count(); ++i )
         {
             // OD 2004-03-29 #i26791#
-            // --> OD 2004-07-06 #i28701# - consider changed type of
+            // #i28701# - consider changed type of
             // <SwSortedList> entries
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
@@ -194,7 +195,6 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
                     --i;
                 }
             }
-            // <--
         }
     }
 }
@@ -205,7 +205,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
 xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
 {
     SwpHints* pHints = GetTxtNode()->GetpSwpHints();
-    ASSERT( pHints, "CalcFlyPos: Why me?" );
+    OSL_ENSURE( pHints, "CalcFlyPos: Why me?" );
     if( !pHints )
         return STRING_LEN;
     SwTxtAttr* pFound = NULL;
@@ -219,7 +219,7 @@ xub_StrLen SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
                 pFound = pHt;
         }
     }
-    ASSERT( pHints, "CalcFlyPos: Not Found!" );
+    OSL_ENSURE( pHints, "CalcFlyPos: Not Found!" );
     if( !pFound )
         return STRING_LEN;
     return *pFound->GetStart();
@@ -277,8 +277,8 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
             ((SwTxtPaintInfo&)rInf).SelectFont();
 
             // I want to know if this can really happen. So here comes a new
-            ASSERT( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
-                    "SwFlyCntPortion::Paint: Outdev has changed" )
+            OSL_ENSURE( ! rInf.GetVsh() || rInf.GetVsh()->GetOut() == rInf.GetOut(),
+                    "SwFlyCntPortion::Paint: Outdev has changed" );
             if( rInf.GetVsh() )
                 ((SwTxtPaintInfo&)rInf).SetOut( rInf.GetVsh()->GetOut() );
         }
@@ -302,7 +302,7 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     bMax( sal_False ),
     nAlign( 0 )
 {
-    ASSERT( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInCntFrm!" );
+    OSL_ENSURE( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInCntFrm!" );
     nLineLength = 1;
     nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
     SetBase( rFrm, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
@@ -320,15 +320,14 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     bMax( sal_False ),
     nAlign( 0 )
 {
-    ASSERT( pDrawContact, "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!" );
+    OSL_ENSURE( pDrawContact, "SwFlyCntPortion::SwFlyCntPortion: no SwDrawContact!" );
     if( !pDrawContact->GetAnchorFrm() )
     {
         // OD 2004-04-01 #i26791# - no direct positioning needed any more
         pDrawContact->ConnectToLayout();
-        // --> OD 2005-01-14 #i40333# - follow-up of #i35635#
+        // #i40333# - follow-up of #i35635#
         // move object to visible layer
         pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
-        // <--
     }
     nLineLength = 1;
     nFlags |= AS_CHAR_ULSPACE | AS_CHAR_INIT;
@@ -365,10 +364,10 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         pSdrObj = GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm );
         if ( !pSdrObj )
         {
-            ASSERT( false, "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
+            OSL_FAIL( "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
-        // --> OD 2007-11-29 #i65798#
+        // #i65798#
         // call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
         // the <DrawFrmFmt> and at the <SwAnchoredDrawObject> instance are
         // correctly set.
@@ -376,7 +375,6 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         {
             GetDrawContact()->GetAnchoredObj( pSdrObj )->MakeObjPos();
         }
-        // <--
     }
     else
     {
@@ -449,7 +447,8 @@ xub_StrLen SwFlyCntPortion::GetFlyCrsrOfst( const KSHORT nOfst,
 
 xub_StrLen SwFlyCntPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
-    // ASSERT( !this, "SwFlyCntPortion::GetCrsrOfst: use GetFlyCrsrOfst()" );
+    // OSL_ENSURE( !this, "SwFlyCntPortion::GetCrsrOfst: use GetFlyCrsrOfst()" );
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

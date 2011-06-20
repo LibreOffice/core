@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#include <errhdl.hxx>   // ASSERT
 #include <atrhndl.hxx>
 #include <svl/itemiter.hxx>
 #include <vcl/outdev.hxx>
@@ -229,7 +229,7 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
          RES_CHRATR_COLOR != rItem.Which() )
         return false;
 
-    // --> FME 2004-09-13 #i15455#
+    // #i15455#
     // 1. case:
     // We do not want to show visited links:
     // (printing, pdf export, page preview)
@@ -257,7 +257,6 @@ bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
 
         return false;
     }
-    // <--
 
     //
     // 2. case:
@@ -332,7 +331,7 @@ void SwAttrHandler::SwAttrStack::Insert( const SwTxtAttr& rAttr, const sal_uInt1
         }
     }
 
-    ASSERT( nPos <= nCount, "wrong position for insert operation");
+    OSL_ENSURE( nPos <= nCount, "wrong position for insert operation");
 
     if ( nPos < nCount )
         memmove( pArray + nPos + 1, pArray + nPos,
@@ -520,7 +519,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 {
-    ASSERT( rItem.Which() < RES_TXTATR_WITHEND_END,
+    OSL_ENSURE( rItem.Which() < RES_TXTATR_WITHEND_END,
             "I do not want this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
     // robust
@@ -541,7 +540,7 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
     }
 
     sal_uInt16 nPos = aAttrStack[ nStack ].Count();
-    ASSERT( nPos, "empty stack?" );
+    OSL_ENSURE( nPos, "empty stack?" );
     aAttrStack[ nStack ].Insert( rAttr, nPos - 1 );
     return sal_False;
 }
@@ -598,7 +597,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 {
-    ASSERT( rAttr.Which() < RES_TXTATR_WITHEND_END,
+    OSL_ENSURE( rAttr.Which() < RES_TXTATR_WITHEND_END,
             "I do not have this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
     if ( rAttr.Which() < RES_TXTATR_WITHEND_END )
@@ -612,7 +611,7 @@ void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
  *************************************************************************/
 void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 {
-    ASSERT( nAttr < RES_TXTATR_WITHEND_END,
+    OSL_ENSURE( nAttr < RES_TXTATR_WITHEND_END,
             "I cannot activate this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
     const sal_uInt16 nStackPos = StackPos[ nAttr ];
@@ -944,7 +943,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 void SwAttrHandler::GetDefaultAscentAndHeight( ViewShell* pShell, OutputDevice& rOut,
                                                sal_uInt16& nAscent, sal_uInt16& nHeight ) const
 {
-    ASSERT( pFnt, "No font available for GetDefaultAscentAndHeight" )
+    OSL_ENSURE( pFnt, "No font available for GetDefaultAscentAndHeight" );
 
     if ( pFnt )
     {
@@ -954,3 +953,4 @@ void SwAttrHandler::GetDefaultAscentAndHeight( ViewShell* pShell, OutputDevice& 
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

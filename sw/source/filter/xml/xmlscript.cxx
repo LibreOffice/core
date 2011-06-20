@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <hintids.hxx>
 #include <xmloff/xmlnmspe.hxx>
 
-#ifndef _XMLOFF_XMLMETAI_HXX
 #include <xmloff/xmlscripti.hxx>
-#endif
 #include "xmlimp.hxx"
 #include "xmlexp.hxx"
 
@@ -63,3 +62,4 @@ SvXMLImportContext *SwXMLImport::CreateScriptContext(
     return pContext;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

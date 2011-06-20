@@ -29,8 +29,6 @@
 #define _GLOBALS_HRC
 
 
-// Versions-Definition wie in solar.h und swtypes.hxx
-//#define SW_FILEFORMAT_40 3580
 
 #include "rcid.hrc"
 
@@ -69,7 +67,7 @@
 #define STR_EVENT_FRM_RESIZE         ( RC_GLOBALS_BEGIN + 28 )
 #define STR_EVENT_FRM_MOVE           ( RC_GLOBALS_BEGIN + 29 )
 
-// Strings fuer Rahmenausrichtungen im Popup
+// Strings for frame alignment in Popup
 #define STR_TOP_BASE                (RC_GLOBALS_BEGIN + 30)
 #define STR_BOTTOM_BASE             (RC_GLOBALS_BEGIN + 31)
 #define STR_CENTER_BASE             (RC_GLOBALS_BEGIN + 32)
@@ -94,7 +92,7 @@
 #define RES_TABD                    (RC_GLOBALS_BEGIN + 3)
 #define RES_TABC                    (RC_GLOBALS_BEGIN + 4)
 
-// DIALOGE -----------------------------------------------------------
+// DIALOGS -----------------------------------------------------------
 
 #define DLG_LISTBOX                 (RC_GLOBALS_BEGIN + 1)
 #define DLG_THESAURUS               (RC_GLOBALS_BEGIN + 2)
@@ -173,11 +171,11 @@
 #define TP_FOOTER_PAGE              (RC_GLOBALS_BEGIN +  17)
 #define TP_FOOTNOTE_PAGE            (RC_GLOBALS_BEGIN +  18)
 
-#define TP_OPTGENERAL_PAGE          (RC_GLOBALS_BEGIN +  19) //Sfx-Seiten
+#define TP_OPTGENERAL_PAGE          (RC_GLOBALS_BEGIN +  19) // Sfx-pages
 #define TP_OPTSAVE_PAGE             (RC_GLOBALS_BEGIN +  20)
 #define TP_OPTPATH_PAGE             (RC_GLOBALS_BEGIN +  21)
 #define TP_OPTSPELL_PAGE            (RC_GLOBALS_BEGIN +  22)
- //Sw-Seiten
+// Sw-pages
 #define SW_EDIT_OPTIONS_TDLG        (RC_GLOBALS_BEGIN +  23)
 #define SW_BROWSER_OPTIONS_TDLG     (RC_GLOBALS_BEGIN +  24)
 #define TP_OPTTEST_PAGE             (RC_GLOBALS_BEGIN +  25)
@@ -275,7 +273,9 @@
 #define TP_SECTION_INDENTS          (RC_GLOBALS_BEGIN +  102)
 #define TP_OPTCOMPATIBILITY_PAGE    (RC_GLOBALS_BEGIN +  103)
 #define TP_MAILCONFIG               (RC_GLOBALS_BEGIN +  104)
-//maximum: RC_GLOBALS_BEGIN +  119
+#define TP_TITLEPAGE                (RC_GLOBALS_BEGIN +  105)
+//maximum: RC_GLOBALS_BEGIN +  120
+
 
 #if STR_DOC_STAT > RC_GLOBALS_END
 #error Resource-Id Ueberlauf in #file, #line
@@ -287,4 +287,5 @@
 #define SID_WRT_SHELL               (RC_GLOBALS_BEGIN +  117)
 
 #define DLG_LINE_NUMBERING          (RC_GLOBALS_BEGIN +  118)
+#define DLG_TITLEPAGE               (RC_GLOBALS_BEGIN +  119)
 #endif // _GLOBALS_HRC

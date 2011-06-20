@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unomid.h>
@@ -44,6 +45,7 @@
 #include <fmtrfmrk.hxx>
 #include <txtrfmrk.hxx>
 #include <hints.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
@@ -52,7 +54,6 @@ using ::rtl::OUString;
 /******************************************************************
  * SwXReferenceMark
  ******************************************************************/
-
 class SwXReferenceMark::Impl
     : public SwClient
 {
@@ -88,9 +89,6 @@ protected:
 
 };
 
-/* -----------------------------07.01.00 12:51--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwXReferenceMark::Impl::Invalidate()
 {
     if (IsValid())
@@ -102,9 +100,6 @@ void SwXReferenceMark::Impl::Invalidate()
     m_pMarkFmt = 0;
 }
 
-/*-- 11.12.98 10:28:37---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
@@ -128,19 +123,12 @@ void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem 
     }
 }
 
-
-/*-- 11.12.98 10:28:32---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXReferenceMark::SwXReferenceMark(
         SwDoc *const pDoc, SwFmtRefMark const*const pRefMark)
     : m_pImpl( new SwXReferenceMark::Impl(*this, pDoc, pRefMark) )
 {
 }
 
-/*-- 11.12.98 10:28:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXReferenceMark::~SwXReferenceMark()
 {
 }
@@ -166,41 +154,37 @@ SwXReferenceMark::CreateXReferenceMark(
         :   new SwXReferenceMark(&rDoc, &rMarkFmt);
 }
 
-/* -----------------------------13.03.00 12:15--------------------------------
+namespace
+{
+    class theSwXReferenceMarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXReferenceMarkUnoTunnelId > {};
+}
 
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SwXReferenceMark::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXReferenceMarkUnoTunnelId::get().getSeq();
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL
 SwXReferenceMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 throw (uno::RuntimeException)
 {
     return ::sw::UnoTunnelImpl<SwXReferenceMark>(rId, this);
 }
-/* -----------------------------06.04.00 16:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SAL_CALL SwXReferenceMark::getImplementationName()
 throw (uno::RuntimeException)
 {
     return C2U("SwXReferenceMark");
 }
-/* -----------------------------06.04.00 16:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 static char const*const g_ServicesReferenceMark[] =
 {
     "com.sun.star.text.TextContent",
     "com.sun.star.text.ReferenceMark",
 };
+
 static const size_t g_nServicesReferenceMark(
-    sizeof(g_ServicesReferenceMark)/sizeof(g_ServicesReferenceMark[0]));
+    SAL_N_ELEMENTS(g_ServicesReferenceMark));
 
 sal_Bool SAL_CALL
 SwXReferenceMark::supportsService(const OUString& rServiceName)
@@ -209,9 +193,7 @@ throw (uno::RuntimeException)
     return ::sw::SupportsServiceImpl(
             g_nServicesReferenceMark, g_ServicesReferenceMark, rServiceName);
 }
-/* -----------------------------06.04.00 16:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString > SAL_CALL
 SwXReferenceMark::getSupportedServiceNames()
 throw (uno::RuntimeException)
@@ -220,9 +202,6 @@ throw (uno::RuntimeException)
             g_nServicesReferenceMark, g_ServicesReferenceMark);
 }
 
-/* -----------------03.11.99 14:14-------------------
-
- --------------------------------------------------*/
 template<typename T> struct NotContainedIn
 {
     ::std::vector<T> const& m_rVector;
@@ -287,8 +266,10 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
     else
     {
-        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK);
+        SwTxtNode *pTxtNd = rPam.GetNode()->GetTxtNode();
+        OSL_ASSERT(pTxtNd);
+        pTxtAttr = pTxtNd ? rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : NULL;
     }
 
     if (!pTxtAttr)
@@ -302,14 +283,11 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     pDoc2->GetUnoCallBack()->Add(this);
 }
 
-/*-- 11.12.98 10:28:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -339,13 +317,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_pDoc = pDocument;
 }
 
-/*-- 11.12.98 10:28:34---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > SAL_CALL
 SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (m_pImpl->IsValid())
     {
@@ -372,12 +347,10 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException)
     }
     return 0;
 }
-/*-- 11.12.98 10:28:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (m_pImpl->IsValid())
     {
         SwFmtRefMark const*const pNewMark =
@@ -405,14 +378,12 @@ void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException)
         m_pImpl->Invalidate();
     }
 }
-/*-- 11.12.98 10:28:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->IsValid())
     {
@@ -420,14 +391,12 @@ throw (uno::RuntimeException)
     }
     m_pImpl->m_ListenerContainer.AddListener(xListener);
 }
-/*-- 11.12.98 10:28:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->IsValid() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -435,13 +404,11 @@ throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
 }
-/*-- 11.12.98 10:28:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SAL_CALL SwXReferenceMark::getName()
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!m_pImpl->IsValid() ||
         !m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName))
     {
@@ -449,13 +416,11 @@ throw (uno::RuntimeException)
     }
     return m_pImpl->m_sMarkName;
 }
-/*-- 11.12.98 10:28:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (m_pImpl->m_bIsDescriptor)
     {
         m_pImpl->m_sMarkName = rName;
@@ -499,22 +464,17 @@ throw (uno::RuntimeException)
     }
 }
 
-/*-- 12.09.00 12:58:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXReferenceMark::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static uno::Reference< beans::XPropertySetInfo >  xRef =
         aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH_EXTENSIONS)
             ->getPropertySetInfo();
     return xRef;
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::setPropertyValue(
     const OUString& /*rPropertyName*/, const uno::Any& /*rValue*/ )
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
@@ -523,9 +483,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 {
     throw lang::IllegalArgumentException();
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXReferenceMark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
@@ -539,53 +497,41 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     }
     return aRet;
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::addPropertyChangeListener(): not implemented");
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::removePropertyChangeListener(): not implemented");
 }
-/*-- 12.09.00 12:58:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::addVetoableChangeListener(): not implemented");
 }
-/*-- 12.09.00 12:58:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXReferenceMark::removeVetoableChangeListener(
     const OUString& /*rPropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::removeVetoableChangeListener(): not implemented");
 }
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -596,12 +542,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 #include <fmtmeta.hxx>
 #include <docsh.hxx>
 
-//=============================================================================
-
 /******************************************************************
  * SwXMetaText
  ******************************************************************/
-
 class SwXMetaText
     : public SwXText
 {
@@ -627,9 +570,9 @@ public:
 
     // XInterface
     virtual void SAL_CALL acquire() throw()
-        { OSL_ENSURE(false, "ERROR: SwXMetaText::acquire"); }
+        { OSL_FAIL("ERROR: SwXMetaText::acquire"); }
     virtual void SAL_CALL release() throw()
-        { OSL_ENSURE(false, "ERROR: SwXMetaText::release"); }
+        { OSL_FAIL("ERROR: SwXMetaText::release"); }
 
     // XTypeProvider
     virtual uno::Sequence< sal_Int8 > SAL_CALL
@@ -722,11 +665,9 @@ SwXMetaText::createTextCursorByRange(
 /******************************************************************
  * SwXMeta
  ******************************************************************/
-
 // the Meta has a cached list of text portions for its contents
 // this list is created by SwXTextPortionEnumeration
 // the Meta listens at the SwTxtNode and throws away the cache when it changes
-
 class SwXMeta::Impl
     : public SwClient
 {
@@ -829,7 +770,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             // ??? is this necessary?
             if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
             {
-                OSL_ENSURE(false, "SwXMeta with different parent?");
+                OSL_FAIL("SwXMeta with different parent?");
                 pXMeta->m_pImpl->m_xParentText.set(i_xParent);
             }
         }
@@ -862,7 +803,6 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     return xMeta;
 }
 
-
 bool SwXMeta::SetContentRange(
         SwTxtNode *& rpNode, xub_StrLen & rStart, xub_StrLen & rEnd ) const
 {
@@ -892,7 +832,7 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
     const bool bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
-    ASSERT(bSuccess, "no pam?");
+    OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
         throw lang::DisposedException();
 
@@ -947,10 +887,14 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     return bForceExpandHints;
 }
 
+namespace
+{
+    class theSwXMetaUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMetaUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq( ::CreateUnoTunnelId() );
-    return aSeq;
+    return theSwXMetaUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel
@@ -973,8 +917,9 @@ static char const*const g_ServicesMeta[] =
     "com.sun.star.text.TextContent",
     "com.sun.star.text.InContentMetadata",
 };
+
 static const size_t g_nServicesMeta(
-    sizeof(g_ServicesMeta)/sizeof(g_ServicesMeta[0]));
+    SAL_N_ELEMENTS(g_ServicesMeta));
 
 sal_Bool SAL_CALL
 SwXMeta::supportsService(const ::rtl::OUString& rServiceName)
@@ -990,14 +935,13 @@ SwXMeta::getSupportedServiceNames() throw (uno::RuntimeException)
     return ::sw::GetSupportedServiceNamesImpl(g_nServicesMeta, g_ServicesMeta);
 }
 
-
 // XComponent
 void SAL_CALL
 SwXMeta::addEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     m_pImpl->m_ListenerContainer.AddListener(xListener);
     if (m_pImpl->m_bIsDisposed)
@@ -1011,7 +955,7 @@ SwXMeta::removeEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->m_bIsDisposed)
     {
@@ -1022,7 +966,7 @@ throw (uno::RuntimeException)
 void SAL_CALL
 SwXMeta::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDescriptor)
     {
@@ -1037,7 +981,7 @@ SwXMeta::dispose() throw (uno::RuntimeException)
         xub_StrLen nMetaStart;
         xub_StrLen nMetaEnd;
         const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
-        ASSERT(bSuccess, "no pam?");
+        OSL_ENSURE(bSuccess, "no pam?");
         if (bSuccess)
         {
             // -1 because of CH_TXTATR
@@ -1051,13 +995,12 @@ SwXMeta::dispose() throw (uno::RuntimeException)
     }
 }
 
-
 void SAL_CALL
 SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
         const sal_uInt16 i_nWhich)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDisposed)
     {
@@ -1126,7 +1069,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     if (!pTxtAttr)
     {
-        ASSERT(false, "meta inserted, but has no text attribute?");
+        OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
             C2S("SwXMeta::attach(): cannot create meta"),
                 static_cast< ::cppu::OWeakObject* >(this));
@@ -1151,7 +1094,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDisposed)
     {
@@ -1168,7 +1111,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
     const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
-    ASSERT(bSuccess, "no pam?");
+    OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
     {
         throw lang::DisposedException(
@@ -1185,35 +1128,35 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
 uno::Reference< text::XText > SAL_CALL
 SwXMeta::getText() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return this;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getStart() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.getStart();
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getEnd() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.getEnd();
 }
 
 rtl::OUString SAL_CALL
 SwXMeta::getString() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.getString();
 }
 
 void SAL_CALL
 SwXMeta::setString(const rtl::OUString& rString) throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.setString(rString);
 }
 
@@ -1221,7 +1164,7 @@ SwXMeta::setString(const rtl::OUString& rString) throw (uno::RuntimeException)
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXMeta::createTextCursor() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.createTextCursor();
 }
 
@@ -1230,7 +1173,7 @@ SwXMeta::createTextCursorByRange(
         const uno::Reference<text::XTextRange> & xTextPosition)
     throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.createTextCursorByRange(xTextPosition);
 }
 
@@ -1239,7 +1182,7 @@ SwXMeta::insertString(const uno::Reference<text::XTextRange> & xRange,
         const rtl::OUString& rString, sal_Bool bAbsorb)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.insertString(xRange, rString, bAbsorb);
 }
 
@@ -1248,7 +1191,7 @@ SwXMeta::insertControlCharacter(const uno::Reference<text::XTextRange> & xRange,
         sal_Int16 nControlCharacter, sal_Bool bAbsorb)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.insertControlCharacter(xRange, nControlCharacter,
                 bAbsorb);
 }
@@ -1259,7 +1202,7 @@ SwXMeta::insertTextContent( const uno::Reference<text::XTextRange> & xRange,
         const uno::Reference<text::XTextContent> & xContent, sal_Bool bAbsorb)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.insertTextContent(xRange, xContent, bAbsorb);
 }
 
@@ -1268,7 +1211,7 @@ SwXMeta::removeTextContent(
         const uno::Reference< text::XTextContent > & xContent)
     throw (container::NoSuchElementException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     return m_pImpl->m_Text.removeTextContent(xContent);
 }
 
@@ -1276,7 +1219,7 @@ SwXMeta::removeTextContent(
 uno::Reference< uno::XInterface > SAL_CALL
 SwXMeta::getParent() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
     SwTxtNode * pTxtNode;
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
@@ -1309,7 +1252,7 @@ SwXMeta::getElementType() throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 SwXMeta::hasElements() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return m_pImpl->GetRegisteredIn() ? sal_True : sal_False;
 }
@@ -1318,7 +1261,7 @@ SwXMeta::hasElements() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXMeta::createEnumeration() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (m_pImpl->m_bIsDisposed)
     {
@@ -1335,7 +1278,7 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
     xub_StrLen nMetaStart;
     xub_StrLen nMetaEnd;
     const bool bSuccess(SetContentRange(pTxtNode, nMetaStart, nMetaEnd));
-    ASSERT(bSuccess, "no pam?");
+    OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
         throw lang::DisposedException();
 
@@ -1351,7 +1294,6 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
         return new SwXTextPortionEnumeration(aPam, *m_pImpl->m_pTextPortions);
     }
 }
-
 
 // MetadatableMixin
 ::sfx2::Metadatable* SwXMeta::GetCoreObject()
@@ -1374,11 +1316,9 @@ uno::Reference<frame::XModel> SwXMeta::GetModel()
     return 0;
 }
 
-
 /******************************************************************
  * SwXMetaField
  ******************************************************************/
-
 inline const ::sw::MetaField * SwXMeta::Impl::GetMetaField() const
 {
     return static_cast< const ::sw::MetaField * >(GetRegisteredIn());
@@ -1389,7 +1329,7 @@ SwXMetaField::SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
         TextRangeList_t const*const pPortions)
     : SwXMetaField_Base(pDoc, pMeta, xParentText, pPortions)
 {
-    ASSERT(pMeta && dynamic_cast< ::sw::MetaField* >(pMeta),
+    OSL_ENSURE(pMeta && dynamic_cast< ::sw::MetaField* >(pMeta),
         "SwXMetaField created for wrong hint!");
 }
 
@@ -1415,8 +1355,9 @@ static char const*const g_ServicesMetaField[] =
     "com.sun.star.text.TextField",
     "com.sun.star.text.textfield.MetadataField",
 };
+
 static const size_t g_nServicesMetaField(
-    sizeof(g_ServicesMetaField)/sizeof(g_ServicesMetaField[0]));
+    SAL_N_ELEMENTS(g_ServicesMetaField));
 
 sal_Bool SAL_CALL
 SwXMetaField::supportsService(const ::rtl::OUString& rServiceName)
@@ -1474,7 +1415,7 @@ SwXMetaField::getAnchor() throw (uno::RuntimeException)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXMetaField::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static uno::Reference< beans::XPropertySetInfo > xRef(
         aSwMapProvider.GetPropertySet(PROPERTY_MAP_METAFIELD)
@@ -1489,14 +1430,14 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     ::sw::MetaField * const pMeta(
             const_cast< ::sw::MetaField * >(m_pImpl->GetMetaField()) );
     if (!pMeta)
         throw lang::DisposedException();
 
-    if (rPropertyName.equalsAscii("NumberFormat"))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NumberFormat")))
     {
         sal_Int32 nNumberFormat(0);
         if (rValue >>= nNumberFormat)
@@ -1504,7 +1445,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             pMeta->SetNumberFormat(static_cast<sal_uInt32>(nNumberFormat));
         }
     }
-    else if (rPropertyName.equalsAscii("IsFixedLanguage"))
+    else if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFixedLanguage")))
     {
         bool b(false);
         if (rValue >>= b)
@@ -1523,7 +1464,7 @@ SwXMetaField::getPropertyValue(const ::rtl::OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     ::sw::MetaField const * const pMeta( m_pImpl->GetMetaField() );
     if (!pMeta)
@@ -1531,12 +1472,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     uno::Any any;
 
-    if (rPropertyName.equalsAscii("NumberFormat"))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NumberFormat")))
     {
         const ::rtl::OUString text( getPresentation(sal_False) );
         any <<= static_cast<sal_Int32>(pMeta->GetNumberFormat(text));
     }
-    else if (rPropertyName.equalsAscii("IsFixedLanguage"))
+    else if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFixedLanguage")))
     {
         any <<= pMeta->IsFixedLanguage();
     }
@@ -1555,8 +1496,7 @@ SwXMetaField::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1566,8 +1506,7 @@ SwXMetaField::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1577,8 +1516,7 @@ SwXMetaField::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1588,8 +1526,7 @@ SwXMetaField::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::removeVetoableChangeListener(): not implemented");
 }
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -1664,7 +1601,7 @@ getPrefixAndSuffix(
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii("getPrefixAndSuffix: exception"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPrefixAndSuffix: exception")),
             0, uno::makeAny(e));
     }
 }
@@ -1674,7 +1611,7 @@ getPrefixAndSuffix(
 SwXMetaField::getPresentation(sal_Bool bShowCommand)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (bShowCommand)
     {
@@ -1692,3 +1629,4 @@ throw (uno::RuntimeException)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

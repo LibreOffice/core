@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,6 @@
 #include <comcore.hrc>
 
 #include <math.h>
-#include <float.h>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
@@ -83,9 +83,8 @@ sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
 
 SvStringsDtor* SwFieldType::pFldNames = 0;
 
-DBG_NAME(SwFieldType)
 
-    sal_uInt16 __FAR_DATA aTypeTab[] = {
+    sal_uInt16 aTypeTab[] = {
     /* RES_DBFLD            */      TYP_DBFLD,
     /* RES_USERFLD          */      TYP_USERFLD,
     /* RES_FILENAMEFLD      */      TYP_FILENAMEFLD,
@@ -152,30 +151,20 @@ SwFieldType::SwFieldType( sal_uInt16 nWhichId )
     : SwModify(0),
     nWhich( nWhichId )
 {
-    DBG_CTOR( SwFieldType, 0 );
 }
-
-#ifdef DBG_UTIL
-
-SwFieldType::~SwFieldType()
-{
-    DBG_DTOR( SwFieldType, 0 );
-}
-
-#endif
 
 const String& SwFieldType::GetName() const
 {
     return aEmptyStr;
 }
 
-sal_Bool SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
+bool SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
 {
-    return sal_False;
+    return false;
 }
-sal_Bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
+bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 {
-    return sal_False;
+    return false;
 }
 
 /*--------------------------------------------------------------------
@@ -189,7 +178,7 @@ SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, sal_uInt16 nLng) :
     bIsAutomaticLanguage(sal_True),
     nFormat(nFmt)
 {
-    ASSERT( pTyp, "SwField: ungueltiger SwFieldType" );
+    OSL_ENSURE( pTyp, "SwField: ungueltiger SwFieldType" );
     pType = pTyp;
 }
 
@@ -201,17 +190,13 @@ SwField::~SwField()
     Beschreibung: Statt Umweg ueber den Typ
  --------------------------------------------------------------------*/
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 sal_uInt16 SwField::Which() const
 {
-    ASSERT(pType, "Kein Typ vorhanden");
+    OSL_ENSURE(pType, "Kein Typ vorhanden");
     return pType->Which();
 }
 #endif
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_uInt16 SwField::GetTypeId() const
 {
@@ -307,16 +292,14 @@ void SwField::SetPar2(const String& )
 
 sal_uInt16 SwField::GetSubType() const
 {
-//  ASSERT(0, "Sorry Not implemented");
     return 0;
 }
 
 void SwField::SetSubType(sal_uInt16 )
 {
-//  ASSERT(0, "Sorry Not implemented");
 }
 
-sal_Bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -327,11 +310,11 @@ sal_Bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         }
         break;
         default:
-            DBG_ERROR("illegal property");
+            OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
-sal_Bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -343,9 +326,9 @@ sal_Bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         }
         break;
         default:
-            DBG_ERROR("illegal property");
+            OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -357,7 +340,7 @@ sal_Bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 
 SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 {
-    ASSERT( pNewType && pNewType->Which() == pType->Which(),
+    OSL_ENSURE( pNewType && pNewType->Which() == pType->Which(),
             "kein Typ oder ungleiche Typen" );
 
     SwFieldType* pOld = pType;
@@ -455,7 +438,7 @@ String FormatNumber(sal_uInt16 nNum, sal_uInt32 nFormat)
         return  String::CreateFromInt32( nNum );
     SvxNumberType aNumber;
 
-    ASSERT(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );
+    OSL_ENSURE(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );
 
     aNumber.SetNumberingType((sal_Int16)nFormat);
     return aNumber.GetNumStr(nNum);
@@ -519,7 +502,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
             else
                 nFmt = nNewFormat;
         }
-        ASSERT(pEntry, "Unbekanntes Zahlenformat!");
+        OSL_ENSURE(pEntry, "Unbekanntes Zahlenformat!");
     }
 
     if( pFormatter->IsTextFormat( nFmt ) )
@@ -534,10 +517,6 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     return sExpand;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
                                         sal_uInt32 nFmt) const
 {
@@ -547,10 +526,6 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
     if (pEntry)
         DoubleToString(rValue, rVal, pEntry->GetLanguage());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
                                         sal_uInt16 nLng ) const
@@ -682,16 +657,12 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
                 }
                 SetFormat( nNewFormat );
             }
-            ASSERT(pEntry, "Unbekanntes Zahlenformat!");
+            OSL_ENSURE(pEntry, "Unbekanntes Zahlenformat!");
         }
     }
 
     SwField::SetLanguage(nLng);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 double SwValueField::GetValue() const
 {
@@ -718,18 +689,10 @@ SwFormulaField::SwFormulaField( const SwFormulaField& rFld )
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 String SwFormulaField::GetFormula() const
 {
     return sFormula;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFormulaField::SetFormula(const String& rStr)
 {
@@ -745,10 +708,6 @@ void SwFormulaField::SetFormula(const String& rStr)
             SwValueField::SetValue( fTmpValue );
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFormulaField::SetExpandedFormula( const String& rStr )
 {
@@ -771,10 +730,6 @@ void SwFormulaField::SetExpandedFormula( const String& rStr )
     }
     sFormula = rStr;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 String SwFormulaField::GetExpandedFormula() const
 {
@@ -806,3 +761,5 @@ String SwField::GetDescription() const
 {
     return SW_RES(STR_FIELD);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

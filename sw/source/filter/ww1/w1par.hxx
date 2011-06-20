@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define _W1PAR_HXX
 
 #include <fltshell.hxx>
-#ifndef _W1CLASS_HXX
 #include <w1class.hxx>
-#endif
 
 ////////////////////////////////////////////////////////////// Ww1Shell
 class Ww1Shell : public SwFltShell
@@ -43,3 +42,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,8 +39,8 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 using namespace ::xmloff::token;
 
-sal_Char __READONLY_DATA sXML_np__office[] = "_ooffice";
-sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
+sal_Char const sXML_np__office[] = "_ooffice";
+sal_Char const sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLSectionList::SwXMLSectionList(
@@ -152,3 +153,5 @@ SvXMLImportContext *SvXMLIgnoreSectionListContext::CreateChildContext(
 {
     return  new SvXMLIgnoreSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

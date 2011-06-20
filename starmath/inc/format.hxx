@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,14 +104,14 @@ String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent );
 class SmFormat : public SfxBroadcaster
 {
     SmFace      vFont[FNT_END + 1];
-    sal_Bool        bDefaultFont[FNT_END + 1];
+    bool        bDefaultFont[FNT_END + 1];
     Size        aBaseSize;
     long        nVersion;
     sal_uInt16      vSize[SIZ_END + 1];
     sal_uInt16      vDist[DIS_END + 1];
     SmHorAlign  eHorAlign;
     sal_Int16       nGreekCharStyle;
-    sal_Bool        bIsTextmode,
+    bool        bIsTextmode,
                 bScaleNormalBrackets;
 
 public:
@@ -121,29 +122,29 @@ public:
     void            SetBaseSize(const Size &rSize)  { aBaseSize = rSize; }
 
     const SmFace &  GetFont(sal_uInt16 nIdent) const { return vFont[nIdent]; }
-    void            SetFont(sal_uInt16 nIdent, const SmFace &rFont, sal_Bool bDefault = sal_False);
+    void            SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault = false);
     void            SetFontSize(sal_uInt16 nIdent, const Size &rSize)   { vFont[nIdent].SetSize( rSize ); }
 
-    void            SetDefaultFont(sal_uInt16 nIdent, sal_Bool bVal)    { bDefaultFont[nIdent] = bVal; }
-    sal_Bool            IsDefaultFont(sal_uInt16 nIdent) const   { return bDefaultFont[nIdent]; }
+    void            SetDefaultFont(sal_uInt16 nIdent, bool bVal)    { bDefaultFont[nIdent] = bVal; }
+    bool            IsDefaultFont(sal_uInt16 nIdent) const   { return bDefaultFont[nIdent]; }
 
-    sal_uInt16          GetRelSize(sal_uInt16 nIdent) const         { return vSize[nIdent]; }
+    sal_uInt16      GetRelSize(sal_uInt16 nIdent) const         { return vSize[nIdent]; }
     void            SetRelSize(sal_uInt16 nIdent, sal_uInt16 nVal)  { vSize[nIdent] = nVal;}
 
-    sal_uInt16          GetDistance(sal_uInt16 nIdent) const            { return vDist[nIdent]; }
+    sal_uInt16      GetDistance(sal_uInt16 nIdent) const            { return vDist[nIdent]; }
     void            SetDistance(sal_uInt16 nIdent, sal_uInt16 nVal) { vDist[nIdent] = nVal; }
 
     SmHorAlign      GetHorAlign() const             { return eHorAlign; }
     void            SetHorAlign(SmHorAlign eAlign)  { eHorAlign = eAlign; }
 
-    sal_Bool            IsTextmode() const     { return bIsTextmode; }
-    void            SetTextmode(sal_Bool bVal) { bIsTextmode = bVal; }
+    bool            IsTextmode() const     { return bIsTextmode; }
+    void            SetTextmode(bool bVal) { bIsTextmode = bVal; }
 
-    sal_Int16           GetGreekCharStyle() const     { return nGreekCharStyle; }
+    sal_Int16       GetGreekCharStyle() const     { return nGreekCharStyle; }
     void            SetGreekCharStyle(sal_Int16 nVal) { nGreekCharStyle = nVal; }
 
-    sal_Bool            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
-    void            SetScaleNormalBrackets(sal_Bool bVal) { bScaleNormalBrackets = bVal; }
+    bool            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
+    void            SetScaleNormalBrackets(bool bVal) { bScaleNormalBrackets = bVal; }
 
     long            GetVersion() const { return nVersion; }
 
@@ -152,8 +153,8 @@ public:
 
     SmFormat &      operator = (const SmFormat &rFormat);
 
-    sal_Bool            operator == (const SmFormat &rFormat) const;
-    inline sal_Bool     operator != (const SmFormat &rFormat) const;
+    bool            operator == (const SmFormat &rFormat) const;
+    inline bool     operator != (const SmFormat &rFormat) const;
 
     void RequestApplyChanges() const
     {
@@ -162,10 +163,11 @@ public:
 
 };
 
-inline sal_Bool    SmFormat::operator != (const SmFormat &rFormat) const
+inline bool    SmFormat::operator != (const SmFormat &rFormat) const
 {
     return !(*this == rFormat);
 }
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

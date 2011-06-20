@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@ SwUndoFlyStrAttr::SwUndoFlyStrAttr( SwFlyFrmFmt& rFlyFrmFmt,
       msOldStr( sOldStr ),
       msNewStr( sNewStr )
 {
-    ASSERT( eUndoId == UNDO_FLYFRMFMT_TITLE ||
+    OSL_ENSURE( eUndoId == UNDO_FLYFRMFMT_TITLE ||
             eUndoId == UNDO_FLYFRMFMT_DESCRIPTION,
             "<SwUndoFlyStrAttr::SwUndoFlyStrAttr(..)> - unexpected undo id --> Undo will not work" );
 }
@@ -97,3 +98,5 @@ SwRewriter SwUndoFlyStrAttr::GetRewriter() const
 
     return aResult;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

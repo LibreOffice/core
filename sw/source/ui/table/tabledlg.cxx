@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,10 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svx/htmlmode.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -55,76 +53,29 @@
 
 #include "access.hrc"
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <frmatr.hxx>
 #include <tabledlg.hxx>
-#ifndef _TABLEPG_HXX
 #include <tablepg.hxx>
-#endif
 #include <tablemgr.hxx>
 #include <pagedesc.hxx>
 #include <uiitems.hxx>
 #include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _TABLEDLG_HRC
 #include <tabledlg.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
 
 using namespace ::com::sun::star;
-
-
-#ifdef DEBUG_TBLDLG
-void DbgTblRep(SwTableRep* pRep)
-{
-    DBG_ERROR(String(pRep->GetColCount()))
-    DBG_ERROR(String(pRep->GetAllColCount()))
-    SwTwips nSum = 0;
-    for(sal_uInt16 i = 0; i < pRep->GetAllColCount(); i++)
-    {
-        String sMsg(i);
-        sMsg += pRep->GetColumns()[i].bVisible ? " v " : " h ";
-        sMsg += pRep->GetColumns()[i].nWidth;
-        nSum +=pRep->GetColumns()[i].nWidth;
-        DBG_ERROR(sMsg)
-    }
-    String sMsg("Spaltensumme: ");
-    sMsg += nSum;
-    sMsg += " Tblbreite: ";
-    sMsg += pRep->GetWidth();
-    DBG_ERROR(sMsg)
-    sMsg = "Gesamt/Links/Rechts: ";
-    sMsg += pRep->GetSpace();
-    sMsg += '/';
-    sMsg += pRep->GetLeftSpace();
-    sMsg += '/';
-    sMsg += pRep->GetRightSpace();
-    DBG_ERROR(sMsg)
-    sMsg = "Align: ";
-    sMsg += pRep->GetAlign();
-    DBG_ERROR(sMsg)
-
-};
-
-#endif
 
 
 SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) :
@@ -183,8 +134,7 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     Init();
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwFormatTablePage::Init()
 {
     aLeftMF.MetricField::SetMin(-999999);
@@ -225,7 +175,7 @@ void  SwFormatTablePage::Init()
 
 IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
 {
-    DBG_ASSERT(pTblData, "Tabellendaten nicht da?");
+    OSL_ENSURE(pTblData, "table data not available?");
     sal_Bool bIsChecked = pBtn->IsChecked();
     sal_Int64 nLeft  = aLeftMF.DenormalizePercent(aLeftMF.GetValue(FUNIT_TWIP ));
     sal_Int64 nRight = aRightMF.DenormalizePercent(aRightMF.GetValue(FUNIT_TWIP ));
@@ -259,8 +209,7 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
 {
     sal_Bool bRestore = sal_True,
@@ -332,9 +281,7 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
     if(aFreeBtn.IsChecked())
     {
         sal_Bool bEnable = aRightMF.GetValue() == 0;
-//      aWidthMF.Enable(bEnable);
         aRelWidthCB.Enable(bEnable);
-//      aWidthFT.Enable(bEnable);
         if ( !bEnable )
         {
             aRelWidthCB.Check(sal_False);
@@ -347,8 +294,7 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
 {
     if( &aRightMF == pEdit)
@@ -460,16 +406,14 @@ void  SwFormatTablePage::ModifyHdl( Edit* pEdit )
     bModified = sal_True;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
                                    const SfxItemSet& rAttrSet)
 {
     return new SwFormatTablePage( pParent, rAttrSet );
 }
 
-/*------------------------------------------------------------------------
--------------------------------------------------------------------------*/
+
 sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     // Testen, ob eins der Control noch den Focus hat
@@ -517,8 +461,7 @@ sal_Bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
     return bModified;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwFormatTablePage::Reset( const SfxItemSet& )
 {
     const SfxItemSet& rSet = GetItemSet();
@@ -654,7 +597,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
     //text direction
     if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, sal_True, &pItem ) )
     {
-        sal_uInt32 nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
+        sal_uIntPtr nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
         sal_uInt16 nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
         aTextDirectionLB.SelectEntryPos( nPos );
         aTextDirectionLB.SaveValue();
@@ -667,11 +610,10 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
-    DBG_ASSERT(pTblData, "Tabellendaten nicht da?");
+    OSL_ENSURE(pTblData, "table data not available?");
     if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP ))
     {
         SwTwips nCurWidth = text::HoriOrientation::FULL != pTblData->GetAlign() ?
@@ -694,8 +636,7 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
     }
 
 }
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
     // os: VCL sorgt nicht dafuer, dass das aktive Control im
@@ -799,8 +740,6 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 pTblData->SetAlign(nAlign);
             }
 
-
-    //      if(  text::HoriOrientation::CENTER && lWidth != (SwTwips)aWidthMF.GetSavedValue())
             if(pTblData->GetWidth() != lWidth )
             {
                 pTblData->SetWidthChanged();
@@ -810,9 +749,6 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if(pTblData->HasWidthChanged())
                 _pSet->Put(SwPtrItem(FN_TABLE_REP, pTblData));
         }
-#ifdef DEBUG_TBLDLG
-DbgTblRep(pTblData)
-#endif
     }
     return sal_True;
 }
@@ -883,16 +819,14 @@ SwTableColumnPage::SwTableColumnPage( Window* pParent,
 {
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTableColumnPage( pParent, rAttrSet );
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwTableColumnPage::Reset( const SfxItemSet& )
 {
     const SfxItemSet& rSet = GetItemSet();
@@ -939,8 +873,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
 
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void  SwTableColumnPage::Init(sal_Bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
@@ -967,8 +900,7 @@ void  SwTableColumnPage::Init(sal_Bool bWeb)
     aProportionalCB.SetClickHdl( aLk );
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
 {
     //Anzeigefenster verschieben
@@ -1009,8 +941,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     return 0;
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 {
     bModified = sal_True;
@@ -1019,8 +950,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, UpHdl, PercentField *, pEdit )
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 {
     bModified = sal_True;
@@ -1029,8 +959,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, DownHdl, PercentField *, pEdit )
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 {
     if(pEdit->IsModified())
@@ -1042,8 +971,7 @@ IMPL_LINK_INLINE_START( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 };
 IMPL_LINK_INLINE_END( SwTableColumnPage, LoseFocusHdl, PercentField *, pEdit )
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
 {
     sal_Bool bCheck = pBox->IsChecked();
@@ -1056,8 +984,7 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
     return 0;
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
 {
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
@@ -1076,8 +1003,7 @@ sal_Bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
     return bModified;
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
 {
         sal_uInt16 nAktPos;
@@ -1093,8 +1019,7 @@ void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
         UpdateCols( nAktPos );
 };
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 {
     SwTwips nSum = 0;
@@ -1145,7 +1070,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
                     nDiff = 0;
                     SetVisibleWidth(nAktPos, GetVisibleWidth(nAktPos) -nDiff);
                 }
-                DBG_ASSERT(nDiff >= 0, "nDiff < 0 kann hier nicht sein!");
+                OSL_ENSURE(nDiff >= 0, "nDiff < 0 cannot be here!");
             }
         }
     }
@@ -1153,7 +1078,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     {
 //      Differenz wird ueber die Tabellenbreite ausgeglichen,
 //      andere Spalten bleiben unveraendert
-        DBG_ASSERT(nDiff <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" );
+        OSL_ENSURE(nDiff <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         SwTwips nActSpace = pTblData->GetSpace() - nTableWidth;
         if(nDiff > nActSpace)
         {
@@ -1169,7 +1094,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     {
 //      Alle Spalten werden proportional mitveraendert, die Tabellenbreite wird
 //      entsprechend angepasst
-        DBG_ASSERT(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "Maximum falsch eingestellt" );
+        OSL_ENSURE(nDiff * nNoOfVisibleCols <= pTblData->GetSpace() - nTableWidth, "wrong maximum" );
         long nAdd = nDiff;
         if(nDiff * nNoOfVisibleCols > pTblData->GetSpace() - nTableWidth)
         {
@@ -1196,34 +1121,7 @@ void   SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
 
             }
         nTableWidth += nAdd;
-
     }
-    else
-    {
-//      Die Differenz wird gleichmaessig auf alle anderen Spalten aufgeteilt
-//      die Tabellenbreite bleibt konstant
-/*
-        SwTwips nDiffn = nDiff/(nNoOfVisibleCols - 1);
-        if(nDiff < 0 && (nNoOfVisibleCols - 1) * nDiffn != nDiff)
-            nDiffn-- ;
-        sal_uInt16 nStart = nAktPos++;
-        if(nAktPos == nNoOfVisibleCols)
-            nStart = 0;
-        for(sal_uInt16 i = 0; i < nNoOfVisibleCols; i++ )
-        {
-            if((nVisWidth = GetVisibleWidth(i)) + nDiff < MINLAY)
-            {
-                nAdd += nVisWidth - MINLAY;
-                SetVisibleWidth(i, MINLAY);
-            }
-        }
-*/
-
-    }
-
-#ifdef DEBUG_TBLDLG
-DbgTblRep(pTblData)
-#endif
 
     if(!bPercentMode)
         aSpaceED.SetValue(aSpaceED.Normalize( pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
@@ -1237,8 +1135,7 @@ DbgTblRep(pTblData)
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
     bPercentMode = pTblData->GetWidthPercent() != 0;
@@ -1277,17 +1174,12 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
     aModifyTableCB.Enable( !bPercentMode && bModifyTbl );
     aProportionalCB.Enable(!bPercentMode && bModifyTbl );
 
-/*  if(pTblData->IsLineSelected() && pTblData->IsComplex())
-    {
-
-    }*/
     aSpaceED.SetValue(aSpaceED.Normalize(
                 pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
@@ -1345,16 +1237,12 @@ int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
             }
             pTblData->SetWidthChanged();
         }
-#ifdef DEBUG_TBLDLG
-DbgTblRep(pTblData)
-#endif
         _pSet->Put(SwPtrItem( FN_TABLE_REP, pTblData ));
     }
     return sal_True;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
 {
     sal_uInt16 i=0;
@@ -1366,16 +1254,14 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)
         i++;
     }
     SwTwips nReturn = pTblData->GetColumns()[i].nWidth;
-    DBG_ASSERT(i < nNoOfCols, "Array index out of range");
+    OSL_ENSURE(i < nNoOfCols, "Array index out of range");
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         nReturn += pTblData->GetColumns()[++i].nWidth;
 
-//  return (*ppTableColumns)[i].nWidth;
     return nReturn;
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 {
     sal_uInt16 i=0;
@@ -1385,15 +1271,14 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
             nPos--;
         i++;
     }
-    DBG_ASSERT(i < nNoOfCols, "Array index out of range");
+    OSL_ENSURE(i < nNoOfCols, "Array index out of range");
     pTblData->GetColumns()[i].nWidth = nNewWidth;
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         pTblData->GetColumns()[++i].nWidth = 0;
 
 }
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
+
 SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
                     const SfxItemSet* pItemSet, SwWrtShell* pSh ) :
         SfxTabDialog(pParent, SW_RES(DLG_FORMAT_TABLE), pItemSet,0),
@@ -1402,7 +1287,7 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
 {
     FreeResource();
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_FORMAT_TABLE, &SwFormatTablePage::Create, 0 );
     AddTabPage(TP_TABLE_TEXTFLOW, &SwTextFlowPage::Create, 0 );
     AddTabPage(TP_TABLE_COLUMN, &SwTableColumnPage::Create, 0 );
@@ -1411,8 +1296,6 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
 }
 
 
-/*------------------------------------------------------------------------
-------------------------------------------------------------------------*/
 void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -1439,8 +1322,6 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
 }
 
-/*-----------------12.12.96 12.22-------------------
---------------------------------------------------*/
 SwTextFlowPage::SwTextFlowPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES( TP_TABLE_TEXTFLOW ), rSet ),
@@ -1517,22 +1398,16 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     HeadLineCBClickHdl();
 }
 
-/*-----------------12.12.96 12.22-------------------
---------------------------------------------------*/
  SwTextFlowPage::~SwTextFlowPage()
 {
 }
 
-/*-----------------12.12.96 12.22-------------------
---------------------------------------------------*/
 SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTextFlowPage(pParent, rAttrSet);
 }
 
-/*-----------------12.12.96 12.22-------------------
---------------------------------------------------*/
 sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
@@ -1649,13 +1524,11 @@ sal_Bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
 }
 
-/*-----------------12.12.96 12.22-------------------
---------------------------------------------------*/
 void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
-    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-    sal_Bool bFlowAllowed = !bHtmlMode || pHtmlOpt->IsPrintLayoutExtension();
+    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+    sal_Bool bFlowAllowed = !bHtmlMode || rHtmlOpt.IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
         // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
@@ -1835,9 +1708,6 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 
     HeadLineCBClickHdl();
 }
-/*-----------------16.04.98 14:48-------------------
-
---------------------------------------------------*/
 
 void SwTextFlowPage::SetShell(SwWrtShell* pSh)
 {
@@ -1850,8 +1720,6 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     }
 }
 
-/*-----------------12.12.96 16.18-------------------
---------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
 {
     if( aPgBrkCB.IsChecked() )
@@ -1890,8 +1758,6 @@ IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
-/*-----------------12.12.96 16.18-------------------
---------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
 {
     sal_Bool bEnable = sal_False;
@@ -1914,8 +1780,6 @@ IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
-/*-----------------12.12.96 16.18-------------------
---------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
 {
     if ( aPgBrkCB.IsChecked() )
@@ -1946,8 +1810,6 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
     return 0;
 }
 
-/*-----------------12.12.96 16.18-------------------
---------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
 {
     if ( pBtn == &aColBrkRB || aPgBrkAfterRB.IsChecked() )
@@ -1962,17 +1824,13 @@ IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
         PageBreakPosHdl_Impl( &aPgBrkBeforeRB );
     return 0;
 }
-/*-----------------17.11.2003 11:30-----------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, CheckBox*, pBox )
 {
     aSplitRowCB.Enable(pBox->IsChecked());
     return 0;
 }
-/*-----------------17.11.2003 11:30-----------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
 {
     pBox->EnableTriState(sal_False);
@@ -1986,9 +1844,6 @@ IMPL_LINK( SwTextFlowPage, HeadLineCBClickHdl, void*, EMPTYARG )
     return 0;
 }
 
-/*-----------------30.05.97 07:37-------------------
-
---------------------------------------------------*/
 void SwTextFlowPage::DisablePageBreak()
 {
     bPageBreak = sal_False;
@@ -2005,3 +1860,4 @@ void SwTextFlowPage::DisablePageBreak()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

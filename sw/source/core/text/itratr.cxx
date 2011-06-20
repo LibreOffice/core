@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ using namespace ::com::sun::star;
 
 void SwAttrIter::Chg( SwTxtAttr *pHt )
 {
-    ASSERT( pHt && pFnt, "No attribute of font available for change");
+    OSL_ENSURE( pHt && pFnt, "No attribute of font available for change");
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, sal_True );
     else
@@ -88,7 +89,7 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 
 void SwAttrIter::Rst( SwTxtAttr *pHt )
 {
-    ASSERT( pHt && pFnt, "No attribute of font available for reset");
+    OSL_ENSURE( pHt && pFnt, "No attribute of font available for reset");
     // get top from stack after removing pHt
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, sal_False );
@@ -373,7 +374,7 @@ public:
     SwMinMaxArgs( OutputDevice* pOutI, ViewShell* pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = STRING_LEN; }
-    void Minimum( long nNew ) { if( (long)rMin < nNew ) rMin = nNew; }
+    void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
@@ -468,7 +469,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
     {
         const SwMinMaxNodeArgs *pIn = (const SwMinMaxNodeArgs*)pArgs;
         const SwPosition *pPos = rFmtA.GetCntntAnchor();
-        ASSERT(pPos && pIn, "Unexpected NULL arguments");
+        OSL_ENSURE(pPos && pIn, "Unexpected NULL arguments");
         if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
             bCalculate = false;
     }
@@ -742,7 +743,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
                             if( RES_FLYFRMFMT == pFrmFmt->Which()
                                 && rTmpSize.GetWidthPercent() )
                             {
-/*-----------------24.01.97 14:09----------------------------------------------
+/*-----------------------------------------------------------------------------
  * Hier ein HACK fuer folgende Situation: In dem Absatz befindet sich
  * ein Textrahmen mit relativer Groesse. Dann nehmen wir mal als minimale
  * Breite 0,5 cm und als maximale KSHRT_MAX.
@@ -843,7 +844,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
             pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );
     }
 
-    ASSERT( pOut, "GetScalingOfSelectedText without outdev" )
+    OSL_ENSURE( pOut, "GetScalingOfSelectedText without outdev" );
 
     MapMode aOldMap( pOut->GetMapMode() );
     pOut->SetMapMode( MapMode( MAP_TWIP ) );
@@ -1070,3 +1071,5 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
 
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

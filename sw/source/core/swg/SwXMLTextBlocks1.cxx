@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,22 +40,19 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellio.hxx>
 #include <SwXMLTextBlocks.hxx>
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
 #include <swevent.hxx>
 #include <swerror.h>
-#include <errhdl.hxx>
 
 
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )
 #define STREAM_STGWRITE ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE )
 
-sal_Char __FAR_DATA XMLN_BLOCKLIST[] = "BlockList.xml";
+sal_Char XMLN_BLOCKLIST[] = "BlockList.xml";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -111,7 +109,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 
             uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
-            ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
+            OSL_ENSURE( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
             if( !xServiceFactory.is() )
             {
                 // Throw an exception ?
@@ -124,8 +122,8 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 
             // get parser
             uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-            ASSERT( xXMLParser.is(),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")));
+            OSL_ENSURE( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
             if( !xXMLParser.is() )
             {
@@ -206,10 +204,10 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
             long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
             sal_Bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
 
-            OUString sStreamName = OUString::createFromAscii("atevent.xml");
+            OUString sStreamName(RTL_CONSTASCII_USTRINGPARAM("atevent.xml"));
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
                 sStreamName, embed::ElementModes::READ );
-            DBG_ASSERT(xDocStream.is(), "Can't create stream");
+            OSL_ENSURE(xDocStream.is(), "Can't create stream");
             if ( xDocStream.is() )
             {
                 uno::Reference<io::XInputStream> xInputStream = xDocStream->getInputStream();
@@ -231,7 +229,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                     uno::Reference< xml::sax::XParser > xParser(
                         xServiceFactory->createInstance(sParserService),
                         UNO_QUERY );
-                    DBG_ASSERT( xParser.is(), "Can't create parser" );
+                    OSL_ENSURE( xParser.is(), "Can't create parser" );
                     if( xParser.is() )
                     {
                         // create descriptor and reference to it. Either
@@ -244,15 +242,14 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                         aFilterArguments[0] <<= xReplace;
 
                         // get filter
-                        OUString sFilterComponent( OUString::createFromAscii(
-                            bOasis
-                            ? "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"
-                            : "com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
+                        OUString sFilterComponent = bOasis
+                            ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"))
+                            : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsImporter"));
                         uno::Reference< xml::sax::XDocumentHandler > xFilter(
                             xServiceFactory->createInstanceWithArguments(
                                 sFilterComponent, aFilterArguments),
                             UNO_QUERY );
-                        DBG_ASSERT( xFilter.is(),
+                        OSL_ENSURE( xFilter.is(),
                                     "can't instantiate atevents filter");
                         if ( xFilter.is() )
                         {
@@ -337,7 +334,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
         uno::Reference < io::XStream > xContents = xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-        ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
+        OSL_ENSURE( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
         if( !xServiceFactory.is() )
         {
             // Throw an exception ?
@@ -349,8 +346,8 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
 
         // get parser
         uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-        ASSERT( xXMLParser.is(),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+        OSL_ENSURE( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( !xXMLParser.is() )
         {
@@ -388,7 +385,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     }
     catch ( uno::Exception& )
     {
-        ASSERT( sal_False, "Tried to open non-existent folder or stream!");
+        OSL_FAIL( "Tried to open non-existent folder or stream!");
     }
 
     return n;
@@ -410,7 +407,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
     {
@@ -419,7 +416,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
 
        uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
-       DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+       OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
     sal_uLong nRes = 0;
 
     try
@@ -490,7 +487,7 @@ void SwXMLTextBlocks::ReadInfo( void )
     {
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
-        ASSERT( xServiceFactory.is(),
+        OSL_ENSURE( xServiceFactory.is(),
                 "XMLReader::Read: got no service manager" );
         if( !xServiceFactory.is() )
         {
@@ -505,8 +502,8 @@ void SwXMLTextBlocks::ReadInfo( void )
 
         // get parser
         uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-        ASSERT( xXMLParser.is(),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")));
+        OSL_ENSURE( xXMLParser.is(),
             "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( !xXMLParser.is() )
         {
@@ -551,7 +548,7 @@ void SwXMLTextBlocks::WriteInfo( void )
     {
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-        DBG_ASSERT( xServiceFactory.is(),
+        OSL_ENSURE( xServiceFactory.is(),
                 "XMLReader::Read: got no service manager" );
         if( !xServiceFactory.is() )
         {
@@ -560,7 +557,7 @@ void SwXMLTextBlocks::WriteInfo( void )
 
         uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
-        DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+        OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
 
         /*
@@ -588,9 +585,7 @@ void SwXMLTextBlocks::WriteInfo( void )
 
         uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-        // #110680#
-        // SwXMLBlockListExport aExp(*this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
-        SwXMLBlockListExport aExp( xServiceFactory, *this, OUString::createFromAscii(XMLN_BLOCKLIST), xHandler);
+        SwXMLBlockListExport aExp( xServiceFactory, *this, OUString(RTL_CONSTASCII_USTRINGPARAM(XMLN_BLOCKLIST)), xHandler);
 
         aExp.exportDoc( XML_BLOCK_LIST );
 
@@ -622,7 +617,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XML autotext event write:: got no service manager" );
     if( !xServiceFactory.is() )
         return ERR_SWG_WRITE_ERROR;
@@ -630,7 +625,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     // Get model
     uno::Reference< lang::XComponent > xModelComp(
         pDoc->GetDocShell()->GetModel(), UNO_QUERY );
-    ASSERT( xModelComp.is(), "XMLWriter::Write: got no model" );
+    OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
 
@@ -664,9 +659,9 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
             // get XML writer
             uno::Reference< io::XActiveDataSource > xSaxWriter(
                 xServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) ),
                 UNO_QUERY );
-            ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+            OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
             if( xSaxWriter.is() )
             {
 
@@ -684,15 +679,15 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
                 aParams[0] <<= xDocHandler;
                 aParams[1] <<= xEvents;
 
+
                 // get filter component
+                OUString sFilterComponent = bOasis
+                    ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"))
+                    : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsExporter"));
                 uno::Reference< document::XExporter > xExporter(
                     xServiceFactory->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                         bOasis
-                             ? "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"
-                            : "com.sun.star.comp.Writer.XMLAutotextEventsExporter"),
-                        aParams), UNO_QUERY);
-                ASSERT( xExporter.is(),
+                        sFilterComponent, aParams), UNO_QUERY);
+                OSL_ENSURE( xExporter.is(),
                         "can't instantiate export filter component" );
                 if( xExporter.is() )
                 {
@@ -739,3 +734,4 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     return nRes;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

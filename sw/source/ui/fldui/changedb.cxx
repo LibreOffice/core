@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,22 +38,16 @@
 #define _CHANGEDB_CXX
 
 #include <svtools/stdctrl.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <txtatr.hxx>
@@ -61,15 +56,9 @@
 #include <dbfld.hxx>
 #include <changedb.hxx>
 
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _CHANGEDB_HRC
 #include <changedb.hrc>
-#endif
 
 #include <unomid.h>
 
@@ -79,10 +68,8 @@ using namespace ::com::sun::star::lang;
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feldeinfuegen bearbeiten
+    Description: edit insert-field
  --------------------------------------------------------------------*/
-
-
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
 
@@ -98,10 +85,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aOKBT       (this, SW_RES(BT_OK         )),
     aCancelBT   (this, SW_RES(BT_CANCEL     )),
     aHelpBT     (this, SW_RES(BT_HELP       )),
-//  aChangeBT   (this, SW_RES(BT_CHANGEDB    )),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
-    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
-
     pSh(rVw.GetWrtShellPtr()),
     pMgr( new SwFldMgr() )
 {
@@ -117,11 +101,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
     aUsedDBTLB.SetStyle(aUsedDBTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     aUsedDBTLB.SetSpaceBetweenEntries(0);
-
-    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
-                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
-    aUsedDBTLB.SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
-                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
+    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
 
     Link aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
@@ -133,10 +113,8 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbank-Listboxen initialisieren
+    Description: initialise database listboxes
  --------------------------------------------------------------------*/
-
-
 void SwChangeDBDlg::FillDBPopup()
 {
     Reference<XNameAccess> xDBContext;
@@ -146,7 +124,7 @@ void SwChangeDBDlg::FillDBPopup()
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
         xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
     }
-    DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
+    OSL_ENSURE(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available");
 
     const SwDBData& rDBData = pSh->GetDBData();
     String sDBName(rDBData.sDataSource);
@@ -188,16 +166,11 @@ void SwChangeDBDlg::FillDBPopup()
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
     String sDBName(rDBName.GetToken(0, DB_DELIM));
     String sTableName(rDBName.GetToken(1, DB_DELIM));
-    int nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
+    sal_IntPtr nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
 
@@ -207,11 +180,7 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
     Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
     Image aDBImg = aImageList.GetImage(IMG_DB);
     Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
-    Image aHCTableImg = aImageListHC.GetImage(IMG_DBTABLE);
-    Image aHCDBImg = aImageListHC.GetImage(IMG_DB);
-    Image aHCQueryImg = aImageListHC.GetImage(IMG_DBQUERY);
     Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
-    Image& rHCToInsert = nCommandType ? aHCQueryImg : aHCTableImg;
     while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
     {
         if (sDBName == aUsedDBTLB.GetEntryText(pParent))
@@ -222,41 +191,33 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                     return pChild;
             }
             SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-            aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
-            aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
     pParent = aUsedDBTLB.InsertEntry(sDBName, aDBImg, aDBImg);
-    aUsedDBTLB.SetExpandedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
-    aUsedDBTLB.SetCollapsedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
 
     SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-    aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
-    aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Dialog zerstoeren
+    Description: destroy dialog
  --------------------------------------------------------------------*/
-__EXPORT SwChangeDBDlg::~SwChangeDBDlg()
+SwChangeDBDlg::~SwChangeDBDlg()
 {
     delete pMgr;
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Schliessen
+     Description:   close
  --------------------------------------------------------------------*/
-void __EXPORT SwChangeDBDlg::Apply()
+void SwChangeDBDlg::Apply()
 {
     UpdateFlds();
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
+
 void SwChangeDBDlg::UpdateFlds()
 {
     SvStringsDtor aDBNames( (sal_uInt8)aUsedDBTLB.GetSelectionCount(), 1 );
@@ -290,11 +251,6 @@ void SwChangeDBDlg::UpdateFlds()
     pSh->EndAllAction();
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 {
     String sTableName, sColumnName;
@@ -309,11 +265,6 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 {
@@ -331,9 +282,8 @@ IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankname fuer Anzeige wandeln
+    Description: convert database name for display
  --------------------------------------------------------------------*/
-
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
     String sTmp(rDBData.sDataSource);
@@ -350,9 +300,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 
     aDocDBNameFT.SetText(sName);
 }
-/*-- 27.05.2004 09:14:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
 {
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
@@ -361,3 +309,4 @@ IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

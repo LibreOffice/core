@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@
 #include <sot/clsids.hxx>
 
 #include "edtwin.hxx"
-#include "errhdl.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "frmatr.hxx"
@@ -66,10 +66,10 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
 {
     InitTabCols();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg( pParent, *this ,DLG_COL_WIDTH );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlg->Execute();
     delete pDlg;
 }
@@ -113,7 +113,7 @@ SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
 
 SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 {
-    ASSERT(nNum <= aCols.Count(), "Index out of Area");
+    OSL_ENSURE(nNum <= aCols.Count(), "Index out of Area");
 
     if ( GetColCount() > 0 )
     {
@@ -138,13 +138,12 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
     // aktuelle Breite setzen
     // alle folgenden Verschieben
     sal_Bool bCurrentOnly = sal_False;
-    SwTwips nWidth = 0;
 
     if ( aCols.Count() > 0 )
     {
         if(aCols.Count() != GetColCount())
             bCurrentOnly = sal_True;
-        nWidth = GetColWidth(nNum);
+        SwTwips nWidth = GetColWidth(nNum);
 
         int nDiff = (int)(nNewWidth - nWidth);
         if( !nNum )
@@ -175,7 +174,7 @@ void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
 
 void SwTableFUNC::InitTabCols()
 {
-    ASSERT(pSh, keine Shell);
+    OSL_ENSURE(pSh, "no Shell");
 
     if( pFmt && pSh)
         pSh->GetTabCols( aCols );
@@ -314,22 +313,22 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
             else if (nColLen > 1)
                 eDataRowSource = chart::ChartDataRowSource_COLUMNS;
             else {
-                DBG_ERROR( "unexpected state" );
+                OSL_FAIL("unexpected state" );
             }
         }
 
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
             uno::makeAny( rCellRange ), beans::PropertyState_DIRECT_VALUE );
         aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
             uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
             uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
             uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xDataReceiver->setArguments( aArgs );
     }
@@ -367,7 +366,7 @@ sal_uInt16  SwTableFUNC::GetColCount() const
 
 int SwTableFUNC::GetRightSeparator(int nNum) const
 {
-    DBG_ASSERT( nNum < (int)GetColCount() ,"Index out of range");
+    OSL_ENSURE( nNum < (int)GetColCount() ,"Index out of range");
     int i = 0;
     while( nNum >= 0 )
     {
@@ -380,3 +379,4 @@ int SwTableFUNC::GetRightSeparator(int nNum) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

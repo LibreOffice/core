@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,20 +34,14 @@
 
 
 #include <hintids.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#include <swundo.hxx>         // fuer Undo-Ids
-#ifndef _GLOBALS_HRC
+#include <swundo.hxx>         // for Undo-Ids
 #include <globals.hrc>
-#endif
 #include <splargs.hxx>
 
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
@@ -67,11 +62,8 @@
 #include <ndtxt.hxx>
 #include <fmtruby.hxx>
 #include <breakit.hxx>
-#include <docsh.hxx>
 
-#ifndef _OLMENU_HRC
 #include <olmenu.hrc>
-#endif
 
 #include <unomid.h>
 
@@ -85,7 +77,7 @@ using namespace ::com::sun::star::i18n;
 #define CHAR_PAR_BRK    ((sal_Char) 0x0D)
 
 //////////////////////////////////////////////////////////////////////
-//     Beschreibung: Ggf. Rahmen/Objektshell abschalten
+//     Description: Turn off frame/object shell if applicable
 
 static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
 {
@@ -196,11 +188,6 @@ SwHHCWrapper::~SwHHCWrapper()
         }
 
     }
-
-/*
-    if( bInfoBox )
-        InfoBox(&pView->GetEditWin(), String(SW_RES(STR_SPELL_OK)) ).Execute();
-*/
 }
 
 
@@ -244,7 +231,7 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
 void SwHHCWrapper::HandleNewUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd )
 {
-    DBG_ASSERT( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
+    OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
     if (!(0 <= nUnitStart && nUnitStart <= nUnitEnd))
         return;
 
@@ -267,7 +254,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
     //!! please see also TextConvWrapper::ChangeText with is a modified
     //!! copy of this code
 
-    DBG_ASSERT( rNewText.Len() != 0, "unexpected empty string" );
+    OSL_ENSURE( rNewText.Len() != 0, "unexpected empty string" );
     if (rNewText.Len() == 0)
         return;
 
@@ -293,7 +280,7 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
         // different length. Negative values allowed!
         long nCorrectionOffset = 0;
 
-        DBG_ASSERT(nIndices == 0 || nIndices == nConvTextLen,
+        OSL_ENSURE(nIndices == 0 || nIndices == nConvTextLen,
                 "mismatch between string length and sequence length!" );
 
         // find all substrings that need to be replaced (and only those)
@@ -317,17 +304,17 @@ void SwHHCWrapper::ChangeText( const String &rNewText,
                 {
                     nChgLen = nIndex - nChgPos;
                     nConvChgLen = nPos - nConvChgPos;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
 #endif
                     String aInNew( rNewText.Copy( nConvChgPos, nConvChgLen ) );
 
                     // set selection to sub string to be replaced in original text
                     xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
-                    DBG_ASSERT( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
+                    OSL_ENSURE( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" );
                     rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
                     rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex + nChgLen );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     String aSelTxt1( rWrtShell.GetSelTxt() );
 #endif
 
@@ -382,7 +369,7 @@ void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttrib
         // restore those for the new text
         rWrtShell.GetCurAttr( aItemSet );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         String aSelTxt1( rWrtShell.GetSelTxt() );
 #endif
         rWrtShell.Delete();
@@ -393,7 +380,7 @@ void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttrib
             rWrtShell.GetCrsr()->SetMark();
         SwPosition *pMark = rWrtShell.GetCrsr()->GetMark();
         pMark->nContent = pMark->nContent.GetIndex() - rNewText.Len();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         String aSelTxt2( rWrtShell.GetSelTxt() );
 #endif
 
@@ -425,13 +412,13 @@ void SwHHCWrapper::ReplaceUnit(
     static OUString aBracketedStart( C2U( "(" ) );
     static OUString aBracketedEnd( C2U( ")" ) );
 
-    DBG_ASSERT( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
+    OSL_ENSURE( nUnitStart >= 0 && nUnitEnd >= nUnitStart, "wrong arguments" );
     if (!(nUnitStart >= 0 && nUnitEnd >= nUnitStart))
         return;
 
     lcl_ActivateTextShell( rWrtShell );
 
-    // Das aktuelle Wort austauschen
+    // replace the current word
     rWrtShell.StartAllAction();
 
     // select current unit
@@ -439,7 +426,7 @@ void SwHHCWrapper::ReplaceUnit(
 
     OUString aOrigTxt( rWrtShell.GetSelTxt() );
     OUString aNewTxt( rReplaceWith );
-    DBG_ASSERT( aOrigTxt == rOrigText, "!! text mismatch !!" );
+    OSL_ENSURE( aOrigTxt == rOrigText, "!! text mismatch !!" );
     SwFmtRuby *pRuby = 0;
     sal_Bool bRubyBelow = sal_False;
     String  aNewOrigText;
@@ -482,7 +469,7 @@ void SwHHCWrapper::ReplaceUnit(
         }
         break;
         default:
-            DBG_ERROR( "unexpected case" );
+            OSL_FAIL("unexpected case" );
     }
     nUnitOffset += nUnitStart + aNewTxt.getLength();
 
@@ -509,10 +496,8 @@ void SwHHCWrapper::ReplaceUnit(
 
         pRuby->SetPosition( bRubyBelow );
         pRuby->SetAdjustment( RubyAdjust_CENTER );
-        //!! the following seem not to be needed
-        //pRuby->SetCharFmtName( const String& rNm );
-        //pRuby->SetCharFmtId( sal_uInt16 nNew );
-#ifdef DEBUG
+
+#if OSL_DEBUG_LEVEL > 1
         SwPaM *pPaM = rWrtShell.GetCrsr();
         (void)pPaM;
 #endif
@@ -539,7 +524,7 @@ void SwHHCWrapper::ReplaceUnit(
             rWrtShell.SetMark();
             rWrtShell.GetCrsr()->GetMark()->nContent -= (xub_StrLen) aNewTxt.getLength();
 
-            DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
+            OSL_ENSURE( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
 
             sal_uInt16 aRanges[] = {
@@ -550,13 +535,11 @@ void SwHHCWrapper::ReplaceUnit(
             SfxItemSet aSet( rWrtShell.GetAttrPool(), aRanges );
             if (pNewUnitLanguage)
             {
-                //DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
-                //      "similar language should not be changed!");
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
             }
 
             const Font *pTargetFont = GetTargetFont();
-            DBG_ASSERT( pTargetFont, "target font missing?" );
+            OSL_ENSURE( pTargetFont, "target font missing?" );
             if (pTargetFont && pNewUnitLanguage)
             {
                 SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( RES_CHRATR_CJK_FONT );
@@ -588,7 +571,7 @@ sal_Bool SwHHCWrapper::HasRubySupport() const
 
 void SwHHCWrapper::Convert()
 {
-    DBG_ASSERT( pConvArgs == 0, "NULL pointer expected" );
+    OSL_ENSURE( pConvArgs == 0, "NULL pointer expected" );
     {
         SwPaM *pCrsr = pView->GetWrtShell().GetCrsr();
         SwPosition* pSttPos = pCrsr->Start();
@@ -618,13 +601,13 @@ void SwHHCWrapper::Convert()
                             pTxtNode, pSttPos->nContent,
                             pTxtNode, pSttPos->nContent );
         }
-        DBG_ASSERT( pConvArgs->pStartNode && pConvArgs->pStartNode->IsTxtNode(),
+        OSL_ENSURE( pConvArgs->pStartNode && pConvArgs->pStartNode->IsTxtNode(),
                 "failed to get proper start text node" );
-        DBG_ASSERT( pConvArgs->pEndNode && pConvArgs->pEndNode->IsTxtNode(),
+        OSL_ENSURE( pConvArgs->pEndNode && pConvArgs->pEndNode->IsTxtNode(),
                 "failed to get proper end text node" );
 
         // chinese conversion specific settings
-        DBG_ASSERT( IsChinese( GetSourceLanguage() ) == IsChinese( GetTargetLanguage() ),
+        OSL_ENSURE( IsChinese( GetSourceLanguage() ) == IsChinese( GetTargetLanguage() ),
                 "source and target language mismatch?" );
         if (IsChinese( GetTargetLanguage() ))
         {
@@ -689,20 +672,18 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 {
     //! modified version of SvxSpellWrapper::SpellNext
 
-    // Keine Richtungsaenderung, also ist der gewuenschte Bereich ( bStartChk )
-    // vollstaendig abgearbeitet.
+    // no change of direction so the desired region is fully processed
     if( bStartChk )
         bStartDone = sal_True;
     else
         bEndDone = sal_True;
 
-    if( bIsOtherCntnt && bStartDone && bEndDone ) // Dokument komplett geprueft?
+    if( bIsOtherCntnt && bStartDone && bEndDone ) // document completely checked?
     {
         bInfoBox = sal_True;
         return sal_False;
     }
 
-    //ResMgr* pMgr = DIALOG_MGR();
     sal_Bool bGoOn = sal_False;
 
     if ( bIsOtherCntnt )
@@ -713,7 +694,7 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
     }
     else if ( bStartDone && bEndDone )
     {
-        // Bodybereich erledigt, Frage nach Sonderbereich
+        // body region done, ask about special region
         if( bIsConvSpecial && HasOtherCnt_impl() )
         {
             ConvStart_impl( pConvArgs, SVX_SPELL_OTHER );
@@ -724,29 +705,9 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
     }
     else
     {
-        // Ein BODY_Bereich erledigt, Frage nach dem anderen BODY_Bereich
-/*
-        //pWin->LeaveWait();
-
-        sal_uInt16 nResId = RID_SVXQB_CONTINUE;
-        QueryBox aBox( pWin, ResId( nResId, pMgr ) );
-        if ( aBox.Execute() != RET_YES )
-        {
-            // Verzicht auf den anderen Bereich, ggf. Frage nach Sonderbereich
-            //pWin->EnterWait();
-            bStartDone = bEndDone = sal_True;
-            return SpellNext();
-        }
-        else
-        {
-*/
             bStartChk = !bStartDone;
             ConvStart_impl( pConvArgs, bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
             bGoOn = sal_True;
-/*
-        }
-        pWin->EnterWait();
-*/
     }
     return bGoOn;
 }
@@ -755,8 +716,6 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 sal_Bool SwHHCWrapper::FindConvText_impl()
 {
     //! modified version of SvxSpellWrapper::FindSpellError
-
-    //ShowLanguageErrors();
 
     sal_Bool bFound = sal_False;
 
@@ -797,22 +756,20 @@ void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs
 void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 {
     pView->SpellEnd( pConversionArgs );
-    //ShowLanguageErrors();
 }
 
 
 sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
     sal_Bool bProgress = !bIsDrawObj && !bIsSelection;
-//    bLastRet = aConvText.getLength() == 0;
     pConversionArgs->aConvText = OUString();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
     uno::Any  aRet = bProgress ?
         pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, pConversionArgs ) :
         pView->GetWrtShell().SpellContinue( &nPageCount, NULL, pConversionArgs );
-    //aRet >>= aConvText;
     return pConversionArgs->aConvText.getLength() != 0;
 }
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

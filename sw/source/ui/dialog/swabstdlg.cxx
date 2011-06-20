@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,10 +44,13 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
     SwFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
     static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ) ) )
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ),
+                                                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")));
     if ( fp )
         return fp();
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

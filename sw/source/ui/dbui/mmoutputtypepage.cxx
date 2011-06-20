@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,16 +38,10 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
 #include <swtypes.hxx>
 #include <mmoutputtypepage.hrc>
-#include <dbui.hrc>
 
-/*-- 02.04.2004 11:06:55---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUTTYPE_PAGE)),
 #ifdef MSC
@@ -90,15 +85,11 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParen
     TypeHdl_Impl(&m_aLetterRB);
 
 }
-/*-- 02.04.2004 11:06:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
 {
 }
-/*-- 14.04.2004 14:44:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergeOutputTypePage, TypeHdl_Impl, RadioButton*, EMPTYARG )
 {
     bool bLetter = m_aLetterRB.IsChecked();
@@ -111,3 +102,4 @@ IMPL_LINK( SwMailMergeOutputTypePage, TypeHdl_Impl, RadioButton*, EMPTYARG )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,9 +47,6 @@ class SwField;
 class SwSetExpField;
 class SwTextAPIObject;
 
-/* -----------------04.12.98 12:49-------------------
- *
- * --------------------------------------------------*/
 class SwXFieldMaster : public cppu::WeakImplHelper4
 <
     ::com::sun::star::beans::XPropertySet,
@@ -209,7 +207,6 @@ public:
     static SwXTextField* CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
 };
 
-
 typedef
 cppu::WeakImplHelper2
 <
@@ -244,9 +241,6 @@ public:
     static sal_Bool getInstanceName(const SwFieldType& rFldType, String& rName);
 };
 
-/* -----------------21.12.98 10:26-------------------
- *
- * --------------------------------------------------*/
 typedef
 cppu::WeakImplHelper3
 <
@@ -319,3 +313,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

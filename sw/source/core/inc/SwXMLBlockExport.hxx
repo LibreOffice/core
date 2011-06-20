@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,6 @@ class SwXMLBlockListExport : public SvXMLExport
 private:
     SwXMLTextBlocks &rBlockList;
 public:
-    // #110680#
     SwXMLBlockListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwXMLTextBlocks & rBlocks,
@@ -56,7 +56,6 @@ class SwXMLTextBlockExport : public SvXMLExport
 private:
     SwXMLTextBlocks &rBlockList;
 public:
-    // #110680#
     SwXMLTextBlockExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwXMLTextBlocks & rBlocks,
@@ -71,3 +70,5 @@ public:
     void _ExportContent() {}
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

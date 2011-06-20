@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,8 @@
 #include <finalthreadmanager.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 
 /** Testing
 
@@ -37,18 +40,22 @@
 using namespace ::com::sun::star;
 
 uno::Reference< util::XJobManager > SwThreadJoiner::mpThreadJoiner;
-osl::Mutex* SwThreadJoiner::mpGetJoinerMutex = new osl::Mutex();
+
+namespace
+{
+    class theJoinerMutex : public rtl::Static<osl::Mutex, theJoinerMutex> {};
+}
 
 uno::Reference< util::XJobManager >& SwThreadJoiner::GetThreadJoiner()
 {
-    osl::MutexGuard aGuard(*mpGetJoinerMutex);
+    osl::MutexGuard aGuard(theJoinerMutex::get());
 
     if ( !mpThreadJoiner.is() )
     {
         mpThreadJoiner =
             uno::Reference< util::XJobManager >(
                 ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.util.JobManager" ) ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.JobManager")) ),
                 uno::UNO_QUERY );
     }
 
@@ -59,3 +66,5 @@ void SwThreadJoiner::ReleaseThreadJoiner()
 {
     mpThreadJoiner.clear();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

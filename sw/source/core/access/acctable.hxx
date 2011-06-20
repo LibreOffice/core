@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,15 +68,13 @@ protected:
 
     virtual ~SwAccessibleTable();
 
-    // --> OD 2007-06-27 #i77106#
+    // #i77106#
     inline void SetDesc( ::rtl::OUString sNewDesc )
     {
         sDesc = sNewDesc;
     }
 
-    // --> OD 2007-06-28 #i77106#
-    virtual SwAccessibleTableData_Impl* CreateNewTableData();
-    // <--
+    virtual SwAccessibleTableData_Impl* CreateNewTableData(); // #i77106#
 
     // force update of table data
     void UpdateTableData();
@@ -252,7 +251,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+    // index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
@@ -267,8 +266,7 @@ inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
     return *mpTableData;
 }
 
-// --> OD 2007-06-28 #i77106#
-// subclass to represent table column headers
+// #i77106# - subclass to represent table column headers
 class SwAccessibleTableColHeaders : public SwAccessibleTable
 {
 protected:
@@ -327,5 +325,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 };
-// <--
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

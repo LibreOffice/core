@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -117,9 +118,6 @@ SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParen
 {
     mxBookmarksSupplier.set( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xDocument( mxModel, uno::UNO_QUERY_THROW );
-    // use view cursor to insert bookmark, or it will fail if insert bookmark in table
-    // mxText = xDocument->getText();
-    mxText = word::getXTextViewCursor( mxModel )->getText();
 }
 // XEnumerationAccess
 uno::Type
@@ -145,16 +143,16 @@ SwVbaBookmarks::createCollectionObject( const css::uno::Any& aSource )
 void SwVbaBookmarks::removeBookmarkByName( const rtl::OUString& rName ) throw (uno::RuntimeException)
 {
     uno::Reference< text::XTextContent > xBookmark( m_xNameAccess->getByName( rName ), uno::UNO_QUERY_THROW );
-    mxText->removeTextContent( xBookmark );
+    word::getXTextViewCursor( mxModel )->getText()->removeTextContent( xBookmark );
 }
 
-void SwVbaBookmarks::addBookmarkByName( const rtl::OUString& rName, const uno::Reference< text::XTextRange >& rTextRange ) throw (uno::RuntimeException)
+void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const rtl::OUString& rName, const uno::Reference< text::XTextRange >& rTextRange ) throw (uno::RuntimeException)
 {
-    uno::Reference< lang::XMultiServiceFactory > xDocMSF( mxModel, uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XMultiServiceFactory > xDocMSF( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmark")) ), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( rName );
-    mxText->insertTextContent( rTextRange, xBookmark, sal_False );
+    rTextRange->getText()->insertTextContent( rTextRange, xBookmark, sal_False );
 }
 
 uno::Any SAL_CALL
@@ -175,12 +173,11 @@ SwVbaBookmarks::Add( const rtl::OUString& rName, const uno::Any& rRange ) throw 
     }
 
     // remove the exist bookmark
-    // rtl::OUString aName = rName.toAsciiLowerCase();
     rtl::OUString aName = rName;
     if( m_xNameAccess->hasByName( aName ) )
         removeBookmarkByName( aName );
 
-    addBookmarkByName( aName, xTextRange );
+    addBookmarkByName( mxModel, aName, xTextRange );
 
     return uno::makeAny( uno::Reference< word::XBookmark >( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
 }
@@ -234,3 +231,5 @@ SwVbaBookmarks::getServiceNames()
     }
     return sNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 #include <tools/string.hxx>
 #include <svl/poolitem.hxx>
@@ -112,7 +113,8 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
 
 SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
 {
-    return OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr();
+    aDbgOutResult = ByteString( rtl::OUStringToOString( aStr, RTL_TEXTENCODING_ASCII_US ) );
+    return aDbgOutResult.GetBuffer();
 }
 
 
@@ -550,7 +552,7 @@ String lcl_dbg_out(const SwNode & rNode)
     aTmpStr += String::CreateFromInt32(rNode.GetIndex());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     aTmpStr += String(" serial=\"", RTL_TEXTENCODING_ASCII_US);
     aTmpStr += String::CreateFromInt32(rNode.GetSerial());
     aTmpStr += String("\"", RTL_TEXTENCODING_ASCII_US);
@@ -638,7 +640,6 @@ String lcl_dbg_out(const SwNode & rNode)
 
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += String::CreateFromInt32
-                //(static_cast<SwTxtFmtColl *>(pColl)->GetOutlineLevel());//#outline level,zhaojianwei
                 (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
 
             const SwNumRuleItem & rItem =
@@ -977,7 +978,7 @@ String lcl_TokenType2Str(FormTokenType nType)
         return String("??", RTL_TEXTENCODING_ASCII_US);
     }
 
-    ASSERT(false, "should not be reached");
+    OSL_FAIL("should not be reached");
 
     return  String("??", RTL_TEXTENCODING_ASCII_US);
 }
@@ -998,7 +999,7 @@ String lcl_dbg_out(const SwFormTokens & rTokens)
 
     SwFormTokens::const_iterator aIt;
 
-    for (aIt = rTokens.begin(); aIt != rTokens.end(); aIt++)
+    for (aIt = rTokens.begin(); aIt != rTokens.end(); ++aIt)
     {
         if (aIt != rTokens.begin())
             aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
@@ -1038,3 +1039,4 @@ SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange)
 
 #endif // DEBUG
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

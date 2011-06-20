@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,9 @@
  ************************************************************************/
 #include "vbaautotextentry.hxx"
 #include <vbahelper/vbahelper.hxx>
+#include <com/sun/star/text/XParagraphCursor.hpp>
 #include <tools/diagnose_ex.h>
+#include "wordvbahelper.hxx"
 #include "vbarange.hxx"
 
 using namespace ::ooo::vba;
@@ -41,7 +44,7 @@ SwVbaAutoTextEntry::~SwVbaAutoTextEntry()
 {
 }
 
-uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::Reference< word::XRange >& _where, const uno::Any& /*_richtext*/ ) throw ( uno::RuntimeException )
+uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::Reference< word::XRange >& _where, const uno::Any& _richtext ) throw ( uno::RuntimeException )
 {
     SwVbaRange* pWhere = dynamic_cast<SwVbaRange*>( _where.get() );
     if( pWhere )
@@ -55,8 +58,27 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
         uno::Reference< text::XTextCursor > xTC = xText->createTextCursorByRange( xTextRange->getStart() );
         xTC->goRight( 1, sal_True );
         xTC->setString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("") ) ); // remove marker
+        // remove the blank paragraph if it is a rich text
+        sal_Bool bRich = sal_False;
+        _richtext >>= bRich;
+        if( bRich )
+        {
+            // check if it is a blank paragraph
+            uno::Reference< text::XParagraphCursor > xParaCursor( xTC, uno::UNO_QUERY_THROW );
+            if( xParaCursor->isStartOfParagraph() && xParaCursor->isEndOfParagraph() )
+            {
+                //remove the blank paragraph
+                uno::Reference< frame::XModel > xModel( getCurrentWordDoc( mxContext ), uno::UNO_QUERY_THROW );
+                uno::Reference< text::XTextViewCursor > xTVCursor = word::getXTextViewCursor( xModel );
+                uno::Reference< text::XTextRange > xCurrentRange( xTC->getEnd(), uno::UNO_QUERY_THROW );
+                xTVCursor->gotoRange( xCurrentRange, sal_False );
+                rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Delete"));
+                dispatchRequests( xModel,url );
+                xTVCursor->gotoRange( xEndMarker->getEnd(), sal_False );
+            }
+        }
         xEndMarker->setString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("") ) ); // remove marker
-        xTC->gotoRange( xEndMarker, sal_True );
+        xTC = xText->createTextCursorByRange( xEndMarker->getEnd() );
         pWhere->setXTextCursor( xTC );
     }
     return uno::Reference< word::XRange >( pWhere );
@@ -95,8 +117,7 @@ SwVbaAutoTextEntries::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration >
 SwVbaAutoTextEntries::createEnumeration() throw (uno::RuntimeException)
 {
-    uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-    return xEnumerationAccess->createEnumeration();
+    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
 uno::Any
@@ -124,3 +145,5 @@ SwVbaAutoTextEntries::getServiceNames()
     }
     return sNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

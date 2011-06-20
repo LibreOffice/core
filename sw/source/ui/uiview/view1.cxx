@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,46 +29,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/ruler.hxx>
 #include <idxmrk.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <navipi.hxx>
 #include <fldwrap.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
 #include <dpage.hxx>
 #include <edtwin.hxx>
 #include "formatclipboard.hxx"
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 // header for class SfxRequest
 #include <sfx2/request.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
 extern int bDocSzUpdated;
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwView::Activate(sal_Bool bMDIActivate)
 {
@@ -85,7 +69,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
     if(!bDocSzUpdated)
         DocSzChgd(aDocSz);
 
-    // #b6330459# make selection visible
+    // make selection visible
     if(bMakeSelectionVisible)
     {
         pWrtShell->MakeSelVisible();
@@ -139,11 +123,6 @@ void SwView::Activate(sal_Bool bMDIActivate)
     SfxViewShell::Activate(bMDIActivate);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwView::Deactivate(sal_Bool bMDIActivate)
 {
     extern sal_Bool bFlushCharBuffer ;
@@ -161,17 +140,10 @@ void SwView::Deactivate(sal_Bool bMDIActivate)
     SfxViewShell::Deactivate(bMDIActivate);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::MarginChanged()
 {
     GetWrtShell().SetBrowseBorder( GetMargin() );
 }
-
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
 
 void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
 {
@@ -217,3 +189,5 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
             rSet.DisableItem( SID_FORMATPAINTBRUSH );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#include "errhdl.hxx"
-#include "txtcfg.hxx"
 #include "swcache.hxx"
 #include "fntcache.hxx"     // pFntCache  ( SwFont/ScrFont-PrtFont Cache )
 #include "swfntcch.hxx"     // pSwFontCache  ( SwAttrSet/SwFont Cache )
@@ -76,7 +73,7 @@ void _TextInit()
     pFntCache = new SwFntCache;                     // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
     pSwFontCache = new SwFontCache;                 // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
     SwCache *pTxtCache = new SwCache( 250, 100      // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , "static SwTxtFrm::pTxtCache"
 #endif
     );
@@ -99,3 +96,4 @@ void _TextFinit()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

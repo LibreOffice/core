@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,12 +48,8 @@
 #include <grfatr.hxx>
 #include <swunohelper.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -91,10 +88,10 @@ sal_Bool lcl_IsHoriOnOddPages(int nEnum)
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
-sal_Bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bRet = sal_True,
-         bVal;
+    bool bRet = true;
+    sal_Bool bVal;
     // Vertikal und Horizontal sind mal getauscht worden!
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -110,16 +107,16 @@ sal_Bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                    GetValue() == RES_MIRROR_GRAPH_BOTH;
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
-            bRet = sal_False;
+            OSL_ENSURE( !this, "unknown MemberId" );
+            bRet = false;
     }
     rVal.setValue( &bVal, ::getBooleanCppuType() );
     return bRet;
 }
 
-sal_Bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
     // Vertikal und Horizontal sind mal getauscht worden!
     nMemberId &= ~CONVERT_TWIPS;
@@ -159,8 +156,8 @@ sal_Bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
-            bRet = sal_False;
+            OSL_ENSURE( !this, "unknown MemberId" );
+            bRet = false;
     }
     return bRet;
 }
@@ -198,15 +195,15 @@ int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-sal_Bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
     rVal <<= (sal_Int16)GetValue();
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -215,11 +212,11 @@ sal_Bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     {
         // sal_uInt16 argument needed
         SetValue( (sal_uInt16) nValue );
-        return sal_True;
+        return true;
     }
 
-    DBG_ERROR( "SwRotationGrf::PutValue - Wrong type!" );
-    return sal_False;
+    OSL_FAIL( "SwRotationGrf::PutValue - Wrong type!" );
+    return false;
 }
 
 // ------------------------------------------------------------------
@@ -270,13 +267,13 @@ int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
         nValue == ((SwGammaGrf&)rCmp).GetValue();
 }
 
-sal_Bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= nValue;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     return rVal >>= nValue;
 }
@@ -295,35 +292,34 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
     return new SwTransparencyGrf( *this );
 }
 // ------------------------------------------------------------------
-sal_Bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
+bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
                                         sal_uInt8 ) const
 {
-    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
+    OSL_ENSURE(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
-    DBG_ASSERT( 0 <= nRet && nRet <= 100, "value out of range" );
+    OSL_ENSURE( 0 <= nRet && nRet <= 100, "value out of range" );
     rVal <<= nRet;
-    return sal_True;
+    return true;
 }
 // ------------------------------------------------------------------
-sal_Bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
+bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
                                         sal_uInt8 )
 {
     //temporary conversion until this is a SfxInt16Item!
-    DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
+    OSL_ENSURE(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
-        return sal_False;
+        return false;
     if(nVal < 0)
     {
         // for compatibility with old documents
-        // OD 05.11.2002 #104308# - introduce rounding as for SO 6.0 PP2
-        // introduced by fix of #104293#.
+        // introduce rounding as for SO 6.0 PP2
         nVal = ( ( nVal * 128 ) - (99/2) ) / 100;
         nVal += 128;
     }
-    DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
+    OSL_ENSURE( 0 <= nVal && nVal <= 100, "value out of range" );
     SetValue(static_cast<sal_uInt8>(nVal));
-    return sal_True;
+    return true;
 }
 
 // ------------------------------------------------------------------
@@ -335,32 +331,29 @@ SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
 
 sal_uInt16 SwDrawModeGrf::GetValueCount() const
 {
-    // GRAPHICDRAWMODE_STANDARD = 0,
-    // GRAPHICDRAWMODE_GREYS = 1,
-    // GRAPHICDRAWMODE_MONO = 2,
-    // GRAPHICDRAWMODE_WATERMARK = 3
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 
-sal_Bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
+bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
                                 sal_uInt8 ) const
 {
     drawing::ColorMode eRet = (drawing::ColorMode)GetEnumValue();
     rVal <<= eRet;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
+bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
                                 sal_uInt8 )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
     {
         SetEnumValue((sal_uInt16)eVal);
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

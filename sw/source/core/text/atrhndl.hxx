@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -157,16 +158,16 @@ public:
 
 inline const SfxPoolItem& SwAttrHandler::GetDefault( const sal_uInt16 nAttribID ) const
 {
-    ASSERT( nAttribID < RES_TXTATR_END,
+    OSL_ENSURE( nAttribID < RES_TXTATR_END,
             "this attrib does not ex."
             );
-    ASSERT( pDefaultArray[ StackPos[ nAttribID ] ], "array not initialized" );
+    OSL_ENSURE( pDefaultArray[ StackPos[ nAttribID ] ], "array not initialized" );
     return *pDefaultArray[ StackPos[ nAttribID ] ];
 }
 
 inline void SwAttrHandler::ResetFont( SwFont& rFnt ) const
 {
-    ASSERT( pFnt, "ResetFont without a font" );
+    OSL_ENSURE( pFnt, "ResetFont without a font" );
     if ( pFnt )
         rFnt = *pFnt;
 };
@@ -177,3 +178,5 @@ inline const SwFont* SwAttrHandler::GetFont() const
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

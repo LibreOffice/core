@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,14 +26,10 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef WW_SORTEDARRAY_HXX
 #define WW_SORTEDARRAY_HXX
 
 #include <algorithm>
-#include <errhdl.hxx>       // ASSERT()
-#include <tools/debug.hxx>
 
 //simple template that manages a static [] array by sorting at construction
 
@@ -70,7 +67,7 @@ namespace ww
         SortedArray(C *pWwSprmTab, size_t nNoElems)
             : mpWwSprmTab(pWwSprmTab), mnNoElems(nNoElems)
         {
-            ASSERT(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
+            OSL_ENSURE(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
             std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
 #if OSL_DEBUG_LEVEL > 1
             bool bBroken=false;
@@ -83,12 +80,12 @@ namespace ww
                 {
                     if (!bBroken)
                     {
-                        sError = rtl::OUString::createFromAscii(
+                        sError = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "WW8: Duplicate in list, almost certainly don't "
                             "want that!\n"
                             "(You will not see this message again unless you "
                             "restart)\n"
-                            "Extra entries are...\n");
+                            "Extra entries are...\n"));
                         bBroken=true;
                     }
 
@@ -110,7 +107,7 @@ namespace ww
             }
             if (bBroken)
             {
-               DBG_ERROR(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
+               OSL_FAIL( rtl::OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
 #endif
         }
@@ -118,4 +115,4 @@ namespace ww
 }
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -217,7 +218,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                 const SwTblSearchType eSearchType )
 {
     //Start- und Endzelle besorgen und den naechsten fragen.
-    ASSERT( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
+    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
             "Tabselection nicht auf Cnt." );
 
     // Zeilen-Selektion:
@@ -249,14 +250,14 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         const sal_uLong nMarkSectionStart = pMarkNode->StartOfSectionIndex();
         const SwTableBox* pMarkBox = rTbl.GetTblBox( nMarkSectionStart );
 
-        ASSERT( pMarkBox, "Point in table, mark outside?" )
+        OSL_ENSURE( pMarkBox, "Point in table, mark outside?" );
 
         const SwTableLine* pLine = pMarkBox ? pMarkBox->GetUpper() : 0;
         sal_uInt16 nSttPos = rLines.GetPos( pLine );
-        ASSERT( USHRT_MAX != nSttPos, "Wo ist meine Zeile in der Tabelle?" );
+        OSL_ENSURE( USHRT_MAX != nSttPos, "Wo ist meine Zeile in der Tabelle?" );
         pLine = rTbl.GetTblBox( rCrsr.GetNode( sal_True )->StartOfSectionIndex() )->GetUpper();
         sal_uInt16 nEndPos = rLines.GetPos( pLine );
-        ASSERT( USHRT_MAX != nEndPos, "Wo ist meine Zeile in der Tabelle?" );
+        OSL_ENSURE( USHRT_MAX != nEndPos, "Wo ist meine Zeile in der Tabelle?" );
         // pb: #i20193# if tableintable then nSttPos == nEndPos == USHRT_MAX
         if ( nSttPos != USHRT_MAX && nEndPos != USHRT_MAX )
         {
@@ -304,20 +305,18 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrms* pCells,
                 const SwTblSearchType eSearchType )
 {
-    // #112697# Robust:
     const SwTabFrm* pStartTab = pStart->FindTabFrm();
     if ( !pStartTab )
     {
-        ASSERT( false, "GetTblSel without start table" )
+        OSL_FAIL( "GetTblSel without start table" );
         return;
     }
 
     int bChkProtected = nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType;
 
     sal_Bool bTblIsValid;
-    // --> FME 2006-01-25 #i55421# Reduced value 10
-    int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
-    // <--
+    // #i55421# Reduced value 10
+    int nLoopMax = 10;
     sal_uInt16 i;
 
     do {
@@ -372,7 +371,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                             break;
                         }
 
-                        ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                        OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                         if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                         {
                             SwTableBox* pBox = (SwTableBox*)
@@ -465,21 +464,20 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 break;
         }
 
-        // --> FME 2005-10-13 #125337# Make code robust, check if pStart has
+        // --> Make code robust, check if pStart has
         // been deleted due to the formatting of the table:
         if ( aDelCheck.HasBeenDeleted() )
         {
-            ASSERT( false, "Current box has been deleted during GetTblSel()" )
+            OSL_FAIL( "Current box has been deleted during GetTblSel()" );
             break;
         }
-        // <--
 
         i = 0;
         rBoxes.Remove( i, rBoxes.Count() );
         --nLoopMax;
 
     } while( sal_True );
-    ASSERT( nLoopMax, "das Layout der Tabelle wurde nicht valide!" );
+    OSL_ENSURE( nLoopMax, "das Layout der Tabelle wurde nicht valide!" );
 }
 
 
@@ -497,37 +495,36 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     if( !pCNd )
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, sal_False, sal_False );
 
-    // #109394# if table is invisible, return
+    // if table is invisible, return
     // (layout needed for forming table selection further down, so we can't
     //  continue with invisible tables)
-    // OD 07.11.2003 #i22135# - Also the content of the table could be
+    // #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
     if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
             return sal_False;
 
     const SwLayoutFrm *pStart = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
-    ASSERT( pStart, "ohne Frame geht gar nichts" );
+    OSL_ENSURE( pStart, "ohne Frame geht gar nichts" );
 
     aIdx = rEndNd;
     pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, sal_False, sal_False );
 
-    // OD 07.11.2003 #i22135# - Robust: check, if content was found and if it's visible
+    // #i22135# - Robust: check, if content was found and if it's visible
     if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
     {
         return sal_False;
     }
 
     const SwLayoutFrm *pEnd = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
-    ASSERT( pEnd, "ohne Frame geht gar nichts" );
+    OSL_ENSURE( pEnd, "ohne Frame geht gar nichts" );
 
 
     sal_Bool bTblIsValid, bValidChartSel;
-    // --> FME 2006-01-25 #i55421# Reduced value 10
+    // #i55421# Reduced value 10
     int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
-    // <--
     sal_uInt16 i = 0;
 
     do {
@@ -584,7 +581,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                             break;
                         }
 
-                        ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                        OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                         const SwRect& rUnion = pUnion->GetUnion(),
                                     & rFrmRect = pCell->Frm();
 
@@ -737,7 +734,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             pGetCLines->DeleteAndDestroy( 0, pGetCLines->Count() );
     } while( sal_True );
 
-    ASSERT( nLoopMax, "das Layout der Tabelle wurde nicht valide!" );
+    OSL_ENSURE( nLoopMax, "das Layout der Tabelle wurde nicht valide!" );
 
     if( !bValidChartSel && pGetCLines )
         pGetCLines->DeleteAndDestroy( 0, pGetCLines->Count() );
@@ -748,7 +745,7 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
 sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
 {
-    ASSERT( pCell->IsCellFrm(), "Frame ohne Gazelle" );
+    OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Gazelle" );
 
     if( pCell->FindTabFrm()->IsVertical() )
         return ( rUnion.Right() >= pCell->Frm().Right() &&
@@ -828,7 +825,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                         break;
                     }
 
-                    ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                    OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                     if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                         pUpperCell = (SwCellFrm*)pCell;
 
@@ -897,7 +894,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                             break;
                         }
 
-                        ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                        OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                         if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                         {
                             const SwCellFrm* pC = (SwCellFrm*)pCell;
@@ -947,7 +944,7 @@ _CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, sal_Bool bVertical )
 void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 )
 {
-    ASSERT( pBox->GetSttNd(), "Box ohne Start-Node" );
+    OSL_ENSURE( pBox->GetSttNd(), "Box ohne Start-Node" );
     SwCntntNode* pCNd = pDoc->GetNodes()[ pBox->GetSttIdx() + 1 ]
                                 ->GetCntntNode();
     if( pCNd && pCNd->IsTxtNode() )
@@ -1007,13 +1004,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
 
     //Zuerst lassen wir uns die Tabellen und die Rechtecke heraussuchen.
-    ASSERT( rPam.GetCntntNode() && rPam.GetCntntNode( sal_False ),
+    OSL_ENSURE( rPam.GetCntntNode() && rPam.GetCntntNode( sal_False ),
             "Tabselection nicht auf Cnt." );
 
 //JP 24.09.96: Merge mit wiederholenden TabellenHeadline funktioniert nicht
 //              richtig. Warum nicht Point 0,0 benutzen? Dann ist garantiert,
 //              das die 1. Headline mit drin ist.
-//  Point aPt( rShell.GetCharRect().Pos() );
     Point aPt( 0, 0 );
 
     const SwCntntNode* pCntNd = rPam.GetCntntNode();
@@ -1058,7 +1054,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
                 while ( pCell && pRow->IsAnLower( pCell ) )
                 {
-                    ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                    OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                         // in der vollen Breite ueberlappend ?
                     if( rUnion.Top() <= pCell->Frm().Top() &&
                         rUnion.Bottom() >= pCell->Frm().Bottom() )
@@ -1208,7 +1204,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if ( pCell->GetNext() )
                     {
                         pCell = (const SwLayoutFrm*)pCell->GetNext();
-                        // --> FME 2005-11-03 #125288# Check if table cell is not empty
+                        // --> Check if table cell is not empty
                         if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
@@ -1488,7 +1484,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         // in der MergeBox sollte jetzt der gesamte Text stehen
         // loesche jetzt noch den initialen TextNode
-        ASSERT( (*ppMergeBox)->GetSttIdx()+2 <
+        OSL_ENSURE( (*ppMergeBox)->GetSttIdx()+2 <
                 (*ppMergeBox)->GetSttNd()->EndOfSectionIndex(),
                     "leere Box" );
         SwNodeIndex aIdx( *(*ppMergeBox)->GetSttNd()->EndOfSectionNode(), -1 );
@@ -1708,7 +1704,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     while ( pTab->IsFollow() )
     {
         const SwFrm *pTmp = pTab->FindPrev();
-        ASSERT( pTmp->IsTabFrm(), "Vorgaenger vom Follow nicht der Master." );
+        OSL_ENSURE( pTmp->IsTabFrm(), "Vorgaenger vom Follow nicht der Master." );
         pTab = (const SwTabFrm*)pTmp;
     }
 
@@ -1776,10 +1772,9 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 
     const SwCntntFrm* pLastCntnt = pTab->FindLastCntnt();
     rpEnd = pLastCntnt ? pLastCntnt->GetUpper() : 0;
-    // --> FME 2006-07-17 #134385# Made code robust. If pTab does not have a lower,
+    // --> Made code robust. If pTab does not have a lower,
     // we would crash here.
     if ( !pLastCntnt ) return;
-    // <--
 
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
@@ -1831,7 +1826,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         if ( !pTmpLeaf || !pTmpTab->IsAnLower( pTmpLeaf ) )
         {
             pTmpTab = (const SwTabFrm*)pTmpTab->FindPrev();
-            ASSERT( pTmpTab->IsTabFrm(), "Vorgaenger vom Follow nicht der Master.");
+            OSL_ENSURE( pTmpTab->IsTabFrm(), "Vorgaenger vom Follow nicht der Master.");
             rpEnd = pTmpTab->FindLastCntnt()->GetUpper();
             while( !rpEnd->IsCellFrm() )
                 rpEnd = rpEnd->GetUpper();
@@ -1852,10 +1847,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     while ( pEnd && !pEnd->IsCellFrm() )
         pEnd = pEnd->GetUpper();
 
-    // #112697# Robust:
     if ( !pStart || !pEnd )
     {
-        ASSERT( false, "MakeSelUnions with pStart or pEnd not in CellFrm" )
+        OSL_FAIL( "MakeSelUnions with pStart or pEnd not in CellFrm" );
         return;
     }
 
@@ -1869,7 +1863,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     {
         if ( !pTable->IsAnFollow( pEndTable ) )
         {
-            ASSERT( pEndTable->IsAnFollow( pTable ), "Tabkette verknotet." );
+            OSL_ENSURE( pEndTable->IsAnFollow( pTable ), "Tabkette verknotet." );
             bExchange = sal_True;
         }
     }
@@ -1903,11 +1897,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     else if( nsSwTblSearchType::TBLSEARCH_COL == ((~nsSwTblSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
         ::lcl_FindStartEndCol( pStart, pEnd, nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType );
 
-    // --> FME 2006-07-17 #134385# Made code robust.
-    if ( !pEnd ) return;
-    // <--
+    if ( !pEnd ) return; // Made code robust.
 
-    //neu besorgen, da sie jetzt verschoben sind. MA: 28. Dec. 93 Bug 5190
+    //neu besorgen, da sie jetzt verschoben sind.
     pTable = pStart->FindTabFrm();
     pEndTable = pEnd->FindTabFrm();
 
@@ -1980,7 +1972,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             while ( pRow && !pRow->Frm().IsOver( aUnion ) )
                 pRow = (SwLayoutFrm*)pRow->GetNext();
 
-            // --> FME 2004-07-26 #i31976#
+            // #i31976#
             // A follow flow row may contain emtpy cells. These are not
             // considered by FirstCell(). Therefore we have to find
             // the first cell manually:
@@ -1993,9 +1985,8 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                     pTmpCell = static_cast<const SwRowFrm*>(pTmpRow)->Lower();
                     pTmpRow  = static_cast<const SwCellFrm*>(pTmpCell)->Lower();
                 }
-                ASSERT( !pTmpCell || pTmpCell->IsCellFrm(), "Lower of rowframe != cellframe?!" )
+                OSL_ENSURE( !pTmpCell || pTmpCell->IsCellFrm(), "Lower of rowframe != cellframe?!" );
             }
-            // <--
 
             const SwLayoutFrm* pFirst = pTmpCell ?
                                         static_cast<const SwLayoutFrm*>(pTmpCell) :
@@ -2102,7 +2093,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 
                 while ( pCell && pRow->IsAnLower( pCell ) )
                 {
-                    ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                    OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                     if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                     {
                         if( (pCell->Frm().*fnRect->fnGetWidth)() < nMinValue )
@@ -2214,7 +2205,7 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
         const sal_uInt16 nPos = rTable.GetTabLines().GetPos(
                     (const SwTableLine*&)pLine ) + 1;
 
-        ASSERT( nPos != USHRT_MAX, "TableLine not found." );
+        OSL_ENSURE( nPos != USHRT_MAX, "TableLine not found." );
 
         if( nStPos > nPos )
             nStPos = nPos;
@@ -2242,13 +2233,13 @@ void _FndBox::SetTableLines( const SwTable &rTable )
 
     SwTableLine* pTmpLine = GetLines()[0]->GetLine();
     sal_uInt16 nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
-    ASSERT( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
+    OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( nPos )
         pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
 
     pTmpLine = GetLines()[GetLines().Count()-1]->GetLine();
     nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
-    ASSERT( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
+    OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( ++nPos < rTable.GetTabLines().Count() )
         pLineBehind = rTable.GetTabLines()[nPos];
 }
@@ -2274,7 +2265,7 @@ void _FndBox::DelFrms( SwTable &rTable )
     {
         nStPos = rTable.GetTabLines().GetPos(
                         (const SwTableLine*&)pLineBefore );
-        ASSERT( nStPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
+        OSL_ENSURE( nStPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
         ++nStPos;
     }
     if( rTable.IsNewModel() && pLineBehind )
@@ -2283,7 +2274,7 @@ void _FndBox::DelFrms( SwTable &rTable )
     {
         nEndPos = rTable.GetTabLines().GetPos(
                         (const SwTableLine*&)pLineBehind );
-        ASSERT( nEndPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
+        OSL_ENSURE( nEndPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
         --nEndPos;
     }
 
@@ -2323,19 +2314,18 @@ void _FndBox::DelFrms( SwTable &rTable )
                         if ( pPrev )
                         {
                             SwFrm *pTmp = pPrev->FindPrev();
-                            ASSERT( pTmp->IsTabFrm(),
+                            OSL_ENSURE( pTmp->IsTabFrm(),
                                     "Vorgaenger vom Follow kein Master.");
                             pPrev = (SwTabFrm*)pTmp;
                         }
                         if ( pPrev )
                         {
                             pPrev->SetFollow( pFollow );
-                            // --> FME 2006-01-31 #i60340# Do not transfer the
+                            // #i60340# Do not transfer the
                             // flag from pUp to pPrev. pUp may still have the
                             // flag set although there is not more follow flow
                             // line associated with pUp.
                             pPrev->SetFollowFlowLine( sal_False );
-                            // <--
                         }
                         else if ( pFollow )
                             ::UnsetFollow( pFollow );
@@ -2398,7 +2388,7 @@ sal_Bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
  */
 void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
 {
-    ASSERT( rTabFrm.IsFollow(), "lcl_UpdateRepeatedHeadlines called for non-follow tab" )
+    OSL_ENSURE( rTabFrm.IsFollow(), "lcl_UpdateRepeatedHeadlines called for non-follow tab" );
 
     // Delete remaining headlines:
     SwRowFrm* pLower = 0;
@@ -2436,7 +2426,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
     {
         nStPos = rTable.GetTabLines().GetPos(
                         (const SwTableLine*&)pLineBefore );
-        ASSERT( nStPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
+        OSL_ENSURE( nStPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
         ++nStPos;
 
     }
@@ -2444,7 +2434,7 @@ void _FndBox::MakeFrms( SwTable &rTable )
     {
         nEndPos = rTable.GetTabLines().GetPos(
                         (const SwTableLine*&)pLineBehind );
-        ASSERT( nEndPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
+        OSL_ENSURE( nEndPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
         --nEndPos;
     }
     //Jetzt die grosse Einfuegeoperation fuer alle Tabllen.
@@ -2467,11 +2457,10 @@ void _FndBox::MakeFrms( SwTable &rTable )
                             pSibling->GetTabLine() != pLine ||
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
                             pSibling->IsRepeatedHeadline() ||
-                            // --> FME 2005-08-24 #i53647# If !pLineBehind,
+                            // #i53647# If !pLineBehind,
                             // IsInSplitTableRow() should be checked.
                             ( pLineBehind && pSibling->IsInFollowFlowRow() ) ||
                             (!pLineBehind && pSibling->IsInSplitTableRow() ) ) )
-                            // <--
                 {
                     pSibling = aIter.Next();
                 }
@@ -2590,11 +2579,10 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                             // only consider row frames that are not follow flow rows
                             // 2. case: pLineBefore != 0:
                             // only consider row frames that are not split table rows
-                            // --> FME 2004-11-23 #i37476# If !pLineBefore,
+                            // #i37476# If !pLineBefore,
                             // check IsInFollowFlowRow instead of IsInSplitTableRow.
                             ( ( !pLineBefore && pSibling->IsInFollowFlowRow() ) ||
                               (  pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )
-                            // <--
                     {
                         pSibling = aIter.Next();
                     }
@@ -2634,8 +2622,8 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                     lcl_UpdateRepeatedHeadlines( *pTable, true );
                 }
 
-                ASSERT( ((SwRowFrm*)pTable->Lower())->GetTabLine() ==
-                        rTable.GetTabLines()[0], "MakeNewFrms: Table corruption!" )
+                OSL_ENSURE( ((SwRowFrm*)pTable->Lower())->GetTabLine() ==
+                        rTable.GetTabLines()[0], "MakeNewFrms: Table corruption!" );
             }
         }
     }
@@ -2668,7 +2656,7 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 
     if ( nBfPos == nBhPos ) //Duerfte eigentlich nie vorkommen.
     {
-        ASSERT( sal_False, "Table, Loeschen auf keinem Bereich !?!" );
+        OSL_FAIL( "Table, Loeschen auf keinem Bereich !?!" );
         return sal_False;
     }
 
@@ -2705,3 +2693,4 @@ sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,14 +33,12 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 
 /* --- class SwParagraphNumTabPage ----------------------------------------
-    Mit dieser TabPage werden Numerierungseinstellungen am Absatz bzw. der
-    Absatzvorlage vorgenommen.
+    with this TabPage numbering settings at the paragraph / paragraph style
+    are performed.
 
  ---------------------------------------------------------------------------*/
 class SwParagraphNumTabPage : public SfxTabPage
@@ -64,7 +63,6 @@ class SwParagraphNumTabPage : public SfxTabPage
 
     // --> OD 2008-04-14 #outlinelevel#
     const String msOutlineNumbering;
-    // <--
 
     sal_Bool                    bModified : 1;
     sal_Bool                    bCurNumrule : 1;
@@ -96,3 +94,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 
 #include <tools/solar.h>
 
-/* -----------------23.02.99 11:33-------------------
+/* --------------------------------------------------
  * Die Klasse SwNode2Layout stellt die Verbindung von Nodes zum Layout her.
  * Sie liefert einen intelligenten Iterator ueber die zum Node oder Nodebereich
  * gehoerenden Frames. Je nach Zweck der Iteration, z.B. um vor oder hinter
@@ -79,3 +80,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

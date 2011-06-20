@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include <algorithm>
 #include <comphelper/stlunosequence.hxx>
 
-#include <errhdl.hxx>
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -85,14 +85,13 @@ namespace {
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwTxtNode& rTxtNode )
     : mrPortionData( rPortionData )
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     , mpTxtNode( &rTxtNode )
     , mpTextMarkupList( 0 )
-    // <--
 {
 }
 
-// --> OD 2010-02-19 #i108125#
+// #i108125#
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwWrongList& rTextMarkupList )
     : mrPortionData( rPortionData )
@@ -100,7 +99,6 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
     , mpTextMarkupList( &rTextMarkupList )
 {
 }
-// <--
 
 sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupType )
         throw (::com::sun::star::lang::IllegalArgumentException,
@@ -108,12 +106,11 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 {
     sal_Int32 nTextMarkupCount( 0 );
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
                             : getTextMarkupList( *mpTxtNode, nTextMarkupType );
-    // <--
     if ( pTextMarkupList )
     {
         nTextMarkupCount = pTextMarkupList->Count();
@@ -138,12 +135,11 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
                             : getTextMarkupList( *mpTxtNode, nTextMarkupType );
-    // <--
     if ( pTextMarkupList )
     {
         const SwWrongArea* pTextMarkup =
@@ -161,8 +157,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         }
         else
         {
-            ASSERT( false,
-                    "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
+            OSL_FAIL( "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
         }
     }
 
@@ -187,12 +182,11 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         return uno::Sequence< ::com::sun::star::accessibility::TextSegment >();
     }
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
                             : getTextMarkupList( *mpTxtNode, nTextMarkupType );
-    // <--
     ::std::vector< ::com::sun::star::accessibility::TextSegment > aTmpTextMarkups;
     if ( pTextMarkupList )
     {
@@ -203,7 +197,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         {
             const SwWrongArea* pTextMarkup =
                     pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIdx) );
-            ASSERT( pTextMarkup,
+            OSL_ENSURE( pTextMarkup,
                     "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
             if ( pTextMarkup &&
                  pTextMarkup->mnPos <= nCoreCharIndex &&
@@ -229,3 +223,5 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 
     return aTextMarkups;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

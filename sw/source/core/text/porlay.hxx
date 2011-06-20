@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -255,9 +256,11 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = NULL,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
                         const xub_StrLen nStart ); //$ ostream
+
+    void dumpLineAsXml(xmlTextWriter* writer, sal_uInt16& ofs, String& aText);
 #endif
 
     OUTPUT_OPERATOR
@@ -367,6 +370,10 @@ public:
 
     const SwDropPortion *FindDropPortion() const;
 
+#if OSL_DEBUG_LEVEL > 1
+    void dumpAsXml( xmlTextWriter* writer, SwTxtFrm* pTxtFrm );
+#endif
+
     OUTPUT_OPERATOR
     DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)
 };
@@ -425,3 +432,5 @@ CLASSIO( SwLineLayout )
 CLASSIO( SwParaPortion )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

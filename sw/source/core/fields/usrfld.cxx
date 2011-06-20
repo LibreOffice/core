@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,10 +127,7 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
     nSubType = nSub & 0xff00;
 }
 
-/*-----------------09.03.98 08:04-------------------
-
---------------------------------------------------*/
-sal_Bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -151,12 +149,10 @@ sal_Bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     default:
         return SwField::QueryValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
-/*-----------------09.03.98 08:04-------------------
 
---------------------------------------------------*/
-sal_Bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -182,7 +178,7 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -308,10 +304,7 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
     }
 }
 
-/*-----------------04.03.98 17:05-------------------
-
---------------------------------------------------*/
-sal_Bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -328,14 +321,12 @@ sal_Bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
-/*-----------------04.03.98 17:05-------------------
 
---------------------------------------------------*/
-sal_Bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -368,10 +359,11 @@ sal_Bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

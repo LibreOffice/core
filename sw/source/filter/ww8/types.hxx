@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,18 +26,10 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef WW_TYPES
 #define WW_TYPES
 
 #include <vector>
-
-//if part of OOo
-#include "typessw.hxx"
-//else
-//include standalonetypes.hxx
-//endif
 
 namespace ww
 {
@@ -55,4 +48,5 @@ namespace ww
 }
 
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

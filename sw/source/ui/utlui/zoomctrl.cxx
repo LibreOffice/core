@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <svl/stritem.hxx>
 #include <svx/zoomitem.hxx>
@@ -42,9 +39,7 @@
 #include "swtypes.hxx"
 #include "zoomctrl.hxx"
 
-
 SFX_IMPL_STATUSBAR_CONTROL( SwZoomControl, SvxZoomItem );
-
 
 SwZoomControl::SwZoomControl( sal_uInt16 _nSlotId,
                               sal_uInt16 _nId,
@@ -53,13 +48,9 @@ SwZoomControl::SwZoomControl( sal_uInt16 _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
-
 SwZoomControl::~SwZoomControl()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
@@ -76,8 +67,6 @@ void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SwZoomControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     if(!sPreviewZoom.Len())
@@ -85,8 +74,6 @@ void SwZoomControl::Paint( const UserDrawEvent& rUsrEvt )
     else
         GetStatusBar().SetItemText( GetId(), sPreviewZoom );
 }
-
-// -----------------------------------------------------------------------
 
 void SwZoomControl::Command( const CommandEvent& rCEvt )
 {
@@ -97,3 +84,4 @@ void SwZoomControl::Command( const CommandEvent& rCEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

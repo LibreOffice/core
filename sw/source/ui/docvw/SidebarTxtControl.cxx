@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -362,7 +360,6 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
             //!! call different Execute function to get rid of the new thesaurus sub menu
             //!! pointer created in the call to Popup.
             //!! Otherwise we would have a memory leak (see also #i107205#)
-            //((PopupMenu*)pMgr->GetSVMenu())->Execute( this, aPos );
             pMgr->Execute( aPos, this );
             delete pMgr;
         }
@@ -425,3 +422,4 @@ css::uno::Reference< css::accessibility::XAccessible > SidebarTxtControl::Create
 
 } } // end of namespace sw::sidebarwindows
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

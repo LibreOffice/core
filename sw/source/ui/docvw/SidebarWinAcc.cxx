@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +64,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
         void ChangeAnchor( const SwFrm* pAnchorFrm )
         {
-            vos::OGuard aGuard(maMutex);
+            osl::MutexGuard aGuard(maMutex);
 
             mpAnchorFrm = pAnchorFrm;
         }
@@ -74,7 +72,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
             getAccessibleParent() throw (css::uno::RuntimeException)
         {
-            vos::OGuard aGuard(maMutex);
+            osl::MutexGuard aGuard(maMutex);
 
             css::uno::Reference< css::accessibility::XAccessible > xAccParent;
 
@@ -89,7 +87,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 
         virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (css::uno::RuntimeException)
         {
-            vos::OGuard aGuard(maMutex);
+            osl::MutexGuard aGuard(maMutex);
 
             sal_Int32 nIndex( -1 );
 
@@ -107,7 +105,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         ViewShell& mrViewShell;
         const SwFrm* mpAnchorFrm;
 
-        ::vos::OMutex maMutex;
+        ::osl::Mutex maMutex;
 };
 
 // =============================================================================
@@ -160,3 +158,4 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessib
 
 } } // end of namespace sw::sidebarwindows
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

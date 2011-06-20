@@ -34,14 +34,15 @@ $(eval $(call gb_Library_add_precompiled_header,sw,$(SRCDIR)/sw/inc/pch/precompi
 $(eval $(call gb_Library_set_componentfile,sw,sw/util/sw))
 
 $(eval $(call gb_Library_set_include,sw,\
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/filter/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
-    -I$(SRCDIR)/sw/inc/pch \
-    -I$(SRCDIR)/sw/inc \
+    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
+    -I$(realpath $(SRCDIR)/sw/inc/pch) \
+    -I$(realpath $(SRCDIR)/sw/inc) \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
+    $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_CFLAGS)) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
@@ -66,7 +67,6 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     sb \
     sfx \
     sot \
-    stl \
     svl \
     svt \
     svx \
@@ -78,8 +78,8 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     utl \
     vbahelper \
     vcl \
-    vos3 \
     xo \
+    xml2 \
     $(gb_STDLIBS) \
 ))
 
@@ -248,8 +248,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/edit/edtox \
     sw/source/core/edit/edundo \
     sw/source/core/edit/edws \
-    sw/source/core/except/dbgloop \
-    sw/source/core/except/errhdl \
     sw/source/core/fields/authfld \
     sw/source/core/fields/cellfml \
     sw/source/core/fields/chpfld \
@@ -285,6 +283,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/calcmove \
     sw/source/core/layout/colfrm \
     sw/source/core/layout/dbg_lay \
+    sw/source/core/layout/dumpfilter \
     sw/source/core/layout/findfrm \
     sw/source/core/layout/flowfrm \
     sw/source/core/layout/fly \
@@ -378,6 +377,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/text/txttab \
     sw/source/core/text/widorp \
     sw/source/core/text/wrong \
+    sw/source/core/text/xmldump \
     sw/source/core/tox/tox \
     sw/source/core/tox/toxhlp \
     sw/source/core/tox/txmsrt \
@@ -587,6 +587,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/docvw/edtwin \
     sw/source/ui/docvw/edtwin2 \
     sw/source/ui/docvw/edtwin3 \
+    sw/source/ui/docvw/extedit \
     sw/source/ui/docvw/frmsidebarwincontainer \
     sw/source/ui/docvw/romenu \
     sw/source/ui/docvw/srcedtw \
@@ -637,6 +638,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/shells/langhelper \
     sw/source/ui/shells/listsh \
     sw/source/ui/shells/mediash \
+    sw/source/ui/shells/navsh \
     sw/source/ui/shells/olesh \
     sw/source/ui/shells/slotadd \
     sw/source/ui/shells/tabsh \
@@ -719,6 +721,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/web/wview \
     sw/source/ui/wrtsh/delete \
     sw/source/ui/wrtsh/move \
+    sw/source/ui/wrtsh/navmgr \
     sw/source/ui/wrtsh/select \
     sw/source/ui/wrtsh/wrtsh1 \
     sw/source/ui/wrtsh/wrtsh2 \
@@ -730,8 +733,8 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
 $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
 
 $(eval $(call gb_SdiTarget_set_include,sw/sdi/swslots,\
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/sdi \
+    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(realpath $(SRCDIR)/sw/sdi) \
     $$(INCLUDE) \
 ))
 

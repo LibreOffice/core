@@ -147,6 +147,15 @@ TabPage TP_OPTLOAD_PAGE
         Text [ en-US ] = "Use square page mode for text grid";
         Text [ zh-CN ] = "使用稿纸模式";
     };
+
+    CheckBox CB_USE_CHAR_UNIT
+    {
+        Pos = MAP_APPFONT ( 12 , 130) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text [ en-US ] = "Enable char unit";
+        Text [ x-comment ] = " ";
+    };
+
 };
 /**************************************************************************/
 /*                                                                        */
@@ -412,6 +421,8 @@ StringArray STR_ARR_METRIC
         < "Miles" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Point" ; FUNIT_POINT ; > ;
+        < "Char" ; FUNIT_CHAR ; >;
+        < "Line" ; FUNIT_LINE ; >;
     };
 };
 

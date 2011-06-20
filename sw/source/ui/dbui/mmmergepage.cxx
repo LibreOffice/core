@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <dbui.hrc>
 #include <mmmergepage.hrc>
 #include <svl/srchitem.hxx>
@@ -44,9 +43,6 @@
 #include <svl/eitem.hxx>
 #include <swabstdlg.hxx>
 
-/*-- 02.04.2004 16:38:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_MERGE_PAGE)),
 #ifdef MSC
@@ -77,24 +73,18 @@ SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     m_aFindED.SetReturnActionLink( LINK(this, SwMailMergeMergePage, EnteredFindStringHdl_Impl ));
 
 }
-/*-- 02.04.2004 16:38:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeMergePage::~SwMailMergeMergePage()
 {
 }
-/*-- 25.05.2004 16:14:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergeMergePage, EditDocumentHdl_Impl, PushButton*, EMPTYARG)
 {
     m_pWizard->SetRestartPage(MM_MERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_RESULT_DOC);
     return 0;
 }
-/*-- 25.05.2004 16:14:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
 {
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
@@ -107,7 +97,7 @@ IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
     aSearchItem.SetBackward(m_aBackwardsCB.IsChecked());
 
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
-    DBG_ASSERT(pTargetView, "no target view exists");
+    OSL_ENSURE(pTargetView, "no target view exists");
     if(pTargetView)
     {
         pTargetView->GetViewFrame()->GetDispatcher()->Execute(
@@ -116,8 +106,11 @@ IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
 
     return 0;
 }
+
 IMPL_LINK( SwMailMergeMergePage, EnteredFindStringHdl_Impl, void*, EMPTYARG )
 {
     m_aFindPB.GetClickHdl().Call( &m_aFindPB );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

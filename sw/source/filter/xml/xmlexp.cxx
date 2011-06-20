@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,14 +64,13 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <ForbiddenCharactersEnum.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
-// --> OD 2007-03-30 #i73788#
-#include <pausethreadstarting.hxx>
-// <--
+#include <pausethreadstarting.hxx> // #i73788#
 
 
 using ::rtl::OUString;
@@ -125,7 +125,6 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 }
 #endif
 
-// #110680#
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
@@ -150,7 +149,7 @@ SwXMLExport::SwXMLExport(
 }
 
 #ifdef XML_CORE_API
-// #110680#
+
 SwXMLExport::SwXMLExport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XModel >& rModel,
@@ -188,19 +187,17 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
 
-    // --> OD 2007-03-30 #i73788#
-    SwPauseThreadStarting aPauseThreadStarting;
-    // <--
+    SwPauseThreadStarting aPauseThreadStarting; // #i73788#
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xTextTunnel.is() )
         return ERR_SWG_WRITE_ERROR;
 
-    // from here, we use core interfaces -> lock Solar-Mutex (#91949#)
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    // from here, we use core interfaces -> lock Solar-Mutex
+    SolarMutexGuard aGuard;
 
     {
         Reference<XPropertySet> rInfoSet = getExportInfo();
@@ -221,7 +218,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SwXText *pText = reinterpret_cast< SwXText * >(
             sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    ASSERT( pText, "SwXText missing" );
+    OSL_ENSURE( pText, "SwXText missing" );
     if( !pText )
         return ERR_SWG_WRITE_ERROR;
 
@@ -252,7 +249,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 {
                     const SvXMLAttrContainerItem *pUnknown =
                                 PTR_CAST( SvXMLAttrContainerItem, pItem );
-                    ASSERT( pUnknown, "illegal attribute container item" );
+                    OSL_ENSURE( pUnknown, "illegal attribute container item" );
                     if( pUnknown && (pUnknown->GetAttrCount() > 0) )
                     {
                         sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
@@ -321,7 +318,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             nRef += pDoc->GetCharFmts()->Count() - 1;
             nRef += pDoc->GetFrmFmts()->Count() - 1;
             nRef += pDoc->GetTxtFmtColls()->Count() - 1;
-//          nRef += pDoc->GetPageDescCnt();
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
             nRef += aDocStat.nAllPara; // 1: only content, no autostyle
@@ -413,7 +409,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( pEmbeddedResolver )
         SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
 
-    ASSERT( !pTableLines, "there are table columns infos left" );
+    OSL_ENSURE( !pTableLines, "there are table columns infos left" );
 
     return nRet;
 }
@@ -436,8 +432,9 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
     return pShapeExport;
 }
 
-__EXPORT SwXMLExport::~SwXMLExport()
+SwXMLExport::~SwXMLExport()
 {
+    DeleteTableLines();
     _FinitItemExport();
 }
 
@@ -453,7 +450,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     Reference< XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
         return;
@@ -479,12 +476,12 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         xText = xTextDoc->getText();
         Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+        OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
         if( xTextTunnel.is() )
         {
             pText = reinterpret_cast< SwXText * >(
                     sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-            ASSERT( pText, "SwXText missing" );
+            OSL_ENSURE( pText, "SwXText missing" );
         }
     }
 
@@ -499,7 +496,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
     sal_Bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
 
-    ASSERT ( bTwip, "Map unit for visible area is not in TWIPS!" );
+   OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Top() ) : rRect.Top();
@@ -575,12 +572,12 @@ void SwXMLExport::SetBodyAttributes()
     // export use of soft page breaks
     {
         Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+        OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
         if( xTextTunnel.is() )
         {
             SwXText *pText = reinterpret_cast< SwXText * >(
                     sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-            ASSERT( pText, "SwXText missing" );
+            OSL_ENSURE( pText, "SwXText missing" );
             if( pText )
             {
                 SwDoc *pDoc = pText->GetDoc();
@@ -609,13 +606,12 @@ void SwXMLExport::_ExportContent()
         Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
         if (xPage.is())
         {
-            // #103597# prevent export of form controls which are embedded in
-            // mute sections
+            // prevent export of form controls which are embedded in mute sections
             Reference<XIndexAccess> xIAPage( xPage, UNO_QUERY );
             GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
                 xIAPage, GetFormExport() );
 
-            // #i36597# / 2004-12-13 / fs@openoffice.org
+            // #i36597#
             if ( GetFormExport()->pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
             {
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
@@ -813,10 +809,6 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    //return (cppu::OWeakObject*)new SwXMLExport(
-    //  EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS|EXPORT_OASIS );
@@ -840,10 +832,6 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    //return (cppu::OWeakObject*)new SwXMLExport(
-    //  EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
-    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport(
         rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
@@ -892,10 +880,14 @@ Reference< XInterface > SAL_CALL SwXMLExportSettings_createInstance(
     return (cppu::OWeakObject*)new SwXMLExport(rSMgr, EXPORT_SETTINGS|EXPORT_OASIS);
 }
 
+namespace
+{
+    class theSwXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMLExportUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
 {
-    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXMLExportUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
@@ -957,7 +949,7 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
         aNextNumInfo.Set( *pNd );
         ExportListChange( aPrevNumInfo, aNextNumInfo );
 
-        ASSERT( !(pNd->IsGrfNode() || pNd->IsOLENode()),
+        OSL_ENSURE( !(pNd->IsGrfNode() || pNd->IsOLENode()),
                 "SwXMLExport::exportCurPaM: grf or OLE node unexpected" );
         if( pNd->IsTxtNode() )
         {
@@ -995,3 +987,5 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
     ExportListChange( aPrevNumInfo, aNextNumInfo );
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

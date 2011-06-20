@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,20 +58,14 @@
 #include <authfld.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <outline.hxx>
 #include <cnttab.hxx>
 #include <swuicnttab.hxx>
 #include <formedt.hxx>
 #include <poolfmt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <uitool.hxx>
 #include <fmtcol.hxx>
 #include <fldbas.hxx>
@@ -81,34 +76,18 @@
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _INDEX_HRC
 #include <index.hrc>
-#endif
-#ifndef _CNTTAB_HRC
 #include <cnttab.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
-#ifndef _TOXHLP_HXX
 #include <toxwrap.hxx>
-#endif
 #include <chpfld.hxx>
 
-#ifndef _UTLUI_HRC
 #include "utlui.hrc"
-#endif
 
 #include <sfx2/app.hxx>
 
@@ -121,8 +100,8 @@ using ::rtl::OUString;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
 
-static const sal_Unicode aDeliStart = '['; //fuer die form
-static const sal_Unicode aDeliEnd    = ']'; //fuer die form
+static const sal_Unicode aDeliStart = '['; // for the form
+static const sal_Unicode aDeliEnd    = ']'; // for the form
 
 #define POS_GRF     0
 #define POS_OLE     1
@@ -132,10 +111,6 @@ static const sal_Unicode aDeliEnd    = ']'; //fuer die form
 #define IDX_FILE_EXTENSION String::CreateFromAscii( \
                             RTL_CONSTASCII_STRINGPARAM( "*.sdi" ))
 
-
-/* -----------------14.06.99 13:10-------------------
-
- --------------------------------------------------*/
 String lcl_CreateAutoMarkFileDlg( const String& rURL,
                                 const String& rFileString, sal_Bool bOpen )
 {
@@ -168,9 +143,7 @@ String lcl_CreateAutoMarkFileDlg( const String& rURL,
     rLastSaveDir = sSaveDir;
     return sRet;
 }
-/* -----------------------------19.01.00 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct AutoMarkEntry
 {
     String sSearch;
@@ -218,8 +191,6 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 
 protected:
     virtual sal_Bool                SeekRow( long nRow );
-//  virtual void                PaintField( OutputDevice& rDev, const awt::Rectangle& rRect,
-//                                          sal_uInt16 nColumnId ) const;
     virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
     virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
     virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
@@ -257,9 +228,7 @@ public:
     ~SwAutoMarkDlg_Impl();
 
 };
-/* -----------------04.11.99 11:02-------------------
 
- --------------------------------------------------*/
 sal_uInt16 CurTOXType::GetFlatIndex() const
 {
     sal_uInt16 nRet = static_cast< sal_uInt16 >(eType);
@@ -269,14 +238,9 @@ sal_uInt16 CurTOXType::GetFlatIndex() const
     }
     return nRet;
 }
-/*************************************************************************
 
-*************************************************************************/
 #define EDIT_MINWIDTH 15
 
-/* -----------------14.06.99 12:12-------------------
-
- --------------------------------------------------*/
 SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell &rShell,
                     SwTOXBase* pCurTOX,
@@ -362,7 +326,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
         }
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_TOX_SELECT, SwTOXSelectTabPage::Create, 0);
     AddTabPage(TP_TOX_STYLES, SwTOXStylesTabPage::Create, 0);
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
@@ -389,9 +353,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     if(aNewPos.X() < 0)
         SetPosPixel(aOldPos);
 }
-/*-- 14.06.99 13:11:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
     SW_MOD()->GetModuleConfig()->SetShowIndexPreview(aShowExampleCB.IsChecked());
@@ -409,9 +371,7 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
     delete pMgr;
     delete pExampleFrame;
 }
-/*-- 14.06.99 13:11:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if( TP_BACKGROUND == nId  )
@@ -435,9 +395,7 @@ void    SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ((SwTOXSelectTabPage&)rPage).SelectType((TOXTypes)nInitialTOXType);
     }
 }
-/*-- 14.06.99 13:11:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 short   SwMultiTOXTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
@@ -468,9 +426,7 @@ short   SwMultiTOXTabDialog::Ok()
 
     return nRet;
 }
-/* -----------------16.06.99 11:59-------------------
 
- --------------------------------------------------*/
 SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
 {
     sal_uInt16 nIndex = eType.GetFlatIndex();
@@ -478,9 +434,7 @@ SwForm* SwMultiTOXTabDialog::GetForm(CurTOXType eType)
         pFormArr[nIndex] = new SwForm(eType.eType);
     return pFormArr[nIndex];
 }
-/* -----------------09.09.99 11:29-------------------
 
- --------------------------------------------------*/
 SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
 {
     sal_uInt16 nIndex = eType.GetFlatIndex();
@@ -520,9 +474,7 @@ SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
     }
     return *pDescArr[nIndex];
 }
-/* -----------------09.09.99 11:36-------------------
 
- --------------------------------------------------*/
 SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
             const SwTOXBase*pCurTOX)
 {
@@ -550,10 +502,6 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     pDesc->SetSortAlgorithm(pCurTOX->GetSortAlgorithm());
     return pDesc;
 }
-
-/* -----------------------------29.12.99 09:53--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
 {
@@ -635,28 +583,20 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
     return 0;
 }
 
-
-/* -----------------05.07.99 09:49-------------------
-
- --------------------------------------------------*/
 sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
-    //if(pColl && pColl->GetOutlineLevel() == NO_NUMBERING)     //#outline level,zhaojianwei
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle()) //<-end,zhaojianwei
         return sal_True;
 
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
-        //rSh.GetTxtCollFromPool(nId)->GetOutlineLevel() == NO_NUMBERING)       //#outline level,zhaojianwei
         ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())   //<-end,zhaojianwei
         return sal_True;
 
     return sal_False;
 }
-/* -----------------14.07.99 16:01-------------------
 
- --------------------------------------------------*/
 class SwIndexTreeLB : public SvTreeListBox
 {
     const HeaderBar* pHeaderBar;
@@ -668,9 +608,7 @@ public:
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
     void            SetHeaderBar(const HeaderBar* pHB) {pHeaderBar = pHB;}
 };
-/* -----------------14.07.99 16:03-------------------
 
- --------------------------------------------------*/
 long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 {
     long nData = (long)pEntry->GetUserData();
@@ -684,9 +622,7 @@ long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
     nData += pTab->GetPos();
     return nData;
 }
-/* -----------------25.08.99 11:14-------------------
 
- --------------------------------------------------*/
 void    SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
 {
     SvLBoxEntry* pEntry = FirstSelected();
@@ -721,9 +657,6 @@ void    SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-/* -----------------16.07.99 10:01-------------------
-
- --------------------------------------------------*/
 class SwHeaderTree : public Control
 {
     HeaderBar       aStylesHB;
@@ -737,9 +670,7 @@ public:
 
     virtual void    GetFocus();
 };
-/* -----------------16.07.99 10:11-------------------
 
- --------------------------------------------------*/
 SwHeaderTree::SwHeaderTree(Window* pParent, const ResId rResId) :
         Control(pParent, rResId),
         aStylesHB(  this, ResId(HB_STYLES, *rResId.GetResMgr())),
@@ -756,17 +687,13 @@ SwHeaderTree::SwHeaderTree(Window* pParent, const ResId rResId) :
     aStylesTLB.SetSizePixel(aTLBSize);
     aStylesTLB.SetHeaderBar(&aStylesHB);
 }
-/* -----------------25.08.99 10:38-------------------
 
- --------------------------------------------------*/
 void    SwHeaderTree::GetFocus()
 {
     Control::GetFocus();
     aStylesTLB.GrabFocus();
 }
-/* -----------------13.07.99 15:29-------------------
 
- --------------------------------------------------*/
 class SwAddStylesDlg_Impl : public SfxModalDialog
 {
     OKButton        aOk;
@@ -789,9 +716,7 @@ public:
     SwAddStylesDlg_Impl(Window* pParent, SwWrtShell& rWrtSh, String rStringArr[]);
     ~SwAddStylesDlg_Impl();
 };
-/* -----------------13.07.99 15:39-------------------
 
- --------------------------------------------------*/
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
             SwWrtShell& rWrtSh, String rStringArr[]) :
     SfxModalDialog(pParent, SW_RES(DLG_ADD_IDX_STYLES)),
@@ -813,9 +738,6 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     aLeftPB.SetAccessibleRelationMemberOf(&aStylesFL);
     aRightPB.SetAccessibleRelationMemberOf(&aStylesFL);
 
-    aLeftPB.SetModeImage( Image( SW_RES( IMG_ALL_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    aRightPB.SetModeImage( Image( SW_RES( IMG_ALL_RIGHT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-
     aOk.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     aLeftPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
     aRightPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
@@ -835,7 +757,6 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 
     SwIndexTreeLB& rTLB = aHeaderTree.GetTreeListBox();
     rTLB.SetStyle(rTLB.GetStyle()|WB_CLIPCHILDREN|WB_SORT);
-    //aStylesTLB.SetSelectHdl(LINK(this, SwAddStylesDlg_Impl, SelectHdl));
     rTLB.GetModel()->SetSortMode(SortAscending);
     for(i = 0; i < MAXLEVEL; ++i)
     {
@@ -879,15 +800,10 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     rTLB.GetModel()->Resort();
 }
 
-/* -----------------13.07.99 15:39-------------------
-
- --------------------------------------------------*/
 SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 {
 }
-/* -----------------13.07.99 15:39-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwAddStylesDlg_Impl, OkHdl, OKButton*, EMPTYARG)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -912,17 +828,13 @@ IMPL_LINK(SwAddStylesDlg_Impl, OkHdl, OKButton*, EMPTYARG)
     EndDialog(RET_OK);
     return 0;
 }
-/* -----------------16.07.99 09:27-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwAddStylesDlg_Impl, HeaderDragHdl, HeaderBar*, EMPTYARG)
 {
     aHeaderTree.GetTreeListBox().Invalidate();
     return 0;
 }
-/* -----------------13.07.99 15:39-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
 {
     sal_Bool bLeft = pBtn == &aLeftPB;
@@ -950,9 +862,6 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
     return 0;
 }
 
-/*-- 14.06.99 13:11:40---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
     SfxTabPage(pParent, SW_RES(TP_TOX_SELECT), rAttrSet),
 
@@ -971,7 +880,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
 
     aCreateFromFL(      this, SW_RES(FL_CREATEFROM       )),
     aFromHeadingsCB(    this, SW_RES(CB_FROMHEADINGS     )),
-//   aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),//#outline level,removed by zhaojianwei
     aAddStylesCB(       this, SW_RES(CB_ADDSTYLES       )),
     aAddStylesPB(       this, SW_RES(PB_ADDSTYLES       )),
 
@@ -1053,7 +961,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aTypeLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
 
     aAddStylesPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, AddStylesHdl));
-    //aChapterDlgPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, ChapterHdl));//#outline level,removed by zhaojianwei
 
     PopupMenu*  pMenu = aAutoMarkPB.GetPopupMenu();
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
@@ -1084,17 +991,13 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aTypeLB.SelectEntryPos(0);
     aTitleED.SaveValue();
 }
-/*-- 14.06.99 13:11:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
 {
     delete pIndexRes;
     delete pIndexEntryWrapper;
 }
-/* -----------------21.10.99 17:03-------------------
 
- --------------------------------------------------*/
 void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
@@ -1106,22 +1009,18 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
         for(sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
         {
             nPos = aTypeLB.InsertEntry(rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(), nPos);
-            sal_uInt32 nEntryData = nUser << 8;
+            sal_uIntPtr nEntryData = nUser << 8;
             nEntryData |= TO_USER;
             aTypeLB.SetEntryData(nPos, (void*)nEntryData);
         }
     }
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 sal_Bool SwTOXSelectTabPage::FillItemSet( SfxItemSet& )
 {
     return sal_True;
 }
-/* -----------------25.08.99 14:31-------------------
 
- --------------------------------------------------*/
 long lcl_TOXTypesToUserData(CurTOXType eType)
 {
     sal_uInt16 nRet = TOX_INDEX;
@@ -1142,7 +1041,7 @@ long lcl_TOXTypesToUserData(CurTOXType eType)
     }
     return nRet;
 }
-//-----------------------------------------------------------------
+
 void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 {
     CurTOXType eCurType (eSet, 0);
@@ -1154,10 +1053,6 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
     TOXTypeHdl(&aTypeLB);
 }
 
-/*-- 14.06.99 13:10:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-//-----------------------------------------------------------------
 CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
 {
     CurTOXType eRet;
@@ -1176,13 +1071,11 @@ CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
         case TO_OBJECT      : eRet.eType = TOX_OBJECTS;     break;
         case TO_TABLE       : eRet.eType = TOX_TABLES;      break;
         case TO_AUTHORITIES : eRet.eType = TOX_AUTHORITIES; break;
-        default: DBG_ERROR("what a type?");
+        default: OSL_FAIL("what a type?");
     }
     return eRet;
 }
-/* -----------------02.09.99 08:16-------------------
 
- --------------------------------------------------*/
 void    SwTOXSelectTabPage::ApplyTOXDescription()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1231,7 +1124,6 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     if(TOX_CONTENT == aCurType.eType)
     {
         aFromHeadingsCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
-        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
         aAddStylesCB.SetText(sAddStyleContent);
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
     }
@@ -1289,7 +1181,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     for( long nCnt = 0; nCnt < aSortAlgorithmLB.GetEntryCount(); ++nCnt )
     {
         const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( (sal_uInt16)nCnt );
-        DBG_ASSERT(pEntryData, "no entry data available");
+        OSL_ENSURE(pEntryData, "no entry data available");
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
             aSortAlgorithmLB.SelectEntryPos( (sal_uInt16)nCnt );
@@ -1297,9 +1189,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
         }
     }
 }
-/* -----------------09.09.99 11:57-------------------
 
- --------------------------------------------------*/
 void SwTOXSelectTabPage::FillTOXDescription()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1406,13 +1296,11 @@ void SwTOXSelectTabPage::FillTOXDescription()
     rDesc.SetLanguage(aLanguageLB.GetSelectLanguage());
     const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData(
                                             aSortAlgorithmLB.GetSelectEntryPos() );
-    DBG_ASSERT(pEntryData, "no entry data available");
+    OSL_ENSURE(pEntryData, "no entry data available");
     if(pEntryData)
         rDesc.SetSortAlgorithm(*pEntryData);
 }
-/* -----------------05.07.99 15:09-------------------
 
- --------------------------------------------------*/
 void SwTOXSelectTabPage::Reset( const SfxItemSet& )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1445,16 +1333,12 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
     TOXTypeHdl(&aTypeLB);
     CheckBoxHdl(&aAddStylesCB);
 }
-/*-- 14.06.99 13:10:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXSelectTabPage::ActivatePage( const SfxItemSet& )
 {
     //nothing to do
 }
-/*-- 14.06.99 13:11:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
@@ -1463,16 +1347,12 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     FillTOXDescription();
     return LEAVE_PAGE;
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 SfxTabPage* SwTOXSelectTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
 {
     return new SwTOXSelectTabPage(pParent, rAttrSet);
 }
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1495,7 +1375,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aAreaFL.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
 
     aFromHeadingsCB.Show( 0 != (nType & (TO_CONTENT)) );
-   // aChapterDlgPB.Show( 0 != (nType & (TO_CONTENT)) );//#outline level,removed by zhaojianwei
     aAddStylesCB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
     aAddStylesPB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
@@ -1527,13 +1406,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aSortAlgorithmFT.Show(bEnableSortLanguage);
     aSortAlgorithmLB.Show(bEnableSortLanguage);
 
-    //if(nType & TO_CONTENT)            //#outline level,removed by zhaojianwei
-    //{
-         //Point aPos(aAddStylesPB.GetPosPixel());
-        //aPos.X() = aChapterDlgPB.GetPosPixel().X();
-        //aAddStylesPB.SetPosPixel(aPos);
-    //}
-    //else if( nType & TO_ILLUSTRATION )//<-removed end.
         // initialize button positions
 
     //#i111993# add styles button has two different positions
@@ -1570,8 +1442,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aKeyAsEntryCB.Show( 0 != (nType & TO_INDEX) );
     aFromFileCB.Show( 0 != (nType & TO_INDEX) );
     aAutoMarkPB.Show( 0 != (nType & TO_INDEX) );
-//  aCreateAutoMarkPB.Show(nType &TO_INDEX);
-//  aEditAutoMarkPB.Show(nType & TO_INDEX);
 
     aIdxOptionsFL.Show( 0 != (nType & TO_INDEX) );
 
@@ -1592,9 +1462,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------30.11.99 12:48-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, ModifyHdl, void*, EMPTYARG)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1605,9 +1473,7 @@ IMPL_LINK(SwTOXSelectTabPage, ModifyHdl, void*, EMPTYARG)
     }
     return 0;
 }
-/* -----------------05.07.99 10:13-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -1621,7 +1487,6 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
             pBox->Check(sal_True);
         }
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
-        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
     }
     if(TOX_USER == aCurType.eType)
     {
@@ -1637,9 +1502,7 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
     ModifyHdl(0);
     return 0;
 };
-/* -----------------14.07.99 14:21-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, EMPTYARG )
 {
     sal_Bool bEnable = aFromCaptionsRB.IsChecked();
@@ -1650,9 +1513,7 @@ IMPL_LINK(SwTOXSelectTabPage, RadioButtonHdl, RadioButton*, EMPTYARG )
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------06.06.01 09:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 {
     Locale aLcl( SvxCreateLocale( aLanguageLB.GetSelectLanguage() ) );
@@ -1691,12 +1552,10 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
         ModifyHdl(0);
     return 0;
 };
-/* -----------------14.06.99 13:10-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
     switch((long)pBox->GetEntryData( pBox->GetSelectEntryPos() ))
     {
         case AREA_DOCUMENT  : break;
@@ -1705,47 +1564,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
     return 0;
 }
 
-//#outline level, removed by zhaojianwei
-//It is no longer used!
-///* -----------------14.06.99 13:10-------------------
-//
-// --------------------------------------------------*/
-//IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,     PushButton*, pButton)
-//{
-//  SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
-//  SwWrtShell& rSh = pTOXDlg->GetWrtShell();
-//
-//  SfxItemSet aTmp(rSh.GetView().GetPool(), FN_PARAM_1, FN_PARAM_1);
-//  SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(pButton, &aTmp, rSh);
-//
-//  if(RET_OK == pDlg->Execute())
-//  {
-//      CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
-//      SwForm* pForm = ((SwMultiTOXTabDialog*)GetTabDialog())->GetForm(aCurType);
-//      // jetzt muss ueberprueft werden, ob dem sdbcx::Index Ueberschriftenvorlagen
-//      // zugewiesen wurden
-//      String sStr;
-//      for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-//      {
-//          sal_Bool bNum = !SwMultiTOXTabDialog::IsNoNum(rSh, pForm->GetTemplate( i + 1 ));
-//          if(bNum)
-//          {
-//              //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
-//              if(i < 5)
-//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT1 + i), sStr );
-//              else
-//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT6 + i - 5), sStr );
-//              pForm->SetTemplate( i + 1, sStr );
-//          }
-//      }
-//
-//  }
-//  delete pDlg;
-//  return 0;
-//}
-/* -----------------14.06.99 13:10-------------------
-
- --------------------------------------------------*/
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
     SwAddStylesDlg_Impl* pDlg = new SwAddStylesDlg_Impl(pButton,
@@ -1756,9 +1574,6 @@ IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------19.01.00 10:59--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu)
 {
@@ -1797,9 +1612,6 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
     return 0;
 }
 
-/* -----------------16.06.99 10:46-------------------
-
- --------------------------------------------------*/
 class SwTOXEdit : public Edit
 {
     SwFormToken aFormToken;
@@ -1838,19 +1650,18 @@ public:
     void    AdjustSize();
 };
 
-//---------------------------------------------------
 void    SwTOXEdit::RequestHelp( const HelpEvent& rHEvt )
 {
     if(!m_pParent->CreateQuickHelp(this, aFormToken, rHEvt))
         Edit::RequestHelp(rHEvt);
 }
-//---------------------------------------------------
+
 void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
     sal_uInt16 nTextLen = GetText().Len();
-    if( (rSel.A() == rSel.B() &&
-         !rSel.A() ) || rSel.A() == nTextLen )
+    if((rSel.A() == rSel.B() &&
+        !rSel.A()) || rSel.A() == nTextLen )
     {
         sal_Bool bCall = sal_False;
         KeyCode aCode = rKEvt.GetKeyCode();
@@ -1871,9 +1682,7 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
     }
     Edit::KeyInput(rKEvt);
 }
-/* -----------------16.07.99 12:41-------------------
 
- --------------------------------------------------*/
 void SwTOXEdit::AdjustSize()
 {
      Size aSize(GetSizePixel());
@@ -1883,8 +1692,6 @@ void SwTOXEdit::AdjustSize()
     SetSizePixel(aSize);
 }
 
-//---------------------------------------------------
-//---------------------------------------------------
 class SwTOXButton : public PushButton
 {
     SwFormToken aFormToken;
@@ -1955,7 +1762,6 @@ public:
             break;
         }
     }
-//<---
     sal_uInt16 GetChapterInfo() const{ return aFormToken.nChapterFormat;}
 
     void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}//i53420
@@ -1963,7 +1769,7 @@ public:
 
     void SetLinkEnd()
         {
-            DBG_ASSERT(TOKEN_LINK_START == aFormToken.eTokenType,
+            OSL_ENSURE(TOKEN_LINK_START == aFormToken.eTokenType,
                                     "call SetLinkEnd for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_END;
             aFormToken.sText.AssignAscii(SwForm::aFormLinkEnd);
@@ -1971,7 +1777,7 @@ public:
         }
     void SetLinkStart()
         {
-            DBG_ASSERT(TOKEN_LINK_END == aFormToken.eTokenType,
+            OSL_ENSURE(TOKEN_LINK_END == aFormToken.eTokenType,
                                     "call SetLinkStart for link start only!");
             aFormToken.eTokenType = TOKEN_LINK_START;
             aFormToken.sText.AssignAscii(SwForm::aFormLinkStt);
@@ -1979,7 +1785,6 @@ public:
         }
 };
 
-//---------------------------------------------------
 void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Bool bCall = sal_False;
@@ -2005,23 +1810,19 @@ void    SwTOXButton::KeyInput( const KeyEvent& rKEvt )
     else
         PushButton::KeyInput(rKEvt);
 }
-//---------------------------------------------------
+
 void    SwTOXButton::RequestHelp( const HelpEvent& rHEvt )
 {
     if(!m_pParent->CreateQuickHelp(this, aFormToken, rHEvt))
         Button::RequestHelp(rHEvt);
 }
-/* -----------------------------23.12.99 14:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwIdxTreeListBox::SwIdxTreeListBox(SwTOXEntryTabPage* pPar, const ResId& rResId) :
         SvTreeListBox(pPar, rResId),
         pParent(pPar)
 {
 }
-/* -----------------------------23.12.99 14:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if( rHEvt.GetMode() & HELPMODE_QUICK )
@@ -2059,7 +1860,7 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     else
         SvTreeListBox::RequestHelp(rHEvt);
 }
-//---------------------------------------------------
+
 SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
         SfxTabPage(pParent, SW_RES(TP_TOX_ENTRY), rAttrSet),
     aLevelFT(this,              SW_RES(FT_LEVEL              )),
@@ -2146,15 +1947,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aTokenWIN.SetAccessibleRelationMemberOf(&aEntryFL);
     aTokenWIN.SetAccessibleRelationLabeledBy(&aTokenFT);
 
-    Image aSortUpHC(SW_RES(IMG_SORTUP_HC ));
-    aFirstSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-
-    Image aSortDownHC(SW_RES(IMG_SORTDOWN_HC ));
-    aFirstSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
@@ -2167,7 +1959,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
 
     aLastTOXType.eType = (TOXTypes)USHRT_MAX;
     aLastTOXType.nIndex = 0;
-    //aLevelGBSize = aLevelGB.GetSizePixel();
     aLevelFLSize = aLevelFT.GetSizePixel();
 
     SetExchangeSupport();
@@ -2223,7 +2014,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
         (aRelToStyleIdxPos.Y() - aAlphaDelimCB.GetPosPixel().Y());
     aEditStylePB.Enable(sal_False);
 
-//get position for Numbering and other stuff
+    //get position for Numbering and other stuff
     aChapterEntryFTPosition = aChapterEntryFT.GetPosPixel();
     aEntryOutlineLevelFTPosition = aEntryOutlineLevelFT.GetPosPixel();
     nBiasToEntryPoint = aEntryOutlineLevelNF.GetPosPixel().X() -
@@ -2259,7 +2050,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aSecondKeyLB.SelectEntryPos(0);
     aThirdKeyLB.SelectEntryPos(0);
 }
-/* -----------------30.11.99 13:37-------------------
+/* --------------------------------------------------
     pVoid is used as signal to change all levels of the example
  --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
@@ -2278,23 +2069,16 @@ IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
     return 0;
 }
 
-/*-- 16.06.99 10:47:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwTOXEntryTabPage::~SwTOXEntryTabPage()
 {
 }
-/*-- 16.06.99 10:47:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool    SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
 {
     // nothing to do
     return sal_True;
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXEntryTabPage::Reset( const SfxItemSet& )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -2319,27 +2103,21 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet& )
     aRelToStyleCB.Check(m_pCurrentForm->IsRelTabPos());
     aCommaSeparatedCB.Check(m_pCurrentForm->IsCommaSeparated());
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_ChgWidth(Window& rWin, long nDiff)
 {
  Size aTempSz(rWin.GetSizePixel());
     aTempSz.Width() += nDiff;
     rWin.SetSizePixel(aTempSz);
 }
-/* ----------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_ChgXPos(Window& rWin, long nDiff)
 {
     Point aTempPos(rWin.GetPosPixel());
     aTempPos.X() += nDiff;
     rWin.SetPosPixel(aTempPos);
 }
-/* ----------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -2386,7 +2164,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(0);
                         aFirstKeyLB.SelectEntryPos(
-                            aFirstKeyLB.GetEntryPos((void*)(sal_uInt32)pKey->eField));
+                            aFirstKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
                         aFirstSortUpRB.Check(pKey->bSortAscending);
                         aFirstSortDownRB.Check(!pKey->bSortAscending);
                     }
@@ -2394,7 +2172,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(1);
                         aSecondKeyLB.SelectEntryPos(
-                            aSecondKeyLB.GetEntryPos((void*)(sal_uInt32)pKey->eField));
+                            aSecondKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
                         aSecondSortUpRB.Check(pKey->bSortAscending);
                         aSecondSortDownRB.Check(!pKey->bSortAscending);
                     }
@@ -2402,7 +2180,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(2);
                         aThirdKeyLB.SelectEntryPos(
-                            aThirdKeyLB.GetEntryPos((void*)(sal_uInt32)pKey->eField));
+                            aThirdKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
                         aThirdSortUpRB.Check(pKey->bSortAscending);
                         aThirdSortDownRB.Check(!pKey->bSortAscending);
                     }
@@ -2425,13 +2203,11 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 
         if(nDiff)
         {
-//          lcl_ChgWidth(aLevelFL, nDiff);
             lcl_ChgWidth(aLevelFT, nDiff);
             lcl_ChgWidth(aLevelLB, nDiff);
             lcl_ChgXPos(aCharStyleFT, nDiff);
             lcl_ChgXPos(aCharStyleLB, nDiff);
             lcl_ChgWidth(aCharStyleLB, -nDiff);
-    //          lcl_ChgXPos(aEditStylePB, -nDiff);
             lcl_ChgXPos(aFillCharFT,  nDiff);
             lcl_ChgXPos(aFillCharCB,  nDiff);
             lcl_ChgXPos(aTabPosFT,   nDiff);
@@ -2514,8 +2290,6 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         aRelToStyleCB.SetPosPixel( bToxIsIndex ? aRelToStyleIdxPos
                                                : aRelToStylePos );
 
-//      aRecalcTabCB.Show(  aCurType.eType == TOX_CONTENT);
-
         aMainEntryStyleFT.Show( bToxIsIndex );
         aMainEntryStyleLB.Show( bToxIsIndex );
         aAlphaDelimCB.Show(     bToxIsIndex );
@@ -2527,9 +2301,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
     aTokenWIN.SetInvalid();
     LevelHdl(&aLevelLB);
 }
-/* -----------------30.11.99 15:04-------------------
 
- --------------------------------------------------*/
 void SwTOXEntryTabPage::UpdateDescriptor()
 {
     WriteBackLevel();
@@ -2569,24 +2341,18 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     if(aCommaSeparatedCB.IsVisible())
         pCurrentForm->SetCommaSeparated(aCommaSeparatedCB.IsChecked());
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
 {
     UpdateDescriptor();
     return LEAVE_PAGE;
 }
-/*-- 16.06.99 10:47:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage* SwTOXEntryTabPage::Create( Window* pParent,     const SfxItemSet& rAttrSet)
 {
     return new SwTOXEntryTabPage(pParent, rAttrSet);
 }
-/*-- 16.06.99 10:47:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
 {
     if( LISTBOX_ENTRY_NOTFOUND != aCharStyleLB.GetSelectEntryPos())
@@ -2605,9 +2371,7 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
     }
     return 0;
 }
-/* -----------------04.10.99 11:34-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
 {
     sal_Bool bInsert = pButton == &aAuthInsertPB;
@@ -2625,7 +2389,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
     else
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled");
+        OSL_ENSURE(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled");
         if( WINDOW_EDIT != pCtrl->GetType() )
         {
             //fill it into the ListBox
@@ -2637,18 +2401,16 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------17.01.00 13:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
 {
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
     String sTemp(SW_RES(STR_AUTH_FIELD_START + nData));
     sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTemp);
-    aAuthFieldsLB.SetEntryData(nPos, (void*)(nData));
+    aAuthFieldsLB.SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
 }
-/*-- 16.06.99 10:47:35---------------------------------------------------
+/*-----------------------------------------------------------------------
 
 This function inizializes the default value in the Token
 put here the UI dependent initializations
@@ -2707,9 +2469,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------14.01.00 11:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, AllLevelsHdl, PushButton*, EMPTYARG)
 {
     //get current level
@@ -2725,9 +2485,6 @@ IMPL_LINK(SwTOXEntryTabPage, AllLevelsHdl, PushButton*, EMPTYARG)
     return 0;
 }
 
-/* -----------------02.12.99 12:40-------------------
-
- --------------------------------------------------*/
 void SwTOXEntryTabPage::WriteBackLevel()
 {
     if(aTokenWIN.IsValid())
@@ -2738,9 +2495,7 @@ void SwTOXEntryTabPage::WriteBackLevel()
             m_pCurrentForm->SetPattern(nLastLevel + 1, sNewToken );
     }
 }
-/*-- 16.06.99 10:47:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
 {
     if(bInLevelHdl)
@@ -2758,7 +2513,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
         {
             String sTmp(SW_RES(STR_AUTH_FIELD_START + i));
             sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTmp);
-            aAuthFieldsLB.SetEntryData(nPos, (void*)(i));
+            aAuthFieldsLB.SetEntryData(nPos, (void*)(sal_uIntPtr)(i));
         }
 
         // #i21237#
@@ -2771,12 +2526,12 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
-                sal_uInt16  nLstBoxPos = aAuthFieldsLB.GetEntryPos( (void*) nSearch );
-                DBG_ASSERT(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
+                sal_uInt16  nLstBoxPos = aAuthFieldsLB.GetEntryPos( (void*)(sal_uIntPtr)nSearch );
+                OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
                 aAuthFieldsLB.RemoveEntry(nLstBoxPos);
             }
 
-            aIt++; // #i21237#
+            ++aIt; // #i21237#
         }
         aAuthFieldsLB.SelectEntryPos(0);
     }
@@ -2784,9 +2539,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
     pBox->GrabFocus();
     return 0;
 }
-/* -----------------20.10.99 13:16-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
 {
     sal_Bool bEnable = &aSortContentRB == pButton;
@@ -2805,16 +2558,13 @@ IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
     aThirdSortDownRB.Enable(bEnable);
     return 0;
 }
-/* -----------------01.07.99 12:21-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 {
     if(pToken->sCharStyleName.Len())
         aCharStyleLB.SelectEntry(pToken->sCharStyleName);
     else
         aCharStyleLB.SelectEntry(sNoCharStyle);
-    //StyleSelectHdl(&aCharStyleLB);
 
     String sEntry = aCharStyleLB.GetSelectEntry();
     aEditStylePB.Enable(sEntry != sNoCharStyle);
@@ -2837,15 +2587,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
             aChapterEntryLB.SelectEntryPos(2);
             break;
         }
-//<---
 //i53420
-//move into position the fixed text
-//         aEntryOutlineLevelFT.SetPosPixel( aEntryOutlineLevelFTPosition );
-// // then the entry
-//         Point aPoint;
-//         aPoint.Y() = aEntryOutlineLevelFTPosition.Y();
-//         aPoint.X() = aEntryOutlineLevelFTPosition.X() + nBiasToEntryPoint;
-//         aEntryOutlineLevelNF.SetPosPixel( aPoint );
 
         aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
     }
@@ -2853,14 +2595,6 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 //i53420
     if(pToken->eTokenType == TOKEN_ENTRY_NO)
     {
-//move into position the fixed text
-//        aEntryOutlineLevelFT.SetPosPixel( aChapterEntryFTPosition );
-// // then the entry
-//         Point aPoint;
-//         aPoint.Y() = aChapterEntryFTPosition.Y();
-//         aPoint.X() = aChapterEntryFTPosition.X() + nBiasToEntryPoint;
-//         aEntryOutlineLevelNF.SetPosPixel( aPoint );
-
         aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
         sal_uInt16 nFormat = 0;
         if( pToken->nChapterFormat == CF_NUM_NOPREPST_TITLE )
@@ -2941,9 +2675,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 
     return 0;
 }
-/* -----------------01.07.99 12:36-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 {
     String sEntry = pBox->GetSelectEntry();
@@ -2952,7 +2684,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
     if(sEntry == sNoCharStyle)
         sEntry.Erase();
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl, "no active control?");
+    OSL_ENSURE(pCtrl, "no active control?");
     if(pCtrl)
     {
         if(WINDOW_EDIT == pCtrl->GetType())
@@ -2964,16 +2696,14 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------------------11.01.00 12:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
 {
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(pCtrl, "no active control?");
+        OSL_ENSURE(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
             ((SwTOXButton*)pCtrl)->SetChapterInfo(nPos);
 
@@ -2987,7 +2717,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
     const sal_uInt16 nLevel = static_cast<sal_uInt8>(pField->GetValue());
 
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl, "no active control?");
+    OSL_ENSURE(pCtrl, "no active control?");
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         ((SwTOXButton*)pCtrl)->SetOutlineLevel(nLevel);
 
@@ -3002,7 +2732,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = aTokenWIN.GetActiveControl();
-        DBG_ASSERT(pCtrl, "no active control?");
+        OSL_ENSURE(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         {
            ((SwTOXButton*)pCtrl)->SetEntryNumberFormat(nPos);//i89791
@@ -3012,13 +2742,10 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
     return 0;
 }
 
-/* -----------------19.08.99 15:37-------------------
-
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
 {
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
+    OSL_ENSURE(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
                 "no active style::TabStop control?");
     if( pCtrl && WINDOW_EDIT != pCtrl->GetType() )
@@ -3029,13 +2756,11 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, MetricField*, pField)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------09.09.99 15:37-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
 {
     Control* pCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
+    OSL_ENSURE(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == ((SwTOXButton*)pCtrl)->GetFormToken().eTokenType,
                 "no active style::TabStop control?");
     if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
@@ -3051,14 +2776,11 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
     return 0;
 }
 
-/*-- 16.06.99 10:47:36---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 {
     //the most right style::TabStop is usually right aligned
     Control* pCurCtrl = aTokenWIN.GetActiveControl();
-    DBG_ASSERT(WINDOW_EDIT != pCurCtrl->GetType() &&
+    OSL_ENSURE(WINDOW_EDIT != pCurCtrl->GetType() &&
             ((SwTOXButton*)pCurCtrl)->GetFormToken().eTokenType == TOKEN_TAB_STOP,
             "no style::TabStop selected!");
 
@@ -3072,9 +2794,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
     ModifyHdl(0);
     return 0;
 }
-/* -----------------16.06.99 11:00-------------------
 
- --------------------------------------------------*/
 void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
@@ -3092,9 +2812,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
     aMainEntryStyleLB.SelectEntry( SwStyleNameMapper::GetUIName(
                                 RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyStr ));
 }
-/* -----------------------------23.12.99 14:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 {
     String sRet;
@@ -3111,9 +2829,6 @@ String  SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
     }
     return sRet;
 }
-/* -----------------16.06.99 15:18-------------------
-
- --------------------------------------------------*/
 
 SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         Window( pParent, rResId ),
@@ -3148,50 +2863,37 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
     aLeftScrollWin.SetClickHdl(aLink);
     aRightScrollWin.SetClickHdl(aLink);
 }
-/* -----------------01.07.99 12:17-------------------
 
- --------------------------------------------------*/
 SwTokenWindow::~SwTokenWindow()
 {
-//  for(sal_uInt16 i = GetItemCount(); i ; i--)
-//      RemoveItem(i - 1);
-
-    for( sal_uInt32 n = 0; n < aControlList.Count(); ++n )
+    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control* pControl = aControlList.GetObject( n );
+        Control* pControl = (*it);
         pControl->SetGetFocusHdl( Link() );
         pControl->SetLoseFocusHdl( Link() );
-    }
-
-    for( sal_uLong i = aControlList.Count(); i; )
-    {
-        Control* pControl = aControlList.Remove( --i );
         delete pControl;
     }
 }
-/* -----------------16.06.99 13:56-------------------
 
- --------------------------------------------------*/
 void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 {
     SetActiveControl(0);
     bValid = sal_True;
+
     if(pForm)
     {
         //apply current level settings to the form
-        for( sal_uLong i = aControlList.Count(); i; )
-        {
-            Control* pControl = aControlList.Remove( --i );
-            delete pControl;
-        }
+        for (ctrl_iterator iter = aControlList.begin(); iter != aControlList.end(); ++iter)
+            delete (*iter);
+
+        aControlList.clear();
     }
+
     nLevel = nL;
     pForm = &rForm;
     //now the display
     if(nLevel < MAXLEVEL || rForm.GetTOXType() == TOX_AUTHORITIES)
     {
-         Size aToolBoxSize = GetSizePixel();
-
         // #i21237#
         SwFormTokens aPattern = pForm->GetPattern(nLevel + 1);
         SwFormTokens::iterator aIt = aPattern.begin();
@@ -3204,7 +2906,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
             if(TOKEN_TEXT == aToken.eTokenType)
             {
-                DBG_ASSERT(!bLastWasText, "text following text is invalid");
+                OSL_ENSURE(!bLastWasText, "text following text is invalid");
                 Control* pCtrl = InsertItem(aToken.sText, aToken);
                 bLastWasText = sal_True;
                 if(!GetActiveControl())
@@ -3240,7 +2942,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 bLastWasText = sal_False;
             }
 
-            aIt++; // #i21237#
+            ++aIt; // #i21237#
         }
         if(!bLastWasText)
         {
@@ -3254,9 +2956,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     }
     AdjustScrolling();
 }
-/* -----------------19.08.99 13:00-------------------
 
- --------------------------------------------------*/
 void SwTokenWindow::SetActiveControl(Control* pSet)
 {
     if( pSet != pActiveCtrl )
@@ -3278,28 +2978,30 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
     }
 }
 
-/* -----------------17.06.99 09:53-------------------
-
- --------------------------------------------------*/
 Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rToken)
 {
     Control* pRet = 0;
-    Control* pLast = aControlList.Last();
     Size aControlSize(GetOutputSizePixel());
-     Point aControlPos;
-    if( pLast )
+    Point aControlPos;
+
+    if(!aControlList.empty())
     {
+        Control* pLast = *(aControlList.rbegin());
+
         aControlSize = pLast->GetSizePixel();
         aControlPos = pLast->GetPosPixel();
         aControlPos.X() += aControlSize.Width();
     }
+
     if(TOKEN_TEXT == rToken.eTokenType)
     {
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
-        aControlList.Insert(pEdit, aControlList.Count());
+
+        aControlList.push_back(pEdit);
+
         pEdit->SetText(rText);
-         Size aEditSize(aControlSize);
+        Size aEditSize(aControlSize);
         aEditSize.Width() = pEdit->GetTextWidth(rText) + EDIT_MINWIDTH;
         pEdit->SetSizePixel(aEditSize);
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
@@ -3312,14 +3014,15 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     {
         SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, rToken);
         pButton->SetPosPixel(aControlPos);
-        aControlList.Insert(pButton, aControlList.Count());
-         Size aEditSize(aControlSize);
+
+        aControlList.push_back(pButton);
+
+        Size aEditSize(aControlSize);
         aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
-//        pButton->SetControlBackground(aCtrlColor);
-//        pButton->SetControlForeground(aTextColor);
         pButton->SetSizePixel(aEditSize);
         pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
         pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
+
         if(TOKEN_AUTHORITY != rToken.eTokenType)
             pButton->SetText(aButtonTexts[rToken.eTokenType]);
         else
@@ -3329,22 +3032,25 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
                         (ToxAuthorityField)rToken.nAuthorityField));
             pButton->SetText(sTmp.Copy(0, 2));
         }
+
         pButton->Show();
         pRet = pButton;
     }
+
     return pRet;
 }
-/* -----------------16.07.99 11:50-------------------
 
- --------------------------------------------------*/
 void    SwTokenWindow::InsertAtSelection(
             const String& rText,
             const SwFormToken& rToken)
 {
-    DBG_ASSERT(pActiveCtrl, "no active control!");
+    OSL_ENSURE(pActiveCtrl, "no active control!");
+
     if(!pActiveCtrl)
         return;
+
     SwFormToken aToInsertToken(rToken);
+
     if(TOKEN_LINK_START == aToInsertToken.eTokenType)
     {
         //determine if start or end of hyperlink is appropriate
@@ -3356,17 +3062,22 @@ void    SwTokenWindow::InsertAtSelection(
         //<insert> LS
         //<insert> LE
         //<insert>
-        sal_Bool bPreStartLinkFound = sal_False; //
+        sal_Bool bPreStartLinkFound = sal_False;
         sal_Bool bPreEndLinkFound = sal_False;
 
-        const Control* pControl = aControlList.First();
+        const Control* pControl = 0;
         const Control* pExchange = 0;
-        while( pControl && pActiveCtrl != pControl )
+
+        ctrl_const_iterator it = aControlList.begin();
+        for( ; it != aControlList.end() && pActiveCtrl != (*it); ++it )
         {
+            pControl = *it;
+
             if( WINDOW_EDIT != pControl->GetType())
             {
                 const SwFormToken& rNewToken =
                                 ((SwTOXButton*)pControl)->GetFormToken();
+
                 if( TOKEN_LINK_START == rNewToken.eTokenType )
                 {
                     bPreStartLinkFound = sal_True;
@@ -3383,19 +3094,22 @@ void    SwTokenWindow::InsertAtSelection(
                     }
                 }
             }
-            pControl = aControlList.Next();
         }
 
-        sal_Bool bPostLinkEndFound = sal_False;
-        sal_Bool bPostLinkStartFound = sal_False;
+        bool bPostLinkStartFound = false;
+
         if(!bPreStartLinkFound && !bPreEndLinkFound)
-            while(pControl)
+        {
+            for( ; it != aControlList.end(); ++it )
             {
+                pControl = *it;
+
                 if( pControl != pActiveCtrl &&
                     WINDOW_EDIT != pControl->GetType())
                 {
                     const SwFormToken& rNewToken =
                                     ((SwTOXButton*)pControl)->GetFormToken();
+
                     if( TOKEN_LINK_START == rNewToken.eTokenType )
                     {
                         if(bPostLinkStartFound)
@@ -3410,15 +3124,11 @@ void    SwTokenWindow::InsertAtSelection(
                             bPostLinkStartFound = sal_False;
                             pExchange = 0;
                         }
-                        else
-                        {
-                            bPostLinkEndFound = sal_True;
-                        }
                         break;
                     }
                 }
-                pControl = aControlList.Next();
             }
+        }
 
         if(bPreStartLinkFound)
         {
@@ -3428,7 +3138,7 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPostLinkStartFound)
         {
-            DBG_ASSERT(pExchange, "no control to exchange?");
+            OSL_ENSURE(pExchange, "no control to exchange?");
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkEnd();
@@ -3438,7 +3148,8 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPreEndLinkFound)
         {
-            DBG_ASSERT(pExchange, "no control to exchange?");
+            OSL_ENSURE(pExchange, "no control to exchange?");
+
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkStart();
@@ -3449,15 +3160,20 @@ void    SwTokenWindow::InsertAtSelection(
 
     //if the active control is text then insert a new button at the selection
     //else replace the button
-    sal_uInt32 nActivePos = aControlList.GetPos(pActiveCtrl);
-    sal_uInt32 nInsertPos = nActivePos;
+    ctrl_iterator iterActive = std::find(aControlList.begin(),
+                                         aControlList.end(), pActiveCtrl);
+
+    ctrl_iterator iterInsert = iterActive;
 
     Size aControlSize(GetOutputSizePixel());
+
     if( WINDOW_EDIT == pActiveCtrl->GetType())
     {
-        nInsertPos++;
-         Selection aSel = ((SwTOXEdit*)pActiveCtrl)->GetSelection();
+        ++iterInsert;
+
+        Selection aSel = ((SwTOXEdit*)pActiveCtrl)->GetSelection();
         aSel.Justify();
+
         String sEditText = ((SwTOXEdit*)pActiveCtrl)->GetText();
         String sLeft = sEditText.Copy( 0, static_cast< sal_uInt16 >(aSel.A()) );
         String sRight = sEditText.Copy( static_cast< sal_uInt16 >(aSel.B()),
@@ -3468,7 +3184,9 @@ void    SwTokenWindow::InsertAtSelection(
 
         SwFormToken aTmpToken(TOKEN_TEXT);
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
-        aControlList.Insert(pEdit, nActivePos + 1);
+
+        iterInsert = aControlList.insert(iterInsert, pEdit);
+
         pEdit->SetText(sRight);
         pEdit->SetSizePixel(aControlSize);
         pEdit->AdjustSize();
@@ -3479,18 +3197,23 @@ void    SwTokenWindow::InsertAtSelection(
     }
     else
     {
-        aControlList.Remove(pActiveCtrl);
+        aControlList.erase(iterActive);
         pActiveCtrl->Hide();
         delete pActiveCtrl;
     }
 
     //now the new button
     SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, aToInsertToken);
-    aControlList.Insert(pButton, nInsertPos);
+
+    aControlList.insert(iterInsert, pButton);
+
     pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
     pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
+
     if(TOKEN_AUTHORITY != aToInsertToken.eTokenType)
+    {
         pButton->SetText(aButtonTexts[aToInsertToken.eTokenType]);
+    }
     else
     {
         //use the first two chars as symbol
@@ -3499,7 +3222,7 @@ void    SwTokenWindow::InsertAtSelection(
         pButton->SetText(sTmp.Copy(0, 2));
     }
 
- Size aEditSize(GetOutputSizePixel());
+    Size aEditSize(GetOutputSizePixel());
     aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
     pButton->SetSizePixel(aEditSize);
     pButton->Check(sal_True);
@@ -3508,101 +3231,112 @@ void    SwTokenWindow::InsertAtSelection(
 
     AdjustPositions();
 }
-/* -----------------19.08.99 12:42-------------------
 
- --------------------------------------------------*/
 void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
 {
     if(bInternalCall && TOX_AUTHORITIES == pForm->GetTOXType())
         m_pParent->PreTokenButtonRemoved(pDel->GetFormToken());
 
-    sal_uInt32 nActivePos = aControlList.GetPos(pDel);
-    DBG_ASSERT(nActivePos != 0xffffffff, "Control does not exist!");
+    ctrl_iterator it = std::find(aControlList.begin(), aControlList.end(), pDel);
+
+    OSL_ENSURE(it != aControlList.end(), "Control does not exist!");
+
     // the two neighbours of the box must be merged
     // the properties of the right one will be lost
-    DBG_ASSERT(nActivePos && nActivePos < aControlList.Count() - 1,
+    OSL_ENSURE(it != aControlList.begin() && it != aControlList.end() - 1,
         "Button at first or last position?");
-    aControlList.Seek(nActivePos - 1);
-    Control* pLeftEdit = aControlList.GetCurObject();
-    aControlList.Seek(nActivePos + 1);
-    Control* pRightEdit = aControlList.GetCurObject();
+
+    ctrl_iterator itLeft = it, itRight = it;
+    --itLeft;
+    ++itRight;
+    Control *pLeftEdit = *itLeft;
+    Control *pRightEdit = *itRight;
+
     String sTemp(((SwTOXEdit*)pLeftEdit)->GetText());
     sTemp += ((SwTOXEdit*)pRightEdit)->GetText();
     ((SwTOXEdit*)pLeftEdit)->SetText(sTemp);
     ((SwTOXEdit*)pLeftEdit)->AdjustSize();
 
-    aControlList.Remove(pRightEdit);
+    aControlList.erase(itRight);
     delete pRightEdit;
 
-    aControlList.Remove(pDel);
+    aControlList.erase(it);
     pActiveCtrl->Hide();
     delete pActiveCtrl;
+
     SetActiveControl(pLeftEdit);
     AdjustPositions();
     if(aModifyHdl.IsSet())
         aModifyHdl.Call(0);
 }
 
-/* -----------------16.07.99 12:39-------------------
-
- --------------------------------------------------*/
 void SwTokenWindow::AdjustPositions()
 {
-    if(aControlList.Count() > 1)
+    if(aControlList.size() > 1)
     {
-        Control* pCtrl = aControlList.First();
-     Point aNextPos = pCtrl->GetPosPixel();
+        ctrl_iterator it = aControlList.begin();
+        Control* pCtrl = *it;
+        ++it;
+
+        Point aNextPos = pCtrl->GetPosPixel();
         aNextPos.X() += pCtrl->GetSizePixel().Width();
-        while(0 != (pCtrl = aControlList.Next()))
+
+        for(; it != aControlList.end(); ++it)
         {
+            pCtrl = *it;
             pCtrl->SetPosPixel(aNextPos);
             aNextPos.X() += pCtrl->GetSizePixel().Width();
         }
+
         AdjustScrolling();
     }
 };
-/* -----------------------------16.08.00 13:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTokenWindow::MoveControls(long nOffset)
 {
     // move the complete list
-    Control* pCtrl = aControlList.First();
-    do
+    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
+        Control *pCtrl = *it;
+
         Point aPos = pCtrl->GetPosPixel();
         aPos.X() += nOffset;
-        pCtrl->SetPosPixel(aPos);
-    }while(0 != (pCtrl = aControlList.Next()));
-}
-/* -----------------------------14.01.00 13:03--------------------------------
 
- ---------------------------------------------------------------------------*/
+        pCtrl->SetPosPixel(aPos);
+    }
+}
+
 void SwTokenWindow::AdjustScrolling()
 {
-    if(aControlList.Count() > 1)
+    if(aControlList.size() > 1)
     {
         //validate scroll buttons
-        Control* pLastCtrl = aControlList.Last();
-        Control* pFirstCtrl = aControlList.First();
+        Control* pFirstCtrl = *(aControlList.begin());
+        Control* pLastCtrl = *(aControlList.rbegin());
+
         long nSpace = aCtrlParentWin.GetSizePixel().Width();
         long nWidth = pLastCtrl->GetPosPixel().X() - pFirstCtrl->GetPosPixel().X()
                                                     + pLastCtrl->GetSizePixel().Width();
-        sal_Bool bEnable = nWidth > nSpace;
+        bool bEnable = nWidth > nSpace;
+
         //the active control must be visible
         if(bEnable && pActiveCtrl)
         {
-             Point aActivePos(pActiveCtrl->GetPosPixel());
+            Point aActivePos(pActiveCtrl->GetPosPixel());
+
             long nMove = 0;
+
             if(aActivePos.X() < 0)
                 nMove = -aActivePos.X();
             else if((aActivePos.X() + pActiveCtrl->GetSizePixel().Width())  > nSpace)
                 nMove = -(aActivePos.X() + pActiveCtrl->GetSizePixel().Width() - nSpace);
+
             if(nMove)
                 MoveControls(nMove);
-            aLeftScrollWin.Enable(aControlList.First()->GetPosPixel().X() < 0);
-            Control* pCtrl = aControlList.Last();
-            aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
+
+            aLeftScrollWin.Enable(pFirstCtrl->GetPosPixel().X() < 0);
+
+            aRightScrollWin.Enable((pLastCtrl->GetPosPixel().X() + pLastCtrl->GetSizePixel().Width()) > nSpace);
         }
         else
         {
@@ -3610,150 +3344,178 @@ void SwTokenWindow::AdjustScrolling()
             {
                 //if the control fits into the space then the first control must be at postion 0
                 long nFirstPos = pFirstCtrl->GetPosPixel().X();
+
                 if(nFirstPos != 0)
                     MoveControls(-nFirstPos);
             }
-            aRightScrollWin.Enable(sal_False);
-            aLeftScrollWin.Enable(sal_False);
+
+            aRightScrollWin.Enable(false);
+            aLeftScrollWin.Enable(false);
         }
     }
 }
-/* -----------------------------14.01.00 13:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 {
-    if(aControlList.Count())
-    {
-        const long nSpace = aCtrlParentWin.GetSizePixel().Width();
+    if(aControlList.empty())
+        return 0;
+
+    const long nSpace = aCtrlParentWin.GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
     String sMessage(String::CreateFromAscii("Space: "));
     sMessage += String::CreateFromInt32(nSpace);
     sMessage += String::CreateFromAscii(" | ");
-    Control* pDebugCtrl = aControlList.First();
-    do
+
+    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
+        Control *pDebugCtrl = *it;
+
         long nDebugXPos = pDebugCtrl->GetPosPixel().X();
         long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
+
         sMessage += String::CreateFromInt32( nDebugXPos );
         sMessage += String::CreateFromAscii(" ");
         sMessage += String::CreateFromInt32(nDebugXPos + nDebugWidth);
         sMessage += String::CreateFromAscii(" | ");
-
-    }while(0 != (pDebugCtrl = aControlList.Next()));
+    }
 
 #endif
 
-        long nMove = 0;
-        if(pBtn == &aLeftScrollWin)
+    long nMove = 0;
+    if(pBtn == &aLeftScrollWin)
+    {
+        //find the first completely visible control (left edge visible)
+        for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
         {
-            //find the first completely visible control (left edge visible)
-            for(sal_uInt16 i = 0; i < aControlList.Count(); i++ )
-            {
-                Control* pCtrl = aControlList.GetObject(i);
-                long nXPos = pCtrl->GetPosPixel().X();
-                if(nXPos >= 0)
-                {
-                    if(!i)
-                        //move the current control to the left edge
-                        nMove = -nXPos;
-                    else
-                        //move the left neighbor to the start position
-                        nMove = -aControlList.GetObject(i - 1)->GetPosPixel().X();
-                    break;
-                }
-            }
-        }
-        else
-        {
-            //find the first completely visible control (left edge visible)
-            for(sal_uLong i = aControlList.Count(); i; i-- )
-            {
-                Control* pCtrl = aControlList.GetObject(i - 1);
-                long nCtrlWidth = pCtrl->GetSizePixel().Width();
-                long nXPos = pCtrl->GetPosPixel().X() + nCtrlWidth;
-                if(nXPos <= nSpace)
-                {
-                    if( i < aControlList.Count())
-                    {
-                        //move the right neighbor  to the right edge right aligned
-                        Control* pRight = aControlList.GetObject(i);
-                        nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
-                    }
-                    break;
-                }
-            }
+            Control *pCtrl = *it;
 
-            //move it left until it's completely visible
-        }
-        if(nMove)
-        {
-            // move the complete list
-            Control* pCtrl = aControlList.First();
-            do
-            {
-             Point aPos = pCtrl->GetPosPixel();
-                aPos.X() += nMove;
-                pCtrl->SetPosPixel(aPos);
-            }while(0 != (pCtrl = aControlList.Next()));
-            aLeftScrollWin.Enable(aControlList.First()->GetPosPixel().X() < 0);
-            pCtrl = aControlList.Last();
-            aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
+            long nXPos = pCtrl->GetPosPixel().X();
 
-#if OSL_DEBUG_LEVEL > 1
-            sMessage.AppendAscii("Move: ");
-            sMessage += String::CreateFromInt32(nMove);
-            GetParent()->GetParent()->GetParent()->SetText(sMessage);
-#endif
+            if (nXPos >= 0)
+            {
+                if (it == aControlList.begin())
+                {
+                    //move the current control to the left edge
+                    nMove = -nXPos;
+                }
+                else
+                {
+                    //move the left neighbor to the start position
+                    ctrl_iterator itLeft = it;
+                    --itLeft;
+                    Control *pLeft = *itLeft;
+
+                    nMove = -pLeft->GetPosPixel().X();
+                }
+
+                break;
+            }
         }
     }
+    else
+    {
+        //find the first completely visible control (right edge visible)
+        for (ctrl_reverse_iterator it = aControlList.rbegin(); it != aControlList.rend(); ++it)
+        {
+            Control *pCtrl = *it;
+
+            long nCtrlWidth = pCtrl->GetSizePixel().Width();
+            long nXPos = pCtrl->GetPosPixel().X() + nCtrlWidth;
+
+            if (nXPos <= nSpace)
+            {
+                if (it != aControlList.rbegin())
+                {
+                    //move the right neighbor  to the right edge right aligned
+                    ctrl_reverse_iterator itRight = it;
+                    --it;
+                    Control *pRight = *itRight;
+                    nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
+                }
+
+                break;
+            }
+        }
+
+        //move it left until it's completely visible
+    }
+
+    if(nMove)
+    {
+        // move the complete list
+
+        Control *pCtrl = 0;
+
+        for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+        {
+            pCtrl = *it;
+
+            Point aPos = pCtrl->GetPosPixel();
+            aPos.X() += nMove;
+            pCtrl->SetPosPixel(aPos);
+        }
+
+        pCtrl = *(aControlList.begin());
+        aLeftScrollWin.Enable(pCtrl->GetPosPixel().X() < 0);
+
+        pCtrl = *(aControlList.rbegin());
+        aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
+
+#if OSL_DEBUG_LEVEL > 1
+        sMessage.AppendAscii("Move: ");
+        sMessage += String::CreateFromInt32(nMove);
+        GetParent()->GetParent()->GetParent()->SetText(sMessage);
+#endif
+    }
+
     return 0;
 }
-/* -----------------17.06.99 11:59-------------------
 
- --------------------------------------------------*/
 String  SwTokenWindow::GetPattern() const
 {
     String sRet;
-    const Control* pControl = ((SwTokenWindow*)this)->aControlList.First();
-    while(pControl)
+
+    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
-                    ? ((SwTOXEdit*)pControl)->GetFormToken()
-                    : ((SwTOXButton*)pControl)->GetFormToken();
+        const Control *pCtrl = *it;
+
+        const SwFormToken &rNewToken = pCtrl->GetType() == WINDOW_EDIT
+                ? ((SwTOXEdit*)pCtrl)->GetFormToken()
+                : ((SwTOXButton*)pCtrl)->GetFormToken();
 
         //TODO: prevent input of TOX_STYLE_DELIMITER in KeyInput
         sRet += rNewToken.GetString();
-
-        pControl = ((SwTokenWindow*)this)->aControlList.Next();
     }
+
     return sRet;
 }
-/* -----------------19.08.99 11:27-------------------
+/* --------------------------------------------------
     Description: Check if a control of the specified
                     TokenType is already contained in the list
  --------------------------------------------------*/
 sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
-    sal_Bool bRet = sal_False;
-    const Control* pControl = ((SwTokenWindow*)this)->aControlList.First();
-    while(pControl)
-    {
-        const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
-                    ? ((SwTOXEdit*)pControl)->GetFormToken()
-                    : ((SwTOXButton*)pControl)->GetFormToken();
+    bool bRet = false;
 
-        if(eSearchFor == rNewToken.eTokenType)
+    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    {
+        const Control *pCtrl = *it;
+
+        const SwFormToken &rNewToken = pCtrl->GetType() == WINDOW_EDIT
+                ? ((SwTOXEdit*)pCtrl)->GetFormToken()
+                : ((SwTOXButton*)pCtrl)->GetFormToken();
+
+        if (eSearchFor == rNewToken.eTokenType)
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
-        pControl = ((SwTokenWindow*)this)->aControlList.Next();
     }
+
     return bRet;
 }
-//---------------------------------------------------
+
 sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
             const SwFormToken& rToken,
             const HelpEvent& rHEvt)
@@ -3775,8 +3537,6 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
      Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
         if(rToken.eTokenType == TOKEN_TAB_STOP )
         {
-//          sEntry += '\n';
-//          sEntry += rToken.nTabStopPosition;
         }
         else
         {
@@ -3801,9 +3561,7 @@ sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
     }
     return bRet;
 }
-/* -----------------------------14.01.00 12:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTokenWindow::Resize()
 {
  Size aCompleteSize(GetOutputSizePixel());
@@ -3821,9 +3579,6 @@ void SwTokenWindow::Resize()
     aCtrlParentWin.SetSizePixel(aMiddleSize);
 }
 
-/* -----------------16.06.99 15:23-------------------
-
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
 {
     ((SwTOXEdit*)pEdit)->AdjustSize();
@@ -3832,106 +3587,120 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
         aModifyHdl.Call(0);
     return 0;
 }
-/* -----------------16.06.99 15:56-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 {
-    sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pEdit);
-    if( (nPos && !pEdit->IsNextControl()) ||
-        (nPos < aControlList.Count() - 1 && pEdit->IsNextControl()))
+    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),pEdit);
+
+    if (it == aControlList.end())
+        return 0;
+
+    ctrl_iterator itTest = it;
+    ++itTest;
+
+    if ((it != aControlList.begin() && !pEdit->IsNextControl()) ||
+        (itTest != aControlList.end() && pEdit->IsNextControl()))
     {
-        aControlList.Seek(nPos);
-        Control* pNextPrev = pEdit->IsNextControl() ? aControlList.Next() : aControlList.Prev();
-        nPos += pEdit->IsNextControl() ? 1 : -1;
-        pNextPrev->GrabFocus();
-        ((SwTOXButton*)pNextPrev)->Check();
+        ctrl_iterator iterFocus = it;
+        pEdit->IsNextControl() ? ++iterFocus : --iterFocus;
+
+        Control *pCtrlFocus = *iterFocus;
+        pCtrlFocus->GrabFocus();
+        reinterpret_cast<SwTOXButton*>(pCtrlFocus)->Check();
+
         AdjustScrolling();
     }
+
     return 0;
 }
-/* -----------------17.06.99 08:58-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 {
-    for(sal_uInt16 i = 0; i < aControlList.Count(); i++)
+    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control* pControl = aControlList.First();
-        while(pControl)
-        {
-            if(WINDOW_EDIT != pControl->GetType() )
-                ((SwTOXButton*)pControl)->Check(sal_False);
-            pControl = aControlList.Next();
-        }
+        Control *pCtrl = *it;
+
+        if (pCtrl && pCtrl->GetType() != WINDOW_EDIT)
+            reinterpret_cast<SwTOXButton*>(pCtrl)->Check(false);
     }
+
     SetActiveControl(pEdit);
+
     return 0;
 }
-/* -----------------17.06.99 10:05-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 {
-    sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pBtn);
-    if( (nPos && !pBtn->IsNextControl()) ||
-        (nPos < aControlList.Count() - 1 && pBtn->IsNextControl()))
+    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),pBtn);
+
+    if (it == aControlList.end())
+        return 0;
+
+    ctrl_iterator itTest = it;
+    ++itTest;
+
+    if (!pBtn->IsNextControl() || (itTest != aControlList.end() && pBtn->IsNextControl()))
     {
-        aControlList.Seek(nPos);
-        sal_Bool bNext = pBtn->IsNextControl();
-        Control* pNextPrev = bNext ? aControlList.Next() : aControlList.Prev();
-        pNextPrev->GrabFocus();
-         Selection aSel(0, 0);
-        if(!bNext)
+        bool isNext = pBtn->IsNextControl();
+
+        ctrl_iterator iterFocus = it;
+        isNext ? ++iterFocus : --iterFocus;
+
+        Control *pCtrlFocus = *iterFocus;
+        pCtrlFocus->GrabFocus();
+        Selection aSel(0,0);
+
+        if (!isNext)
         {
-            sal_uInt16 nLen = ((SwTOXEdit*)pNextPrev)->GetText().Len();
+            sal_uInt16 nLen = reinterpret_cast<SwTOXEdit*>(pCtrlFocus)->GetText().Len();
+
             aSel.A() = nLen;
             aSel.B() = nLen;
         }
-        ((SwTOXEdit*)pNextPrev)->SetSelection(aSel);
-        pBtn->Check(sal_False);
+
+        reinterpret_cast<SwTOXEdit*>(pCtrlFocus)->SetSelection(aSel);
+
+        pBtn->Check(false);
+
         AdjustScrolling();
     }
+
     return 0;
 }
 
-/* -----------------17.06.99 10:04-------------------
-
- --------------------------------------------------*/
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
 {
-    for(sal_uInt16 i = 0; i < aControlList.Count(); i++)
+    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control* pControl = aControlList.First();
-        while(pControl)
-        {
-            if(WINDOW_EDIT != pControl->GetType() )
-                ((SwTOXButton*)pControl)->Check(pBtn == pControl);
-            pControl = aControlList.Next();
-        }
+        Control *pControl = *it;
+
+        if (pControl && WINDOW_EDIT != pControl->GetType())
+            reinterpret_cast<SwTOXButton*>(pControl)->Check(pBtn == pControl);
     }
+
     SetActiveControl(pBtn);
+
     return 0;
 }
-/* -----------------------------28.01.2002 12:22------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwTokenWindow::GetFocus()
 {
     if(GETFOCUS_TAB & GetGetFocusFlags())
     {
-       Control* pFirst = aControlList.First();
-       if(pFirst)
-       {
-            pFirst->GrabFocus();
-            SetActiveControl(pFirst);
-            AdjustScrolling();
-       }
+        if (!aControlList.empty())
+        {
+            Control *pFirst = *aControlList.begin();
+
+            if (pFirst)
+            {
+                pFirst->GrabFocus();
+                SetActiveControl(pFirst);
+                AdjustScrolling();
+            }
+        }
     }
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet ) :
     SfxTabPage(pParent, SW_RES(TP_TOX_STYLES), rAttrSet),
     aFormatFL(this,     SW_RES(FL_FORMAT  )),
@@ -3948,8 +3717,6 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
 
     SetExchangeSupport( sal_True );
 
-    aAssignBT.SetModeImage( Image( SW_RES( IMG_ONE_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-
     aEditStyleBT.SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
     aAssignBT.SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));
     aStdBT.SetClickHdl         (LINK(   this, SwTOXStylesTabPage, StdHdl));
@@ -3962,43 +3729,35 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     aEditStyleBT.SetAccessibleRelationMemberOf(&aFormatFL);
 
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 SwTOXStylesTabPage::~SwTOXStylesTabPage()
 {
     delete m_pCurrentForm;
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool    SwTOXStylesTabPage::FillItemSet( SfxItemSet& )
 {
     return sal_True;
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 void    SwTOXStylesTabPage::Reset( const SfxItemSet& rSet )
 {
     ActivatePage(rSet);
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 {
     m_pCurrentForm = new SwForm(GetForm());
     aParaLayLB.Clear();
     aLevelLB.Clear();
 
-    // kein Hyperlink fuer Benutzerverzeichnisse
+    // not hyperlink for user directories
 
     sal_uInt16 i, nSize = m_pCurrentForm->GetFormMax();
 
-    // form-Pattern anzeigen ohne Titel
+    // display form pattern without title
 
-    //1. TemplateEntry  anzeigen
+    // display 1st TemplateEntry
     String aStr( SW_RES( STR_TITLE ));
     if( m_pCurrentForm->GetTemplate( 0 ).Len() )
     {
@@ -4032,7 +3791,7 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         aLevelLB.InsertEntry( aCpy );
     }
 
-    // Templates initialisieren
+    // initialise templates
     const SwTxtFmtColl *pColl;
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
     const sal_uInt16 nSz = rSh.GetTxtFmtCollCount();
@@ -4041,7 +3800,7 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         if( !(pColl = &rSh.GetTxtFmtColl( i ))->IsDefault() )
             aParaLayLB.InsertEntry( pColl->GetName() );
 
-    // Pool-Collections abfragen und fuer das Verzeichnis setzen
+    // query pool collections and set them for the directory
     for( i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
     {
         aStr = m_pCurrentForm->GetTemplate( i );
@@ -4052,45 +3811,37 @@ void    SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
 
     EnableSelectHdl(&aParaLayLB);
 }
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
+
 int     SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
 {
     GetForm() = *m_pCurrentForm;
     return LEAVE_PAGE;
 }
 
-/* -----------------25.03.99 15:17-------------------
- *
- * --------------------------------------------------*/
 SfxTabPage* SwTOXStylesTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTOXStylesTabPage(pParent, rAttrSet);
 }
-/* -----------------26.03.99 12:47-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
 {
     if( LISTBOX_ENTRY_NOTFOUND != aParaLayLB.GetSelectEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, aParaLayLB.GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA);
-//      SwPtrItem aShell(FN_PARAM_WRTSHELL, pWrtShell);
         Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
         SID_STYLE_EDIT, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_MODAL,
-            &aStyle, &aFamily/*, &aShell*/, 0L);
+            &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }
     return 0;
 }
 /*--------------------------------------------------------------------
-     Beschreibung: Vorlagen zuweisen
+     Description: allocate templates
  --------------------------------------------------------------------*/
 IMPL_LINK( SwTOXStylesTabPage, AssignHdl, Button *, EMPTYARG )
 {
@@ -4118,9 +3869,7 @@ IMPL_LINK( SwTOXStylesTabPage, AssignHdl, Button *, EMPTYARG )
     }
     return 0;
 }
-/* -----------------26.03.99 09:10-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK( SwTOXStylesTabPage, StdHdl, Button *, EMPTYARG )
 {
     sal_uInt16 nPos = aLevelLB.GetSelectEntryPos();
@@ -4137,9 +3886,7 @@ IMPL_LINK( SwTOXStylesTabPage, StdHdl, Button *, EMPTYARG )
     }
     return 0;
 }
-/* -----------------26.03.99 09:11-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK_INLINE_START( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
 {
     String aTmpName( aParaLayLB.GetSelectEntry() );
@@ -4151,12 +3898,12 @@ IMPL_LINK_INLINE_START( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
+
 /*--------------------------------------------------------------------
-     Beschreibung: nur wenn selektiert enable
+     Description: enable only when selected
  --------------------------------------------------------------------*/
 IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
 {
-    //UpdatePattern();
     aStdBT.Enable(aLevelLB.GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
@@ -4167,9 +3914,7 @@ IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
     aEditStyleBT.Enable(aParaLayLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
     return 0;
 }
-/* -----------------------------18.01.00 16:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwTOXStylesTabPage, ModifyHdl, void*, EMPTYARG)
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
@@ -4180,9 +3925,7 @@ IMPL_LINK(SwTOXStylesTabPage, ModifyHdl, void*, EMPTYARG)
     }
     return 0;
 }
-/******************************************************************************
 
-******************************************************************************/
 #define ITEM_SEARCH         1
 #define ITEM_ALTERNATIVE    2
 #define ITEM_PRIM_KEY       3
@@ -4223,9 +3966,9 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
     xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
 
     //////////////////////////////////////////////////////////////////////
-    // HACK: BrowseBox invalidiert nicht ihre Childs, wie es eigentlich sein sollte.
-    // Deshalb wird WB_CLIPCHILDREN zurueckgesetzt, wodurch das Invalidieren
-    // der Childs erzwungen wird.
+    // HACK: BrowseBox doesn't invalidate its childs, how it should be.
+    // That's why WB_CLIPCHILDREN is reset in order to enforce the
+    // childs' invalidation
     WinBits aStyle = GetStyle();
     if( aStyle & WB_CLIPCHILDREN )
     {
@@ -4251,17 +3994,13 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
                           HIB_STDSTYLE, HEADERBAR_APPEND );
 
 }
-/* -----------------------------19.01.00 11:29--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
 {
     nCurrentRow = nRow;
     return sal_True;
 }
-/* -----------------------------19.01.00 15:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     const String* pRet = &aEmptyStr;
@@ -4282,9 +4021,6 @@ String SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
     return *pRet;
 }
 
-/* -----------------------------19.01.00 11:29--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
                                 const Rectangle& rRect, sal_uInt16 nColumnId) const
 {
@@ -4292,16 +4028,12 @@ void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
     sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
     rDev.DrawText( rRect, sPaint, nStyle );
 }
-/* -----------------------------19.01.00 14:51--------------------------------
 
- ---------------------------------------------------------------------------*/
 ::svt::CellController* SwEntryBrowseBox::GetController(long /*nRow*/, sal_uInt16 nCol)
 {
     return nCol < ITEM_CASE ? xController : xCheckController;
 }
-/* -----------------------------19.01.00 15:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwEntryBrowseBox::SaveModified()
 {
     SetModified();
@@ -4345,9 +4077,7 @@ sal_Bool SwEntryBrowseBox::SaveModified()
     }
     return sal_True;
 }
-/* -----------------------------19.01.00 14:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::InitController(
                 ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
 {
@@ -4366,9 +4096,7 @@ void    SwEntryBrowseBox::InitController(
                                                             rTxt == sYes );
      }
 }
-/* -----------------------------19.01.00 12:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 {
     AutoMarkEntry* pToInsert = 0;
@@ -4421,9 +4149,7 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
         aEntryArr.Insert(pToInsert, aEntryArr.Count());
     RowInserted(0, aEntryArr.Count() + 1, sal_True);
 }
-/* -----------------------------19.01.00 12:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 {
     //check if the current controller is modified
@@ -4463,9 +4189,7 @@ void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
             rOutStr.WriteByteStringLine( sWrite, eTEnc );
     }
 }
-/* -----------------------------21.01.00 11:49--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwEntryBrowseBox::IsModified()const
 {
     if(bModified)
@@ -4481,9 +4205,7 @@ sal_Bool SwEntryBrowseBox::IsModified()const
         pController = xCheckController;
     return pController ->IsModified();
 }
-/* -----------------------------19.01.00 11:29--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkURL,
         const String& rAutoMarkType, sal_Bool bCreate) :
     ModalDialog(pParent, SW_RES(DLG_CREATE_AUTOMARK)),
@@ -4518,15 +4240,11 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     if(bError)
         EndDialog(RET_CANCEL);
 }
-/* -----------------------------19.01.00 11:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 {
 }
-/* -----------------------------19.01.00 16:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, EMPTYARG)
 {
     sal_Bool bError = sal_False;
@@ -4551,3 +4269,4 @@ IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, EMPTYARG)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

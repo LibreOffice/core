@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,11 +30,11 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 #endif
 #include <swrect.hxx>
+#include <vector>
 
 class SwDoc;
 class SwFrm;
@@ -166,8 +167,13 @@ public:
 
 class SwLayCacheIoImpl
 {
-    SvBytes         aRecTypes;
-    SvULongs        aRecSizes;
+private:
+    struct RecTypeSize {
+        sal_uInt8 type;
+        sal_uLong size;
+        RecTypeSize(sal_uInt8 typ, sal_uLong siz) : type(typ), size(siz) {}
+    };
+    std::vector<RecTypeSize> aRecords;
 
     SvStream        *pStream;
 
@@ -230,3 +236,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

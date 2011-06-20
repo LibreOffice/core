@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,15 +47,13 @@
 #include <viewimp.hxx>
 #include <dview.hxx>
 #include <rootfrm.hxx>
-#include <txtfrm.hxx>   // SwTxtFrm
+#include <txtfrm.hxx>     // SwTxtFrm
 #include <docary.hxx>
 #include <extinput.hxx>
 #include <ndtxt.hxx>
 #include <scriptinfo.hxx>
-#include <mdiexp.hxx>           // GetSearchDialog
-#ifndef _COMCORE_HRC
-#include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
-#endif
+#include <mdiexp.hxx>     // GetSearchDialog
+#include <comcore.hrc>    // ResId for query when (switching to?) Search & Replace
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -63,253 +62,15 @@
 
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
-//Damit beim ShowCrsr nicht immer wieder die gleiche Size teuer ermittelt
-//werden muss, hier statische Member, die beim Wechsel des MapModes
-// angepasst werden
+// Here static members are defined. They will get changed on alteration of the
+// MapMode. This is done so that on ShowCrsr the same size does not have to be
+// expensively determined again and again.
 
 long SwSelPaintRects::nPixPtX = 0;
 long SwSelPaintRects::nPixPtY = 0;
 MapMode* SwSelPaintRects::pMapMode = 0;
 
-
-#ifdef SHOW_BOOKMARKS
-// #include <IMark.hxx>
-//
-// class SwBookmarkRects : public SwSelPaintRects
-// {
-//  virtual void Paint( const Rectangle& rRect );
-//  virtual void FillRects();
-//
-// public:
-//  SwBookmarkRects( const SwCrsrShell& rSh ) : SwSelPaintRects( rSh ) {}
-// };
-//
-// void SwBookmarkRects::Paint( const Rectangle& rRect )
-// {
-//  Window* pWin = GetShell()->GetWin();
-//
-//  RasterOp eOld( pWin->GetRasterOp() );
-//  sal_Bool bLCol = pWin->IsLineColor();
-//  Color aLCol( pWin->GetLineColor() );
-//  sal_Bool bFCol = pWin->IsFillColor();
-//  Color aFCol( pWin->GetFillColor() );
-//
-//  pWin->SetRasterOp( ROP_XOR );
-//  Color aCol( RGB_COLORDATA( 0xF0, 0xC8, 0xF0 ) ^ COL_WHITE );
-//  pWin->SetFillColor( aCol );
-//  pWin->SetLineColor( aCol );
-//
-//  pWin->DrawRect( rRect );
-//
-//  if( bLCol ) pWin->SetLineColor( aLCol ); else pWin->SetLineColor();
-//  if( bFCol ) pWin->SetFillColor( aFCol ); else pWin->SetFillColor();
-//  pWin->SetRasterOp( eOld );
-// }
-//
-// void SwBookmarkRects::FillRects()
-// {
-//  SwRegionRects aReg( GetShell()->VisArea() );
-//
-//     const SwBookmarks& rBkmkTbl = GetShell()->getIDocumentMarkAccess()->getBookmarks();
-//  SwShellCrsr* pCrsr = 0;
-//  for( sal_uInt16 n = 0; n < rBkmkTbl.Count(); ++n )
-//  {
-//      const SwBookmark& rBkmk = *rBkmkTbl[ n ];
-//      if( rBkmk.IsBookMark() && rBkmk.GetOtherPos() )
-//      {
-//          if( !pCrsr )
-//          {
-//              pCrsr = new SwShellCrsr( *GetShell(), rBkmk.GetPos() );
-//              pCrsr->SetMark();
-//          }
-//          else
-//              *pCrsr->GetPoint() = rBkmk.GetPos();
-//          *pCrsr->GetMark() = *rBkmk.GetOtherPos();
-//          pCrsr->FillRects();
-//          for( sal_uInt16 i = 0; i < pCrsr->Count(); ++i )
-//              aReg -= (*pCrsr)[ i ];
-//
-//          pCrsr->Remove( 0, i );
-//      }
-//  }
-//  if( pCrsr ) delete pCrsr;
-//
-//  aReg.Invert();
-//  SwRects::Insert( &aReg, 0 );
-// }
-//
-// SwBookmarkRects* pBookMarkRects = 0;
-//
-// void ShowBookmarks( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 )
-// {
-//     if( !pBookMarkRects && pSh->getIDocumentMarkAccess()->getBookmarks().Count() )
-//      pBookMarkRects = new SwBookmarkRects( *pSh );
-//
-//  if( pBookMarkRects )
-//  {
-//      switch( nAction )
-//      {
-//      case 1: pBookMarkRects->Show(); break;
-//      case 2: pBookMarkRects->Hide(); break;
-//      case 3: pBookMarkRects->Invalidate( *pRect ); break;
-//      }
-//
-//      if( !pBookMarkRects->Count() )
-//          delete pBookMarkRects, pBookMarkRects = 0;
-//  }
-// }
-//
-// #define SHOWBOOKMARKS1( nAct )           ShowBookmarks( GetShell(),nAct );
-// #define SHOWBOOKMARKS2( nAct, pRect )    ShowBookmarks( GetShell(),nAct, pRect );
-
-#else
-
-#define SHOWBOOKMARKS1( nAct )
-#define SHOWBOOKMARKS2( nAct, pRect )
-
-#endif
-
-#ifdef SHOW_REDLINES
-#include <redline.hxx>
-
-class SwRedlineRects : public SwSelPaintRects
-{
-    sal_uInt16 nMode;
-    sal_uInt16 nNm;
-
-    virtual void Paint( const Rectangle& rRect );
-    virtual void FillRects();
-
-public:
-    SwRedlineRects( const SwCrsrShell& rSh, sal_uInt16 nName, sal_uInt16 n )
-        : SwSelPaintRects( rSh ), nMode( n ), nNm( nName )
-    {}
-};
-
-void SwRedlineRects::Paint( const Rectangle& rRect )
-{
-    Window* pWin = GetShell()->GetWin();
-
-    RasterOp eOld( pWin->GetRasterOp() );
-    sal_Bool bLCol = pWin->IsLineColor();
-    Color aLCol( pWin->GetLineColor() );
-    sal_Bool bFCol = pWin->IsFillColor();
-    Color aFCol( pWin->GetFillColor() );
-
-    pWin->SetRasterOp( ROP_XOR );
-    Color aCol;
-
-    sal_uInt8 nVal = 0xc8 - ( (nMode / 4) * 16 );
-    switch( nMode % 4 )
-    {
-    case 0: aCol = RGB_COLORDATA( nVal, nVal, 0xFF );   break;
-    case 1: aCol = RGB_COLORDATA( 0xFF, 0xc8, nVal );   break;
-    case 2: aCol = RGB_COLORDATA( nVal, 0xFF, nVal );   break;
-    case 3: aCol = RGB_COLORDATA( 0xFF, nVal, nVal );   break;
-    }
-    aCol = aCol.GetColor() ^ COL_WHITE;
-
-    pWin->SetFillColor( aCol );
-    pWin->SetLineColor( aCol );
-
-    pWin->DrawRect( rRect );
-
-    if( bLCol ) pWin->SetLineColor( aLCol ); else pWin->SetLineColor();
-    if( bFCol ) pWin->SetFillColor( aFCol ); else pWin->SetFillColor();
-    pWin->SetRasterOp( eOld );
-}
-
-void SwRedlineRects::FillRects()
-{
-    SwRegionRects aReg( GetShell()->VisArea() );
-
-    const SwRedlineTbl& rTbl = GetShell()->GetDoc()->GetRedlineTbl();
-    SwShellCrsr* pCrsr = 0;
-    for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
-    {
-        const SwRedline& rRed = *rTbl[ n ];
-        if( rRed.HasMark() && (nMode % 4 ) == rRed.GetType() &&
-            nNm == rRed.GetAuthor() )
-        {
-            if( !pCrsr )
-            {
-                pCrsr = new SwShellCrsr( *GetShell(), *rRed.GetPoint() );
-                pCrsr->SetMark();
-            }
-            else
-                *pCrsr->GetPoint() = *rRed.GetPoint();
-            *pCrsr->GetMark() = *rRed.GetMark();
-            pCrsr->FillRects();
-            for( sal_uInt16 i = 0; i < pCrsr->Count(); ++i )
-                aReg -= (*pCrsr)[ i ];
-
-            pCrsr->Remove( 0, i );
-        }
-    }
-    if( pCrsr ) delete pCrsr;
-
-    aReg.Invert();
-    SwRects::Insert( &aReg, 0 );
-}
-
-SwRedlineRects* aRedlines[ 10 * 4 ];
-static int bFirstCall = sal_True;
-
-void ShowRedlines( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 )
-{
-    if( bFirstCall )
-    {
-        memset( aRedlines, 0, sizeof(aRedlines));
-        bFirstCall = sal_False;
-    }
-
-    const SwRedlineTbl& rTbl = pSh->GetDoc()->GetRedlineTbl();
-    const SwRedlineAuthorTbl& rAuthorTbl = pSh->GetDoc()->GetRedlineAuthorTbl();
-
-    for( sal_uInt16 n = 0; n < rAuthorTbl.Count(); ++n )
-    {
-        for( int i = 0; i < 4; ++i  )
-        {
-            SwRedlineRects** ppRedRect = &aRedlines[ n * 4 + i ];
-            if( rTbl.Count() && !*ppRedRect )
-                *ppRedRect = new SwRedlineRects( *pSh, n, n * 4 + i );
-
-            if( *ppRedRect )
-            {
-                switch( nAction )
-                {
-                case 1: (*ppRedRect)->Show(); break;
-                case 2: (*ppRedRect)->Hide(); break;
-                case 3: (*ppRedRect)->Invalidate( *pRect ); break;
-                }
-
-                if( !(*ppRedRect)->Count() )
-                    delete *ppRedRect, *ppRedRect = 0;
-            }
-        }
-    }
-}
-
-#define SHOWREDLINES1( nAct )           ShowRedlines( GetShell(),nAct );
-#define SHOWREDLINES2( nAct, pRect )    ShowRedlines( GetShell(),nAct, pRect );
-
-#else
-
-#define SHOWREDLINES1( nAct )
-#define SHOWREDLINES2( nAct, pRect )
-
-#endif
-
-#ifdef JP_REDLINE
-    if( GetDoc()->GetRedlineTbl().Count() )
-    {
-        SwRedlineTbl& rRedlineTbl = (SwRedlineTbl&)GetDoc()->GetRedlineTbl();
-        for( sal_uInt16 i = 0; i < rRedlineTbl.Count(); ++i )
-            rRedlineTbl[ i ]->HideRects( *GetShell() );
-    }
-#endif
-
-// --------  Ab hier Klassen / Methoden fuer den nicht Text-Cursor ------
+// -----  Starting from here: classes / methods for the non-text-cursor -----
 
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
     : pCrsrShell( pCShell )
@@ -321,7 +82,7 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
 
 #ifdef SW_CRSR_TIMER
     bTimerOn = sal_True;
-    SetTimeout( 50 );       // 50msec Verzoegerung
+    SetTimeout( 50 );       // 50 millisecond delay
 #endif
 }
 
@@ -331,7 +92,7 @@ SwVisCrsr::~SwVisCrsr()
 {
 #ifdef SW_CRSR_TIMER
     if( bTimerOn )
-        Stop();     // Timer stoppen
+        Stop();     // stop timer
 #endif
 
     if( bIsVisible && aTxtCrsr.IsVisible() )
@@ -349,16 +110,16 @@ void SwVisCrsr::Show()
     {
         bIsVisible = sal_True;
 
-        // muss ueberhaupt angezeigt werden ?
+        // display at all?
         if( pCrsrShell->VisArea().IsOver( pCrsrShell->aCharRect ) )
 #ifdef SW_CRSR_TIMER
         {
             if( bTimerOn )
-                Start();            // Timer aufsetzen
+                Start();            // start timer
             else
             {
                 if( IsActive() )
-                    Stop();         // Timer Stoppen
+                    Stop();         // stop timer
 
                 _SetPosAndShow();
             }
@@ -379,22 +140,22 @@ void SwVisCrsr::Hide()
 
 #ifdef SW_CRSR_TIMER
         if( IsActive() )
-            Stop();         // Timer Stoppen
+            Stop();         // stop timer
 #endif
 
-        if( aTxtCrsr.IsVisible() )      // sollten die Flags nicht gueltig sein?
+        if( aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
             aTxtCrsr.Hide();
     }
 }
 
 #ifdef SW_CRSR_TIMER
 
-void __EXPORT SwVisCrsr::Timeout()
+void SwVisCrsr::Timeout()
 {
-    ASSERT( !bIsDragCrsr, "Timer vorher abschalten" );
+    OSL_ENSURE( !bIsDragCrsr, "Timer vorher abschalten" );
     if( bIsVisible )
     {
-        if ( !pCrsrShell->GetWin() ) //SwFrmFmt::GetGraphic setzt das Win temp aus!
+        if ( !pCrsrShell->GetWin() ) // SwFrmFmt::GetGraphic suspends Win temporarily!
             Start();
         else
             _SetPosAndShow();
@@ -412,7 +173,7 @@ sal_Bool SwVisCrsr::ChgTimerFlag( sal_Bool bFlag )
     bOld = bTimerOn;
     if( !bFlag && bIsVisible && IsActive() )
     {
-        Stop();         // Timer Stoppen
+        Stop();          // stop timer
         _SetPosAndShow();
     }
     bTimerOn = bFlag;
@@ -578,7 +339,7 @@ void SwSelPaintRects::Show()
 
         if(mpCursorOverlay)
         {
-            if(aNewRanges.size())
+            if(!aNewRanges.empty())
             {
                 static_cast< sdr::overlay::OverlaySelection* >(mpCursorOverlay)->setRanges(aNewRanges);
             }
@@ -595,9 +356,9 @@ void SwSelPaintRects::Show()
 
             if(pTargetOverlay)
             {
-                // #i97672# get the system's hilight color and limit it to the maximum
-                // allowed luminance. This is needed to react on too bright hilight colors
-                // which would otherwise vive a bad visualisation
+                // #i97672# get the system's highlight color and limit it to the maximum
+                // allowed luminance. This is needed to react on too bright highlight colors
+                // which would otherwise vive a bad visualisation.
                 const OutputDevice *pOut = Application::GetDefaultDevice();
                 Color aHighlight(pOut->GetSettings().GetStyleSettings().GetHighlightColor());
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
@@ -643,9 +404,10 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     SwRects::Insert( &aReg, 0 );
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Liegt die Selection rechts oder unten ausserhalb des sichtbaren
-    // Bereiches, so ist diese nie auf eine Pixel rechts/unten aligned.
-    // Das muss hier erkannt und ggf. das Rechteckt erweitert werden.
+    // If the selection is to the right or at the bottom, outside the
+    // visible area, it is never aligned on one pixel at the right/bottom.
+    // This has to be determined here and if that is the case the
+    // rectangle has to be expanded.
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if( GetShell()->bVisPortChgd && 0 != ( nSz = Count()) )
     {
@@ -732,7 +494,7 @@ void SwShellCrsr::SetMark()
 
 void SwShellCrsr::FillRects()
 {
-    // die neuen Rechtecke berechnen
+    // calculate the new rectangles
     if( HasMark() &&
         GetPoint()->nNode.GetNode().IsCntntNode() &&
         GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
@@ -749,14 +511,11 @@ void SwShellCrsr::Show()
     do {
         pTmp->SwSelPaintRects::Show();
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
-
-    SHOWBOOKMARKS1( 1 )
-    SHOWREDLINES1( 1 )
 }
 
 
-    // Dieses Rechteck wird neu gepaintet, also ist die SSelection in
-    // dem Bereich ungueltig
+    // This rectangle gets painted anew, therefore the SSelection in this
+    // area is invalid.
 void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
     SwShellCrsr * pTmp = this;
@@ -765,10 +524,8 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
     {
         pTmp->SwSelPaintRects::Invalidate( rRect );
 
-        // --> FME 2005-08-18 #125102#
         // skip any non SwShellCrsr objects in the ring
         // (see:SwAutoFormat::DeleteSel()
-        // <--
         Ring* pTmpRing = pTmp;
         pTmp = 0;
         do
@@ -779,9 +536,6 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
         while ( !pTmp );
     }
     while( this != pTmp );
-
-    SHOWBOOKMARKS2( 3, &rRect )
-    SHOWREDLINES2( 3, &rRect )
 }
 
 
@@ -791,9 +545,6 @@ void SwShellCrsr::Hide()
     do {
         pTmp->SwSelPaintRects::Hide();
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
-
-    SHOWBOOKMARKS1( 2 )
-    SHOWREDLINES1( 2 )
 }
 
 SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
@@ -808,8 +559,8 @@ short SwShellCrsr::MaxReplaceArived()
     Window* pDlg = LAYOUT_THIS_WINDOW (::GetSearchDialog());
     if( pDlg )
     {
-        // alte Actions beenden; die Tabellen-Frames werden angelegt und
-        // eine SSelection kann erzeugt werden
+        // Terminate old actions. The table-frames get constructed and
+        // a SSelection can be created.
         SvUShorts aArr;
         sal_uInt16 nActCnt;
         ViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
@@ -832,7 +583,7 @@ short SwShellCrsr::MaxReplaceArived()
         }   //swmod 071107//swmod 071225
     }
     else
-        // ansonsten aus dem Basic, und dann auf RET_YES schalten
+        // otherwise from the Basic, and than switch to RET_YES
         nRet = RET_YES;
 
     return nRet;
@@ -849,10 +600,10 @@ sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
                             &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
-// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//              am sichtbaren Cursor
+// JP 05.03.98: To test the UNO-Crsr behavior here the implementation on the
+//              visible cursor.
 
 sal_Bool SwShellCrsr::IsSelOvr( int eFlags )
 {
@@ -861,7 +612,7 @@ sal_Bool SwShellCrsr::IsSelOvr( int eFlags )
 
 #endif
 
-// sal_True: an die Position kann der Cursor gesetzt werden
+// TRUE: The cursor can be set to the position.
 sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
 {
     if( GetShell() && ( GetShell()->IsAllProtect() ||
@@ -912,8 +663,8 @@ void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 
 void SwShellTableCrsr::FillRects()
 {
-    // die neuen Rechtecke berechnen
-    // JP 16.01.98: wenn der Cursor noch "geparkt" ist nichts machen!!
+    // Calculate the new rectangles.
+    // JP 16.01.98: If the cursor is still "parked" do nothing!!
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex() )
         return;
@@ -946,7 +697,7 @@ void SwShellTableCrsr::FillRects()
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
 
-        ASSERT( pFrm, "Node nicht in einer Tabelle" );
+        OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );
 
         while ( pFrm )
         {
@@ -961,11 +712,11 @@ void SwShellTableCrsr::FillRects()
 }
 
 
-// Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
+// Check if the SPoint is within the Table-SSelection.
 sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
-    // die neuen Rechtecke berechnen
-    // JP 16.01.98: wenn der Cursor noch "geparkt" ist nichts machen!!
+    // Calculate the new rectangles.
+    // JP 16.01.98: If the cursor is still "parked" do nothing!!
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex()  )
         return sal_False;
@@ -981,17 +732,17 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
         SwFrm* pFrm = pCNd->getLayoutFrm( GetShell()->GetLayout(), &GetPtPos() );
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
-        ASSERT( pFrm, "Node nicht in einer Tabelle" );
+        OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );
         if( pFrm && pFrm->Frm().IsInside( rPt ) )
             return sal_True;
     }
     return sal_False;
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
-// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//              am sichtbaren Cursor
+// JP 05.03.98: To test the UNO-Crsr behavior here the implementation on the
+//              visible cursor.
 sal_Bool SwShellTableCrsr::IsSelOvr( int eFlags )
 {
     return SwShellCrsr::IsSelOvr( eFlags );
@@ -1004,3 +755,4 @@ sal_Bool SwShellTableCrsr::IsAtValidPos( sal_Bool bPoint ) const
     return SwShellCrsr::IsAtValidPos( bPoint );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_starmath.hxx"
 
 
-#include <vector>
 #include <osl/mutex.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
@@ -63,11 +63,11 @@ SmSym::SmSym() :
     m_aName(C2S("unknown")),
     m_aSetName(C2S("unknown")),
     m_cChar('\0'),
-    m_bPredefined(sal_False),
-    m_bDocSymbol(sal_False)
+    m_bPredefined(false),
+    m_bDocSymbol(false)
 {
     m_aExportName = m_aName;
-    m_aFace.SetTransparent(sal_True);
+    m_aFace.SetTransparent(true);
     m_aFace.SetAlign(ALIGN_BASELINE);
 }
 
@@ -79,29 +79,18 @@ SmSym::SmSym(const SmSym& rSymbol)
 
 
 SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-             const String& rSet, sal_Bool bIsPredefined)
+             const String& rSet, bool bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
 
     m_aFace     = rFont;
-    m_aFace.SetTransparent(sal_True);
+    m_aFace.SetTransparent(true);
     m_aFace.SetAlign(ALIGN_BASELINE);
 
-    m_cChar   = cChar;
-//! according to HDU this should not be used anymore now
-//! since this was necessary in the early days but should
-//! not be done now since this is handled now at a more
-//! bottom layer by HDU.
-//! He can still imagine scenarios where this will be wrong
-//! now though, for example when importing *some* old documents.
-//! But overall it should be a large improvement, and
-//! likely everything will still work... #_- (eyes shut and "go"!)
-//
-//    if (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet())
-//        Character |= 0xF000;
+    m_cChar         = cChar;
     m_aSetName      = rSet;
     m_bPredefined   = bIsPredefined;
-    m_bDocSymbol    = sal_False;
+    m_bDocSymbol    = false;
 }
 
 
@@ -195,7 +184,7 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
     SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
     for ( ; aIt != m_aSymbols.end(); ++aIt)
         aRes.push_back( &aIt->second );
-//    DBG_ASSERT( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
+//    OSL_ENSURE( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
     return aRes;
 }
 
@@ -219,17 +208,17 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         else if (pFound && !bForceChange && bSymbolConflict)
         {
             // TODO: to solve this a document owned symbol manager would be required ...
-            // But for now we have a global one to easily support availability of all
+                OSL_FAIL( "symbol conflict, different symbol with same name found!" );
             // symbols in all formulas. A copy of the global one would be needed here
             // and then the new symbol has to be forcefully applied. This would keep
             // the current formula intact but will leave the set of symbols in the
             // global symbol manager somewhat to chance.
-            DBG_ASSERT( 0, "symbol conflict, different symbol with same name found!" );
         }
 
+    OSL_ENSURE( bAdded, "failed to add symbol" );
         if (bAdded)
             m_bModified = true;
-        DBG_ASSERT( bAdded || (pFound && !bSymbolConflict), "AddOrReplaceSymbol: unresolved symbol conflict" );
+        OSL_ENSURE( bAdded || (pFound && !bSymbolConflict), "AddOrReplaceSymbol: unresolved symbol conflict" );
     }
 
     return bAdded;
@@ -284,7 +273,7 @@ void SmSymbolManager::Load()
     for (size_t i = 0;  i < nSymbolCount;  ++i)
     {
         const SmSym &rSym = aSymbols[i];
-        DBG_ASSERT( rSym.GetName().Len() > 0, "symbol without name!" );
+        OSL_ENSURE( rSym.GetName().Len() > 0, "symbol without name!" );
         if (rSym.GetName().Len() > 0)
             AddOrReplaceSymbol( rSym );
     }
@@ -292,7 +281,7 @@ void SmSymbolManager::Load()
 
     if (0 == nSymbolCount)
     {
-        DBG_ERROR( "no symbol set found" );
+        OSL_FAIL( "no symbol set found" );
         m_bModified = false;
     }
 
@@ -308,12 +297,12 @@ void SmSymbolManager::Load()
         // make the new symbol a copy but with ITALIC_NORMAL, and add it to iGreek
         const SmSym &rSym = *aGreekSymbols[i];
         Font aFont( rSym.GetFace() );
-        DBG_ASSERT( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
+        OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
         String aSymbolName( (sal_Unicode)'i' );
         aSymbolName += rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
-                aSymbolSetName, sal_True /*bIsPredefined*/ );
+                aSymbolSetName, true /*bIsPredefined*/ );
 
         AddOrReplaceSymbol( aSymbol );
     }
@@ -324,23 +313,6 @@ void SmSymbolManager::Save()
     if (m_bModified)
     {
         SmMathConfig &rCfg = *SM_MOD()->GetConfig();
-
-#if 0
-        sal_uInt16 nSymbolCount     = GetSymbolCount();
-        sal_uInt16 nSaveSymbolCnt   = 0;
-        const SmSym **pSymbols  = new const SmSym* [ nSymbolCount ];
-        const SmSym **pSym      = pSymbols;
-        for (sal_uInt16 j = 0;  j < nSymbolCount;  ++j)
-        {
-            const SmSym &rSym = *pSymSet->GetSymbol( j );
-            if (!rSym.IsDocSymbol())
-            {
-                *pSym++ = &rSym;
-                ++nSaveSymbolCnt;
-            }
-        }
-        DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
-#endif
 
         // prepare to skip symbols from iGreek on saving
         SmLocalizedSymbolData   aLocalizedData;
@@ -357,12 +329,10 @@ void SmSymbolManager::Save()
                 aSymbols.push_back( *aTmp[i] );
         }
         rCfg.SetSymbols( aSymbols );
-#if 0
-        delete [] pSymbols;
-#endif
 
         m_bModified = false;
     }
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,7 +88,7 @@ SvXMLImportContext *SwXMLBodyContentContext_Impl::CreateChildContext(
 
 void SwXMLBodyContentContext_Impl::EndElement()
 {
-    /* #108146# Code moved to SwXMLOmport::endDocument */
+    /* Code moved to SwXMLOmport::endDocument */
     GetImport().GetTextImport()->SetOutlineStyles( sal_False );
 }
 
@@ -105,3 +106,5 @@ SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
 
     return pContext;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

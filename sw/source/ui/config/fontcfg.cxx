@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <fontcfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/outdev.hxx>
@@ -44,18 +44,13 @@ using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
 
-/* -----------------07.10.2002 12:15-----------------
- *
- * --------------------------------------------------*/
 inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_Int16 eCJK, sal_Int16 eCTL)
 {
     return LanguageType(
                 nType < FONT_STANDARD_CJK ? eWestern :
                     nType >= FONT_STANDARD_CTL ? eCTL : eCJK);
 }
-/* -----------------------------08.09.00 15:52--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 {
     Sequence<OUString> aNames;
@@ -104,9 +99,6 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
     }
     return aNames;
 }
-/*-----------------03.09.96 15.00-------------------
-
---------------------------------------------------*/
 
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer"))
@@ -129,7 +121,7 @@ SwStdFontConfig::SwStdFontConfig() :
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -151,9 +143,7 @@ SwStdFontConfig::SwStdFontConfig() :
         }
     }
 }
-/* -----------------------------08.09.00 15:58--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwStdFontConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -184,14 +174,11 @@ void    SwStdFontConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/* -----------------------------08.09.00 15:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwStdFontConfig::~SwStdFontConfig()
-{}
-/*-----------------18.01.97 10.05-------------------
+{
+}
 
---------------------------------------------------*/
 sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
 {
     sal_Bool bSame = sal_False;
@@ -250,9 +237,6 @@ sal_Bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     return bSame;
 }
 
-/* -----------------11.01.99 13:16-------------------
- * Standards auslesen
- * --------------------------------------------------*/
 String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
 {
     String sRet;
@@ -280,10 +264,6 @@ String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
         case FONT_INDEX_CTL   :
             nFontId = DEFAULTFONT_CTL_TEXT;
         break;
-//        case FONT_STANDARD:
-//        case FONT_LIST    :
-//        case FONT_CAPTION :
-//        case FONT_INDEX   :
         default:
             nFontId = DEFAULTFONT_LATIN_TEXT;
     }
@@ -291,9 +271,6 @@ String  SwStdFontConfig::GetDefaultFor(sal_uInt16 nFontType, LanguageType eLang)
     return  aFont.GetName();
 }
 
-/*-- 11.10.2005 10:43:43---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageType eLang)
 {
     sal_Int32 nRet = FONTSIZE_DEFAULT;
@@ -303,7 +280,10 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageTyp
         case  FONT_OUTLINE_CJK:
         case  FONT_OUTLINE_CTL:
             nRet = FONTSIZE_OUTLINE;
-        break;
+            break;
+        case FONT_STANDARD_CJK:
+            nRet = FONTSIZE_CJK_DEFAULT;
+            break;
     }
     if( eLang == LANGUAGE_THAI && nFontType >= FONT_STANDARD_CTL )
     {
@@ -312,12 +292,9 @@ sal_Int32 SwStdFontConfig::GetDefaultHeightFor(sal_uInt16 nFontType, LanguageTyp
     return nRet;
 }
 
-/*-- 11.10.2005 10:50:06---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
 {
-    DBG_ASSERT( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()");
+    OSL_ENSURE( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()");
     if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)
     {
         SvtLinguOptions aLinguOpt;
@@ -343,12 +320,9 @@ void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
     }
 }
 
-/*-- 08.11.2005 14:18:26---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang )
 {
-    DBG_ASSERT(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()");
+    OSL_ENSURE(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()");
     sal_Int32 nRet = nDefaultFontHeight[nFont + FONT_PER_GROUP * nScriptType];
     if(nRet <= 0)
         return GetDefaultHeightFor(nFont + FONT_PER_GROUP * nScriptType, eLang);
@@ -357,3 +331,4 @@ sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType
 
 void SwStdFontConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

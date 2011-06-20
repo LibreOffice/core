@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 
 /** class to manage threads in Writer - it conforms the singleton pattern
 
-    OD 2007-04-13 #i73788#
+    #i73788#
 
     @author OD
 */
@@ -85,3 +86,5 @@ bool SwThreadManager::StartingOfThreadsSuspended()
 {
     return mpThreadManagerImpl->StartingOfThreadsSuspended();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

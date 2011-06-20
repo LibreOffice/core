@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,14 @@
 #define _MAILMERGEPREPAREMERGEPAGE_HXX
 
 #include <svtools/wizardmachine.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
 #include <mailmergehelper.hxx>
 #include "actctrl.hxx"
 
 class SwMailMergeWizard;
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergePrepareMergePage : public svt::OWizardPage
 {
     SwBoldFixedInfo m_aHeaderFI;
@@ -75,3 +72,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

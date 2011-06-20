@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,19 +38,19 @@ enum FlyCntType
 
 };
 
-//Returnwerte fuer Chainable und Chain
+// Return values for chainable and chain.
 #define SW_CHAIN_OK             0
-#define SW_CHAIN_NOT_EMPTY      1       //Nur leere Frames duerfen connected werden
-#define SW_CHAIN_IS_IN_CHAIN    2       //Destination ist bereits in einer chain
-#define SW_CHAIN_WRONG_AREA     3       //Destination steht in einer nicht erlaubten
-                                        //Section (Kopf-/Fusszeile)
-#define SW_CHAIN_NOT_FOUND      4       //Destination und/oder Source nicht gefunden
-#define SW_CHAIN_SOURCE_CHAINED 5       //Source hat bereits einen Follow
-#define SW_CHAIN_SELF           6       //Sich selbst zu verketten  ist
-                                        //natuerlich nicht erleubt.
+#define SW_CHAIN_NOT_EMPTY      1       // Only empty frames may be connected.
+#define SW_CHAIN_IS_IN_CHAIN    2       // Destination already in chain.
+#define SW_CHAIN_WRONG_AREA     3       // Destination in section where it shouldn't be
+                                        // (header, footer).
+#define SW_CHAIN_NOT_FOUND      4       // Destination and/or source not found.
+#define SW_CHAIN_SOURCE_CHAINED 5       // Source already has a follow.
+#define SW_CHAIN_SELF           6       // Self-chaining is not allowed.
 
 
 
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

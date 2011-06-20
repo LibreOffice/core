@@ -42,6 +42,8 @@
 #define FT_LINE             17
 #define FT_LINE_COUNT       18
 #define PB_PDATE            19
+#define FT_CHAR_COUNT_EXCL_SPACES   20
+#define FT_CHAR_EXCL_SPACES            21
 
 #define BT_OK               100
 

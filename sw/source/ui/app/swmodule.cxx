@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 
 #include <hintids.hxx>
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
 #include <svx/galbrws.hxx>
@@ -45,7 +44,7 @@
 #include <svx/insctrl.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/linectrl.hxx>
-#include <svx/tbxctl.hxx>           //z-Zt falscher includeschutz!
+#include <svx/tbxctl.hxx>            // at the moment wrong include-protection!
 #include <svx/fillctrl.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
@@ -59,34 +58,28 @@
 #include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fontworkgallery.hxx>
+#include <svx/modctrl.hxx>
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <comphelper/processfactory.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <swevent.hxx>
 #include <swacorr.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <dobjfac.hxx>
 #include <init.hxx>
 #include <pview.hxx>
 #include <wview.hxx>
 #include <wdocsh.hxx>
 #include <globdoc.hxx>
-#ifndef _SRCVIEW_HXX //autogen
 #include <srcview.hxx>
-#endif
 #include <glshell.hxx>
 #include <tabsh.hxx>
 #include <listsh.hxx>
@@ -99,21 +92,11 @@
 #include <beziersh.hxx>
 #include <wtextsh.hxx>
 #include <wfrmsh.hxx>
-#ifndef _DRFORMSH_HXX
 #include <drformsh.hxx>
-#endif
-#ifndef _WGRFSH_HXX
 #include <wgrfsh.hxx>
-#endif
-#ifndef _WOLESH_HXX
 #include <wolesh.hxx>
-#endif
-#ifndef _WLISTSH_HXX
 #include <wlistsh.hxx>
-#endif
-#ifndef _WTABSH_HXX
 #include <wtabsh.hxx>
-#endif
 #include <navipi.hxx>
 #include <chartins.hxx>
 #include <inputwin.hxx>
@@ -129,12 +112,8 @@
 #include <workctrl.hxx>
 #include <tbxanchr.hxx>
 #include <fldwrap.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
-#ifndef _SYNCBTN_HXX
 #include <syncbtn.hxx>
-#endif
 #include <mailmergechildwindow.hxx>
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
@@ -144,33 +123,31 @@
 #include <swatrset.hxx>
 #include <idxmrk.hxx>
 #include <dlelstnr.hxx>
-#ifndef _BARCFG_HXX
 #include <barcfg.hxx>
-#endif
 #include <svx/rubydialog.hxx>
-// OD 14.02.2003 #107424#
 #include <svtools/colorcfg.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <unotools/moduleoptions.hxx>
 
-#ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 #include <avmedia/mediatoolbox.hxx>
 
 #include <annotsh.hxx>
+#include <navsh.hxx>
 
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
 ResMgr *pSwResMgr = 0;
-sal_Bool    bNoInterrupt    = sal_False;
+sal_Bool     bNoInterrupt     = sal_False;
 
 #include <sfx2/app.hxx>
 
 #include <svx/svxerr.hxx>
 
 #include <unomid.h>
+
+#include "swdllimpl.hxx"
 
 using namespace com::sun::star;
 
@@ -179,8 +156,6 @@ TYPEINIT1( SwModule, SfxModule );
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-//************************************************************************
 
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
@@ -212,7 +187,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 {
     SetName( String::CreateFromAscii("StarWriter") );
     pSwResMgr = GetResMgr();
-    SvxErrorHandler::Get();
+    SvxErrorHandler::ensure();
     pErrorHdl = new SfxErrorHandler( RID_SW_ERRHDL,
                                      ERRCODE_AREA_SW,
                                      ERRCODE_AREA_SW_END,
@@ -220,21 +195,18 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pModuleConfig = new SwModuleOptions;
 
-    //Die brauchen wie sowieso
+    // We need them anyways
     pToolbarConfig = new SwToolbarConfigItem( sal_False );
     pWebToolbarConfig = new SwToolbarConfigItem( sal_True );
 
     pStdFontConfig = new SwStdFontConfig;
 
-    pAuthorNames = new SvStringsDtor(5, 1); // Alle Redlining-Autoren
+    pAuthorNames = new SvStringsDtor(5, 1);    // All Redlining-Authors
 
-    //JP 18.10.96: SvxAutocorrect gegen die SwAutocorrect austauschen
-    SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
-    if( pACfg )
-    {
-        const SvxAutoCorrect* pOld = pACfg->GetAutoCorrect();
-        pACfg->SetAutoCorrect(new SwAutoCorrect( *pOld ));
-    }
+    // replace SvxAutocorrect with SwAutocorrect
+    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
+    rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
 
     StartListening( *SFX_APP() );
 
@@ -243,9 +215,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     // at the view options.
     GetColorConfig();
 }
-
-//************************************************************************
-
 uno::Reference< scanner::XScannerManager >
 SwModule::GetScannerManager()
 {
@@ -258,8 +227,8 @@ SwModule::GetScannerManager()
             m_xScannerManager =
                 uno::Reference< scanner::XScannerManager >(
                     xMgr->createInstance(
-                        rtl::OUString::createFromAscii(
-                            "com.sun.star.scanner.ScannerManager" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.scanner.ScannerManager")) ),
                     uno::UNO_QUERY );
         }
     }
@@ -275,24 +244,18 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
         {
             m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
                     xMgr->createInstance(
-                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LanguageGuessing"))),
                         uno::UNO_QUERY );
         }
     }
     return m_xLanguageGuesser;
 }
 
-//************************************************************************
-
 SwModule::~SwModule()
 {
-    SetPool(0);
-    SfxItemPool::Free(pAttrPool);
     delete pErrorHdl;
     EndListening( *SFX_APP() );
 }
-
-//************************************************************************
 
 void SwModule::CreateLngSvcEvtListener()
 {
@@ -300,16 +263,14 @@ void SwModule::CreateLngSvcEvtListener()
         xLngSvcEvtListener = new SwLinguServiceEventListener;
 }
 
-//************************************************************************
-
 void SwDLL::RegisterFactories()
 {
-    //Diese Id's duerfen nicht geaendert werden. Mittels der Id's wird vom
-    //Sfx die View (Dokumentansicht wiederherstellen) erzeugt.
+    // These Id's must not be changed. Through these Id's the View (resume Documentview)
+    // is created by Sfx.
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );
 
-    SwWebView::RegisterFactory      ( 5 );
+    SwWebView::RegisterFactory        ( 5 );
 
     if ( SvtModuleOptions().IsWriter() )
     {
@@ -317,9 +278,6 @@ void SwDLL::RegisterFactories()
         SwPagePreView::RegisterFactory  ( 7 );
     }
 }
-
-//************************************************************************
-
 
 void SwDLL::RegisterInterfaces()
 {
@@ -347,6 +305,7 @@ void SwDLL::RegisterInterfaces()
     SwBezierShell::RegisterInterface(pMod);
     SwGrfShell::RegisterInterface(pMod);
     SwOleShell::RegisterInterface(pMod);
+    SwNavigationShell::RegisterInterface(pMod);
     SwWebTextShell::RegisterInterface(pMod);
     SwWebFrameShell::RegisterInterface(pMod);
     SwWebGrfShell::RegisterInterface(pMod);
@@ -357,8 +316,6 @@ void SwDLL::RegisterInterfaces()
     SwMediaShell::RegisterInterface(pMod);
     SwAnnotationShell::RegisterInterface(pMod);
 }
-
-//************************************************************************
 
 void SwDLL::RegisterControls()
 {
@@ -393,7 +350,6 @@ void SwDLL::RegisterControls()
     SvxLineEndToolBoxControl::RegisterControl(SID_ATTR_LINEEND_STYLE, pMod );
 
     SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
-//  SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod );
     SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
     SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
     SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
@@ -422,6 +378,7 @@ void SwDLL::RegisterControls()
     SwBookmarkControl::RegisterControl(FN_STAT_PAGE, pMod );
     SwTemplateControl::RegisterControl(FN_STAT_TEMPLATE, pMod );
     SwViewLayoutControl::RegisterControl( SID_ATTR_VIEWLAYOUT, pMod );
+    SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
 
     SwTableOptimizeCtrl::RegisterControl(FN_OPTIMIZE_TABLE, pMod);
@@ -429,7 +386,6 @@ void SwDLL::RegisterControls()
     SvxIMapDlgChildWindow::RegisterChildWindow( sal_False, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False, pMod );
     SvxHlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxHyperlinkDlgWrapper::RegisterChildWindow( sal_False, pMod, SFX_CHILDWIN_FORCEDOCK );
     SvxFontWorkChildWindow::RegisterChildWindow( sal_False, pMod );
     SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SwFldDataOnlyDlgWrapper::RegisterChildWindow( sal_False, pMod );
@@ -439,7 +395,6 @@ void SwDLL::RegisterControls()
     SwRedlineAcceptChild::RegisterChildWindow( sal_False, pMod );
     SwSyncChildWin::RegisterChildWindow( sal_True, pMod );
     SwMailMergeChildWindow::RegisterChildWindow( sal_False, pMod );
-//    SwSendMailChildWindow::RegisterChildWindow( sal_False, pMod );
     SwInsertIdxMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SwInsertAuthMarkWrapper::RegisterChildWindow( sal_False, pMod );
     SvxRubyChildWindow::RegisterChildWindow( sal_False, pMod);
@@ -475,22 +430,17 @@ void SwDLL::RegisterControls()
 
 /*************************************************************************
 |*
-|* Modul laden (nur Attrappe fuer das Linken der DLL)
+|* Load Module (only dummy for linking of the DLL)
 |*
 \************************************************************************/
 
-/* -----------------20.04.99 10:46-------------------
- *
- * --------------------------------------------------*/
 void    SwModule::InitAttrPool()
 {
-    DBG_ASSERT(!pAttrPool, "Pool ist schon da!");
+    OSL_ENSURE(!pAttrPool, "Pool already exists!");
     pAttrPool = new SwAttrPool(0);
     SetPool(pAttrPool);
 }
-/* -----------------20.04.99 10:46-------------------
- *
- * --------------------------------------------------*/
+
 void    SwModule::RemoveAttrPool()
 {
     SetPool(0);
@@ -498,3 +448,4 @@ void    SwModule::RemoveAttrPool()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

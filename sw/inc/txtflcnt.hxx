@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@ class SwTxtNode;
 class SwDoc;
 
 // SWTXT_FLYCNT ********************************
-// Attribut fuer zeilengebundene Frames (ohne Endindex)
+// Attribute for line-bound frames (without end index).
 
 class SwTxtFlyCnt : public SwTxtAttr
 {
@@ -44,13 +45,13 @@ class SwTxtFlyCnt : public SwTxtAttr
 public:
     SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStart );
 
-    // Setzt den Anker im pFmt und
+    // Sets anchor in pFmt and
     void    SetAnchor( const SwTxtNode *pNode );
 
     inline        SwFlyInCntFrm  *GetFlyFrm( const SwFrm *pCurrFrm );
     inline const  SwFlyInCntFrm  *GetFlyFrm( const SwFrm *pCurrFrm ) const;
 
-    // erzeugt sich ein neues FlyFrameFormat
+    // creates for itself a new FlyFrameFormat.
     void CopyFlyFmt( SwDoc* pDoc );
 };
 
@@ -66,3 +67,4 @@ inline const SwFlyInCntFrm *SwTxtFlyCnt::GetFlyFrm( const SwFrm *pCurrFrm ) cons
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

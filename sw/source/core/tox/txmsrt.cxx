@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
@@ -186,8 +186,8 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                 {
                     SwPosition aPos( *pNd );
                     const SwDoc& rDoc = *pNd->GetDoc();
-#ifdef DBG_UTIL
-                    ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ),
+#if OSL_DEBUG_LEVEL > 1
+                    OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ),
                             "wo steht der Absatz" );
 #else
                     GetBodyTxtNode( rDoc, aPos, *pFrm );
@@ -340,7 +340,7 @@ sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     if(GetLevel() != rCmp.GetLevel() || nKeyLevel != rCmp.nKeyLevel)
         return sal_False;
 
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
 
     String sMyTxt;
     String sMyTxtReading;
@@ -363,14 +363,11 @@ sal_Bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 //
 // kleiner haengt nur vom Text ab
 
-
-//
-
 sal_Bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
 
     String sMyTxt;
     String sMyTxtReading;
@@ -398,12 +395,9 @@ sal_Bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 //
 // Das Stichwort selbst
 
-
-//
-
 void SwTOXIndex::GetText_Impl( String& rTxt, String& rTxtReading ) const
 {
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
     const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
     switch(nKeyLevel)
     {
@@ -461,7 +455,7 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) 
 
 sal_uInt16 SwTOXIndex::GetLevel() const
 {
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
 
     sal_uInt16 nForm = FORM_PRIMARY_KEY;
 
@@ -532,7 +526,6 @@ void SwTOXCustom::GetText_Impl( String& rTxt, String &rTxtReading ) const
 {
     rTxt = aKey;
     rTxtReading = sReading;
-    /// !!!!!!!!!!!!!!
 }
 
 
@@ -620,13 +613,6 @@ void SwTOXPara::GetText_Impl( String& rTxt, String& ) const
     case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
             xub_StrLen nStt = nStartIndex;
-/* JP 22.01.98:
-    Tabs ueberspringen - macht aber keinen Sinn, solange in der TOX-Form
-    nicht die KapitelNummer eingestellt werden kann
-            const String& rTmp = ((SwTxtNode*)pNd)->GetTxt();
-            while( '\t' == rTmp.GetChar( nStt ) && nStt < rTmp.Len() )
-                ++nStt;
-*/
             rTxt = ((SwTxtNode*)pNd)->GetExpandTxt(
                     nStt,
                     STRING_NOTFOUND == nEndIndex ? STRING_LEN : nEndIndex - nStt);
@@ -643,7 +629,7 @@ void SwTOXPara::GetText_Impl( String& rTxt, String& ) const
                 rTxt = pFly->GetName();
             else
             {
-                ASSERT( !this, "Grafik/Object ohne Namen" )
+                OSL_ENSURE( !this, "Grafik/Object ohne Namen" );
                 sal_uInt16 nId = nsSwTOXElement::TOX_OLE == eType
                                 ? STR_OBJECT_DEFNAME
                                 : nsSwTOXElement::TOX_GRAPHIC == eType
@@ -663,13 +649,6 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) c
     {
         SwTxtNode* pSrc = (SwTxtNode*)aTOXSources[0].pNd;
         xub_StrLen nStt = nStartIndex;
-/* JP 22.01.98:
-    Tabs ueberspringen - macht aber keinen Sinn, solange in der TOX-Form
-    nicht die KapitelNummer eingestellt werden kann
-        const String& rTxt = pSrc->GetTxt();
-        while( '\t' == rTxt.GetChar( nStt ) && nStt < rTxt.Len() )
-            ++nStt;
-*/
         pSrc->GetExpandTxt( rNd, &rInsPos, nStt,
                 nEndIndex == STRING_LEN ? STRING_LEN : nEndIndex - nStt,
                 sal_False, sal_False, sal_True );
@@ -691,9 +670,6 @@ sal_uInt16 SwTOXPara::GetLevel() const
 
     if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
     {
-        //sal_uInt16 nTmp = ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-        //if(nTmp < NO_NUMBERING)
-        //  nRet = nTmp + 1;
         const int nTmp = ((SwTxtNode*)pNd)->GetAttrOutlineLevel();//#outline level,zhaojianwei????
         if(nTmp != 0 )
             nRet = static_cast<sal_uInt16>(nTmp);
@@ -713,41 +689,6 @@ String SwTOXPara::GetURL() const
         {
             const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
 
-            // --> OD 2009-08-05 #i103265#
-//            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
-//            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
-//            {
-//                aTxt = '#';
-//                const SwNumRule * pRule = pTxtNd->GetNumRule();
-//                if( pRule )
-//                {
-//                    // dann noch die rel. Nummer davor setzen
-//                    const sal_uInt16 nCurrLevel = static_cast<sal_uInt16>(pTxtNd->GetActualListLevel());
-//                    if(nCurrLevel <= MAXLEVEL)
-//                    {
-//                        // --> OD 2005-11-02 #i51089 - TUNING#
-//                        if ( pTxtNd->GetNum() )
-//                        {
-//                            SwNumberTree::tNumberVector aNumVector =
-//                                pTxtNd->GetNumberVector();
-
-//                            for( sal_uInt16 n = 0; n <= nCurrLevel; ++n )
-//                            {
-//                                int nNum = aNumVector[ n ];
-//                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
-//                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
-//                            }
-//                        }
-//                        else
-//                        {
-//                            ASSERT( false,
-//                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
-//                        }
-//                    }
-//                }
-//                aTxt += pTxtNd->GetExpandTxt();
-//                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
-//            }
             SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
             ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
                                 *(pTxtNd),
@@ -755,7 +696,6 @@ String SwTOXPara::GetURL() const
             aTxt = '#';
             const String aMarkName( pMark->GetName() );
             aTxt += aMarkName;
-            // <--
         }
         break;
 
@@ -808,7 +748,7 @@ void SwTOXTable::GetText_Impl( String& rTxt, String& ) const
     }
     else
     {
-        ASSERT( !this, "Wo ist meine Tabelle geblieben?" )
+        OSL_ENSURE( !this, "Wo ist meine Tabelle geblieben?" );
         rTxt = SW_RESSTR( STR_TABLE_DEFNAME );
     }
 }
@@ -834,9 +774,6 @@ String SwTOXTable::GetURL() const
     }
     return aTxt;
 }
-/*-- 15.09.99 14:28:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 
 SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
                 SwFmtFld& rField, const SwTOXInternational& rIntl ) :
@@ -863,9 +800,7 @@ sal_uInt16 SwTOXAuthority::GetLevel() const
         nRet = 1;
     return nRet;
 }
-/*-- 15.09.99 14:28:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 static String lcl_GetText(SwFmtFld const& rField)
 {
     return rField.GetFld()->ExpandField(true);
@@ -876,9 +811,6 @@ void SwTOXAuthority::GetText_Impl( String& rTxt, String& ) const
     rTxt = lcl_GetText(m_rField);
 }
 
-/* -----------------21.09.99 12:50-------------------
-
- --------------------------------------------------*/
 void    SwTOXAuthority::FillText( SwTxtNode& rNd,
                         const SwIndex& rInsPos, sal_uInt16 nAuthField ) const
 {
@@ -905,18 +837,14 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
         sText = (pField->GetFieldText((ToxAuthorityField) nAuthField));
     rNd.InsertText( sText, rInsPos );
 }
-/* -----------------14.10.99 09:35-------------------
 
- --------------------------------------------------*/
 sal_Bool    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
             ((SwAuthorityField*)m_rField.GetFld())->GetHandle() ==
                 ((SwAuthorityField*)((SwTOXAuthority&)rCmp).m_rField.GetFld())->GetHandle();
 }
-/* -----------------21.10.99 09:52-------------------
 
- --------------------------------------------------*/
 sal_Bool    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
 {
     sal_Bool bRet = sal_False;
@@ -951,3 +879,5 @@ sal_Bool    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,9 +86,6 @@ using namespace ::com::sun::star;
 |*
 |*  SwTabFrm::SwTabFrm(), ~SwTabFrm()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 30. May. 96
-|*
 |*************************************************************************/
 SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     SwLayoutFrm( rTab.GetFrmFmt(), pSib ),
@@ -97,10 +95,9 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     bComplete = bCalcLowers = bONECalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
     bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
-    // --> OD 2004-10-04 #i26945#
+    // #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    // <--
     bFixSize = sal_False;     //Nicht nochmal auf die Importfilter hereinfallen.
     nType = FRMC_TAB;
 
@@ -118,7 +115,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
         else
             delete pNew;
     }
-    ASSERT( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
+    OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
 }
 
 SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
@@ -130,10 +127,9 @@ SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :
     bLockJoin = bComplete = bONECalcLowers = bCalcLowers = bLowersFormatted = bLockBackMove =
     bResizeHTMLTable = bHasFollowFlowLine = bIsRebuildLastLine =
     bRestrictTableGrowth = bRemoveFollowFlowLinePending = sal_False;
-    // --> OD 2004-10-04 #i26945#
+    // #i26945#
     bConsiderObjsForMinCellHeight = sal_True;
     bObjsDoesFit = sal_True;
-    // <--
     bFixSize = sal_False;     //Nicht nochmal auf die Importfilter hereinfallen.
     nType = FRMC_TAB;
 
@@ -169,9 +165,6 @@ SwTabFrm::~SwTabFrm()
 |*
 |*  SwTabFrm::JoinAndDelFollows()
 |*
-|*  Ersterstellung      MA 30. May. 96
-|*  Letzte Aenderung    MA 30. May. 96
-|*
 |*************************************************************************/
 void SwTabFrm::JoinAndDelFollows()
 {
@@ -187,13 +180,10 @@ void SwTabFrm::JoinAndDelFollows()
 |*
 |*  SwTabFrm::RegistFlys()
 |*
-|*  Ersterstellung      MA 08. Jul. 93
-|*  Letzte Aenderung    MA 27. Jan. 99
-|*
 |*************************************************************************/
 void SwTabFrm::RegistFlys()
 {
-    ASSERT( Lower() && Lower()->IsRowFrm(), "Keine Zeilen." );
+    OSL_ENSURE( Lower() && Lower()->IsRowFrm(), "Keine Zeilen." );
 
     SwPageFrm *pPage = FindPageFrm();
     if ( pPage )
@@ -213,19 +203,17 @@ void SwTabFrm::RegistFlys()
 void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom );
 void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
 sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva );
-// --> OD 2004-10-15 #i26945# - add parameter <_bOnlyRowsAndCells> to control
+// #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
 sal_Bool MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells = false );
-// <--
 // OD 2004-02-18 #106629# - correct type of 1st parameter
-// --> OD 2004-10-04 #i26945# - add parameter <_bConsiderObjs> in order to
+// #i26945# - add parameter <_bConsiderObjs> in order to
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
 SwTwips MA_FASTCALL lcl_CalcMinRowHeight( const SwRowFrm *pRow,
                                           const sal_Bool _bConsiderObjs );
-// <--
 SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm&, const SwBorderAttrs& );
 
 /*************************************************************************
@@ -262,7 +250,7 @@ SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
 //
 SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, bool bRowSpanLine )
 {
-    ASSERT( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" )
+    OSL_ENSURE( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" );
     const SwRowFrm& rRow = (SwRowFrm&)rTmpRow;
 
     rTab.SetFollowFlowLine( sal_True );
@@ -273,7 +261,7 @@ SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, boo
     return pFollowFlowLine;
 }
 
-// --> OD 2004-11-05 #i26945# - local helper function to invalidate all lower
+// #i26945# - local helper function to invalidate all lower
 // objects. By parameter <_bMoveObjsOutOfRange> it can be controlled, if
 // additionally the objects are moved 'out of range'.
 void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
@@ -284,7 +272,7 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
     if ( !_pPageFrm )
     {
         _pPageFrm = _rLayoutFrm.FindPageFrm();
-        ASSERT( _pPageFrm,
+        OSL_ENSURE( _pPageFrm,
                 "<lcl_InvalidateLowerObjs(..)> - missing page frame -> no move of lower objects out of range" );
         if ( !_pPageFrm )
         {
@@ -321,7 +309,7 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                     // due to the movement
                     SwObjPositioningInProgress aObjPosInProgress( *pAnchoredObj );
                     pAnchoredObj->SetObjLeft( _pPageFrm->Frm().Right() );
-                    // --> OD 2004-11-24 #115759# - reset character rectangle,
+                    // #115759# - reset character rectangle,
                     // top of line and relative position in order to assure,
                     // that anchored object is correctly positioned.
                     pAnchoredObj->ClearCharRectAndTopOfLine();
@@ -333,7 +321,6 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                                 ->Prepare( PREP_FLY_ATTR_CHG,
                                            &(pAnchoredObj->GetFrmFmt()) );
                     }
-                    // <--
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
@@ -353,7 +340,6 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
         pLowerFrm = pLowerFrm->GetNext();
     }
 }
-// <--
 //
 // Local helper function to shrink all lowers of rRow to 0 height
 //
@@ -369,12 +355,11 @@ void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
                                const_cast<SwCellFrm&>(pCurrMasterCell->FindStartEndOfRowSpanCell( true, true )) :
                                *pCurrMasterCell;
 
-        // --> OD 2004-10-04 #i26945#
+        // #i26945#
         // all lowers should have the correct position
         lcl_ArrangeLowers( &rToAdjust,
                            (rToAdjust.*fnRect->fnGetPrtTop)(),
                            sal_False );
-        // <--
         // TODO: Optimize number of frames which are set to 0 height
         // we have to start with the last lower frame, otherwise
         // the shrink will not shrink the current cell
@@ -438,12 +423,11 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
             SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
             while ( pTmpSourceRow )
             {
-                // --> FME 2006-01-10 #125926# Achtung! It is possible,
+                // #125926# Achtung! It is possible,
                 // that pTmpSourceRow->IsFollowFlowRow() but pTmpDestRow
                 // cannot be found. In this case, we have to move the complete
                 // row.
                 SwRowFrm* pTmpDestRow = (SwRowFrm*)pCurrDestCell->Lower();
-                // <--
 
                 if ( pTmpSourceRow->IsFollowFlowRow() && pTmpDestRow )
                 {
@@ -451,7 +435,7 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
                     while ( pTmpDestRow->GetNext() )
                         pTmpDestRow = (SwRowFrm*)pTmpDestRow->GetNext();
 
-                    ASSERT( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Knoten in der Tabelle" )
+                    OSL_ENSURE( pTmpDestRow->GetFollowRow() == pTmpSourceRow, "Knoten in der Tabelle" );
 
                     lcl_MoveRowContent( *pTmpSourceRow, *pTmpDestRow );
                     pTmpDestRow->SetFollowRow( pTmpSourceRow->GetFollowRow() );
@@ -523,20 +507,18 @@ void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
             SwTwips nTmpCut = nRemain;
             SwRowFrm* pTmpLastLineRow = (SwRowFrm*)pCurrLastLineCell->Lower();
 
-            // --> OD 2004-10-04 #i26945#
+            // #i26945#
             SwTwips nCurrentHeight =
                     lcl_CalcMinRowHeight( pTmpLastLineRow,
                                           rTab.IsConsiderObjsForMinCellHeight() );
-            // <--
             while ( pTmpLastLineRow && pTmpLastLineRow->GetNext() && nTmpCut > nCurrentHeight )
             {
                 nTmpCut -= nCurrentHeight;
                 pTmpLastLineRow = (SwRowFrm*)pTmpLastLineRow->GetNext();
-                // --> OD 2004-10-04 #i26945#
+                // #i26945#
                 nCurrentHeight =
                     lcl_CalcMinRowHeight( pTmpLastLineRow,
                                           rTab.IsConsiderObjsForMinCellHeight() );
-                // <--
             }
 
             //
@@ -641,7 +623,7 @@ void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine )
 
             if ( NULL != pRowFrm->GetPrev() && !pRowFrm->ContainsCntnt() )
             {
-                ASSERT( pRowFrm->GetFollowRow(), "Deleting row frame without follow" )
+                OSL_ENSURE( pRowFrm->GetFollowRow(), "Deleting row frame without follow" );
 
                 // The footnotes have to be moved:
                 lcl_MoveFootnotes( rTab, *rTab.GetFollow(), *pRowFrm );
@@ -683,24 +665,21 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     // Here the recalculation process starts:
     //
     rTab.SetRebuildLastLine( sal_True );
-    // --> OD 2004-10-15 #i26945#
+    // #i26945#
     rTab.SetDoesObjsFit( sal_True );
-    // <--
     SWRECTFN( rTab.GetUpper() )
 
-    // --> OD 2004-11-05 #i26945# - invalidate and move floating screen
+    // #i26945# - invalidate and move floating screen
     // objects 'out of range'
     ::lcl_InvalidateLowerObjs( rLastLine, true );
-    // <--
     //
     // manipulate row and cell sizes
     //
-    // --> OD 2004-10-04 #i26945# - Do *not* consider floating screen objects
+    // #i26945# - Do *not* consider floating screen objects
     // for the minimal cell height.
     rTab.SetConsiderObjsForMinCellHeight( sal_False );
     ::lcl_ShrinkCellsAndAllContent( rLastLine );
     rTab.SetConsiderObjsForMinCellHeight( sal_True );
-    // <--
 
     //
     // invalidate last line
@@ -725,40 +704,13 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     }
 
     //
-    // TODO: e.g., for i71806: What shall we do if the table already
-    // exceeds its upper? I think we have to adjust the heights of the
-    // table, rLastRow and all cells in rLastRow
-    //
-    /*SwTwips nDistanceToUpperPrtBottom =
-            (rTab.Frm().*fnRect->fnBottomDist)( (rTab.GetUpper()->*fnRect->fnGetPrtBottom)());
-
-    if ( nDistanceToUpperPrtBottom < 0 )
-    {
-        (rTab.Frm().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-        (rTab.Prt().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-
-        (rLastLine.Frm().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-        (rLastLine.Prt().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-
-        SwFrm* pTmpCell = rLastLine.Lower();
-        while ( pTmpCell )
-        {
-            (pTmpCell->Frm().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-            (pTmpCell->Prt().*fnRect->fnAddBottom)( nDistanceToUpperPrtBottom );
-
-            pTmpCell = pTmpCell->GetNext();
-        }
-    }*/
-
-    //
     // Do the recalculation
     //
     lcl_RecalcRow( rLastLine, LONG_MAX );
-    // --> OD 2004-11-23 #115759# - force a format of the last line in order to
+    // #115759# - force a format of the last line in order to
     // get the correct height.
     rLastLine.InvalidateSize();
     rLastLine.Calc();
-    // <--
 
     //
     // Unlock this tab frame and its follow
@@ -784,13 +736,12 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
 
     //
     // 1. Check if table fits to its upper.
-    // --> OD 2004-10-15 #i26945# - include check, if objects fit
+    // #i26945# - include check, if objects fit
     //
     const SwTwips nDistanceToUpperPrtBottom =
             (rTab.Frm().*fnRect->fnBottomDist)( (rTab.GetUpper()->*fnRect->fnGetPrtBottom)());
     if ( nDistanceToUpperPrtBottom < 0 || !rTab.DoesObjsFit() )
         bRet = false;
-    // <--
 
     //
     // 2. Check if each cell in the last line has at least one content frame.
@@ -856,9 +807,8 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     }
 
     rTab.SetRebuildLastLine( sal_False );
-    // --> OD 2004-10-15 #i26945#
+    // #i26945#
     rTab.SetDoesObjsFit( sal_True );
-    // <--
 
     return bRet;
 }
@@ -935,16 +885,16 @@ bool SwTabFrm::RemoveFollowFlowLine()
     // find last row in master
     SwFrm* pLastLine = GetLastLower();
 
-    ASSERT( HasFollowFlowLine() &&
+    OSL_ENSURE( HasFollowFlowLine() &&
             pFollowFlowLine &&
-            pLastLine, "There should be a flowline in the follow" )
+            pLastLine, "There should be a flowline in the follow" );
 
     // We have to reset the flag here, because lcl_MoveRowContent
     // calls a GrowFrm(), which has a different bahavior if
     // this flag is set.
     SetFollowFlowLine( sal_False );
 
-    // --> FME 2007-07-19 #140081# Make code robust.
+    // #140081# Make code robust.
     if ( !pFollowFlowLine || !pLastLine )
         return true;
 
@@ -954,7 +904,6 @@ bool SwTabFrm::RemoveFollowFlowLine()
     // NEW TABLES
     // If a row span follow flow line is removed, we want to move the whole span
     // to the master:
-    SwTwips nGrow = 0;
     long nRowsToMove = lcl_GetMaximumLayoutRowSpan( *pFollowFlowLine );
 
     if ( nRowsToMove > 1 )
@@ -962,6 +911,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
         SWRECTFN( this )
         SwFrm* pRow = pFollowFlowLine->GetNext();
         SwFrm* pInsertBehind = GetLastLower();
+        SwTwips nGrow = 0;
 
         while ( pRow && nRowsToMove-- > 1 )
         {
@@ -997,7 +947,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
     return bJoin;
 }
 
-// --> OD 2004-10-04 #i26945# - Floating screen objects are no longer searched.
+// #i26945# - Floating screen objects are no longer searched.
 bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
 {
     bool bRet = false;
@@ -1016,9 +966,8 @@ bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
             }
             else
             {
-                // --> OD 2004-10-04 #i26945# - search only for sections
+                // #i26945# - search only for sections
                 bRet = pTmpFrm->IsSctFrm();
-                // <--
             }
 
             if ( bRet )
@@ -1035,28 +984,20 @@ bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
 |*
 |*  SwTabFrm::Split(), Join()
 |*
-|*  Ersterstellung      MA 03. Jun. 93
-|*  Letzte Aenderung    MA 03. Sep. 96
-|*
 |*************************************************************************/
 bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep )
 {
     bool bRet = true;
 
     SWRECTFN( this )
-    //ASSERT( bVert ? nCutPos >= Frm().Left() &&
-    //                nCutPos <= Frm().Left() + Frm().Width() :
-    //                nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(), "SplitLine out of table." );
 
-    // --> OD 2004-10-14 #i26745# - format row and cell frames of table
+    // #i26745# - format row and cell frames of table
     {
         this->Lower()->_InvalidatePos();
-        // --> OD 2005-03-30 #i43913# - correction:
+        // #i43913# - correction
         // call method <lcl_InnerCalcLayout> with first lower.
         lcl_InnerCalcLayout( this->Lower(), LONG_MAX, true );
-        // <--
     }
-    // <--
 
     //Um die Positionen der Zellen mit der CutPos zu vergleichen muessen sie
     //ausgehend von der Tabelle nacheinander berechnet werden. Sie koennen
@@ -1099,8 +1040,8 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     //
     bool bSplitRowAllowed = pRow->IsRowSplitAllowed();
 
-    // --> FME 2004-06-03 #i29438#
-    // --> OD 2004-10-04 #i26945# - Floating screen objects no longer forbid
+    // #i29438#
+    // #i26945# - Floating screen objects no longer forbid
     // a splitting of the table row.
     // Special DoNotSplit case 1:
     // Search for sections inside pRow:
@@ -1109,9 +1050,8 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     {
         bTryToSplit = false;
     }
-    // <--
 
-    // --> FME 2004-06-07 #i29771#
+    // #i29771#
     // To avoid loops, we do some checks before actually trying to split
     // the row. Maybe we should keep the next row in this table.
     // Note: This is only done if we are at the beginning of our upper
@@ -1123,7 +1063,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
         // At least one more non-heading row has to stay in this table in
         // order to avoid loops:
         //
-        ASSERT( !GetIndPrev(), "Table is supposed to be at beginning" )
+        OSL_ENSURE( !GetIndPrev(), "Table is supposed to be at beginning" );
         bKeepNextRow = true;
     }
     else if ( !GetIndPrev() && nRepeat == nRowCount )
@@ -1220,7 +1160,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
         if ( pRow == pFirstNonHeadlineRow )
             return false;
 
-        // --> OD 2008-10-21 #i91764#
+        // #i91764#
         // Ignore row span lines
         SwRowFrm* pTmpRow = pFirstNonHeadlineRow;
         while ( pTmpRow && pTmpRow->IsRowSpanLine() )
@@ -1231,7 +1171,6 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
         {
             return false;
         }
-        // <--
     }
 
     //
@@ -1401,10 +1340,9 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
 
 bool SwTabFrm::Join()
 {
-    ASSERT( !HasFollowFlowLine(), "Joining follow flow line" )
+    OSL_ENSURE( !HasFollowFlowLine(), "Joining follow flow line" );
 
     SwTabFrm *pFoll = GetFollow();
-    SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
 
     if ( !pFoll->IsJoinLocked() )
     {
@@ -1417,6 +1355,7 @@ bool SwTabFrm::Join()
 
         SwFrm* pPrv = GetLastLower();
 
+        SwTwips nHeight = 0;    //Gesamthoehe der eingefuegten Zeilen als Return.
         while ( pRow )
         {
             pNxt = pRow->GetNext();
@@ -1443,9 +1382,6 @@ bool SwTabFrm::Join()
 |*
 |*  SwTabFrm::MakeAll()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 10. Apr. 97
-|*
 |*************************************************************************/
 void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
 {
@@ -1460,9 +1396,8 @@ void MA_FASTCALL SwInvalidatePositions( SwFrm *pFrm, long nBottom )
             if ( ((SwLayoutFrm*)pFrm)->Lower() )
             {
                 ::SwInvalidatePositions( ((SwLayoutFrm*)pFrm)->Lower(), nBottom);
-                // --> OD 2004-11-05 #i26945#
+                // #i26945#
                 ::lcl_InvalidateLowerObjs( *(static_cast<SwLayoutFrm*>(pFrm)) );
-                // <--
             }
         }
         else
@@ -1508,7 +1443,7 @@ void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom )
               (*fnRect->fnYDiff)( (pFrm->Frm().*fnRect->fnGetTop)(), nBottom ) < 0 ) );
 }
 
-// --> collapsing borders FME 2005-05-27 #i29550#
+// #i29550#
 void lcl_InvalidateAllLowersPrt( SwLayoutFrm* pLayFrm )
 {
     pLayFrm->_InvalidatePrt();
@@ -1552,7 +1487,7 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
 
     while ( pCnt && pDontLeave->IsAnLower( pCnt ) )
     {
-        // --> OD 2004-11-23 #115759# - check, if a format of content frame is
+        // #115759# - check, if a format of content frame is
         // possible. Thus, 'copy' conditions, found at the beginning of
         // <SwCntntFrm::MakeAll(..)>, and check these.
         const bool bFormatPossible = !pCnt->IsJoinLocked() &&
@@ -1574,26 +1509,24 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
         if ( bFormatPossible && !bSkipContent )
         {
             bRet |= !pCnt->IsValid();
-            // --> OD 2004-10-06 #i26945# - no extra invalidation of floating
+            // #i26945# - no extra invalidation of floating
             // screen objects needed.
             // Thus, delete call of method <SwFrm::InvalidateObjs( true )>
-            // <--
             pCnt->Calc();
             // OD 2004-05-11 #i28701# - usage of new method <::FormatObjsAtFrm(..)>
             // to format the floating screen objects
-            // --> OD 2005-05-03 #i46941# - frame has to be valid
+            // #i46941# - frame has to be valid
             // Note: frame could be invalid after calling its format, if it's locked.
-            ASSERT( !pCnt->IsTxtFrm() ||
+            OSL_ENSURE( !pCnt->IsTxtFrm() ||
                     pCnt->IsValid() ||
                     static_cast<SwTxtFrm*>(pCnt)->IsJoinLocked(),
                     "<SwCntntFrm::CalcLowers(..)> - text frame invalid and not locked." );
             if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
             {
-                // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame to
+                // #i23129#, #i36347# - pass correct page frame to
                 // the object formatter
                 if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
                                                           *(pCnt->FindPageFrm()) ) )
-                // <--
                 {
                     if ( pCnt->GetRegisteredIn() == pLoopControlCond )
                         ++nLoopControlRuns;
@@ -1611,13 +1544,12 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
                     }
 
 #if OSL_DEBUG_LEVEL > 1
-                    ASSERT( false, "LoopControl in SwCntntFrm::CalcLowers" )
+                    OSL_FAIL( "LoopControl in SwCntntFrm::CalcLowers" );
 #endif
                 }
             }
             pCnt->GetUpper()->Calc();
         }
-        // <--
         if( ! bAll && (*fnRect->fnYDiff)((pCnt->Frm().*fnRect->fnGetTop)(), nBottom) > 0 )
             break;
         pCnt = pCnt->GetNextCntntFrm();
@@ -1625,7 +1557,7 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
     return bRet;
 }
 
-// --> OD 2004-10-15 #i26945# - add parameter <_bOnlyRowsAndCells> to control
+// #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
 sal_Bool MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
@@ -1638,17 +1570,15 @@ sal_Bool MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
     SWRECTFN( pFrm )
     do
     {
-        // --> OD 2004-10-15 #i26945# - parameter <_bOnlyRowsAndCells> controls,
+        // #i26945# - parameter <_bOnlyRowsAndCells> controls,
         // if only row and cell frames are formatted.
         if ( pFrm->IsLayoutFrm() &&
              ( !_bOnlyRowsAndCells || pFrm->IsRowFrm() || pFrm->IsCellFrm() ) )
-        // <--
         {
-            // --> FME 2006-02-23 #130744# An invalid locked table frame will
+            // #130744# An invalid locked table frame will
             // not be calculated => It will not become valid =>
             // Loop in lcl_RecalcRow(). Therefore we do not consider them for bRet.
             bRet |= !pFrm->IsValid() && ( !pFrm->IsTabFrm() || !static_cast<SwTabFrm*>(pFrm)->IsJoinLocked() );
-            // <--
             pFrm->Calc();
             if( static_cast<SwLayoutFrm*>(pFrm)->Lower() )
                 bRet |= lcl_InnerCalcLayout( static_cast<SwLayoutFrm*>(pFrm)->Lower(), nBottom);
@@ -1674,7 +1604,7 @@ sal_Bool MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
 
 void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
 {
-    // --> OD 2004-10-05 #i26945# - For correct appliance of the 'straightforward
+    // #i26945# - For correct appliance of the 'straightforward
     // object positioning process, it's needed to notify that the page frame,
     // on which the given layout frame is in, is in its layout process.
     SwPageFrm* pPageFrm = rRow.FindPageFrm();
@@ -1682,7 +1612,6 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
         pPageFrm->SetLayoutInProgress( true );
     else
         pPageFrm = 0L;
-    // <--
 
     // FME 2007-08-30 #i81146# new loop control
     sal_uInt16 nLoopControlRuns_1 = 0;
@@ -1701,9 +1630,9 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
             if ( ++nLoopControlRuns_2 > nLoopControlMax )
             {
 #if OSL_DEBUG_LEVEL > 1
-                ASSERT( 0 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 1!" );
-                ASSERT( 1 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 2!!" );
-                ASSERT( 2 >  nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 3!!!" );
+                OSL_ENSURE( 0 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 1!" );
+                OSL_ENSURE( 1 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 2!!" );
+                OSL_ENSURE( 2 >  nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 3!!!" );
 #endif
                 rRow.ValidateThisAndAllLowers( nLoopControlStage_2++ );
                 nLoopControlRuns_2 = 0;
@@ -1716,10 +1645,9 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
 
         if( bCheck )
         {
-            // --> OD 2004-11-23 #115759# - force another format of the
+            // #115759# - force another format of the
             // lowers, if at least one of it was invalid.
             bCheck = SwCntntFrm::CalcLowers( &rRow, rRow.GetUpper(), nBottom, true );
-            // <--
 
             // NEW TABLES
             // First we calculate the cells with row span of < 1, afterwards
@@ -1750,9 +1678,9 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
                 if ( ++nLoopControlRuns_1 > nLoopControlMax )
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    ASSERT( 0 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 1!" );
-                    ASSERT( 1 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 2!!" );
-                    ASSERT( 2 >  nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 3!!!" );
+                    OSL_ENSURE( 0 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 1!" );
+                    OSL_ENSURE( 1 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 2!!" );
+                    OSL_ENSURE( 2 >  nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 3!!!" );
 #endif
                     rRow.ValidateThisAndAllLowers( nLoopControlStage_1++ );
                     nLoopControlRuns_1 = 0;
@@ -1766,10 +1694,9 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
         break;
     } while( true );
 
-    // --> OD 2004-10-05 #i26945#
+    // #i26945#
     if ( pPageFrm )
         pPageFrm->SetLayoutInProgress( false );
-    // <--
 }
 
 void MA_FASTCALL lcl_RecalcTable( SwTabFrm& rTab,
@@ -1793,7 +1720,7 @@ void MA_FASTCALL lcl_RecalcTable( SwTabFrm& rTab,
 // GetIndPrev(), which did not work correctly for #i5947#
 bool lcl_NoPrev( const SwFrm& rFrm )
 {
-    // --> OD 2007-09-04 #i79774#, #b6596954#
+    // #i79774#
     // skip empty sections on investigation of direct previous frame.
     // use information, that at least one empty section is skipped in the following code.
     bool bSkippedDirectPrevEmptySection( false );
@@ -1819,7 +1746,6 @@ bool lcl_NoPrev( const SwFrm& rFrm )
     {
         return true;
     }
-    // <--
 
     // I do not have a direct prev, but I have an indirect prev.
     // In section frames I have to check if I'm located inside
@@ -1843,7 +1769,7 @@ bool lcl_NoPrev( const SwFrm& rFrm )
 
 #define KEEPTAB ( !GetFollow() && !IsFollow() )
 
-// --> OD 2005-09-28 #b6329202# - helper method to find next content frame of
+// - helper method to find next content frame of
 // a table frame and format it to assure keep attribute.
 // method return true, if a next content frame is formatted.
 // Precondition: The given table frame hasn't a follow and isn't a follow.
@@ -1887,8 +1813,8 @@ void SwTabFrm::MakeAll()
     if ( HasFollow() )
     {
         SwTabFrm* pFollowFrm = (SwTabFrm*)GetFollow();
-        ASSERT( !pFollowFrm->IsJoinLocked() || !pFollowFrm->IsRebuildLastLine(),
-                "SwTabFrm::MakeAll for master while follow is in RebuildLastLine()" )
+        OSL_ENSURE( !pFollowFrm->IsJoinLocked() || !pFollowFrm->IsRebuildLastLine(),
+                "SwTabFrm::MakeAll for master while follow is in RebuildLastLine()" );
         if ( pFollowFrm->IsJoinLocked() && pFollowFrm->IsRebuildLastLine() )
             return;
     }
@@ -1965,7 +1891,7 @@ void SwTabFrm::MakeAll()
     // table rows.
     bool bTryToSplit = true;
 
-    // --> FME 2006-02-16 #131283#
+    // #131283#
     // Indicates that two individual rows may keep together, based on the keep
     // attribute set at the first paragraph in the first cell.
     const bool bTableRowKeep = !bDontSplit && GetFmt()->GetDoc()->get(IDocumentSettingAccess::TABLE_ROW_KEEP);
@@ -2034,11 +1960,10 @@ void SwTabFrm::MakeAll()
             {
                 bMovedFwd = sal_True;
                 bCalcLowers = sal_True;
-                // --> OD 2009-08-12 #i99267#
+                // #i99267#
                 // reset <bSplit> after forward move to assure that follows
                 // can be joined, if further space is available.
                 bSplit = sal_False;
-                // <--
             }
 
         Point aOldPos( (Frm().*fnRect->fnGetPos)() );
@@ -2066,6 +1991,10 @@ void SwTabFrm::MakeAll()
                            pPre->GetAttrSet()->GetKeep().GetValue()) )
             {
                 bCalcLowers = sal_True;
+                // #i99267#
+                // reset <bSplit> after forward move to assure that follows
+                // can be joined, if further space is available.
+                bSplit = sal_False;
             }
         }
 
@@ -2095,7 +2024,6 @@ void SwTabFrm::MakeAll()
                 delete pAccess;
                 bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrm( *this ), sal_False );
-//                  GetFmt()->GetDoc()->GetDocShell()->IsReadOnly() ? sal_False : sal_True );
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
@@ -2160,27 +2088,17 @@ void SwTabFrm::MakeAll()
                     bLowersFormatted = sal_True;
                     if ( bKeep && KEEPTAB )
                     {
-                        // --> OD 2005-09-28 #b6329202#
+                        //
                         // Consider case that table is inside another table,
                         // because it has to be avoided, that superior table
                         // is formatted.
                         // Thus, find next content, table or section
                         // and, if a section is found, get its first
                         // content.
-//                        SwFrm *pNxt = FindNextCnt();
-//                        if( pNxt && pNxt->IsInTab() )
-//                            pNxt = pNxt->FindTabFrm();
-//                        if ( pNxt )
-//                        {
-//                            pNxt->Calc();
-//                            if ( !GetNext() )
-//                                bValidPos = sal_False;
-//                        }
                         if ( 0 != lcl_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
                             bValidPos = sal_False;
                         }
-                        // <--
                     }
                 }
             }
@@ -2341,13 +2259,12 @@ void SwTabFrm::MakeAll()
                 {
                     delete pAccess;
 
-                    // --> OD 2005-09-28 #b6329202#
+                    //
                     // Consider case that table is inside another table, because
                     // it has to be avoided, that superior table is formatted.
                     // Thus, find next content, table or section and, if a section
                     // is found, get its first content.
                     const SwFrm* pTmpNxt = lcl_FormatNextCntntForKeep( this );
-                    // <--
 
                     pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                     pAttrs = pAccess->Get();
@@ -2430,19 +2347,17 @@ void SwTabFrm::MakeAll()
              ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() || !pFirstNonHeadlineRow->ShouldRowKeepWithNext() ) &&
              ( !bDontSplit || !pIndPrev ) )
         {
-            // --> FME 2004-06-03 #i29438#
+            // #i29438#
             // Special DoNotSplit case:
             // We better avoid splitting of a row frame if we are inside a columned
             // section which has a height of 0, because this is not growable and thus
             // all kinds of unexpected things could happen.
-            const SwSectionFrm* pTmpSct = 0;
             if ( IsInSct() &&
-                (pTmpSct = FindSctFrm())->Lower()->IsColumnFrm() &&
+                (FindSctFrm())->Lower()->IsColumnFrm() &&
                 0 == (GetUpper()->Frm().*fnRect->fnGetHeight)()  )
             {
                 bTryToSplit = false;
             }
-            // <--
 
             // 1. Try: bTryToSplit = true  => Try to split the row.
             // 2. Try: bTryToSplit = false => Split the table between the rows.
@@ -2468,7 +2383,7 @@ void SwTabFrm::MakeAll()
                 // Set to false again as early as possible.
                 bLastRowHasToMoveToFollow = false;
 
-                // --> FME 2005-08-03 #i52781#
+                // #i52781#
                 // YaSC - Yet another special case:
                 // If our upper is inside a table cell which is not allowed
                 // to split, we do not try to split:
@@ -2480,7 +2395,6 @@ void SwTabFrm::MakeAll()
                     if ( pTmpRow && !static_cast<const SwRowFrm*>(pTmpRow)->IsRowSplitAllowed() )
                         continue;
                 }
-                // <--
 
                 sal_uInt16 nMinNumOfLines = nRepeat;
 
@@ -2525,8 +2439,8 @@ void SwTabFrm::MakeAll()
                     if( !bTryToSplit && !bSplitError && nUnSplitted > 0 )
                         --nUnSplitted;
 
-                    // --> FME 2004-06-09 #i29771# Two tries to split the table:
-                    // If an error occured during splitting. We start a second
+                    // #i29771# Two tries to split the table
+                    // If an error occurred during splitting. We start a second
                     // try, this time without splitting of table rows.
                     if ( bSplitError )
                     {
@@ -2534,12 +2448,11 @@ void SwTabFrm::MakeAll()
                             RemoveFollowFlowLine();
                     }
 
-                    // --> FME 2005-02-10 #119477#
+                    // #119477#
                     // If splitting the table was successfull or not,
                     // we do not want to have 'empty' follow tables.
                     if ( GetFollow() && !GetFollow()->GetFirstNonHeadlineRow() )
                         Join();
-                    // <--
 
 
                     // We want to restore the situation before the failed
@@ -2553,7 +2466,6 @@ void SwTabFrm::MakeAll()
                         bTryToSplit = false;
                         continue;
                     }
-                    // <--
 
                       bTryToSplit = !bSplitError;
 
@@ -2561,7 +2473,7 @@ void SwTabFrm::MakeAll()
                     //Follow gleich gueltig gemacht werden.
                     if ( GetFollow() )
                     {
-                        // --> OD 2007-11-30 #i80924#
+                        // #i80924#
                         // After a successful split assure that the first row
                         // is invalid. When graphics are present, this isn't hold.
                         // Note: defect i80924 could also be fixed, if it is
@@ -2571,7 +2483,6 @@ void SwTabFrm::MakeAll()
                         {
                             GetFollow()->GetLower()->InvalidatePos();
                         }
-                        // <--
                         SWRECTFNX( GetFollow() )
 
                         static sal_uInt8 nStack = 0;
@@ -2587,20 +2498,18 @@ void SwTabFrm::MakeAll()
                             pAttrs = pAccess->Get();
 
                             ((SwTabFrm*)GetFollow())->SetLowersFormatted(sal_False);
-                            // --> OD 2005-03-30 #i43913# - lock follow table
+                            // #i43913# - lock follow table
                             // to avoid its formatting during the format of
                             // its content.
                             const bool bOldJoinLock =  GetFollow()->IsJoinLocked();
                             GetFollow()->LockJoin();
-                            // <--
                             ::lcl_RecalcRow( static_cast<SwRowFrm&>(*GetFollow()->Lower()),
                                              (GetFollow()->GetUpper()->Frm().*fnRectX->fnGetBottom)() );
-                            // --> OD 2005-03-30 #i43913#
-                            // --> FME 2006-04-05 #i63632# Do not unlock the
+                            // #i43913#
+                            // #i63632# Do not unlock the
                             // follow if it wasn't locked before.
                             if ( !bOldJoinLock )
                                 GetFollow()->UnlockJoin();
-                            // <--
 
                             if ( !GetFollow()->GetFollow() )
                             {
@@ -2646,21 +2555,19 @@ void SwTabFrm::MakeAll()
             ((SwSectionFrm*)GetUpper()->GetUpper()->GetUpper())->MoveAllowed(this) )
             bMovedFwd = sal_False;
 
-        // --> FME 2004-06-09 #i29771# Reset bTryToSplit flag on change of upper
+        // #i29771# Reset bTryToSplit flag on change of upper
         const SwFrm* pOldUpper = GetUpper();
-        // <--
 
         //Mal sehen ob ich irgenwo Platz finde...
         if ( !bMovedFwd && !MoveFwd( bMakePage, sal_False ) )
             bMakePage = sal_False;
 
-        // --> FME 2004-06-09 #i29771# Reset bSplitError flag on change of upper
+        // #i29771# Reset bSplitError flag on change of upper
         if ( GetUpper() != pOldUpper )
         {
             bTryToSplit = true;
             nUnSplitted = 5;
         }
-        // <--
 
         SWREFRESHFN( this )
         bMovedFwd = bCalcLowers = sal_True;
@@ -2693,7 +2600,7 @@ void SwTabFrm::MakeAll()
 
         if ( bCalcLowers && IsValid() )
         {
-            // --> OD 2005-05-11 #i44910# - format of lower frames unnecessary
+            // #i44910# - format of lower frames unnecessary
             // and can cause layout loops, if table doesn't fit and isn't
             // allowed to split.
             SwTwips nDistToUpperPrtBottom =
@@ -2707,10 +2614,9 @@ void SwTabFrm::MakeAll()
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( false, "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
+                OSL_FAIL( "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
             }
 #endif
-            // <--
         }
 
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
@@ -2737,8 +2643,6 @@ void SwTabFrm::MakeAll()
 |*
 |*  Beschreibung:       Berechnet die Offsets, die durch FlyFrames
 |*                      entstehen.
-|*  Ersterstellung      MA/MIB 14. Apr. 99
-|*  Letzte Aenderung
 |*
 |*************************************************************************/
 sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
@@ -2755,7 +2659,6 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
     const IDocumentSettingAccess* pIDSA = GetFmt()->getIDocumentSettingAccess();
     const bool bWrapAllowed = pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
                                 ( !IsInFtn() && 0 == FindFooterOrHeader() );
-    // <--
 
     if ( pPage->GetSortedObjs() && bWrapAllowed )
     {
@@ -2774,7 +2677,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
             {
                 SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
-                // --> OD 2004-10-07 #i26945# - correction of conditions,
+                // #i26945# - correction of conditions,
                 // if Writer fly frame has to be considered:
                 // - no need to check, if top of Writer fly frame differs
                 //   from WEIT_WECH, because its also check, if the Writer
@@ -2790,25 +2693,11 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                 //   E.g., it could happen, that the fly frame is still registered
                 //   at the page frame, the table is on, but it's anchor character
                 //   text frame has already changed its page.
-                //if ( WEIT_WECH != (pFly->Frm().*fnRect->fnGetTop)() &&
-                //     pFly->IsFlyAtCntFrm() && aFlyRect.IsOver( aRect ) &&
-                //     // OD 25.02.2003 #i9040# - use '<=' instead of '<'
-                //     (*fnRect->fnYDiff)(
-                //            (pFly->GetAnchorFrm()->Frm().*fnRect->fnGetBottom)(),
-                //            (Frm().*fnRect->fnGetTop)() ) <= 0 &&
-                //     !IsAnLower( pFly ) && !pFly->IsAnLower( this ) &&
-                //     ( !pMyFly || pMyFly->IsAnLower( pFly ) ) &&
-                //     pPage->GetPhyPageNum() >=
-                //     pFly->GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() &&
-                //     // anchor should be in same page body/header/footer
-                //     ( pFly->GetAnchorFrm()->FindFooterOrHeader() ==
-                //       FindFooterOrHeader() ) )
                 const SwTxtFrm* pAnchorCharFrm = pFly->FindAnchorCharFrm();
                 bool bConsiderFly =
-                    // --> OD 2005-04-06 #i46807# - do not consider invalid
+                    // #i46807# - do not consider invalid
                     // Writer fly frames.
                     pFly->IsValid() &&
-                    // <--
                     // fly anchored at character
                     pFly->IsFlyAtCntFrm() &&
                     // fly overlaps with corresponding table rectangle
@@ -2820,14 +2709,13 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                     // table isn't lower of fly
                     !pFly->IsAnLower( this ) &&
                     // fly is lower of fly, the table is in
-                    // --> OD 2005-05-31 #123274# - correction:
+                    // #123274# - correction
                     // assure that fly isn't a lower of a fly, the table isn't in.
                     // E.g., a table in the body doesn't wrap around a graphic,
                     // which is inside a frame.
                     ( ( !pMyFly ||
                         pMyFly->IsAnLower( pFly ) ) &&
                       pMyFly == pFly->GetAnchorFrmContainingAnchPos()->FindFlyFrm() ) &&
-                    // <--
                     // anchor frame not on following page
                     pPage->GetPhyPageNum() >=
                       pFly->GetAnchorFrm()->FindPageFrm()->GetPhyPageNum() &&
@@ -2842,16 +2730,14 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                     const SwFrm* pThisHeaderFooterFrm = FindFooterOrHeader();
 
                     if ( pFlyHeaderFooterFrm != pThisHeaderFooterFrm &&
-                        // --> FME 2007-07-02 #148493# If bConsiderWrapOnObjPos is set,
+                        // #148493# If bConsiderWrapOnObjPos is set,
                         // we want to consider the fly if it is located in the header and
                         // the table is located in the body:
                          ( !bConsiderWrapOnObjPos || 0 != pThisHeaderFooterFrm || !pFlyHeaderFooterFrm->IsHeaderFrm() ) )
                         bConsiderFly = false;
-                        // <--
                 }
 
                 if ( bConsiderFly )
-                // <--
                 {
                     const SwFmtSurround   &rSur = pFly->GetFmt()->GetSurround();
                     const SwFmtHoriOrient &rHori= pFly->GetFmt()->GetHoriOrient();
@@ -2897,13 +2783,11 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 |*
 |*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea
 |*                      Die Fixsize wird hier nicht eingestellt.
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 18. Jun. 97
 |*
 |*************************************************************************/
 void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    ASSERT( pAttrs, "TabFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "TabFrm::Format, pAttrs ist 0." );
 
     SWRECTFN( this )
     if ( !bValidSize )
@@ -2932,7 +2816,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     long nRightOffset = Max( 0L, nTmpRight );
 
     SwTwips nLower = pAttrs->CalcBottomLine();
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     if ( IsCollapsingBorders() )
         nLower += GetBottomLineSize();
     // <-- collapsing
@@ -3077,11 +2961,6 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                         // OD 10.03.2003 #i9040# - consider right line attribute.
                         nRightSpacing = Max( nRightSpacing, ( nRightOffset + nRightLine ) );
                     }
-                    // OD 10.03.2003 #i9040# - do not hold wished table width.
-                    /*
-                    if ( !pAttrs->GetLRSpace().GetRight() )
-                        nRight = Max( nRight, nMax - (nWish + nLeft + nRight));
-                    */
                 }
                 break;
             case text::HoriOrientation::LEFT_AND_WIDTH:
@@ -3108,17 +2987,16 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
                 }
                 break;
             default:
-                ASSERT( sal_False, "Ungueltige orientation fuer Table." );
+                OSL_FAIL( "Ungueltige orientation fuer Table." );
         }
 
-        // --> OD 2004-07-15 #i26250# - extend bottom printing area, if table
+        // #i26250# - extend bottom printing area, if table
         // is last content inside a table cell.
         if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) &&
              GetUpper()->IsInTab() && !GetIndNext() )
         {
             nLower += pAttrs->GetULSpace().GetLower();
         }
-        // <--
         (this->*fnRect->fnSetYMargins)( nUpper, nLower );
         if( (nMax - MINLAY) < (nLeftSpacing + nRightSpacing) )
             (this->*fnRect->fnSetXMargins)( 0, 0 );
@@ -3170,9 +3048,6 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
 |*
 |*  SwTabFrm::GrowFrm()
 |*
-|*  Ersterstellung      MA 12. Mar. 93
-|*  Letzte Aenderung    MA 23. Sep. 96
-|*
 |*************************************************************************/
 SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
@@ -3198,10 +3073,9 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             pFrm = pFrm->GetNext();
         }
 
-        long nTmp = 0;
         if ( nReal < nDist )
         {
-            nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
+            long nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
 
             if ( IsRestrictTableGrowth() )
             {
@@ -3232,7 +3106,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             if ( GetNext()->IsCntntFrm() )
                 GetNext()->InvalidatePage( pPage );
         }
-        // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+        // #i28701# - Due to the new object positioning the
         // frame on the next page/column can flow backward (e.g. it was moved
         // forward due to the positioning of its objects ). Thus, invalivate this
         // next frame, if document compatibility option 'Consider wrapping style
@@ -3241,7 +3115,6 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         {
             InvalidateNextPos();
         }
-        // <--
         _InvalidateAll();
         InvalidatePage( pPage );
         SetComplete();
@@ -3256,9 +3129,6 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 /*************************************************************************
 |*
 |*    SwTabFrm::Modify()
-|*
-|*    Ersterstellung    MA 14. Mar. 93
-|*    Letzte Aenderung  MA 06. Dec. 96
 |*
 |*************************************************************************/
 void SwTabFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
@@ -3292,8 +3162,6 @@ void SwTabFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     {
         SwPageFrm *pPage = FindPageFrm();
         InvalidatePage( pPage );
-//      if ( nInvFlags & 0x01 )
-//          SetCompletePaint();
         if ( nInvFlags & 0x02 )
             _InvalidatePrt();
         if ( nInvFlags & 0x40 )
@@ -3419,9 +3287,6 @@ void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 |*
 |*    SwTabFrm::GetInfo()
 |*
-|*    Ersterstellung    MA 06. Dec. 96
-|*    Letzte Aenderung  MA 26. Jun. 98
-|*
 |*************************************************************************/
 sal_Bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
@@ -3453,9 +3318,6 @@ sal_Bool SwTabFrm::GetInfo( SfxPoolItem &rHnt ) const
 |*
 |*    SwTabFrm::FindLastCntnt()
 |*
-|*    Ersterstellung    MA 13. Apr. 93
-|*    Letzte Aenderung  MA 15. May. 98
-|*
 |*************************************************************************/
 SwCntntFrm *SwTabFrm::FindLastCntnt()
 {
@@ -3483,10 +3345,10 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 SwSectionFrm* pSect = pRet->FindSctFrm();
-                ASSERT( pSect, "Wo kommt denn die Spalte her?")
-                ASSERT( IsAnLower( pSect ), "Gespaltene Zelle?" );
+                OSL_ENSURE( pSect, "Wo kommt denn die Spalte her?");
+                OSL_ENSURE( IsAnLower( pSect ), "Gespaltene Zelle?" );
 #endif
                 return pRet->FindSctFrm()->FindLastCntnt();
             }
@@ -3495,7 +3357,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // pRet may be a cell frame without a lower (cell has been split).
             // We have to find the last content the hard way:
             //
-            ASSERT( pRet->IsCellFrm(), "SwTabFrm::FindLastCntnt failed" )
+            OSL_ENSURE( pRet->IsCellFrm(), "SwTabFrm::FindLastCntnt failed" );
             const SwFrm* pRow = pRet->GetUpper();
             while ( pRow && !pRow->GetUpper()->IsTabFrm() )
                 pRow = pRow->GetUpper();
@@ -3531,9 +3393,6 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
 |*
 |*  SwTabFrm::GetLeaf()
 |*
-|*  Ersterstellung      MA 19. Mar. 93
-|*  Letzte Aenderung    MA 25. Apr. 95
-|*
 |*************************************************************************/
 SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
 {
@@ -3556,8 +3415,6 @@ SwLayoutFrm *SwTabFrm::GetLeaf( MakePageType eMakePage, sal_Bool bFwd )
 |*  SwTabFrm::ShouldBwdMoved()
 |*
 |*  Beschreibung        Returnwert sagt ob der Frm verschoben werden sollte
-|*  Ersterstellung      MA 10. Jul. 95
-|*  Letzte Aenderung    MA 04. Mar. 97
 |*
 |*************************************************************************/
 sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &rReformat )
@@ -3610,7 +3467,7 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
                     }
                     bMoveAnyway = BwdMoveNecessary( pNewPage, aRect) > 1;
 
-                    // --> FME 2006-01-20 #i54861# Due to changes made in PrepareMake,
+                    // #i54861# Due to changes made in PrepareMake,
                     // the tabfrm may not have a correct position. Therefore
                     // it is possible that pNewUpper->Prt().Height == 0. In this
                     // case the above calculation of nSpace might give wrong
@@ -3620,7 +3477,6 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
                     const SwTwips nTmpSpace = (aRect.*fnRectX->fnGetHeight)();
                     if ( (pNewUpper->Prt().*fnRectX->fnGetHeight)() > 0 || nTmpSpace <= 0 )
                         nSpace = nTmpSpace;
-                    // <--
 
                     const ViewShell *pSh = getRootFrm()->GetCurrShell();
                     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
@@ -3637,7 +3493,7 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
             return rReformat = sal_True;
         else if ( !bLockBackMove && nSpace > 0 )
         {
-            // --> OD 2004-10-05 #i26945# - check, if follow flow line
+            // #i26945# - check, if follow flow line
             // contains frame, which are moved forward due to its object
             // positioning.
             SwRowFrm* pFirstRow = GetFirstNonHeadlineRow();
@@ -3648,16 +3504,14 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
             {
                 return sal_False;
             }
-            // <--
             SwTwips nTmpHeight = CalcHeightOfFirstContentLine();
 
-            // --> FME 2005-01-17 #118840#
+            // #118840#
             // For some mysterious reason, I changed the good old
             // 'return nHeight <= nSpace' to 'return nTmpHeight < nSpace'.
             // This obviously results in problems with table frames in
             // sections. Remember: Every twip is sacred.
             return nTmpHeight <= nSpace;
-            // <--
         }
     }
     return sal_False;
@@ -3667,13 +3521,10 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
 |*
 |*  SwTabFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 |*************************************************************************/
 void SwTabFrm::Cut()
 {
-    ASSERT( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
     SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
@@ -3731,14 +3582,13 @@ void SwTabFrm::Cut()
     Remove();
     if ( pUp )
     {
-        ASSERT( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
+        OSL_ENSURE( !pUp->IsFtnFrm(), "Tabelle in Fussnote." );
         SwSectionFrm *pSct = 0;
-        // --> OD 2006-01-04 #126020# - adjust check for empty section
-        // --> OD 2006-02-01 #130797# - correct fix #126020#
+        // #126020# - adjust check for empty section
+        // #130797# - correct fix #126020#
         if ( !pUp->Lower() && pUp->IsInSct() &&
              !(pSct = pUp->FindSctFrm())->ContainsCntnt() &&
              !pSct->ContainsAny( true ) )
-        // <--
         {
             if ( pUp->GetUpper() )
             {
@@ -3762,17 +3612,14 @@ void SwTabFrm::Cut()
 |*
 |*  SwTabFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 |*************************************************************************/
 void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     //In den Baum einhaengen.
@@ -3833,9 +3680,6 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 |*
 |*  SwTabFrm::Prepare()
 |*
-|*  Created        AMA 01/10/02
-|*  Last Change    AMA 01/10/02
-|*
 |*************************************************************************/
 void SwTabFrm::Prepare( const PrepareHint eHint, const void *, sal_Bool )
 {
@@ -3847,15 +3691,12 @@ void SwTabFrm::Prepare( const PrepareHint eHint, const void *, sal_Bool )
 |*
 |*  SwRowFrm::SwRowFrm(), ~SwRowFrm()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 30. May. 96
-|*
 |*************************************************************************/
 SwRowFrm::SwRowFrm( const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent ):
     SwLayoutFrm( rLine.GetFrmFmt(), pSib ),
     pTabLine( &rLine ),
     pFollowRow( 0 ),
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     mnTopMarginForLowers( 0 ),
     mnBottomMarginForLowers( 0 ),
     mnBottomLineSize( 0 ),
@@ -3894,9 +3735,6 @@ SwRowFrm::~SwRowFrm()
 |*
 |*  SwRowFrm::RegistFlys()
 |*
-|*  Ersterstellung      MA 08. Jul. 93
-|*  Letzte Aenderung    MA 08. Jul. 93
-|*
 |*************************************************************************/
 void SwRowFrm::RegistFlys( SwPageFrm *pPage )
 {
@@ -3906,9 +3744,6 @@ void SwRowFrm::RegistFlys( SwPageFrm *pPage )
 /*************************************************************************
 |*
 |*    SwRowFrm::Modify()
-|*
-|*    Ersterstellung    MA 12. Nov. 97
-|*    Letzte Aenderung  MA 12. Nov. 97
 |*
 |*************************************************************************/
 void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
@@ -3933,10 +3768,9 @@ void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         {
             const bool bInFirstNonHeadlineRow = pTab->IsFollow() &&
                                                 this == pTab->GetFirstNonHeadlineRow();
-            // --> FME 2004-10-27 #i35063#
+            // #i35063#
             // Invalidation required is pRow is last row
             if ( bInFirstNonHeadlineRow || !GetNext() )
-            // <--
             {
                 if ( bInFirstNonHeadlineRow )
                     pTab = pTab->FindMaster();
@@ -3954,9 +3788,6 @@ void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 |*
 |*  SwRowFrm::MakeAll()
 |*
-|*  Ersterstellung      MA 01. Mar. 94
-|*  Letzte Aenderung    MA 01. Mar. 94
-|*
 |*************************************************************************/
 void SwRowFrm::MakeAll()
 {
@@ -3969,9 +3800,6 @@ void SwRowFrm::MakeAll()
 |*
 |*  SwRowFrm::Format()
 |*
-|*  Ersterstellung      MA 13. Mar. 93
-|*  Letzte Aenderung    MA 20. Jun. 96
-|*
 |*************************************************************************/
 long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
 {
@@ -3981,13 +3809,13 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
             ((SwSectionFrm*)pFrm)->ContainsCntnt() : pFrm;
     while( pTmp )
     {
-        // --> OD 2004-10-08 #i26945# - consider follow text frames
+        // #i26945# - consider follow text frames
         const SwSortedObjs* pObjs( 0L );
         bool bIsFollow( false );
         if ( pTmp->IsTxtFrm() && static_cast<const SwTxtFrm*>(pTmp)->IsFollow() )
         {
             const SwFrm* pMaster;
-            // --> FME 2005-04-01 #i46450# Master does not necessarily have
+            // #i46450# Master does not necessarily have
             // to exist if this function is called from JoinFrm() ->
             // Cut() -> Shrink()
             const SwTxtFrm* pTmpFrm = static_cast<const SwTxtFrm*>(pTmp);
@@ -4009,20 +3837,18 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
             pObjs = pTmp->GetDrawObjs();
         }
         if ( pObjs )
-        // <--
         {
             for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                // --> OD 2004-10-08 #i26945# - if <pTmp> is follow, the
+                // #i26945# - if <pTmp> is follow, the
                 // anchor character frame has to be <pTmp>.
                 if ( bIsFollow &&
                      const_cast<SwAnchoredObject*>(pAnchoredObj)->FindAnchorCharFrm() != pTmp )
                 {
                     continue;
                 }
-                // <--
-                // --> OD 2004-10-04 #i26945# - consider also drawing objects
+                // #i26945# - consider also drawing objects
                 {
                     // OD 30.09.2003 #i18732# - only objects, which follow
                     // the text flow have to be considered.
@@ -4051,7 +3877,7 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                             nHeight = Max( nHeight, nDistOfFlyBottomToAnchorTop + nFrmDiff -
                                             (pFrm->Frm().*fnRect->fnGetHeight)() );
 
-                            // --> FME 2006-01-24 #i56115# The first height calculation
+                            // #i56115# The first height calculation
                             // gives wrong results if pFrm->Prt().Y() > 0. We do
                             // a second calculation based on the actual rectangles of
                             // pFrm and pAnchoredObj, and use the maximum of the results.
@@ -4063,11 +3889,9 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                                                                             (pFrm->Frm().*fnRect->fnGetBottom)() );
 
                             nHeight = Max( nHeight, nDistOfFlyBottomToAnchorTop2 );
-                            // <--
                         }
                     }
                 }
-                // <--
             }
         }
         if( !pFrm->IsSctFrm() )
@@ -4085,7 +3909,7 @@ SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttr
     SwTwips nTopSpace = 0;
     SwTwips nBottomSpace = 0;
 
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     if ( pTab->IsCollapsingBorders() && rCell.Lower() && !rCell.Lower()->IsRowFrm() )
     {
         nTopSpace    = ((SwRowFrm*)rCell.GetUpper())->GetTopMarginForLowers();
@@ -4110,7 +3934,7 @@ SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttr
 }
 
 
-// --> OD 2004-10-04 #i26945# - add parameter <_bConsiderObjs> in order to
+// #i26945# - add parameter <_bConsiderObjs> in order to
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
 SwTwips MA_FASTCALL lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
@@ -4129,22 +3953,20 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
             // and else-body
             if ( pLow->IsRowFrm() )
             {
-                // --> OD 2004-10-04 #i26945#
+                // #i26945#
                 nHeight += ::lcl_CalcMinRowHeight( static_cast<const SwRowFrm*>(pLow),
                                                    _bConsiderObjs );
-                // <--
             }
             else
             {
                 long nLowHeight = (pLow->Frm().*fnRect->fnGetHeight)();
                 nHeight += nLowHeight;
-                // --> OD 2004-10-04 #i26945#
+                // #i26945#
                 if ( _bConsiderObjs )
                 {
                     nFlyAdd = Max( 0L, nFlyAdd - nLowHeight );
                     nFlyAdd = Max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
                 }
-                // <--
             }
 
             pLow = pLow->GetNext();
@@ -4170,7 +3992,7 @@ SwTwips MA_FASTCALL lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
 }
 
 // OD 2004-02-18 #106629# - correct type of 1st parameter
-// --> OD 2004-10-04 #i26945# - add parameter <_bConsiderObjs> in order to control,
+// #i26945# - add parameter <_bConsiderObjs> in order to control,
 // if floating screen objects have to be considered for the minimal cell height
 SwTwips MA_FASTCALL lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
                                           const sal_Bool _bConsiderObjs )
@@ -4181,7 +4003,7 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
 
     if ( _pRow->HasFixSize() && !_pRow->IsRowSpanLine() )
     {
-        ASSERT( ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size" )
+        OSL_ENSURE( ATT_FIX_SIZE == rSz.GetHeightSizeType(), "pRow claims to have fixed size" );
         return rSz.GetHeight();
     }
 
@@ -4227,7 +4049,7 @@ SwTwips MA_FASTCALL lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
     return nHeight;
 }
 
-// --> collapsing borders FME 2005-05-27 #i29550#
+// #i29550#
 
 // Calculate the maximum of (TopLineSize + TopLineDist) over all lowers:
 sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
@@ -4325,7 +4147,7 @@ sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
 void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 {
     SWRECTFN( this )
-    ASSERT( pAttrs, "SwRowFrm::Format ohne Attrs." );
+    OSL_ENSURE( pAttrs, "SwRowFrm::Format ohne Attrs." );
 
     const sal_Bool bFix = bFixSize;
 
@@ -4339,7 +4161,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
         aPrt.Width ( aFrm.Width() );
         aPrt.Height( aFrm.Height() );
 
-        // --> collapsing borders FME 2005-05-27 #i29550#
+        // #i29550#
         // Here we calculate the top-printing area for the lower cell frames
         SwTabFrm* pTabFrm = FindTabFrm();
         if ( pTabFrm->IsCollapsingBorders() )
@@ -4352,7 +4174,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 
             const SwRowFrm* pPreviousRow = 0;
 
-            // --> FME 2004-09-14 #i32456#
+            // #i32456#
             // In order to calculate the top printing area for the lower cell
             // frames, we have to find the 'previous' row frame and compare
             // the bottom values of the 'previous' row with the 'top' values
@@ -4394,19 +4216,17 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
                 SwIterator<SwRowFrm,SwFmt> aIter( *pPrevTabLine->GetFrmFmt() );
                 for ( SwRowFrm* pRow = aIter.First(); pRow; pRow = aIter.Next() )
                 {
-                    // --> OD 2004-11-23 #115759# - do *not* take repeated
+                    // #115759# - do *not* take repeated
                     // headlines, because during split of table it can be
                     // invalid and thus can't provide correct border values.
                     if ( pRow->GetTabLine() == pPrevTabLine &&
                          !pRow->IsRepeatedHeadline() )
-                    // <--
                     {
                         pPreviousRow = pRow;
                         break;
                     }
                 }
             }
-            // <--
 
             sal_uInt16 nTopPrtMargin = nTopSpace;
             if ( pPreviousRow )
@@ -4447,20 +4267,19 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = sal_True;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if ( HasFixSize() )
         {
             const SwFmtFrmSize &rFrmSize = GetFmt()->GetFrmSize();
-            ASSERT( rFrmSize.GetSize().Height() > 0, "Hat ihn" );
+            OSL_ENSURE( rFrmSize.GetSize().Height() > 0, "Hat ihn" );
         }
 #endif
         const SwTwips nDiff = (Frm().*fnRect->fnGetHeight)() -
                               ( HasFixSize() && !IsRowSpanLine()
                                 ? pAttrs->GetSize().Height()
-                                // --> OD 2004-10-04 #i26945#
+                                // #i26945#
                                 : ::lcl_CalcMinRowHeight( this,
                                     FindTabFrm()->IsConsiderObjsForMinCellHeight() ) );
-                                // <--
         if ( nDiff )
         {
             bFixSize = sal_False;
@@ -4495,9 +4314,6 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 /*************************************************************************
 |*
 |*  SwRowFrm::AdjustCells()
-|*
-|*  Ersterstellung      MA 10. Aug. 93
-|*  Letzte Aenderung    MA 16. Dec. 96
 |*
 |*************************************************************************/
 void SwRowFrm::AdjustCells( const SwTwips nHeight, const sal_Bool bHeight )
@@ -4600,9 +4416,6 @@ void SwRowFrm::AdjustCells( const SwTwips nHeight, const sal_Bool bHeight )
 |*
 |*  SwRowFrm::Cut()
 |*
-|*  Ersterstellung      MA 12. Nov. 97
-|*  Letzte Aenderung    MA 12. Nov. 97
-|*
 |*************************************************************************/
 void SwRowFrm::Cut()
 {
@@ -4612,7 +4425,7 @@ void SwRowFrm::Cut()
         pTab->FindMaster()->InvalidatePos();
     }
 
-    // --> OD 2010-02-17 #i103961#
+    // #i103961#
     // notification for accessibility
     {
         SwRootFrm *pRootFrm = getRootFrm();
@@ -4624,7 +4437,7 @@ void SwRowFrm::Cut()
                 SwFrm* pCellFrm( GetLower() );
                 while ( pCellFrm )
                 {
-                    ASSERT( pCellFrm->IsCellFrm(),
+                    OSL_ENSURE( pCellFrm->IsCellFrm(),
                             "<SwRowFrm::Cut()> - unexpected type of SwRowFrm lower." );
                     pVSh->Imp()->DisposeAccessibleFrm( pCellFrm );
 
@@ -4633,7 +4446,6 @@ void SwRowFrm::Cut()
             }
         }
     }
-    // <--
 
     SwLayoutFrm::Cut();
 }
@@ -4641,9 +4453,6 @@ void SwRowFrm::Cut()
 /*************************************************************************
 |*
 |*  SwRowFrm::GrowFrm()
-|*
-|*  Ersterstellung      MA 15. Mar. 93
-|*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
 
@@ -4665,10 +4474,10 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     }
     else
     {
-        ASSERT( GetUpper()->IsCellFrm(), "RowFrm->GetUpper neither table nor cell" )
+        OSL_ENSURE( GetUpper()->IsCellFrm(), "RowFrm->GetUpper neither table nor cell" );
         bRestrictTableGrowth = GetFollowRow() && bHasFollowFlowLine;
-        ASSERT( !bRestrictTableGrowth || !GetNext(),
-                "GetFollowRow for row frame that has a Next" )
+        OSL_ENSURE( !bRestrictTableGrowth || !GetNext(),
+                "GetFollowRow for row frame that has a Next" );
 
         //
         // There may still be some space left in my direct upper:
@@ -4718,9 +4527,6 @@ SwTwips SwRowFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwRowFrm::ShrinkFrm()
 |*
-|*  Ersterstellung      MA 15. Mar. 93
-|*  Letzte Aenderung    MA 20. Jun. 96
-|*
 |*************************************************************************/
 SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
@@ -4748,10 +4554,9 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         // minimum height.
         if( nMinHeight < (Frm().*fnRect->fnGetHeight)() )
         {
-            // --> OD 2004-10-04 #i26945#
-            ASSERT( FindTabFrm(), "<SwRowFrm::ShrinkFrm(..)> - no table frame -> crash." );
+            // #i26945#
+            OSL_ENSURE( FindTabFrm(), "<SwRowFrm::ShrinkFrm(..)> - no table frame -> crash." );
             const bool bConsiderObjs( FindTabFrm()->IsConsiderObjsForMinCellHeight() );
-            // <--
             nMinHeight = lcl_CalcMinRowHeight( this, bConsiderObjs );
         }
 
@@ -4825,7 +4630,7 @@ bool SwRowFrm::IsRowSplitAllowed() const
     // Fixed size rows are never allowed to split:
     if ( HasFixSize() )
     {
-        ASSERT( ATT_FIX_SIZE == GetFmt()->GetFrmSize().GetHeightSizeType(), "pRow claims to have fixed size" )
+        OSL_ENSURE( ATT_FIX_SIZE == GetFmt()->GetFrmSize().GetHeightSizeType(), "pRow claims to have fixed size" );
         return false;
     }
 
@@ -4862,9 +4667,6 @@ bool SwRowFrm::ShouldRowKeepWithNext() const
 /*************************************************************************
 |*
 |*  SwCellFrm::SwCellFrm(), ~SwCellFrm()
-|*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 30. May. 96
 |*
 |*************************************************************************/
 SwCellFrm::SwCellFrm( const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent ) :
@@ -4921,9 +4723,6 @@ SwCellFrm::~SwCellFrm()
 |*
 |*  SwCellFrm::Format()
 |*
-|*  Ersterstellung      MA 09. Mar. 93
-|*  Letzte Aenderung    MA 29. Jan. 98
-|*
 |*************************************************************************/
 sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
 {
@@ -4954,7 +4753,7 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                 for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
-                    // --> OD 2004-10-08 #i26945# - check, if anchored object
+                    // #i26945# - check, if anchored object
                     // is lower of layout frame by checking, if the anchor
                     // frame, which contains the anchor position, is a lower
                     // of the layout frame.
@@ -4962,8 +4761,7 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                     {
                         continue;
                     }
-                    // <--
-                    // --> OD 2005-08-08 #i52904# - distinguish between anchored
+                    // #i52904# - distinguish between anchored
                     // objects, whose vertical position depends on its anchor
                     // frame and whose vertical position is independent
                     // from its anchor frame.
@@ -4987,13 +4785,12 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                         // which are anchored to-paragraph/to-character, if
                         // the wrapping style influence has to be considered
                         // on the object positioning.
-                        // --> OD 2005-08-08 #i52904# - no direct move of objects,
+                        // #i52904# - no direct move of objects,
                         // whose vertical position doesn't depend on anchor frame.
                         const bool bDirectMove =
                                 WEIT_WECH != pFly->Frm().Top() &&
                                 bVertPosDepOnAnchor &&
                                 !pFly->ConsiderObjWrapInfluenceOnObjPos();
-                        // <--
                         if ( bDirectMove )
                         {
                             (pFly->Frm().*fnRect->fnSubTop)( -lDiff );
@@ -5003,22 +4800,19 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                             // instance, which represents the Writer fly frame in
                             // the drawing layer
                             pFly->GetVirtDrawObj()->SetChanged();
-                            // <--
-                            // --> OD 2006-10-13 #i58280#
+                            // #i58280#
                             pFly->InvalidateObjRectWithSpaces();
-                            // <--
                         }
 
                         if ( pFly->IsFlyInCntFrm() )
                         {
                             static_cast<SwFlyInCntFrm*>(pFly)->AddRefOfst( lDiff );
-                            // --> OD 2004-12-02 #115759# - reset current relative
+                            // #115759# - reset current relative
                             // position to get re-positioned, if not directly moved.
                             if ( !bDirectMove )
                             {
                                 pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
                             }
-                            // <--
                         }
                         else if( pFly->IsAutoPos() )
                         {
@@ -5027,18 +4821,17 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                             // <mnLastTopOfLine> has also been adjusted.
                             pFly->AddLastTopOfLineY( lDiff );
                         }
-                        // --> OD 2004-11-05 #i26945# - re-registration at
+                        // #i26945# - re-registration at
                         // page frame of anchor frame, if table frame isn't
                         // a follow table and table frame isn't in its
                         // rebuild of last line.
                         const SwTabFrm* pTabFrm = pLay->FindTabFrm();
-                        // --> OD 2004-11-23 #115759#
+                        // #115759#
                         // - save: check, if table frame is found.
                         if ( pTabFrm &&
                              !( pTabFrm->IsFollow() &&
                                 pTabFrm->FindMaster()->IsRebuildLastLine() ) &&
                              pFly->IsFlyFreeFrm() )
-                        // <--
                         {
                             SwPageFrm* pPageFrm = pFly->GetPageFrm();
                             SwPageFrm* pPageOfAnchor = pFrm->FindPageFrm();
@@ -5051,28 +4844,26 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                                     pPageOfAnchor->AppendFlyToPage( pFly );
                             }
                         }
-                        // <--
                         // OD 2004-05-11 #i28701# - Because of the introduction
                         // of new positionings and alignments (e.g. aligned at
                         // page area, but anchored at-character), the position
                         // of the Writer fly frame has to be invalidated.
                         pFly->InvalidatePos();
 
-                        // --> OD 2004-11-04 #i26945# - follow-up of #i3317#
+                        // #i26945# - follow-up of #i3317#
                         // No arrangement of lowers, if Writer fly frame isn't
                         // moved
                         if ( bDirectMove &&
                              ::lcl_ArrangeLowers( pFly,
                                                   (pFly->*fnRect->fnGetPrtTop)(),
                                                   bInva ) )
-                        // <--
                         {
                             pFly->SetCompletePaint();
                         }
                     }
                     else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
                     {
-                        // --> OD 2004-11-05 #i26945#
+                        // #i26945#
                         const SwTabFrm* pTabFrm = pLay->FindTabFrm();
                         if ( pTabFrm &&
                              !( pTabFrm->IsFollow() &&
@@ -5092,11 +4883,11 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                                 pPageOfAnchor->AppendDrawObjToPage( *pAnchoredObj );
                             }
                         }
-                        // --> OD 2004-07-01 #i28701# - adjust last character
+                        // #i28701# - adjust last character
                         // rectangle and last top of line.
                         pAnchoredObj->AddLastCharY( lDiff );
                         pAnchoredObj->AddLastTopOfLineY( lDiff );
-                        // --> OD 2005-08-08 #i52904# - re-introduce direct move
+                        // #i52904# - re-introduce direct move
                         // of drawing objects
                         const bool bDirectMove =
                                 static_cast<const SwDrawFrmFmt&>(pAnchoredObj->GetFrmFmt()).IsPosAttrSet() &&
@@ -5113,17 +4904,14 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                             {
                                 pAnchoredObj->DrawObj()->Move( Size( 0, lDiff ) );
                             }
-                            // --> OD 2006-10-13 #i58280#
+                            // #i58280#
                             pAnchoredObj->InvalidateObjRectWithSpaces();
-                            // <--
                         }
-                        // <--
                         pAnchoredObj->InvalidateObjPos();
                     }
                     else
                     {
-                        ASSERT( false,
-                                "<lcl_ArrangeLowers(..)> - unknown type of anchored object!" );
+                        OSL_FAIL( "<lcl_ArrangeLowers(..)> - unknown type of anchored object!" );
                     }
                 }
             }
@@ -5140,15 +4928,14 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
         // not fit into the cell anymore:
         SwTwips nDistanceToUpperPrtBottom =
             (pFrm->Frm().*fnRect->fnBottomDist)( (pLay->*fnRect->fnGetPrtBottom)());
-        // --> OD 2006-01-19 #i56146# - Revise fix of issue #i26945#
+        // #i56146# - Revise fix of issue #i26945#
         // do *not* consider content inside fly frames, if it's an undersized paragraph.
-        // --> OD 2004-10-08 #i26945# - consider content inside fly frames
+        // #i26945# - consider content inside fly frames
         if ( nDistanceToUpperPrtBottom < 0 &&
              ( ( pFrm->IsInFly() &&
                  ( !pFrm->IsTxtFrm() ||
                    !static_cast<SwTxtFrm*>(pFrm)->IsUndersized() ) ) ||
                pFrm->IsInSplitTableRow() ) )
-        // <--
         {
             pFrm->InvalidatePos();
         }
@@ -5160,7 +4947,7 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
 
 void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    ASSERT( pAttrs, "CellFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "CellFrm::Format, pAttrs ist 0." );
     const SwTabFrm* pTab = FindTabFrm();
     SWRECTFN( pTab )
 
@@ -5172,7 +4959,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         if ( Lower() )
         {
             SwTwips nTopSpace, nBottomSpace, nLeftSpace, nRightSpace;
-            // --> collapsing borders FME 2005-05-27 #i29550#
+            // #i29550#
             if ( pTab->IsCollapsingBorders() && !Lower()->IsRowFrm()  )
             {
                 const SvxBoxItem& rBoxItem = pAttrs->GetBox();
@@ -5194,11 +4981,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             (this->*fnRect->fnSetYMargins)( nTopSpace, nBottomSpace );
         }
     }
-    // --> OD 2004-10-04 #i26945#
+    // #i26945#
     long nRemaining = GetTabBox()->getRowSpan() >= 1 ?
                       ::lcl_CalcMinCellHeight( this, pTab->IsConsiderObjsForMinCellHeight(), pAttrs ) :
                       0;
-    // <--
     if ( !bValidSize )
     {
         bValidSize = sal_True;
@@ -5219,9 +5005,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             const SwTwips nWish = pTab->GetFmt()->GetFrmSize().GetWidth();
             nWidth = pAttrs->GetSize().Width();
 
-            ASSERT( nWish, "Tabelle ohne Breite?" );
-            ASSERT( nWidth <= nWish, "Zelle breiter als Tabelle." );
-            ASSERT( nWidth > 0, "Box without width" );
+            OSL_ENSURE( nWish, "Tabelle ohne Breite?" );
+            OSL_ENSURE( nWidth <= nWish, "Zelle breiter als Tabelle." );
+            OSL_ENSURE( nWidth > 0, "Box without width" );
 
             const long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
             if ( nWish != nPrtWidth )
@@ -5273,7 +5059,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         }
         else
         {
-            ASSERT( pAttrs->GetSize().Width() > 0, "Box without width" );
+            OSL_ENSURE( pAttrs->GetSize().Width() > 0, "Box without width" );
             nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
             SwFrm *pPre = GetUpper()->Lower();
             while ( pPre != this )
@@ -5321,25 +5107,22 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 
     SwPageFrm* pPg = 0;
     if ( !FindTabFrm()->IsRebuildLastLine() && text::VertOrientation::NONE != rOri.GetVertOrient() &&
-    // --> OD 2008-07-16 #158225# no vertical alignment of covered cells
+    // #158225# no vertical alignment of covered cells
          !IsCoveredCell() &&
-    // <--
-    // --> FME 2004-06-29 #116532# Do not consider vertical alignment in grid mode
+    // #116532# Do not consider vertical alignment in grid mode
          !(pPg = FindPageFrm())->HasGrid() )
-    // <--
     {
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
-            //ASSERT fuer HTML-Import!
-            ASSERT( !this, "VAlign an Zelle ohne Inhalt" );
+            // OSL_ENSURE(fuer HTML-Import!
+            OSL_ENSURE( !this, "VAlign an Zelle ohne Inhalt" );
             return;
         }
         sal_Bool bVertDir = sal_True;
-        // --> OD 2005-03-30 #i43913# - no vertical alignment, if wrapping
+        // #i43913# - no vertical alignment, if wrapping
         // style influence is considered on object positioning and
         // an object is anchored inside the cell.
         const bool bConsiderWrapOnObjPos( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) );
-        // <--
         //Keine Ausrichtung wenn Rahmen mit Umlauf in die Zelle ragen.
         if ( pPg->GetSortedObjs() )
         {
@@ -5365,17 +5148,16 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                         }
 
                         const SwFrm* pAnch = pAnchoredObj->GetAnchorFrm();
-                        // --> OD 2005-03-30 #i43913#
-                        // --> OD 2005-08-08 #i52904# - no vertical alignment,
+                        // #i43913#
+                        // #i52904# - no vertical alignment,
                         // if object, anchored inside cell, has temporarly
                         // consider its wrapping style on object positioning.
-                        // --> FME 2006-02-01 #i58806# - no vertical alignment
+                        // #i58806# - no vertical alignment
                         // if object does not follow the text flow.
                         if ( bConsiderWrapOnObjPos ||
                              !IsAnLower( pAnch ) ||
                              pAnchoredObj->IsTmpConsiderWrapInfluence() ||
                              !rAnchoredObjFrmFmt.GetFollowTextFlow().GetValue() )
-                        // <--
                         {
                             bVertDir = sal_False;
                             break;
@@ -5389,10 +5171,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         if( ( bVertDir && ( nRemaining -= lcl_CalcTopAndBottomMargin( *this, *pAttrs ) ) < nPrtHeight ) ||
             (Lower()->Frm().*fnRect->fnGetTop)() != (this->*fnRect->fnGetPrtTop)() )
         {
-            long lTopOfst = 0,
-                    nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
+               long nDiff = (Prt().*fnRect->fnGetHeight)() - nRemaining;
             if ( nDiff >= 0 )
             {
+                long lTopOfst = 0;
                 if ( bVertDir )
                 {
                     switch ( rOri.GetVertOrient() )
@@ -5423,9 +5205,6 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 /*************************************************************************
 |*
 |*    SwCellFrm::Modify()
-|*
-|*    Ersterstellung    MA 20. Dec. 96
-|*    Letzte Aenderung  MA 20. Dec. 96
 |*
 |*************************************************************************/
 
@@ -5473,7 +5252,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
         CheckDirChange();
     }
 
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     if ( bAttrSetChg &&
          SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_BOX, sal_False, &pItem ) )
     {
@@ -5516,7 +5295,7 @@ long SwCellFrm::GetLayoutRowSpan() const
     return  nRet;
 }
 
-// --> OD 2010-02-17 #i103961#
+// #i103961#
 void SwCellFrm::Cut()
 {
     // notification for accessibility
@@ -5534,7 +5313,6 @@ void SwCellFrm::Cut()
 
     SwLayoutFrm::Cut();
 }
-// <--
 
 //
 // Helper functions for repeated headlines:
@@ -5545,8 +5323,8 @@ void SwCellFrm::Cut()
  */
 bool SwTabFrm::IsInHeadline( const SwFrm& rFrm ) const
 {
-    ASSERT( IsAnLower( &rFrm ) && rFrm.IsInTab(),
-             "SwTabFrm::IsInHeadline called for frame not lower of table" )
+    OSL_ENSURE( IsAnLower( &rFrm ) && rFrm.IsInTab(),
+             "SwTabFrm::IsInHeadline called for frame not lower of table" );
 
     const SwFrm* pTmp = &rFrm;
     while ( !pTmp->GetUpper()->IsTabFrm() )
@@ -5605,20 +5383,19 @@ bool SwTabFrm::IsLayoutSplitAllowed() const
     return GetFmt()->GetLayoutSplit().GetValue();
 }
 
-// --> collapsing borders FME 2005-05-27 #i29550#
+// #i29550#
 
 sal_uInt16 SwTabFrm::GetBottomLineSize() const
 {
-    ASSERT( IsCollapsingBorders(),
-            "BottomLineSize only required for collapsing borders" )
+    OSL_ENSURE( IsCollapsingBorders(),
+            "BottomLineSize only required for collapsing borders" );
 
-    ASSERT( Lower(), "Warning! Trying to prevent a crash, please inform FME" )
+    OSL_ENSURE( Lower(), "Warning! Trying to prevent a crash, please inform FME" );
 
     const SwFrm* pTmp = GetLastLower();
 
-    // --> FME 2005-12-07 #124755# Try to make code robust:
+    // #124755# Try to make code robust
     if ( !pTmp ) return 0;
-    // <--
 
     return static_cast<const SwRowFrm*>(pTmp)->GetBottomLineSize();
 }
@@ -5668,13 +5445,12 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
         if ( pTmp )
         {
             SwTwips nTmpHeight = USHRT_MAX;
-            // --> FME 2004-09-14 #i32456# Consider lower row frames
+            // #i32456# Consider lower row frames
             if ( pTmp->IsRowFrm() )
             {
                 const SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
                 nTmpHeight = lcl_CalcHeightOfFirstContentLine( *pTmpSourceRow );
             }
-            // <--
             if ( pTmp->IsTabFrm() )
             {
                 nTmpHeight = ((SwTabFrm*)pTmp)->CalcHeightOfFirstContentLine();
@@ -5704,19 +5480,18 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
                         pFrm = pFrm->GetNext();
                     }
 
-                    // --> FME, OD 2004-07-15 #i26831#, #i26520#
+                    // #i26831#, #i26520#
                     // The additional lower space of the current last.
-                    // --> OD 2004-11-25 #115759# - do *not* consider the
+                    // #115759# - do *not* consider the
                     // additional lower space for 'master' text frames
                     if ( pLast && pLast->IsFlowFrm() &&
                          ( !pLast->IsTxtFrm() ||
                            !static_cast<const SwTxtFrm*>(pLast)->GetFollow() ) )
-                    // <--
                     {
                         nReal += SwFlowFrm::CastFlowFrm(pLast)->CalcAddLowerSpaceAsLastInTableCell();
                     }
                     // Don't forget the upper space and lower space,
-                    // --> OD 2004-11-25 #115759# - do *not* consider the upper
+                    // #115759# - do *not* consider the upper
                     // and the lower space for follow text frames.
                     if ( pTmp->IsFlowFrm() &&
                          ( !pTmp->IsTxtFrm() ||
@@ -5725,8 +5500,7 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace( NULL, pLast);
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
                     }
-                    // <--
-                    // --> OD 2004-11-25 #115759# - consider additional lower
+                    // #115759# - consider additional lower
                     // space of <pTmp>, if contains only one line.
                     // In this case it would be the new last text frame, which
                     // would have no follow and thus would add this space.
@@ -5737,7 +5511,6 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)
                                         ->CalcAddLowerSpaceAsLastInTableCell();
                     }
-                    // <--
                     if ( nReal > 0 )
                         nTmpHeight -= nReal;
                 }
@@ -5748,14 +5521,13 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
                     SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCurrSourceCell );
                     const SwBorderAttrs &rAttrs = *aAccess.Get();
                     nTmpHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
-                    // --> OD 2004-07-16 #i26250#
+                    // #i26250#
                     // Don't forget the upper space and lower space,
                     if ( pTmp->IsFlowFrm() )
                     {
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace();
                         nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
                     }
-                    // <--
                 }
             }
 
@@ -5798,7 +5570,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
     SwTwips nTmpHeight = 0;
 
     pFirstRow = GetFirstNonHeadlineRow();
-    ASSERT( !IsFollow() || pFirstRow, "FollowTable without Lower" )
+    OSL_ENSURE( !IsFollow() || pFirstRow, "FollowTable without Lower" );
 
     // NEW TABLES
     if ( pFirstRow && pFirstRow->IsRowSpanLine() && pFirstRow->GetNext() )
@@ -5875,12 +5647,11 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
             }
         }
 
-        // --> FME 2004-11-18 #118411#
+        // #118411#
         // Optimization: lcl_CalcHeightOfFirstContentLine actually can trigger
         // a formatting of the row frame (via the GetFormatted()). We don't
         // want this formatting if the row does not have a height.
         else if ( 0 != nFirstLineHeight )
-        // <--
         {
             const bool bOldJoinLock = IsJoinLocked();
             ((SwTabFrm*)this)->LockJoin();
@@ -5932,3 +5703,4 @@ bool SwFrm::IsInCoveredCell() const
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,11 +31,13 @@
 #include <sfx2/shell.hxx>
 #include "shellid.hxx"
 #include "swmodule.hxx"
+#include <unotools/caserotate.hxx>
 
 class SwView;
 class SwAnnotationShell: public SfxShell
 {
     SwView&     rView;
+    RotateTransliteration m_aRotateCase;
 
 public:
     SFX_DECL_INTERFACE(SW_ANNOTATIONSHELL)
@@ -59,6 +62,7 @@ public:
     void        StateClpbrd(SfxItemSet &rSet);
 
     void        ExecTransliteration(SfxRequest &);
+    void                ExecRotateTransliteration(SfxRequest &);
 
     void        ExecUndo(SfxRequest &rReq);
     void        StateUndo(SfxItemSet &rSet);
@@ -76,3 +80,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,10 +87,6 @@ NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
     Init(nFormatType, bUsrFmts);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
                                     const ResId& rResId, short nFormatType,
                                     sal_uLong nDefFmt, sal_Bool bUsrFmts ) :
@@ -105,10 +102,6 @@ NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
 {
     Init(nFormatType, bUsrFmts);
 }
-
-/* -----------------15.06.98 11:29-------------------
- *
- * --------------------------------------------------*/
 
 void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
 {
@@ -131,18 +124,11 @@ void NumFormatListBox::Init(short nFormatType, sal_Bool bUsrFmts)
     SetSelectHdl(LINK(this, NumFormatListBox, SelectHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 NumFormatListBox::~NumFormatListBox()
 {
     if (pOwnFormatter)
         delete pOwnFormatter;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwView* NumFormatListBox::GetView()
 {
@@ -150,10 +136,6 @@ SwView* NumFormatListBox::GetView()
         return pVw;
     return ::GetActiveView();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
@@ -167,7 +149,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         else
         {
             SwView *pView = GetView();
-            DBG_ASSERT(pView, "no view found");
+            OSL_ENSURE(pView, "no view found");
             if(!pView)
                 return;
             SwWrtShell &rSh = pView->GetWrtShell();
@@ -237,7 +219,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             break;
 
         default:
-            DBG_ERROR("what a format?");
+            OSL_FAIL("what a format?");
             break;
         }
 
@@ -298,10 +280,6 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 {
     if (nDefFmt == ULONG_MAX)
@@ -316,7 +294,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     else
     {
         SwView *pView = GetView();
-        DBG_ASSERT(pView, "no view found");
+        OSL_ENSURE(pView, "no view found");
         if(!pView)
             return;
         SwWrtShell &rSh = pView->GetWrtShell();
@@ -357,7 +335,6 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     while ((sal_uLong)GetEntryData(nPos) == ULONG_MAX)
         nPos++;
 
-//
     sal_uLong nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
     sal_uLong nSysShortDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
     sal_uLong nSysLongDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
@@ -391,20 +368,12 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     nDefFormat = GetFormat();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uLong NumFormatListBox::GetFormat() const
 {
     sal_uInt16 nPos = GetSelectEntryPos();
 
     return (sal_uLong)GetEntryData(nPos);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 {
@@ -441,12 +410,12 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
             GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
         if (RET_OK == pDlg->Execute())
         {
@@ -487,10 +456,6 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 double NumFormatListBox::GetDefValue(const short nFormatType) const
 {
     double fDefValue = 0.0;
@@ -505,12 +470,6 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
         case NUMBERFORMAT_TIME:
             fDefValue = SVX_NUMVAL_TIME;
             break;
-/*      {
-            String sValue("31.8.1997 16:57:34");
-            sal_uLong nFormat = pFormatter->GetStandardFormat(nFormatType, LANGUAGE_GERMAN);
-            pFormatter->IsNumberFormat( sValue, nFormat, fDefValue );
-        }
-        break;*/
 
         case NUMBERFORMAT_TEXT:
         case NUMBERFORMAT_UNDEFINED:
@@ -537,13 +496,10 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
     return fDefValue;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void NumFormatListBox::Clear()
 {
     ListBox::Clear();
     nCurrFormatType = -1;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

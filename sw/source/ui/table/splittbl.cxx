@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <splittbl.hrc>
 #include <table.hrc>
 #include <tblenum.hxx>
-/*-----------------17.03.98 10:56-------------------
 
---------------------------------------------------*/
 SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     SvxStandardDialog(pParent, SW_RES(DLG_SPLIT_TABLE)),
     aOKPB(                  this, SW_RES(PB_OK      )),
@@ -58,9 +57,6 @@ SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     aCntntCopyRB.Check();
 }
 
-/*-----------------17.03.98 10:56-------------------
-
---------------------------------------------------*/
 void SwSplitTblDlg::Apply()
 {
     m_nSplit = HEADLINE_CNTNTCOPY;
@@ -77,3 +73,4 @@ void SwSplitTblDlg::Apply()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,22 +43,12 @@
 #include <labfmt.hxx>
 #include <labprt.hxx>
 #include <unotools.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include "uitool.hxx"
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _LABEL_HRC
 #include <label.hrc>
-#endif
 
 //impl in envimg.cxx
 extern SW_DLLPUBLIC String MakeSender();
@@ -90,18 +81,13 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
     rItem.nRows   = nRows;
 }
 
-// --------------------------------------------------------------------------
 void SwLabDlg::_ReplaceGroup( const String &rMake )
 {
-    //Die alten Eintraege vernichten.
+    // Remove old entries
     pRecs->Remove( 1, pRecs->Count() - 1 );
     aLabelsCfg.FillLabels(rtl::OUString(rMake), *pRecs);
     aLstGroup = rMake;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
@@ -118,10 +104,6 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
     else if (nId == TP_LAB_PRT)
         pPrtPage = (SwLabPrtPage*)&rPage;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
                                 SwNewDBMgr* pDBMgr, sal_Bool bLabel) :
@@ -144,7 +126,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEW_DOC)));
     GetOKButton().SetHelpId(HID_LABEL_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);   // in order for generated help text to get used
 
     AddTabPage(TP_LAB_LAB, m_bLabel ? sFormat : sMedium ,SwLabPage   ::Create, 0, sal_False, 0);
     AddTabPage(TP_VISITING_CARDS, SwVisitingCardPage::Create, 0);
@@ -164,7 +146,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     {
         SetText(sBusinessCardDlg);
     }
-    // Benutzer-Etikette aus writer.cfg lesen
+    // Read user label from writer.cfg
     SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));
     SwLabRec* pRec = new SwLabRec;
     const String aTmp( SW_RES( STR_CUSTOM ) );
@@ -198,17 +180,15 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
 
     if ( aMakes.Count() )
         _ReplaceGroup( *aMakes[nLstGroup] );
+
     if (pExampleSet)
         pExampleSet->Put(aItem);
 }
-
-// --------------------------------------------------------------------------
 
 SwLabDlg::~SwLabDlg()
 {
     delete pRecs;
 }
-// --------------------------------------------------------------------------
 
 void SwLabDlg::GetLabItem(SwLabItem &rItem)
 {
@@ -216,22 +196,20 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
     const SwLabItem& rOldItem = (const SwLabItem&)GetInputSetImpl()->Get(FN_LABEL);
 
     if (rActItem != rOldItem)
-    {   // Wurde schon mal mit (hoffentlich) korrektem Inhalt "geputtet"
+    {
+        // Was already "put" with (hopefully) correct content
         rItem = rActItem;
     }
     else
     {
         rItem = rOldItem;
 
-        // Im rItem stehen (vom Namen mal abgesehen) immer nur die
-        // benutzerdefinierbaren Einstellungen. Daher richtige Werte
-        // direkt aus dem Record besorgen:
+        // In rItem there are only settings defined by users.
+        // Therefore get the real settings directly from Record
         SwLabRec* pRec = GetRecord(rItem.aType, rItem.bCont);
         pRec->FillItem( rItem );
     }
 }
-
-// --------------------------------------------------------------------------
 
 SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
 {
@@ -250,13 +228,11 @@ SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
             break;
         }
     }
-    if (!bFound)    // Benutzerdefiniert
+    if (!bFound)    // User defined
         pRec = Recs()[0];
 
     return(pRec);
 }
-
-// --------------------------------------------------------------------------
 
 Printer *SwLabDlg::GetPrt()
 {
@@ -266,7 +242,6 @@ Printer *SwLabDlg::GetPrt()
         return (NULL);
 }
 
-// --------------------------------------------------------------------------
 SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_LAB_LAB), rSet),
     pNewDBMgr(NULL),
@@ -299,7 +274,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     SetExchangeSupport();
 
 
-    // Handler installieren
+    // Install handlers
     aAddrBox       .SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
     aDatabaseLB    .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
     aTableLB       .SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
@@ -318,24 +293,19 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     {
         String &rStr = *GetParent()->Makes()[i];
         aMakeBox.InsertEntry( rStr );
+
         if ( rStr == String(aItem.aLstMake) )
             nLstGroup = i;
     }
-//  Reset(rSet);
+
     aMakeBox.SelectEntryPos( nLstGroup );
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwLabPage::~SwLabPage()
 {
 }
-/* -----------------29.09.99 09:08-------------------
 
- --------------------------------------------------*/
 void lcl_ChgYPos(Window& rWin, long nDiff)
 {
     Point aTempPos(rWin.GetPosPixel());
@@ -367,7 +337,6 @@ void SwLabPage::SetToBusinessCard()
     Point aFLPos(aWritingFL.GetPosPixel());
     long nDiffPos = aFormatFL.GetPosPixel().Y() - aFLPos.Y();
     Size aFLSz(aFormatFL.GetSizePixel());
-//  aFLSz.Height() += nDiffPos;
     aFormatFL.SetPosSizePixel(aFLPos, aFLSz);
 
     // move all controls up
@@ -387,22 +356,17 @@ void SwLabPage::SetToBusinessCard()
     aTypeBox.SetPosPixel(aLBPos);
 };
 
-// --------------------------------------------------------------------------
-
-
 IMPL_LINK( SwLabPage, AddrHdl, Button *, EMPTYARG )
 {
     String aWriting;
+
     if ( aAddrBox.IsChecked() )
         aWriting = MakeSender();
+
     aWritingEdit.SetText( aWriting.ConvertLineEnd() );
     aWritingEdit.GrabFocus();
     return 0;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 {
@@ -412,11 +376,10 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 
     if (pListBox == &aDatabaseLB)
         GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
+
     GetNewDBMgr()->GetColumnNames(&aDBFieldLB, sActDBName, aTableLB.GetSelectEntry());
     return 0;
 }
-
-
 
 IMPL_LINK( SwLabPage, FieldHdl, Button *, EMPTYARG )
 {
@@ -436,20 +399,12 @@ IMPL_LINK( SwLabPage, FieldHdl, Button *, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 IMPL_LINK_INLINE_START( SwLabPage, PageHdl, Button *, EMPTYARG )
 {
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
     return 0;
 }
 IMPL_LINK_INLINE_END( SwLabPage, PageHdl, Button *, EMPTYARG )
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
 {
@@ -505,10 +460,6 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 IMPL_LINK_INLINE_START( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
 {
     DisplayFormat();
@@ -516,10 +467,6 @@ IMPL_LINK_INLINE_START( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabPage::DisplayFormat()
 {
@@ -552,18 +499,12 @@ void SwLabPage::DisplayFormat()
     aFormatInfo.SetText(aText);
 }
 
-// --------------------------------------------------------------------------
-
 SwLabRec* SwLabPage::GetSelectedEntryPos()
 {
     String sSelEntry(aTypeBox.GetSelectEntry());
 
     return GetParent()->GetRecord(sSelEntry, aContButton.IsChecked());
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabPage::InitDatabaseBox()
 {
@@ -587,18 +528,16 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-// --------------------------------------------------------------------------
 SfxTabPage* SwLabPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwLabPage(pParent, rSet);
 }
 
-// --------------------------------------------------------------------------
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
 {
     Reset( rSet );
 }
-// --------------------------------------------------------------------------
+
 int SwLabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
@@ -606,10 +545,6 @@ int SwLabPage::DeactivatePage(SfxItemSet* _pSet)
 
     return sal_True;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabPage::FillItem(SwLabItem& rItem)
 {
@@ -627,10 +562,6 @@ void SwLabPage::FillItem(SwLabItem& rItem)
     rItem.aLstType = aTypeBox.GetSelectEntry();
 }
 
-// --------------------------------------------------------------------------
-
-
-
 sal_Bool SwLabPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem( aItem );
@@ -638,8 +569,6 @@ sal_Bool SwLabPage::FillItemSet(SfxItemSet& rSet)
 
     return sal_True;
 }
-
-// --------------------------------------------------------------------------
 
 void SwLabPage::Reset(const SfxItemSet& rSet)
 {
@@ -685,10 +614,6 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
         aSheetButton.Check();
 }
 
-/*-- 08.07.99 14:00:02---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-//-----------------------------------------------------------------------------
 void SwVisitingCardPage::ClearUserData()
 {
     SvLBoxEntry* pEntry = aAutoTextLB.First();
@@ -699,8 +624,6 @@ void SwVisitingCardPage::ClearUserData()
     }
 }
 
-//-----------------------------------------------------------------------------
-
 void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
                 const rtl::OUString* pNames, const rtl::OUString* pValues )
 {
@@ -710,8 +633,6 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
         pEntry->SetUserData( new String( pValues[ i ] ));
     }
 }
-
-//-----------------------------------------------------------------------------
 
 SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_VISITING_CARDS), rSet),
@@ -740,9 +661,7 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) 
     aAutoTextGroupLB.Show();
     InitFrameControl();
 }
-/*-- 08.07.99 14:00:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwVisitingCardPage::~SwVisitingCardPage()
 {
     for(sal_uInt16 i = 0; i < aAutoTextGroupLB.GetEntryCount(); i++)
@@ -752,38 +671,31 @@ SwVisitingCardPage::~SwVisitingCardPage()
     ClearUserData();
     delete pExampleFrame;
 }
-/*-- 08.07.99 14:00:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage* SwVisitingCardPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwVisitingCardPage(pParent, rSet);
 }
-/*-- 08.07.99 14:00:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
 {
     Reset( rSet );
     UpdateFields();
 }
-/*-- 08.07.99 14:00:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(*_pSet);
     return LEAVE_PAGE;
 }
-/*-- 08.07.99 14:00:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 {
     String* pGroup = (String*)aAutoTextGroupLB.GetEntryData(
                                     aAutoTextGroupLB.GetSelectEntryPos());
-    DBG_ASSERT(pGroup, "no group selected?");
+    OSL_ENSURE(pGroup, "no group selected?");
+
     if(pGroup)
         aLabItem.sGlossaryGroup = *pGroup;
 
@@ -793,9 +705,7 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
     rSet.Put(aLabItem);
     return sal_True;
 }
-/*-- 08.07.99 14:00:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
 {
     SvLBoxEntry* pEntry = rAutoTextLB.First();
@@ -810,7 +720,7 @@ void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
         pEntry = rAutoTextLB.Next(pEntry);
     }
 }
-//-----------------------------------------------------------------------------
+
 sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
 {
     SvLBoxEntry* pEntry = rAutoTextLB.First();
@@ -826,7 +736,6 @@ sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
     return sal_False;
 }
 
-//-----------------------------------------------------------------------------
 void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 {
     aLabItem = (const SwLabItem&) rSet.Get(FN_LABEL);
@@ -872,9 +781,6 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     }
 }
 
-/* -----------------29.09.99 08:55-------------------
-
- --------------------------------------------------*/
 SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_PRIVATE_DATA), rSet),
     aDataFL             (this, SW_RES( FL_DATA       )),
@@ -913,38 +819,27 @@ SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
     SetExchangeSupport();
 }
 
-/*-- 29.09.99 08:55:57---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwPrivateDataPage::~SwPrivateDataPage()
 {
 }
-/*-- 29.09.99 08:55:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage* SwPrivateDataPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwPrivateDataPage(pParent, rSet);
 }
-/*-- 29.09.99 08:55:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
 {
     Reset(rSet);
 }
-/*-- 29.09.99 08:55:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int  SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(*_pSet);
     return LEAVE_PAGE;
 }
-/*-- 29.09.99 08:55:58---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
 {
 
@@ -971,9 +866,7 @@ sal_Bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
     rSet.Put(aItem);
     return sal_True;
 }
-/*-- 29.09.99 08:55:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
 {
     const SwLabItem& aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
@@ -996,9 +889,7 @@ void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
     aHomePageED .SetText(aItem.aPrivWWW);
     aMailED     .SetText(aItem.aPrivMail);
 }
-/* -----------------29.09.99 08:56-------------------
 
- --------------------------------------------------*/
 SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_BUSINESS_DATA), rSet),
     aDataFL             (this, SW_RES( FL_DATA       )),
@@ -1031,38 +922,28 @@ SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) 
     SetExchangeSupport();
 }
 
-/*-- 29.09.99 08:56:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwBusinessDataPage::~SwBusinessDataPage()
 {
 }
-/*-- 29.09.99 08:56:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage* SwBusinessDataPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwBusinessDataPage(pParent, rSet);
 }
-/*-- 29.09.99 08:56:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)
 {
     Reset(rSet);
 }
-/*-- 29.09.99 08:56:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int  SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
         FillItemSet(*_pSet);
     return LEAVE_PAGE;
 }
-/*-- 29.09.99 08:56:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
@@ -1085,9 +966,7 @@ sal_Bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
     rSet.Put(aItem);
     return sal_True;
 }
-/*-- 29.09.99 08:56:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwBusinessDataPage::Reset(const SfxItemSet& rSet)
 {
     const SwLabItem& aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
@@ -1109,3 +988,4 @@ void SwBusinessDataPage::Reset(const SfxItemSet& rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

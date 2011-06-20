@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,6 +51,12 @@ void SAL_CALL SwVbaReplacement::setText( const ::rtl::OUString& _text ) throw (u
     mxPropertyReplace->setReplaceString( _text );
 }
 
+void SAL_CALL SwVbaReplacement::ClearFormatting( ) throw (uno::RuntimeException)
+{
+    uno::Sequence< beans::PropertyValue > aPropValues;
+    mxPropertyReplace->setReplaceAttributes( aPropValues );
+}
+
 rtl::OUString&
 SwVbaReplacement::getServiceImplName()
 {
@@ -69,3 +76,4 @@ SwVbaReplacement::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -59,7 +59,6 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    // #111827#
     /**
        Returns the rewriter of this undo object.
 

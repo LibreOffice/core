@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include <limits.h>     // USHRT_MAX
 #include "swcont.hxx"
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 
 class SwWrtShell;
 class SwContentArr;
@@ -42,7 +41,7 @@ class SwTOXBase;
 class SwRedline;
 
 //----------------------------------------------------------------------------
-//  Hilfsklassen
+//  helper classes
 //----------------------------------------------------------------------------
 
 class SwPopup : public PopupMenu
@@ -170,29 +169,28 @@ public:
     const SwTOXBase* GetTOXBase() const {return pBase;}
 };
 /*
-    class ContentType enthaelt Informationen zu einer Inhaltsform
-    Das MemberArray wird nur gefuellt, wenn der Inhalt mit GetMember
-    angefordert wird. Es wird nach Invalidate() nur dann neu geladen,
-    wenn der Inhalt erneut ausgelesen werden soll.
+    class ContentType contains information to one type of content.
+    MemberArray is only populated if the content is requested by
+    GetMember. It is reloaded after Invalidate() only if the content
+    should be read again.
 */
-//----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 
 class SwContentType : public SwTypeNumber
 {
     SwWrtShell*         pWrtShell;
-    SwContentArr*       pMember;            // Array fuer Inhalte
-    String              sContentTypeName;   // Name der Inhaltsform
-    String              sSingleContentTypeName; // Name der Inhaltsform, Singular
-    String              sTypeToken;         // Anhaengsel fuer URL
-    sal_uInt16              nMemberCount;       // Inhaltsanzahl
-    sal_uInt16              nContentType;       // Id der Inhaltsform
+    SwContentArr*       pMember;            // array for content
+    String              sContentTypeName;   // name of content type
+    String              sSingleContentTypeName; // name of content type, singular
+    String              sTypeToken;         // attachment for URL
+    sal_uInt16              nMemberCount;       // content count
+    sal_uInt16              nContentType;       // content type's Id
     sal_uInt8               nOutlineLevel;
-    sal_Bool                bMemberFilled : 1;  // wurden die Inhalte bereits eingefuegt?
-    sal_Bool                bIsInternalDrag:1;  // koennen die Inhalte verschoben werden?
+    sal_Bool                bMemberFilled : 1;  // has content already been inserted?
+    sal_Bool                bIsInternalDrag:1;  // can content be relocated?
     sal_Bool                bDataValid :    1;  //
-    sal_Bool                bEdit:          1;  // kann diese Type bearbeitet werden ?
-    sal_Bool                bDelete:        1;  // kann diese Type geloescht werden ?
+    sal_Bool                bEdit:          1;  // can this type be edited?
+    sal_Bool                bDelete:        1;  // can this type be deleted?
 protected:
         void            RemoveNewline(String&);
 public:
@@ -215,7 +213,7 @@ public:
                                 Invalidate();
                             }
 
-        void                Invalidate(); // nur nMemberCount wird neu gelesen
+        void                Invalidate(); // only nMemberCount is read again
 
         sal_Bool                IsEditable() const {return bEdit;}
         sal_Bool                IsDeletable() const {return bDelete;}
@@ -223,3 +221,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

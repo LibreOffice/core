@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef TOOLBOX_HXX
 #define TOOLBOX_HXX
 
@@ -44,7 +46,6 @@ protected:
     ToolBox    *pToolBoxCmd;
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
-    ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
     sal_uInt16      nActiveCategoryRID;
 
     virtual sal_Bool    Close();
@@ -56,7 +57,7 @@ protected:
     DECL_LINK( CmdSelectHdl, ToolBox* );
 
     SmViewShell * GetView();
-    const ImageList * GetImageList( sal_uInt16 nResId, sal_Bool bHighContrast );
+    const ImageList * GetImageList( sal_uInt16 nResId );
 
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
@@ -68,7 +69,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent &rEvt );
 
-    void        AdjustPosSize( sal_Bool bSetPos );
+    void        AdjustPosSize( bool bSetPos );
     void        SetCategory(sal_uInt16 nCategory);
 };
 
@@ -85,3 +86,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

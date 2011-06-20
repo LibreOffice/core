@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,22 +39,22 @@
 #include <pam.hxx>
 #include <pamtyp.hxx>
 #include <txtfrm.hxx>
-#include <section.hxx>
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <crsskip.hxx>
 
-// --> FME 2004-06-29 #114856# Formular view
+// Formular view
 #include <flyfrm.hxx>
 #include <fmteiro.hxx>
 #include <section.hxx>
 #include <sectfrm.hxx>
-// <--
-#include <ndtxt.hxx> // #111827#
+#include <ndtxt.hxx>
 
 #include <IMark.hxx>
 #include <hints.hxx>
+
+#include <xmloff/odffields.hxx>
 
 // fuer den dummen ?MSC-? Compiler
 inline xub_StrLen GetSttOrEnd( sal_Bool bCondition, const SwCntntNode& rNd )
@@ -66,8 +67,6 @@ inline xub_StrLen GetSttOrEnd( sal_Bool bCondition, const SwCntntNode& rNd )
 |*  SwPosition
 |*
 |*  Beschreibung        PAM.DOC
-|*  Ersterstellung      VB  4.3.91
-|*  Letzte Aenderung    VB  4.3.91
 |*
 *************************************************************************/
 
@@ -387,8 +386,6 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool bChk )
 |*  SwPointAndMark
 |*
 |*  Beschreibung        PAM.DOC
-|*  Ersterstellung      VB  4.3.91
-|*  Letzte Aenderung    JP  6.5.91
 |*
 *************************************************************************/
 
@@ -548,7 +545,7 @@ void SwPaM::SetMark()
     (*m_pMark) = (*m_pPoint);
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwPaM::Exchange()
 {
@@ -587,9 +584,6 @@ sal_Bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
 |*                      SwPaM *         der zu setzende Bereich
 |*                      const SwPaM&    der enventuell vorgegeben Bereich
 |*    Return-Werte      SwPaM*          der entsprehend neu gesetzte Bereich
-|*
-|*    Ersterstellung    JP 26.04.91
-|*    Letzte Aenderung  JP 26.04.91
 |*
 *************************************************************************/
 
@@ -646,8 +640,7 @@ sal_uInt16 SwPaM::GetPageNum( sal_Bool bAtPoint, const Point* pLayPos )
     return 0;
 }
 
-// --> FME 2004-06-29 #114856# Formular view
-// See also SwCrsrShell::IsCrsrReadonly()
+// Formular view - See also SwCrsrShell::IsCrsrReadonly()
 const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 {
     const SwFrm* pRet = 0;
@@ -671,7 +664,6 @@ const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 
     return pRet;
 }
-// <--
 
 // steht in etwas geschuetztem oder in die Selektion umspannt
 // etwas geschuetztes.
@@ -687,24 +679,18 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     else
         pFrm = 0;
 
-    // --> FME 2004-06-29 #114856# Formular view
     // Will be set if point/mark are inside edit-in-readonly environment
     const SwFrm* pSttEIRFrm = 0;
     const SwFrm* pEndEIRFrm = 0;
 
     if( pFrm && ( pFrm->IsProtected() ||
-                  // --> FME 2004-06-29 #114856# Formular view
-                  ( bFormView &&
-                     0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-                  // <--
+                  ( bFormView && 0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
         bRet = sal_True;
     else if( pNd )
     {
         const SwSectionNode* pSNd = pNd->GetSectionNode();
         if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                      // --> FME 2004-06-29 #114856# Formular view
                       (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-                      // <--
             bRet = sal_True;
     }
 
@@ -716,22 +702,16 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
             pFrm = 0;
 
         if( pFrm && ( pFrm->IsProtected() ||
-                  // --> FME 2004-06-29 #114856# Formular view
-                  ( bFormView &&
-                     0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-                  // <--
+                  ( bFormView && 0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
             bRet = sal_True;
         else if( pNd )
         {
             const SwSectionNode* pSNd = pNd->GetSectionNode();
             if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                          // --> FME 2004-06-29 #114856# Formular view
                           (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-                          // <--
                 bRet = sal_True;
         }
 
-        // --> FME 2004-06-29 #114856# Formular view
         if ( !bRet && bFormView )
         {
            // Check if start and end frame are inside the _same_
@@ -739,7 +719,6 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
            if ( pSttEIRFrm != pEndEIRFrm )
                 bRet = sal_True;
         }
-        // <--
 
         // oder sollte eine geschuetzte Section innerhalb der
         // Selektion liegen?
@@ -766,7 +745,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
                     if( pFmt->GetProtect().IsCntntProtected() )
                     {
                         const SwFmtCntnt& rCntnt = pFmt->GetCntnt(sal_False);
-                        ASSERT( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                        OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
                         sal_uLong nIdx = rCntnt.GetCntntIdx()->GetIndex();
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
                             rCntnt.GetCntntIdx()->GetNode().GetNodes().IsDocNodes() )
@@ -785,60 +764,45 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
                         }
                     }
                 }
-
-#ifdef CHECK_CELL_READONLY
-//JP 22.01.99: bisher wurden Tabelle, die in der Text-Selektion standen
-//              nicht beachtet. Wollte man das haben, dann muss dieser
-//              Code freigeschaltet werden
-
-                if( !bRet )
-                {
-                    // dann noch ueber alle Tabellen
-                    const SwFrmFmts& rFmts = *GetDoc()->GetTblFrmFmts();
-                    for( n = rFmts.Count(); n ;  )
-                    {
-                        SwFrmFmt* pFmt = (SwFrmFmt*)rFmts[ --n ];
-                        const SwTable* pTbl = SwTable::FindTable( pFmt );
-                        sal_uLong nIdx = pTbl ? pTbl->GetTabSortBoxes()[0]->GetSttIdx()
-                                          : 0;
-                        if( nSttIdx <= nIdx && nEndIdx >= nIdx )
-                        {
-                            // dann teste mal alle Boxen
-                            const SwTableSortBoxes& rBoxes = pTbl->GetTabSortBoxes();
-
-                            for( sal_uInt16 i =  rBoxes.Count(); i; )
-                                if( rBoxes[ --i ]->GetFrmFmt()->GetProtect().
-                                    IsCntntProtected() )
-                                {
-                                    bRet = sal_True;
-                                    break;
-                                }
-
-                            if( bRet )
-                                break;
-                        }
-                    }
-                }
-#endif
             }
         }
     }
     //FIXME FieldBk
     // TODO: Form Protection when Enhanced Fields are enabled
-    if (!bRet) {
-        const SwDoc *pDoc = GetDoc();
-        sw::mark::IMark* pA = NULL;
-        sw::mark::IMark* pB = NULL;
-        if ( pDoc )
+    const SwDoc *pDoc = GetDoc();
+    sw::mark::IMark* pA = NULL;
+    sw::mark::IMark* pB = NULL;
+    bool bUnhandledMark = false;
+    if ( pDoc )
+    {
+        const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess( );
+        pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
+        pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
+
+        sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
+        if ( pFieldmark )
+            bUnhandledMark = pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) );
+    }
+
+    if (!bRet)
+    {
+        // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
+        if ( ( pA == pB ) && bUnhandledMark )
+            bRet = sal_True;
+        else
         {
-            const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess( );
-            pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
-            pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
-            bRet = ( pA != pB );
+            // Form protection case
+            bool bAtStartA = pA != NULL && pA->GetMarkStart() == *GetPoint();
+            bool bAtStartB = pB != NULL && pB->GetMarkStart() == *GetMark();
+            bRet = ( pA != pB ) || bAtStartA || bAtStartB;
+            bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
+            if ( bProtectForm )
+                bRet |= ( pA == NULL || pB == NULL );
         }
-        bool bProtectForm = pDoc->get( IDocumentSettingAccess::PROTECT_FORM );
-        if ( bProtectForm )
-            bRet |= ( pA == NULL || pB == NULL );
+    }
+    else
+    {
+        bRet = !( pA == pB && pA != NULL );
     }
     return bRet;
 }
@@ -909,12 +873,6 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
                             ( !bInReadOnly && pFrm->IsProtected() ) ||
                             ( pFrm->IsTxtFrm() &&
                                 ((SwTxtFrm*)pFrm)->IsHiddenNow() ) )
-
-//                          rNodes[ rNodes.EndOfAutotext ]->StartOfSection().GetIndex()
-//                          < aPos.nNode.GetIndex() && aPos.nNode.GetIndex()
-//                          < rNodes.EndOfAutotext.GetIndex() &&
-//                          0 == ( pFrm = pNd->GetFrm()) &&
-//                          pFrm->IsProtected() )
                         {
                             pNd = 0;
                             continue;       // suche weiter
@@ -1172,7 +1130,6 @@ sal_Bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
     return sal_True;
 }
 
-// #111827#
 String SwPaM::GetTxt() const
 {
     String aResult;
@@ -1244,3 +1201,5 @@ sal_Bool SwPaM::LessThan(const SwPaM & a, const SwPaM & b)
 {
     return (*a.Start() < *b.Start()) || (*a.Start() == *b.Start() && *a.End() < *b.End());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

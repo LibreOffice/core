@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,16 +31,15 @@
 
 #include <vector>
 #include <tools/string.hxx>
+#include <swdllapi.h>
 
-
-String const UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
-String const UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
-String const UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
-
+extern SW_DLLPUBLIC String const UNDO_ARG1;
+extern SW_DLLPUBLIC String const UNDO_ARG2;
+extern SW_DLLPUBLIC String const UNDO_ARG3;
 
 typedef std::pair<String, String> SwRewriteRule;
 
-class SwRewriter
+class SW_DLLPUBLIC SwRewriter
 {
     std::vector<SwRewriteRule> mRules;
 
@@ -54,3 +54,5 @@ public:
 };
 
 #endif // _SW_REWRITER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

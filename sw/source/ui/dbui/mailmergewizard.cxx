@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,27 +44,19 @@
 #include <mmlayoutpage.hxx>
 #include <mmconfigitem.hxx>
 #include <swabstdlg.hxx>
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
 #include <view.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "vcl/msgbox.hxx" // RET_CANCEL
 
 #include <helpid.h>
-#include <dbui.hrc>
 #include <mailmergewizard.hrc>
 
 using namespace svt;
 using namespace ::com::sun::star;
-/*-- 01.04.2004 16:52:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
                         SW_RES(DLG_MAILMERGEWIZARD),
@@ -122,15 +115,11 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
     ActivatePage();
     UpdateRoadmap();
 }
-/*-- 01.04.2004 16:52:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeWizard::~SwMailMergeWizard()
 {
 }
-/*-- 01.04.2004 16:52:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OWizardPage*    SwMailMergeWizard::createPage(WizardState _nState)
 {
     OWizardPage* pRet = 0;
@@ -145,16 +134,15 @@ OWizardPage*    SwMailMergeWizard::createPage(WizardState _nState)
         case MM_MERGEPAGE         : pRet = new SwMailMergeMergePage(this);          break;
         case MM_OUTPUTPAGE       :  pRet = new SwMailMergeOutputPage(this);         break;
     }
-    DBG_ASSERT(pRet, "no page created in ::createPage");
+    OSL_ENSURE(pRet, "no page created in ::createPage");
     return pRet;
 }
-/*-- 04.06.2004 13:18:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeWizard::enterState( WizardState _nState )
 {
     ::svt::RoadmapWizard::enterState( _nState );
 /*
+
     entering a page after the layoutpage requires the insertion
     of greeting and address block - if not yet done
     entering the merge or output page requires to create the output document
@@ -201,9 +189,7 @@ void SwMailMergeWizard::enterState( WizardState _nState )
 
     UpdateRoadmap();
 }
-/*-- 04.06.2004 12:54:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String  SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
 {
     String sRet;
@@ -224,7 +210,7 @@ String  SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
     }
     return sRet;
 }
-/*-- 24.06.2004 09:24:45---------------------------------------------------
+/*----------------------------------------------------------------------
     enables/disables pages in the roadmap depending on the current
     page and state
   -----------------------------------------------------------------------*/
@@ -297,7 +283,7 @@ void SwMailMergeWizard::UpdateRoadmap()
         enableState( nPage, bEnable );
     }
 }
-/*-- 24.06.2004 09:24:45---------------------------------------------------
+/*-- --------------------------------------------------------------------
     enables/disables pages in the roadmap depending on the current
     page and state
   -----------------------------------------------------------------------*/
@@ -309,28 +295,24 @@ void SwMailMergeWizard::CreateTargetDocument()
     if( m_rConfigItem.GetTargetView() )
         m_rConfigItem.GetTargetView()->GetViewFrame()->GetFrame().Appear();
 }
-/*-- 23.08.2004 08:51:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeWizard::updateRoadmapItemLabel( WizardState _nState )
 {
     svt::RoadmapWizard::updateRoadmapItemLabel( _nState );
 }
 
-// ------------------------------------------------------------------------
-
 short SwMailMergeWizard::Execute()
 {
-    DBG_ERROR( "SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
+    OSL_FAIL("SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
                "It creates a thread (MailDispatcher instance) that will call"
                "back to VCL apartment => deadlock!\n"
                "Use Dialog::StartExecuteModal to execute the dialog!" );
     return RET_CANCEL;
 }
 
-// ------------------------------------------------------------------------
-
 void SwMailMergeWizard::StartExecuteModal( const Link& rEndDialogHdl )
 {
     ::svt::RoadmapWizard::StartExecuteModal( rEndDialogHdl );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

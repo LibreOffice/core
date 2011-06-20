@@ -102,6 +102,12 @@ TabPage TP_TEXTGRID_PAGE
         Last = 154 ;
         SpinSize = 1 ;
     };
+    FixedText       FT_LINERANGE
+    {
+        Pos = MAP_APPFONT ( 103 , 82 ) ;
+        Size = MAP_APPFONT ( 25 , 8 );
+        Text [ en-US ] = "( 1 - 48 )" ;
+    };
     FixedText       FT_TEXTSIZE
     {
         Pos = MAP_APPFONT ( 133 , 82 ) ;
@@ -173,6 +179,12 @@ TabPage TP_TEXTGRID_PAGE
         First = 0 ;
         Last = 5600 ;
         SpinSize = 5 ;
+    };
+    FixedText       FT_CHARRANGE
+    {
+        Pos = MAP_APPFONT ( 103 , 96 ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text [ en-US ] = "( 1 - 45 )" ;
     };
     FixedText       FT_RUBYSIZE
     {

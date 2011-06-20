@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/memberids.hrc>
@@ -344,7 +344,6 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::_InitItemImport()
 {
-    // #110680#
     pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP, MAP_TWIP, getServiceFactory() );
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
@@ -393,3 +392,5 @@ SvXMLImportContext *SwXMLImport::CreateTableItemImportContext(
                                             GetTableItemMapper(),
                                             GetTwipUnitConverter() );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

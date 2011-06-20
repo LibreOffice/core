@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,8 +37,9 @@ class SwDDETable : public SwTable
     SwDepend aDepend;
 public:
     TYPEINFO();
-    // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
-    // Die SwTable ist danach Leer und muss geloescht werden.
+
+    // Ctor moves all lines/boxes from SwTable to it.
+    // After that SwTable is empty and has to be deleted.
     SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
                 sal_Bool bUpdate = sal_True );
     ~SwDDETable();
@@ -61,3 +63,5 @@ inline const SwDDEFieldType* SwDDETable::GetDDEFldType() const
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

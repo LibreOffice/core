@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,16 +48,13 @@
 //diesem befreundet. So kann der FlowFrm anstelle des this-Pointer mit der
 //Referenz auf den SwFrm arbeiten.
 
-//#include "frame.hxx"   //fuer inlines
-
 class SwPageFrm;
 class SwRect;
 class SwBorderAttrs;
 class SwDoc;
 class SwNodeIndex;
-// --> OD 2005-03-04 #i44049#
+// #i44049#
 class SwObjectFormatterTxtFrm;
-// <--
 
 void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
 
@@ -67,9 +65,8 @@ class SwFlowFrm
     friend inline void PrepareUnlock( SwFlowFrm * );
     friend inline void TableSplitRecalcLock( SwFlowFrm * );
     friend inline void TableSplitRecalcUnlock( SwFlowFrm * );
-    // --> OD 2005-03-04 #i44049#
+    // #i44049#
     friend class SwObjectFormatterTxtFrm;
-    // <--
 
     //TblSel darf das Follow-Bit zuruecksetzen.
     friend inline void UnsetFollow( SwFlowFrm *pFlow );
@@ -92,31 +89,25 @@ class SwFlowFrm
     /** helper method to determine previous frame for calculation of the
         upper space
 
-        OD 2004-03-10 #i11860#
+        #i11860#
 
         @param _pProposedPrevFrm
         optional input parameter - pointer to frame, which should be used
         instead of the direct previous frame.
-
-        @author OD
     */
     const SwFrm* _GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm = 0L ) const;
 
     /** method to detemine the upper space amount, which is considered for
         the previous frame
 
-        OD 2004-03-11 #i11860#
-
-        @author OD
+        #i11860#
     */
     SwTwips _GetUpperSpaceAmountConsideredForPrevFrm() const;
 
     /** method to detemine the upper space amount, which is considered for
         the page grid
 
-        OD 2004-03-12 #i11860#
-
-        @author OD
+        #i11860#
     */
     SwTwips _GetUpperSpaceAmountConsideredForPageGrid(
                                 const SwTwips _nUpperSpaceWithoutGrid ) const;
@@ -124,6 +115,7 @@ class SwFlowFrm
 protected:
 
     SwFlowFrm *pFollow;
+    SwFlowFrm *pPrecede;
 
     sal_Bool bIsFollow  :1; //Ist's ein Follow
     sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
@@ -137,9 +129,8 @@ protected:
 
     //Prueft ob Vorwaertsfluss noch Sinn macht Endloswanderschaften (unterbinden)
     inline sal_Bool IsFwdMoveAllowed();
-    // --> OD 2005-03-08 #i44049# - method <CalcCntnt(..)> has to check this property.
+    // #i44049# - method <CalcCntnt(..)> has to check this property.
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
-    // <--
     sal_Bool IsKeepFwdMoveAllowed();    //Wie oben, Move fuer Keep.
 
     //Prueft ob ein Obj das Umlauf wuenscht ueberlappt.
@@ -181,7 +172,11 @@ public:
     const  SwFlowFrm *GetFollow() const    { return pFollow;   }
            SwFlowFrm *GetFollow()          { return pFollow;   }
            sal_Bool       IsAnFollow( const SwFlowFrm *pFlow ) const;
-    inline void       SetFollow( SwFlowFrm *pNew ) { pFollow = pNew; }
+    inline void       SetFollow( SwFlowFrm *pNew );
+
+    const  SwFlowFrm *GetPrecede() const   { return pPrecede;   }
+           SwFlowFrm *GetPrecede()         { return pPrecede;   }
+
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
     sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
@@ -202,11 +197,9 @@ public:
 
     /** method to determine the upper space hold by the frame
 
-        OD 2004-03-12 #i11860# - add 3rd parameter <_bConsiderGrid> to get
+        #i11860# - add 3rd parameter <_bConsiderGrid> to get
         the upper space with and without considering the page grid
         (default value: <sal_True>)
-
-        @author ?
     */
     SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = NULL,
                             const SwFrm* pPr = NULL,
@@ -216,26 +209,18 @@ public:
         the previous frame and the page grid, if option 'Use former object
         positioning' is OFF
 
-        OD 2004-03-18 #i11860#
-
-        @author OD
+        #i11860#
     */
     SwTwips GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const;
 
     /** calculation of lower space
-
-        OD 2004-03-02 #106629#
-
-        @author OD
     */
     SwTwips CalcLowerSpace( const SwBorderAttrs* _pAttrs = 0L ) const;
 
     /** calculation of the additional space to be considered, if flow frame
         is the last inside a table cell
 
-        OD 2004-07-16 #i26250
-
-        @author OD
+        #i26250
 
         @param _pAttrs
         optional input parameter - border attributes of the flow frame.
@@ -269,5 +254,13 @@ inline sal_Bool SwFlowFrm::IsFwdMoveAllowed()
     return rThis.GetIndPrev() != 0;
 }
 
+inline void SwFlowFrm::SetFollow( SwFlowFrm *pNew )
+{
+    pFollow = pNew;
+    if ( pFollow != NULL )
+        pFollow->pPrecede = this;
+}
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

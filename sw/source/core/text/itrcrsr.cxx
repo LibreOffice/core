@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include "errhdl.hxx"
 #include "ndtxt.hxx"
 #include "frmfmt.hxx"
 #include "paratr.hxx"
@@ -47,7 +47,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <pagefrm.hxx>
 
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
@@ -57,9 +56,8 @@
 #include "pordrop.hxx"
 #include "crstate.hxx"      // SwCrsrMoveState
 #include <pormulti.hxx>     // SwMultiPortion
-// --> OD 2010-05-05 #i111284#
+// #i111284#
 #include <numrule.hxx>
-// <--
 
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
@@ -77,7 +75,7 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
                                  const SwCrsrMoveState& rCMS,
                                  const SwLinePortion& rPor )
 {
-    ASSERT( rCMS.pSpecialPos, "Information about special pos missing" )
+    OSL_ENSURE( rCMS.pSpecialPos, "Information about special pos missing" );
 
     if ( rPor.InFldGrp() && ((SwFldPortion&)rPor).GetExp().Len() )
     {
@@ -109,7 +107,7 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
 
         } while ( sal_True );
 
-        ASSERT( nCharOfst >= nFldIdx, "Request of position inside field failed" )
+        OSL_ENSURE( nCharOfst >= nFldIdx, "Request of position inside field failed" );
         sal_uInt16 nLen = nCharOfst - nFldIdx + 1;
 
         if ( pString )
@@ -146,7 +144,7 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
     }
 }
 
-// --> OD 2010-05-05 #i111284#
+// #i111284#
 namespace {
     bool AreListLevelIndentsApplicableAndLabelAlignmentActive( const SwTxtNode& rTxtNode )
     {
@@ -165,7 +163,6 @@ namespace {
         return bRet;
     }
 } // end of anonymous namespace
-// <--
 
 /*************************************************************************
  *                SwTxtMargin::CtorInitTxtMargin()
@@ -179,11 +176,10 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const SwTxtNode *pNode = pFrm->GetTxtNode();
 
     const SvxLRSpaceItem &rSpace = pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
-    // --> OD 2009-09-08 #i95907#, #b6879723#
-    // --> OD 2010-05-05 #i111284#
+    // #i95907#
+    // #i111284#
     const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
         AreListLevelIndentsApplicableAndLabelAlignmentActive( *(pFrm->GetTxtNode()) ) );
-    // <--
 
     //
     // Carefully adjust the text formatting ranges.
@@ -200,43 +196,36 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     const int nLMWithNum = pNode->GetLeftMarginWithNum( sal_True );
     if ( pFrm->IsRightToLeft() )
     {
-        // --> OD 2008-01-23 #newlistlevelattrs#
         // this calculation is identical this the calculation for L2R layout - see below
         nLeft = pFrm->Frm().Left() +
                 pFrm->Prt().Left() +
                 nLMWithNum -
                 pNode->GetLeftMarginWithNum( sal_False ) -
-                // --> OD 2009-09-08 #i95907#, #b6879723#
-                // --> OD 2010-05-05 #i111284#
+                // #i95907#
+                // #i111284#
 //                rSpace.GetLeft() +
 //                rSpace.GetTxtLeft();
                 ( bListLevelIndentsApplicableAndLabelAlignmentActive
                   ? 0
                   : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
-                // <--
     }
     else
     {
-        // --> OD 2009-09-08 #i95907#, #b6879723#
-        // --> OD 2010-05-05 #i111284#
-//        if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // #i95907#
+        // #i111284#
         if ( bListLevelIndentsApplicableAndLabelAlignmentActive ||
              !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
-        // <--
         {
             // this calculation is identical this the calculation for R2L layout - see above
             nLeft = pFrm->Frm().Left() +
                     pFrm->Prt().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum( sal_False ) -
-                    // --> OD 2009-09-08 #i95907#, #b6879723#
-                    // --> OD 2010-05-05 #i111284#
-//                    rSpace.GetLeft() +
-//                    rSpace.GetTxtLeft();
+                    // #i95907#
+                    // #i111284#
                     ( bListLevelIndentsApplicableAndLabelAlignmentActive
                       ? 0
                       : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
-                    // <--
         }
         else
         {
@@ -249,12 +238,11 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     nRight = pFrm->Frm().Left() + pFrm->Prt().Left() + pFrm->Prt().Width();
 
     if( nLeft >= nRight &&
-         // --> FME 2005-08-10 #i53066# Omit adjustment of nLeft for numbered
+         // #i53066# Omit adjustment of nLeft for numbered
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !pFrm->IsInTab() ||
           !nLMWithNum ) )
-         // <--
     {
         nLeft = pFrm->Prt().Left() + pFrm->Frm().Left();
         if( nLeft >= nRight )   // z.B. bei grossen Absatzeinzuegen in schmalen Tabellenspalten
@@ -287,7 +275,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                     case SVX_LINE_SPACE_FIX:
                         nFirstLineOfs = pSpace->GetLineHeight();
                     break;
-                    default: ASSERT( sal_False, ": unknown LineSpaceRule" );
+                    default: OSL_FAIL( ": unknown LineSpaceRule" );
                 }
                 switch( pSpace->GetInterLineSpaceRule() )
                 {
@@ -313,21 +301,18 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                         nFirstLineOfs += pSpace->GetInterLineSpace();
                         break;
                     }
-                    default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
+                    default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                 }
             }
         }
         else
             nFirstLineOfs = nFLOfst;
 
-        // --> OD 2009-09-08 #i95907#, #b6879723#
-        // --> OD 2010-05-05 #i111284#
-//        if ( pFrm->IsRightToLeft() ||
-//             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // #i95907#
+        // #i111284#
         if ( pFrm->IsRightToLeft() ||
              bListLevelIndentsApplicableAndLabelAlignmentActive ||
              !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
-        // <--
         {
             nFirst = nLeft + nFirstLineOfs;
         }
@@ -338,13 +323,11 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                           pFrm->Prt().Left() );
         }
 
-        // --> OD 2008-01-31 #newlistlevelattrs#
         // Note: <SwTxtFrm::GetAdditionalFirstLineOffset()> returns a negative
         //       value for the new list label postion and space mode LABEL_ALIGNMENT
         //       and label alignment CENTER and RIGHT in L2R layout respectively
         //       label alignment LEFT and CENTER in R2L layout
         nFirst += pFrm->GetAdditionalFirstLineOffset();
-        // <--
 
         if( nFirst >= nRight )
             nFirst = nRight - 1;
@@ -365,9 +348,8 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     bLastBlock = rAdjust.GetLastBlock() == SVX_ADJUST_BLOCK;
     bLastCenter = rAdjust.GetLastBlock() == SVX_ADJUST_CENTER;
 
-    // --> OD 2008-07-01 #i91133#
+    // #i91133#
     mnTabLeft = pNode->GetLeftMarginForTabCalculation();
-    // <--
 
 #if OSL_DEBUG_LEVEL > 1
     static sal_Bool bOne = sal_False;
@@ -498,7 +480,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             pCMS->aRealHeight.X() = nTmpAscent - nPorAscent;
         else
             pCMS->aRealHeight.X() = 0;
-        ASSERT( nPorHeight, "GetCharRect: Missing Portion-Height" );
+        OSL_ENSURE( nPorHeight, "GetCharRect: Missing Portion-Height" );
         pCMS->aRealHeight.Y() = nPorHeight;
     }
 
@@ -575,10 +557,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             if( bNoTxt )
                 nTmpFirst = nX;
             // 8670: EndPortions zaehlen hier einmal als TxtPortions.
-            // --> OD 2008-01-28 #newlistlevelattrs#
 //            if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
             if( pPor->InTxtGrp() || pPor->IsBreakPortion() || pPor->InTabGrp() )
-            // <--
             {
                 bNoTxt = sal_False;
                 nTmpFirst = nX;
@@ -963,7 +943,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if( pPor )
         {
-            ASSERT( !pPor->InNumberGrp() || bInsideFirstField, "Number surprise" );
+            OSL_ENSURE( !pPor->InNumberGrp() || bInsideFirstField, "Number surprise" );
             sal_Bool bEmptyFld = sal_False;
             if( pPor->InFldGrp() && pPor->GetLen() )
             {
@@ -974,7 +954,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     SwLinePortion *pNext = pTmp->GetPortion();
                     while( pNext && !pNext->InFldGrp() )
                     {
-                        ASSERT( !pNext->GetLen(), "Where's my field follow?" );
+                        OSL_ENSURE( !pNext->GetLen(), "Where's my field follow?" );
                         nAddX = nAddX + pNext->Width();
                         pNext = pNext->GetPortion();
                     }
@@ -1046,7 +1026,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 // Ausgleich vor 's'.
                 while( pPor && !pPor->GetLen() )
                 {
-                    DBG_LOOP;
                     nX += pPor->Width();
                     if( !pPor->IsMarginPortion() )
                     {
@@ -1151,8 +1130,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     const SwLinePortion *pLast = rLineLayout.FindLastPortion();
                     if ( pLast->IsMultiPortion() )
                     {
-                        ASSERT( ((SwMultiPortion*)pLast)->IsBidi(),
-                                 "Non-BidiPortion inside BidiPortion" )
+                        OSL_ENSURE( ((SwMultiPortion*)pLast)->IsBidi(),
+                                 "Non-BidiPortion inside BidiPortion" );
                         pOrig->Pos().X() += pLast->Width() +
                                             pLast->CalcSpacing( nSpaceAdd, aInf );
                     }
@@ -1181,7 +1160,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 pCMS->aRealHeight.X() = nTmpAscent - nPorAscent;
             else
                 pCMS->aRealHeight.X() = 0;
-            ASSERT( nPorHeight, "GetCharRect: Missing Portion-Height" );
+            OSL_ENSURE( nPorHeight, "GetCharRect: Missing Portion-Height" );
             if ( nTmpHeight > nPorHeight )
                 pCMS->aRealHeight.Y() = nPorHeight;
             else
@@ -1208,8 +1187,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     {
         const sal_uInt8 nExtendRange = pCMS->pSpecialPos->nExtendRange;
 
-        ASSERT( ! pCMS->pSpecialPos->nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
-                "LineOffset AND Number Portion?" )
+        OSL_ENSURE( ! pCMS->pSpecialPos->nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
+                "LineOffset AND Number Portion?" );
 
         // portions which are behind the string
         if ( SP_EXTEND_RANGE_BEHIND == nExtendRange )
@@ -1293,7 +1272,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     // x ist der horizontale Offset innerhalb der Zeile.
     SwTwips x = rPoint.X();
-    CONST SwTwips nLeftMargin  = GetLineStart();
+    const SwTwips nLeftMargin  = GetLineStart();
     SwTwips nRightMargin = GetLineEnd();
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;
@@ -1628,7 +1607,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                         ((SwDropPortion*)pPor)->GetFnt() : NULL );
 
                 SwParaPortion* pPara = (SwParaPortion*)GetInfo().GetParaPortion();
-                ASSERT( pPara, "No paragraph!" );
+                OSL_ENSURE( pPara, "No paragraph!" );
 
                 SwDrawTextInfo aDrawInf( aSizeInf.GetVsh(),
                                          *aSizeInf.GetOut(),
@@ -1641,12 +1620,11 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 if ( nSpaceAdd )
                 {
                     xub_StrLen nCharCnt;
-                    // --> FME 2005-04-04 #i41860# Thai justified alignemt needs some
+                    // #i41860# Thai justified alignemt needs some
                     // additional information:
                     aDrawInf.SetNumberOfBlanks( pPor->InTxtGrp() ?
                                                 static_cast<const SwTxtPortion*>(pPor)->GetSpaceCnt( aSizeInf, nCharCnt ) :
                                                 0 );
-                    // <--
                 }
 
                 if ( pPor->InFldGrp() && pCMS && pCMS->pSpecialPos )
@@ -1884,3 +1862,4 @@ bool SwTxtFrm::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) c
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

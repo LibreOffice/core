@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -256,7 +257,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual sal_Bool QueryValue(com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) const;
+    virtual bool QueryValue(com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) const;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -268,7 +269,9 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-        virtual sal_Bool PutValue(const com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId);
+    virtual bool PutValue(const com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId);
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

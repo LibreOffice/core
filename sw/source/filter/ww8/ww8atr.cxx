@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 /*
  * This file contains methods for the WW8 output
@@ -135,6 +135,7 @@
 #include <vcl/outdev.hxx>
 #include <i18npool/mslangid.hxx>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
 using namespace nsSwDocInfoSubType;
@@ -149,7 +150,7 @@ using namespace nsSwDocInfoSubType;
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
 */
 
-#if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
+#if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(__MINGW32__)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
@@ -387,7 +388,7 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
 {
     bool bNewPageDesc = false;
     const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
-    ASSERT(pCurrent && pAktPageDesc, "Not possible surely");
+    OSL_ENSURE(pCurrent && pAktPageDesc, "Not possible surely");
     if (pAktPageDesc && pCurrent)
     {
         if (pCurrent != pAktPageDesc)
@@ -458,7 +459,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
         }
         else if ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
         {
-            // --> FME 2007-05-30 #146867# Word does not like hard break attributes in some table cells
+            // Word does not like hard break attributes in some table cells
             bool bRemoveHardBreakInsideTable = false;
             if ( bOutTable )
             {
@@ -478,13 +479,12 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     }
                 }
             }
-            // <--
 
             bBreakSet = true;
 
             if ( !bRemoveHardBreakInsideTable )
             {
-                ASSERT(pAktPageDesc, "should not be possible");
+                OSL_ENSURE(pAktPageDesc, "should not be possible");
                 /*
                  If because of this pagebreak the page desc following the page
                  break is the follow style of the current page desc then output a
@@ -495,15 +495,13 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 */
                 if ( pAktPageDesc )
                 {
-                    // --> OD 2007-05-30 #i76301#
-                    // assure that there is a page break before set at the node.
+                    // #i76301# - assure that there is a page break before set at the node.
                     const SvxFmtBreakItem* pBreak = dynamic_cast<const SvxFmtBreakItem*>(pItem);
                     if ( pBreak &&
                          pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE )
                     {
                         bNewPageDesc = SetAktPageDescFromNode( rNd );
                     }
-                    // <--
                 }
                 if ( !bNewPageDesc )
                     AttrOutput().OutputItem( *pItem );
@@ -540,7 +538,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( bHackInBreak )
     {
-        ASSERT( pAktPageDesc, "should not be possible" );
+        OSL_ENSURE( pAktPageDesc, "should not be possible" );
         if ( pAktPageDesc )
             bNewPageDesc = SetAktPageDescFromNode( rNd );
     }
@@ -552,7 +550,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     bBreakBefore = false;
 }
 
-// --> OD 2007-05-29 #i76300#
+// #i76300#
 bool MSWordExportBase::OutputFollowPageDesc( const SfxItemSet* pSet, const SwTxtNode* pNd )
 {
     bool bRet = false;
@@ -616,7 +614,7 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
     const SwSectionFmt* pFmt = GetSectionFormat( rNd );
     const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
 
-    ASSERT( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
+    OSL_ENSURE( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
 
     if ( pNewPgDescFmt )
     {
@@ -695,12 +693,9 @@ void WW8AttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt &rNFmt
     else
     {
         m_rWW8Export.Out_SwNumLvl( nLvl );
-        // --> OD 2008-06-03 #i86652#
-//        if (rNFmt.GetAbsLSpace())
         if ( rNFmt.GetPositionAndSpaceMode() ==
                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION  &&
              rNFmt.GetAbsLSpace() )
-        // <--
         {
             SwNumFmt aNumFmt( rNFmt );
             const SvxLRSpaceItem& rLR =
@@ -719,7 +714,7 @@ void WW8AttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt &rNFmt
     }
 }
 
-// --> OD 2007-06-04 #i77805#
+// #i77805#
 bool WW8Export::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
 {
     bool bRet( false );
@@ -750,7 +745,6 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
 
     return bRet;
 }
-// <--
 
 void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpFmt, bool bFlyFmt )
 {
@@ -774,12 +768,9 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                 if ( bStyDef )
                     AttrOutput().OutlineNumbering( static_cast< sal_uInt8 >( nLvl ), rNFmt, rFmt );
 
-                // --> OD 2008-06-03 #i86652#
-//                if (rNFmt.GetAbsLSpace())
                 if ( rNFmt.GetPositionAndSpaceMode() ==
                                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION  &&
                      rNFmt.GetAbsLSpace() )
-                // <--
                 {
                     SfxItemSet aSet( rFmt.GetAttrSet() );
                     SvxLRSpaceItem aLR(
@@ -799,7 +790,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
             {
                 //otherwise we might have to remove outline numbering from
                 //what gets exported if the parent style was outline numbered
-                // --> OD 2007-06-04 #i77805#
+                // #i77805#
                 // If inherited outline numbering is suppress, the left/right
                 // margins has to be exported explicitly.
                 if ( bStyDef && DisallowInheritingOutlineNumbering(rFmt) )
@@ -812,7 +803,6 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                         com::sun::star::i18n::ScriptType::LATIN, mbExportModeRTF);
                     bCallOutSet = false;
                 }
-                // <--
             }
         }
         break;
@@ -822,7 +812,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     case RES_FLYFRMFMT:
         if (bFlyFmt)
         {
-            ASSERT(mpParentFrame, "No parent frame, all broken");
+            OSL_ENSURE(mpParentFrame, "No parent frame, all broken");
 
             if (mpParentFrame)
             {
@@ -856,8 +846,10 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
             }
         }
         break;
+    case RES_FRMFMT:
+        break;
     default:
-        ASSERT( !this, "Was wird hier ausgegeben ??? " );
+        OSL_ENSURE( !this, "Which format is exported here?" );
         break;
     }
 
@@ -932,9 +924,7 @@ String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const String* pName, 
             sRet += String::CreateFromInt32( nSeqNo );
             break;
     }
-    // --> OD 2005-06-08 #i43956# - encode bookmark accordingly
-    return BookmarkToWord( sRet );
-    // <--
+    return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
 }
 
 //-----------------------------------------------------------------------
@@ -1046,7 +1036,7 @@ void WW8AttributeOutput::OutputFKP()
 
 void WW8AttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
-    ASSERT( !m_rWW8Export.pO->Count(), " pO ist am ZeilenEnde nicht leer" );
+    OSL_ENSURE( !m_rWW8Export.pO->Count(), " pO ist am ZeilenEnde nicht leer" );
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
@@ -1067,7 +1057,7 @@ void WW8AttributeOutput::OutputWW8Attribute( sal_uInt8 nId, bool bVal )
 
 void WW8AttributeOutput::OutputWW8AttributeCTL( sal_uInt8 nId, bool bVal )
 {
-    ASSERT( nId <= 1, "out of range" );
+    OSL_ENSURE( nId <= 1, "out of range" );
     if ( !m_rWW8Export.bWrtWW8 || nId > 1 )
         return;
 
@@ -1093,20 +1083,26 @@ void WW8AttributeOutput::CharFont( const SvxFontItem& rFont )
 
 void WW8AttributeOutput::CharFontCTL( const SvxFontItem& rFont )
 {
+    //Can only export in 8+, in 7- export as normal varient and expect that
+    //upperlevel code has blocked exporting clobbering attributes
+    sal_uInt16 nFontID = m_rWW8Export.GetId( rFont );
     if ( m_rWW8Export.bWrtWW8 )
-    {
         m_rWW8Export.InsUInt16( NS_sprm::LN_CFtcBi );
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( rFont ) );
-    }
+    else
+        m_rWW8Export.pO->Insert( 93, m_rWW8Export.pO->Count() );
+    m_rWW8Export.InsUInt16( nFontID );
 }
 
 void WW8AttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 {
+    //Can only export in 8+, in 7- export as normal varient and expect that
+    //upperlevel code has blocked exporting clobbering attributes
+    sal_uInt16 nFontID = m_rWW8Export.GetId( rFont );
     if ( m_rWW8Export.bWrtWW8 )
-    {
         m_rWW8Export.InsUInt16( NS_sprm::LN_CRgFtc1 );
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( rFont ) );
-    }
+    else
+        m_rWW8Export.pO->Insert( 93, m_rWW8Export.pO->Count() );
+    m_rWW8Export.InsUInt16( nFontID );
 }
 
 void WW8AttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
@@ -1307,7 +1303,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
             b = 0;
             break;
         default:
-            ASSERT( rUnderline.GetLineStyle() == UNDERLINE_NONE, "Unhandled underline type" );
+            OSL_ENSURE( rUnderline.GetLineStyle() == UNDERLINE_NONE, "Unhandled underline type" );
             break;
     }
 
@@ -1322,10 +1318,10 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
         switch ( rLanguage.Which() )
         {
             case RES_CHRATR_LANGUAGE:
-                nId = NS_sprm::LN_CRgLid0;
+                nId = NS_sprm::LN_CRgLid0_80;
                 break;
             case RES_CHRATR_CJK_LANGUAGE:
-                nId = NS_sprm::LN_CRgLid1;
+                nId = NS_sprm::LN_CRgLid1_80;
                 break;
             case RES_CHRATR_CTL_LANGUAGE:
                 nId = NS_sprm::LN_CLidBi;
@@ -1337,25 +1333,24 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 
     if ( nId )
     {
-        if ( m_rWW8Export.bWrtWW8 ) // use sprmCRgLid0 rather than sprmCLid
+        if ( m_rWW8Export.bWrtWW8 ) // use sprmCRgLid0_80 rather than sprmCLid
             m_rWW8Export.InsUInt16( nId );
         else
             m_rWW8Export.pO->Insert( (sal_uInt8)nId, m_rWW8Export.pO->Count() );
         m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
 
-        // unknown as to exactly why, but this seems to shadow the other
-        // paramater in word 2000 and without it spellchecking doesn't work
-        if ( nId == NS_sprm::LN_CRgLid0 )
+        // Word 2000 and above apparently require both old and new versions of
+        // these sprms to be set, without it spellchecking doesn't work
+        if ( nId == NS_sprm::LN_CRgLid0_80 )
         {
-            m_rWW8Export.InsUInt16( 0x4873 );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgLid0 );
             m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
         }
-        else if ( nId == NS_sprm::LN_CLidBi )
+        else if ( nId == NS_sprm::LN_CRgLid1_80 )
         {
-            m_rWW8Export.InsUInt16( 0x4874 );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgLid1 );
             m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
         }
-
     }
 }
 
@@ -1484,7 +1479,7 @@ void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
     if ( !rRotate.GetValue() )
         return;
 
-    if ( m_rWW8Export.bWrtWW8 && !m_rWW8Export.bIsInTable )
+    if ( m_rWW8Export.bWrtWW8 && !m_rWW8Export.IsInTable() )
     {
         // #i36867 In word the text in a table is rotated via the TC or NS_sprm::LN_TTextFlow
         // This means you can only rotate all or none of the text adding NS_sprm::LN_CEastAsianLayout
@@ -1656,10 +1651,10 @@ void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
     }
 }
 
-// --> OD 2005-06-08 #i43956# - add optional parameter <pLinkStr>
+// #i43956# - add optional parameter <pLinkStr>
 // It's needed to write the hyperlink data for a certain cross-reference
 // - it contains the name of the link target, which is a bookmark.
-// --> OD 2008-08-14 #158418# - add optional parameter <bIncludeEmptyPicLocation>
+// add optional parameter <bIncludeEmptyPicLocation>
 // It is needed to write an empty picture location for page number field separators
 static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
                                String* pLinkStr = 0L,
@@ -1676,7 +1671,6 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
 
     rWrt.WriteChar(c);
 
-    // --> OD 2008-08-14 #158418#
     // store empty sprmCPicLocation for field separator
     if ( bIncludeEmptyPicLocation &&
          ( c == 0x13 || c == 0x14 || c == 0x15 ) )
@@ -1684,9 +1678,8 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         SwWW8Writer::InsUInt16( aItems, NS_sprm::LN_CPicLocation );
         SwWW8Writer::InsUInt32( aItems, 0x00000000 );
     }
-    // <--
 
-    // --> OD 2005-06-08 #i43956# - write hyperlink data and attributes
+    // #i43956# - write hyperlink data and attributes
     if ( rWrt.bWrtWW8 && c == 0x01 && pLinkStr )
     {
         // write hyperlink data to data stream
@@ -1788,7 +1781,7 @@ WW8_WrPlcFld* WW8Export::CurrentFieldPlc() const
             pFldP = pFldHFTxtBxs;
             break;
         default:
-            ASSERT( !this, "was ist das fuer ein SubDoc-Type?" );
+            OSL_ENSURE( !this, "was ist das fuer ein SubDoc-Type?" );
     }
     return pFldP;
 }
@@ -1799,9 +1792,8 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
     bool bUnicode = IsUnicode();
     WW8_WrPlcFld* pFldP = CurrentFieldPlc();
 
-    // --> OD 2008-08-14 #158418#
     const bool bIncludeEmptyPicLocation = ( eFldType == ww::ePAGE );
-    // <--
+
     if (WRITEFIELD_START & nMode)
     {
         sal_uInt8 aFld13[2] = { 0x13, 0x00 };  // will change
@@ -1810,9 +1802,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             aFld13[0] |= 0x80;
         aFld13[1] = static_cast< sal_uInt8 >(eFldType);  // Typ nachtragen
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld13 );
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x13, 0, bIncludeEmptyPicLocation );
-        // <--
     }
     if (WRITEFIELD_CMD_START & nMode)
     {
@@ -1823,7 +1813,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             SwWW8Writer::WriteString8(Strm(), rFldCmd, false,
                 RTL_TEXTENCODING_MS_1252);
         }
-        // --> OD 2005-06-08 #i43956# - write hyperlink character including
+        // #i43956# - write hyperlink character including
         // attributes and corresponding binary data for certain reference fields.
         bool bHandleBookmark = false;
 
@@ -1834,11 +1824,6 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
                   eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ))
                 bHandleBookmark = true;
 
-#if 0
-            if (pFld->GetTyp()->Which() == RES_INPUTFLD &&
-                eFldType == ww::eFORMTEXT)
-                bHandleBookmark = true;
-#endif
         }
 
         if ( bHandleBookmark )
@@ -1864,16 +1849,13 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
             // insert hyperlink character including attributes and data.
             InsertSpecialChar( *this, 0x01, &aLinkStr );
         }
-        // <--
     }
     if (WRITEFIELD_CMD_END & nMode)
     {
         static const sal_uInt8 aFld14[2] = { 0x14, 0xff };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
         pFldP->ResultAdded();
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x14, 0, bIncludeEmptyPicLocation );
-        // <--
     }
     if (WRITEFIELD_END & nMode)
     {
@@ -1941,9 +1923,7 @@ void WW8Export::OutputField( const SwField* pFld, ww::eField eFldType,
         }
 
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld15 );
-        // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x15, 0, bIncludeEmptyPicLocation );
-        // <--
     }
 }
 
@@ -2090,7 +2070,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                     if( 3 == nRet )
                         aFillTxt = aTxt;
-                    else if ((4 == nRet) || (2 == nRet)) //#109414#
+                    else if ((4 == nRet) || (2 == nRet))
                         aFillTxt = '\t';
                     else
                         aFillTxt.Erase();
@@ -2100,8 +2080,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 sStr.AppendAscii(sEntryEnd);
             }
             break;
-
-//      case TOX_AUTHORITIES:   eCode = eTOA; sStr = ???; break;
 
         case TOX_ILLUSTRATIONS:
         case TOX_OBJECTS:
@@ -2127,8 +2105,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
             }
             break;
 
-//      case TOX_USER:
-//      case TOX_CONTENT:
         default:
             {
                 sStr = FieldString(eCode);
@@ -2151,39 +2127,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
 
                 if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                 {
-                    // --> OD 2009-02-27 #i99641#
-                    // The following code does not determine the minimum outline
-                    // level for the TOC
-//                    // Search over all the outline styles used and figure out
-//                    // what is the minimum outline level we need to display
-//                    // (ignoring headline styles 1-9)
-//                    //sal_uInt8 nLvl = 0, nMinLvl = 0; //#outline level, removed by zhaojianwei
-//                    int nLvl = 0, nMinLvl = 0;      //<-end,add by zhaojianwei
-//                    const SwTxtFmtColls& rColls = *GetExport().pDoc->GetTxtFmtColls();
-//                    const SwTxtFmtColl* pColl;
-//                    for( n = rColls.Count(); n; )
-//                    {
-//                        pColl = rColls[ --n ];
-//                        //nLvl = pColl->GetOutlineLevel();    //#outline level,zhaojianwei
-//                        //sal_uInt16 nPoolId = pColl->GetPoolFmtId();
-//                        //if( MAXLEVEL > nLvl && nMinLvl < nLvl &&        //<-end, ->add by zhaojianwei
-//                        sal_uInt16 nPoolId = pColl->GetPoolFmtId();
-//                        if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-//                          nMinLvl < (nLvl = pColl->GetAssignedOutlineStyleLevel()) && //<-end,zhaojianwei
-//                            ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
-//                              RES_POOLCOLL_HEADLINE9 < nPoolId ))
-//                        {
-//                            // If we are using the default heading styles then use nTOXLvl
-//                            if(!nMinLvl)
-//                                nLvl = nTOXLvl;
-//                            else
-//                                nLvl = nMinLvl < nTOXLvl ? nMinLvl : (sal_uInt8)nTOXLvl;
-//                            nMinLvl = nLvl;
-//                        }
-//                    }
                     const int nMinLvl = nTOXLvl;
 
-//                    if( nLvl )
                     if ( nMinLvl > 0 )
                     {
                         int nTmpLvl = nMinLvl;
@@ -2195,34 +2140,6 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         sStr.AppendAscii(sEntryEnd);
 
                     }
-                    // <--
-
-                    // --> OD 2009-02-27 #i99641#
-                    // not needed to additional export paragraph style with
-                    // an outline level to the /t option
-//                    if( nMinLvl > 0 )
-//                    // <--
-//                    {
-//                        // collect this templates into the \t otion
-//                        const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-//                        const SwTxtFmtColl* pColl;
-//                        int nLvl = 0;
-//                        for( n = rColls.Count(); n;)
-//                        {
-//                            pColl = rColls[--n];
-//                            //nLvl =  pColl->GetOutlineLevel();         //#outline level, removed by zhaojianwei
-//                            //if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
-//                            //{                                         //<-end, ->add by zhaojianwei
-//                            if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-//                                nMinLvl <= ( nLvl = pColl->GetAssignedOutlineStyleLevel()))
-//                            {                                           //<-end,zhaojianwei
-//                                if( sTOption.Len() )
-//                                    sTOption += ';';
-//                                (( sTOption += pColl->GetName() ) += ';' )
-//                                        += String::CreateFromInt32( nLvl + 1 );
-//                            }
-//                        }
-//                    }
 
                 }
 
@@ -2305,10 +2222,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                   }
 
                 if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
-                    // --> OD 2009-02-27 #i99641#
-                    // Consider additional styles regardless of TOX-outlinelevel
+                    // #i99641# - Consider additional styles regardless of TOX-outlinelevel
                     for( n = 0; n < MAXLEVEL; ++n )
-                    // <--
                     {
                         const String& rStyles = pTOX->GetStyleNames( n );
                         if( rStyles.Len() )
@@ -2322,7 +2237,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 if( sStyle.Len() )
                                 {
                                     SwTxtFmtColl* pColl = GetExport().pDoc->FindTxtFmtCollByName(sStyle);
-                                    if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
+                                    if (!pColl || !pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
                                     {
                                         if( sTOption.Len() )
                                             sTOption += ',';
@@ -2467,7 +2382,7 @@ void AttributeOutputBase::GetNumberPara( String& rStr, const SwField& rFld )
             rStr.APPEND_CONST_ASC("\\*roman ");
             break;
         default:
-            ASSERT(rFld.GetFormat() == SVX_NUM_ARABIC,
+            OSL_ENSURE(rFld.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default\n");
         case SVX_NUM_ARABIC:
             rStr.APPEND_CONST_ASC("\\*Arabic ");
@@ -2715,7 +2630,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_AUTHORFLD:
         {
             ww::eField eFld =
-                (AF_SHORTCUT & nSubType ? ww::eUSERINITIALS : ww::eUSERNAME);
+                (AF_SHORTCUT & pFld->GetFormat() ? ww::eUSERINITIALS : ww::eUSERNAME);
             GetExport().OutputField(pFld, eFld, FieldString(eFld));
         }
         break;
@@ -3145,7 +3060,7 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
             break;
         default:
             nVal = 4;
-            ASSERT( false, "Unknown vert alignment" );
+            OSL_FAIL( "Unknown vert alignment" );
             break;
     }
     m_rWW8Export.InsUInt16( nVal );
@@ -3528,17 +3443,17 @@ void WW8AttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 
 sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
 {
-    // Bug #49917#
-    ASSERT( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
+    OSL_ENSURE( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
 
     bool bReplaced = false;
     SvStream& rStrm = Strm();
     sal_uLong nRetPos = 0, nPos = rStrm.Tell();
-    sal_uInt8 nBCode=0;
-    sal_uInt16 nUCode=0;
     //If there is at least two characters already output
     if (nPos - (IsUnicode() ? 2 : 1) >= sal_uLong(pFib->fcMin))
     {
+        sal_uInt8 nBCode=0;
+        sal_uInt16 nUCode=0;
+
         rStrm.SeekRel(IsUnicode() ? -2 : -1);
         if (IsUnicode())
             rStrm >> nUCode;
@@ -3579,8 +3494,7 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
         }
         else if ((nUCode == 0x0c) && (nChar == 0x0e))
         {
-            //#108854# a column break after a section has
-            //no effect in writer
+            // a column break after a section has no effect in writer
             bReplaced = true;
         }
         rStrm.Seek( nPos );
@@ -3597,13 +3511,6 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifndef DBG_UTIL
-    else
-    {
-        ASSERT( nRetPos || nPos == (sal_uLong)pFib->fcMin,
-                "WW8_ReplaceCr an falscher FilePos gerufen" );
-    }
-#endif
     return nRetPos;
 }
 
@@ -3650,9 +3557,6 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
     {
         switch ( rBreak.GetBreak() )
         {
-            // JP 21.06.99: column breaks never change to pagebreaks
-            // case SVX_BREAK_COLUMN_BEFORE:
-            // case SVX_BREAK_COLUMN_BOTH:
             case SVX_BREAK_NONE:
             case SVX_BREAK_PAGE_BEFORE:
             case SVX_BREAK_PAGE_BOTH:
@@ -3666,10 +3570,8 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
     {
         sal_uInt8 nC = 0;
         bool bBefore = false;
-        // --> OD 2007-05-29 #i76300#
-        // Note: Can only be <true>, if <bBefore> equals <false>.
+        // #i76300# - Note: Can only be <true>, if <bBefore> equals <false>.
         bool bCheckForFollowPageDesc = false;
-        // <--
 
         switch ( rBreak.GetBreak() )
         {
@@ -3700,24 +3602,22 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
             case SVX_BREAK_PAGE_AFTER:
             case SVX_BREAK_PAGE_BOTH:
                 nC = msword::PageBreak;
-                // --> OD 2007-05-29 #i76300#
-                // check for follow page description, if current writing attributes
-                // of a paragraph.
+                // #i76300# - check for follow page description,
+                // if current writing attributes of a paragraph.
                 if ( dynamic_cast< const SwTxtNode* >( GetExport().pOutFmtNode ) &&
                      GetExport().GetCurItemSet() )
                 {
                     bCheckForFollowPageDesc = true;
                 }
-                // <--
                 break;
 
             default:
                 break;
         }
 
-        if ( ( bBefore == GetExport().bBreakBefore ) && nC )  // #49917#
+        if ( ( bBefore == GetExport().bBreakBefore ) && nC )
         {
-            // --> OD 2007-05-29 #i76300#
+            // #i76300#
             bool bFollowPageDescWritten = false;
             if ( bCheckForFollowPageDesc && !bBefore )
             {
@@ -3729,7 +3629,6 @@ void AttributeOutputBase::FormatBreak( const SvxFmtBreakItem& rBreak )
             {
                 SectionBreak( nC );
             }
-            // <--
         }
     }
 }
@@ -3747,7 +3646,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         switch ( rGrid.GetGridType() )
         {
             default:
-                ASSERT(false, "Unknown grid type");
+                OSL_FAIL("Unknown grid type");
             case GRID_NONE:
                 nGridType = 0;
                 break;
@@ -3776,25 +3675,12 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         if (pSwFmt != NULL)
         {
             nPageCharSize = ItemGet<SvxFontHeightItem>
-            (*pSwFmt, RES_CHRATR_CJK_FONTSIZE).GetHeight();
+            (*pSwFmt, RES_CHRATR_FONTSIZE).GetHeight();
         }
+        sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
+            rGrid.GetBaseWidth( );
+        sal_Int32 nCharSpace = ( nPitch - nPageCharSize ) * 4096 / 20;
 
-        sal_Int32 nCharWidth = rGrid.GetBaseWidth() - nPageCharSize;
-        sal_Int32 nFraction = 0;
-        nFraction = nCharWidth % 20;
-        if ( nCharWidth < 0 )
-            nFraction = 20 + nFraction;
-        nFraction = ( nFraction * 0xFFF ) / 20;
-        nFraction = ( nFraction & 0x00000FFF );
-
-        sal_Int32 nMain = 0;
-        nMain = nCharWidth / 20;
-        if ( nCharWidth < 0 )
-            nMain -= 1;
-        nMain = nMain * 0x1000;
-        nMain = ( nMain & 0xFFFFF000 );
-
-        sal_uInt32 nCharSpace = nFraction + nMain;
         m_rWW8Export.InsUInt16( NS_sprm::LN_SDxtCharSpace );
         m_rWW8Export.InsUInt32( nCharSpace );
     }
@@ -3923,7 +3809,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
     }
     else if ( m_rWW8Export.bOutPageDescs )            // Page-UL
     {
-        ASSERT( m_rWW8Export.GetCurItemSet(), "Impossible" );
+        OSL_ENSURE( m_rWW8Export.GetCurItemSet(), "Impossible" );
         if ( !m_rWW8Export.GetCurItemSet() )
             return;
 
@@ -4038,7 +3924,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
 {
     if ( !m_rWW8Export.mpParentFrame )
     {
-        ASSERT( m_rWW8Export.mpParentFrame, "HoriOrient without mpParentFrame !!" );
+        OSL_ENSURE( m_rWW8Export.mpParentFrame, "HoriOrient without mpParentFrame !!" );
         return;
     }
 
@@ -4077,7 +3963,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFmtHoriOrient& rFlyHori
 
 void WW8AttributeOutput::FormatAnchor( const SwFmtAnchor& rAnchor )
 {
-    ASSERT( m_rWW8Export.mpParentFrame, "Anchor without mpParentFrame !!" );
+    OSL_ENSURE( m_rWW8Export.mpParentFrame, "Anchor without mpParentFrame !!" );
 
     if ( m_rWW8Export.bOutFlyFrmAttrs )
     {
@@ -4144,20 +4030,76 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
     // what SwRTFWriter::OutRTFBorder does in the RTF filter Eventually it
     // would be nice if all this functionality was in the one place
     WW8_BRC aBrc;
-    sal_uInt16 nWidth = rLine.GetInWidth() + rLine.GetOutWidth();
+    sal_uInt16 nWidth = rLine.GetWidth();
     sal_uInt8 brcType = 0, nColCode = 0;
 
     if( nWidth )                                // Linie ?
     {
         // BRC.brcType
-        bool bDouble = 0 != rLine.GetInWidth() && 0 != rLine.GetOutWidth();
-        bool bThick = !bDouble && !bWrtWW8 && nWidth > 75;
-        if( bDouble )
-            brcType = 3;
-        else if( bThick )
+        bool bThick = !rLine.isDouble() && !bWrtWW8 && nWidth > 75;
+        if( bThick )
             brcType = 2;
         else
-            brcType = 1;
+        {
+            brcType = 0;
+            if ( bWrtWW8 )
+            {
+                // All the border types values are available on
+                // http://msdn.microsoft.com/en-us/library/dd908142%28v=office.12%29.aspx
+                switch ( rLine.GetStyle( ) )
+                {
+                    case ::editeng::SOLID:
+                        {
+                            if ( rLine.GetWidth( ) == DEF_LINE_WIDTH_0 )
+                                brcType = 5;
+                            else
+                                brcType = 1;
+                        }
+                        break;
+                    case ::editeng::DOTTED:
+                        brcType = 6;
+                        break;
+                    case ::editeng::DASHED:
+                        brcType = 7;
+                        break;
+                    case ::editeng::DOUBLE:
+                        brcType = 3;
+                        break;
+                    case ::editeng::THINTHICK_SMALLGAP:
+                        brcType = 11;
+                        break;
+                    case ::editeng::THINTHICK_MEDIUMGAP:
+                        brcType = 14;
+                        break;
+                    case ::editeng::THINTHICK_LARGEGAP:
+                        brcType = 17;
+                        break;
+                    case ::editeng::THICKTHIN_SMALLGAP:
+                        brcType = 12;
+                        break;
+                    case ::editeng::THICKTHIN_MEDIUMGAP:
+                        brcType = 15;
+                        break;
+                    case ::editeng::THICKTHIN_LARGEGAP:
+                        brcType = 18;
+                        break;
+                    case ::editeng::EMBOSSED:
+                        brcType = 24;
+                        break;
+                    case ::editeng::ENGRAVED:
+                        brcType = 25;
+                        break;
+                    case ::editeng::OUTSET:
+                        brcType = 26;
+                        break;
+                    case ::editeng::INSET:
+                        brcType = 27;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         // BRC.dxpLineWidth
         if( bThick )
@@ -4176,6 +4118,10 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             nWidth = ( nWidth + 7 ) / 15;
             if( nWidth > 5 )
                 nWidth = 5;
+            if ( ::editeng::DOTTED == rLine.GetStyle( ) )
+                nWidth = 6;
+            else if ( ::editeng::DASHED == rLine.GetStyle( ) )
+                nWidth = 7;
         }
 
         if( 0 == nWidth )                       // ganz duenne Linie
@@ -4223,7 +4169,7 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
 void WW8Export::Out_BorderLine(WW8Bytes& rO, const SvxBorderLine* pLine,
     sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow)
 {
-    ASSERT( ( nSprmNo == 0 ) ||
+    OSL_ENSURE( ( nSprmNo == 0 ) ||
             ( nSprmNo >= 38 && nSprmNo <= 41 ) ||
             ( nSprmNo >= NS_sprm::LN_PBrcTop && nSprmNo <= NS_sprm::LN_PBrcRight ) ||
             ( nSprmNo >= NS_sprm::LN_SBrcTop && nSprmNo <= NS_sprm::LN_SBrcRight ),
@@ -4384,25 +4330,6 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol & 
     else
         m_rWW8Export.pO->Insert( 138, m_rWW8Export.pO->Count(  ) );
     m_rWW8Export.pO->Insert( bEven ? 1 : 0, m_rWW8Export.pO->Count(  ) );
-
-#if 0
-    // FIXME what's the use of this code
-    if ( bEven )
-    {
-        sal_uInt16 nSpace = rColumns[0]->GetRight() + rColumns[1]->GetLeft();
-        for ( n = 2; n < nCols; n++ )
-        {
-            short nDiff = nSpace - ( rColumns[n - 1]->GetRight()
-                                         + rColumns[n]->GetLeft() );
-            if (nDiff > 10 || nDiff < -10)
-            {
-                // Toleranz: 10 tw
-                bEven = false;
-                break;
-            }
-        }
-    }
-#endif
 
     if ( !bEven )
     {
@@ -4575,7 +4502,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                                 getScriptType(pNd->GetTxt(), 0);
                         }
                     }
-                    ASSERT( pSet, "No attrset for lineheight :-(" );
+                    OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
                     if ( pSet )
                     {
                         nSpace = nSpace + (short)( AttrSetToLineHeight( *GetExport().pDoc,
@@ -4597,7 +4524,9 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
         }
         break;
     }
-
+    // if nSpace is negative, it is a fixed size in 1/20 of a point
+    // if nSpace is positive and nMulti is 1, it is 1/240 of a single line height
+    // otherwise, I have no clue what the heck it is
     ParaLineSpacing_Impl( nSpace, nMulti );
 }
 
@@ -4716,7 +4645,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
     {
         default:
             //Can't get an unknown type here
-            ASSERT(false, "Unknown frame direction");
+            OSL_FAIL("Unknown frame direction");
         case FRMDIR_HORI_LEFT_TOP:
             nTextFlow = 0;
             break;
@@ -4865,8 +4794,8 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 {
     if (!nAdd && !nDel) //It its a no-op
         return;
-    ASSERT(nAdd <= 255, "more than 255 added tabstops ?");
-    ASSERT(nDel <= 255, "more than 244 removed tabstops ?");
+    OSL_ENSURE(nAdd <= 255, "more than 255 added tabstops ?");
+    OSL_ENSURE(nDel <= 255, "more than 244 removed tabstops ?");
     if (nAdd > 255)
         nAdd = 255;
     if (nDel > 255)
@@ -5006,7 +4935,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
             nCurrentLeft = ((const SvxLRSpaceItem*)pLR)->GetTxtLeft();
     }
 
-    // --> FLR 2009-03-17 #i100264#
+    // #i100264#
     if ( m_rWW8Export.bStyDef &&
          m_rWW8Export.pCurrentStyle != NULL &&
          m_rWW8Export.pCurrentStyle->DerivedFrom() != NULL )
@@ -5022,7 +4951,6 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         ParaTabStopDelAdd( m_rWW8Export, aTabs, 0, rTabStops, 0 );
         return;
     }
-    // <--
 
     // StyleDef -> "einfach" eintragen || keine Style-Attrs -> dito
     const SvxTabStopItem* pStyleTabs = 0;
@@ -5289,7 +5217,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, sal_Bool b
     const SfxPoolItem* pItem;
     if ( !bDeep || !pSet->GetParent() )
     {
-        ASSERT( rSet.Count(), "Wurde doch schon behandelt oder?" );
+        OSL_ENSURE( rSet.Count(), "Wurde doch schon behandelt oder?" );
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {
@@ -5314,4 +5242,4 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, sal_Bool b
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

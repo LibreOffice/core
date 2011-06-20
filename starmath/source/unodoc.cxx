@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 
 #include "smdll.hxx"
 #include "document.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -57,15 +58,11 @@ uno::Sequence< rtl::OUString > SAL_CALL SmDocument_getSupportedServiceNames() th
 uno::Reference< uno::XInterface > SAL_CALL SmDocument_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/, const sal_uInt64 _nCreationFlags ) throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( !SM_MOD() )
-        SmDLL::Init();
-
+    SolarMutexGuard aGuard;
+    SmGlobals::ensure();
     SfxObjectShell* pShell = new SmDocShell( _nCreationFlags );
-    if( pShell )
-        return uno::Reference< uno::XInterface >( pShell->GetModel() );
-
-    return uno::Reference< uno::XInterface >();
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

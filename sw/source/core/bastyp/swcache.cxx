@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,29 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <tools/debug.hxx>
-#include <errhdl.hxx>
 #include <swcache.hxx>
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 
-#ifndef DBG_UTIL
-#define INCREMENT( nVar )
-#else
+#if OSL_DEBUG_LEVEL > 1
 #define INCREMENT( nVar )   ++nVar
+#else
+#define INCREMENT( nVar )
 #endif
 
 /*************************************************************************
-|*
 |*  SwCache::Check()
-|*
-|*  Ersterstellung      MA 23. Mar. 94
-|*  Letzte Aenderung    MA 23. Mar. 94
-|*
 |*************************************************************************/
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwCache::Check()
 {
@@ -58,8 +51,8 @@ void SwCache::Check()
         return;
 
     //Konsistenspruefung.
-    ASSERT( !pLast->GetNext(), "Last but not last." );
-    ASSERT( !pRealFirst->GetPrev(), "First but not first." );
+    OSL_ENSURE( !pLast->GetNext(), "Last but not last." );
+    OSL_ENSURE( !pRealFirst->GetPrev(), "First but not first." );
     sal_uInt16 nCnt = 0;
     sal_Bool bFirstFound = sal_False;
     SwCacheObj *pObj = pRealFirst;
@@ -70,41 +63,36 @@ void SwCache::Check()
         SwCacheObj *pTmp = pLast;
         while ( pTmp && pTmp != pObj )
             pTmp = pTmp->GetPrev();
-        ASSERT( pTmp, "Objekt not found." );
+        OSL_ENSURE( pTmp, "Objekt not found." );
 
         ++nCnt;
         if ( pObj == pFirst )
             bFirstFound = sal_True;
         if ( !pObj->GetNext() )
-            ASSERT( pObj == pLast, "Last not Found." );
+            OSL_ENSURE( pObj == pLast, "Last not Found." );
         pObj = pObj->GetNext();
-        ASSERT( pObj != pRekursive, "Recursion in SwCache." );
+        OSL_ENSURE( pObj != pRekursive, "Recursion in SwCache." );
     }
-    ASSERT( bFirstFound, "First not Found." );
-    ASSERT( (nCnt + aFreePositions.Count()) == Count(), "Lost Chain." );
+    OSL_ENSURE( bFirstFound, "First not Found." );
+    OSL_ENSURE( (nCnt + aFreePositions.Count()) == Count(), "Lost Chain." );
     if ( Count() == nCurMax )
-        ASSERT( (nCurMax - nCnt) == aFreePositions.Count(), "Lost FreePositions." );
+        OSL_ENSURE( (nCurMax - nCnt) == aFreePositions.Count(), "Lost FreePositions." );
 }
 #endif
 
-#if defined(DBG_UTIL) && defined(MADEBUG)
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK Check();
 #else
 #define CHECK
 #endif
 
 /*************************************************************************
-|*
 |*  SwCache::SwCache(), ~SwCache()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
-|*
 |*************************************************************************/
 
 
 SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , const ByteString &rNm
 #endif
     ) :
@@ -115,7 +103,7 @@ SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
     pLast( 0 ),
     nMax( nInitSize ),
     nCurMax( nInitSize )
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , aName( rNm ),
     nAppend( 0 ),
     nInsertFree( 0 ),
@@ -134,55 +122,46 @@ SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
 {
 }
 
-#ifdef DBG_UTIL
-
-
+#if OSL_DEBUG_LEVEL > 1
 SwCache::~SwCache()
 {
-#if OSL_DEBUG_LEVEL > 1
     {
         ByteString sOut( aName ); sOut += '\n';
-        (( sOut += "Anzahl neuer Eintraege:             " )
+        (( sOut += "Number of new entries:                 " )
                     += ByteString::CreateFromInt32( nAppend ))+= '\n';
-        (( sOut += "Anzahl Insert auf freie Plaetze:    " )
+        (( sOut += "Number of insert on free places:       " )
                     += ByteString::CreateFromInt32( nInsertFree ))+= '\n';
-        (( sOut += "Anzahl Ersetzungen:                 " )
+        (( sOut += "Number of replacements:                " )
                     += ByteString::CreateFromInt32( nReplace ))+= '\n';
-        (( sOut += "Anzahl Erfolgreicher Get's:         " )
+        (( sOut += "Number of successful Get's:            " )
                     += ByteString::CreateFromInt32( nGetSuccess ))+= '\n';
-        (( sOut += "Anzahl Fehlgeschlagener Get's:      " )
+        (( sOut += "Number of failed Get's:                " )
                     += ByteString::CreateFromInt32( nGetFail ))+= '\n';
-        (( sOut += "Anzahl Umsortierungen (LRU):        " )
+        (( sOut += "Number or reordering (LRU):            " )
                     += ByteString::CreateFromInt32( nToTop ))+= '\n';
-        (( sOut += "Anzahl Loeschungen:                 " )
+        (( sOut += "Number of suppressions:                " )
                     += ByteString::CreateFromInt32( nDelete ))+= '\n';
-        (( sOut += "Anzahl Get's ohne Index:            " )
+        (( sOut += "Number of Get's without Index:         " )
                     += ByteString::CreateFromInt32( nGetSeek ))+= '\n';
-        (( sOut += "Anzahl Seek fuer Get ohne Index:    " )
+        (( sOut += "Number of Seek for Get without Index:  " )
                     += ByteString::CreateFromInt32( nAverageSeekCnt ))+= '\n';
-        (( sOut += "Anzahl Flush-Aufrufe:               " )
+        (( sOut += "Number of Flush calls:                 " )
                     += ByteString::CreateFromInt32( nFlushCnt ))+= '\n';
-        (( sOut += "Anzahl geflush'ter Objekte:         " )
+        (( sOut += "Number of flushed objects:             " )
                     += ByteString::CreateFromInt32( nFlushedObjects ))+= '\n';
-        (( sOut += "Anzahl Cache-Erweiterungen:         " )
+        (( sOut += "Number of Cache expansions:            " )
                     += ByteString::CreateFromInt32( nIncreaseMax ))+= '\n';
-        (( sOut += "Anzahl Cache-Verkleinerungen:       " )
+        (( sOut += "Number of Cache reductions:            " )
                     += ByteString::CreateFromInt32( nDecreaseMax ))+= '\n';
 
-        DBG_ERROR( sOut.GetBuffer() );
+        OSL_TRACE( sOut.GetBuffer() );
     }
     Check();
-#endif
 }
 #endif
 
 /*************************************************************************
-|*
 |*  SwCache::Flush()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
-|*
 |*************************************************************************/
 
 
@@ -194,10 +173,10 @@ void SwCache::Flush( const sal_uInt8 )
     SwCacheObj *pTmp;
     while ( pObj )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if ( pObj->IsLocked() )
         {
-            ASSERT( sal_True, "Flushing locked objects." );
+            OSL_FAIL( "Flushing locked objects." );
             if ( !pRealFirst )
             {
                 pRealFirst = pFirst = pLast = pObj;
@@ -228,12 +207,7 @@ void SwCache::Flush( const sal_uInt8 )
 }
 
 /*************************************************************************
-|*
 |*  SwCache::ToTop()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 24. Apr. 95
-|*
 |*************************************************************************/
 
 
@@ -249,7 +223,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
 
     if ( !pRealFirst )
     {   //Der erste wird eingetragen.
-        ASSERT( !pFirst && !pLast, "First not first." );
+        OSL_ENSURE( !pFirst && !pLast, "First not first." );
         pRealFirst = pFirst = pLast = pObj;
         CHECK;
         return;
@@ -258,7 +232,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
     //Ausschneiden.
     if ( pObj == pLast )
     {
-        ASSERT( pObj->GetPrev(), "Last but no Prev." );
+        OSL_ENSURE( pObj->GetPrev(), "Last but no Prev." );
         pLast = pObj->GetPrev();
         pLast->SetNext( 0 );
     }
@@ -281,7 +255,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
     }
     else
     {
-        ASSERT( pFirst, "ToTop, First ist not RealFirst an Empty." );
+        OSL_ENSURE( pFirst, "ToTop, First ist not RealFirst an Empty." );
 
         if ( pFirst->GetPrev() )
         {
@@ -298,12 +272,7 @@ void SwCache::ToTop( SwCacheObj *pObj )
 }
 
 /*************************************************************************
-|*
 |*  SwCache::Get()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
-|*
 |*************************************************************************/
 
 
@@ -319,7 +288,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
             ToTop( pRet );
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if ( pRet )
             ++nGetSuccess;
         else
@@ -343,7 +312,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_Bool bToTop )
     if ( bToTop && pRet && pRet != pFirst )
         ToTop( pRet );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if ( pRet )
         ++nGetSuccess;
     else
@@ -354,19 +323,14 @@ SwCacheObj *SwCache::Get( const void *pOwner, const sal_Bool bToTop )
 }
 
 /*************************************************************************
-|*
 |*  SwCache::Delete()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
-|*
 |*************************************************************************/
 
 
 void SwCache::DeleteObj( SwCacheObj *pObj )
 {
     CHECK;
-    ASSERT( !pObj->IsLocked(), "SwCache::Delete: Object ist Locked." );
+    OSL_ENSURE( !pObj->IsLocked(), "SwCache::Delete: Object ist Locked." );
     if ( pObj->IsLocked() )
         return;
 
@@ -414,20 +378,6 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
     CHECK;
 }
 
-/*
-
-
-void SwCache::Delete( const void *pOwner, const sal_uInt16 nIndex )
-{
-    INCREMENT( nDelete );
-    SwCacheObj *pObj;
-    if ( 0 != (pObj = Get( pOwner, nIndex, sal_False )) )
-        DeleteObj( pObj );
-}
-*/
-
-
-
 void SwCache::Delete( const void *pOwner )
 {
     INCREMENT( nDelete );
@@ -438,19 +388,14 @@ void SwCache::Delete( const void *pOwner )
 
 
 /*************************************************************************
-|*
 |*  SwCache::Insert()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 20. Sep. 94
-|*
 |*************************************************************************/
 
 
 sal_Bool SwCache::Insert( SwCacheObj *pNew )
 {
     CHECK;
-    ASSERT( !pNew->GetPrev() && !pNew->GetNext(), "New but not new." );
+    OSL_ENSURE( !pNew->GetPrev() && !pNew->GetNext(), "New but not new." );
 
     sal_uInt16 nPos;//Wird hinter den if's zum setzen am Obj benutzt.
     if ( Count() < nCurMax )
@@ -479,13 +424,13 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
             pObj = pObj->GetPrev();
         if ( !pObj )
         {
-            ASSERT( sal_False, "Cache overflow." );
+            OSL_FAIL( "Cache overflow." );
             return sal_False;
         }
 
         nPos = pObj->GetCachePos();
         if ( pObj == pLast )
-        {   ASSERT( pObj->GetPrev(), "Last but no Prev" );
+        { OSL_ENSURE( pObj->GetPrev(), "Last but no Prev" );
             pLast = pObj->GetPrev();
             pLast->SetNext( 0 );
         }
@@ -513,7 +458,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
         pNew->SetNext( pFirst );
     }
     else
-    {   ASSERT( !pLast, "Last but no First." );
+    { OSL_ENSURE( !pLast, "Last but no First." );
         pLast = pNew;
     }
     if ( pFirst == pRealFirst )
@@ -525,12 +470,7 @@ sal_Bool SwCache::Insert( SwCacheObj *pNew )
 }
 
 /*************************************************************************
-|*
 |*  SwCache::SetLRUOfst()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
-|*
 |*************************************************************************/
 
 
@@ -552,12 +492,7 @@ void SwCache::SetLRUOfst( const sal_uInt16 nOfst )
 }
 
 /*************************************************************************
-|*
 |*  SwCacheObj::SwCacheObj()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 24. Nov. 95
-|*
 |*************************************************************************/
 
 
@@ -577,21 +512,14 @@ SwCacheObj::~SwCacheObj()
 }
 
 /*************************************************************************
-|*
 |*  SwCacheObj::SetLock(), Unlock()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 15. Mar. 94
-|*
 |*************************************************************************/
 
-#ifdef DBG_UTIL
-
-
+#if OSL_DEBUG_LEVEL > 1
 
 void SwCacheObj::Lock()
 {
-    ASSERT( nLock < UCHAR_MAX, "To many Locks for CacheObject." );
+    OSL_ENSURE( nLock < UCHAR_MAX, "To many Locks for CacheObject." );
     ++nLock;
 }
 
@@ -599,7 +527,7 @@ void SwCacheObj::Lock()
 
 void SwCacheObj::Unlock()
 {
-    ASSERT( nLock, "No more Locks available." );
+    OSL_ENSURE( nLock, "No more Locks available." );
     --nLock;
 }
 #endif
@@ -612,18 +540,12 @@ SwCacheAccess::~SwCacheAccess()
 }
 
 /*************************************************************************
-|*
 |*  SwCacheAccess::Get()
-|*
-|*  Ersterstellung      MA 15. Mar. 94
-|*  Letzte Aenderung    MA 04. Apr. 95
-|*
 |*************************************************************************/
-
 
 void SwCacheAccess::_Get()
 {
-    ASSERT( !pObj, "SwCacheAcces Obj already available." );
+    OSL_ENSURE( !pObj, "SwCacheAcces Obj already available." );
 
     pObj = NewObj();
     if ( !rCache.Insert( pObj ) )
@@ -636,21 +558,12 @@ void SwCacheAccess::_Get()
 }
 
 /*************************************************************************
-|*
 |*  SwCacheAccess::IsAvailable()
-|*
-|*  Ersterstellung      MA 23. Mar. 94
-|*  Letzte Aenderung    MA 23. Mar. 94
-|*
 |*************************************************************************/
-
 
 sal_Bool SwCacheAccess::IsAvailable() const
 {
     return pObj != 0;
 }
 
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

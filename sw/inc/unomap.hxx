@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -165,7 +166,7 @@
 #define WID_SECT_EDIT_IN_READONLY 8013
 
 
-//Verzeichnisse
+// Indices/Tables of content
 #define WID_PRIMARY_KEY                         1000
 #define WID_SECONDARY_KEY                       1001
 #define WID_ALT_TEXT                            1002
@@ -190,7 +191,6 @@
 #define WID_LEVEL_FORMAT                        1021
 #define WID_LEVEL_PARAGRAPH_STYLES              1022
 #define WID_RECALC_TAB_STOPS                    1023
-//#define WID_???                               1024
 #define WID_MAIN_ENTRY_CHARACTER_STYLE_NAME     1025
 #define WID_CREATE_FROM_TABLES                  1026
 #define WID_CREATE_FROM_TEXT_FRAMES             1027
@@ -230,7 +230,7 @@
 #define WID_PRIMARY_KEY_READING                 1059
 #define WID_SECONDARY_KEY_READING               1060
 
-//text document
+// Text document
 #define WID_DOC_CHAR_COUNT                      1000
 #define WID_DOC_PARA_COUNT                      1001
 #define WID_DOC_WORD_COUNT                      1002
@@ -251,11 +251,9 @@
 #define WID_DOC_HAS_VALID_SIGNATURES            1017
 #define WID_DOC_BUILDID                         1024
 #define WID_DOC_ISTEMPLATEID                        1025
-// --> OD 2006-03-21 #b6375613#
 #define WID_APPLY_WORKAROUND_FOR_B6375613       1070
-// <--
 
-//MailMerge
+// MailMerge
 #define WID_SELECTION                           1071
 #define WID_RESULT_SET                          1072
 #define WID_CONNECTION                          1073
@@ -298,11 +296,11 @@
 #define WID_DOC_VBA_DOCOBJ                      1106
 
 
-//AutoText
+// AutoText
 #define WID_GROUP_PATH                          0
 #define WID_GROUP_TITLE                         1
 
-//NumberingRules
+// NumberingRules
 #define WID_IS_AUTOMATIC                0
 #define WID_CONTINUOUS                  1
 #define WID_RULE_NAME                   2
@@ -310,7 +308,7 @@
 #define WID_IS_OUTLINE                  4
 #define WID_DEFAULT_LIST_ID             5
 
-//TextColumns
+// TextColumns
 #define WID_TXTCOL_LINE_WIDTH           0
 #define WID_TXTCOL_LINE_COLOR           1
 #define WID_TXTCOL_LINE_REL_HGT         2
@@ -318,10 +316,8 @@
 #define WID_TXTCOL_LINE_IS_ON           4
 #define WID_TXTCOL_IS_AUTOMATIC         5
 #define WID_TXTCOL_AUTO_DISTANCE        6
+#define WID_TXTCOL_LINE_STYLE           7
 
-/* -----------------04.07.98 11:41-------------------
- *
- * --------------------------------------------------*/
 class SwItemPropertySet : public SfxItemPropertySet
 {
 protected:
@@ -330,9 +326,6 @@ public:
     SwItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
         SfxItemPropertySet( pMap ){}
 };
-/* -----------------04.07.98 11:41-------------------
- *
- * --------------------------------------------------*/
 class SwUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry*        aMapEntriesArr[PROPERTY_MAP_END];
@@ -349,3 +342,5 @@ public:
 
 extern SwUnoPropertyMapProvider aSwMapProvider;
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

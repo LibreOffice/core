@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -280,9 +281,9 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 {
     SwPaM* pCmp = (SwPaM*)pDestShell->GetCrsr();        // sicher den Pointer auf Cursor
     do {
-        ASSERT( pCmp->GetPoint()->nContent.GetIdxReg()
+        OSL_ENSURE( pCmp->GetPoint()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(), "Point im falschen Node" );
-        ASSERT( pCmp->GetMark()->nContent.GetIdxReg()
+        OSL_ENSURE( pCmp->GetMark()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(sal_False), "Mark im falschen Node" );
         sal_Bool bTst = *pCmp->GetPoint() == *pCmp->GetMark();
         (void) bTst;
@@ -354,3 +355,4 @@ sal_Bool SwEditShell::DelFullPara()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

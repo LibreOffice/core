@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,13 +93,13 @@ struct compSwNumberTreeNodeLessThan
     Uncounted Phantoms
 
       0.1. dljflskjlasf
-    5. ödsöfkaös
+    5. abcdagaha
       5.1.
 
     + R (nStart = 5)
       + 0 (phantom, not counted)
       | + 1 dljflskjlasf
-      + 5 ödsöfkaös
+      + 5 abcdagaha
         + 1
 
      The phantom gets numbered with 0. The first non-phantom node gets
@@ -143,8 +144,6 @@ public:
     /**
        Remove a child.
 
-       OD 2008-02-19 #refactorlists# - no longer virtual
-
        @param pChild     child to be removed
      */
     void RemoveChild( SwNumberTreeNode* pChild );
@@ -173,9 +172,7 @@ public:
      */
     SwNumberTree::tSwNumTreeNumber GetNumber( bool bValidate = true ) const;
 
-    // --> OD 2008-11-26 #158694#
     bool IsContinueingPreviousSubTree() const;
-    // <--
 
     /**
        Returns level numbers of this node.
@@ -240,7 +237,6 @@ public:
 
     /** set level of this node
 
-        OD 2008-03-13 #refactorlists#
         precondition: node is already member of a list tree
 
         @author OD
@@ -276,13 +272,13 @@ public:
        All iterators holding the last valid node in the according list
        of childs are set to the end of this list, thereby stating all
        children in the list are invalid.
-       OD 2007-10-26 #i83479# - made public
+       #i83479# - made public
      */
     void InvalidateTree() const;
 
     /**
        Notifies all invalid children of this node.
-       OD 2007-10-26 #i83479# - made public
+       #i83479# - made public
      */
     void NotifyInvalidChildren();
 
@@ -312,15 +308,14 @@ public:
     */
     void NotifyInvalidSiblings();
 
-    /** notification of all nodes in the list tree on certain list level
-
-        OD 2008-04-17 #refactorlists#
+    /**
+       notification of all nodes in the list tree on certain list level
     */
     void NotifyNodesOnListLevel( const int nListLevel );
 
     /** Invalidation and notification of complete numbering tree
 
-        OD 2006-04-26 #i64010#
+        #i64010#
         Usage: on <IsCounted()> state change its needed to invalidate the
                complete numbering tree due to wide influence of this change.
     */
@@ -343,7 +338,7 @@ public:
 
     /** determines the node, which is preceding the node
 
-        OD 2007-09-06 #i81002#
+        #i81002#
         The search for the preceding node is performed for the tree below the
         <this> node. To search the complete tree, the method has been called for
         the root of the tree.
@@ -352,30 +347,7 @@ public:
     */
     const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
 
-//    /**
-//       Returns a string representation of this node.
-
-//       @return the string representation of this node
-//     */
-//    virtual String ToString() const = 0;
-
-//    /**
-//       Print this subtree.
-
-//       @param o              output stream to direct output to
-//       @param rIndent        additional indent for the children of this node
-//       @param rMyIndent      indent to use for this node
-//       @param nDepth         number of levels to print (-1 means all levels)
-
-//       @return output stream after output of this subtree
-//     */
-//    String print(const String & rIndent = String("  ",
-//                                                 RTL_TEXTENCODING_ASCII_US),
-//                 const String & rMyIndent = String("  ",
-//                                                   RTL_TEXTENCODING_ASCII_US),
-//                 int nDepth = -1) const;
-
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static unsigned long GetInstances();
     unsigned long GetSerial();
 #endif
@@ -422,20 +394,16 @@ protected:
      */
     tSwNumberTreeChildren::size_type GetChildCount() const;
 
-    // --> OD 2006-04-26 #i64010# - made pure virtual
+    // #i64010# - made pure virtual
     virtual bool HasCountedChildren() const = 0;
-    // <--
 
-    // --> OD 2006-04-26 #i64010#
+    // #i64010#
     virtual bool IsCountedForNumbering() const = 0;
-    // <--
 
-    // --> OD 2008-02-19 #refactorlists#
     // method called before this tree node has been added to the list tree
     virtual void PreAdd() = 0;
     // method called after this tree node has been removed from the list tree
     virtual void PostRemove() = 0;
-    // <--
 
 #ifdef __SW_NUMBER_TREE_SANITY_CHECK
     /**
@@ -460,7 +428,6 @@ protected:
     */
     mutable SwNumberTree::tSwNumTreeNumber mnNumber;
 
-    // --> OD 2008-11-26 #158694#
     // boolean indicating, that a node of a not counted parent node is continueing
     // the numbering of parent's previous node sub tree.
     // Example:
@@ -469,7 +436,6 @@ protected:
     //      sdfjlksaf <-- not counted parent node
     //     1.2. lfjlaskf <-- <mbContinueingPreviousSubTree = true>
     mutable bool mbContinueingPreviousSubTree;
-    // <--
 
     /**
        true     this node is a phantom
@@ -482,9 +448,9 @@ protected:
        than or equal to the referenced child are valid. All children
        greater than the referenced child are invalid.
      */
-    mutable tSwNumberTreeChildren::iterator mItLastValid;
+    mutable tSwNumberTreeChildren::const_iterator mItLastValid;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     /**
        Counter for the number of created instances.
      */
@@ -521,7 +487,6 @@ protected:
 
     /** Invalidation of all children
 
-        OD 2005-10-19 #126009#
         Usage: on <IsCounted()> state change the children have to be invalidated
     */
     inline void InvalidateChildren()
@@ -531,7 +496,6 @@ protected:
 
     /** Invalidation of parent node, if its not counted.
 
-        OD 2005-10-19 #126009#
         Usage: on <IsCounted()> state change the parent have to be invalidated
     */
     inline void InvalidateNotCountedParent()
@@ -551,7 +515,7 @@ protected:
                               - false   only set if aItLastValid is preceeding
                                         the current last valid node
      */
-    void SetLastValid(tSwNumberTreeChildren::iterator aItLastValid,
+    void SetLastValid(tSwNumberTreeChildren::const_iterator aItLastValid,
                       bool bValidating = false) const;
 
     /**
@@ -586,7 +550,6 @@ protected:
 
     /** Notification of parent node siblings, if its not counted.
 
-        OD 2005-10-19 #126009#
         Usage: on <IsCounted()> state change the parent node and its siblings
                have to be notified.
     */
@@ -599,8 +562,6 @@ protected:
     }
 
     /** notification of children nodes on certain depth
-
-        OD 2008-04-17 #refactorlists#
 
         @author OD
     */
@@ -679,8 +640,6 @@ protected:
     /**
        Return if phantoms are counted.
 
-       OD 2008-02-19 #refactorlists# - pure virtual now
-
        @retval true phantoms are counted
        @retval false else
      */
@@ -694,9 +653,7 @@ protected:
      */
     bool HasOnlyPhantoms() const;
 
-    // --> OD 2005-10-27 #126009#
     bool HasPhantomCountedParent() const;
-    // <--
 
     /**
         HB, OD : return node, if it isn't a phantom, otherwise return first
@@ -715,7 +672,7 @@ protected:
      */
     void ClearObsoletePhantoms();
 
-    tSwNumberTreeChildren::iterator GetIterator(const SwNumberTreeNode * pChild) const;
+    tSwNumberTreeChildren::const_iterator GetIterator(const SwNumberTreeNode * pChild) const;
 
     /**
        Moves all children to a given destination node.
@@ -727,7 +684,6 @@ protected:
     /** Moves all children of this node that are greater than a given node
         to the destination node.
 
-        OD 2005-10-14 #125991#
         distinguish between node for comparing, whose children are greater,
         and the destination node.
 
@@ -765,3 +721,5 @@ struct SwNumberTreeNodeIsLessThan
     { return SwNumberTreeNodeLessThan(_pNode, pNode); }
 };
 #endif // _SW_NUMBER_TREE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "cmdid.h"
-#include <tools/list.hxx>
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include "helpid.h"
-
 
 #include <sfx2/styfitem.hxx>
 
@@ -108,7 +105,7 @@ rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
     rtl::OUString aRes;
     if (0 <= nIndex  &&  nIndex < COND_COMMAND_COUNT)
     {
-        aRes = C2U( aCommandContext[ nIndex ] );
+        aRes = rtl::OUString::createFromAscii( aCommandContext[ nIndex ] );
     }
     return aRes;
 }
@@ -152,7 +149,7 @@ CommandStruct SwCondCollItem::aCmds[] =
 TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
 
 /****************************************************************************
-    Item fuer den Transport der Bedingungstabelle
+    Item for the transport of the condition table
 ****************************************************************************/
 
 
@@ -161,33 +158,19 @@ SwCondCollItem::SwCondCollItem(sal_uInt16 _nWhich ) :
 {
 
 }
-/****************************************************************************
-
-****************************************************************************/
-
 
 SwCondCollItem::~SwCondCollItem()
 {
 }
-
-/****************************************************************************
-
-****************************************************************************/
-
 
 SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwCondCollItem(*this);
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rItem), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rItem), "different types" );
     sal_Bool bReturn = sal_True;
     for(sal_uInt16 i = 0; i < COND_COMMAND_COUNT; i++)
         if(sStyles[i] != ((SwCondCollItem&)rItem).sStyles[i])
@@ -199,20 +182,10 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
     return bReturn;
 }
 
-/****************************************************************************
-
-****************************************************************************/
-
-
 const String&   SwCondCollItem::GetStyle(sal_uInt16 nPos) const
 {
     return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
 }
-
-/****************************************************************************
-
-****************************************************************************/
-
 
 void SwCondCollItem::SetStyle(const String* pStyle, sal_uInt16 nPos)
 {
@@ -220,17 +193,9 @@ void SwCondCollItem::SetStyle(const String* pStyle, sal_uInt16 nPos)
         sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;
 }
 
-
-/****************************************************************************
-
-****************************************************************************/
-
-
 const CommandStruct* SwCondCollItem::GetCmds()
 {
     return aCmds;
 }
 
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

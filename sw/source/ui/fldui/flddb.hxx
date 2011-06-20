@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/group.hxx>
 
 #include "condedit.hxx"
@@ -39,10 +38,6 @@
 #include "numfmtlb.hxx"
 
 #include "fldpage.hxx"
-
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwFldDBPage : public SwFldPage
 {
@@ -104,3 +99,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

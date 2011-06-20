@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
@@ -40,18 +39,12 @@
 #include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <frmatr.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <uitool.hxx>
 #include <edtwin.hxx>
 #include <pagedesc.hxx>
@@ -60,25 +53,13 @@
 #include <workctrl.hxx>
 #include <usrpref.hxx>
 #include <scroll.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
-#ifndef _RIBBAR_HRC
 #include <ribbar.hrc>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
@@ -142,15 +123,9 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
         if( SVX_ZOOM_OPTIMAL == eZoomType )
         {
-            if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
-            {
-                lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
-            }
-            else
-            {
+            if (!pPostItMgr->HasNotes() || !pPostItMgr->ShowNotes())
                 aPageSize.Width() -= ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
-                lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
-            }
+            lLeftMargin = long(rLRSpace.GetLeft()) + DOCUMENTBORDER + nLeftOfst;
             nFac = aWindowSize.Width() * 100 / aPageSize.Width();
         }
         else if(SVX_ZOOM_WHOLEPAGE == eZoomType || SVX_ZOOM_PAGEWIDTH == eZoomType )
@@ -167,7 +142,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                 nFac = Min( nFac, nVisPercent );
             }
         }
-        else /*if( SVX_ZOOM_PAGEWIDTH_NOBORDER == eZoomType )*/
+        else
         {
             const long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
             nFac = aWindowSize.Width() * 100 / nTmpWidth;
@@ -239,15 +214,6 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     pWrtShell->UnlockPaint();
     if( bUnLockView )
         pWrtShell->LockView( sal_False );
-
-//    if ( mpPostItMgr )
-//    {
-//        mpPostItMgr->Rescale();
-//        mpPostItMgr->CalcRects();
-//        mpPostItMgr->LayoutPostIts();
-//    }
-
-//  eZoom = eZoomType;
 }
 
 void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewOnly )
@@ -307,13 +273,41 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewO
 /*
  * Scrollbar - Handler
  */
+IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
+{
+    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    {
+        VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
+        OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
+        Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
+
+        switch ( pVclEvent->GetId() )
+        {
+            case VCLEVENT_WINDOW_HIDE:
+                if( pChildWin == pHScrollbar )
+                    ShowHScrollbar( sal_False );
+                else if( pChildWin == pVScrollbar )
+                    ShowVScrollbar( sal_False );
+                break;
+            case VCLEVENT_WINDOW_SHOW:
+                if( pChildWin == pHScrollbar )
+                    ShowHScrollbar( sal_True );
+                else if( pChildWin == pVScrollbar )
+                    ShowVScrollbar( sal_True );
+                break;
+        }
+    }
+
+    return 0;
+}
 
 int SwView::_CreateScrollbar( sal_Bool bHori )
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
-    ASSERT( !*ppScrollbar, "vorher abpruefen!" )
+    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" );
 
     if( !bHori )
         CreatePageButtons( !bShowAtResize );
@@ -327,6 +321,8 @@ int SwView::_CreateScrollbar( sal_Bool bHori )
     (*ppScrollbar)->SetEndScrollHdl( LINK( this, SwView, EndScrollHdl ));
 
     (*ppScrollbar)->EnableDrag( sal_True );
+
+    (*ppScrollbar)->SetAuto( sal_True );
 
     if(GetWindow())
         InvalidateBorder();
@@ -376,9 +372,7 @@ IMPL_LINK( SwView, BtnPage, Button *, pButton )
     Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
     return 0;
 }
-/*-----------------20.06.97 10:46-------------------
 
---------------------------------------------------*/
 IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
 {
     if ( !pbNext )
@@ -528,16 +522,6 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
     return 0;
 }
 
-/*************************************************************************
-|*
-|*  SwView::CreateTab()
-|*
-|*  Beschreibung
-|*  Ersterstellung      VB 29.05.91
-|*  Letzte Aenderung    OS 09.05.96
-|*
-*************************************************************************/
-
 int SwView::CreateTab()
 {
     pHRuler->SetActive(GetFrame() && IsActive());
@@ -546,16 +530,6 @@ int SwView::CreateTab()
     InvalidateBorder();
     return 1;
 }
-
-/*************************************************************************
-|*
-|*  SwView::KillTab()
-|*
-|*  Beschreibung
-|*  Ersterstellung      VB 29.05.91
-|*  Letzte Aenderung    OS 09.05.96
-|*
-*************************************************************************/
 
 int SwView::KillTab()
 {
@@ -581,28 +555,16 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
         pVRuler->Invalidate();
     }
 }
-/* -----------------------------07.04.01 17:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::GetVLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pVRuler->GetUnit();
 }
-/* -----------------------------07.04.01 17:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::GetHLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pHRuler->GetUnit();
 }
-/*************************************************************************
-|*
-|*  SwView::CreateVLineal()
-|*
-|*  Beschreibung
-|*  Ersterstellung  VB 29.05.91
-|*
-*************************************************************************/
 
 int SwView::CreateVLineal()
 {
@@ -614,15 +576,6 @@ int SwView::CreateVLineal()
     return 1;
 }
 
-/*************************************************************************
-|*
-|*  SwView::KillVLineal()
-|*
-|*  Beschreibung
-|*  Ersterstellung  VB 29.05.91
-|*
-*************************************************************************/
-
 int SwView::KillVLineal()
 {
     pVRuler->Hide();
@@ -630,15 +583,6 @@ int SwView::KillVLineal()
     InvalidateBorder();
     return 1;
 }
-/*************************************************************************
-|*
-|*  SwView::ExecRulerClick()
-|*
-|*  Beschreibung
-|*  Ersterstellung  OS 15.06.95
-|*  Letzte Aenderung
-|*
-*************************************************************************/
 
 IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
 {
@@ -664,18 +608,10 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
     return 0;
 }
 
-
-/*-----------------20.02.97 09:11-------------------
-
---------------------------------------------------*/
-
 sal_uInt16 SwView::GetMoveType()
 {
     return nMoveType;
 }
-/*-----------------20.02.97 09:11-------------------
-
---------------------------------------------------*/
 
 void SwView::SetMoveType(sal_uInt16 nSet)
 {
@@ -695,17 +631,10 @@ void SwView::SetMoveType(sal_uInt16 nSet)
     }
 }
 
-/*-----------------20.06.97 11:18-------------------
-
---------------------------------------------------*/
 void SwView::SetActMark(sal_Int32 nSet)
 {
     nActMark = nSet;
 }
-
-/*-----------------15.03.97 10:53-------------------
-
---------------------------------------------------*/
 
 void SwView::SetImageButtonColor(Color& rColor)
 {
@@ -715,40 +644,33 @@ void SwView::SetImageButtonColor(Color& rColor)
         pPageDownBtn->SetControlForeground(rColor);
     }
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::ShowHScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pHScrollbar, "Scrollbar invalid");
     pHScrollbar->ExtendedShow(bShow);
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsHScrollbarVisible()const
 {
-    DBG_ASSERT(pHScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pHScrollbar, "Scrollbar invalid");
     return pHScrollbar->IsVisible( sal_False ) || pHScrollbar->IsAuto();
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::ShowVScrollbar(sal_Bool bShow)
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pVScrollbar, "Scrollbar invalid");
     pVScrollbar->ExtendedShow(bShow);
     pPageUpBtn->Show(bShow);
     pPageDownBtn->Show(bShow);
     pNaviBtn->Show(bShow);
 }
-/* -----------------------------2002/06/26 13:57------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwView::IsVScrollbarVisible()const
 {
-    DBG_ASSERT(pVScrollbar, "Scrollbar invalid");
+    OSL_ENSURE(pVScrollbar, "Scrollbar invalid");
     return pVScrollbar->IsVisible( sal_False );
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

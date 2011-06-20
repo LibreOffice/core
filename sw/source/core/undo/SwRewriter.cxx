@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,9 +71,10 @@ String SwRewriter::Apply(const String & rStr) const
     String aResult = rStr;
     vector<SwRewriteRule>::const_iterator aIt;
 
-    for (aIt = mRules.begin(); aIt != mRules.end(); aIt++)
+    for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)
         aResult.SearchAndReplaceAll(aIt->first, aIt->second);
 
     return aResult;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

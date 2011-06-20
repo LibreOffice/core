@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************ *************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <basesh.hxx>
-#include <wrtsh.hxx>
 #include <flddat.hxx>
 #include <numrule.hxx>
 #include <textsh.hxx>
@@ -71,7 +71,6 @@
 #include <shells.hrc>
 
 #include <sfx2/app.hxx>
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
@@ -84,7 +83,6 @@
 #include <switerator.hxx>
 
 using namespace nsSwDocInfoSubType;
-
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
@@ -105,7 +103,6 @@ String& lcl_AppendRedlineStr( String& rStr, sal_uInt16 nRedlId )
 }
 
 // STATIC DATA -----------------------------------------------------------
-
 void SwTextShell::ExecField(SfxRequest &rReq)
 {
     SwWrtShell& rSh = GetShell();
@@ -151,10 +148,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     default:
                     {
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                         SfxAbstractDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                        OSL_ENSURE(pDlg, "Dialogdiet fail!");
                         pDlg->Execute();
                         delete pDlg;
                     }
@@ -242,7 +239,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, sal_False, &pItem ))
                         nFormat = ((SfxUInt32Item *)pItem)->GetValue();
-                    DBG_WARNING("Command is not yet used");
+                    OSL_FAIL("Command is not yet used");
                     sal_Unicode cSeparator = ' ';
                     SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
                     bRes = aFldMgr.InsertFld(aData);
@@ -402,7 +399,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 if (pRedline)
                 {
                     sComment = pRedline->GetComment();
-                    if ( sComment == String(rtl::OUString::createFromAscii("")) )
+                    if ( !sComment.Len() )
                         GetView().GetDocShell()->Broadcast(SwRedlineHint(pRedline,SWREDLINE_INSERTED));
                     const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS,&GetView()));
                 }
@@ -419,9 +416,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     sal_Bool bTravel = sal_False;
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact, "Dialogdiet fail!");
                     ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                    DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
+                    OSL_ENSURE(fnGetRange, "Dialogdiet fail! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
                     aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pRedline->GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
@@ -464,9 +461,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bTravel |= bNext|bPrev;
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact2, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact2, "Dialogdiet fail!");
                     AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel, sal_True );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 
                     String sTitle(SW_RES(STR_REDLINE_COMMENT));
@@ -525,10 +522,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 else
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");
+                    OSL_ENSURE(pFact, "Dialogdiet fail!");
                     AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog( DLG_JAVAEDIT,
                                                             pMDI, &rSh);
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                    OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     if ( pDlg->Execute() )
                     {
                         aType = pDlg->GetType();
@@ -604,7 +601,7 @@ FIELD_INSERT:
             }
             break;
             default:
-                ASSERT(sal_False, falscher Dispatcher);
+                OSL_FAIL("wrong dispatcher");
                 return;
         }
     }
@@ -641,12 +638,6 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             break;
             case FN_EDIT_FIELD:
             {
-                /* #108536# Fields can be selected, too now. Removed
-
-                if( rSh.HasSelection() )
-                     rSet.DisableItem(nWhich);
-                else ...
-                */
 
                 if( !bGetField )
                 {
@@ -721,11 +712,6 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
-/*---------------------------------------------------------------------------
-    Beschreibung:
- ----------------------------------------------------------------------------*/
-
 
 void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
 {
@@ -891,4 +877,4 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
     return 0;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

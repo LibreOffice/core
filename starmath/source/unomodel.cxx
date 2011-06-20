@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_starmath.hxx"
 
 
-#include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
@@ -49,6 +49,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <unomodel.hxx>
@@ -59,8 +60,6 @@
 #include <config.hxx>
 #include <smdll.hxx>
 
-using namespace ::vos;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::std;
 using namespace ::comphelper;
@@ -73,6 +72,8 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::script;
 
 
+using rtl::OUString;
+
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
@@ -81,13 +82,13 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 9, "resource incomplete" );
+    OSL_ENSURE( aLocalizedStrings.Count() >= 18, "resource incomplete" );
     if( aLocalizedStrings.Count() < 9 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
     SmConfig *pConfig = pp->GetConfig();
-    DBG_ASSERT( pConfig, "SmConfig not found" );
+    OSL_ENSURE( pConfig, "SmConfig not found" );
     if (!pConfig)
         return;
 
@@ -155,15 +156,6 @@ SmPrintUIOptions::SmPrintUIOptions()
     aHintNoLayoutPage[0].Value = makeAny( sal_True );
     m_aUIProperties[8].Value <<= aHintNoLayoutPage;
 
-// IsIgnoreSpacesRight is a parser option! Thus we don't add it to the printer UI.
-//
-//    // create subgroup for misc options
-//    m_aUIProperties[8].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 9 ) );
-//
-//    // create a bool option for ignore spacing (matches to SID_NO_RIGHT_SPACES)
-//    m_aUIProperties[9].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
-//                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_NO_RIGHT_SPACE ) ),
-//                                                  pConfig->IsIgnoreSpacesRight() );
 }
 
 
@@ -238,13 +230,11 @@ enum SmModelPropertyHandles
     HANDLE_PRINTER_SETUP,
     HANDLE_SYMBOLS,
     HANDLE_USED_SYMBOLS,
-    HANDLE_BASIC_LIBRARIES,     /* #93295# */
+    HANDLE_BASIC_LIBRARIES,
     HANDLE_RUNTIME_UID,
-    // --> PB 2004-08-25 #i33095# Security Options
-    HANDLE_LOAD_READONLY,
-    // <--
-    HANDLE_DIALOG_LIBRARIES,     // #i73329#
-    HANDLE_BASELINE // 3.7.2010 #i972#
+    HANDLE_LOAD_READONLY,     // Security Options
+    HANDLE_DIALOG_LIBRARIES,  // #i73329#
+    HANDLE_BASELINE
 };
 
 PropertySetInfo * lcl_createModelPropertyInfo ()
@@ -314,18 +304,16 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "UserDefinedSymbolsInUse"       ),        HANDLE_USED_SYMBOLS                  ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PropertyAttribute::READONLY, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
-        // --> PB 2004-08-25 #i33095# Security Options
+        // #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
-        // <--
-        // --> 3.7.2010 #i972#
+        // #i972#
         { RTL_CONSTASCII_STRINGPARAM( "BaseLine"), HANDLE_BASELINE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
-        // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
     PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
     return pInfo;
 }
-//-----------------------------------------------------------------------
+
 SmModel::SmModel( SfxObjectShell *pObjSh )
 : SfxBaseModel(pObjSh)
 , PropertySetHelper ( lcl_createModelPropertyInfo () )
@@ -333,14 +321,12 @@ SmModel::SmModel( SfxObjectShell *pObjSh )
 
 {
 }
-//-----------------------------------------------------------------------
+
 SmModel::~SmModel() throw ()
 {
     delete m_pPrintUIOptions;
 }
-/*-- 28.03.00 14:18:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
@@ -358,26 +344,20 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
         aRet = SfxBaseModel::queryInterface ( rType );
     return aRet;
 }
-/*-- 28.03.00 14:18:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SmModel::acquire() throw()
 {
     OWeakObject::acquire();
 }
-/*-- 28.03.00 14:18:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SmModel::release() throw()
 {
     OWeakObject::release();
 }
-/*-- 28.03.00 14:18:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
     aTypes.realloc(nLen + 4);
@@ -387,30 +367,19 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeExce
     pTypes[nLen++] = ::getCppuType((Reference<XMultiPropertySet>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XRenderable>*)0);
 
-    // XPropertyState not supported?? (respective virtual functions from
-    // PropertySetHelper not overloaded)
-    //pTypes[nLen++] = ::getCppuType((Reference<XPropertyState>*)0);
-
     return aTypes;
 }
-/* -----------------------------28.03.00 14:23--------------------------------
 
- ---------------------------------------------------------------------------*/
+namespace
+{
+    class theSmModelUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSmModelUnoTunnelId> {};
+}
+
 const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 {
-    static osl::Mutex aCreateMutex;
-    osl::Guard<osl::Mutex> aGuard( aCreateMutex );
+    return theSmModelUnoTunnelId::get().getSeq();
+}
 
-    static uno::Sequence< sal_Int8 > aSeq;
-    if(!aSeq.getLength())
-    {
-        aSeq.realloc( 16 );
-        rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-    }
-    return aSeq;
-} /* -----------------------------28.03.00 14:23--------------------------------
-
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw(uno::RuntimeException)
 {
@@ -423,12 +392,7 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
 
     return SfxBaseModel::getSomething( rId );
 }
-/*-- 07.01.00 16:32:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-/*-- 07.01.00 16:33:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 {
     uno::TypeClass eType = rAny.getValueType().getTypeClass();
@@ -442,7 +406,6 @@ sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
         rAny >>= nRet;
     return nRet;
 }
-//-----------------------------------------------------------------------------
 
 OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 {
@@ -452,12 +415,9 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 
 ::rtl::OUString SmModel::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.math.FormulaDocument");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.math.FormulaDocument"));
 }
 
-/*-- 20.01.04 11:21:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return (
@@ -465,9 +425,7 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::Runt
             rServiceName == A2OU("com.sun.star.formula.FormulaProperties")
            );
 }
-/*-- 20.01.04 11:21:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -475,7 +433,7 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::Ru
 
 uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -487,7 +445,7 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
     throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 
@@ -545,7 +503,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                sal_Bool bVal = *(sal_Bool*)(*pValues).getValue();
+                bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -561,7 +519,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                sal_Bool bVal = *(sal_Bool*)(*pValues).getValue();
+                bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -695,7 +653,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     sal_uInt32 nSize = aSequence.getLength();
                     SvMemoryStream aStream ( aSequence.getArray(), nSize, STREAM_READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    static sal_uInt16 __READONLY_DATA nRange[] =
+                    static sal_uInt16 const nRange[] =
                     {
                         SID_PRINTSIZE,       SID_PRINTSIZE,
                         SID_PRINTZOOM,       SID_PRINTZOOM,
@@ -746,7 +704,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
             }
             break;
-            // --> PB 2004-08-25 #i33095# Security Options
+            // #i33095# Security Options
             case HANDLE_LOAD_READONLY :
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
@@ -756,7 +714,6 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     pDocSh->SetLoadReadonly( bReadonly );
                 break;
             }
-            // <--
         }
     }
 
@@ -805,7 +762,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                sal_Bool bVal = IsItalic( rFace );
+                bool bVal = IsItalic( rFace );
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -818,7 +775,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                sal_Bool bVal = IsBold( rFace ); // bold?
+                bool bVal = IsBold( rFace ); // bold?
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -964,14 +921,13 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_RUNTIME_UID:
                 *pValue <<= getRuntimeUID();
             break;
-            // --> PB 2004-08-25 #i33095# Security Options
+            // #i33095# Security Options
             case HANDLE_LOAD_READONLY :
             {
                  *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
-            // <--
-            // --> 3.7.2010 #i972#
+            // #i972#
             case HANDLE_BASELINE:
             {
                 if ( !pDocSh->pTree )
@@ -985,7 +941,6 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 }
             }
             break;
-            // <--
         }
     }
 }
@@ -997,7 +952,7 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
         const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 1;
 }
 
@@ -1030,7 +985,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1041,7 +996,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 
     SmPrinterAccess aPrinterAccess( *pDocSh );
     Printer *pPrinter = aPrinterAccess.GetPrinter();
-    //Point   aPrtPageOffset( pPrinter->GetPageOffset() );
     Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
 
     // if paper size is 0 (usually if no 'real' printer is found),
@@ -1068,7 +1022,7 @@ void SAL_CALL SmModel::render(
         const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1106,7 +1060,7 @@ void SAL_CALL SmModel::render(
             while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
                 pViewSh = SfxViewShell::GetNext( *pViewSh, &aTypeId, sal_False /* search non-visible views as well*/ );
             SmViewShell *pView = PTR_CAST( SmViewShell, pViewSh );
-            DBG_ASSERT( pView, "SmModel::render : no SmViewShell found" );
+            OSL_ENSURE( pView, "SmModel::render : no SmViewShell found" );
 
             if (pView)
             {
@@ -1165,7 +1119,7 @@ void SAL_CALL SmModel::render(
 void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xParent)
         throw( lang::NoSupportException, uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     SfxBaseModel::setParent( xParent );
     uno::Reference< lang::XUnoTunnel > xParentTunnel( xParent, uno::UNO_QUERY );
     if ( xParentTunnel.is() )
@@ -1178,3 +1132,4 @@ void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xPare
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

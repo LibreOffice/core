@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -168,13 +169,9 @@ sal_Bool SwCursor::IsSkipOverProtectSections() const
 }
 
 
-// Sicher die aktuelle Position, damit ggfs. auf diese zurueck
-// gefallen werden kann. Die SavePos Objekte werden als Stack verwaltet,
-// damit das auch alles bei verschachtelten Aufrufen funktioniert.
 // Das CreateNewSavePos ist virtual, damit abgeleitete Klassen vom Cursor
 // gegebenenfalls eigene SaveObjecte anlegen und in den virtuellen
 // Check-Routinen verwenden koennen.
-
 void SwCursor::SaveState()
 {
     _SwCursor_SavePos* pNew = CreateNewSavePos();
@@ -325,7 +322,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 if( rProtect.IsCntntProtected() )
                 {
                     const SwFmtCntnt& rCntnt = pFmt->GetCntnt(sal_False);
-                    ASSERT( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                    OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
                     sal_uLong nIdx = rCntnt.GetCntntIdx()->GetIndex();
                     if( nSttIdx <= nIdx && nEndIdx >= nIdx )
                     {
@@ -361,7 +358,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     0 == pFrm->Frm().Height() )
                 ;
 
-            // --> LIJIAN/FME 2007-11-27 #i72394# skip to prev /next valid paragraph
+            // #i72394# skip to prev /next valid paragraph
             // with a layout in case the first search did not succeed:
             if( !pFrm )
             {
@@ -373,7 +370,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                         :   pFrm->GetPrevCntntFrm();
                 }
             }
-            // <--
 
             SwCntntNode* pCNd;
             if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
@@ -535,7 +531,7 @@ sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
     // Check for convered cell:
     bool bInCoveredCell = false;
     const SwStartNode* pTmpSttNode = pCNd->FindTableBoxStartNode();
-    ASSERT( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" )
+    OSL_ENSURE( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" );
     const SwTableBox* pBox = pTmpSttNode ? pTableNode->GetTable().GetTblBox( pTmpSttNode->GetIndex() ) : 0; //Robust #151355
     if ( pBox && pBox->getRowSpan() < 1 ) // Robust #151270
         bInCoveredCell = true;
@@ -1368,22 +1364,46 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->GetBreakIter().is() )
     {
-        xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
-        Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary(
-                            pTxtNd->GetTxt(), nPtPos,
-                            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            nWordType,
-                            bForward ));
-
-        if( aBndry.startPos != aBndry.endPos )
+        // Should we select the whole fieldmark?
+        const IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
+        sw::mark::IMark* pMark = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
+        if ( pMark )
         {
-            GetPoint()->nContent = (xub_StrLen)aBndry.endPos;
-            if( !IsSelOvr() )
+            const SwPosition rStart = pMark->GetMarkStart();
+            GetPoint()->nNode = rStart.nNode;
+            GetPoint()->nContent = rStart.nContent;
+            GetPoint()->nContent++; // Don't select the start delimiter
+
+            const SwPosition rEnd = pMark->GetMarkEnd();
+
+            if ( rStart != rEnd )
             {
                 SetMark();
-                GetMark()->nContent = (xub_StrLen)aBndry.startPos;
+                GetMark()->nNode = rEnd.nNode;
+                GetMark()->nContent = rEnd.nContent;
+                GetMark()->nContent--; //Don't select the end delimiter
+            }
+            bRet = sal_True;
+        }
+        else
+        {
+            xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+            Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary(
+                                pTxtNd->GetTxt(), nPtPos,
+                                pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+                                nWordType,
+                                bForward ));
+
+            if( aBndry.startPos != aBndry.endPos )
+            {
+                GetPoint()->nContent = (xub_StrLen)aBndry.endPos;
                 if( !IsSelOvr() )
-                    bRet = sal_True;
+                {
+                    SetMark();
+                    GetMark()->nContent = (xub_StrLen)aBndry.startPos;
+                    if( !IsSelOvr() )
+                        bRet = sal_True;
+                }
             }
         }
     }
@@ -1614,7 +1634,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
     else
         fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
 
-    // ASSERT( not in covered cell )
+    // OSL_ENSURE( not in covered cell )
 
     while( nCnt )
     {
@@ -1644,8 +1664,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
             {
                 // Set cursor to start/end of covered cell:
                 SwTableBox* pTableBox = pOldTabBoxSttNode->GetTblBox();
-                const long nRowSpan = pTableBox->getRowSpan();
-                if ( nRowSpan > 1 )
+                if ( pTableBox && pTableBox->getRowSpan() > 1 )
                 {
                     pTableBox = & pTableBox->FindEndOfRowSpan( pOldTabSttNode->GetTable(), (sal_uInt16)(pTableBox->getRowSpan() + mnRowSpanOffset ) );
                     SwNodeIndex& rPtIdx = GetPoint()->nNode;
@@ -1676,7 +1695,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         if ( pTableBoxStartNode )
         {
             const SwTableBox* pTableBox = pTableBoxStartNode->GetTblBox();
-            if ( pTableBox->getRowSpan() < 1 )
+            if ( pTableBox && pTableBox->getRowSpan() < 1 )
             {
                 // Store the row span offset:
                 mnRowSpanOffset = pTableBox->getRowSpan();
@@ -1808,7 +1827,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
             // set the point to the last frame in the table box. This is
             // only necessary if we do not already have a table selection
             const SwStartNode* pTblNd = GetNode( sal_True )->FindTableBoxStartNode();
-            ASSERT( pTblNd, "pTblCrsr without SwTableNode?" )
+            OSL_ENSURE( pTblNd, "pTblCrsr without SwTableNode?" );
 
             if ( pTblNd ) // safety first
             {
@@ -1932,7 +1951,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
         // proceeding:
         if ( mnRowSpanOffset )
         {
-            if ( pTableBox->getRowSpan() > 1 )
+            if ( pTableBox && pTableBox->getRowSpan() > 1 )
             {
                 pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(), (sal_uInt16)(pTableBox->getRowSpan() + mnRowSpanOffset) );
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
@@ -1955,7 +1974,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
 
         pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();
         pTableBox = pTableBoxStartNode->GetTblBox();
-        if ( pTableBox->getRowSpan() < 1 )
+        if ( pTableBox && pTableBox->getRowSpan() < 1 )
         {
             mnRowSpanOffset = pTableBox->getRowSpan();
             // move cursor to non-covered cell:
@@ -2020,12 +2039,12 @@ sal_Bool SwCursor::GotoTblBox( const String& rName )
 
 sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 {
-    //JP 28.8.2001: for optimization test something before
+    //for optimization test something before
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
     bool bShortCut = false;
     if ( fnWhichPara == fnParaCurr )
     {
-        // --> FME 2005-02-21 #i41048#
+        // #i41048#
         // If fnWhichPara == fnParaCurr, (*fnWhichPara)( *this, fnPosPara )
         // can already move the cursor to a different text node. In this case
         // we better check if IsSelOvr().
@@ -2036,7 +2055,6 @@ sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
             if ( GetPoint()->nContent.GetIndex() != nSttEnd )
                 bShortCut = true;
         }
-        // <--
     }
     else
     {
@@ -2069,13 +2087,7 @@ sal_Bool SwCursor::MoveSection( SwWhichSection fnWhichSect,
                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
-/*
-    sal_Bool MoveTable( SwWhichTable, SwPosTable );
-    sal_Bool MoveColumn( SwWhichColumn, SwPosColumn );
-    sal_Bool MoveRegion( SwWhichRegion, SwPosRegion );
-*/
-
-void SwCursor::RestoreSavePos()     // Point auf die SavePos setzen
+void SwCursor::RestoreSavePos()
 {
     if( pSavePos )
     {
@@ -2103,13 +2115,14 @@ sal_Bool lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, sal_uI
 {
     sal_uLong nIdx = pSrch->GetIndex();
 
-    sal_uInt16 nO = rTmp.Count(), nM, nU = 0;
+    sal_uInt16 nO = rTmp.Count();
     if( nO > 0 )
     {
         nO--;
+        sal_uInt16 nU = 0;
         while( nU <= nO )
         {
-            nM = nU + ( nO - nU ) / 2;
+            sal_uInt16 nM = nU + ( nO - nU ) / 2;
             if( rTmp[ nM ]->GetSttNd() == pSrch )
             {
                 rFndPos = nM;
@@ -2190,19 +2203,6 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             if( bDel )
             {
                 SwPaM* pDel = (SwPaM*)pCur->GetPrev();
-/*
-JP 20.07.98: der alte Code geht mit dem UNO-TableCrsr nicht
-                if( pDel == pAktCrsr )
-                {
-                    if( pAktCrsr->GetNext() == pAktCrsr )
-                    {
-                        pAktCrsr->DeleteMark();
-                        break;      // es gibt nichts mehr zu loeschen!
-                    }
-                    pAktCrsr = (SwCursor*)pDel->GetPrev();
-                }
-                delete pDel;
-*/
 
                 if( pDel == pAktCrsr )
                     pAktCrsr->DeleteMark();
@@ -2354,3 +2354,4 @@ sal_Bool SwTableCursor::HasReadOnlyBoxSel() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

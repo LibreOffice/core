@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
 
 #include "doc.hxx"
 #include "lineinfo.hxx"
@@ -138,7 +137,7 @@ SwCharFmt* SwLineNumberInfo::GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) cons
 
 void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
 {
-    ASSERT( pChFmt, "SetCharFmt, 0 is not a valid pointer" );
+    OSL_ENSURE( pChFmt, "SetCharFmt, 0 is not a valid pointer" );
     pChFmt->Add( this );
 }
 
@@ -157,3 +156,4 @@ void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <tools/stream.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sot/storage.hxx>
@@ -45,9 +44,7 @@
 #include <rootfrm.hxx>
 #include <drawdoc.hxx>
 #include <dpage.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellio.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -81,7 +78,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SvxColorTableItem* pColItem = ( SvxColorTableItem* )
                                 ( pDocSh->GetItem( SID_COLOR_TABLE ) );
         XColorTable *pXCol = pColItem ? pColItem->GetColorTable() :
-                                        XColorTable::GetStdColorTable();
+                                        &XColorTable::GetStdColorTable();
         SetColorTable( pXCol );
 
         if ( !pColItem )
@@ -96,7 +93,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SetObjectShell( pDocSh );
     }
     else
-        SetColorTable( XColorTable::GetStdColorTable() );
+        SetColorTable( &XColorTable::GetStdColorTable() );
 
     // copy all the default values to the SdrModel
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();
@@ -130,7 +127,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     }
 
     SetForbiddenCharsTable( pD->getForbiddenCharacterTable() );
-    // #87795# Implementation for asian compression
+    // Implementation for asian compression
     SetCharCompressType( static_cast<sal_uInt16>(pD->getCharacterCompressionType() ));
 }
 
@@ -145,9 +142,7 @@ SwDrawDocument::~SwDrawDocument()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
-    // #116168#
     ClearModel(sal_True);
-    //Clear();
 }
 
 /*************************************************************************
@@ -160,7 +155,7 @@ SwDrawDocument::~SwDrawDocument()
 \************************************************************************/
 
 
-SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SwDrawDocument::AllocPage(bool bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
     pPage->SetName( String::CreateFromAscii(
@@ -215,7 +210,6 @@ SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
     return (SdrLayerID)pDoc->GetHeavenId();
 }
 
-// --> OD 2006-03-01 #b6382898#
 uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
 {
 
@@ -230,11 +224,11 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
     }
     catch( uno::RuntimeException& )
     {
-        ASSERT( false,
-                "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
+        OSL_FAIL( "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
     }
 
     return xModel;
 }
 
-// <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

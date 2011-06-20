@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -128,10 +129,9 @@ inline SwClient::SwClient() :
 // SwModify
 // ----------
 
+// class has a doubly linked list for dependencies
 class SW_DLLPUBLIC SwModify: public SwClient
 {
-//  friend class SwClientIter;
-
     SwClient* pRoot;                // the start of the linked list of clients
     sal_Bool bModifyLocked : 1;         // don't broadcast changes now
     sal_Bool bLockClientList : 1;       // may be set when this instance notifies its clients
@@ -199,6 +199,7 @@ public:
 
     SwClient* GetToTell() { return pToTell; }
 
+    // get Client information
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 
 protected:
@@ -258,3 +259,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

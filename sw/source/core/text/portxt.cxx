@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,13 +32,9 @@
 
 #include <ctype.h>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <hintids.hxx>     // CH_TXTATR
-#include <errhdl.hxx>   // ASSERT
 #include <SwPortionHandler.hxx>
-#include <txtcfg.hxx>
 #include <porlay.hxx>
 #include <inftxt.hxx>
 #include <guess.hxx>    // SwTxtGuess, Zeilenumbruch
@@ -53,10 +50,6 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <xmloff/odffields.hxx>
-
-#if OSL_DEBUG_LEVEL > 1
-const sal_Char *GetLangName( const MSHORT nLang );
-#endif
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -328,7 +321,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
             // this should usually be true but
             aGuess.AlternativeSpelling( rInf, rInf.GetSoftHyphPos() - 1 );
             bFull = CreateHyphen( rInf, aGuess );
-            ASSERT( bFull, "Problem with hyphenation!!!" );
+            OSL_ENSURE( bFull, "Problem with hyphenation!!!" );
         }
         rInf.ChgHyph( bHyph );
         rInf.SetSoftHyphPos( 0 );
@@ -401,9 +394,8 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         //   (work around different definition of tab stop character - breaking or
         //   non breaking character - in compatibility mode)
         else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() &&
-                    // --> OD 2010-01-29 #b6921213#
+                    //
                     rInf.IsOtherThanFtnInside() ) ||
-                    // <--
                   ( rInf.GetLast() &&
                     rInf.GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) &&
                     rInf.GetLast()->InTabGrp() &&
@@ -436,7 +428,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 
             SetLen( aGuess.BreakPos() - rInf.GetIdx() );
 
-            ASSERT( aGuess.BreakStart() >= aGuess.FieldDiff(),
+            OSL_ENSURE( aGuess.BreakStart() >= aGuess.FieldDiff(),
                     "Trouble with expanded field portions during line break" );
             const xub_StrLen nRealStart = aGuess.BreakStart() - aGuess.FieldDiff();
             if( aGuess.BreakPos() < nRealStart && !InExpGrp() )
@@ -492,9 +484,9 @@ sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
         return sal_True;
     }
 
-    ASSERT( rInf.RealWidth() || (rInf.X() == rInf.Width()),
+    OSL_ENSURE( rInf.RealWidth() || (rInf.X() == rInf.Width()),
         "SwTxtPortion::Format: missing real width" );
-    ASSERT( Height(), "SwTxtPortion::Format: missing height" );
+    OSL_ENSURE( Height(), "SwTxtPortion::Format: missing height" );
 
     return _Format( rInf );
 }
@@ -552,7 +544,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
 xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
-    ASSERT( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
+    OSL_ENSURE( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 
@@ -743,13 +735,12 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     if( rInf.GetVsh() && rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
     {
         const XubString aTxt( ' ' );
         rInf.DrawText( aTxt, *this, 0, 1, false );
     }
-    // <--
 }
 
 /*************************************************************************
@@ -791,12 +782,12 @@ namespace {
     {
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT));
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
         if(io_pCurrentText)
         {
-            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
             if(pListEntries != pParameters->end())
             {
                 uno::Sequence< ::rtl::OUString > vListEntries;
@@ -825,17 +816,18 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
         { // a checkbox...
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
             bool checked = pCheckboxFm->IsChecked();
             rInf.DrawCheckBox(*this, checked);
         }
-        else if ( pBM->GetFieldname( ).equalsAscii(  ODF_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         { // a list...
             rtl::OUString aTxt;
+            getCurrentListIndex( pBM, &aTxt );
             rInf.DrawViewOpt( *this, POR_FLD );
-            rInf.DrawText( aTxt, *this, 0, 0/*aTxt.getLength()*/, false );
+            rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
         }
         else
         {
@@ -852,16 +844,16 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
     SwIndex aIndex( pNd, rInf.GetIdx(  ) );
     SwPosition aPosition( *pNd, aIndex );
     IFieldmark *pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
-    ASSERT( pBM != NULL, "Where is my form field bookmark???" );
+    OSL_ENSURE( pBM != NULL, "Where is my form field bookmark???" );
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
         {
             Width( rInf.GetTxtHeight(  ) );
             Height( rInf.GetTxtHeight(  ) );
             SetAscent( rInf.GetAscent(  ) );
         }
-        else if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         {
             ::rtl::OUString aTxt;
             getCurrentListIndex( pBM, &aTxt );
@@ -879,3 +871,4 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

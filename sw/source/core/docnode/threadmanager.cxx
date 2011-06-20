@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,6 @@
  ************************************************************************/
 #include "precompiled_sw.hxx"
 #include <threadmanager.hxx>
-#include <errhdl.hxx>
 
 #include <algorithm>
 
@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 /** class to manage threads
 
-    OD 2007-01-29 #i73788#
+    #i73788#
 
     @author OD
 */
@@ -147,7 +147,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
             }
             else
             {
-                ASSERT( false, "<ThreadManager::RemoveThread(..)> - ThreadJoiner already gone!" );
+                OSL_FAIL( "<ThreadManager::RemoveThread(..)> - ThreadJoiner already gone!" );
             }
         }
 
@@ -200,7 +200,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
         }
         else
         {
-            ASSERT( false, "<ThreadManager::StartThread(..)> - ThreadJoiner already gone!" );
+            OSL_FAIL( "<ThreadManager::StartThread(..)> - ThreadJoiner already gone!" );
         }
     }
     else
@@ -256,3 +256,5 @@ void ThreadManager::ResumeStartingOfThreads()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

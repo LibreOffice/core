@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,10 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <ooo/vba/XControlProvider.hpp>
+#include <ooo/vba/word/WdProtectionType.hpp>
 
 #include <vbahelper/helperdecl.hxx>
 #include <wordvbahelper.hxx>
@@ -50,7 +52,14 @@
 #include "vbafield.hxx"
 #include "vbapagesetup.hxx"
 #include "vbasections.hxx"
+#include "vbatablesofcontents.hxx"
 #include <vbahelper/vbashapes.hxx>
+#include <vbahelper/vbahelper.hxx>
+#include "vbarevisions.hxx"
+#include "vbaframes.hxx"
+#include "vbaformfields.hxx"
+#include <osl/file.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -200,7 +209,6 @@ uno::Any SAL_CALL
 SwVbaDocument::Shapes( const uno::Any& index ) throw (uno::RuntimeException)
 {
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getModel(), uno::UNO_QUERY_THROW );
-    //uno::Reference< drawing::XShapes > xShapes( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, xModel ) );
@@ -216,6 +224,22 @@ SwVbaDocument::Sections( const uno::Any& index ) throw (uno::RuntimeException)
     uno::Reference< XCollection > xCol( new SwVbaSections( mxParent, mxContext, getModel() ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
+}
+
+uno::Any SAL_CALL
+SwVbaDocument::TablesOfContents( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< XCollection > xCol( new SwVbaTablesOfContents( this, mxContext, mxTextDocument ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
+}
+
+uno::Any SAL_CALL
+SwVbaDocument::FormFields( const uno::Any& /*index*/ ) throw (uno::RuntimeException)
+{
+    uno::Reference< XCollection > xCol;
     return uno::makeAny( xCol );
 }
 
@@ -239,16 +263,34 @@ SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException)
     uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
     uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
-    rtl::OUString sTemplateName = xDocProps->getTemplateName();
+    rtl::OUString sTemplateUrl = xDocProps->getTemplateURL();
 
-    xTemplate = new SwVbaTemplate( this, mxContext, getModel(), sTemplateName );
+    xTemplate = new SwVbaTemplate( this, mxContext, getModel(), sTemplateUrl );
     return uno::makeAny( xTemplate );
 }
 
 void SAL_CALL
-SwVbaDocument::setAttachedTemplate( const css::uno::Any& /*_attachedtemplate*/ ) throw (uno::RuntimeException)
+SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate ) throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException();
+    rtl::OUString sTemplate;
+    if( !( _attachedtemplate >>= sTemplate ) )
+    {
+        throw uno::RuntimeException();
+    }
+    rtl::OUString aURL;
+    INetURLObject aObj;
+    aObj.SetURL( sTemplate );
+    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+    if ( bIsURL )
+        aURL = sTemplate;
+    else
+        osl::FileBase::getFileURLFromSystemPath( sTemplate, aURL );
+
+    uno::Reference< word::XTemplate > xTemplate;
+    uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( getModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSupp( xDocInfoSupp->getDocumentInfo(), uno::UNO_QUERY_THROW );
+    uno::Reference< document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );
+    xDocProps->setTemplateURL( aURL );
 }
 
 uno::Any SAL_CALL
@@ -265,6 +307,116 @@ SwVbaDocument::Tables( const css::uno::Any& aIndex ) throw (uno::RuntimeExceptio
 void SAL_CALL SwVbaDocument::Activate() throw (uno::RuntimeException)
 {
     VbaDocumentBase::Activate();
+}
+
+::sal_Int32 SAL_CALL SwVbaDocument::getProtectionType() throw (css::uno::RuntimeException)
+{
+    //TODO
+    return word::WdProtectionType::wdNoProtection;
+}
+
+void SAL_CALL SwVbaDocument::setProtectionType( ::sal_Int32 /*_protectiontype*/ ) throw (css::uno::RuntimeException)
+{
+    //TODO
+}
+
+::sal_Bool SAL_CALL SwVbaDocument::getUpdateStylesOnOpen() throw (css::uno::RuntimeException)
+{
+    //TODO
+    return sal_False;
+}
+
+void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( ::sal_Bool /*_updatestylesonopen*/ ) throw (uno::RuntimeException)
+{
+    //TODO
+}
+
+::sal_Bool SAL_CALL SwVbaDocument::getAutoHyphenation() throw (uno::RuntimeException)
+{
+    // check this property only in default paragraph style
+    sal_Bool IsAutoHyphenation = sal_False;
+    uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
+    xParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaIsHyphenation")) ) >>= IsAutoHyphenation;
+    return IsAutoHyphenation;
+}
+
+void SAL_CALL SwVbaDocument::setAutoHyphenation( ::sal_Bool _autohyphenation ) throw (uno::RuntimeException)
+{
+    //TODO
+    uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
+    xParaProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaIsHyphenation")), uno::makeAny( _autohyphenation ) );
+}
+
+::sal_Int32 SAL_CALL SwVbaDocument::getHyphenationZone() throw (uno::RuntimeException)
+{
+    //TODO
+    return 0;
+}
+
+void SAL_CALL SwVbaDocument::setHyphenationZone( ::sal_Int32 /*_hyphenationzone*/ ) throw (uno::RuntimeException)
+{
+    //TODO
+}
+
+::sal_Int32 SAL_CALL SwVbaDocument::getConsecutiveHyphensLimit() throw (uno::RuntimeException)
+{
+    //TODO
+    sal_Int16 nHyphensLimit = 0;
+    uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
+    xParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaHyphenationMaxHyphens")) ) >>= nHyphensLimit;
+    return nHyphensLimit;
+}
+
+void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutivehyphenslimit ) throw (uno::RuntimeException)
+{
+    sal_Int16 nHyphensLimit = static_cast< sal_Int16 >( _consecutivehyphenslimit );
+    uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
+    xParaProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaHyphenationMaxHyphens")), uno::makeAny( nHyphensLimit ) );
+}
+
+void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const uno::Any& /*NOReset*/, const uno::Any& /*Password*/, const uno::Any& /*UseIRM*/, const uno::Any& /*EnforceStyleLock*/ ) throw (uno::RuntimeException)
+{
+    // Seems not support in Writer
+    // VbaDocumentBase::Protect( Password );
+}
+
+void SAL_CALL SwVbaDocument::PrintOut( const uno::Any& /*Background*/, const uno::Any& /*Append*/, const uno::Any& /*Range*/, const uno::Any& /*OutputFileName*/, const uno::Any& /*From*/, const uno::Any& /*To*/, const uno::Any& /*Item*/, const uno::Any& /*Copies*/, const uno::Any& /*Pages*/, const uno::Any& /*PageType*/, const uno::Any& /*PrintToFile*/, const uno::Any& /*Collate*/, const uno::Any& /*FileName*/, const uno::Any& /*ActivePrinterMacGX*/, const uno::Any& /*ManualDuplexPrint*/, const uno::Any& /*PrintZoomColumn*/, const uno::Any& /*PrintZoomRow*/, const uno::Any& /*PrintZoomPaperWidth*/, const uno::Any& /*PrintZoomPaperHeight*/ ) throw (uno::RuntimeException)
+{
+    //TODO
+}
+
+void SAL_CALL SwVbaDocument::PrintPreview(  ) throw (uno::RuntimeException)
+{
+    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrintPreview"));
+    dispatchRequests( mxModel,url );
+}
+
+void SAL_CALL SwVbaDocument::ClosePrintPreview(  ) throw (uno::RuntimeException)
+{
+    rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClosePreview"));
+    dispatchRequests( mxModel,url );
+}
+
+uno::Any SAL_CALL
+SwVbaDocument::Revisions( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< document::XRedlinesSupplier > xRedlinesSupp( mxTextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xRedlines( xRedlinesSupp->getRedlines(), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xCol( new SwVbaRevisions( this, mxContext, getModel(), xRedlines ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
+}
+
+uno::Any SAL_CALL
+SwVbaDocument::Frames( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< text::XTextFramesSupplier > xTextFramesSupp( mxTextDocument, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xFrames( xTextFramesSupp->getTextFrames(), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xCol( new SwVbaFrames( this, mxContext, xFrames, getModel() ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
 }
 
 uno::Any
@@ -379,3 +531,4 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ooo.vba.word.Document" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,15 +60,10 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-// OD 18.06.2003 #108784#
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <vector>
-// --> OD 2004-06-24 #i28701#
+// #i28701#
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
-// <--
 
 
 using namespace com::sun::star;
@@ -110,9 +106,6 @@ const SwFrm *lcl_FindAnchor( const SdrObject *pObj, sal_Bool bAll )
 |*
 |*  SwDrawView::Ctor
 |*
-|*  Ersterstellung      OK 18.11.94
-|*  Letzte Aenderung    MA 22. Jul. 96
-|*
 *************************************************************************/
 
 
@@ -145,12 +138,11 @@ SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_Writer());
 }
 
-// --> OD 2009-03-05 #i99665#
+// #i99665#
 sal_Bool SwDrawView::IsAntiAliasing() const
 {
     return getOptionsDrawinglayer().IsAntiAliasing();
 }
-// <--
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -233,9 +225,6 @@ SdrObject* SwDrawView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTo
 |*
 |*  Gets called every time the handles need to be build
 |*
-|*  Ersterstellung      AW 06. Sep. 99
-|*  Letzte Aenderung    AW 06. Sep. 99
-|*
 *************************************************************************/
 
 void SwDrawView::AddCustomHdl()
@@ -246,16 +235,14 @@ void SwDrawView::AddCustomHdl()
         return;
 
     SdrObject *pObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
-    // --> OD 2006-11-06 #130889# - make code robust
-//    const SwFmtAnchor &rAnchor = ::FindFrmFmt(pObj)->GetAnchor();
+    // make code robust
     SwFrmFmt* pFrmFmt( ::FindFrmFmt( pObj ) );
     if ( !pFrmFmt )
     {
-        ASSERT( false, "<SwDrawView::AddCustomHdl()> - missing frame format!" );
+        OSL_FAIL( "<SwDrawView::AddCustomHdl()> - missing frame format!" );
         return;
     }
     const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
-    // <--
 
     if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         return;
@@ -268,7 +255,7 @@ void SwDrawView::AddCustomHdl()
 
     if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
     {
-        // --> OD 2004-06-24 #i28701# - use last character rectangle saved at object
+        // #i28701# - use last character rectangle saved at object
         // in order to avoid a format of the anchor frame
         SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
         SwRect aAutoPos = pAnchoredObj->GetLastCharRect();
@@ -287,9 +274,6 @@ void SwDrawView::AddCustomHdl()
 /*************************************************************************
 |*
 |*  SwDrawView::GetMaxToTopObj(), _GetMaxToTopObj()
-|*
-|*  Ersterstellung      MA 13. Jan. 95
-|*  Letzte Aenderung    MA 18. Mar. 97
 |*
 *************************************************************************/
 
@@ -344,9 +328,6 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
 |*
 |*  SwDrawView::GetMaxToBtmObj()
 |*
-|*  Ersterstellung      MA 13. Jan. 95
-|*  Letzte Aenderung    MA 05. Sep. 96
-|*
 *************************************************************************/
 
 
@@ -373,9 +354,6 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 |*
 |*  SwDrawView::ObjOrderChanged()
 |*
-|*  Ersterstellung      MA 31. Jul. 95
-|*  Letzte Aenderung    MA 18. Mar. 97
-|*
 *************************************************************************/
 
 inline sal_Bool lcl_IsChild( SdrObject *pParent, SdrObject *pChild )
@@ -401,8 +379,6 @@ inline SdrObject *lcl_FindParent( SdrObject *pObj )
 
 /** determine maximal order number for a 'child' object of given 'parent' object
 
-    OD 2004-08-20 #110810#
-
     @author OD
 */
 sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
@@ -411,7 +387,7 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
     sal_uInt32 nMaxChildOrdNum = _rParentObj.GetDrawObj()->GetOrdNum();
 
     const SdrPage* pDrawPage = _rParentObj.GetDrawObj()->GetPage();
-    ASSERT( pDrawPage,
+    OSL_ENSURE( pDrawPage,
             "<SwDrawView::_GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!" );
 
     sal_uInt32 nObjCount = pDrawPage->GetObjCount();
@@ -439,8 +415,6 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
 /** method to move 'repeated' objects of the given moved object to the
     according level
 
-    OD 2004-08-23 #110810#
-
     @author OD
 */
 void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
@@ -450,7 +424,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
     std::list<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
-        ASSERT( pContact,
+        OSL_ENSURE( pContact,
                 "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
         pContact->GetAnchoredObjs( aAnchoredObjs );
     }
@@ -493,7 +467,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
             SdrObject* pChildObj = (*aObjIter);
             {
                 const SwContact* pContact = ::GetUserCall( pChildObj );
-                ASSERT( pContact,
+                OSL_ENSURE( pContact,
                         "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
                 pContact->GetAnchoredObjs( aAnchoredObjs );
             }
@@ -526,16 +500,15 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
     }
 }
 
-// --> OD 2004-08-20 #110810# - adjustment and re-factoring of method
+// --> adjustment and re-factoring of method
 void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
                                           sal_uLong nNewPos )
 {
-    // --> OD 2004-08-17 #110810# - nothing to do for group members
+    // nothing to do for group members
     if ( pObj->GetUpGroup() )
     {
         return;
     }
-    // <--
 
     // determine drawing page and assure that the order numbers are correct.
     SdrPage* pDrawPage = GetModel()->GetPage( 0 );
@@ -648,14 +621,13 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
         while ( pTmpObj )
         {
-            // --> OD 2004-12-07 #i38563# - assure, that anchor frame exists.
+            // #i38563# - assure, that anchor frame exists.
             // If object is anchored inside a invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.
             const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, sal_True );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
                                             ? pTmpAnchorFrm->FindFlyFrm() : 0L;
-            // <--
             if ( pTmpParentObj &&
                  &(pTmpParentObj->GetFrmFmt()) != pParentFrmFmt )
             {
@@ -702,14 +674,13 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
             if ( pTmpObj == pObj )
                 break;
 
-            // --> OD 2004-12-07 #i38563# - assure, that anchor frame exists.
+            // #i38563# - assure, that anchor frame exists.
             // If object is anchored inside a invisible part of the document
             // (e.g. page header, whose page style isn't applied, or hidden
             // section), no anchor frame exists.
             const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, sal_True );
             const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
                                             ? pTmpAnchorFrm->FindFlyFrm() : 0L;
-            // <--
             if ( pTmpParentObj &&
                  ( ( pTmpParentObj == pFlyFrm ) ||
                    ( pFlyFrm->IsUpperOf( *pTmpParentObj ) ) ) )
@@ -754,14 +725,10 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
 
     _MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
 }
-// <--
 
 /*************************************************************************
 |*
 |*  SwDrawView::TakeDragLimit()
-|*
-|*  Ersterstellung      AMA 26. Apr. 96
-|*  Letzte Aenderung    MA 03. May. 96
 |*
 *************************************************************************/
 
@@ -788,9 +755,6 @@ sal_Bool SwDrawView::TakeDragLimit( SdrDragMode eMode,
 |*
 |*  SwDrawView::CalcAnchor()
 |*
-|*  Ersterstellung      MA 13. Jan. 95
-|*  Letzte Aenderung    MA 08. Nov. 96
-|*
 *************************************************************************/
 
 
@@ -815,16 +779,14 @@ const SwFrm* SwDrawView::CalcAnchor()
     else
     {
         SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
-        // OD 17.06.2003 #108784# - determine correct anchor position for
-        // 'virtual' drawing objects.
-        // OD 2004-03-25 #i26791#
+        // determine correct anchor position for 'virtual' drawing objects.
+        // #i26791#
         pAnch = pC->GetAnchorFrm( pObj );
         if( !pAnch )
         {
             pC->ConnectToLayout();
-            // OD 17.06.2003 #108784# - determine correct anchor position for
-            // 'virtual' drawing objects.
-            // OD 2004-03-25 #i26791#
+            // determine correct anchor position for 'virtual' drawing objects.
+            // #i26791#
             pAnch = pC->GetAnchorFrm( pObj );
         }
         aMyRect = pObj->GetSnapRect();
@@ -852,7 +814,7 @@ const SwFrm* SwDrawView::CalcAnchor()
     {
         if ( pAnch->IsCntntFrm() )
         {
-            // OD 26.06.2003 #108784# - allow drawing objects in header/footer,
+            // allow drawing objects in header/footer,
             // but exclude control objects.
             bool bBodyOnly = CheckControlLayer( pObj );
             pAnch = ::FindAnchor( (SwCntntFrm*)pAnch, aPt, bBodyOnly );
@@ -880,9 +842,6 @@ const SwFrm* SwDrawView::CalcAnchor()
 |*
 |*  SwDrawView::ShowDragXor(), HideDragXor()
 |*
-|*  Ersterstellung      MA 17. Jan. 95
-|*  Letzte Aenderung    MA 27. Jan. 95
-|*
 *************************************************************************/
 
 
@@ -896,16 +855,12 @@ void SwDrawView::ShowDragAnchor()
     {
         CalcAnchor();
         pHdl->SetPos(aAnchorPoint);
-        //OLMRefreshAllIAOManagers();
     }
 }
 
 /*************************************************************************
 |*
 |*  SwDrawView::MarkListHasChanged()
-|*
-|*  Ersterstellung      OM 02. Feb. 95
-|*  Letzte Aenderung    OM 07. Jul. 95
 |*
 *************************************************************************/
 
@@ -951,7 +906,7 @@ void SwDrawView::ModelHasChanged()
 
 void SwDrawView::MakeVisible( const Rectangle &rRect, Window & )
 {
-    ASSERT( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
+    OSL_ENSURE( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
     rImp.GetShell()->MakeVisible( SwRect( rRect ) );
 }
 
@@ -987,14 +942,12 @@ void SwDrawView::CheckPossibilities()
                         uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
                         if ( xObj.is() )
                         {
-                            // --> OD 2004-08-16 #110810# - improvement for
-                            // the future, when more than one Writer fly frame
-                            // can be selected.
+                            // --> improvement for the future, when more
+                            // than one Writer fly frame can be selected.
 
                             // TODO/LATER: retrieve Aspect - from where?!
                             bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) ? sal_True : sal_False;
 
-                            // <--
 
                             // #i972: protect position if it is a Math object anchored 'as char' and baseline alignment is activated
                             SwDoc* pDoc = Imp().GetShell()->GetDoc();
@@ -1020,8 +973,7 @@ void SwDrawView::CheckPossibilities()
             SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
             if ( !pFrmFmt )
             {
-                ASSERT( false,
-                        "<SwDrawView::CheckPossibilities()> - missing frame format" );
+                OSL_FAIL( "<SwDrawView::CheckPossibilities()> - missing frame format" );
                 bProtect = sal_True;
             }
             else if ((FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) &&
@@ -1037,8 +989,6 @@ void SwDrawView::CheckPossibilities()
 
 /** replace marked <SwDrawVirtObj>-objects by its reference object for delete
     marked objects.
-
-    OD 18.06.2003 #108784#
 
     @author OD
 */
@@ -1090,8 +1040,7 @@ void SwDrawView::DeleteMarked()
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-    // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
-    // reference objects.
+    // replace marked <SwDrawVirtObj>-objects by its reference objects.
     {
         SdrPageView* pDrawPageView = rImp.GetPageView();
         if ( pDrawPageView )
@@ -1113,3 +1062,4 @@ void SwDrawView::DeleteMarked()
         pTmpRoot->EndAllAction();   //swmod 080218
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

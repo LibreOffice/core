@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,21 +37,17 @@
  {
  public:
 
-    /** die DocInfo hat siche geaendert (Notify ueber die DocShell)
-        stosse die entsp. Felder zum Updaten an.
+    /** DocInfo has changed (notify via DocShell):
+        make required fields update.
     */
     virtual void DocInfoChgd() = 0;
 
-    /** Dokument - Statistics
+    /** Document - Statistics
     */
     virtual const SwDocStat &GetDocStat() const = 0;
 
-    /**
-    */
     virtual void SetDocStat(const SwDocStat& rStat) = 0;
 
-    /**
-    */
     virtual void UpdateDocStat(SwDocStat& rStat) = 0;
 
 protected:
@@ -58,3 +55,5 @@ protected:
  };
 
  #endif // IDOCUMENTSTATISTICS_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

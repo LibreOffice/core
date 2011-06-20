@@ -60,7 +60,7 @@
 #define STR_OVERWRITE               (RC_FMTUI_BEGIN + 32)
 #define ST_CUSTOMIZE                1
 
-// die Abstaende zur Basis 2 nicht aendern !!!!
+// Do not change relations to base 2!!!
 #define DLG_TEMPLATE_BASE           (RC_FMTUI_BEGIN + 40)
 #define DLG_TEMPLATE_1              (RC_FMTUI_BEGIN + 41)
 #define DLG_TEMPLATE_2              (RC_FMTUI_BEGIN + 42)

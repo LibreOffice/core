@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-/// @HTML
 
 #ifndef SW_WRITERHELPER
 #define SW_WRITERHELPER
@@ -44,11 +43,6 @@
 #include <pam.hxx>                  //SwPaM
 #include <tools/poly.hxx>           //Polygon, PolyPolygon
 #include <doc.hxx>                  //SwDoc
-
-//Uncomment to dump debugging streams of graphics
-#if OSL_DEBUG_LEVEL > 1
-//#   define DEBUGDUMP
-#endif
 
 class SwTxtFmtColl;
 class SwCharFmt;
@@ -116,12 +110,11 @@ namespace sw
         const SwFrmFmt* mpFlyFrm;
         SwPosition maPos;
         Size maSize;
-        // --> OD 2007-04-19 #i43447#
-        // Size of the frame in the layout.
+        // #i43447# - Size of the frame in the layout.
         // Especially needed for graphics, whose layout size can differ from its
         // size, because it is scaled into its environment.
         Size maLayoutSize;
-        // <--
+
         WriterSource meWriterType;
         const SwNode *mpStartFrameContent;
         bool mbIsInline;
@@ -202,8 +195,7 @@ namespace sw
 
         /** The layout size of the contained element
 
-            OD 2007-04-19 #i43447#
-            Needed for graphics, which are scaled into its environment
+            #i43447# - Needed for graphics, which are scaled into its environment
 
             @return layout size
         */
@@ -564,7 +556,7 @@ namespace sw
             e.g.  given Normal/Heading1/Heading2/.../Heading10 at their default
             assigned outline style list levels of body level/level 1/level 2/.../level 10
 
-            OD 2009-02-04 #i98791#
+            #i98791#
             adjust the sorting algorithm due to introduced outline level attribute
 
             @param rStyles
@@ -663,30 +655,6 @@ namespace sw
         */
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode);
 
-#if 0
-        /** Get the Frames anchored for all nodes between two points
-
-            Given a container of frames, find the ones anchored to the nodes
-            from start to end. Half open sequence, i.e. those anchored to
-            start, but not those anchored to end
-
-            @param rFrames
-            The container of frames to search in
-
-            @param rStart
-            The SwNode to start check for anchors from
-
-            @param rEnd
-            The SwNode to end check for anchors from
-
-            @return the Frames in rFrames anchored to rNode
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        Frames GetFramesBetweenNodes(const Frames &rFrames,
-                const SwNode &rStart, const SwNode &rEnd);
-#endif
         /** Get the Numbering Format used on a paragraph
 
             There are two differing types of numbering formats that may be on a
@@ -946,43 +914,9 @@ namespace sw
             /// No copying allowed
             DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc);
         };
-
-#ifdef DEBUGDUMP
-        /** Create a SvStream to dump data to during debugging
-
-            This creates a file in the program dir of OOo, delete the SvStream
-            after you are done with it
-
-            @param rSuffix
-            The suffix that will be appened to this debugging file
-
-            @return a SvStream to dump data to
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        SvStream *CreateDebuggingStream(const String &rSuffix);
-
-        /** Dump one SvStream to another
-
-            @param rSrc
-            The source stream
-
-            @param rDest
-            The destination stream
-
-            @param nLen
-            Optional Length of data to copy from rSrc to rDest, if unused copy
-            all available data from rSrc
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        void DumpStream(const SvStream &rSrc, SvStream &rDest,
-            sal_uInt32 nLen = STREAM_SEEK_TO_END);
-#endif
     }
 }
 
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,7 @@
 #include <globals.hrc>
 
 /*--------------------------------------------------------------------
-    Beschreibung: Handhabung der Verzeichnisse durch TOXMgr
+    Description: handle indexes with TOXMgr
  --------------------------------------------------------------------*/
 
 
@@ -52,7 +53,7 @@ SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Aktuelle TOXMarks behandeln
+    Description: handle current TOXMarks
  --------------------------------------------------------------------*/
 
 
@@ -82,12 +83,10 @@ void SwTOXMgr::DeleteTOXMark()
         pSh->DeleteTOXMark( pCurTOXMark );
         pSh->SetModified();
     }
-    // zur naechsten wandern
+    // go to next one
     pCurTOXMark = pNext;
 }
-/* -----------------20.08.99 10:48-------------------
 
- --------------------------------------------------*/
 void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
 {
     SwTOXMark* pMark = 0;
@@ -95,8 +94,8 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     {
         case  TOX_CONTENT:
         {
-            ASSERT(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
-                                            ungueltiger Level InsertTOCMark);
+            OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
+                       "invalid InsertTOCMark level");
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_CONTENT, 0));
             pMark->SetLevel( static_cast< sal_uInt16 >(rDesc.GetLevel()) );
 
@@ -130,8 +129,8 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
         break;
         case  TOX_USER:
         {
-            ASSERT(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
-                                            ungueltiger Level InsertTOCMark);
+            OSL_ENSURE(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
+                       "invalid InsertTOCMark level");
             sal_uInt16 nId = rDesc.GetTOUName() ?
                 GetUserTypeID(*rDesc.GetTOUName()) : 0;
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_USER, nId));
@@ -148,13 +147,13 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     pSh->EndAllAction();
 }
 /*--------------------------------------------------------------------
-    Beschreibung: Update eines TOXMarks
+    Description: Update of TOXMarks
  --------------------------------------------------------------------*/
 
 
 void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
 
     pSh->StartAllAction();
     if(pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
@@ -199,8 +198,8 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 
     if(rDesc.GetAltStr())
     {
-        // JP 26.08.96: Bug 30344 - entweder der Text aus dem Doc oder
-        //                          ein Alternativ-Text, beides gibts nicht!
+        // JP 26.08.96: Bug 30344 - either the text of a Doc or an alternative test,
+        //                          not both!
         sal_Bool bReplace = pCurTOXMark->IsAlternativeText();
         if( bReplace )
             pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
@@ -216,7 +215,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     }
     pSh->SetModified();
     pSh->EndAllAction();
-    // Bug 36207 pCurTOXMark zeigt hier in den Wald!
+    // Bug 36207 pCurTOXMark points nowhere here!
     if(!pCurTOXMark)
     {
         pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
@@ -227,7 +226,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   UserTypeID ermitteln
+    Description:    determine UserTypeID
  --------------------------------------------------------------------*/
 
 
@@ -246,13 +245,13 @@ sal_uInt16 SwTOXMgr::GetUserTypeID(const String& rStr)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Traveling zwischen den TOXMarks
+    Description: traveling between TOXMarks
  --------------------------------------------------------------------*/
 
 
 void SwTOXMgr::NextTOXMark(sal_Bool bSame)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_NXT : TOX_NXT;
@@ -263,7 +262,7 @@ void SwTOXMgr::NextTOXMark(sal_Bool bSame)
 
 void SwTOXMgr::PrevTOXMark(sal_Bool bSame)
 {
-    ASSERT(pCurTOXMark, "kein aktuelles TOXMark");
+    OSL_ENSURE(pCurTOXMark, "no current TOXMark");
     if( pCurTOXMark )
     {
         SwTOXSearch eDir = bSame ? TOX_SAME_PRV : TOX_PRV;
@@ -272,7 +271,7 @@ void SwTOXMgr::PrevTOXMark(sal_Bool bSame)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Stichwortverzeichnis einfuegen
+    Description: insert keyword index
  --------------------------------------------------------------------*/
 const SwTOXBase* SwTOXMgr::GetCurTOX()
 {
@@ -288,10 +287,6 @@ void SwTOXMgr::SetCurTOXMark(sal_uInt16 nId)
 {
     pCurTOXMark = (nId < aCurMarks.Count()) ? aCurMarks[nId] : 0;
 }
-
-/* -----------------01.07.99 16:23-------------------
-
- --------------------------------------------------*/
 
 sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                                     SwTOXBase** ppBase,
@@ -407,7 +402,6 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     pSh->DelRight();
                 pNewTOX = (SwTOXBase*)pCurTOX;
             }
-//          pTOX->SetOptions(rDesc.GetIndexOptions());
             pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
             pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());
         }
@@ -415,7 +409,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     }
 
 
-    DBG_ASSERT(pNewTOX, "no TOXBase created!" );
+    OSL_ENSURE(pNewTOX, "no TOXBase created!" );
     if(!pNewTOX)
         return sal_False;
 
@@ -436,8 +430,8 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     if(!pCurTOX || (ppBase && !(*ppBase)) )
     {
-        // wird ppBase uebergeben, dann wird das TOXBase hier nur erzeugt
-        // und dann ueber den Dialog in ein Globaldokument eingefuegt
+        // when ppBase is passed over, TOXBase is only created here
+        // and then inserted in a global document by the dialog
         if(ppBase)
             (*ppBase) = pNewTOX;
         else
@@ -478,9 +472,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     return bRet;
 }
-/* -----------------20.10.99 14:11-------------------
 
- --------------------------------------------------*/
 void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
                         SwTOXSortKey eKey2,
                             SwTOXSortKey eKey3)
@@ -499,9 +491,6 @@ void SwTOXDescription::SetSortKeys(SwTOXSortKey eKey1,
     eSortKey3 = aArr[2];
 }
 
-/* -----------------10.09.99 10:02-------------------
-
- --------------------------------------------------*/
 void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -527,3 +516,4 @@ void SwTOXDescription::ApplyTo(SwTOXBase& rTOXBase)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

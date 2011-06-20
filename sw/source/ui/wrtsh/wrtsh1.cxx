@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,9 +38,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#if STLPORT_VERSION>=321
-#include <math.h>   // prevent conflict between exception and std::exception
-#endif
+#include <math.h>
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
@@ -108,8 +107,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <editeng/acorrcfg.hxx>
-
 #include "PostItMgr.hxx"
 #include <sfx2/msgpool.hxx>
 
@@ -125,6 +122,7 @@ using namespace com::sun::star;
         ePageMove(MV_NO),\
         pCrsrStack(0),  \
         rView(rShell),\
+        aNavigationMgr(this), \
         bDestOnStack(sal_False), \
         fnLeaveSelect(&SwWrtShell::SttLeaveSelect)
 
@@ -146,7 +144,7 @@ using namespace com::sun::star;
 
 SvxAutoCorrect* lcl_IsAutoCorr()
 {
-       SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                             AddNonBrkSpace | ChgOrdinalNumber |
                             ChgToEnEmDash | SetINetAttr | Autocorrect ))
@@ -259,18 +257,6 @@ void SwWrtShell::Insert( const String &rStr )
         bDeleted = DelRight() != 0;
     }
 
-    /*
-JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
-            naechste Zeichen.
-    if( bHasSel && !bIns && 1 < rStr.Len() )
-    {
-        // falls mehrere Zeichen anstehen, nur das erste einfuegen,
-        // der Rest muss dann aber Ueberschrieben werden.
-        SwEditShell::Insert( rStr.GetChar( 0 ) );
-        SwEditShell::Overwrite( rStr.Copy( 1 ) );
-    }
-    else
-*/
     bCallIns ?
         SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
 
@@ -280,7 +266,6 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
         EndAllAction();
         EndUndo();
     }
-//    delete pChgFlg;
 }
 
 /* Begrenzung auf maximale Hoehe geht nicht, da die maximale Hoehe
@@ -423,27 +408,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 // TODO/LATER: recording! Convert properties to items
                 case SID_INSERT_PLUGIN:
-                    /*
-                    if(pReq)
-                    {
-                        INetURLObject* pURL = aDlg.GetURL();
-                        if(pURL)
-                            pReq->AppendItem(SfxStringItem(FN_PARAM_2, pURL->GetMainURL(INetURLObject::NO_DECODE)));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    } */
                 case SID_INSERT_FLOATINGFRAME:
-                    /*
-                    if(pReq && xFloatingFrame.Is())
-                    {
-                        const SfxFrameDescriptor* pDescriptor = xFloatingFrame->GetFrameDescriptor();
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_1, pDescriptor->GetName()));
-                        pReq->AppendItem(
-                                SfxStringItem( FN_PARAM_2,
-                                    pDescriptor->GetURL().GetMainURL(INetURLObject::NO_DECODE)));
-                        pReq->AppendItem(SvxSizeItem(FN_PARAM_3, pDescriptor->GetMargin()));
-                        pReq->AppendItem(SfxByteItem(FN_PARAM_4, pDescriptor->GetScrollingMode()));
-                        pReq->AppendItem(SfxBoolItem(FN_PARAM_5, pDescriptor->HasFrameBorder()));
-                    }*/
                 {
                     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
                     const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
@@ -503,8 +468,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 pClient->DoVerb( SVVERB_SHOW );
 
                 // TODO/LATER: set document name - should be done in Client
-                //if ( !ERRCODE_TOERROR( nErr ) )
-                //    xIPObj->SetDocumentName( GetView().GetDocShell()->GetTitle() );
             }
         }
     }
@@ -560,7 +523,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
                 {
                     try
                     {
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("Formula"), uno::makeAny( ::rtl::OUString( aMathData ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Formula")), uno::makeAny( ::rtl::OUString( aMathData ) ) );
                         bActivate = sal_False;
                     }
                     catch ( uno::Exception& )
@@ -600,7 +563,6 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
     // --> #i972#
     if ( bStarMath && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
         AlignFormulaToBaseline( xRef.GetObject() );
-    // <--
 
     if (pFlyFrmFmt)
         *pFlyFrmFmt = pFmt;
@@ -660,7 +622,7 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
          !GetView().GetViewFrame()->GetFrame().IsInPlace() )
     {
         svt::EmbeddedObjectRef& xRef = GetOLEObject();
-        ASSERT( xRef.is(), "OLE not found" );
+        OSL_ENSURE( xRef.is(), "OLE not found" );
         SfxInPlaceClient* pCli=0;
 
         pCli = GetView().FindIPClient( xRef.GetObject(), &GetView().GetEditWin() );
@@ -701,12 +663,13 @@ void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& 
 
 
 void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
-                             const SwRect *pFlyPrtRect,
-                             const SwRect *pFlyFrmRect )
+                                  const SwRect *pFlyPrtRect,
+                                  const SwRect *pFlyFrmRect,
+                                  const bool bNoTxtFrmPrtAreaChanged )
 {
     //Einstellen der Skalierung am Client. Diese ergibt sich aus der Differenz
     //zwischen der VisArea des Objektes und der ObjArea.
-    ASSERT( xObj.is(), "ObjectRef not  valid" );
+    OSL_ENSURE( xObj.is(), "ObjectRef not  valid" );
 
     sal_Int64 nAspect = xObj.GetViewAspect();
     if ( nAspect == embed::Aspects::MSOLE_ICON )
@@ -739,7 +702,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                 aSz.Width = aSize.Width();
                 aSz.Height = aSize.Height();
                 xObj->setVisualAreaSize( nAspect, aSz );
-                // --> OD 2005-05-02 #i48419# - action 'UpdateReplacement' doesn't
+                // #i48419# - action 'UpdateReplacement' doesn't
                 // have to change the modified state of the document.
                 // This is only a workaround for the defect, that this action
                 // modifies a document after load, because unnecessarily the
@@ -767,7 +730,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                         GetDoc()->GetDocShell()->EnableSetModified( sal_True );
                     }
                 }
-                // <--
             }
 
             // TODO/LATER: this is only a workaround,
@@ -784,12 +746,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     SfxInPlaceClient* pCli = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
     if ( !pCli )
     {
-        if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc) || bLinkingChart
+        if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc)
+             || bLinkingChart
             // TODO/LATER: ResizeOnPrinterChange
              //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
-             || nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE // non-resizable objects need to be
-                                                            // set the size back by this method
-             )
+             // --> OD #i117189# - refine condition for non-resizable objects
+             // non-resizable objects need to be set the size back by this method
+             || ( bNoTxtFrmPrtAreaChanged && nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
         {
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
         }
@@ -807,13 +770,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     catch( embed::NoVisualAreaSizeException& )
     {
-        DBG_ERROR( "Can't get visual area size!\n" );
+        OSL_FAIL("Can't get visual area size!\n" );
         // the scaling will not be done
     }
     catch( uno::Exception& )
     {
         // TODO/LATER: handle the error
-        DBG_ERROR( "Can't get visual area size!\n" );
+        OSL_FAIL("Can't get visual area size!\n" );
         return;
     }
 
@@ -901,7 +864,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     {
         // --> this moves non-resizable object so that when adding borders the baseline remains the same
         const SwFlyFrmFmt *pFlyFrmFmt = dynamic_cast< const SwFlyFrmFmt * >( GetFlyFrmFmt() );
-        ASSERT( pFlyFrmFmt, "Could not find fly frame." );
+        OSL_ENSURE( pFlyFrmFmt, "Could not find fly frame." );
         if ( pFlyFrmFmt )
         {
             const Point &rPoint = pFlyFrmFmt->GetLastFlyFrmPrtRectPos();
@@ -909,7 +872,6 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                         : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
             aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
         }
-        // <--
         aArea.Width ( _aVisArea.Width() );
         aArea.Height( _aVisArea.Height() );
         RequestObjectResize( aArea, xObj.GetObject() );
@@ -954,6 +916,8 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
             if(HasSelection())
                 DelRight();
             SwFEShell::SplitNode();
+            // delete the numbered attribute of the last line if the last line is empty
+            GetDoc()->ClearLineNumAttrs( *GetCrsr()->GetPoint() );
         }
 
         const SwPageDesc *pDesc = pPageDesc
@@ -1035,7 +999,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool 
                 SwapPam();
             ClearMark();
         }
-
+        SwPosition aPos = *GetCrsr()->GetPoint();
         SwFmtFtn aFootNote( bEndNote );
         if(rStr.Len())
             aFootNote.SetNumStr( rStr );
@@ -1048,6 +1012,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool 
             Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
             GotoFtnTxt();
         }
+        aNavigationMgr.addEntry(aPos);
     }
 }
 /*------------------------------------------------------------------------
@@ -1090,7 +1055,6 @@ void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 // extern void SetNumChrFmt( SwWrtShell*, SwNumRules& );
 
 // -> #i40041#
-// --> OD 2005-10-25 #b6340308#
 // Preconditions (as far as OD has figured out):
 // - <SwEditShell::HasNumber()> is sal_False, if <bNum> is sal_True
 // - <SwEditShell::HasBullet()> is sal_False, if <bNum> is sal_False
@@ -1105,7 +1069,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 
     const SwNumRule * pNumRule = pCurRule;
 
-    // --> OD 2005-10-25 #b6340308#
     // - activate outline rule respectively turning on outline rule for
     //   current text node. But, only for turning on a numbering (<bNum> == sal_True).
     // - overwrite found numbering rule at current cursor position, if
@@ -1116,10 +1079,10 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
     SwTxtFmtColl * pColl = GetCurTxtFmtColl();
     if ( pColl )
     {
-        // --> OD 2005-10-25 #b6340308# - retrieve numbering rule at paragraph
+        // retrieve numbering rule at paragraph
         // style, which is found at current cursor position in the document.
         SwNumRule* pCollRule = pDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
-        // --> OD 2005-10-25 #125993# - The outline numbering rule isn't allowed
+        // #125993# - The outline numbering rule isn't allowed
         // to be derived from a parent paragraph style to a derived one.
         // Thus check, if the found outline numbering rule is directly
         // set at the paragraph style <pColl>. If not, set <pCollRule> to NULL
@@ -1132,29 +1095,15 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 pCollRule = 0;
             }
         }
-        // --> OD 2006-11-20 #i71764#
-        // Document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE has no influence
-        // any more.
-//        if ( pCollRule == NULL &&
-//             NO_NUMBERING != pColl->GetOutlineLevel() &&
-//             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) )
-//        {
-//            pCollRule = GetDoc()->GetOutlineNumRule();
-//        }
-        // <--
 
-        // <--
-        // --> OD 2005-10-25 #b6340308#
         if ( !pCollRule )
         {
             pNumRule = pCollRule;
         }
-        // --> OD 2006-06-12 #b6435904#
         // no activation or continuation of outline numbering in Writer/Web document
         else if ( bNum &&
                   !dynamic_cast<SwWebDocShell*>(GetDoc()->GetDocShell()) &&
                   pCollRule == GetDoc()->GetOutlineNumRule() )
-        // <--
         {
             if ( pNumRule == pCollRule )
             {
@@ -1168,9 +1117,9 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     // check, if numbering of the outline level of the pararaph
                     // style is active. If not, activate this outline level.
                     nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
-                    ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),   //<-end,zhaojianwei
+                    OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                             "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                    if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&        //<-end,zhaojianwei
+                    if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
                          pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                             == SVX_NUM_NUMBER_NONE )
                     {
@@ -1185,7 +1134,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 }
                 else
                 {
-                    // --> OD 2009-08-27 #i101234#
+                    // #i101234#
                     // activate outline numbering, because from the precondition
                     // it's known, that <SwEdit::HasNumber()> == sal_False
                     bActivateOutlineRule = true;
@@ -1194,7 +1143,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             }
             else if ( !pNumRule )
             {
-                // --> OD 2009-08-27 #i101234#
+                // #i101234#
                 // Check, if corresponding list level of the outline numbering
                 // has already a numbering format set.
                 nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei,need further consideration
@@ -1210,16 +1159,15 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     // turning on outline numbering at current cursor position
                     bContinueFoundNumRule = true;
                 }
-                // <--
             }
             else
             {
                 // check, if numbering of the outline level of the pararaph
                 // style is active. If not, activate this outline level.
-                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//#outline level,zhaojianwei
-                ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),//#outline level,zhaojianwei
+                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
+                OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                         "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&//#outline level,zhaojianwei
+                if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
                      pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                         == SVX_NUM_NUMBER_NONE )
                 {
@@ -1236,7 +1184,6 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
         }
     }
 
-    // --> OD 2005-10-25 #b6340308#
     // Only automatic numbering/bullet rules should be changed.
     // Note: The outline numbering rule is also an automatic one. It's only
     //       changed, if it has to be activated.
@@ -1252,11 +1199,8 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
             pNumRule = 0;
         }
     }
-    // <--
 
-    // --> OD 2005-10-25 #b6340308#
     // Search for a previous numbering/bullet rule to continue it.
-    // --> OD 2008-03-18 #refactorlists#
     String sContinuedListId;
     if ( !pNumRule )
     {
@@ -1265,13 +1209,11 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                                             sContinuedListId );
         bContinueFoundNumRule = pNumRule != 0;
     }
-    // <--
 
     if (pNumRule)
     {
         SwNumRule aNumRule(*pNumRule);
 
-        // --> OD 2005-10-25 #b6340308#
         // do not change found numbering/bullet rule, if it should only be continued.
         if ( !bContinueFoundNumRule )
         {
@@ -1279,12 +1221,10 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 
             if (pTxtNode)
             {
-                // --> OD 2005-10-26 #b6340308# - use above retrieve outline
-                // level, if outline numbering has to be activated.
-                int nLevel = bActivateOutlineRule  ////#outline level,zhaojianwei,need more consideration
+                // use above retrieve outline level, if outline numbering has to be activated.
+                int nLevel = bActivateOutlineRule
                               ? nActivateOutlineLvl
                               : pTxtNode->GetActualListLevel();
-                // <--
 
                 if (nLevel < 0)
                     nLevel = 0;
@@ -1298,14 +1238,12 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     aFmt.SetNumberingType(SVX_NUM_ARABIC);
                 else
                 {
-                    // --> OD 2008-06-03 #i63395#
-                    // Only apply user defined default bullet font
+                    // #i63395# Only apply user defined default bullet font
                     if ( numfunc::IsDefBulletFontUserDefined() )
                     {
                         const Font* pFnt = &numfunc::GetDefBulletFont();
                         aFmt.SetBulletFont( pFnt );
                     }
-                    // <--
                     aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
@@ -1315,32 +1253,24 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 aNumRule.Set(static_cast<sal_uInt16>(nLevel), aFmt);
             }
         }
-        // <--
 
-        // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
-        // --> OD 2008-03-27 #refactorlists#
         SetCurNumRule( aNumRule, false, sContinuedListId, true );
-        // <--
     }
     else
     {
-        // --> OD 2009-08-27 #i95907#
+        // #i95907#
         const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                     numfunc::GetDefaultPositionAndSpaceMode() );
-        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
-        // <--
-        // <--
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
         SwDocShell* pDocSh = GetView().GetDocShell();
-        // --> OD 2008-06-03 #i63395#
+        // #i63395#
         // Only apply user defined default bullet font
         const Font* pFnt = numfunc::IsDefBulletFontUserDefined()
                            ? &numfunc::GetDefBulletFont()
                            : 0;
-        // <--
 
         if (bNum)
         {
@@ -1366,7 +1296,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 
             if (! bNum)
             {
-                // --> OD 2008-06-03 #i63395#
+                // #i63395#
                 // Only apply user defined default bullet font
                 if ( pFnt )
                 {
@@ -1379,7 +1309,7 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 aFmt.SetSuffix(::rtl::OUString());
             }
 
-            // --> OD 2009-08-26 #i95907#
+            // #i95907#
             if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 if(bHtml && nLvl)
@@ -1393,33 +1323,26 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     aFmt.SetAbsLSpace(nWidthOfTabs + nLvl * 720);
                 }
             }
-            // <--
 
-            // --> FME 2005-01-21 #i38904#  Default alignment for
+            // #i38904#  Default alignment for
             // numbering/bullet should be rtl in rtl paragraph:
             if ( bRightToLeft )
             {
                 aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
             }
-            // <--
 
             aNumRule.Set( nLvl, aFmt );
         }
 
-        // --> OD 2009-08-26 #i95907#
+        // #i95907#
         if ( pTxtNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            // --> OD 2010-01-05 #b6884103#
-//            short nTxtNodeFirstLineOffset( 0 );
-//            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
-//            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
-//                                           nTxtNodeFirstLineOffset;
+
             const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
-            // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
             {
-                // --> OD 2010-05-05 #i111172#
+                // #i111172#
                 // If text node is already inside a list, assure that the indents
                 // are the same. Thus, adjust the indent change value by subtracting
                 // indents of to be applied list style.
@@ -1432,17 +1355,12 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                         nIndentChange -= aFmt.GetIndentAt() + aFmt.GetFirstLineIndent();
                     }
                 }
-                // <--
                 aNumRule.ChangeIndent( nIndentChange );
             }
         }
-        // <--
-        // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
-        // --> OD 2008-03-17 #refactorlists#
         // start new list
         SetCurNumRule( aNumRule, true, String(), true );
-        // <--
     }
 
     EndUndo(UNDO_NUMORNONUM);
@@ -1475,10 +1393,8 @@ void SwWrtShell::NumOrBulletOff()
                 aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
                 aNumRule.Set(nLevel, aFmt);
 
-                // --> OD 2008-03-17 #refactorlists#
                 // no start or continuation of a list - the outline style is only changed.
                 SetCurNumRule( aNumRule, false );
-                // <--
             }
         }
         else
@@ -1486,10 +1402,9 @@ void SwWrtShell::NumOrBulletOff()
             DelNumRules();
         }
 
-        // --> OD 2005-10-24 #126346# - Cursor can not be anymore in front of
+        // #126346# - Cursor can not be anymore in front of
         // a label, because numbering/bullet is switched off.
         SetInFrontOfLabel( sal_False );
-        // <--
     }
 }
 // <- #i29560#
@@ -1504,9 +1419,7 @@ void SwWrtShell::BulletOn()
 }
 
 
-/*--------------------------------------------------
 
---------------------------------------------------*/
 SelectionType SwWrtShell::GetSelectionType() const
 {
     // ContentType kann nicht ermittelt werden innerhalb einer
@@ -1516,9 +1429,6 @@ SelectionType SwWrtShell::GetSelectionType() const
 
     if ( BasicActionPend() )
         return IsSelFrmMode() ? nsSelectionType::SEL_FRM : nsSelectionType::SEL_TXT;
-
-//  if ( IsTableMode() )
-//      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
     if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
@@ -1576,7 +1486,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( IsTableMode() )
         nCnt |= (nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS);
 
-    // --> FME 2005-01-12 #i39855#
+    // #i39855#
     // Do not pop up numbering toolbar, if the text node has a numbering
     // of type SVX_NUM_NUMBER_NONE.
     const SwNumRule* pNumRule = GetCurNumRule();
@@ -1585,16 +1495,13 @@ SelectionType SwWrtShell::GetSelectionType() const
         const SwTxtNode* pTxtNd =
             GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
 
-        // --> OD 2008-03-19 #refactorlists#
         if ( pTxtNd && pTxtNd->IsInList() )
-        // <--
         {
             const SwNumFmt& rFmt = pNumRule->Get(sal::static_int_cast< sal_uInt8, sal_Int32>(pTxtNd->GetActualListLevel()));
             if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
                 nCnt |= nsSelectionType::SEL_NUM;
         }
     }
-    // <--
 
     return nCnt;
 }
@@ -1658,7 +1565,14 @@ SwFrmFmt *SwWrtShell::GetTblStyle(const String &rFmtName)
     return 0;
 }
 
+SwNavigationMgr& SwWrtShell::GetNavigationMgr() {
+    return aNavigationMgr;
+}
 
+void SwWrtShell::addCurrentPosition() {
+    SwPaM* pPaM = GetCrsr();
+    aNavigationMgr.addEntry(*pPaM->GetPoint());
+}
 /*------------------------------------------------------------------------
  Beschreibung:  Anwenden der Vorlagen
 ------------------------------------------------------------------------*/
@@ -1747,10 +1661,6 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
     EndAction();
 }
 
-/*-----------------12.03.97 12.24-------------------
-
---------------------------------------------------*/
-
 void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
 {
     StartAction();
@@ -1819,6 +1729,12 @@ SwWrtShell::SwWrtShell( SwDoc& rDoc, Window *_pWin, SwView &rShell,
     SET_CURR_SHELL( this );
     SetSfxViewShell( (SfxViewShell *)&rShell );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
+
+    // place the cursor on the first field...
+    IFieldmark *pBM = NULL;
+    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=NULL ) {
+        GotoFieldmark(pBM);
+    }
 }
 
 /*
@@ -1848,9 +1764,6 @@ sal_Bool SwWrtShell::Pop( sal_Bool bOldCrsr )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 sal_Bool SwWrtShell::CanInsert()
 {
     return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
@@ -1910,3 +1823,4 @@ void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

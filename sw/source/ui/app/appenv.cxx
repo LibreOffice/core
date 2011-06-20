@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
-
 
 #include <hintids.hxx>
 
@@ -75,15 +72,9 @@
 #include <crsskip.hxx>
 
 #include <cmdid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "envelp.hrc"
 #include "envimg.hxx"
@@ -93,11 +84,7 @@
 #define ENV_CANCEL      SHRT_MAX
 
 
-// --------------------------------------------------------------------------
-
-
-// Funktion wird fuer Etiketten und Briefumschlaege benutzt!
-//  im applab.cxx und appenv.cxx
+// Function used for labels and envelopes in applab.cxx and appenv.cxx
 String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
 {
     String sRet;
@@ -119,7 +106,6 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
             {
                 sTmpText = aLine.Copy( 0, nPos );
                 aLine.Erase( 0, nPos );
-//              sTmpText = aLine.Cut( 0, nPos );
             }
             else
             {
@@ -128,15 +114,13 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
                 {
                     sTmpText = aLine;
                     aLine.Erase();
-//                  sTmpText = aLine.Cut();
                 }
                 else
                 {
                     sTmpText = aLine.Copy( 0, nPos + 1);
                     aLine.Erase( 0, nPos + 1);
-//                  sTmpText = aLine.Cut( 0, nPos + 1 );
 
-                    // Datenbankfelder muesen mind. 3 Punkte beinhalten!
+                    // Database fields must contain at least 3 points!
                     String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
                     sal_uInt16 nCnt = sDBName.GetTokenCount('.');
                     if (nCnt >= 3)
@@ -154,13 +138,10 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         }
         rSh.InsertLineBreak();
     }
-    rSh.DelLeft();  // Letzten Linebreak wieder l???schen
+    rSh.DelLeft();  // Again remove last linebreak
 
     return sRet;
 }
-
-// ----------------------------------------------------------------------------
-
 
 void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
 {
@@ -171,12 +152,9 @@ void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId
             pNewSh->GetTxtCollFromPool(nCollId)->SetFmtAttr(pColl->GetAttrSet());
 }
 
-// ----------------------------------------------------------------------------
-
-
 void SwModule::InsertEnv( SfxRequest& rReq )
 {
-static sal_uInt16 nTitleNo = 0;
+    static sal_uInt16 nTitleNo = 0;
 
     SwDocShell      *pMyDocSh;
     SfxViewFrame    *pFrame;
@@ -184,34 +162,34 @@ static sal_uInt16 nTitleNo = 0;
     SwWrtShell      *pOldSh,
                     *pSh;
 
-    //aktuelle Shell besorgen
+    // Get current shell
     pMyDocSh = (SwDocShell*) SfxObjectShell::Current();
     pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
-    // Neues Dokument erzeugen (kein Show!)
+    // Create new document (don't show!)
     SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     pNewView = (SwView*) pFrame->GetViewShell();
-    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
+    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 
     String aTmp( SW_RES(STR_ENV_TITLE) );
     aTmp += String::CreateFromInt32( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 
-    // Ggf. alte Collections "Absender" und "Empfaenger" in neues
-    // Dokument kopieren
+    // if applicable, copy the old Collections "Sender" and "Reciever" to
+    // a new document
     if ( pOldSh )
     {
         ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_JAKETADRESS);
         ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_SENDADRESS);
     }
 
-    // SwEnvItem aus Config lesen
+    // Read SwEnvItem from config
     SwEnvCfgItem aEnvCfg;
 
-    //Haben wir schon einen Briefumschlag.
+    // Check if there's already an envelope.
     sal_Bool bEnvChange = sal_False;
 
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
@@ -245,10 +223,10 @@ static sal_uInt16 nTitleNo = 0;
     if ( !pItem )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange, DLG_ENV );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         nMode = pDlg->Execute();
     }
     else
@@ -262,18 +240,18 @@ static sal_uInt16 nTitleNo = 0;
     {
         SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
 
-        // Dialog auslesen, Item in Config speichern
+        // Read dialog and save item to config
         const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);
         aEnvCfg.GetItem() = rItem;
         aEnvCfg.Commit();
 
-        //Wenn wir Drucken uebernehmen wir den eingestellten Jobsetup aus
-        //dem Dialog. Die Informationen muessen hier vor dem evtl. zerstoeren
-        //der neuen Shell gesetzt werden, weil deren Drucker an den Dialog
-        //gereicht wurde.
+        // When we print we take the Jobsetup that is set up in the dialog.
+        // Information has to be set here, before a possible destruction of
+        // the new shell because the shell's printer has been handed to the
+        // dialog.
         if ( nMode != ENV_NEWDOC )
         {
-            ASSERT(pOldSh, "Kein Dokument - war 'Einfuegen' nicht disabled???");
+            OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((sal_uInt8)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFmtAttr(aItem);
@@ -289,29 +267,29 @@ static sal_uInt16 nTitleNo = 0;
         if (nMode == ENV_INSERT)
         {
 
-            SetView(&pOldSh->GetView()); // Pointer auf oberste View restaurieren
+            SetView(&pOldSh->GetView()); // Set pointer to top view
 
-            //Neues Dok wieder loeschen
+            // Delete new document
             xDocSh->DoClose();
             pSh = pOldSh;
             //#i4251# selected text or objects in the document should
             //not be deleted on inserting envelopes
             pSh->EnterStdMode();
-            // Los geht's (Einfuegen)
+            // Here it goes (insert)
             pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE, NULL);
             pSh->StartAllAction();
             pSh->SttEndDoc(sal_True);
 
             if (bEnvChange)
             {
-                // Folgevorlage: Seite 2
+                // followup template: page 2
                 pFollow = pSh->GetPageDesc(pSh->GetCurPageDesc()).GetFollow();
 
-                // Text der ersten Seite loeschen
+                // Delete text from the first page
                 if ( !pSh->SttNxtPg(sal_True) )
                     pSh->EndPg(sal_True);
                 pSh->DelRight();
-                // Rahmen der ersten Seite loeschen
+                // Delete frame of the first page
                 if( pSh->GotoFly( rSendMark ) )
                 {
                     pSh->EnterSelFrmMode();
@@ -325,10 +303,10 @@ static sal_uInt16 nTitleNo = 0;
                 pSh->SttEndDoc(sal_True);
             }
             else
-                // Folgevorlage: Seite 1
+                // Followup template: page 1
                 pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
 
-            // Seitenumbruch einfuegen
+            // Insert page break
             if ( pSh->IsCrsrInTbl() )
             {
                 pSh->SplitNode();
@@ -344,12 +322,12 @@ static sal_uInt16 nTitleNo = 0;
         else
         {
             pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
-            // Los geht's (Drucken)
+            // Let's go (print)
             pSh->StartAllAction();
             pSh->DoUndo(sal_False);
 
-            // Neue Collections "Absender" und "Empfaenger" wieder in neues
-            // Dokument kopieren
+            // Again, copy the new collections "Sender" and "Reciever" to
+            // a new document
             if ( pOldSh )
             {
                 ::lcl_CopyCollAttr(pOldSh, pSh, RES_POOLCOLL_JAKETADRESS);
@@ -358,21 +336,20 @@ static sal_uInt16 nTitleNo = 0;
         }
 
         SET_CURR_SHELL(pSh);
-        pSh->SetNewDoc();       // Performanceprobleme vermeiden
+        pSh->SetNewDoc();   // Avoid performance problems
 
-        // Flys dieser Seite merken
+        // Remember Flys of this site
         SvPtrarr aFlyArr(0, 5);
         if( ENV_NEWDOC != nMode && !bEnvChange )
             pSh->GetPageObjs( aFlyArr );
 
-        // Page-Desc ermitteln
+        // Get page description
         SwPageDesc* pDesc = pSh->GetPageDescFromPool(RES_POOLPAGE_JAKET);
         SwFrmFmt&   rFmt  = pDesc->GetMaster();
 
         Printer *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
 
-        // Raender (setzen sich zusammen aus Shift-Offset und
-        // Ausrichtung)
+    // Borders (are put together by Shift-Offset and alignment)
         Size aPaperSize = pPrt->PixelToLogic( pPrt->GetPaperSizePixel(),
                                               MAP_TWIP);
         if ( !aPaperSize.Width() && !aPaperSize.Height() )
@@ -408,25 +385,25 @@ static sal_uInt16 nTitleNo = 0;
         rFmt.SetFmtAttr(aLRMargin);
         rFmt.SetFmtAttr(aULMargin);
 
-        // Kopf-, Fusszeilen
+        // Header and footer
         rFmt.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
         pDesc->ChgHeaderShare(sal_False);
         rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
         pDesc->ChgFooterShare(sal_False);
 
-        // Seitennumerierung
+        // Page numbering
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
 
-        // Einstellen der Seitengroesse
+        // Page size
         rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
                                             nPageW + lLeft, nPageH + lUpper));
 
-        // Einstellen der Numerierungsart der Seite
+        // Set type of page numbering
         SvxNumberType aType;
         aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
         pDesc->SetNumType(aType);
 
-        // Folgevorlage
+        // Followup template
         if (pFollow)
             pDesc->SetFollow(pFollow);
 
@@ -434,7 +411,7 @@ static sal_uInt16 nTitleNo = 0;
         pDesc->SetLandscape( rItem.eAlign >= ENV_VER_LEFT &&
                              rItem.eAlign <= ENV_VER_RGHT);
 
-        // Page-Desc anwenden
+        // Apply page description
 
         sal_uInt16 nPos;
         pSh->FindPageDescByName( pDesc->GetName(),
@@ -445,17 +422,17 @@ static sal_uInt16 nTitleNo = 0;
         pSh->ChgPageDesc( nPos, *pDesc);
         pSh->ChgCurPageDesc(*pDesc);
 
-        // Rahmen einfuegen
+        // Insert Frame
         SwFlyFrmAttrMgr aMgr(sal_False, pSh, FRMMGR_TYPE_ENVELP);
         SwFldMgr aFldMgr;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
-        //Defaults ueberschreiben!
+        // Overwrite defaults!
         aMgr.GetAttrSet().Put( SvxBoxItem(RES_BOX) );
         aMgr.SetULSpace( 0L, 0L );
         aMgr.SetLRSpace( 0L, 0L );
 
-        // Absender
+        // Sender
         if (rItem.bSend)
         {
             pSh->SttEndDoc(sal_True);
@@ -472,7 +449,7 @@ static sal_uInt16 nTitleNo = 0;
             aMgr.UpdateAttrMgr();
         }
 
-        // Empfaenger
+        // Addressee
         pSh->SttEndDoc(sal_True);
 
         aMgr.InsertFlyFrm(FLY_AT_PAGE,
@@ -485,11 +462,11 @@ static sal_uInt16 nTitleNo = 0;
         pSh->SetTxtFmtColl( pAddr );
         InsertLabEnvText(*pSh, aFldMgr, rItem.aAddrText);
 
-        // Flys auf die "alten" Seiten verschieben
+        // Move Flys to the "old" pages
         if (aFlyArr.Count())
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
-        // Fertig
+        // Finished
         pSh->SttEndDoc(sal_True);
 
         pSh->EndAllAction();
@@ -505,7 +482,7 @@ static sal_uInt16 nTitleNo = 0;
 
             if ( rItem.aAddrText.indexOf('<') >= 0 )
             {
-                static sal_uInt16 __READONLY_DATA aInva[] =
+                static sal_uInt16 const aInva[] =
                                     {
                                         SID_SBA_BRW_UPDATE,
                                         SID_SBA_BRW_INSERT,
@@ -514,7 +491,7 @@ static sal_uInt16 nTitleNo = 0;
                                     };
                 pFrame->GetBindings().Invalidate( aInva );
 
-                // Datenbankbeamer oeffnen
+                // Open database beamer
                 ShowDBObj(*pNewView, pSh->GetDBData());
             }
         }
@@ -528,14 +505,14 @@ static sal_uInt16 nTitleNo = 0;
 
         rReq.Done();
     }
-    else    //Abbruch
+    else    // Abort
     {
         rReq.Ignore();
 
         xDocSh->DoClose();
         --nTitleNo;
 
-        // Pointer auf oberste View restaurieren
+        // Set pointer to top view
         if (pOldSh)
             SetView(&pOldSh->GetView());
     }
@@ -543,3 +520,4 @@ static sal_uInt16 nTitleNo = 0;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

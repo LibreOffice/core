@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,7 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
 
     Point aRet;
 
-    DBG_ASSERT( pParentWin, "Window not found" );
+    OSL_ENSURE( pParentWin, "Window not found" );
     if (pParentWin)
     {
         Rectangle aObjPixel = pParentWin->LogicToPixel( rLogicChart, pParentWin->GetMapMode() );
@@ -148,11 +149,6 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
     return aRet;
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-
 void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 {
     (void) pParent;
@@ -177,9 +173,6 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
         {
             SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
             String aCurrentTblName = pTblFmt->GetName();
-//             String aText( String::CreateFromAscii("<.>") );   // was used for UI
-//             aText.Insert( rWrtShell.GetBoxNms(), 2);
-//             aText.Insert( aCurrentTblName, 1 );
             aRangeString = aCurrentTblName;
             aRangeString += OUString::valueOf( sal_Unicode('.') );
             aRangeString += rWrtShell.GetBoxNms();
@@ -203,7 +196,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
         {
             uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
                 xMCF->createInstanceWithContext(
-                    C2U("com.sun.star.comp.chart2.WizardDialog")
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.WizardDialog"))
                     , xContext), uno::UNO_QUERY);
             uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
             if( xInit.is() )
@@ -213,10 +206,10 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 uno::Sequence<uno::Any> aSeq(2);
                 uno::Any* pArray = aSeq.getArray();
                 beans::PropertyValue aParam1;
-                aParam1.Name = C2U("ParentWindow");
+                aParam1.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                 aParam1.Value <<= uno::makeAny(xDialogParentWindow);
                 beans::PropertyValue aParam2;
-                aParam2.Name = C2U("ChartModel");
+                aParam2.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ChartModel"));
                 aParam2.Value <<= uno::makeAny(xChartModel);
                 pArray[0] <<= uno::makeAny(aParam1);
                 pArray[1] <<= uno::makeAny(aParam2);
@@ -230,7 +223,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                     {
                         //get dialog size:
                         awt::Size aDialogAWTSize;
-                        if( xDialogProps->getPropertyValue( ::rtl::OUString::createFromAscii("Size") )
+                        if( xDialogProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) )
                             >>= aDialogAWTSize )
                         {
                             Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -242,14 +235,14 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                                     aSwRect = pFlyFrmFmt->GetAnchoredObj()->GetObjRectWithSpaces();
                                 Rectangle aRect( aSwRect.SVRect() );
                                 Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
-                                xDialogProps->setPropertyValue( ::rtl::OUString::createFromAscii("Position"),
+                                xDialogProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Position")),
                                     uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                             }
                         }
                     }
                     catch( uno::Exception& )
                     {
-                        DBG_ERROR( "Chart wizard couldn't be positioned automatically\n" );
+                        OSL_FAIL("Chart wizard couldn't be positioned automatically\n" );
                     }
                 }
 
@@ -261,7 +254,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 }
                 else
                 {
-                    DBG_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
+                    OSL_ENSURE( nDialogRet == ui::dialogs::ExecutableDialogResults::OK,
                         "dialog execution failed" );
                 }
             }
@@ -273,7 +266,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 }
 
 
-void __EXPORT AutoEdit::KeyInput( const KeyEvent& rEvt )
+void AutoEdit::KeyInput( const KeyEvent& rEvt )
 {
     sal_uInt16 nCode = rEvt.GetKeyCode().GetCode();
     if( nCode != KEY_SPACE )
@@ -283,3 +276,4 @@ void __EXPORT AutoEdit::KeyInput( const KeyEvent& rEvt )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

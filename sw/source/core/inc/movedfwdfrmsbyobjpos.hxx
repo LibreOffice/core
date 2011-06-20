@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,8 @@
 
 class SwTxtNode;
 class SwTxtFrm;
-// --> OD 2004-10-05 #i26945#
+// --> #i26945#
 class SwRowFrm;
-// <--
 
 typedef std::map< const SwTxtNode*, const sal_uInt32 > NodeMap;
 typedef std::map< const SwTxtNode*, const sal_uInt32 >::const_iterator NodeMapIter;
@@ -53,18 +53,18 @@ class SwMovedFwdFrmsByObjPos
         void Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
                      const sal_uInt32 _nToPageNum );
 
-        // --> OD 2005-01-12 #i40155#
+        // --> #i40155#
         void Remove( const SwTxtFrm& _rTxtFrm );
-        // <--
 
         bool FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                   sal_uInt32& _ornToPageNum ) const;
 
-        // --> OD 2004-10-05 #i26945#
+        // --> #i26945#
         bool DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const;
-        // <--
 
         void Clear() { maMovedFwdFrms.clear(); };
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

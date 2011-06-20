@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,14 +74,10 @@ using namespace com::sun::star::uno;
 
 using namespace ::com::sun::star;
 
-#ifndef DBG_UTIL
-#define CHECK_TABLE(t)
-#else
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 2
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else
 #define CHECK_TABLE(t)
-#endif
 #endif
 
 typedef SwTableLine* SwTableLinePtr;
@@ -104,9 +101,9 @@ struct _CpyTabFrm
 
     _CpyTabFrm& operator=( const _CpyTabFrm& );
 
-    sal_Bool operator==( const _CpyTabFrm& rCpyTabFrm )
+    sal_Bool operator==( const _CpyTabFrm& rCpyTabFrm ) const
         { return  (sal_uLong)Value.nSize == (sal_uLong)rCpyTabFrm.Value.nSize; }
-    sal_Bool operator<( const _CpyTabFrm& rCpyTabFrm )
+    sal_Bool operator<( const _CpyTabFrm& rCpyTabFrm ) const
         { return  (sal_uLong)Value.nSize < (sal_uLong)rCpyTabFrm.Value.nSize; }
 };
 
@@ -196,7 +193,7 @@ sal_Bool lcl_DelOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
 typedef sal_Bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, sal_Bool );
 
-#if defined(DBG_UTIL) || defined( JP_DEBUG )
+#if OSL_DEBUG_LEVEL > 1
 
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 
@@ -217,8 +214,8 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
             {                                                       \
                 if ( pFrm->GetTabLine() == GetTabLines()[i] )       \
                     {                                               \
-                        ASSERT( pFrm->GetUpper()->IsTabFrm(),       \
-                                "Table layout does not match table structure" )       \
+                        OSL_ENSURE( pFrm->GetUpper()->IsTabFrm(),       \
+                                "Table layout does not match table structure" );       \
                     }                                               \
             }                                                       \
         }                                                           \
@@ -230,7 +227,6 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #define CHECKTABLELAYOUT
 
 #endif
-
 
 struct CR_SetLineHeight
 {
@@ -289,8 +285,6 @@ SV_IMPL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm )
 
 void lcl_DelCpyTabFrmFmts( _CpyTabFrm& rArr );
 
-// ---------------------------------------------------------------
-
 struct _CpyPara
 {
     boost::shared_ptr< std::vector< std::vector< sal_uLong > > > pWidths;
@@ -333,7 +327,6 @@ struct _CpyPara
         {}
     void SetBoxWidth( SwTableBox* pBox );
 };
-
 
 sal_Bool lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
 {
@@ -396,7 +389,6 @@ sal_Bool lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
         else
         {
             aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ];
-//          aFindFrm.pNewFrmFmt->Add( pBox );
             pBox->ChgFrmFmt( (SwTableBoxFmt*)aFindFrm.pNewFrmFmt );
         }
     }
@@ -488,8 +480,6 @@ sal_Bool lcl_CopyRow( const _FndLine*& rpFndLine, void* pPara )
     return sal_True;
 }
 
-//-----------------------------------------------------------
-
 void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
                 sal_Bool bBehind )
 {
@@ -532,10 +522,9 @@ SwRowFrm* GetRowFrm( SwTableLine& rLine )
     return 0;
 }
 
-
 sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    ASSERT( rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
@@ -575,8 +564,8 @@ sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 n
         //Layout updaten
         aFndBox.MakeFrms( *this );
 
-        CHECKBOXWIDTH
-        CHECKTABLELAYOUT
+        CHECKBOXWIDTH;
+        CHECKTABLELAYOUT;
         bRes = sal_True;
     }
 
@@ -591,7 +580,7 @@ sal_Bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 n
 sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    ASSERT( pDoc && rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
+    OSL_ENSURE( pDoc && rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
@@ -676,8 +665,8 @@ sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             aFndBox.MakeNewFrms( *this, nCnt, bBehind );
     }
 
-    CHECKBOXWIDTH
-    CHECKTABLELAYOUT
+    CHECKBOXWIDTH;
+    CHECKTABLELAYOUT;
 
     SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
     if (pPCD && nCnt)
@@ -721,7 +710,6 @@ sal_Bool _FndBoxAppendRowLine( const SwTableLine*& rpLine, void* pPara )
         delete pFndLine;
     return sal_True;
 }
-
 
 sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
 {
@@ -776,12 +764,11 @@ sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
     // TL_CHART2: need to inform chart of probably changed cell names
     pDoc->UpdateCharts( GetFrmFmt()->GetName() );
 
-    CHECKBOXWIDTH
-    CHECKTABLELAYOUT
+    CHECKBOXWIDTH;
+    CHECKTABLELAYOUT;
 
     return sal_True;
 }
-
 
 void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
                             sal_Bool bFirst, SwShareBoxFmts& rShareFmts );
@@ -1083,7 +1070,6 @@ void lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
     }
 }
 
-
 sal_Bool SwTable::DeleteSel(
     SwDoc*     pDoc
     ,
@@ -1091,7 +1077,7 @@ sal_Bool SwTable::DeleteSel(
     const SwSelBoxes* pMerged, SwUndo* pUndo,
     const sal_Bool bDelMakeFrms, const sal_Bool bCorrBorder )
 {
-    ASSERT( pDoc, "No doc?" );
+    OSL_ENSURE( pDoc, "No doc?" );
     SwTableNode* pTblNd = 0;
     if( rBoxes.Count() )
     {
@@ -1153,19 +1139,16 @@ sal_Bool SwTable::DeleteSel(
     // TL_CHART2: now inform chart that sth has changed
     pDoc->UpdateCharts( GetFrmFmt()->GetName() );
 
-    CHECKTABLELAYOUT
-    CHECK_TABLE( *this )
+    CHECKTABLELAYOUT;
+    CHECK_TABLE( *this );
 
     return sal_True;
 }
 
-
-// ---------------------------------------------------------------
-
 sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                         sal_Bool bSameHeight )
 {
-    ASSERT( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
+    OSL_ENSURE( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
@@ -1187,7 +1170,7 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
         {
             SwTableBox* pSelBox = *( rBoxes.GetData() + n );
             const SwRowFrm* pRow = GetRowFrm( *pSelBox->GetUpper() );
-            ASSERT( pRow, "wo ist der Frm von der SwTableLine?" )
+            OSL_ENSURE( pRow, "wo ist der Frm von der SwTableLine?" );
             SWRECTFN( pRow )
             pRowHeights[ n ] = (pRow->Frm().*fnRect->fnGetHeight)();
         }
@@ -1201,7 +1184,7 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
     for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
     {
         SwTableBox* pSelBox = *( rBoxes.GetData() + n );
-        ASSERT( pSelBox, "Box steht nicht in der Tabelle" );
+        OSL_ENSURE( pSelBox, "Box steht nicht in der Tabelle" );
 
         // dann fuege in die Box nCnt neue Zeilen ein
         SwTableLine* pInsLine = pSelBox->GetUpper();
@@ -1308,7 +1291,7 @@ sal_Bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16
 
 sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
-    ASSERT( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
+    OSL_ENSURE( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
@@ -1334,7 +1317,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
     for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
         SwTableBox* pSelBox = *( aSelBoxes.GetData() + n );
-        ASSERT( pSelBox, "Box steht nicht in der Tabelle" );
+        OSL_ENSURE( pSelBox, "Box steht nicht in der Tabelle" );
 
         // We don't want to split small table cells into very very small cells
         if( pSelBox->GetFrmFmt()->GetFrmSize().GetWidth()/( nCnt + 1 ) < 10 )
@@ -1416,8 +1399,6 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
     return sal_True;
 }
 
-// ---------------------------------------------------------------
-
 /*
     ----------------------- >> MERGE << ------------------------
      Algorithmus:
@@ -1432,7 +1413,6 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
 
     ----------------------- >> MERGE << ------------------------
 */
-
 void lcl_CpyLines( sal_uInt16 nStt, sal_uInt16 nEnd,
                                 SwTableLines& rLines,
                                 SwTableBox* pInsBox,
@@ -1463,10 +1443,10 @@ void lcl_CalcWidth( SwTableBox* pBox )
 {
     // Annahme: jede Line in der Box ist gleich gross
     SwFrmFmt* pFmt = pBox->ClaimFrmFmt();
-    ASSERT( pBox->GetTabLines().Count(), "Box hat keine Lines" );
+    OSL_ENSURE( pBox->GetTabLines().Count(), "Box hat keine Lines" );
 
     SwTableLine* pLine = pBox->GetTabLines()[0];
-    ASSERT( pLine, "Box steht in keiner Line" );
+    OSL_ENSURE( pLine, "Box steht in keiner Line" );
 
     long nWidth = 0;
     for( sal_uInt16 n = 0; n < pLine->GetTabBoxes().Count(); ++n )
@@ -1478,8 +1458,6 @@ void lcl_CalcWidth( SwTableBox* pBox )
     pFmt->ResetFmtAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
     pFmt->ResetFmtAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
 }
-
-
 
 struct _InsULPara
 {
@@ -1509,7 +1487,6 @@ struct _InsULPara
     void SetLower( SwTableLine* pLine=0 )
         { bUL_LR = sal_True;    bUL = sal_False; if( pLine ) pInsLine = pLine; }
 };
-
 
 sal_Bool lcl_Merge_MoveBox( const _FndBox*& rpFndBox, void* pPara )
 {
@@ -1591,8 +1568,6 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
         sal_uInt16 nLeft = pFndLn->GetTabBoxes().C40_GETPOS( SwTableBox, pLBx );
         sal_uInt16 nRight = pFndLn->GetTabBoxes().C40_GETPOS( SwTableBox, pRBx );
 
-//      if( ( nLeft && nRight+1 < pFndLn->GetTabBoxes().Count() ) ||
-//          ( !nLeft && nRight+1 >= pFndLn->GetTabBoxes().Count() ) )
         if( !nLeft || nRight == pFndLn->GetTabBoxes().Count() )
         {
             if( pULPara->bUL )  // Upper ?
@@ -1722,7 +1697,7 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
             lcl_CalcWidth( pRMBox );        // bereche die Breite der Box
         }
         else {
-            ASSERT( sal_False , "Was denn nun" );
+            OSL_FAIL( "Was denn nun" );
         }
     }
     // Left/Right
@@ -1752,11 +1727,10 @@ sal_Bool lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
     return sal_True;
 }
 
-
 sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         SwTableBox* pMergeBox, SwUndoTblMerge* pUndo )
 {
-    ASSERT( rBoxes.Count() && pMergeBox, "keine gueltigen Werte" );
+    OSL_ENSURE( rBoxes.Count() && pMergeBox, "keine gueltigen Werte" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
@@ -1862,8 +1836,6 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     return sal_True;
 }
-
-// ---------------------------------------------------------------
 
 void lcl_CheckRowSpan( SwTable &rTbl )
 {
@@ -2219,11 +2191,11 @@ sal_Bool SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
     {   // The copied line must not contain any row span attributes > 1
         SwTableLine* pLine = rTblNd.GetTable().GetTabLines()[0];
         sal_uInt16 nColCount = pLine->GetTabBoxes().Count();
-        ASSERT( nColCount, "Empty Table Line" )
+        OSL_ENSURE( nColCount, "Empty Table Line" );
         for( sal_uInt16 nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
         {
             SwTableBox* pTableBox = pLine->GetTabBoxes()[nCurrCol];
-            ASSERT( pTableBox, "Missing Table Box" );
+            OSL_ENSURE( pTableBox, "Missing Table Box" );
             pTableBox->setRowSpan( 1 );
         }
     }
@@ -2263,7 +2235,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     SwNodeIndex aIdx( rPos.nNode, -1 );
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
     aIdx++;
-    ASSERT( pTblNd, "wo ist denn nun der TableNode?" );
+    OSL_ENSURE( pTblNd, "wo ist denn nun der TableNode?" );
 
     pTblNd->GetTable().SetRowsToRepeat( GetRowsToRepeat() );
 
@@ -2273,7 +2245,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         // ist im neuen Dokument ueberhaupt der FeldTyp vorhanden ?
         SwFieldType* pFldType = pInsDoc->InsertFldType(
                                     *((SwDDETable*)this)->GetDDEFldType() );
-        ASSERT( pFldType, "unbekannter FieldType" );
+        OSL_ENSURE( pFldType, "unbekannter FieldType" );
 
         // tauschen am Node den Tabellen-Pointer aus
         pNewTbl = new SwDDETable( *pNewTbl,
@@ -2371,10 +2343,6 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     return sal_True;
 }
 
-
-
-// ---------------------------------------------------------------
-
 // suche ab dieser Line nach der naechsten Box mit Inhalt
 SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
                      const SwTableBox* pSrchBox, sal_Bool bOvrTblLns ) const
@@ -2395,7 +2363,7 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTbl,
     if( GetUpper() )
     {
         nFndPos = GetUpper()->GetTabLines().GetPos( pLine );
-        ASSERT( USHRT_MAX != nFndPos, "Line nicht in der Tabelle" );
+        OSL_ENSURE( USHRT_MAX != nFndPos, "Line nicht in der Tabelle" );
         // gibts eine weitere Line
         if( nFndPos+1 >= GetUpper()->GetTabLines().Count() )
             return GetUpper()->GetUpper()->FindNextBox( rTbl, GetUpper(), bOvrTblLns );
@@ -2446,7 +2414,7 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTbl,
     if( GetUpper() )
     {
         nFndPos = GetUpper()->GetTabLines().GetPos( pLine );
-        ASSERT( USHRT_MAX != nFndPos, "Line nicht in der Tabelle" );
+        OSL_ENSURE( USHRT_MAX != nFndPos, "Line nicht in der Tabelle" );
         // gibts eine weitere Line
         if( !nFndPos )
             return GetUpper()->GetUpper()->FindPreviousBox( rTbl, GetUpper(), bOvrTblLns );
@@ -2498,7 +2466,6 @@ SwTableBox* SwTableBox::FindPreviousBox( const SwTable& rTbl,
                                         bOvrTblLns );
 }
 
-
 sal_Bool lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* )
 {
     // in der HeadLine sind die Absaetze mit BedingtenVorlage anzupassen
@@ -2515,8 +2482,6 @@ sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* )
     ((SwTableLine*)rpLine)->GetTabBoxes().ForEach( &lcl_BoxSetHeadCondColl, 0 );
     return sal_True;
 }
-
-/*  */
 
 SwTwips lcl_GetDistance( SwTableBox* pBox, sal_Bool bLeft )
 {
@@ -2736,8 +2701,6 @@ sal_Bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     return sal_True;
 }
 
-/**/
-
 sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                             SwTwips nDist, sal_Bool bCheck )
 {
@@ -2821,7 +2784,7 @@ sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                 }
                 else
                 {
-                    ASSERT( pBox->GetSttNd(), "Das muss eine EndBox sein!");
+                    OSL_ENSURE( pBox->GetSttNd(), "Das muss eine EndBox sein!");
 
                     if( !rParam.bLeft && 3 != nCmp )
                         ++n;
@@ -2920,8 +2883,8 @@ sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                 rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
                                 (TBLFIX_CHGABS != rParam.nMode ||
                                 (n < rBoxes.Count() &&
-                                (nDist + nWidth + rBoxes[ n+1 ]->
-                                    GetFrmFmt()->GetFrmSize().GetWidth() / 2)
+                                  (nDist + nWidth + rBoxes[ n+1 ]->
+                                   GetFrmFmt()->GetFrmSize().GetWidth() / 2)
                                   > rParam.nSide) ))
                              : (nDist + nWidth / 2 ) > rParam.nSide
                 )
@@ -2985,8 +2948,8 @@ sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                 (rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
                                 (TBLFIX_CHGABS != rParam.nMode ||
                                 (n < rBoxes.Count() &&
-                                (nDist + nWidth + rBoxes[ n+1 ]->
-                                    GetFrmFmt()->GetFrmSize().GetWidth() / 2)
+                                  (nDist + nWidth + rBoxes[ n+1 ]->
+                                   GetFrmFmt()->GetFrmSize().GetWidth() / 2)
                                   > rParam.nSide) ))
                               : (nDist + nWidth / 2 ) > rParam.nSide ))
             {
@@ -3022,7 +2985,6 @@ sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     return sal_True;
 }
 
-
 // das Ergebnis des Positions Vergleiches
 //  POS_BEFORE,             // Box liegt davor
 //  POS_BEHIND,             // Box liegt dahinter
@@ -3031,7 +2993,6 @@ sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 //  POS_EQUAL,              // Box und Start/End sind gleich
 //  POS_OVERLAP_BEFORE,     // Box ueberlappt den Start
 //  POS_OVERLAP_BEHIND      // Box ueberlappt das Ende
-
 SwComparePosition _CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
                                     sal_uInt16 nBoxStt, sal_uInt16 nBoxEnd )
 {
@@ -3424,7 +3385,7 @@ sal_Bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                             break;
 
                         default:
-                            ASSERT( !pBox, "hier sollte man nie hinkommen" );
+                            OSL_ENSURE( !pBox, "hier sollte man nie hinkommen" );
                             break;
                         }
                     }
@@ -3477,8 +3438,6 @@ sal_Bool lcl_DelOtherBox( SwTableLine* , CR_SetBoxWidth& , SwTwips , sal_Bool )
     return sal_True;
 }
 
-/**/
-
 void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
 {
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -3498,7 +3457,7 @@ void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
     }
 }
 
-#if defined(DBG_UTIL) || defined( JP_DEBUG )
+#if OSL_DEBUG_LEVEL > 1
 
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 {
@@ -3518,10 +3477,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 
     if( Abs( nAktSize - nSize ) > ( COLFUZZY * rBoxes.Count() ) )
     {
-        DBG_ERROR( "Boxen der Line zu klein/gross" );
-#if defined( WNT ) && defined( JP_DEBUG )
-        __asm int 3;
-#endif
+        OSL_FAIL( "Boxen der Line zu klein/gross" );
     }
 }
 
@@ -3556,7 +3512,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
     {
         _FndPara aPara( rParam.aBoxes, pFndBox );
         rTbl.GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-        ASSERT( pFndBox->GetLines().Count(), "Wo sind die Boxen" );
+        OSL_ENSURE( pFndBox->GetLines().Count(), "Wo sind die Boxen" );
         pFndBox->SetTableLines( rTbl );
 
         if( ppUndo )
@@ -4065,7 +4021,6 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
 
     return bRet;
 }
-/*  */
 
 _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
                                 SwTableSortBoxes& rTmpLst )
@@ -4073,7 +4028,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
     // suche alle Boxen / Lines
     SwTable& rTbl = rParam.pTblNd->GetTable();
 
-    ASSERT( rParam.aBoxes.Count(), "ohne Boxen ist nichts zu machen!" );
+    OSL_ENSURE( rParam.aBoxes.Count(), "ohne Boxen ist nichts zu machen!" );
 
     // loeschen der gesamten Tabelle verhindern
     if( !rParam.bBigger && rParam.aBoxes.Count() ==
@@ -4087,7 +4042,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
     {
         _FndPara aPara( rParam.aBoxes, pFndBox );
         rTbl.GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
-        ASSERT( pFndBox->GetLines().Count(), "Wo sind die Boxen" );
+        OSL_ENSURE( pFndBox->GetLines().Count(), "Wo sind die Boxen" );
         pFndBox->SetTableLines( rTbl );
 
         if( ppUndo )
@@ -4106,7 +4061,7 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
                     sal_Bool bMinSize )
 {
     SwLayoutFrm* pLineFrm = GetRowFrm( rLine );
-    ASSERT( pLineFrm, "wo ist der Frm von der SwTableLine?" );
+    OSL_ENSURE( pLineFrm, "wo ist der Frm von der SwTableLine?" );
 
     SwFrmFmt* pFmt = rLine.ClaimFrmFmt();
 
@@ -4153,7 +4108,7 @@ sal_Bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
     {
         // anhand der alten Size die neue relative errechnen
         SwLayoutFrm* pLineFrm = GetRowFrm( *pLine );
-        ASSERT( pLineFrm, "wo ist der Frm von der SwTableLine?" );
+        OSL_ENSURE( pLineFrm, "wo ist der Frm von der SwTableLine?" );
         SwTwips nRstHeight = CalcRowRstHeight( pLineFrm );
         if( (nRstHeight + ROWFUZZY) < nDist )
             bRet = sal_False;
@@ -4171,7 +4126,7 @@ sal_Bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
         {
             // anhand der alten Size die neue relative errechnen
             SwLayoutFrm* pLineFrm = GetRowFrm( *pLine );
-            ASSERT( pLineFrm, "wo ist der Frm von der SwTableLine?" );
+            OSL_ENSURE( pLineFrm, "wo ist der Frm von der SwTableLine?" );
 
             if( TBLFIX_CHGPROP == rParam.nMode )
             {
@@ -4188,7 +4143,7 @@ sal_Bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
         if( TBLFIX_CHGPROP == rParam.nMode )
         {
             SwLayoutFrm* pLineFrm = GetRowFrm( *pLine );
-            ASSERT( pLineFrm, "wo ist der Frm von der SwTableLine?" );
+            OSL_ENSURE( pLineFrm, "wo ist der Frm von der SwTableLine?" );
 
             // aus der alten Size die neue relative errechnen
             // Wird die selektierte Box groesser ueber den MaxSpace anpassen,
@@ -4397,8 +4352,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
                         pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst );
 
-                        // #110525# delete complete table when last row is
-                        // deleted
+                        // delete complete table when last row is deleted
                         if( !bBigger &&
                             aParam.aBoxes.Count() == aSortCntBoxes.Count() )
                         {
@@ -4434,7 +4388,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                     for( n = nStt; n < nEnd; ++n )
                     {
                         SwLayoutFrm* pLineFrm = GetRowFrm( *(*pLines)[ n ] );
-                        ASSERT( pLineFrm, "wo ist der Frm von der SwTableLine?" );
+                        OSL_ENSURE( pLineFrm, "wo ist der Frm von der SwTableLine?" );
                         aParam.nMaxSpace += CalcRowRstHeight( pLineFrm );
                         aParam.nMaxHeight += pLineFrm->Frm().Height();
                     }
@@ -4562,8 +4516,6 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     return bRet;
 }
 
-/*  */
-
 SwFrmFmt* SwShareBoxFmt::GetFormat( long nWidth ) const
 {
     SwFrmFmt *pRet = 0, *pTmp;
@@ -4635,10 +4587,6 @@ SwFrmFmt* SwShareBoxFmts::GetFormat( const SwFrmFmt& rFmt,
 
 void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, const SwFrmFmt& rNew )
 {
-    // wenn das Format nicht geshared ist, braucht es auch nicht in die
-    // Liste aufgenommen werden. Denn es gibt keinen 2. der es sucht.
-//leider werden auch die CellFrms gefunden
-//  if( !rOld.IsLastDepend() )
     {
         sal_uInt16 nPos;
         SwShareBoxFmt* pEntry;
@@ -4653,6 +4601,7 @@ void SwShareBoxFmts::AddFormat( const SwFrmFmt& rOld, const SwFrmFmt& rNew )
         pEntry->AddFormat( rNew );
     }
 }
+
 void SwShareBoxFmts::ChangeFrmFmt( SwTableBox* pBox, SwTableLine* pLn,
                                     SwFrmFmt& rFmt )
 {
@@ -4760,4 +4709,4 @@ sal_Bool SwShareBoxFmts::Seek_Entry( const SwFrmFmt& rFmt, sal_uInt16* pPos ) co
     return sal_False;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

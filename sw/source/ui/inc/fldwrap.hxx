@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,8 @@ public:
     virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
     void            ShowPage(sal_uInt16 nPage = 0);
 };
-/* -----------------04.02.2003 14:14-----------------
+
+/* --------------------------------------------------
  * field dialog only showing database page to support
  * mail merge
  * --------------------------------------------------*/
@@ -58,6 +60,6 @@ public:
     virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
 };
 
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

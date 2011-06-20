@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,7 @@
 
 
 #include <types.hxx>
+#include <osl/diagnose.h>
 
 
 sal_Unicode ConvertMathPrivateUseAreaToUnicode( sal_Unicode cChar )
@@ -37,7 +39,7 @@ sal_Unicode ConvertMathPrivateUseAreaToUnicode( sal_Unicode cChar )
     sal_Unicode cRes = cChar;
     if (IsInPrivateUseArea( cChar ))
     {
-        DBG_ASSERT( 0, "Error: private use area characters should no longer be in use!" );
+        OSL_FAIL( "Error: private use area characters should no longer be in use!" );
         cRes = (sal_Unicode) '@'; // just some character that should easily be notice as odd in the context
     }
     return cRes;
@@ -50,3 +52,4 @@ sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
     return cRes;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

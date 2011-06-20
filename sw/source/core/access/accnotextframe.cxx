@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -39,9 +40,7 @@
 #include <ndnotxt.hxx>
 #include <flyfrm.hxx>
 #include <cntfrm.hxx>
-// --> OD 2009-07-14 #i73249#
-#include <hints.hxx>
-// <--
+#include <hints.hxx> //#i73249#
 #include "accnotextframe.hxx"
 
 using namespace ::com::sun::star;
@@ -72,7 +71,7 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
     msDesc()
 {
     const SwNoTxtNode* pNd = GetNoTxtNode();
-    // --> OD 2009-07-14 #i73249#
+    // #i73249#
     // consider new attributes Title and Description
     if( pNd )
     {
@@ -85,7 +84,6 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
             msDesc = msTitle;
         }
     }
-    // <--
 }
 
 SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
@@ -95,7 +93,7 @@ SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    // --> OD 2009-07-14 #i73249#
+    // #i73249#
     // suppress handling of RES_NAME_CHANGED in case that attribute Title is
     // used as the accessible name.
     if ( nWhich != RES_NAME_CHANGED ||
@@ -105,10 +103,10 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
     }
 
     const SwNoTxtNode *pNd = GetNoTxtNode();
-    ASSERT( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
+    OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
-        // --> OD 2009-07-14 #i73249#
+        // #i73249#
         case RES_TITLE_CHANGED:
         {
             const String& sOldTitle(
@@ -157,26 +155,12 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
             }
         }
         break;
-        // <--
-        /*
-    case RES_OBJECTDYING:
-        if( aDepend.GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
-            const_cast < SwModify *>( aDepend.GetRegisteredIn()->Remove( aDepend );
-        break;
-
-    case RES_FMT_CHG:
-        if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
-            static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
-            GetRegisteredIn()->Remove( this );
-        break;
-    */
     }
 }
 
 void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( aDepend.GetRegisteredIn() )
         const_cast < SwModify *>( aDepend.GetRegisteredIn() )->Remove( &aDepend );
@@ -184,11 +168,11 @@ void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
     SwAccessibleFrameBase::Dispose( bRecursive );
 }
 
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -199,12 +183,11 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
 
     return SwAccessibleFrameBase::getAccessibleName();
 }
-// <--
 
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -273,3 +256,5 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
 {
     return getSize().Width;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

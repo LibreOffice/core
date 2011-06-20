@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -181,7 +182,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 
 sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 {
-    ASSERT( pInsDoc, "kein Ins.Dokument"  );
+    OSL_ENSURE( pInsDoc, "kein Ins.Dokument"  );
 
     SwNodes& rNds = pInsDoc->GetNodes();
 
@@ -282,7 +283,6 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
 sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 {
-    sal_Bool bRet = sal_False;
     GetCrsr();  // ggfs. alle Cursor erzeugen lassen
     if( IsSelOnePara() )
     {
@@ -304,7 +304,6 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
                             RTL_CONSTASCII_STRINGPARAM( "\015\012" ));
 #endif
         }
-        bRet = sal_True;
     }
     else if( IsSelection() )
     {
@@ -371,3 +370,4 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

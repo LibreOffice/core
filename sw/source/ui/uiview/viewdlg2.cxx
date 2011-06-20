@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
-
 #include <fldmgr.hxx>
 #include <expfld.hxx>
 #include <modcfg.hxx>
@@ -60,10 +59,6 @@ extern String* pOldTabCat;
 extern String* pOldFrmCat;
 extern String* pOldDrwCat;
 
-/* -----------------06.11.98 13:45-------------------
- *
- * --------------------------------------------------*/
-
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
@@ -73,10 +68,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         case FN_INSERT_CAPTION:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDialog = pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION );
-            DBG_ASSERT(pDialog, "Dialogdiet fail!");
+            OSL_ENSURE(pDialog, "Dialogdiet fail!");
             if ( pDialog )
             {
                 pDialog->Execute();
@@ -87,10 +82,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         case  FN_EDIT_FOOTNOTE:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         pMDI, *pWrtShell, sal_True );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
             pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
@@ -100,10 +95,6 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         }
     }
 }
-
-/* -----------------06.11.98 14:53-------------------
- *
- * --------------------------------------------------*/
 
 void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
 {
@@ -117,10 +108,6 @@ void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
             InsertCaption(pOpt);
     }
 }
-
-/* -----------------06.11.98 12:58-------------------
- *
- * --------------------------------------------------*/
 
 void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 {
@@ -239,3 +226,4 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

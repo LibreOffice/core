@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,8 +110,8 @@ void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
                 const SwFmt* pConditionalFmt )
 {
     const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(mrpAttrSet.get());
-    ASSERT( pAttrSet, "no SwAttrSet" )
-    ASSERT( pParentFmt || !pConditionalFmt, "ConditionalFmt without ParentFmt?" )
+    OSL_ENSURE( pAttrSet, "no SwAttrSet" );
+    OSL_ENSURE( pParentFmt || !pConditionalFmt, "ConditionalFmt without ParentFmt?" );
 
     const SwAttrSet* pParentSet = pParentFmt ? &pParentFmt->GetAttrSet() : 0;
 
@@ -155,24 +156,22 @@ int Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNo
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
     {
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
     }
-    // <--
 
     const int nRet = aNewSet.Put( rSet );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     if ( pStyleNames )
     {
         aNewSet.Put( *pStyleNames );
         delete pStyleNames;
     }
-    // <--
 
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -205,14 +204,13 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 {
     SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState( RES_FRMATR_STYLE_NAME, sal_False ) )
     {
         pStyleNames = new SfxItemSet( *aNewSet.GetPool(), RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME );
         pStyleNames->Put( aNewSet );
     }
-    // <--
 
     // for a correct broadcast, we need to do a SetModifyAtAttr with the items
     // from aNewSet. The 'regular' SetModifyAtAttr is done in GetNewAutoStyle
@@ -221,13 +219,12 @@ int Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
     const int nRet = aNewSet.Put_BC( rSet, pOld, pNew );
 
-    // --> FME 2007-4-12 #i76273# Robust: Save the style name items:
+    // #i76273# Robust
     if ( pStyleNames )
     {
         aNewSet.Put( *pStyleNames );
         delete pStyleNames;
     }
-    // <--
 
     if ( nRet )
         GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
@@ -280,12 +277,6 @@ sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 |*      alle EndNodes der GrundSection haben den Level 0
 |*      alle StartNodes der GrundSection haben den Level 1
 |*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Aenderung:  JP  11.08.93
-|*      keine Rekursion mehr !!
-|*
 *******************************************************************/
 
 
@@ -322,15 +313,9 @@ sal_uInt16 SwNode::GetSectionLevel() const
 |*      rWhere bezeichnet die Position innerhalb dieses Arrays,
 |*      an der der Node eingefuegt werden soll
 |*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
-|*
 *******************************************************************/
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 long SwNode::nSerial = 0;
 #endif
 
@@ -362,7 +347,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -395,7 +380,7 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -527,7 +512,6 @@ sal_Bool SwNode::IsProtect() const
 const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                                         sal_uInt32* pPgDescNdIdx ) const
 {
-    // OD 18.03.2003 #106329#
     if ( !GetNodes().IsDocNodes() )
     {
         return 0;
@@ -562,7 +546,6 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
             0 != ( pPage = pFrm->FindPageFrm() ) )
         {
             pPgDesc = pPage->GetPageDesc();
-            // OD 18.03.2003 #106329#
             if ( pPgDescNdIdx )
             {
                 *pPgDescNdIdx = pNode->GetIndex();
@@ -635,7 +618,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                         }
                         if( n >= rFmts.Count() )
                         {
-                            ASSERT( !this, "Fly-Section aber kein Format gefunden" );
+                            OSL_ENSURE( !this, "Fly-Section aber kein Format gefunden" );
                             return sal_False;
                         }
                     }
@@ -721,7 +704,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                     // kann jetzt nur noch ein Seitengebundener Fly sein
                     // oder irgendetwas neueres.
                     // Hier koennen wir nur noch den Standard returnen
-                    ASSERT( pNd->FindFlyStartNode(),
+                    OSL_ENSURE( pNd->FindFlyStartNode(),
                             "wo befindet sich dieser Node?" );
 
                     pPgDesc = &pDoc->GetPageDesc( 0 );
@@ -758,7 +741,6 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                 else if( pNd->IsSectionNode() )
                     pPgDesc = pNd->GetSectionNode()->GetSection().
                             GetFmt()->GetPageDesc().GetPageDesc();
-                // OD 18.03.2003 #106329#
                 if ( pPgDescNdIdx )
                 {
                     *pPgDescNdIdx = pNd->GetIndex();
@@ -871,7 +853,6 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             // oder ans Feld und von dort holen !!
             while( nPos &&
                    nLvl < ( pRet = rONds[nPos]->GetTxtNode() )
-                    //->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                     ->GetAttrOutlineLevel() - 1 )  //<-end,zhaojianwei
                 --nPos;
 
@@ -898,20 +879,16 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
     if( IsValidNextPrevNd( *this ))
     {
         SwNodeIndex aIdx( *this, -1 );
-        // --> OD 2007-06-04 #i77805#
-        // skip section start and end nodes
+        // #i77805# - skip section start and end nodes
         while ( aIdx.GetNode().IsSectionNode() ||
                 ( aIdx.GetNode().IsEndNode() &&
                   aIdx.GetNode().StartOfSectionNode()->IsSectionNode() ) )
         {
             --aIdx;
         }
-        // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_PREV_LAYNODE;
-        // --> OD 2007-06-04 #i77805#
-        // skip section start and end nodes
-//        aIdx += 2;
+        // #i77805# - skip section start and end nodes
         aIdx = SwNodeIndex( *this, +1 );
         while ( aIdx.GetNode().IsSectionNode() ||
                 ( aIdx.GetNode().IsEndNode() &&
@@ -919,7 +896,6 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
         {
             ++aIdx;
         }
-        // <--
         if( IsValidNextPrevNd( aIdx.GetNode() ))
             nRet |= ND_HAS_NEXT_LAYNODE;
     }
@@ -937,11 +913,6 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
 |*      IN
 |*      rNodes bezeichnet das variable Array, in dem sich der Node
 |*      befindet
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
 |*
 *******************************************************************/
 
@@ -996,12 +967,6 @@ void SwStartNode::CheckSectionCondColl() const
 |*      !!!!!!!!!!!!
 |*      Es wird eine Kopie uebergeben!
 |*
-|*  Ersterstellung
-|*      VER0100 vb 901214
-|*
-|*  Stand
-|*      VER0100 vb 901214
-|*
 *******************************************************************/
 
 
@@ -1032,9 +997,6 @@ SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
     SwNode( rWhere, nNdType ),
     pCondColl( 0 ),
     mbSetModifyAtAttr( false )
-#ifdef OLD_INDEX
-    ,SwIndexReg(2)
-#endif
 {
 }
 
@@ -1186,7 +1148,7 @@ xub_StrLen SwCntntNode::Len() const { return 0; }
 
 SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
-    ASSERT( pNewColl, "Collectionpointer ist 0." );
+    OSL_ENSURE( pNewColl, "Collectionpointer ist 0." );
     SwFmtColl *pOldColl = GetFmtColl();
 
     if( pNewColl != pOldColl )
@@ -1328,7 +1290,7 @@ sal_Bool SwCntntNode::GoPrevious(SwIndex * pIdx, sal_uInt16 nMode ) const
 
 void SwCntntNode::MakeFrms( SwCntntNode& rNode )
 {
-    ASSERT( &rNode != this,
+    OSL_ENSURE( &rNode != this,
             "Kein Contentnode oder Copy-Node und neuer Node identisch." );
 
     if( !GetDepends() || &rNode == this )   // gibt es ueberhaupt Frames ??
@@ -1337,7 +1299,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     SwFrm *pFrm, *pNew;
     SwLayoutFrm *pUpper;
     // Frames anlegen fuer Nodes, die vor oder hinter der Tabelle stehen ??
-    ASSERT( FindTableNode() == rNode.FindTableNode(), "Table confusion" )
+    OSL_ENSURE( FindTableNode() == rNode.FindTableNode(), "Table confusion" );
 
     SwNode2Layout aNode2Layout( *this, rNode.GetIndex() );
 
@@ -1345,7 +1307,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     {
         pNew = rNode.MakeFrm( pUpper );
         pNew->Paste( pUpper, pFrm );
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
@@ -1361,7 +1323,6 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
                             dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
             }
         }
-        // <--
     }
 }
 
@@ -1420,25 +1381,6 @@ sal_Bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
             return sal_False;
         }
         break;
-    // --> OD 2008-02-19 #refactorlists#
-//    case RES_GETNUMNODES:
-//        // #111955# only numbered nodes in rInfo
-//        if( IsTxtNode())
-//        {
-//            SwTxtNode * pTxtNode = (SwTxtNode*)this;
-//            pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, sal_True );
-
-//            if (0 != pItem  &&
-//                pItem->GetValue().Len() &&
-//                pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
-//                GetNodes().IsDocNodes())
-//            {
-//                ((SwNumRuleInfo&)rInfo).AddNode( *pTxtNode );
-//            }
-//        }
-
-//        return sal_True;
-    // <--
 
     case RES_FINDNEARESTNODE:
         if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
@@ -1463,7 +1405,7 @@ sal_Bool SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     if( !GetpSwAttrSet() )            // lasse von den entsprechenden Nodes die
         NewAttrSet( GetDoc()->GetAttrPool() );      // AttrSets anlegen
 
-    ASSERT( GetpSwAttrSet(), "warum wurde kein AttrSet angelegt?" );
+    OSL_ENSURE( GetpSwAttrSet(), "warum wurde kein AttrSet angelegt?" );
 
     if ( IsInCache() )
     {
@@ -1504,7 +1446,7 @@ sal_Bool SwCntntNode::SetAttr( const SfxItemSet& rSet )
     const SfxPoolItem* pFnd = 0;
     if( SFX_ITEM_SET == rSet.GetItemState( RES_AUTO_STYLE, sal_False, &pFnd ) )
     {
-        ASSERT( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
+        OSL_ENSURE( rSet.Count() == 1, "SetAutoStyle mixed with other attributes?!" );
         const SwFmtAutoFmt* pTmp = static_cast<const SwFmtAutoFmt*>(pFnd);
 
         // If there already is an attribute set (usually containing a numbering
@@ -1720,7 +1662,7 @@ sal_uInt16 SwCntntNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rW
     if ( 0 == rWhichIds.size() )
         return nRet;
 
-    ASSERT( GetpSwAttrSet(), "no item set" )
+    OSL_ENSURE( GetpSwAttrSet(), "no item set" );
     SwAttrSet aNewAttrSet( *GetpSwAttrSet() );
     for ( std::vector<sal_uInt16>::const_iterator aIter = rWhichIds.begin();
           aIter != rWhichIds.end();
@@ -1744,12 +1686,11 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
                     nWhich, sal_False, &pFnd ) && bInParents ))
             ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
     }
-    // --> OD 2005-10-25 #126347# - undo change of issue #i51029#
+    // undo change of issue #i51029#
     // Note: <GetSwAttrSet()> returns <mpAttrSet>, if set, otherwise it returns
     //       the attribute set of the paragraph style, which is valid for the
     //       content node - see file <node.hxx>
     else
-    // <--
     {
         GetSwAttrSet().GetItemState( nWhich, bInParents, &pFnd );
     }
@@ -1974,7 +1915,7 @@ void SwCntntNode::ChkCondColl()
     }
 }
 
-// --> OD 2005-02-21 #i42921#
+// #i42921#
 short SwCntntNode::GetTextDirection( const SwPosition& rPos,
                                      const Point* pPt ) const
 {
@@ -1984,10 +1925,8 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
     if( pPt )
         aPt = *pPt;
 
-    // --> OD 2007-01-10 #i72024#
-    // No format of the frame, because this can cause recursive layout actions
+    // #i72024# - No format of the frame, because this can cause recursive layout actions
     SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, sal_False );
-    // <--
 
     if ( pFrm )
     {
@@ -2010,7 +1949,6 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
 
     return nRet;
 }
-// <--
 
 SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize )
 {
@@ -2062,12 +2000,11 @@ const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return G
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
 IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
-// --> OD 2007-10-31 #i83479#
+// #i83479#
 IDocumentListItems& SwNode::getIDocumentListItems()
 {
     return *GetDoc();
 }
-// <--
 
 sal_Bool SwNode::IsInRedlines() const
 {
@@ -2079,3 +2016,5 @@ sal_Bool SwNode::IsInRedlines() const
 
     return bResult;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

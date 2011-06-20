@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nSectionNodePos ]->GetSectionNode();
-    ASSERT( pNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         rDoc.DeleteRedline( *pNd, true, USHRT_MAX );
@@ -240,7 +241,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
     SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
-    ASSERT( pTxtNd, "wo ist mein TextNode?" );
+    OSL_ENSURE( pTxtNd, "wo ist mein TextNode?" );
 
     {
         RemoveIdxRel( nNode + 1, SwPosition( aIdx,
@@ -387,7 +388,7 @@ void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
-    OSL_ENSURE(pNd, "SwUndoDelSection::RedoImpl(): no SectionNode?");
+    OSL_ENSURE( pNd, "wo ist mein SectionNode?" );
     // einfach das Format loeschen, der Rest erfolgt automatisch
     rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 }
@@ -441,7 +442,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     SwSectionNode *const pSectNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
-    ASSERT( pSectNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE( pSectNd, "wo ist mein SectionNode?" );
 
     SwSection& rNdSect = pSectNd->GetSection();
     SwFmt* pFmt = rNdSect.GetFmt();
@@ -497,3 +498,4 @@ void SwUndoUpdateSection::RedoImpl(::sw::UndoRedoContext & rContext)
     UndoImpl(rContext);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

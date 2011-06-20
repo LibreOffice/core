@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,9 +72,6 @@ SV_IMPL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr )
 |*
 |*  SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
 |*
-|*  Ersterstellung      AMA 26. Nov. 97
-|*  Letzte Aenderung    AMA 26. Nov. 97
-|*
 |*************************************************************************/
 SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib ) :
     SwLayoutFrm( rSect.GetFmt(), pSib ),
@@ -126,7 +124,7 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, sal_Bool bMaster ) :
 //       frame and its insert in the layout.
 void SwSectionFrm::Init()
 {
-    ASSERT( GetUpper(), "SwSectionFrm::Init before insertion?!" );
+    OSL_ENSURE( GetUpper(), "SwSectionFrm::Init before insertion?!" );
     SWRECTFN( this )
     long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
     (Frm().*fnRect->fnSetWidth)( nWidth );
@@ -183,21 +181,18 @@ SwSectionFrm::~SwSectionFrm()
 |*
 |*  SwSectionFrm::DelEmpty()
 |*
-|*  Ersterstellung      AMA 17. Dec. 97
-|*  Letzte Aenderung    AMA 17. Dec. 97
-|*
 |*************************************************************************/
 void SwSectionFrm::DelEmpty( sal_Bool bRemove )
 {
     if( IsColLocked() )
     {
-        ASSERT( !bRemove, "Don't delete locked SectionFrms" );
+        OSL_ENSURE( !bRemove, "Don't delete locked SectionFrms" );
         return;
     }
     SwFrm* pUp = GetUpper();
     if( pUp )
     {
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -212,7 +207,6 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
                                 dynamic_cast<SwTxtFrm*>(FindPrevCnt( true )) );
             }
         }
-        // <--
         _Cut( bRemove );
     }
     if( IsFollow() )
@@ -251,9 +245,6 @@ void SwSectionFrm::DelEmpty( sal_Bool bRemove )
 |*
 |*  SwSectionFrm::Cut()
 |*
-|*  Ersterstellung      AMA 02. Dec. 97
-|*  Letzte Aenderung    AMA 02. Dec. 97
-|*
 |*************************************************************************/
 void SwSectionFrm::Cut()
 {
@@ -262,7 +253,7 @@ void SwSectionFrm::Cut()
 
 void SwSectionFrm::_Cut( sal_Bool bRemove )
 {
-    ASSERT( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
     PROTOCOL( this, PROT_CUT, 0, GetUpper() )
 
@@ -340,25 +331,22 @@ void SwSectionFrm::_Cut( sal_Bool bRemove )
 |*
 |*  SwSectionFrm::Paste()
 |*
-|*  Ersterstellung      AMA 04. Dec. 97
-|*  Letzte Aenderung    AMA 04. Dec. 97
-|*
 |*************************************************************************/
 
 void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     PROTOCOL( this, PROT_PASTE, 0, GetUpper() )
 
     //In den Baum einhaengen.
     SwSectionFrm* pSect = pParent->FindSctFrm();
-    // --> OD 2008-06-23 #156927#
+    // #156927#
     // Assure that parent is not inside a table frame, which is inside the found section frame.
     if ( pSect )
     {
@@ -369,7 +357,6 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
             pSect = 0;
         }
     }
-    // <--
 
     SWRECTFN( pParent )
     if( pSect && HasToBreak( pSect ) )
@@ -456,9 +443,6 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 |*  Zunaechst werden uebergeordnete Bereiche immer aufgebrochen,
 |*  spaeter koennte man es einstellbar machen.
 |*
-|*  Ersterstellung      AMA 12. Dec. 97
-|*  Letzte Aenderung    AMA 12. Dec. 97
-|*
 |*************************************************************************/
 
 sal_Bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
@@ -484,9 +468,6 @@ sal_Bool SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
 /*************************************************************************
 |*
 |*  SwSectionFrm::MergeNext()
-|*
-|*  Ersterstellung      AMA 04. Dec. 97
-|*  Letzte Aenderung    AMA 04. Dec. 97
 |*
 |*  Verschmilzt zwei SectionFrms, falls es sich um den
 |*  gleichen Bereich handelt.
@@ -534,9 +515,6 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 |*
 |*  SwSectionFrm::SplitSect()
 |*
-|*  Ersterstellung      AMA 29. Apr. 99
-|*  Letzte Aenderung    AMA 29. Apr. 99
-|*
 |*  Zerteilt einen SectionFrm in zwei Teile, der zweite Teil beginnt mit dem
 |*  uebergebenen Frame.
 |*  Benoetigt wird dies beim Einfuegen eines inneren Bereichs, weil innerhalb
@@ -547,7 +525,7 @@ void SwSectionFrm::MergeNext( SwSectionFrm* pNxt )
 
 sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
 {
-    ASSERT( pFrm, "SplitSect: Why?" );
+    OSL_ENSURE( pFrm, "SplitSect: Why?" );
     SwFrm* pOther = bApres ? pFrm->FindNext() : pFrm->FindPrev();
     if( !pOther )
         return sal_False;
@@ -556,7 +534,7 @@ sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
         return sal_False;
     // Den Inhalt zur Seite stellen
     SwFrm* pSav = ::SaveCntnt( this, bApres ? pOther : pFrm );
-    ASSERT( pSav, "SplitSect: What's on?" );
+    OSL_ENSURE( pSav, "SplitSect: What's on?" );
     if( pSav ) // Robust
     {   // Einen neuen SctFrm anlegen, nicht als Follow/Master
         SwSectionFrm* pNew = new SwSectionFrm( *pSect->GetSection(), pSect );
@@ -589,9 +567,6 @@ sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
 /*************************************************************************
 |*
 |*  SwSectionFrm::MoveCntntAndDelete()
-|*
-|*  Ersterstellung      AMA 29. Jan 99
-|*  Letzte Aenderung    AMA 29. Jan 99
 |*
 |*  MoveCntnt wird zur Zerstoerung eines SectionFrms wg. Aufhebung oder
 |*  Verstecken des Bereichs gerufen, um den Inhalt umzuhaengen.
@@ -776,7 +751,7 @@ void SwSectionFrm::MoveCntntAndDelete( SwSectionFrm* pDel, sal_Bool bSave )
     // jetzt koennen eventuell zwei Teile des uebergeordneten Bereich verschmelzen
     if( pPrvSct && !pPrvSct->IsJoinLocked() )
     {
-        ASSERT( pNxtSct, "MoveCntnt: No Merge" );
+        OSL_ENSURE( pNxtSct, "MoveCntnt: No Merge" );
         pPrvSct->MergeNext( pNxtSct );
     }
 }
@@ -787,7 +762,9 @@ void SwSectionFrm::MakeAll()
         return;
     if( !pSection ) // Durch DelEmpty
     {
-        ASSERT( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
+#endif
         if( !bValidPos )
         {
             if( GetUpper() )
@@ -841,7 +818,7 @@ void SwSectionFrm::MakeAll()
 
 sal_Bool SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, sal_Bool , sal_Bool & )
 {
-    ASSERT( sal_False, "Hups, wo ist meine Tarnkappe?" );
+    OSL_FAIL( "Hups, wo ist meine Tarnkappe?" );
     return sal_False;
 }
 
@@ -941,9 +918,6 @@ sal_Bool SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
  *
  *  SwSectionFrm::CollectEndnotes(  )
  *
- *  Ersterstellung      AMA 03. Nov 99
- *  Letzte Aenderung    AMA 03. Nov 99
- *
  *  CollectEndnotes looks for endnotes in the sectionfrm and his follows,
  *  the endnotes will cut off the layout and put into the array.
  *  If the first endnote is not a master-SwFtnFrm, the whole sectionfrm
@@ -958,7 +932,7 @@ SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, sal_Bool &rbEmpty,
     SwSectionFrm* pSect = rbEmpty ? rpSect->GetFollow() : rpSect;
     while( pSect )
     {
-       ASSERT( (pSect->Lower() && pSect->Lower()->IsColumnFrm()) || pSect->GetUpper()->IsFtnFrm(),
+       OSL_ENSURE( (pSect->Lower() && pSect->Lower()->IsColumnFrm()) || pSect->GetUpper()->IsFtnFrm(),
                 "InsertEndnotes: Where's my column?" );
 
         // i73332: Columned section in endnote
@@ -1027,9 +1001,9 @@ void lcl_ColumnRefresh( SwSectionFrm* pSect, sal_Bool bFollow )
 
 void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 {
-    ASSERT( IsColLocked(), "CollectEndnotes: You love the risk?" );
+    OSL_ENSURE( IsColLocked(), "CollectEndnotes: You love the risk?" );
     // i73332: Section in footnode does not have columns!
-    ASSERT( (Lower() && Lower()->IsColumnFrm()) || GetUpper()->IsFtnFrm(), "Where's my column?" );
+    OSL_ENSURE( (Lower() && Lower()->IsColumnFrm()) || GetUpper()->IsFtnFrm(), "Where's my column?" );
 
     SwSectionFrm* pSect = this;
     SwFtnFrm* pFtn;
@@ -1154,15 +1128,14 @@ void SwSectionFrm::SimpleFormat()
 {
     if ( IsJoinLocked() || IsColLocked() )
         return;
-    // ASSERT( pFollow, "SimpleFormat: Follow required" );
+    // OSL_ENSURE( pFollow, "SimpleFormat: Follow required" );
     LockJoin();
     SWRECTFN( this )
     if( GetPrev() || GetUpper() )
     {
-        // --> OD 2009-09-28 #b6882166#
+        //
         // assure notifications on position changes.
         const SwLayNotify aNotify( this );
-        // <--
         (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), sal_False );
         bValidPos = sal_True;
     }
@@ -1182,7 +1155,7 @@ void SwSectionFrm::SimpleFormat()
     UnlockJoin();
 }
 
-// --> OD 2005-01-11 #i40147# - helper class to perform extra section format
+// #i40147# - helper class to perform extra section format
 // to position anchored objects and to keep the position of whose objects locked.
 class ExtraFormatToPositionObjs
 {
@@ -1219,7 +1192,7 @@ class ExtraFormatToPositionObjs
             }
         }
 
-        // --> OD 2008-06-20 #i81555#
+        // #i81555#
         void InitObjs( SwFrm& rFrm )
         {
             SwSortedObjs* pObjs = rFrm.GetDrawObjs();
@@ -1246,7 +1219,6 @@ class ExtraFormatToPositionObjs
                 }
             }
         }
-        // <--
 
         void FormatSectionToPositionObjs()
         {
@@ -1262,13 +1234,12 @@ class ExtraFormatToPositionObjs
                                         (mpSectFrm->GetUpper()->*fnRect->fnGetPrtBottom)() );
                 (mpSectFrm->Frm().*fnRect->fnAddBottom)( nDiff );
                 (mpSectFrm->*fnRect->fnSetYMargins)( nTopMargin, 0 );
-                // --> OD 2006-05-08 #i59789#
+                // #i59789#
                 // suppress formatting, if printing area of section is too narrow
                 if ( (mpSectFrm->Prt().*fnRect->fnGetHeight)() <= 0 )
                 {
                     return;
                 }
-                // <--
                 mpSectFrm->ChgLowersProp( aOldSectPrtSize );
 
                 // format column frames and its body and footnote container
@@ -1286,12 +1257,11 @@ class ExtraFormatToPositionObjs
                 }
 
                 // unlock position of lower floating screen objects for the extra format
-                // --> OD 2008-06-20 #i81555#
+                // #i81555#
                 // Section frame can already have changed the page and its content
                 // can still be on the former page.
                 // Thus, initialize objects via lower-relationship
                 InitObjs( *mpSectFrm );
-                // <--
 
                 // format content - first with collecting its foot-/endnotes before content
                 // format, second without collecting its foot-/endnotes.
@@ -1325,8 +1295,6 @@ class ExtraFormatToPositionObjs
 |*  SwSectionFrm::Format()
 |*
 |*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
-|*  Ersterstellung      AMA 03. Dec. 97
-|*  Letzte Aenderung    MA 09. Oct. 98
 |*
 |*************************************************************************/
 
@@ -1334,7 +1302,9 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 {
     if( !pSection ) // Durch DelEmpty
     {
-        ASSERT( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
+#endif
         bValidSize = bValidPos = bValidPrtArea = sal_True;
         return;
     }
@@ -1377,7 +1347,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         // OD 2004-05-17 #i28701# - If the wrapping style has to be considered
         // on object positioning, an extra formatting has to be performed
         // to determine the correct positions the floating screen objects.
-        // --> OD 2005-01-11 #i40147#
+        // #i40147#
         // use new helper class <ExtraFormatToPositionObjs>.
         // This class additionally keep the locked position of the objects
         // and releases this position lock keeping on destruction.
@@ -1388,7 +1358,6 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         {
             aExtraFormatToPosObjs.FormatSectionToPositionObjs();
         }
-        // <--
 
         // Column widths have to be adjusted before calling _CheckClipping.
         // _CheckClipping can cause the formatting of the lower frames
@@ -1428,18 +1397,16 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             {
                 if( pFrm->IsColumnFrm() && pFrm->GetNext() )
                 {
-                    // --> OD 2006-05-08 #i61435#
+                    // #i61435#
                     // suppress formatting, if upper frame has height <= 0
                     if ( (GetUpper()->Frm().*fnRect->fnGetHeight)() > 0 )
                     {
                         FormatWidthCols( *pAttr, nRemaining, MINLAY );
                     }
-                    // <--
-                    // --> OD 2006-01-04 #126020# - adjust check for empty section
-                    // --> OD 2006-02-01 #130797# - correct fix #126020#
+                    // #126020# - adjust check for empty section
+                    // #130797# - correct fix #126020#
                     while( HasFollow() && !GetFollow()->ContainsCntnt() &&
                            !GetFollow()->ContainsAny( true ) )
-                    // <--
                     {
                         SwFrm* pOld = GetFollow();
                         GetFollow()->DelEmpty( sal_False );
@@ -1556,8 +1523,6 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 |*  Beschreibung        Liefert das naechste Layoutblatt in das der Frame
 |*      gemoved werden kann.
 |*      Neue Seiten werden nur dann erzeugt, wenn der Parameter sal_True ist.
-|*  Ersterstellung      AMA 07. Jan. 98
-|*  Letzte Aenderung    AMA 07. Jan. 98
 |*
 |*************************************************************************/
 
@@ -1585,7 +1550,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 //  SwSectionFrm *pSect = GetUpper()->FindSctFrm();
     SwSectionFrm *pSect = FindSctFrm();
     sal_Bool bWrongPage = sal_False;
-    ASSERT( pSect, "GetNextSctLeaf: Missing SectionFrm" );
+    OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrm" );
 
     // Hier eine Abkuerzung fuer Bereiche mit Follows,
     // dieser kann akzeptiert werden, wenn keine Spalten oder Seiten (ausser Dummyseiten)
@@ -1754,7 +1719,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
                         pNxt = (SwSectionFrm*)pTmp;
                     else
                     {
-                        ASSERT( pTmp->IsTabFrm(), "GetNextSctLeaf: Wrong Type" );
+                        OSL_ENSURE( pTmp->IsTabFrm(), "GetNextSctLeaf: Wrong Type" );
                         pNxt = (SwTabFrm*)pTmp;
                     }
                     while( !pNxtCntnt && 0 != ( pTmp = pTmp->GetNext() ) )
@@ -1793,8 +1758,6 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 |*
 |*  Beschreibung        Liefert das vorhergehende LayoutBlatt in das der
 |*      Frame gemoved werden kann.
-|*  Ersterstellung      AMA 07. Jan. 98
-|*  Letzte Aenderung    AMA 07. Jan. 98
 |*
 |*************************************************************************/
 
@@ -1844,7 +1807,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     // nur ein Spaltenwechsel erfolgen, eine der oberen Abkuerzungen haette
     // zuschlagen muessen, ebenso wenn der Bereich einen pPrev hat.
     // Jetzt ziehen wir sogar eine leere Spalte in Betracht...
-    ASSERT( FindSctFrm(), "GetNextSctLeaf: Missing SectionFrm" );
+    OSL_ENSURE( FindSctFrm(), "GetNextSctLeaf: Missing SectionFrm" );
     if( ( IsInTab() && !IsTabFrm() ) || FindFooterOrHeader() )
         return pCol;
 
@@ -1854,7 +1817,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     // this table.
     SwSectionFrm *pSect = FindSctFrm();
 
-    // --> OD 2009-01-16 #i95698#
+    // #i95698#
     // A table cell containing directly a section does not break - see lcl_FindSectionsInRow(..)
     // Thus, a table inside a section, which is inside another table can only
     // flow backward in the columns of its section.
@@ -1863,7 +1826,6 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     {
         return pCol;
     }
-    // <--
 
     {
         SwFrm *pPrv;
@@ -2024,9 +1986,6 @@ sal_Bool SwSectionFrm::Growable() const
 |*
 |*  SwSectionFrm::_Grow(), _Shrink()
 |*
-|*  Ersterstellung      AMA 14. Jan. 98
-|*  Letzte Aenderung    AMA 14. Jan. 98
-|*
 |*************************************************************************/
 
 SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
@@ -2124,7 +2083,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
                             pFrm->InvalidatePos();
                     }
                 }
-                // --> OD 2004-07-05 #i28701# - Due to the new object positioning
+                // #i28701# - Due to the new object positioning
                 // the frame on the next page/column can flow backward (e.g. it
                 // was moved forward due to the positioning of its objects ).
                 // Thus, invalivate this next frame, if document compatibility
@@ -2133,7 +2092,6 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
                 {
                     InvalidateNextPos();
                 }
-                // <--
             }
             return nGrow;
         }
@@ -2185,7 +2143,6 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
                 long nPrtHeight = (Prt().*fnRect->fnGetHeight)() - nDist;
                 (Prt().*fnRect->fnSetHeight)( nPrtHeight );
 
-                SwTwips nReal = 0;
                 // We do not allow a section frame to shrink the its upper
                 // footer frame. This is because in the calculation of a
                 // footer frame, the content of the section frame is _not_
@@ -2201,7 +2158,7 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
                 // would cause the top of the section frame to overlap with the
                 // fly frame again, this would result in a perfect loop.
                 if( GetUpper() && !GetUpper()->IsFooterFrm() )
-                    nReal = GetUpper()->Shrink( nDist, bTst );
+                    GetUpper()->Shrink( nDist, bTst );
 
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
                 {
@@ -2234,9 +2191,6 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, sal_Bool bTst )
 /*************************************************************************
 |*
 |*  SwSectionFrm::MoveAllowed()
-|*
-|*  Ersterstellung      MA 08. Oct. 98
-|*  Letzte Aenderung    MA 08. Oct. 98
 |*
 |*  Wann sind Frms innerhalb eines SectionFrms moveable?
 |*  Wenn sie noch nicht in der letzten Spalte des SectionFrms sind,
@@ -2315,13 +2269,12 @@ sal_Bool SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
 SwFrm* SwFrm::_GetIndPrev() const
 {
     SwFrm *pRet = NULL;
-    // --> OD 2007-09-04 #i79774#, #b659654#
+    // #i79774#
     // Do not assert, if the frame has a direct previous frame, because it
     // could be an empty section frame. The caller has to assure, that the
     // frame has no direct previous frame or only empty section frames as
     // previous frames.
-    ASSERT( /*!pPrev &&*/ IsInSct(), "Why?" );
-    // <--
+    OSL_ENSURE( /*!pPrev &&*/ IsInSct(), "Why?" );
     const SwFrm* pSct = GetUpper();
     if( !pSct )
         return NULL;
@@ -2334,8 +2287,8 @@ SwFrm* SwFrm::_GetIndPrev() const
         const SwFrm* pCol = GetUpper()->GetUpper()->GetPrev();
         while( pCol )
         {
-            ASSERT( pCol->IsColumnFrm(), "GetIndPrev(): ColumnFrm expected" );
-            ASSERT( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
+            OSL_ENSURE( pCol->IsColumnFrm(), "GetIndPrev(): ColumnFrm expected" );
+            OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
                     "GetIndPrev(): Where's the body?");
             if( ((SwLayoutFrm*)((SwLayoutFrm*)pCol)->Lower())->Lower() )
                 return NULL;
@@ -2352,7 +2305,7 @@ SwFrm* SwFrm::_GetIndPrev() const
 
 SwFrm* SwFrm::_GetIndNext()
 {
-    ASSERT( !pNext && IsInSct(), "Why?" );
+    OSL_ENSURE( !pNext && IsInSct(), "Why?" );
     SwFrm* pSct = GetUpper();
     if( !pSct )
         return NULL;
@@ -2364,8 +2317,8 @@ SwFrm* SwFrm::_GetIndNext()
         SwFrm* pCol = GetUpper()->GetUpper()->GetNext();
         while( pCol )
         {
-            ASSERT( pCol->IsColumnFrm(), "GetIndNext(): ColumnFrm expected" );
-            ASSERT( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
+            OSL_ENSURE( pCol->IsColumnFrm(), "GetIndNext(): ColumnFrm expected" );
+            OSL_ENSURE( pCol->GetLower() && pCol->GetLower()->IsBodyFrm(),
                     "GetIndNext(): Where's the body?");
             if( ((SwLayoutFrm*)((SwLayoutFrm*)pCol)->Lower())->Lower() )
                 return NULL;
@@ -2437,9 +2390,6 @@ void SwSectionFrm::CalcEndAtEndFlag()
 |*
 |*  SwSectionFrm::Modify()
 |*
-|*  Ersterstellung      MA 08. Oct. 98
-|*  Letzte Aenderung    MA 08. Oct. 98
-|*
 |*************************************************************************/
 
 void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
@@ -2479,10 +2429,13 @@ void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
 void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
+    // #i117863#: The hint needs to indicate whether to keep the SwSectionFrm
+    // content or not.
+    const SwSectionFrmMoveAndDeleteHint* pHint =
+                    dynamic_cast<const SwSectionFrmMoveAndDeleteHint*>(&rHint);
+    if ( pHint && pHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
     {
-        SwSectionFrm::MoveCntntAndDelete( this, sal_True );
+        SwSectionFrm::MoveCntntAndDelete( this, pHint->IsSaveCntnt() );
     }
 }
 
@@ -2600,7 +2553,7 @@ void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew
     }
 }
 
-/*-----------------09.06.99 14:58-------------------
+/*--------------------------------------------------
  * SwSectionFrm::ToMaximize(..): A follow or a ftncontainer at the end of the
  * page causes a maximal Size of the sectionframe.
  * --------------------------------------------------*/
@@ -2633,7 +2586,7 @@ sal_Bool SwSectionFrm::ToMaximize( sal_Bool bCheckFollow ) const
     return bRet;
 }
 
-/*-----------------09.06.99 15:07-------------------
+/*--------------------------------------------------
  * sal_Bool SwSectionFrm::ContainsFtnCont()
  * checks every Column for FtnContFrms.
  * --------------------------------------------------*/
@@ -2645,7 +2598,7 @@ SwFtnContFrm* SwSectionFrm::ContainsFtnCont( const SwFtnContFrm* pCont ) const
     if( pCont )
     {
         pLay = pCont->FindFtnBossFrm( 0 );
-        ASSERT( IsAnLower( pLay ), "ConatainsFtnCont: Wrong FtnContainer" );
+        OSL_ENSURE( IsAnLower( pLay ), "ConatainsFtnCont: Wrong FtnContainer" );
         pLay = (SwLayoutFrm*)pLay->GetNext();
     }
     else if( Lower() && Lower()->IsColumnFrm() )
@@ -2656,11 +2609,11 @@ SwFtnContFrm* SwSectionFrm::ContainsFtnCont( const SwFtnContFrm* pCont ) const
     {
         if( pLay->Lower() && pLay->Lower()->GetNext() )
         {
-            ASSERT( pLay->Lower()->GetNext()->IsFtnContFrm(),
+            OSL_ENSURE( pLay->Lower()->GetNext()->IsFtnContFrm(),
                     "ToMaximize: Unexspected Frame" );
             pRet = (SwFtnContFrm*)pLay->Lower()->GetNext();
         }
-        ASSERT( !pLay->GetNext() || pLay->GetNext()->IsLayoutFrm(),
+        OSL_ENSURE( !pLay->GetNext() || pLay->GetNext()->IsLayoutFrm(),
                 "ToMaximize: ColFrm exspected" );
         pLay = (SwLayoutFrm*)pLay->GetNext();
     }
@@ -2678,7 +2631,7 @@ void SwSectionFrm::InvalidateFtnPos()
     }
 }
 
-/*-----------------18.03.99 10:37-------------------
+/*--------------------------------------------------
  * SwSectionFrm::Undersize() liefert den Betrag, um den der Bereich gern
  * groesser waere, wenn in ihm Undersized TxtFrms liegen, ansonsten Null.
  * Das Undersized-Flag wird ggf. korrigiert.
@@ -2732,7 +2685,7 @@ void SwSectionFrm::CalcFtnCntnt()
     }
 }
 
-/* -----------------09.02.99 14:26-------------------
+/* --------------------------------------------------
  * Wenn ein SectionFrm leerlaeuft, z.B. weil sein Inhalt die Seite/Spalte wechselt,
  * so wird er nicht sofort zerstoert (es koennte noch jemand auf dem Stack einen Pointer
  * auf ihn halten), sondern er traegt sich in eine Liste am RootFrm ein, die spaeter
@@ -2756,12 +2709,12 @@ void SwRootFrm::InsertEmptySct( SwSectionFrm* pDel )
 
 void SwRootFrm::_DeleteEmptySct()
 {
-    ASSERT( pDestroy, "Keine Liste, keine Kekse" );
+    OSL_ENSURE( pDestroy, "Keine Liste, keine Kekse" );
     while( pDestroy->Count() )
     {
         SwSectionFrm* pSect = (*pDestroy)[0];
         pDestroy->Remove( sal_uInt16(0) );
-        ASSERT( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
+        OSL_ENSURE( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
                 "DeleteEmptySct: Locked SectionFrm" );
         if( !pSect->Frm().HasArea() && !pSect->ContainsCntnt() )
         {
@@ -2781,20 +2734,20 @@ void SwRootFrm::_DeleteEmptySct()
             }
         }
         else {
-            ASSERT( pSect->GetSection(), "DeleteEmptySct: Halbtoter SectionFrm?!" );
+            OSL_ENSURE( pSect->GetSection(), "DeleteEmptySct: Halbtoter SectionFrm?!" );
         }
     }
 }
 
 void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
 {
-    ASSERT( pDestroy, "Where's my list?" );
+    OSL_ENSURE( pDestroy, "Where's my list?" );
     sal_uInt16 nPos;
     if( pDestroy->Seek_Entry( pSct, &nPos ) )
         pDestroy->Remove( nPos );
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 sal_Bool SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {
@@ -2814,3 +2767,4 @@ bool SwSectionFrm::IsBalancedSection() const
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

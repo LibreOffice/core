@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,8 +43,6 @@
 #include <com/sun/star/text/XMailMergeBroadcaster.hpp>
 #include <svl/itemprop.hxx>
 #include <sfx2/objsh.hxx>
-
-#include <functional>
 
 namespace com { namespace sun { namespace star {
 
@@ -105,7 +104,6 @@ class SwXMailMerge :
     cppu::OInterfaceContainerHelper     aMergeListeners;
     OPropertyListenerContainerHelper    aPropListeners;
 
-    //SfxItemPropertySet          aPropSet;
     const SfxItemPropertySet*   pPropSet;
 
     SfxObjectShellRef xDocSh;   // the document
@@ -204,3 +202,4 @@ extern com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CAL
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

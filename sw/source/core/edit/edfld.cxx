@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -234,7 +235,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 
     FOREACHPAM_START(this)                      // fuer jeden PaM
         bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
-        ASSERT( bSuccess, "Doc->Insert(Field) failed");
+        OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
     FOREACHPAM_END()                      // fuer jeden PaM
 
@@ -268,7 +269,7 @@ SwField* SwEditShell::GetCurFld() const
     SwTxtFld *pTxtFld = GetDocTxtFld( pCrsr->Start() );
     SwField *pCurFld = NULL;
 
-    /* #108536# Field was only recognized if no selection was
+    /* Field was only recognized if no selection was
         present. Now it is recognized if either the cursor is in the
         field or the selection spans exactly over the field. */
     if( pTxtFld &&
@@ -287,7 +288,7 @@ SwField* SwEditShell::GetCurFld() const
 
     }
 
-    /* #108536# removed handling of multi-selections */
+    /* removed handling of multi-selections */
 
     return pCurFld;
 }
@@ -298,7 +299,6 @@ SwField* SwEditShell::GetCurFld() const
 |*                  SwEditShell::UpdateFlds()
 |*
 |*    Beschreibung  Stehen die PaMs auf Feldern ?
-|*                  BP 12.05.92
 |*
 *************************************************************************/
 SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
@@ -343,11 +343,6 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwTxtFld *pTxtFld;
         SwFmtFld *pFmtFld;
 
-//      if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-//          ( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
-//            0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
-//          ( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
-//              ->GetTyp()->Which() == rFld.GetTyp()->Which() )
         if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
         {
             pTxtFld = GetDocTxtFld(pCrsr->Start());
@@ -356,7 +351,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
 
             if (pTxtFld != 0)
-                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, sal_True); // #111840#
+                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, sal_True);
         }
 
         // bOkay (statt return wg. EndAllAction) wird sal_False,
@@ -403,7 +398,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                             bOkay = sal_False;
 
                         bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
-                                                           pMsgHnt, sal_False); // #111840#
+                                                           pMsgHnt, sal_False);
                     }
                     // Der Suchbereich wird um den gefundenen Bereich
                     // verkuerzt.
@@ -420,7 +415,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
     EndAllAction();
 }
 
-/*-----------------13.05.92 10:54-------------------
+/*--------------------------------------------------
  Liefert den logischen fuer die Datenbank zurueck
  --------------------------------------------------*/
 
@@ -520,16 +515,12 @@ sal_Bool SwEditShell::IsLabelDoc() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::LABEL_DOCUMENT);
 }
-/* -----------------------------21.12.99 12:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 {
     GetDoc()->ChangeAuthorityData(pNewData);
 }
-/* -----------------------------03.08.2001 12:04------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
@@ -562,3 +553,5 @@ sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
     }
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <shellio.hxx>
 #include <swdll.hxx>
 #include <unoprnms.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -50,37 +51,27 @@ using namespace ::com::sun::star::lang;
 #define SWFILTEROPTIONSOBJ_SERVICE      RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilterOptionsDialog")
 #define SWFILTEROPTIONSOBJ_IMPLNAME     RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.FilterOptionsDialog")
 #define FILTER_OPTIONS_NAME             RTL_CONSTASCII_USTRINGPARAM("FilterOptions")
-/*-- 2002/06/21 11:01:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXFilterOptions::SwXFilterOptions() :
     bExport( sal_False )
 {
 }
-/*-- 2002/06/21 11:01:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXFilterOptions::~SwXFilterOptions()
 {
 }
-/*-- 2002/06/21 11:01:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString  SwXFilterOptions::getImplementationName_Static()
 {
     return ::rtl::OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
 }
-/*-- 2002/06/21 11:01:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString> SwXFilterOptions::getSupportedServiceNames_Static()
 {
     ::rtl::OUString sService(SWFILTEROPTIONSOBJ_SERVICE);
     return uno::Sequence< ::rtl::OUString> (&sService, 1);
 }
-/*-- 2002/06/21 11:01:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() throw (uno::RuntimeException)
 {
     uno::Sequence<beans::PropertyValue> aRet(1);
@@ -91,9 +82,7 @@ uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() thro
 
     return aRet;
 }
-/*-- 2002/06/21 11:01:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyValue >& aProps )
     throw (beans::UnknownPropertyException, beans::PropertyVetoException,
        IllegalArgumentException, WrappedTargetException, uno::RuntimeException)
@@ -109,20 +98,16 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
             rProp.Value >>= sFilterName;
         else if ( aPropName == ::rtl::OUString(FILTER_OPTIONS_NAME) )
             rProp.Value >>= sFilterOptions;
-        else if ( aPropName.equalsAscii( "InputStream" ) )
+        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             rProp.Value >>= xInputStream;
     }
 }
-/*-- 2002/06/21 11:01:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void   SwXFilterOptions::setTitle( const ::rtl::OUString& /*rTitle*/ )
     throw (uno::RuntimeException)
 {
 }
-/*-- 2002.06.21 11:01:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
@@ -143,10 +128,10 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
     {
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream,  DLG_ASCII_FILTER );
-        DBG_ASSERT(pAsciiDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pAsciiDlg, "Dialogdiet fail!");
         if(RET_OK == pAsciiDlg->Execute())
         {
             SwAsciiOptions aOptions;
@@ -164,54 +149,44 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
 
     return nRet;
 }
-/*-- 2002/06/21 11:01:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void   SwXFilterOptions::setTargetDocument( const uno::Reference< XComponent >& xDoc )
     throw (IllegalArgumentException, uno::RuntimeException)
 {
     bExport = sal_False;
     xModel = xDoc;
 }
-/*-- 2002/06/21 11:01:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& xDoc )
         throw (IllegalArgumentException,uno::RuntimeException)
 {
     bExport = sal_True;
     xModel = xDoc;
 }
-/*-- 2002/06/21 11:01:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException)
 {
     return ::rtl::OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
 }
-/*-- 2002/06/21 11:01:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwXFilterOptions::supportsService( const ::rtl::OUString& rServiceName )
     throw(uno::RuntimeException)
 {
     return rServiceName == ::rtl::OUString(SWFILTEROPTIONSOBJ_SERVICE);
 }
-/*-- 2002/06/21 11:01:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString > SwXFilterOptions::getSupportedServiceNames()
                 throw(uno::RuntimeException)
 {
     return SwXFilterOptions::getSupportedServiceNames_Static();
 }
 
-
 uno::Reference<uno::XInterface> SAL_CALL SwXFilterOptions_createInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    SwDLL::Init();
+    SolarMutexGuard aGuard;
+    SwGlobals::ensure();
     return (::cppu::OWeakObject*) new SwXFilterOptions;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

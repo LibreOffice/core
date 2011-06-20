@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,12 +32,8 @@
 
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/brshitem.hxx>
@@ -50,9 +47,7 @@
 #include <editeng/akrnitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/charreliefitem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <editeng/cntritem.hxx>
-#endif
 #include <editeng/colritem.hxx>
 #include <editeng/cscoitem.hxx>
 #include <editeng/crsditem.hxx>
@@ -61,9 +56,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX //autogen
 #include <editeng/emphitem.hxx>
-#endif
 #include <editeng/charscaleitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/twolinesitem.hxx>
@@ -77,7 +70,7 @@
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <scriptinfo.hxx>
 
-#if defined(WNT) || defined(PM2)
+#if defined(WNT)
 #define FNT_LEADING_HACK
 #endif
 
@@ -85,7 +78,7 @@
 #define FNT_ATM_HACK
 #endif
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 // globale Variable
 SvStatistics aSvStat;
 #endif
@@ -122,7 +115,7 @@ sal_uInt16 MapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
             break;
 #if OSL_DEBUG_LEVEL > 1
         default :
-            ASSERT( sal_False, "Unsupported direction" );
+            OSL_FAIL( "Unsupported direction" );
             break;
 #endif
         }
@@ -149,7 +142,7 @@ sal_uInt16 UnMapDirection( sal_uInt16 nDir, const sal_Bool bVertFormat )
             break;
 #if OSL_DEBUG_LEVEL > 1
         default :
-            ASSERT( sal_False, "Unsupported direction" );
+            OSL_FAIL( "Unsupported direction" );
             break;
 #endif
         }
@@ -426,7 +419,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     }
     bPaintBlank = sal_False;
     bPaintWrong = sal_False;
-    ASSERT( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
+    OSL_ENSURE( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
 }
 
 /*************************************************************************
@@ -567,6 +560,12 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
         SetVertical( pAttrSet->GetCharRotate().GetValue() );
     else
         SetVertical( 0 );
+    if( pIDocumentSettingAccess && pIDocumentSettingAccess->get( IDocumentSettingAccess::SMALL_CAPS_PERCENTAGE_66 ))
+    {
+        aSub[ SW_LATIN ].smallCapsPercentage66 = true;
+        aSub[ SW_CJK ].smallCapsPercentage66 = true;
+        aSub[ SW_CTL ].smallCapsPercentage66 = true;
+    }
 }
 
 SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
@@ -578,6 +577,7 @@ SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
     nOrgAscent = rFont.nOrgAscent;
     nPropWidth = rFont.nPropWidth;
     aSize = rFont.aSize;
+    smallCapsPercentage66 = rFont.smallCapsPercentage66;
     return *this;
 }
 
@@ -924,7 +924,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
 
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+static sal_Char const sDoubleSpace[] = "  ";
         Size aFontSize = _GetTxtSize( rInf );
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
@@ -1035,7 +1035,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+static sal_Char const sDoubleSpace[] = "  ";
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
         xub_StrLen nOldIdx = rInf.GetIdx();
@@ -1169,8 +1169,10 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 // used during painting of small capitals
 void SwDrawTextInfo::Shift( sal_uInt16 nDir )
 {
-    ASSERT( bPos, "DrawTextInfo: Undefined Position" );
-    ASSERT( bSize, "DrawTextInfo: Undefined Width" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( bPos, "DrawTextInfo: Undefined Position" );
+    OSL_ENSURE( bSize, "DrawTextInfo: Undefined Width" );
+#endif
 
     const sal_Bool bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
@@ -1185,7 +1187,7 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
         ((Point*)pPos)->X() += GetSize().Width();
         break;
     case 900 :
-        ASSERT( ((Point*)pPos)->Y() >= GetSize().Width(), "Going underground" );
+        OSL_ENSURE( ((Point*)pPos)->Y() >= GetSize().Width(), "Going underground" );
         ((Point*)pPos)->Y() -= GetSize().Width();
         break;
     case 1800 :
@@ -1244,3 +1246,5 @@ long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
     rMutableOut.SetFont(aOldFont);
     return nHeight;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

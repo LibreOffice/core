@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,23 +30,16 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Fussnoteneinstellungs-TabPage
+    Description:    footnote settings TabPage
  --------------------------------------------------------------------*/
-
 class SwFootNotePage: public SfxTabPage
 {
 public:
@@ -73,12 +67,18 @@ private:
     LineListBox     aLineTypeBox;
     FixedText       aLineWidthLbl;
     MetricField     aLineWidthEdit;
+    FixedText       aLineColorLbl;
+    ColorListBox    aLineColorBox;
+    FixedText       aLineLengthLbl;
+    MetricField     aLineLengthEdit;
     FixedText       aLineDistLbl;
     MetricField     aLineDistEdit;
 
     DECL_LINK( HeightPage, Button * );
     DECL_LINK( HeightMetric, Button * );
     DECL_LINK( HeightModify, MetricField * );
+    DECL_LINK( LineWidthChanged_Impl, void * );
+    DECL_LINK( LineColorSelected_Impl, void * );
 
     long            lMaxHeight;
 
@@ -91,3 +91,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

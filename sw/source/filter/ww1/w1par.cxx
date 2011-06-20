@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,14 +35,10 @@
 #include <ndtxt.hxx>            // class SwTxtNode
 #include <fltini.hxx>           // Ww1Reader
 #include <w1par.hxx>
-#ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
-#endif
 #include <mdiexp.hxx>           // StatLine...()
 #include <swerror.h>            // ERR_WW1_...
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 
 //----------------------------------------
 //    Initialisieren der Feld-FilterFlags
@@ -76,7 +73,7 @@ static sal_uLong WW1_Read_FieldIniFlags()
 sal_uLong WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
-    ASSERT(pStrm!=NULL, "W1-Read ohne Stream");
+    OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
         sal_Bool bNew = !bInsertMode;           // Neues Doc ( kein Einfuegen )
@@ -139,3 +136,4 @@ Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const String& rBaseURL, sal_Bool bNe
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

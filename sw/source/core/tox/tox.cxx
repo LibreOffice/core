@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 #include <tools/resid.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
-#include <errhdl.hxx>
 #include <txtatr.hxx>
 #include <ndtxt.hxx>
 #include <txttxmrk.hxx>
@@ -212,7 +212,7 @@ void SwTOXMark::RegisterToTOXType( SwTOXType& rMark )
 
 int SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetRegisteredIn() == ((SwTOXMark&)rAttr).GetRegisteredIn();
 }
 
@@ -247,7 +247,7 @@ String SwTOXMark::GetText() const
     else if( pTxtAttr && pTxtAttr->GetpTxtNd() )
     {
         xub_StrLen* pEndIdx = pTxtAttr->GetEnd();
-        ASSERT( pEndIdx, "TOXMark ohne Mark!!");
+        OSL_ENSURE( pEndIdx, "TOXMark ohne Mark!!");
         if( pEndIdx )
         {
             const xub_StrLen nStt = *pTxtAttr->GetStart();
@@ -317,7 +317,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     case TOX_TABLES       : nPoolId = STR_POOLCOLL_TOX_TABLESH; break;
     case TOX_AUTHORITIES  : nPoolId = STR_POOLCOLL_TOX_AUTHORITIESH;    break;
     default:
-        ASSERT( !this, "ungueltiger TOXTyp");
+        OSL_ENSURE( !this, "ungueltiger TOXTyp");
         return ;
     }
 
@@ -335,10 +335,9 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         SwFormToken aToken(TOKEN_TAB_STOP);
         aToken.nTabStopPosition = 0;
 
-        // --> FME 2004-12-10 #i36870# right aligned tab for all
+        // #i36870# right aligned tab for all
         aToken.cTabFillChar = '.';
         aToken.eTabAlign = SVX_TAB_ADJUST_END;
-        // <--
 
         aTokens.push_back(aToken);
         aTokens.push_back(SwFormToken(TOKEN_PAGE_NUMS));
@@ -463,7 +462,7 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
             {
                 const SvxTabStop& rTab = (*pTabStops)[nTab];
 
-                // --> FME 2004-12-16 #i29178#
+                // #i29178#
                 // For Word import, we do not want to replace exising tokens,
                 // we insert new tabstop tokens without a tabstop character:
                 if ( bInsertNewTapStops )
@@ -479,7 +478,6 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
                         aCurrentPattern.push_back(aToken);
                     }
                 }
-                // <--
                 else
                 {
                     aIt = find_if(aIt, aCurrentPattern.end(),
@@ -500,7 +498,6 @@ void SwForm::AdjustTabStops(SwDoc& rDoc, sal_Bool bInsertNewTapStops) // #i21237
                         break; // no more tokens to replace
                 }
             }
-            // <--
 
             if(bChanged)
                 SetPattern(nLevel, aCurrentPattern); // #i21237#
@@ -635,34 +632,6 @@ SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
 
     return *this;
 }
-
-/* -----------------16.07.99 16:02-------------------
-
-SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
-{
-    aForm = rSource.aForm;
-    aName = rSource.aName;
-    aTitle = rSource.aTitle;
-    sMainEntryCharStyle = rSource.sMainEntryCharStyle;
-    sSequenceName = rSource.sSequenceName;
-    eLanguage = rSource.eLanguage;
-    sSortAlgorithm = rSource.sSortAlgorithm;
-    aData = rSource.aData;
-    nCreateType = rSource.nCreateType;
-    nOLEOptions = rSource.nOLEOptions;
-    eCaptionDisplay = rSource.eCaptionDisplay;
-    bProtected = rSource.bProtected;
-    bFromChapter = rSource.bFromChapter;
-    bFromObjectNames = rSource.bFromObjectNames;
-    bLevelFromChapter = rSource.bLevelFromChapter;
-
-    if (rSource.GetAttrSet())
-        SetAttrSet(*rSource.GetAttrSet());
-
-    return *this;
-}
-
- --------------------------------------------------*/
 
 String SwFormToken::GetString() const
 {
@@ -905,7 +874,7 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
         sal_uInt16 nLen;
         sal_uInt16 nOffset;
         FormTokenType eToken;
-    } __READONLY_DATA aTokenArr[] = {
+    } const aTokenArr[] = {
         { SwForm::aFormTab,       SwForm::nFormEntryLen,      1, TOKEN_TAB_STOP },
         { SwForm::aFormPageNums,  SwForm::nFormPageNumsLen,   1, TOKEN_PAGE_NUMS },
         { SwForm::aFormLinkStt,   SwForm::nFormLinkSttLen,    1, TOKEN_LINK_START },
@@ -931,7 +900,7 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
             break;
         }
 
-    ASSERT( pNm, "wrong token" );
+    OSL_ENSURE( pNm, "wrong token" );
     if (pTokenLen)
         *pTokenLen = nTokenLen;
 
@@ -942,13 +911,13 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
 
 void SwForm::SetPattern(sal_uInt16 nLevel, const SwFormTokens& rTokens)
 {
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
     aPattern[nLevel] = rTokens;
 }
 
 void SwForm::SetPattern(sal_uInt16 nLevel, const String & rStr)
 {
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
 
     SwFormTokensHelper aHelper(rStr);
     aPattern[nLevel] = aHelper.GetTokens();
@@ -956,7 +925,8 @@ void SwForm::SetPattern(sal_uInt16 nLevel, const String & rStr)
 
 const SwFormTokens& SwForm::GetPattern(sal_uInt16 nLevel) const
 {
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
+    OSL_ENSURE(nLevel < GetFormMax(), "Index >= FORM_MAX");
     return aPattern[nLevel];
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

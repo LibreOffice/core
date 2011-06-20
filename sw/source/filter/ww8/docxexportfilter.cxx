@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 #include <pam.hxx>
 #include <unotxdoc.hxx>
 
-#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -42,14 +43,14 @@ using ::rtl::OUString;
 
 #define S( x ) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 
-DocxExportFilter::DocxExportFilter( const uno::Reference< lang::XMultiServiceFactory >& rMSF )
-    : oox::core::XmlFilterBase( rMSF )
+DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext >& xContext )
+    : oox::core::XmlFilterBase( xContext )
 {
 }
 
 bool DocxExportFilter::exportDocument()
 {
-    OSL_TRACE(, "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
+    OSL_TRACE( "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
 
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
@@ -78,7 +79,7 @@ bool DocxExportFilter::exportDocument()
         aExport.ExportDocument( true ); // FIXME support exporting selection only
     }
 
-    commit();
+    commitStorage();
 
     // delete the pCurPam
     if ( pCurPam )
@@ -114,15 +115,13 @@ uno::Sequence< OUString > SAL_CALL DocxExport_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*) new DocxExportFilter( rSMgr );
+    return (cppu::OWeakObject*) new DocxExportFilter( xCtx );
 }
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
@@ -133,50 +132,31 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
 // - component_getFactory -
 // ------------------------
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
+::cppu::ImplementationEntry entries [] =
 {
-    OSL_TRACE("%s, pImplName is '%s'", OSL_THIS_FUNC, pImplName);
-    uno::Reference< lang::XSingleServiceFactory > xFactory;
-    void* pRet = 0;
-
-    if ( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME ) );
-
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                    DocxExport_getImplementationName(),
-                    DocxExport_createInstance,
-                    DocxExport_getSupportedServiceNames() ) );
-    } else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFEXPORT ) == 0 ) {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFEXPORT ) );
-
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                    RtfExport_getImplementationName(),
-                    RtfExport_createInstance,
-                    RtfExport_getSupportedServiceNames() ) );
-    } else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFIMPORT ) == 0 ) {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFIMPORT ) );
-
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                    RtfImport_getImplementationName(),
-                    RtfImport_createInstance,
-                    RtfImport_getSupportedServiceNames() ) );
-    }
-
-    if ( xFactory.is() )
+        DocxExport_createInstance, DocxExport_getImplementationName,
+        DocxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
     {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
+        RtfExport_createInstance, RtfExport_getImplementationName,
+        RtfExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    {
+        RtfImport_createInstance, RtfImport_getImplementationName,
+        RtfImport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+        0, 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
-    return pRet;
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+{
+    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
 }
 
-#ifdef __cplusplus
-}
-#endif
+} // extern "C"
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

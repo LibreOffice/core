@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,21 +26,16 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _ESCHER_HXX
 #define _ESCHER_HXX
 
-#ifndef _ESCHEREX_HXX
 #include <filter/msfilter/escherex.hxx>
-#endif
 
 const sal_uInt32 nInlineHack = 0x00010001;
 class SwFrmFmt;
-// --> OD 2005-01-06 #i30669#
+// #i30669#
 class SwFmtHoriOrient;
 class SwFmtVertOrient;
-// <--
 
 class WinwordAnchoring : public EscherExClientRecord_Base
 {
@@ -50,7 +46,7 @@ public:
     /** method to perform conversion of positioning attributes with the help
         of corresponding layout information
 
-        OD 2005-01-06 #i30669#
+        #i30669#
         Because most of the Writer object positions doesn't correspond to the
         object positions in WW8, this method converts the positioning
         attributes. For this conversion the corresponding layout information
@@ -59,8 +55,6 @@ public:
         No conversion is performed for as-character anchored objects. Whose
         object positions are already treated special in method <WriteData(..)>.
         Usage of method: Used by method <SetAnchoring(..)>, nothing else
-
-        @author OD
 
         @param _iorHoriOri
         input/output parameter - containing the current horizontal position
@@ -186,4 +180,4 @@ private:
 
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

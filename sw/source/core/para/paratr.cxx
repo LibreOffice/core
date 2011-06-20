@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <unostyle.hxx>
 #include <SwStyleNameMapper.hxx>
-#include "errhdl.hxx"
 #include "paratr.hxx"
 #include "charfmt.hxx"
 #include "cmdid.h"
@@ -61,8 +61,6 @@ TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
 /*************************************************************************
 |*    Beschreibung      Methoden von SwFmtDrop
-|*    Ersterstellung    MS  19.02.91
-|*    Letzte Aenderung  JP 08.08.94
 *************************************************************************/
 
 
@@ -137,7 +135,7 @@ sal_Bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 
 int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return ( nLines == ((SwFmtDrop&)rAttr).GetLines() &&
              nChars == ((SwFmtDrop&)rAttr).GetChars() &&
              nDistance ==  ((SwFmtDrop&)rAttr).GetDistance() &&
@@ -151,7 +149,7 @@ SfxPoolItem* SwFmtDrop::Clone( SfxItemPool* ) const
     return new SwFmtDrop( *this );
 }
 
-sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
@@ -180,10 +178,10 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch(nMemberId&~CONVERT_TWIPS)
     {
@@ -209,7 +207,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if ( rVal >>= nVal )
                 nDistance = (sal_Int16) MM100_TO_TWIP((sal_Int32)nVal);
             else
-                return sal_False;
+                return false;
             break;
         }
         case MID_DROPCAP_FORMAT:
@@ -222,8 +220,6 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nDistance   = MM100_TO_TWIP(pDrop->Distance);
             }
             else {
-                //exception( wrong_type)
-                ;
             }
         }
         break;
@@ -231,10 +227,10 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bWholeWord = *(sal_Bool*)rVal.getValue();
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
-            DBG_ERROR("char format cannot be set in PutValue()!");
+            OSL_FAIL("char format cannot be set in PutValue()!");
         break;
     }
-    return sal_True;
+    return true;
 }
 
 // class SwRegisterItem -------------------------------------------------
@@ -252,33 +248,26 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 }
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
-    return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
-    // <--
-}
-/* -----------------------------27.06.00 11:05--------------------------------
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
 
- ---------------------------------------------------------------------------*/
-sal_Bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+    return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
+}
+
+bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
-    return sal_True;
+    return true;
 }
-/* -----------------------------27.06.00 11:05--------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
+bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     rtl::OUString uName;
     rVal >>= uName;
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
-    return sal_True;
+    return true;
 }
-/* -----------------19.05.2003 10:44-----------------
 
- --------------------------------------------------*/
 SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 {
     return new SwParaConnectBorderItem( *this );
@@ -286,3 +275,4 @@ SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

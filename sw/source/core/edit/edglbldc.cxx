@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -86,7 +87,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             {
             case TOX_HEADER_SECTION:    break;      // ignore
             case TOX_CONTENT_SECTION:
-                ASSERT( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+                OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
                 pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
                 break;
 
@@ -408,3 +409,4 @@ SwGlblDocContent::SwGlblDocContent( const SwSection* pSect )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

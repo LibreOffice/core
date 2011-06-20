@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 #include <pagefrm.hxx>  // SwPageFrm
 #include <paratr.hxx>
 #include <SwPortionHandler.hxx>
-#include <txtcfg.hxx>
 #include <porrst.hxx>
 #include <inftxt.hxx>
 #include <txtpaint.hxx> // ClipVout
@@ -58,6 +58,8 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+
+#include <crsrsh.hxx>
 
 /*************************************************************************
  *                      class SwTmpEndPortion
@@ -173,14 +175,13 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
         if( rInf.GetFont()->IsPaintBlank() )
         {
-            static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+            static sal_Char const sDoubleSpace[] = "  ";
             XubString aTxtDouble( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-            // --> FME 2006-07-12 #b6439097#
+            //
             SwRect aClipRect;
             rInf.CalcRect( *this, &aClipRect, 0 );
             SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
             aClip.ChgClip( aClipRect, 0 );
-            // <--
             rInf.DrawText( aTxtDouble, *this, 0, 2, sal_True );
         }
     }
@@ -229,7 +230,21 @@ SwLinePortion *SwArrowPortion::Compress() { return this; }
 
 SwTwips SwTxtFrm::EmptyHeight() const
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
+    if (IsCollapse()) {
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
+        if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
+            SwCrsrShell *pCrSh=(SwCrsrShell*)pSh;
+            SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
+            if (pCurrFrm==(SwCntntFrm*)this) {
+                // do nothing
+            } else {
+                return 1;
+            }
+        } else {
+            return 1;
+        }
+    }
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
 
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
@@ -292,7 +307,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
 
 sal_Bool SwTxtFrm::FormatEmpty()
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
 
     if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
         0 != GetTxtNode()->GetNumRule() ||
@@ -352,11 +367,10 @@ sal_Bool SwTxtFrm::FormatEmpty()
                  aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
                  return sal_False;
 
-            // --> OD 2004-11-17 #i35635# - call method <HideAndShowObjects()>
+            // #i35635# - call method <HideAndShowObjects()>
             // to assure that objects anchored at the empty paragraph are
             // correctly visible resp. invisible.
             HideAndShowObjects();
-            // <--
             return sal_True;
         }
     }
@@ -426,8 +440,8 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                         rRegDiff = rSpace.GetLineHeight();
                                     break;
                                 }
-                                default: ASSERT(
-                                sal_False, ": unknown LineSpaceRule" );
+                                default:
+                                    OSL_FAIL( ": unknown LineSpaceRule" );
                             }
                             switch( rSpace.GetInterLineSpaceRule() )
                             {
@@ -452,7 +466,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                     nNettoHeight = rRegDiff;
                                     break;
                                 }
-                                default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
+                                default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                             }
                             pDesc->SetRegHeight( rRegDiff );
                             pDesc->SetRegAscent( rRegDiff - nNettoHeight +
@@ -578,3 +592,5 @@ KSHORT SwControlCharPortion::GetViewWidth( const SwTxtSizeInfo& rInf ) const
 
     return mnViewWidth;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

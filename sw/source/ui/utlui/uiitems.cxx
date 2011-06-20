@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,16 +39,14 @@
 
 #include "utlui.hrc"
 #include "attrdesc.hrc"
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Breitenangaben der Fussnotenlinien, mit TabPage abstimmen
-static const sal_uInt16 __FAR_DATA nFtnLines[] = {
+static const sal_uInt16 nFtnLines[] = {
     0,
     10,
     50,
@@ -86,7 +85,7 @@ SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 int  SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( Which() == rAttr.Which(), "keine gleichen Attribute" );
+    OSL_ENSURE( Which() == rAttr.Which(), "keine gleichen Attribute" );
     return ( aFtnInfo == ((SwPageFtnInfoItem&)rAttr).GetPageFtnInfo());
 }
 
@@ -122,12 +121,10 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-/* -----------------------------26.04.01 12:25--------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
+bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
     {
         case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetHeight());break;
@@ -143,18 +140,28 @@ sal_Bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//text::HorizontalAdjust
         case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
         case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
+        case MID_FTN_LINE_STYLE    :
+        {
+            switch ( aFtnInfo.GetLineStyle( ) )
+            {
+                default:
+                case ::editeng::NO_STYLE: rVal <<= sal_Int8( 0 ); break;
+                case ::editeng::SOLID: rVal <<= sal_Int8( 1 ); break;
+                case ::editeng::DOTTED: rVal <<= sal_Int8( 2 ); break;
+                case ::editeng::DASHED: rVal <<= sal_Int8( 3 ); break;
+            }
+            break;
+        }
         default:
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
-/* -----------------------------26.04.01 12:26--------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
+bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
 {
     sal_Int32 nSet32 = 0;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch(nMemberId  & ~CONVERT_TWIPS)
     {
         case MID_LINE_COLOR        :
@@ -166,7 +173,7 @@ sal_Bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
         case MID_LINE_FOOTNOTE_DIST:
                 rVal >>= nSet32;
                 if(nSet32 < 0)
-                    bRet = sal_False;
+                    bRet = false;
                 else
                 {
                     nSet32 = MM100_TO_TWIP(nSet32);
@@ -185,7 +192,7 @@ sal_Bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             if(nSet >= 0)
                 aFtnInfo.SetLineWidth(MM100_TO_TWIP(nSet));
             else
-                bRet = sal_False;
+                bRet = false;
         }
         break;
         case MID_LINE_RELWIDTH     :
@@ -193,7 +200,7 @@ sal_Bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             sal_Int8 nSet = 0;
             rVal >>= nSet;
             if(nSet < 0)
-                bRet = sal_False;
+                bRet = false;
             else
                 aFtnInfo.SetWidth(Fraction(nSet, 100));
         }
@@ -205,11 +212,25 @@ sal_Bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
                 aFtnInfo.SetAdj((SwFtnAdj)nSet);
             else
-                bRet = sal_False;
+                bRet = false;
+        }
+        case MID_FTN_LINE_STYLE:
+        {
+            ::editeng::SvxBorderStyle eStyle = ::editeng::NO_STYLE;
+            sal_Int8 nSet = 0;
+            rVal >>= nSet;
+            switch ( nSet )
+            {
+                case 1: eStyle = ::editeng::SOLID; break;
+                case 2: eStyle = ::editeng::DOTTED; break;
+                case 3: eStyle = ::editeng::DASHED; break;
+                default: break;
+            }
+            aFtnInfo.SetLineStyle( eStyle );
         }
         break;
         default:
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
@@ -240,20 +261,15 @@ SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SwPtrItem( *this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
     const SwPtrItem& rItem = (SwPtrItem&)rAttr;
     return ( pMisc == rItem.pMisc );
 }
 
 
-/*-----------------12.11.97 12:55-------------------------------
+/*--------------------------------------------------------------
  SwUINumRuleItem fuer die NumTabPages der FormatNumRule/Stylisten
 ---------------------------------------------------------------*/
 SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const sal_uInt16 nId )
@@ -280,17 +296,17 @@ SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 int  SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
 }
 
-sal_Bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*pRule);
     rVal.setValue(&xRules, ::getCppuType((uno::Reference< container::XIndexReplace>*)0));
-    return sal_True;
+    return true;
 }
-sal_Bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)
@@ -303,18 +319,14 @@ sal_Bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
             *pRule = *pSwXRules->GetNumRule();
         }
     }
-    return sal_True;
+    return true;
 }
-/* -----------------17.06.98 17:43-------------------
- *
- * --------------------------------------------------*/
+
 SwBackgroundDestinationItem::SwBackgroundDestinationItem(sal_uInt16  _nWhich, sal_uInt16 nValue) :
     SfxUInt16Item(_nWhich, nValue)
 {
 }
-/* -----------------17.06.98 17:44-------------------
- *
- * --------------------------------------------------*/
+
 SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwBackgroundDestinationItem(Which(), GetValue());
@@ -322,3 +334,4 @@ SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool * /*pPool*/ ) c
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

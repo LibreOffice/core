@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -169,6 +170,12 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
 
+    /// docx requires footnoteRef/endnoteRef tag at the beginning of each of them
+    virtual void FootnoteEndnoteRefTag() {};
+
+    /// for docx footnotePr/endnotePr inside sectPr
+    virtual void SectFootnoteEndnotePr() {};
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
 
@@ -176,7 +183,7 @@ public:
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet ) = 0;
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby ) = 0;
+    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby ) = 0;
 
     /// Output ruby end.
     virtual void EndRuby() = 0;
@@ -247,7 +254,8 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId ) = 0;
+            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
+            bool bAutoUpdate ) = 0;
 
     /// End of a style in the styles table.
     virtual void EndStyle() = 0;
@@ -563,6 +571,9 @@ public:
     /// Return the right export class.
     virtual MSWordExportBase& GetExport() = 0;
 
+    /// @overload
+    const MSWordExportBase& GetExport() const { return const_cast< AttributeOutputBase* >( this )->GetExport(); }
+
     /// Call the right virtual function according to the type of the item.
     void OutputItem( const SfxPoolItem& rHt );
 
@@ -580,4 +591,4 @@ public:
 
 #endif // _ATTRIBUTEOUTPUTBASE_HXX_
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

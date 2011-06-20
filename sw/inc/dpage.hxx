@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _DPAGE_HXX
 #define _DPAGE_HXX
 
-#ifndef _FM_FMPAGE_HXX
 #include <svx/fmpage.hxx>
-#endif
 #include <svx/svdobj.hxx>
 
 class SdrPageGridFrameList;
@@ -62,3 +61,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

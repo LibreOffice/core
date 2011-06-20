@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _RTL_USTRING_HXX //autogen
 #include <rtl/ustring.hxx>
-#endif
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <basic/sbx.hxx>
@@ -43,9 +42,7 @@
 #include <frmatr.hxx>
 #include <docary.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swevent.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -136,12 +133,6 @@ sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs
 
             eErr = pDocShell->CallXScript(
                 rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
-
-            //*pRet = pRetValue->GetString();
-            // use the AnyConverter to return a String if appropriate?
-
-            // need to call something like lcl_translateUno2Basic
-            // pArgs = lcl_translateUno2Basic( pUnoArgs );
 
             delete pUnoArgs;
             break;
@@ -257,12 +248,6 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 nRet += 0 == pDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
 
-                //*pRet = pRetValue->GetString();
-                // use the AnyConverter to return a String if appropriate?
-
-                // need to call something like lcl_translateUno2Basic
-                // pArgs = lcl_translateUno2Basic( pUnoArgs );
-
                 delete pUnoArgs;
             }
             // JavaScript calls are ignored
@@ -274,3 +259,4 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,9 @@
 #define _CAPTION_HXX
 
 #include <tools/string.hxx>
-//#ifndef _STREAM_HXX //autogen
-//#include <tools/stream.hxx>
-//#endif
 #include <tools/globname.hxx>
 #include <SwCapObjType.hxx>
 #include "swdllapi.h"
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC InsCaptionOpt
 {
@@ -55,7 +49,7 @@ private:
     String          sSeparator;
     String          sCharacterStyle;
 
-    sal_Bool         bIgnoreSeqOpts;    // wird nicht gespeichert
+    sal_Bool         bIgnoreSeqOpts;    // is not being saved
     sal_Bool         bCopyAttributes;   //          -""-
 
 public:
@@ -116,3 +110,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

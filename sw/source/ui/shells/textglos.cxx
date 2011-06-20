@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 
-#include "errhdl.hxx"
 #include "view.hxx"
-#include "initui.hxx"
 #include "cmdid.h"
 #include "textsh.hxx"
 #include "initui.hxx"
@@ -46,7 +45,6 @@
 #include <misc.hrc>
 
 // STATIC DATA -----------------------------------------------------------
-
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -88,7 +86,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                     aShortName = (( const SfxStringItem *)pItem)->GetValue();
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -104,7 +102,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 String aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -120,7 +118,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, sal_False, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
@@ -131,7 +129,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(sal_False, falscher Dispatcher);
+            OSL_FAIL("wrong dispatcher");
             return;
     }
     if(bUpdateList)
@@ -142,4 +140,4 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
     }
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

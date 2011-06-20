@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include <mmconfigitem.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
@@ -60,9 +59,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using ::rtl::OUString;
 
-/*-- 19.04.2004 12:19:50---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwAddressControl_Impl : public Control
 {
     ScrollBar                       m_aScrollBar;
@@ -100,9 +96,6 @@ public:
     void        SetCursorTo(sal_uInt32 nElement);
 };
 
-/*-- 13.04.2004 10:09:42---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, const ResId& rResId ) :
     Control(pParent, rResId),
 #ifdef MSC
@@ -126,9 +119,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, const ResId& rResI
     m_aScrollBar.EnableDrag();
 
 }
-/*-- 13.04.2004 10:09:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddressControl_Impl::~SwAddressControl_Impl()
 {
     ::std::vector<FixedText*>::iterator aTextIter;
@@ -138,9 +129,7 @@ SwAddressControl_Impl::~SwAddressControl_Impl()
     for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
         delete *aEditIter;
 }
-/*-- 19.04.2004 12:22:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 {
     m_pData = &rDBData;
@@ -189,7 +178,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     Link aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
     Edit* pLastEdit = 0;
     sal_Int32 nVisibleLines = 0;
-    sal_Int32 nLines = 0;
+    sal_uIntPtr nLines = 0;
     for(aHeaderIter = m_pData->aDBColumnHeaders.begin();
                 aHeaderIter != m_pData->aDBColumnHeaders.end();
                 ++aHeaderIter, nEDYPos += m_nLineHeight, nFTYPos += m_nLineHeight, nLines++)
@@ -238,23 +227,21 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 
     }
 }
-/*-- 21.04.2004 11:37:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
 {
     if(m_bNoDataSet || m_nCurrentDataSet != nSet)
     {
         m_bNoDataSet = false;
         m_nCurrentDataSet = nSet;
-        DBG_ASSERT(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
+        OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index");
         if(m_pData->aDBData.size() > m_nCurrentDataSet)
         {
             ::std::vector<Edit*>::iterator aEditIter;
             sal_uInt32 nIndex = 0;
             for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter, ++nIndex)
             {
-                DBG_ASSERT(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
+                OSL_ENSURE(nIndex < m_pData->aDBData[m_nCurrentDataSet].size(),
                             "number of colums doesn't match number of Edits");
                 (*aEditIter)->SetText(m_pData->aDBData[m_nCurrentDataSet][nIndex]);
             }
@@ -262,9 +249,6 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
     }
 }
 
-/*-- 19.04.2004 14:17:50---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll)
 {
     long nThumb = pScroll->GetThumbPos();
@@ -272,9 +256,7 @@ IMPL_LINK(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll)
 
     return 0;
 }
-/*-- 19.04.2004 16:16:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressControl_Impl, GotFocusHdl_Impl, Edit*, pEdit)
 {
     if(0 != (GETFOCUS_TAB & pEdit->GetGetFocusFlags()))
@@ -284,9 +266,7 @@ IMPL_LINK(SwAddressControl_Impl, GotFocusHdl_Impl, Edit*, pEdit)
     }
     return 0;
 }
-/*-- 21.04.2004 14:56:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
 {
     long nThumb = m_aScrollBar.GetThumbPos();
@@ -307,24 +287,21 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
         ScrollHdl_Impl(&m_aScrollBar);
     }
 }
-/*-- 19.04.2004 16:16:25---------------------------------------------------
-    copy data changes into database
-  -----------------------------------------------------------------------*/
+
+// copy data changes into database
 IMPL_LINK(SwAddressControl_Impl, EditModifyHdl_Impl, Edit*, pEdit)
 {
     //get the data element number of the current set
     sal_Int32 nIndex = (sal_Int32)(sal_IntPtr)pEdit->GetData();
     //get the index of the set
-    DBG_ASSERT(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
+    OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
     if(m_pData->aDBData.size() > m_nCurrentDataSet)
     {
         m_pData->aDBData[m_nCurrentDataSet][nIndex] = pEdit->GetText();
     }
     return 0;
 }
-/*-- 21.04.2004 14:51:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressControl_Impl::SetCursorTo(sal_uInt32 nElement)
 {
     if(nElement < m_aEdits.size())
@@ -336,9 +313,7 @@ void SwAddressControl_Impl::SetCursorTo(sal_uInt32 nElement)
     }
 
 }
-/*-- 19.04.2004 16:16:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressControl_Impl::Command( const CommandEvent& rCEvt )
 {
     switch ( rCEvt.GetCommand() )
@@ -358,9 +333,7 @@ void SwAddressControl_Impl::Command( const CommandEvent& rCEvt )
             Control::Command(rCEvt);
     }
 }
-/*-- 19.04.2004 16:16:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType() == EVENT_COMMAND)
@@ -375,9 +348,7 @@ long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     return Control::PreNotify(rNEvt);
 }
-/*-- 13.04.2004 10:08:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwCreateAddressListDialog::SwCreateAddressListDialog(
         Window* pParent, const String& rURL, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CREATEADDRESSLIST)),
@@ -452,7 +423,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 for( xub_StrLen nToken = 0; nToken < nHeaders; ++nToken)
                 {
                     String sHeader = sLine.GetToken( 0, '\t', nIndex );
-                    DBG_ASSERT(sHeader.Len() > 2 &&
+                    OSL_ENSURE(sHeader.Len() > 2 &&
                             sHeader.GetChar(0) == '\"' && sHeader.GetChar(sHeader.Len() - 1) == '\"',
                             "Wrong format of header");
                     if(sHeader.Len() > 2)
@@ -470,7 +441,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 for( xub_StrLen nToken = 0; nToken < nDataCount; ++nToken)
                 {
                     String sData = sLine.GetToken( 0, '\t', nIndex );
-                    DBG_ASSERT(sData.Len() >= 2 &&
+                    OSL_ENSURE(sData.Len() >= 2 &&
                                 sData.GetChar(0) == '\"' && sData.GetChar(sData.Len() - 1) == '\"',
                             "Wrong format of line");
                     if(sData.Len() >= 2)
@@ -500,19 +471,14 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
     UpdateButtons();
 }
-/*-- 13.04.2004 10:08:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwCreateAddressListDialog::~SwCreateAddressListDialog()
 {
     delete m_pAddressControl;
     delete m_pCSVData;
     delete m_pFindDlg;
 }
-/*-- 13.04.2004 10:08:59---------------------------------------------------
-    add a new data set of empty strings and set the address input control
-    to that new set
-  -----------------------------------------------------------------------*/
+
 IMPL_LINK(SwCreateAddressListDialog, NewHdl_Impl, PushButton*, EMPTYARG)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
@@ -528,9 +494,7 @@ IMPL_LINK(SwCreateAddressListDialog, NewHdl_Impl, PushButton*, EMPTYARG)
     UpdateButtons();
     return 0;
 }
-/*-- 13.04.2004 10:09:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
@@ -552,9 +516,7 @@ IMPL_LINK(SwCreateAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
     UpdateButtons();
     return 0;
 }
-/*-- 13.04.2004 10:09:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAddressListDialog, FindHdl_Impl, PushButton*, EMPTYARG)
 {
     if(!m_pFindDlg)
@@ -572,9 +534,7 @@ IMPL_LINK(SwCreateAddressListDialog, FindHdl_Impl, PushButton*, EMPTYARG)
         m_pFindDlg->Show(!m_pFindDlg->IsVisible());
     return 0;
 }
-/*-- 13.04.2004 10:09:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
 {
     SwCustomizeAddressListDialog* pDlg = new SwCustomizeAddressListDialog(pButton, *m_pCSVData);
@@ -600,10 +560,7 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
     }
     return 0;
 }
-/*-- 23.04.2004 09:02:51---------------------------------------------------
-    writes the data into a .csv file
-    encoding is UTF8, separator is tab, strings are enclosed into "
-  -----------------------------------------------------------------------*/
+
 IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, EMPTYARG)
 {
     if(!m_sURL.Len())
@@ -677,9 +634,7 @@ IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, EMPTYARG)
 
     return 0;
 }
-/*-- 13.04.2004 10:09:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, PushButton*, pButton)
 {
     sal_uInt32 nValue = static_cast< sal_uInt32 >(m_aSetNoNF.GetValue());
@@ -705,18 +660,14 @@ IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, PushButton*, pButton)
     }
     return 0;
 }
-/*-- 21.04.2004 12:06:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCreateAddressListDialog, DBNumCursorHdl_Impl, NumericField*, EMPTYARG)
 {
     m_pAddressControl->SetCurrentDataSet( static_cast< sal_uInt32 >(m_aSetNoNF.GetValue() - 1) );
     UpdateButtons();
     return 0;
 }
-/*-- 21.04.2004 13:22:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwCreateAddressListDialog::UpdateButtons()
 {
     sal_uInt32 nCurrent = static_cast< sal_uInt32 >(m_aSetNoNF.GetValue() );
@@ -727,9 +678,7 @@ void SwCreateAddressListDialog::UpdateButtons()
     m_aEndPB.Enable(nCurrent != nSize);
     m_aDeletePB.Enable(nSize > 0);
 }
-/*-- 21.04.2004 13:22:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
 {
     OUString sSearch = rSearch;
@@ -774,9 +723,7 @@ void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
         m_pAddressControl->SetCursorTo(nElement);
     }
 }
-/*-- 13.04.2004 13:48:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent) :
     ModelessDialog(pParent, SW_RES(DLG_MM_FIND_ENTRY)),
 #ifdef MSC
@@ -799,15 +746,11 @@ SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent) :
     m_aFindED.SetModifyHdl(LINK(this, SwFindEntryDialog, FindEnableHdl_Impl));
     m_aCancel.SetClickHdl(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
 }
-/*-- 13.04.2004 13:48:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwFindEntryDialog::~SwFindEntryDialog()
 {
 }
-/*-- 21.04.2004 13:37:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwFindEntryDialog, FindHdl_Impl, PushButton*, EMPTYARG)
 {
     sal_Int32 nColumn = -1;
@@ -817,19 +760,17 @@ IMPL_LINK(SwFindEntryDialog, FindHdl_Impl, PushButton*, EMPTYARG)
         m_pParent->Find(m_aFindED.GetText(), nColumn);
     return 0;
 }
-/*-- 21.04.2004 13:37:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwFindEntryDialog, FindEnableHdl_Impl, Edit*, EMPTYARG)
 {
     m_aFindPB.Enable(m_aFindED.GetText().Len() > 0);
     return 0;
 }
-/*-- 21.04.2004 15:36:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwFindEntryDialog, CloseHdl_Impl, PushButton*, EMPTYARG)
 {
     Show(sal_False);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

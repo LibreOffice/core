@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,12 +43,12 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
 #include <tools/gen.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svl/itemset.hxx>
 
 #include <editeng/editobj.hxx>
@@ -60,16 +61,15 @@
 
 #include "accessibility.hxx"
 #include <applicat.hxx>
+#include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
 
-using namespace rtl;
+using rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
-
-#define A2OU(cChar)  rtl::OUString::createFromAscii(cChar)
 
 //////////////////////////////////////////////////////////////////////
 
@@ -121,8 +121,7 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     nClientId           (0),
     pWin                (pGraphicWin)
 {
-    DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
-    //++aRefCount;
+    OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
 }
 
 
@@ -131,21 +130,13 @@ SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
     aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
     nClientId           (0)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     pWin = rSmAcc.pWin;
-    DBG_ASSERT( pWin, "SmGraphicAccessible: window missing" );
-    //++aRefCount;
+    OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
 }
 
 
 SmGraphicAccessible::~SmGraphicAccessible()
 {
-/*
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (--aRefCount == 0)
-    {
-    }
-*/
 }
 
 
@@ -194,7 +185,7 @@ void SmGraphicAccessible::LaunchEvent(
 uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessibleContext()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return this;
 }
 
@@ -204,7 +195,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
     //! the arguments coordinates are relativ to the current window !
     //! Thus the top-left point is (0, 0)
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -217,7 +208,7 @@ uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAtPoint
         const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     XAccessible *pRes = 0;
     if (containsPoint( aPoint ))
         pRes = this;
@@ -227,10 +218,10 @@ uno::Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleAtPoint
 awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetBounds( pWin );
 }
@@ -238,10 +229,10 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getBounds()
 awt::Point SAL_CALL SmGraphicAccessible::getLocation()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     return awt::Point( aRect.X, aRect.Y );
@@ -250,10 +241,10 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocation()
 awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetLocationOnScreen( pWin );
 }
@@ -261,17 +252,17 @@ awt::Point SAL_CALL SmGraphicAccessible::getLocationOnScreen()
 awt::Size SAL_CALL SmGraphicAccessible::getSize()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
 #if OSL_DEBUG_LEVEL > 1
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
-    DBG_ASSERT( aSz == aSz2, "mismatch in width" );
+    OSL_ENSURE( aSz == aSz2, "mismatch in width" );
 #endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }
@@ -279,7 +270,7 @@ awt::Size SAL_CALL SmGraphicAccessible::getSize()
 void SAL_CALL SmGraphicAccessible::grabFocus()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -289,7 +280,7 @@ void SAL_CALL SmGraphicAccessible::grabFocus()
 sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -299,7 +290,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getForeground()
 sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -315,7 +306,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getBackground()
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleChildCount()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 0;
 }
 
@@ -323,27 +314,26 @@ Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleChild(
         sal_Int32 /*i*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     throw IndexOutOfBoundsException();  // there is no child...
-    /*return 0;*/
 }
 
 Reference< XAccessible > SAL_CALL SmGraphicAccessible::getAccessibleParent()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
     Window *pAccParent = pWin->GetAccessibleParentWindow();
-    DBG_ASSERT( pAccParent, "accessible parent missing" );
+    OSL_ENSURE( pAccParent, "accessible parent missing" );
     return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
     Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
@@ -359,14 +349,14 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getAccessibleIndexInParent()
 sal_Int16 SAL_CALL SmGraphicAccessible::getAccessibleRole()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return AccessibleRole::DOCUMENT;
 }
 
 OUString SAL_CALL SmGraphicAccessible::getAccessibleDescription()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SmDocShell *pDoc = GetDoc_Impl();
     return pDoc ? OUString(pDoc->GetText()) : OUString();
 }
@@ -374,14 +364,14 @@ OUString SAL_CALL SmGraphicAccessible::getAccessibleDescription()
 OUString SAL_CALL SmGraphicAccessible::getAccessibleName()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return aAccName;
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleRelationSet()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
     return xRelSet;   // empty relation set
 }
@@ -389,7 +379,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SmGraphicAccessible::getAccessibleR
 Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStateSet()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::utl::AccessibleStateSetHelper *pStateSet =
             new ::utl::AccessibleStateSetHelper;
 
@@ -399,9 +389,6 @@ Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStat
         pStateSet->AddState( AccessibleStateType::DEFUNC );
     else
     {
-        //pStateSet->AddState( AccessibleStateType::EDITABLE );
-        //pStateSet->AddState( AccessibleStateType::HORIZONTAL );
-        //pStateSet->AddState( AccessibleStateType::TRANSIENT );
         pStateSet->AddState( AccessibleStateType::ENABLED );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         if (pWin->HasFocus())
@@ -422,7 +409,7 @@ Reference< XAccessibleStateSet > SAL_CALL SmGraphicAccessible::getAccessibleStat
 Locale SAL_CALL SmGraphicAccessible::getLocale()
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // should be the document language...
     // We use the language of the localized symbol names here.
     return Application::GetSettings().GetUILocale();
@@ -435,7 +422,7 @@ void SAL_CALL SmGraphicAccessible::addEventListener(
 {
     if (xListener.is())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         if (pWin)
         {
             if (!nClientId)
@@ -451,7 +438,7 @@ void SAL_CALL SmGraphicAccessible::removeEventListener(
 {
     if (xListener.is())
     {
-        vos::OGuard aGuard(Application::GetSolarMutex());
+        SolarMutexGuard aGuard;
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
         if ( !nListenerCount )
         {
@@ -468,16 +455,17 @@ void SAL_CALL SmGraphicAccessible::removeEventListener(
 sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return 0;
 }
 
 sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
+    SolarMutexGuard aGuard;
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
-    if (!(/*0 <= nIdx  &&*/  nIdx < aTxt.Len()))
+    if (!(nIdx < aTxt.Len()))
         throw IndexOutOfBoundsException();
     return sal_False;
 }
@@ -485,11 +473,11 @@ sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
 sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     String aTxt( GetAccessibleText_Impl() );
-    if (!(/*0 <= nIdx  &&*/  nIdx < aTxt.Len()))
+    if (!(nIdx < aTxt.Len()))
         throw IndexOutOfBoundsException();
     return aTxt.GetChar( nIdx );
 }
@@ -499,7 +487,7 @@ Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttri
         const uno::Sequence< ::rtl::OUString > & /*rRequestedAttributes*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nLen = GetAccessibleText_Impl().Len();
     if (!(0 <= nIndex  &&  nIndex < nLen))
         throw IndexOutOfBoundsException();
@@ -509,7 +497,7 @@ Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttri
 awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     awt::Rectangle aRes;
 
@@ -523,10 +511,10 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         if (!pDoc)
             throw RuntimeException();
         String aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // #108812# aTxt.Len() is valid
+        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // aTxt.Len() is valid
             throw IndexOutOfBoundsException();
 
-        // #108812# find a reasonable rectangle for position aTxt.Len().
+        // find a reasonable rectangle for position aTxt.Len().
         bool bWasBehindText = (nIndex == aTxt.Len());
         if (bWasBehindText && nIndex)
             --nIndex;
@@ -538,8 +526,8 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         if (pNode)
         {
             sal_Int32 nAccIndex = pNode->GetAccessibleIndex();
-            DBG_ASSERT( nAccIndex >= 0, "invalid accessible index" );
-            DBG_ASSERT( nIndex >= nAccIndex, "index out of range" );
+            OSL_ENSURE( nAccIndex >= 0, "invalid accessible index" );
+            OSL_ENSURE( nIndex >= nAccIndex, "index out of range" );
 
             String    aNodeText;
             pNode->GetAccessibleText( aNodeText );
@@ -549,8 +537,6 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
                 // get appropriate rectangle
                 Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
                 Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
-//                aTLPos.X() -= pNode->GetItalicLeftSpace();
-//                Size  aSize (pNode->GetItalicSize());
                 aTLPos.X() -= 0;
                 Size  aSize (pNode->GetSize());
 
@@ -574,7 +560,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             }
         }
 
-        // #108812# take rectangle from last character and move it to the right
+        // take rectangle from last character and move it to the right
         if (bWasBehindText)
             aRes.X += aRes.Width;
     }
@@ -585,14 +571,14 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
 sal_Int32 SAL_CALL SmGraphicAccessible::getCharacterCount()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return GetAccessibleText_Impl().Len();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int32 nRes = -1;
     if (pWin)
@@ -617,9 +603,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
         {
             // get appropriate rectangle
             Point   aOffset( pNode->GetTopLeft() - pTree->GetTopLeft() );
-            Point   aTLPos ( /*pWin->GetFormulaDrawPos() +*/ aOffset );
-//            aTLPos.X() -= pNode->GetItalicLeftSpace();
-//            Size  aSize( pNode->GetItalicSize() );
+            Point   aTLPos ( aOffset );
             aTLPos.X() -= 0;
             Size  aSize( pNode->GetSize() );
 #if OSL_DEBUG_LEVEL > 1
@@ -630,10 +614,10 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
             Rectangle aRect( aTLPos, aSize );
             if (aRect.IsInside( aPos ))
             {
-                DBG_ASSERT( pNode->IsVisible(), "node is not a leaf" );
+                OSL_ENSURE( pNode->IsVisible(), "node is not a leaf" );
                 String aTxt;
                 pNode->GetAccessibleText( aTxt );
-                DBG_ASSERT( aTxt.Len(), "no accessible text available" );
+                OSL_ENSURE( aTxt.Len(), "no accessible text available" );
 
                 long nNodeX = pNode->GetLeft();
 
@@ -646,8 +630,8 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
                         nRes = i;
                 }
                 delete[] pXAry;
-                DBG_ASSERT( nRes >= 0  &&  nRes < aTxt.Len(), "index out of range" );
-                DBG_ASSERT( pNode->GetAccessibleIndex() >= 0,
+                OSL_ENSURE( nRes >= 0  &&  nRes < aTxt.Len(), "index out of range" );
+                OSL_ENSURE( pNode->GetAccessibleIndex() >= 0,
                         "invalid accessible index" );
 
                 nRes = pNode->GetAccessibleIndex() + nRes;
@@ -660,21 +644,21 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
 OUString SAL_CALL SmGraphicAccessible::getSelectedText()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return OUString();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionStart()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return -1;
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getSelectionEnd()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return -1;
 }
 
@@ -683,7 +667,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
         sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nLen = GetAccessibleText_Impl().Len();
     if (!(0 <= nStartIndex  &&  nStartIndex < nLen) ||
         !(0 <= nEndIndex    &&  nEndIndex   < nLen))
@@ -694,7 +678,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
 OUString SAL_CALL SmGraphicAccessible::getText()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return GetAccessibleText_Impl();
 }
 
@@ -707,23 +691,23 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     //!! text should be copied exclusive that end index though. And arguments
     //!! may be switched.
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nStart = (xub_StrLen) Min(nStartIndex, nEndIndex);
     xub_StrLen nEnd   = (xub_StrLen) Max(nStartIndex, nEndIndex);
-    if (!(/*0 <= nStart  &&*/  nStart <= aTxt.Len()) ||
-        !(/*0 <= nEnd    &&*/  nEnd   <= aTxt.Len()))
+    if (!(nStart <= aTxt.Len()) ||
+        !(nEnd   <= aTxt.Len()))
         throw IndexOutOfBoundsException();
     return aTxt.Copy( nStart, nEnd - nStart );
 }
 
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
+    if (!(nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -740,11 +724,11 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
+    if (!(nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -762,11 +746,11 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     String aTxt( GetAccessibleText_Impl() );
     xub_StrLen nIdx = (xub_StrLen) nIndex;
     //!! nIndex is allowed to be the string length
-    if (!(/*0 <= nIdx  &&*/  nIdx <= aTxt.Len()))
+    if (!(nIdx <= aTxt.Len()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
@@ -788,7 +772,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
         sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Bool bReturn = sal_False;
 
     if (!pWin)
@@ -820,7 +804,6 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
 OUString SAL_CALL SmGraphicAccessible::getImplementationName()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return A2OU("SmGraphicAccessible");
 }
 
@@ -828,7 +811,6 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" ) ||
@@ -838,7 +820,6 @@ sal_Bool SAL_CALL SmGraphicAccessible::supportsService(
 Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(4);
     OUString *pNames = aNames.getArray();
     pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );
@@ -867,7 +848,6 @@ SmEditSource::SmEditSource( const SmEditSource &rSrc ) :
     aEditViewFwd(rSrc.rEditAcc),
     rEditAcc    (rSrc.rEditAcc)
 {
-    //aBroadCaster;     can be completely new
 }
 
 SmEditSource::~SmEditSource()
@@ -1038,7 +1018,7 @@ String SmTextForwarder::GetText( const ESelection& rSel ) const
 SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    OSL_ENSURE( pEditEngine, "EditEngine missing" );
     if( rSel.nStartPara == rSel.nEndPara )
     {
         sal_uInt8 nFlags = 0;
@@ -1054,7 +1034,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHa
             nFlags = GETATTRIBS_CHARATTRIBS;
             break;
         default:
-            DBG_ERROR("unknown flags for SmTextForwarder::GetAttribs");
+            OSL_FAIL("unknown flags for SmTextForwarder::GetAttribs");
         }
 
         return pEditEngine->GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
@@ -1068,7 +1048,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, sal_Bool bOnlyHa
 SfxItemSet SmTextForwarder::GetParaAttribs( sal_uInt16 nPara ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    OSL_ENSURE( pEditEngine, "EditEngine missing" );
 
     SfxItemSet aSet( pEditEngine->GetParaAttribs( nPara ) );
 
@@ -1188,8 +1168,8 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
         // get list of char attribs
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        sal_Bool bEmpty = sal_True;     // we found no item inside the selektion of this paragraph
-        sal_Bool bGaps  = sal_False;    // we found items but theire gaps between them
+        bool bEmpty = true;     // we found no item inside the selektion of this paragraph
+        bool bGaps  = false;    // we found items but theire gaps between them
         sal_uInt16 nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
@@ -1197,7 +1177,7 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
         for( sal_uInt16 nAttrib = 0; nAttrib < aAttribs.Count(); nAttrib++ )
         {
             struct EECharAttrib aAttrib = aAttribs.GetObject( nAttrib );
-            DBG_ASSERT( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
+            OSL_ENSURE( aAttrib.pAttr, "GetCharAttribs gives corrupt data" );
 
             const sal_Bool bEmptyPortion = aAttrib.nStart == aAttrib.nEnd;
             if( (!bEmptyPortion && (aAttrib.nStart >= nEndPos)) || (bEmptyPortion && (aAttrib.nStart > nEndPos)) )
@@ -1222,55 +1202,16 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
             }
 
             if( bEmpty )
-                bEmpty = sal_False;
+                bEmpty = false;
 
             if( !bGaps && aAttrib.nStart > nLastEnd )
-                bGaps = sal_True;
+                bGaps = true;
 
             nLastEnd = aAttrib.nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
-            bGaps = sal_True;
-/*
-        // since we have no portion with our item or if there were gaps
-        if( bEmpty || bGaps )
-        {
-            // we need to check the paragraph item
-            const SfxItemSet& rParaSet = rEditEngine.GetParaAttribs( nPara );
-            if( rParaSet.GetItemState( nWhich ) == SFX_ITEM_SET )
-            {
-                eState = SFX_ITEM_SET;
-                // get item from the paragraph
-                const SfxPoolItem* pTempItem = rParaSet.GetItem( nWhich );
-                if( pParaItem )
-                {
-                    if( *pParaItem != *pTempItem )
-                        return SFX_ITEM_DONTCARE;
-                }
-                else
-                {
-                    pParaItem = pTempItem;
-                }
-
-                // set if theres no last item or if its the same
-                eParaState = SFX_ITEM_SET;
-            }
-            else if( bEmpty )
-            {
-                eParaState = SFX_ITEM_DEFAULT;
-            }
-            else if( bGaps )
-            {
-                // gaps and item not set in paragraph, thats a dont care
-                return SFX_ITEM_DONTCARE;
-            }
-        }
-        else
-        {
-            eParaState = SFX_ITEM_SET;
-        }
-*/
+            bGaps = true;
         if( bEmpty )
             eParaState = SFX_ITEM_DEFAULT;
         else if( bGaps )
@@ -1345,7 +1286,7 @@ Rectangle SmTextForwarder::GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) 
 
     if (pEditEngine)
     {
-        // #108900# Handle virtual position one-past-the end of the string
+        // Handle virtual position one-past-the end of the string
         if( nIndex >= pEditEngine->GetTextLen(nPara) )
         {
             if( nIndex )
@@ -1708,8 +1649,7 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     pTextHelper         (0),
     pWin                (pEditWin)
 {
-    DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
-    //++aRefCount;
+    OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
 }
 
 
@@ -1717,26 +1657,18 @@ SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
     SmEditAccessibleBaseClass(),
     aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) )
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     pWin = rSmAcc.pWin;
-    DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
-    //++aRefCount;
+    OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
 }
 
 SmEditAccessible::~SmEditAccessible()
 {
     delete pTextHelper;
-/*
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    if (--aRefCount == 0)
-    {
-    }
-*/
 }
 
 void SmEditAccessible::Init()
 {
-    DBG_ASSERT( pWin, "SmEditAccessible: window missing" );
+    OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
     if (pWin)
     {
         EditEngine *pEditEngine = pWin->GetEditEngine();
@@ -1751,17 +1683,9 @@ void SmEditAccessible::Init()
     }
 }
 
-#ifdef TL_NOT_YET_USED
-SmDocShell * SmEditAccessible::GetDoc_Impl()
-{
-    SmViewShell *pView = pWin ? pWin->GetView() : 0;
-    return pView ? pView->GetDoc() : 0;
-}
-#endif // TL_NOT_YET_USED
-
 void SmEditAccessible::ClearWin()
 {
-    // #112565# remove handler before current object gets destroyed
+    // remove handler before current object gets destroyed
     // (avoid handler being called for already dead object)
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
@@ -1781,7 +1705,7 @@ void SmEditAccessible::ClearWin()
 uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleContext(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return this;
 }
 
@@ -1792,7 +1716,7 @@ sal_Bool SAL_CALL SmEditAccessible::containsPoint( const awt::Point& aPoint )
     //! the arguments coordinates are relativ to the current window !
     //! Thus the top left-point is (0, 0)
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -1804,7 +1728,7 @@ sal_Bool SAL_CALL SmEditAccessible::containsPoint( const awt::Point& aPoint )
 uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleAtPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pTextHelper)
         throw RuntimeException();
     return pTextHelper->GetAt( aPoint );
@@ -1813,10 +1737,10 @@ uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleAtPoint( c
 awt::Rectangle SAL_CALL SmEditAccessible::getBounds(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetBounds( pWin );
 }
@@ -1824,10 +1748,10 @@ awt::Rectangle SAL_CALL SmEditAccessible::getBounds(  )
 awt::Point SAL_CALL SmEditAccessible::getLocation(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     return awt::Point( aRect.X, aRect.Y );
@@ -1836,10 +1760,10 @@ awt::Point SAL_CALL SmEditAccessible::getLocation(  )
 awt::Point SAL_CALL SmEditAccessible::getLocationOnScreen(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
     return lcl_GetLocationOnScreen( pWin );
 }
@@ -1847,17 +1771,17 @@ awt::Point SAL_CALL SmEditAccessible::getLocationOnScreen(  )
 awt::Size SAL_CALL SmEditAccessible::getSize(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
-    DBG_ASSERT(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
+    OSL_ENSURE(pWin->GetParent()->GetAccessible() == getAccessibleParent(),
             "mismatch of window parent and accessible parent" );
 
     Size aSz( pWin->GetSizePixel() );
 #if OSL_DEBUG_LEVEL > 1
     awt::Rectangle aRect( lcl_GetBounds( pWin ) );
     Size aSz2( aRect.Width, aRect.Height );
-    DBG_ASSERT( aSz == aSz2, "mismatch in width" );
+    OSL_ENSURE( aSz == aSz2, "mismatch in width" );
 #endif
     return awt::Size( aSz.Width(), aSz.Height() );
 }
@@ -1865,7 +1789,7 @@ awt::Size SAL_CALL SmEditAccessible::getSize(  )
 void SAL_CALL SmEditAccessible::grabFocus(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
@@ -1875,7 +1799,7 @@ void SAL_CALL SmEditAccessible::grabFocus(  )
 sal_Int32 SAL_CALL SmEditAccessible::getForeground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -1885,7 +1809,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getForeground()
 sal_Int32 SAL_CALL SmEditAccessible::getBackground()
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!pWin)
         throw RuntimeException();
@@ -1902,7 +1826,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getBackground()
 sal_Int32 SAL_CALL SmEditAccessible::getAccessibleChildCount(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pTextHelper)
         throw RuntimeException();
     return pTextHelper->GetChildCount();
@@ -1911,7 +1835,7 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleChildCount(  )
 uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleChild( sal_Int32 i )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pTextHelper)
         throw RuntimeException();
     return pTextHelper->GetChild( i );
@@ -1920,19 +1844,19 @@ uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleChild( sal
 uno::Reference< XAccessible > SAL_CALL SmEditAccessible::getAccessibleParent(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if (!pWin)
         throw RuntimeException();
 
     Window *pAccParent = pWin->GetAccessibleParentWindow();
-    DBG_ASSERT( pAccParent, "accessible parent missing" );
+    OSL_ENSURE( pAccParent, "accessible parent missing" );
     return pAccParent ? pAccParent->GetAccessible() : Reference< XAccessible >();
 }
 
 sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     sal_Int32 nIdx = -1;
     Window *pAccParent = pWin ? pWin->GetAccessibleParentWindow() : 0;
     if (pAccParent)
@@ -1948,21 +1872,21 @@ sal_Int32 SAL_CALL SmEditAccessible::getAccessibleIndexInParent(  )
 sal_Int16 SAL_CALL SmEditAccessible::getAccessibleRole(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return AccessibleRole::PANEL /*TEXT ?*/;
 }
 
 rtl::OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return OUString();  // empty as agreed with product-management
 }
 
 rtl::OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // same name as displayed by the window when not docked
     return aAccName;
 }
@@ -1970,7 +1894,7 @@ rtl::OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
 uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibleRelationSet(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Reference< XAccessibleRelationSet > xRelSet = new utl::AccessibleRelationSetHelper();
     return xRelSet;   // empty relation set
 }
@@ -1978,7 +1902,7 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL SmEditAccessible::getAccessibl
 uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleStateSet(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     ::utl::AccessibleStateSetHelper *pStateSet =
             new ::utl::AccessibleStateSetHelper;
 
@@ -1988,10 +1912,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
         pStateSet->AddState( AccessibleStateType::DEFUNC );
     else
     {
-        //pStateSet->AddState( AccessibleStateType::EDITABLE );
         pStateSet->AddState( AccessibleStateType::MULTI_LINE );
-        //pStateSet->AddState( AccessibleStateType::HORIZONTAL );
-        //pStateSet->AddState( AccessibleStateType::TRANSIENT );
         pStateSet->AddState( AccessibleStateType::ENABLED );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         if (pWin->HasFocus())
@@ -2012,7 +1933,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SmEditAccessible::getAccessibleSt
 Locale SAL_CALL SmEditAccessible::getLocale(  )
     throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     // should be the document language...
     // We use the language of the localized symbol names here.
     return Application::GetSettings().GetUILocale();
@@ -2023,14 +1944,13 @@ Locale SAL_CALL SmEditAccessible::getLocale(  )
 void SAL_CALL SmEditAccessible::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());   if (pTextHelper)   // not disposing (about to destroy view shell)
+    if (pTextHelper)   // not disposing (about to destroy view shell)
         pTextHelper->AddEventListener( xListener );
 }
 
 void SAL_CALL SmEditAccessible::removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
    if (pTextHelper)   // not disposing (about to destroy view shell)
         pTextHelper->RemoveEventListener( xListener );
 }
@@ -2038,7 +1958,6 @@ void SAL_CALL SmEditAccessible::removeEventListener( const uno::Reference< XAcce
 OUString SAL_CALL SmEditAccessible::getImplementationName()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return A2OU("SmEditAccessible");
 }
 
@@ -2046,7 +1965,6 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
         const OUString& rServiceName )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     return  rServiceName == A2OU( "com::sun::star::accessibility::Accessible" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleComponent" ) ||
             rServiceName == A2OU( "com::sun::star::accessibility::AccessibleContext" );
@@ -2055,7 +1973,6 @@ sal_Bool SAL_CALL SmEditAccessible::supportsService(
 Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< OUString > aNames(3);
     OUString *pNames = aNames.getArray();
     pNames[0] = A2OU( "com::sun::star::accessibility::Accessible" );
@@ -2066,3 +1983,4 @@ Sequence< OUString > SAL_CALL SmEditAccessible::getSupportedServiceNames()
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,22 +30,12 @@
 
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-
-/*-----------------22.02.97 15.06-------------------
-
---------------------------------------------------*/
 class SwInsertAbstractDlg  : public SfxModalDialog
 {
     FixedLine       aFL;
@@ -71,3 +62,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

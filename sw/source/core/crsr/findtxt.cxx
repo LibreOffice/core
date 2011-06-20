@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -162,7 +163,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                        }
                        break;
                    default:
-                    ASSERT( false, "unknown case in lcl_CleanStr" )
+                    OSL_FAIL( "unknown case in lcl_CleanStr" );
                     break;
                 }
             }
@@ -434,7 +435,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     bool bRemoveSoftHyphens = true;
     if ( bRegSearch )
     {
-        const rtl::OUString a00AD( rtl::OUString::createFromAscii( "\\x00AD" ) );
+        const rtl::OUString a00AD(RTL_CONSTASCII_USTRINGPARAM("\\x00AD"));
         if ( -1 != rSearchOpt.searchString.indexOf( a00AD ) )
              bRemoveSoftHyphens = false;
     }
@@ -586,10 +587,6 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
     sal_Bool bFnd = (sal_Bool)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
-    /*   #i80135# if we found something in a note, Mark and Point is the same
-    if( bFnd && *pCrsr->GetMark() == *pCrsr->GetPoint() )
-        return FIND_NOT_FOUND;
-    */
 
     if( bFnd && bReplace )          // String ersetzen ??
     {
@@ -713,3 +710,4 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

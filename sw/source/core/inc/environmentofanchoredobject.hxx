@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,6 @@ namespace objectpositioning
         public:
             /** construtor
 
-                OD 05.11.2003
-
-                @author OD
-
                 @param _bFollowTextFlow
                 input parameter - indicates, if the anchored object, for which
                 this environment is instantiated, follow the text flow or not
@@ -51,17 +48,12 @@ namespace objectpositioning
             SwEnvironmentOfAnchoredObject( const bool _bFollowTextFlow );
 
             /** destructor
-
-                OD 05.11.2003
-
-                @author OD
             */
             ~SwEnvironmentOfAnchoredObject();
 
             /** determine environment layout frame for possible horizontal object
                 positions respectively for alignment to 'page areas'
 
-                OD 05.11.2003
                 this is, if object has to follow the text flow:
                 - cell frame, if anchored inside a cell
                 - fly frame, if anchored inside a fly frame
@@ -69,10 +61,8 @@ namespace objectpositioning
 
                 this is, if object hasn't to follow the text flow:
                 - page frame.
-                OD 2005-01-20 #118546# - no exception any more. Thus remove
+                - no exception any more. Thus remove
                 parameter <_bForPageAlignment>
-
-                @author OD
 
                 @param _rHoriOrientFrm
                 input parameter - frame, at which the horizontal position is
@@ -87,7 +77,6 @@ namespace objectpositioning
             /** determine environment layout frame for possible vertical object
                 positions respectively for alignments to 'page areas'
 
-                OD 05.11.2003
                 this is, if object has to follow the text flow:
                 - cell frame, if anchored inside a cell
                 - fly frame, if anchored inside a fly frame
@@ -97,10 +86,8 @@ namespace objectpositioning
 
                 this is, if object hasn't to follow the text flow:
                 - page frame.
-                OD 2005-01-20 #118546# - no exception any more. Thus remove
+                - no exception any more. Thus remove
                 parameter <_bForPageAlignment>
-
-                @author OD
 
                 @param _rVertOrientFrm
                 input parameter - frame, at which the vertical position is
@@ -115,3 +102,5 @@ namespace objectpositioning
 } // namespace objectpositioning
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

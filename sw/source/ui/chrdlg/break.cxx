@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,33 +36,21 @@
 
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <uitool.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <break.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 
-#ifndef _BREAK_HRC
 #include <break.hrc>
-#endif
-#ifndef _CHRDLG_HRC
 #include <chrdlg.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 
 void SwBreakDlg::Apply()
@@ -83,7 +72,6 @@ void SwBreakDlg::Apply()
     }
 }
 
-
 IMPL_LINK_INLINE_START( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 {
     CheckEnable();
@@ -92,7 +80,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, ClickHdl, void *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler fuer Aendern Seitenummer
+ Description:   Handler for Change Page Number
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
@@ -104,7 +92,7 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Durch Aendern der Seitennummer wird die Checkbox gecheckt.
+ Description:   By changing the Page number the checkbox is checked.
 ------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
@@ -115,18 +103,18 @@ IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  Ok-Handler;
-                prueft, ob die Seitenummer nPage eine legale Seitennummer
-                ist (linke Seiten mit geraden Nummern etc. bei einer Seitenvorlage
-                mit wechselnden Seiten)
+ Description:   Ok-Handler;
+                checks whether pagenumber nPage is a legal pagenumber
+                (left pages with even numbers etc. for a page template
+                with alternating pages)
 ------------------------------------------------------------------------*/
 
 IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
 {
     if(aPageNumBox.IsChecked()) {
-            // wenn unterschiedliche Seitenvorlagen, testen auf Gueltigkeit
+        // In case of differing page descriptions, test validity
         const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
-            // auf Position 0 steht 'Ohne'.
+        // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( aPageCollBox.GetSelectEntry(),
@@ -134,7 +122,7 @@ IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
-        ASSERT(pPageDesc, Seitenvorlage nicht gefunden.);
+        OSL_ENSURE(pPageDesc, "Page description not found.");
         const sal_uInt16 nUserPage = sal_uInt16(aPageNumEdit.GetValue());
         sal_Bool bOk = sal_True;
         switch(pPageDesc->GetUseOn())
@@ -192,7 +180,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageNumEdit.SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
 
 
-    // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
+    // Insert page description to Listbox
     const sal_uInt16 nCount = rSh.GetPageDescCnt();
     sal_uInt16 i;
 
@@ -215,7 +203,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageNumEdit.SetText( aEmptyStr );
     FreeResource();
 }
-
 
 void SwBreakDlg::CheckEnable()
 {
@@ -241,7 +228,7 @@ void SwBreakDlg::CheckEnable()
     bEnable &= bPage;
     if ( bEnable )
     {
-        // auf Position 0 steht 'Ohne' Seitenvorlage.
+        // position 0 says 'Without' page template.
         const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
             bEnable = sal_False;
@@ -253,3 +240,5 @@ void SwBreakDlg::CheckEnable()
 SwBreakDlg::~SwBreakDlg()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

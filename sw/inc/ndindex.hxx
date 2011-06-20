@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@ class SW_DLLPUBLIC SwNodeIndex
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
     friend void SwNodes::RemoveNode( sal_uLong, sal_uLong, sal_Bool );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static int nSerial;
     int MySerial;
 #endif
@@ -51,9 +52,9 @@ class SW_DLLPUBLIC SwNodeIndex
     SwNode* pNd;
     SwNodeIndex *pNext, *pPrev;
 
-    void Remove();                  // Ausketten
+    void Remove();
 
-    // diese sind nicht erlaubt!
+    // These are not allowed!
     SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx );
     SwNodeIndex( SwNodes& rNds, int nIdx );
 
@@ -65,10 +66,8 @@ public:
 
     inline sal_uLong operator++();
     inline sal_uLong operator--();
-#ifndef CFRONT
     inline sal_uLong operator++(int);
     inline sal_uLong operator--(int);
-#endif
 
     inline sal_uLong operator+=( sal_uLong );
     inline sal_uLong operator-=( sal_uLong );
@@ -93,23 +92,22 @@ public:
            SwNodeIndex& operator=( const SwNodeIndex& );
            SwNodeIndex& operator=( const SwNode& );
 
-    // gebe den Wert vom Index als sal_uLong zurueck
+    // Return value of index as sal_uLong.
     inline sal_uLong GetIndex() const;
 
-    // ermoeglicht Zuweisungen ohne Erzeugen eines temporaeren Objektes
+    // Enables assignments without creation of a temporary object.
     SwNodeIndex& Assign( SwNodes& rNds, sal_uLong );
     SwNodeIndex& Assign( const SwNode& rNd, long nOffset = 0 );
 
-        // Herausgabe des Pointers auf das NodesArray,
+    // Gets pointer on NodesArray.
     inline const SwNodes& GetNodes() const;
     inline       SwNodes& GetNodes();
 
     SwNode& GetNode() const { return *pNd; }
 };
 
-/*
- * SwRange
- */
+// SwRange
+
 class SW_DLLPUBLIC SwNodeRange
 {
 public:
@@ -129,9 +127,8 @@ public:
 
 
 
-// fuer die inlines wird aber der node.hxx benoetigt. Dieses braucht aber
-// auch wieder dieses. Also alle Inlines, die auf pNd zugreifen werden
-// hier implementiert.
+// For inlines node.hxx is needed which in turn needs this one.
+// Therefore all inlines accessing pNd are implemented here.
 
 inline sal_uLong SwNodeIndex::GetIndex() const
 {
@@ -202,7 +199,6 @@ inline sal_uLong SwNodeIndex::operator--()
 {
     return ( pNd = GetNodes()[ pNd->GetIndex()-1 ] )->GetIndex();
 }
-#ifndef CFRONT
 inline sal_uLong SwNodeIndex::operator++(int)
 {
     sal_uLong nOldIndex = pNd->GetIndex();
@@ -215,7 +211,6 @@ inline sal_uLong SwNodeIndex::operator--(int)
     pNd = GetNodes()[ nOldIndex - 1 ];
     return nOldIndex;
 }
-#endif
 
 inline sal_uLong SwNodeIndex::operator+=( sal_uLong nWert )
 {
@@ -241,3 +236,5 @@ inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong nWert )
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

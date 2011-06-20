@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,18 +39,14 @@
 #include <sfx2/imgmgr.hxx>
 #include <vcl/wrkwin.hxx>
 #include "toolbox.hxx"
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
-#ifndef _TOOLBOX_HRC_
 #include "toolbox.hrc"
-#endif
 #include "view.hxx"
 
 
 ////////////////////////////////////////////////////////////
 
-static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID, sal_Bool bHighContrast )
+static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID )
 {
     sal_uInt16 nRes = 0xFFFF;
     switch (nCategoryRID)
@@ -64,10 +61,8 @@ static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID, sal_Bool bHighContr
         case RID_FORMAT_CAT         : nRes = RID_IL_FORMAT; break;
         case RID_MISC_CAT           : nRes = RID_IL_MISC; break;
         default :
-            DBG_ERROR( "unkown category" );
+            OSL_FAIL( "unkown category" );
     }
-    if (nRes != 0xFFFF && bHighContrast)
-        ++nRes;     //! the resource ID for the high contrast image list is just +1 compared to the regular ones
     return nRes;
 }
 
@@ -98,29 +93,20 @@ static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
     sal_uInt16 nRes = 0xFFFF;
     switch (nResId)
     {
-        case RID_IL_UNBINOPS        :
-        case RID_ILH_UNBINOPS       : nRes = RID_UNBINOPS_CAT; break;
-        case RID_IL_RELATIONS       :
-        case RID_ILH_RELATIONS      : nRes = RID_RELATIONS_CAT; break;
-        case RID_IL_SETOPERATIONS   :
-        case RID_ILH_SETOPERATIONS  : nRes = RID_SETOPERATIONS_CAT; break;
-        case RID_IL_FUNCTIONS       :
-        case RID_ILH_FUNCTIONS      : nRes = RID_FUNCTIONS_CAT; break;
-        case RID_IL_OPERATORS       :
-        case RID_ILH_OPERATORS      : nRes = RID_OPERATORS_CAT; break;
-        case RID_IL_ATTRIBUTES      :
-        case RID_ILH_ATTRIBUTES     : nRes = RID_ATTRIBUTES_CAT; break;
-        case RID_IL_BRACKETS        :
-        case RID_ILH_BRACKETS       : nRes = RID_BRACKETS_CAT; break;
-        case RID_IL_FORMAT          :
-        case RID_ILH_FORMAT         : nRes = RID_FORMAT_CAT; break;
-        case RID_IL_MISC            :
-        case RID_ILH_MISC           : nRes = RID_MISC_CAT; break;
+        case RID_IL_UNBINOPS       : nRes = RID_UNBINOPS_CAT; break;
+        case RID_IL_RELATIONS      : nRes = RID_RELATIONS_CAT; break;
+        case RID_IL_SETOPERATIONS  : nRes = RID_SETOPERATIONS_CAT; break;
+        case RID_IL_FUNCTIONS      : nRes = RID_FUNCTIONS_CAT; break;
+        case RID_IL_OPERATORS      : nRes = RID_OPERATORS_CAT; break;
+        case RID_IL_ATTRIBUTES     : nRes = RID_ATTRIBUTES_CAT; break;
+        case RID_IL_BRACKETS       : nRes = RID_BRACKETS_CAT; break;
+        case RID_IL_FORMAT         : nRes = RID_FORMAT_CAT; break;
+        case RID_IL_MISC           : nRes = RID_MISC_CAT; break;
         default :
-            if (nResId != RID_IL_CATALOG  &&  nResId != RID_ILH_CATALOG)
+            if (nResId != RID_IL_CATALOG)
             {
 #if OSL_DEBUG_LEVEL > 1
-                DBG_ERROR( "unkown category" );
+                OSL_FAIL( "unkown category" );
 #endif
             }
     }
@@ -157,10 +143,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     pToolBoxCmd = vToolBoxCategories[0];
 
     for (i = 0;  i <= NUM_TBX_CATEGORIES; ++i)
-    {
         aImageLists [i] = 0;
-        aImageListsH[i] = 0;
-    }
 
     FreeResource();
 }
@@ -174,10 +157,7 @@ SmToolBoxWindow::~SmToolBoxWindow()
         delete pBox;
     }
     for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
-    {
         delete aImageLists[i];
-        delete aImageListsH[i];
-    }
 }
 
 
@@ -188,7 +168,7 @@ SmViewShell * SmToolBoxWindow::GetView()
 }
 
 
-const ImageList * SmToolBoxWindow::GetImageList( sal_uInt16 nResId, sal_Bool bHighContrast )
+const ImageList * SmToolBoxWindow::GetImageList( sal_uInt16 nResId )
 {
     // creates the image list via its resource id and stores that
     // list for later use in the respective array.
@@ -198,37 +178,35 @@ const ImageList * SmToolBoxWindow::GetImageList( sal_uInt16 nResId, sal_Bool bHi
     // get index to use
     sal_uInt16 nCategoryRID = GetCategoryRID( nResId );
     sal_Int16 nIndex = GetToolBoxCategoriesIndex( nCategoryRID );
-    if (nIndex == -1 && (nResId == RID_IL_CATALOG || nResId == RID_ILH_CATALOG))
+    if (nIndex == -1 && (nResId == RID_IL_CATALOG))
         nIndex = NUM_TBX_CATEGORIES;
 
     if (nIndex >= 0)
     {
-        ImageList **pImgList = bHighContrast ? aImageListsH : aImageLists;
+        ImageList **pImgList = aImageLists;
         if (!pImgList[ nIndex ])
             pImgList[ nIndex ] = new ImageList( SmResId(nResId) );
         pIL = pImgList[ nIndex ];
     }
 
-    DBG_ASSERT( pIL, "image list not found!" );
+    OSL_ENSURE( pIL, "image list not found!" );
     return pIL;
 }
 
 
 void SmToolBoxWindow::ApplyImageLists( sal_uInt16 nCategoryRID )
 {
-    sal_Bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
     // set image list for toolbox 'catalog'
-    const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );
-    DBG_ASSERT( pImageList, "image list missing" );
+    const ImageList *pImageList = GetImageList( RID_IL_CATALOG );
+    OSL_ENSURE( pImageList, "image list missing" );
     if (pImageList)
         aToolBoxCat.SetImageList( *pImageList );
 
     // set image list for active (visible) category of 'catalog'
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-    sal_uInt16 nResId = GetImageListRID( nCategoryRID, bHighContrast );
-    pImageList = GetImageList( nResId, bHighContrast );
-    DBG_ASSERT( pImageList && nIdx >= 0, "image list or index missing" );
+    sal_uInt16 nResId = GetImageListRID( nCategoryRID );
+    pImageList = GetImageList( nResId );
+    OSL_ENSURE( pImageList && nIdx >= 0, "image list or index missing" );
     if (pImageList && nIdx >= 0)
         vToolBoxCategories[ nIdx ]->SetImageList( *pImageList );
 }
@@ -243,25 +221,25 @@ void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
 
 void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    static sal_Bool bSetPosition = sal_True;
+    static bool bSetPosition = true;
     if (STATE_CHANGE_INITSHOW == nStateChange)
     {
         SetCategory( nActiveCategoryRID == USHRT_MAX ? RID_UNBINOPS_CAT : nActiveCategoryRID );
 
         // calculate initial position to be used after creation of the window...
         AdjustPosSize( bSetPosition );
-        bSetPosition = sal_False;
+        bSetPosition = false;
     }
     //... otherwise the base class will remember the last position of the window
     SfxFloatingWindow::StateChanged( nStateChange );
 }
 
 
-void SmToolBoxWindow::AdjustPosSize( sal_Bool bSetPos )
+void SmToolBoxWindow::AdjustPosSize( bool bSetPos )
 {
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
     Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 4 /* see nLines in SetCategory*/ ) );
-    DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
+    OSL_ENSURE( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
 
     // catalog settings
     aToolBoxCat.SetPosPixel( Point(0, 3) );
@@ -285,7 +263,7 @@ void SmToolBoxWindow::AdjustPosSize( sal_Bool bSetPos )
     if (bSetPos)
     {
         SmViewShell *pView = GetView();
-        DBG_ASSERT( pView, "view shell missing" );
+        OSL_ENSURE( pView, "view shell missing" );
         Point aPos( 50, 75 );
         if (pView)
         {
@@ -308,8 +286,8 @@ sal_Bool SmToolBoxWindow::Close()
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_TOOLBOX, SFX_CALLMODE_STANDARD,
-                new SfxBoolItem(SID_TOOLBOX, sal_False), 0L);
-    return sal_True;
+                new SfxBoolItem(SID_TOOLBOX, false), 0L);
+    return true;
 }
 
 void SmToolBoxWindow::GetFocus()
@@ -345,22 +323,22 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
     pToolBoxCmd->Hide();
 
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-    DBG_ASSERT( nIdx >= 0, "unkown category" );
+        OSL_ENSURE( nIdx >= 0, "unkown category" );
     if (nIdx >= 0)
         pToolBoxCmd = vToolBoxCategories[nIdx];
 
     // calculate actual size of window to use
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
     Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( nLines ) );
-    DBG_ASSERT( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
+        OSL_ENSURE( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
     // main window settings
     Size  aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + aCmdSize.Height() + 3);
     SetOutputSizePixel( aWndSize );
 
     if (nActiveCategoryRID)
-        aToolBoxCat.CheckItem(nActiveCategoryRID, sal_False);
+            aToolBoxCat.CheckItem(nActiveCategoryRID, false);
     nActiveCategoryRID = nCategoryRID;
-    aToolBoxCat.CheckItem(nActiveCategoryRID, sal_True);
+        aToolBoxCat.CheckItem(nActiveCategoryRID, true);
 
     pToolBoxCmd->Show();
 }
@@ -402,3 +380,4 @@ SmToolBoxWrapper::SmToolBoxWrapper(Window *pParentWindow,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

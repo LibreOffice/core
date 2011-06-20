@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,14 +28,12 @@
 #ifndef _PRCNTFLD_HXX
 #define _PRCNTFLD_HXX
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include "swdllapi.h"
 
 class SW_DLLPUBLIC PercentField : public MetricField
 {
-    sal_Int64   nRefValue;      // 100%-Wert fuer Umrechnung (in Twips)
+    sal_Int64   nRefValue;      // 100% value for conversion (in Twips)
     sal_Int64   nOldMax;
     sal_Int64   nOldMin;
     sal_Int64   nOldSpinSize;
@@ -97,3 +96,4 @@ public:
 
 #endif // _PRCNTFLD_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
         GetDoc()->SplitNode( *pPos, false );
     }
 
-    /* #109161# If called from a shell the adjust item is propagated
+    /* If called from a shell the adjust item is propagated
         from pPos to the new content nodes in the table.
      */
     const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
@@ -451,9 +452,8 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
             const SwTableNode* pChkNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
             if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                 bNew == pChkNd->GetTable().IsNewModel() &&
-                // --> FME 2004-09-17 #117418# Consider table in table case
+                // Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
-                // <--
                 *pChkNxtPrv = sal_True, bRet = sal_True;        // mit Prev ist moeglich
             else
             {
@@ -470,10 +470,9 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
             if( bWithPrev )
             {
                 pTmpTblNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
-                // --> FME 2004-09-17 #117418# Consider table in table case
+                // Consider table in table case
                 if ( pTmpTblNd && pTmpTblNd->EndOfSectionIndex() != pTblNd->GetIndex() - 1 )
                     pTmpTblNd = 0;
-                // <--
             }
             else
                 pTmpTblNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
@@ -491,3 +490,4 @@ void SwEditShell::AppendUndoForInsertFromDB( sal_Bool bIsTable )
     GetDoc()->AppendUndoForInsertFromDB( *GetCrsr(), bIsTable );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

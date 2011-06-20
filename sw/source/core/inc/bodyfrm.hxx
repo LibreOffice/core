@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,11 @@ protected:
 public:
     SwBodyFrm( SwFrmFmt*, SwFrm* );
 
+    virtual void Paint( const SwRect&, const SwPrintData *pPrintData = NULL ) const;
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };
 
 #endif  //_BODYFRM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

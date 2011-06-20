@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,7 @@
 using namespace ::com::sun::star;
 
 
-// --> OD 2004-11-22 #117958#
 #include <svx/sdr/properties/defaultproperties.hxx>
-// <--
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -83,9 +82,6 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 /*************************************************************************
 |*
 |*  SwFlyDrawObj::Ctor
-|*
-|*  Ersterstellung      MA 18. Apr. 95
-|*  Letzte Aenderung    MA 28. May. 96
 |*
 *************************************************************************/
 
@@ -131,14 +127,13 @@ namespace sdr
 
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
-    // --> OD 2004-11-22 #117958# - create default properties
+    // create default properties
     return new sdr::properties::DefaultProperties(*this);
-    // <--
 }
 
 sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
 {
-    // #i95264# needs an own VC since createViewIndependentPrimitive2DSequence()
+    // needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
     return new sdr::contact::VCOfSwFlyDrawObj(*this);
 }
@@ -155,24 +150,21 @@ SwFlyDrawObj::~SwFlyDrawObj()
 |*
 |*  SwFlyDrawObj::Factory-Methoden
 |*
-|*  Ersterstellung      MA 23. Feb. 95
-|*  Letzte Aenderung    MA 23. Feb. 95
-|*
 *************************************************************************/
 
-sal_uInt32 __EXPORT SwFlyDrawObj::GetObjInventor() const
+sal_uInt32 SwFlyDrawObj::GetObjInventor() const
 {
     return SWGInventor;
 }
 
 
-sal_uInt16 __EXPORT SwFlyDrawObj::GetObjIdentifier()    const
+sal_uInt16 SwFlyDrawObj::GetObjIdentifier() const
 {
     return SwFlyDrawObjIdentifier;
 }
 
 
-sal_uInt16 __EXPORT SwFlyDrawObj::GetObjVersion() const
+sal_uInt16 SwFlyDrawObj::GetObjVersion() const
 {
     return SwDrawFirst;
 }
@@ -180,9 +172,6 @@ sal_uInt16 __EXPORT SwFlyDrawObj::GetObjVersion() const
 /*************************************************************************
 |*
 |*  SwVirtFlyDrawObj::CToren, Dtor
-|*
-|*  Ersterstellung      MA 08. Dec. 94
-|*  Letzte Aenderung    MA 28. May. 96
 |*
 *************************************************************************/
 
@@ -438,7 +427,7 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
 }
 
 
-__EXPORT SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
+SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
     if ( GetPage() )    //Der SdrPage die Verantwortung entziehen.
         GetPage()->RemoveObject( GetOrdNum() );
@@ -447,9 +436,6 @@ __EXPORT SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 /*************************************************************************
 |*
 |*  SwVirtFlyDrawObj::GetFmt()
-|*
-|*  Ersterstellung      MA 08. Dec. 94
-|*  Letzte Aenderung    MA 08. Dec. 94
 |*
 *************************************************************************/
 
@@ -467,9 +453,6 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 /*************************************************************************
 |*
 |*  SwVirtFlyDrawObj::Paint()
-|*
-|*  Ersterstellung      MA 20. Dec. 94
-|*  Letzte Aenderung    MA 18. Dec. 95
 |*
 *************************************************************************/
 
@@ -491,8 +474,7 @@ namespace
                     if ( pMetaFile &&
                          pMetaFile->IsRecord() && !pMetaFile->IsPause() )
                     {
-                        ASSERT( false,
-                                "MapMode restoration during meta file creation is somehow suspect - using <SetRelativeMapMode(..)>, but not sure, if correct." )
+                        OSL_FAIL( "MapMode restoration during meta file creation is somehow suspect - using <SetRelativeMapMode(..)>, but not sure, if correct." );
                         mpOutDev->SetRelativeMapMode( pViewShell->getPrePostMapMode() );
                     }
                     else
@@ -560,12 +542,9 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 |*
 |*  SwVirtFlyDrawObj::TakeObjInfo()
 |*
-|*  Ersterstellung      MA 03. May. 95
-|*  Letzte Aenderung    MA 03. May. 95
-|*
 *************************************************************************/
 
-void __EXPORT SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
+void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
     rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
     rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = sal_True;
@@ -582,9 +561,6 @@ void __EXPORT SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) con
 |*
 |*  SwVirtFlyDrawObj::Groessenermittlung
 |*
-|*  Ersterstellung      MA 12. Jan. 95
-|*  Letzte Aenderung    MA 10. Nov. 95
-|*
 *************************************************************************/
 
 void SwVirtFlyDrawObj::SetRect() const
@@ -596,38 +572,38 @@ void SwVirtFlyDrawObj::SetRect() const
 }
 
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetCurrentBoundRect() const
+const Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
     SetRect();
     return aOutRect;
 }
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLastBoundRect() const
+const Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
 {
     return GetCurrentBoundRect();
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::RecalcBoundRect()
+void SwVirtFlyDrawObj::RecalcBoundRect()
 {
     SetRect();
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::RecalcSnapRect()
+void SwVirtFlyDrawObj::RecalcSnapRect()
 {
     SetRect();
 }
 
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetSnapRect()  const
+const Rectangle& SwVirtFlyDrawObj::GetSnapRect()  const
 {
     SetRect();
     return aOutRect;
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
+void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
 {
     Rectangle aTmp( GetLastBoundRect() );
     SetRect();
@@ -638,20 +614,20 @@ void __EXPORT SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
+void SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
 {
     SetRect();
 }
 
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLogicRect() const
+const Rectangle& SwVirtFlyDrawObj::GetLogicRect() const
 {
     SetRect();
     return aOutRect;
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
+void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
 {
     Rectangle aTmp( GetLastBoundRect() );
     SetRect();
@@ -662,7 +638,7 @@ void __EXPORT SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
+void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 {
     SetRect();
 }
@@ -683,12 +659,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 |*
 |*  SwVirtFlyDrawObj::Move() und Resize()
 |*
-|*  Ersterstellung      MA 12. Jan. 95
-|*  Letzte Aenderung    MA 26. Jul. 96
-|*
 *************************************************************************/
 
-void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
+void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
     MoveRect( aOutRect, rSiz );
     const Point aOldPos( GetFlyFrm()->Frm().Pos() );
@@ -835,7 +808,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
+void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const Fraction& xFact, const Fraction& yFact)
 {
     ResizeRect( aOutRect, rRef, xFact, yFact );
@@ -943,7 +916,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::Move(const Size& rSiz)
+void SwVirtFlyDrawObj::Move(const Size& rSiz)
 {
     NbcMove( rSiz );
     SetChanged();
@@ -951,7 +924,7 @@ void __EXPORT SwVirtFlyDrawObj::Move(const Size& rSiz)
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::Resize(const Point& rRef,
+void SwVirtFlyDrawObj::Resize(const Point& rRef,
                     const Fraction& xFact, const Fraction& yFact)
 {
     NbcResize( rRef, xFact, yFact );
@@ -960,14 +933,14 @@ void __EXPORT SwVirtFlyDrawObj::Resize(const Point& rRef,
 }
 
 
-Pointer  __EXPORT SwVirtFlyDrawObj::GetMacroPointer(
+Pointer  SwVirtFlyDrawObj::GetMacroPointer(
     const SdrObjMacroHitRec& ) const
 {
     return Pointer( POINTER_REFHAND );
 }
 
 
-FASTBOOL __EXPORT SwVirtFlyDrawObj::HasMacro() const
+bool SwVirtFlyDrawObj::HasMacro() const
 {
     const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
     return rURL.GetMap() || rURL.GetURL().Len();
@@ -1023,3 +996,5 @@ SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

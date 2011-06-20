@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -84,13 +85,11 @@ class SwTxtFrm: public SwCntntFrm
     // OD 2004-03-17 #i11860# - re-factoring of #i11859#
     // member for height of last line (value needed for proportional line spacing)
     SwTwips mnHeightOfLastLine;
-    // --> OD 2008-01-31 #newlistlevelattrs#
     // member for the additional first line offset, which is caused by the list
     // label alignment for list level position and space mode LABEL_ALIGNMENT.
     // This additional first line offset is used for the text formatting.
     // It is NOT used for the determination of printing area.
     SwTwips mnAdditionalFirstLineOffset;
-    // <--
 
 
     xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
@@ -404,10 +403,10 @@ public:
     inline sal_Bool IsSwapped() const { return bIsSwapped; }
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
-#ifndef DBG_UTIL
-    void CalcFtnFlag();
+#if OSL_DEBUG_LEVEL > 1
+    void CalcFtnFlag( xub_StrLen nStop = STRING_LEN );//For testing SplitFrm
 #else
-    void CalcFtnFlag( xub_StrLen nStop = STRING_LEN );//Fuer den Test von SplitFrm
+    void CalcFtnFlag();
 #endif
 
     // Hidden
@@ -460,12 +459,11 @@ public:
     SwTxtFrm *FindQuoVadisFrm();
 
     // holt die Formatierug nach, wenn der Idle-Handler zugeschlagen hat.
-    // --> FME 2004-10-29 #i29062# GetFormatted() can trigger a full formatting
+    // #i29062# GetFormatted() can trigger a full formatting
     // of the paragraph, causing other layout frames to become invalid. This
     // has to be avoided during painting. Therefore we need to pass the
     // information that we are currently in the paint process.
     SwTxtFrm* GetFormatted( bool bForceQuickFormat = false );
-    // <--
 
     // wird demnaechst uebertragen
     inline void SetFtn( const sal_Bool bNew ) { bFtn = bNew; }
@@ -504,18 +502,14 @@ public:
         line offset for the real text formatting due to the value of label
         adjustment attribute of the list level.
 
-        OD 2008-01-31 #newlistlevelattrs#
-
         @author OD
     */
     void CalcAdditionalFirstLineOffset();
 
-    // --> OD 2008-01-31 #newlistlevelattrs#
     inline SwTwips GetAdditionalFirstLineOffset() const
     {
         return mnAdditionalFirstLineOffset;
     }
-    // <--
 
     // liefert den zusaetzlichen Zeilenabstand fuer den naechsten Absatz
     // OD 07.01.2004 #i11859# - change return data type;
@@ -614,6 +608,8 @@ public:
     }
 
     static void repaintTextFrames( const SwTxtNode& rNode );
+
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
 };
 
 /*************************************************************************
@@ -740,47 +736,6 @@ inline void SwTxtFrm::ResetBlinkPor() const
     ((SwTxtFrm*)this)->bBlinkPor = sal_False;
 }
 
-#ifdef LINGU_STATISTIK
-
-class SwLinguStatistik
-{
-public:
-    long nWords;    // gepruefte Worte
-    long nFlushCnt; // zaehlt die Messungen
-
-    long nWrong;  // als falsch erkannt
-    long nAlter;  // Alternativvorschlaege
-    long nSpellTime; // Zeitmessung
-    long nSynonym; // Thesaurus
-    long nNoSynonym; // Thesaurus ratlos
-    long nMeaning; // Thesaurus-Bedeutung
-    long nNoMeaning; // Thesaurus meinungslos
-    long nTheTime; // Zeitmessung
-    long nHyphens; // Trennstellen
-    long nNoHyph; // Worte ohne Trennstellen
-    long nHyphErr; // Fehler beim Trennen
-    long nHyphTime; // Zeitmessung
-    SpellCheck *pSpell;
-    LanguageType eLang;
-
-    void Flush();
-
-    inline SwLinguStatistik()
-        { nWords = nWrong = nAlter = nSynonym = nNoSynonym =
-          nHyphens = nNoHyph = nHyphErr = nSpellTime = nTheTime =
-          nHyphTime = nFlushCnt = 0;
-          pSpell = NULL;
-          eLang = LANGUAGE_DONTKNOW; }
-    inline ~SwLinguStatistik(){ Flush(); }
-};
-
-// globale Variable, implementiert in txtfrm.cxx
-extern SwLinguStatistik aSwLinguStat;
-
-#define SW_LING(nWhich,nInc) (aSwLinguStat.nWhich) += nInc;
-
-#endif
-
 #define SWAP_IF_SWAPPED( pFrm )\
     sal_Bool bUndoSwap = sal_False;   \
     if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
@@ -833,3 +788,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

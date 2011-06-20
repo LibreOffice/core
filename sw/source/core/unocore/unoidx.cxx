@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,16 +37,9 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
-#include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/text/ChapterFormat.hpp>
-#include <com/sun/star/text/ReferenceFieldPart.hpp>
-#include <com/sun/star/text/BibliographyDataField.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <hints.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -71,12 +65,12 @@
 #include <chpfld.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <unoevtlstnr.hxx>
+#include <comphelper/servicehelper.hxx>
 
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-//-----------------------------------------------------------------------------
 static OUString
 lcl_AnyToString(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
@@ -87,7 +81,7 @@ lcl_AnyToString(uno::Any const& rVal) throw (lang::IllegalArgumentException)
     }
     return sRet;
 }
-//-----------------------------------------------------------------------------
+
 static sal_Int16
 lcl_AnyToInt16(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
@@ -98,7 +92,7 @@ lcl_AnyToInt16(uno::Any const& rVal) throw (lang::IllegalArgumentException)
     }
     return nRet;
 }
-//-----------------------------------------------------------------------------
+
 static sal_Bool
 lcl_AnyToBool(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
@@ -119,6 +113,7 @@ throw (lang::IllegalArgumentException)
         ? (rBitMask |  nBit)
         : (rBitMask & ~nBit);
 }
+
 static void
 lcl_BitMaskToAny(uno::Any & o_rValue,
         const sal_uInt16 nBitMask, const sal_uInt16 nBit)
@@ -127,7 +122,6 @@ lcl_BitMaskToAny(uno::Any & o_rValue,
     o_rValue <<= bRet;
 }
 
-//-----------------------------------------------------------------------------
 static void
 lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
 {
@@ -150,7 +144,7 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
 
     rTOXBase.RegisterToTOXType( *((SwTOXType*)pNewType) );
 }
-//-----------------------------------------------------------------------------
+
 static const char cUserDefined[] = "User-Defined";
 static const char cUserSuffix[] = " (user)";
 #define USER_LEN 12
@@ -171,7 +165,7 @@ void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
         rTmp += C2U(cUserSuffix);
     }
 }
-//-----------------------------------------------------------------------------
+
 static void
 lcl_ConvertTOUNameToUserName(OUString& rTmp)
 {
@@ -192,9 +186,6 @@ lcl_ConvertTOUNameToUserName(OUString& rTmp)
     }
 }
 
-/* -----------------13.09.99 16:39-------------------
-
- --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper2
 <   lang::XServiceInfo
 ,   container::XIndexReplace
@@ -240,9 +231,6 @@ public:
 
 };
 
-/* -----------------13.09.99 16:39-------------------
-
- --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper2
 <   lang::XServiceInfo
 ,   container::XIndexReplace
@@ -289,14 +277,9 @@ public:
 
 };
 
-
 /******************************************************************
  * SwXDocumentIndex
  ******************************************************************/
-
-/* -----------------20.06.98 11:06-------------------
- *
- * --------------------------------------------------*/
 class SwDocIndexDescriptorProperties_Impl
 {
 private:
@@ -310,9 +293,7 @@ public:
     const OUString& GetTypeName() const { return m_sUserTOXTypeName; }
     void  SetTypeName(const OUString& rSet) { m_sUserTOXTypeName = rSet; }
 };
-/* -----------------20.06.98 11:41-------------------
- *
- * --------------------------------------------------*/
+
 SwDocIndexDescriptorProperties_Impl::SwDocIndexDescriptorProperties_Impl(
         SwTOXType const*const pType)
 {
@@ -410,9 +391,6 @@ protected:
 
 };
 
-/*-- 14.12.98 09:35:07---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
@@ -423,26 +401,18 @@ void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *
     }
 }
 
-/*-- 14.12.98 09:35:03---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXDocumentIndex::SwXDocumentIndex(
         SwTOXBaseSection const& rBaseSection, SwDoc & rDoc)
     : m_pImpl( new SwXDocumentIndex::Impl( *this,
                 rDoc, rBaseSection.SwTOXBase::GetType(), & rBaseSection) )
 {
 }
-/* -----------------15.01.99 14:59-------------------
- *
- * --------------------------------------------------*/
+
 SwXDocumentIndex::SwXDocumentIndex(const TOXTypes eType, SwDoc& rDoc)
     : m_pImpl( new SwXDocumentIndex::Impl( *this, rDoc, eType, 0) )
 {
 }
 
-/*-- 14.12.98 09:35:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXDocumentIndex::~SwXDocumentIndex()
 {
 }
@@ -465,17 +435,16 @@ SwXDocumentIndex::CreateXDocumentIndex(
     return xIndex;
 }
 
-/* -----------------------------10.03.00 18:02--------------------------------
+namespace
+{
+    class theSwXDocumentIndexUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentIndexUnoTunnelId > {};
+}
 
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SwXDocumentIndex::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXDocumentIndexUnoTunnelId::get().getSeq();
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL
 SwXDocumentIndex::getSomething(const uno::Sequence< sal_Int8 >& rId)
 throw (uno::RuntimeException)
@@ -483,46 +452,39 @@ throw (uno::RuntimeException)
     return ::sw::UnoTunnelImpl<SwXDocumentIndex>(rId, this);
 }
 
-/* -----------------------------06.04.00 15:01--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SAL_CALL
 SwXDocumentIndex::getImplementationName() throw (uno::RuntimeException)
 {
     return C2U("SwXDocumentIndex");
 }
-/* -----------------------------06.04.00 15:01--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SAL_CALL
 SwXDocumentIndex::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return C2U("com.sun.star.text.BaseIndex") == rServiceName
         || ((TOX_INDEX == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.DocumentIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentIndex")))
         || ((TOX_CONTENT == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.ContentIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ContentIndex")))
         || ((TOX_USER == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.UserDefinedIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.UserDefinedIndex")))
         || ((TOX_ILLUSTRATIONS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.IllustrationsIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.IllustrationsIndex")))
         || ((TOX_TABLES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.TableIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TableIndex")))
         || ((TOX_OBJECTS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.ObjectIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ObjectIndex")))
         || ((TOX_AUTHORITIES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.Bibliography"));
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.Bibliography")));
 }
-/* -----------------------------06.04.00 15:01--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -554,13 +516,10 @@ SwXDocumentIndex::getSupportedServiceNames() throw (uno::RuntimeException)
     return aRet;
 }
 
-/*-- 14.12.98 09:35:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 OUString SAL_CALL SwXDocumentIndex::getServiceName()
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     sal_uInt16 nObjectType = SW_SERVICE_TYPE_INDEX;
     switch (m_pImpl->m_eTOXType)
@@ -584,12 +543,9 @@ throw (uno::RuntimeException)
     return SwXServiceProvider::GetProviderName(nObjectType);
 }
 
-/*-- 14.12.98 09:35:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pFmt = m_pImpl->GetSectionFmt();
     SwTOXBaseSection *const pTOXBase = (pFmt) ?
@@ -603,22 +559,16 @@ void SAL_CALL SwXDocumentIndex::update() throw (uno::RuntimeException)
     pTOXBase->UpdatePageNum();
 }
 
-/*-- 14.12.98 09:35:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXDocumentIndex::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     const uno::Reference< beans::XPropertySetInfo > xRef =
         m_pImpl->m_rPropSet.getPropertySetInfo();
     return xRef;
 }
 
-/*-- 14.12.98 09:35:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
@@ -626,7 +576,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SfxItemPropertySimpleEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
@@ -688,7 +638,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 throw lang::IllegalArgumentException();
             }
             lcl_ConvertTOUNameToUserName(sNewName);
-            DBG_ASSERT(TOX_USER == eTxBaseType,
+            OSL_ENSURE(TOX_USER == eTxBaseType,
                     "tox type name can only be changed for user indexes");
             if (pSectionFmt)
             {
@@ -736,7 +686,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_CREATE_FROM_OUTLINE:
             lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_OUTLINELEVEL);
         break;
-//          case WID_PARAGRAPH_STYLE_NAMES             :DBG_ERROR("not implemented")
+//          case WID_PARAGRAPH_STYLE_NAMES             :OSL_FAIL("not implemented")
 //          break;
         case WID_CREATE_FROM_CHAPTER:
             rTOXBase.SetFromChapter(lcl_AnyToBool(rValue));
@@ -936,15 +886,12 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
 }
 
-/*-- 14.12.98 09:35:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
     SfxItemPropertySimpleEntry const*const pEntry =
@@ -1275,9 +1222,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     return aRet;
 }
 
-/*-- 14.12.98 09:35:06---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::addPropertyChangeListener(
         const ::rtl::OUString& /*rPropertyName*/,
@@ -1285,8 +1229,7 @@ SwXDocumentIndex::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1296,8 +1239,7 @@ SwXDocumentIndex::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1307,8 +1249,7 @@ SwXDocumentIndex::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1318,18 +1259,14 @@ SwXDocumentIndex::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
 }
 
-/* -----------------18.02.99 13:39-------------------
- *
- * --------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -1387,13 +1324,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_bIsDescriptor = sal_False;
 }
 
-/*-- 15.01.99 14:23:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > SAL_CALL
 SwXDocumentIndex::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
     if (!pSectionFmt)
@@ -1416,9 +1350,6 @@ SwXDocumentIndex::getAnchor() throw (uno::RuntimeException)
     return xRet;
 }
 
-/*-- 15.01.99 15:46:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void lcl_RemoveChildSections(SwSectionFmt& rParentFmt)
 {
     SwSections aTmpArr;
@@ -1440,7 +1371,7 @@ void lcl_RemoveChildSections(SwSectionFmt& rParentFmt)
 
 void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
     if (pSectionFmt)
@@ -1451,15 +1382,12 @@ void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
     }
 }
 
-/*-- 15.01.99 15:46:49---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn())
     {
@@ -1467,15 +1395,13 @@ throw (uno::RuntimeException)
     }
     m_pImpl->m_ListenerContainer.AddListener(xListener);
 }
-/*-- 15.01.99 15:46:54---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -1484,12 +1410,9 @@ throw (uno::RuntimeException)
     }
 }
 
-/* -----------------30.07.99 11:28-------------------
-
- --------------------------------------------------*/
 OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     OUString uRet;
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );
@@ -1507,13 +1430,11 @@ OUString SAL_CALL SwXDocumentIndex::getName() throw (uno::RuntimeException)
     }
     return uRet;
 }
-/* -----------------30.07.99 11:28-------------------
 
- --------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::setName(const OUString& rName) throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!rName.getLength())
     {
@@ -1562,9 +1483,6 @@ uno::Reference<frame::XModel> SwXDocumentIndex::GetModel()
 /******************************************************************
  * SwXDocumentIndexMark
  ******************************************************************/
-/* -----------------21.04.99 09:36-------------------
- *
- * --------------------------------------------------*/
 static sal_uInt16
 lcl_TypeToPropertyMap_Mark(const TOXTypes eType)
 {
@@ -1647,7 +1565,7 @@ public:
         try {
             InsertTOXMark(rTOXType, rMark, rPam, 0);
         } catch (...) {
-            OSL_ENSURE(false, "ReplaceTOXMark() failed!");
+            OSL_FAIL("ReplaceTOXMark() failed!");
             m_ListenerContainer.Disposing();
             throw;
         }
@@ -1659,9 +1577,6 @@ protected:
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
-/* -----------------------------16.10.00 11:24--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwXDocumentIndexMark::Impl::Invalidate()
 {
     if (GetRegisteredIn())
@@ -1681,9 +1596,6 @@ void SwXDocumentIndexMark::Impl::Invalidate()
     m_pTOXMark = 0;
 }
 
-/*-- 14.12.98 10:25:47---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
@@ -1694,25 +1606,18 @@ void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolIt
     }
 }
 
-/*-- 14.12.98 10:25:43---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXDocumentIndexMark::SwXDocumentIndexMark(const TOXTypes eToxType)
     : m_pImpl( new SwXDocumentIndexMark::Impl(*this, 0, eToxType, 0, 0) )
 {
 }
-/*-- 14.12.98 10:25:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDocumentIndexMark::SwXDocumentIndexMark(SwDoc & rDoc,
                 SwTOXType & rType, SwTOXMark & rMark)
     : m_pImpl( new SwXDocumentIndexMark::Impl(*this, &rDoc, rType.GetType(),
                     &rType, &rMark) )
 {
 }
-/*-- 14.12.98 10:25:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDocumentIndexMark::~SwXDocumentIndexMark()
 {
 }
@@ -1735,17 +1640,16 @@ SwXDocumentIndexMark::CreateXDocumentIndexMark(
     return xTOXMark;
 }
 
-/* -----------------------------10.03.00 18:02--------------------------------
+namespace
+{
+    class theSwXDocumentIndexMarkUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentIndexMarkUnoTunnelId > {};
+}
 
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SwXDocumentIndexMark::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXDocumentIndexMarkUnoTunnelId::get().getSeq();
 }
-/* -----------------------------10.03.00 18:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int64 SAL_CALL
 SwXDocumentIndexMark::getSomething(const uno::Sequence< sal_Int8 >& rId)
 throw (uno::RuntimeException)
@@ -1760,22 +1664,17 @@ static const sal_Char cIdxMarkAsian[]  = "com.sun.star.text.DocumentIndexMarkAsi
 static const sal_Char cUserMark[]      = "com.sun.star.text.UserIndexMark";
 static const sal_Char cTextContent[]   = "com.sun.star.text.TextContent";
 
-/* -----------------------------06.04.00 15:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SAL_CALL
 SwXDocumentIndexMark::getImplementationName() throw (uno::RuntimeException)
 {
     return C2U("SwXDocumentIndexMark");
 }
-/* -----------------------------06.04.00 15:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SAL_CALL
 SwXDocumentIndexMark::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     return rServiceName.equalsAscii(cBaseMark)
         || rServiceName.equalsAscii(cTextContent)
@@ -1788,13 +1687,11 @@ throw (uno::RuntimeException)
         || ((m_pImpl->m_eTOXType == TOX_INDEX)
                 && rServiceName.equalsAscii(cIdxMarkAsian));
 }
-/* -----------------------------06.04.00 15:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     const sal_Int32 nCnt = (m_pImpl->m_eTOXType == TOX_INDEX) ? 4 : 3;
     uno::Sequence< OUString > aRet(nCnt);
@@ -1820,13 +1717,10 @@ SwXDocumentIndexMark::getSupportedServiceNames() throw (uno::RuntimeException)
     return aRet;
 }
 
-/*-- 14.12.98 10:25:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 OUString SAL_CALL
 SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sRet;
     SwTOXType *const pType = m_pImpl->GetTOXType();
@@ -1844,14 +1738,12 @@ SwXDocumentIndexMark::getMarkEntry() throw (uno::RuntimeException)
     }
     return sRet;
 }
-/*-- 14.12.98 10:25:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndexMark::setMarkEntry(const OUString& rIndexEntry)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
@@ -1881,15 +1773,12 @@ throw (uno::RuntimeException)
     }
 }
 
-/* -----------------18.02.99 13:40-------------------
- *
- * --------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndexMark::attach(
         const uno::Reference< text::XTextRange > & xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_bIsDescriptor)
     {
@@ -1954,7 +1843,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    //which must now return sal_True
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     SwTOXMark aMark (pTOXType);
     if (m_pImpl->m_sAltText.getLength())
@@ -2093,13 +1982,10 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     const_cast<SwTOXType &>(rTOXType).Add(& m_TypeDepend);
 }
 
-/*-- 14.12.98 10:25:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > SAL_CALL
 SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (!pType || !m_pImpl->m_pTOXMark)
@@ -2130,13 +2016,10 @@ SwXDocumentIndexMark::getAnchor() throw (uno::RuntimeException)
     return xRet;
 }
 
-/*-- 14.12.98 10:25:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXType *const pType = m_pImpl->GetTOXType();
     if (pType && m_pImpl->m_pTOXMark)
@@ -2144,15 +2027,13 @@ SwXDocumentIndexMark::dispose() throw (uno::RuntimeException)
         m_pImpl->DeleteTOXMark(); // call Invalidate() via modify!
     }
 }
-/*-- 14.12.98 10:25:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndexMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn())
     {
@@ -2160,15 +2041,13 @@ throw (uno::RuntimeException)
     }
     m_pImpl->m_ListenerContainer.AddListener(xListener);
 }
-/*-- 14.12.98 10:25:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndexMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!m_pImpl->GetRegisteredIn() ||
         !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
@@ -2177,13 +2056,10 @@ throw (uno::RuntimeException)
     }
 }
 
-/*-- 14.12.98 10:25:46---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXDocumentIndexMark::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     static uno::Reference< beans::XPropertySetInfo >  xInfos[3];
     int nPos = 0;
@@ -2209,9 +2085,6 @@ SwXDocumentIndexMark::getPropertySetInfo() throw (uno::RuntimeException)
     return xInfos[nPos];
 }
 
-/*-- 14.12.98 10:25:46---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndexMark::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
@@ -2219,7 +2092,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SfxItemPropertySimpleEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap()->getByName(rPropertyName);
@@ -2338,15 +2211,12 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
 }
 
-/*-- 14.12.98 10:25:46---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Any aRet;
     SfxItemPropertySimpleEntry const*const pEntry =
@@ -2448,9 +2318,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     return aRet;
 }
 
-/*-- 14.12.98 10:25:46---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndexMark::addPropertyChangeListener(
         const ::rtl::OUString& /*rPropertyName*/,
@@ -2458,8 +2325,7 @@ SwXDocumentIndexMark::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2469,8 +2335,7 @@ SwXDocumentIndexMark::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-    "SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2480,8 +2345,7 @@ SwXDocumentIndexMark::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2491,31 +2355,21 @@ SwXDocumentIndexMark::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-    "SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
 }
-
 
 /******************************************************************
  * SwXDocumentIndexes
  ******************************************************************/
-/*-- 05.05.99 13:14:59---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXDocumentIndexes::SwXDocumentIndexes(SwDoc *const _pDoc)
     : SwUnoCollection(_pDoc)
 {
 }
-/*-- 05.05.99 13:15:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDocumentIndexes::~SwXDocumentIndexes()
 {
 }
 
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SAL_CALL
 SwXDocumentIndexes::getImplementationName() throw (uno::RuntimeException)
 {
@@ -2526,8 +2380,9 @@ static char const*const g_ServicesDocumentIndexes[] =
 {
     "com.sun.star.text.DocumentIndexes",
 };
+
 static const size_t g_nServicesDocumentIndexes(
-    sizeof(g_ServicesDocumentIndexes)/sizeof(g_ServicesDocumentIndexes[0]));
+    SAL_N_ELEMENTS(g_ServicesDocumentIndexes));
 
 sal_Bool SAL_CALL
 SwXDocumentIndexes::supportsService(const OUString& rServiceName)
@@ -2544,13 +2399,10 @@ SwXDocumentIndexes::getSupportedServiceNames() throw (uno::RuntimeException)
         g_nServicesDocumentIndexes, g_ServicesDocumentIndexes);
 }
 
-/*-- 05.05.99 13:15:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int32 SAL_CALL
 SwXDocumentIndexes::getCount() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2569,15 +2421,12 @@ SwXDocumentIndexes::getCount() throw (uno::RuntimeException)
     return nRet;
 }
 
-/*-- 05.05.99 13:15:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXDocumentIndexes::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2604,15 +2453,12 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     throw lang::IndexOutOfBoundsException();
 }
 
-/*-- 31.01.00 10:12:31---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXDocumentIndexes::getByName(const OUString& rName)
 throw (container::NoSuchElementException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2638,13 +2484,10 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     throw container::NoSuchElementException();
 }
 
-/*-- 31.01.00 10:12:31---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2678,14 +2521,11 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException)
     return aRet;
 }
 
-/*-- 31.01.00 10:12:31---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SAL_CALL
 SwXDocumentIndexes::hasByName(const OUString& rName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(!IsValid())
         throw uno::RuntimeException();
@@ -2708,17 +2548,12 @@ throw (uno::RuntimeException)
     return sal_False;
 }
 
-/*-- 05.05.99 13:15:01---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL
 SwXDocumentIndexes::getElementType() throw (uno::RuntimeException)
 {
     return text::XDocumentIndex::static_type();
 }
-/*-- 05.05.99 13:15:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SAL_CALL
 SwXDocumentIndexes::hasElements() throw (uno::RuntimeException)
 {
@@ -2728,25 +2563,16 @@ SwXDocumentIndexes::hasElements() throw (uno::RuntimeException)
 /******************************************************************
  * SwXDocumentIndex::StyleAccess_Impl
  ******************************************************************/
-
-/*-- 13.09.99 16:52:28---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXDocumentIndex::StyleAccess_Impl::StyleAccess_Impl(
         SwXDocumentIndex& rParentIdx)
     : m_xParent(&rParentIdx)
 {
 }
-/*-- 13.09.99 16:52:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDocumentIndex::StyleAccess_Impl::~StyleAccess_Impl()
 {
 }
 
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getImplementationName()
 throw (uno::RuntimeException)
@@ -2758,8 +2584,9 @@ static char const*const g_ServicesIndexStyleAccess[] =
 {
     "com.sun.star.text.DocumentIndexParagraphStyles",
 };
+
 static const size_t g_nServicesIndexStyleAccess(
-    sizeof(g_ServicesIndexStyleAccess)/sizeof(g_ServicesIndexStyleAccess[0]));
+    SAL_N_ELEMENTS(g_ServicesIndexStyleAccess));
 
 sal_Bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::supportsService(
@@ -2778,16 +2605,13 @@ throw (uno::RuntimeException)
             g_nServicesIndexStyleAccess, g_ServicesIndexStyleAccess);
 }
 
-/*-- 13.09.99 16:52:29---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
         sal_Int32 nIndex, const uno::Any& rElement)
 throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(nIndex < 0 || nIndex > MAXLEVEL)
     {
@@ -2818,23 +2642,19 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
     }
     rTOXBase.SetStyleNames(sSetStyles, static_cast<sal_uInt16>(nIndex));
 }
-/*-- 13.09.99 16:52:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getCount() throw (uno::RuntimeException)
 {
     return MAXLEVEL;
 }
-/*-- 13.09.99 16:52:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if(nIndex < 0 || nIndex > MAXLEVEL)
     {
@@ -2861,18 +2681,14 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     uno::Any aRet(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
     return aRet;
 }
-/*-- 13.09.99 16:52:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getElementType()
 throw (uno::RuntimeException)
 {
     return ::getCppuType((uno::Sequence<OUString>*)0);
 }
-/*-- 13.09.99 16:52:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::hasElements() throw (uno::RuntimeException)
 {
@@ -2882,24 +2698,16 @@ SwXDocumentIndex::StyleAccess_Impl::hasElements() throw (uno::RuntimeException)
 /******************************************************************
  * SwXDocumentIndex::TokenAccess_Impl
  ******************************************************************/
-/*-- 13.09.99 16:52:28---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXDocumentIndex::TokenAccess_Impl::TokenAccess_Impl(
         SwXDocumentIndex& rParentIdx)
     : m_xParent(&rParentIdx)
 {
 }
-/*-- 13.09.99 16:52:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXDocumentIndex::TokenAccess_Impl::~TokenAccess_Impl()
 {
 }
 
-/* -----------------------------06.04.00 15:08--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getImplementationName()
 throw (uno::RuntimeException)
@@ -2911,8 +2719,9 @@ static char const*const g_ServicesIndexTokenAccess[] =
 {
     "com.sun.star.text.DocumentIndexLevelFormat",
 };
+
 static const size_t g_nServicesIndexTokenAccess(
-    sizeof(g_ServicesIndexTokenAccess)/sizeof(g_ServicesIndexTokenAccess[0]));
+    SAL_N_ELEMENTS(g_ServicesIndexTokenAccess));
 
 sal_Bool SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::supportsService(
@@ -2950,16 +2759,13 @@ static const struct TokenType g_TokenTypes[] =
     { 0, static_cast<enum FormTokenType>(0) }
 };
 
-/*-- 13.09.99 16:52:29---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
         sal_Int32 nIndex, const uno::Any& rElement)
 throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
@@ -2985,7 +2791,8 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         SwFormToken aToken(TOKEN_END);
         for(sal_Int32 j = 0; j < nProperties; j++)
         {
-            if (pProperties[j].Name.equalsAscii("TokenType"))
+            if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("TokenType")))
             {
                 const OUString sTokenType =
                         lcl_AnyToString(pProperties[j].Value);
@@ -3078,7 +2885,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nChapterFormat = nFormat;
             }
-//--->i53420
+// #i53420#
             else if (pProperties[j].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("ChapterLevel")))
             {
@@ -3089,7 +2896,6 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nOutlineLevel = nLevel;
             }
-//<---
             else if (pProperties[j].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
             {
@@ -3124,7 +2930,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         {
             aToken.eTokenType = TOKEN_ENTRY;
         }
-//---> i53420
+// #i53420#
 // check for chapter format allowed values if it was TOKEN_ENTRY_NO type
 // only allowed value are CF_NUMBER and CF_NUM_NOPREPST_TITLE
 // reading from file
@@ -3139,7 +2945,6 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 throw lang::IllegalArgumentException();
             }
         }
-//<---
         sPattern += aToken.GetString();
     }
     SwForm aForm(rTOXBase.GetTOXForm());
@@ -3147,27 +2952,21 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
     rTOXBase.SetTOXForm(aForm);
 }
 
-/*-- 13.09.99 16:52:29---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int32 SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getCount() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const sal_Int32 nRet = m_xParent->m_pImpl->GetFormMax();
     return nRet;
 }
 
-/*-- 13.09.99 16:52:30---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Any SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
@@ -3203,7 +3002,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         {
             case TOKEN_ENTRY_NO:
             {
-//--->i53420
+// #i53420#
 // writing to file (from doc to properties)
                 sal_Int32 nElements = 2;
                 sal_Int32 nCurrentElement = 0;
@@ -3224,7 +3023,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[nCurrentElement].Name = C2U("TokenType");
                 pArr[nCurrentElement++].Value <<=
-                    OUString::createFromAscii("TokenEntryNumber");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryNumber"));
 
                 pArr[nCurrentElement].Name = C2U("CharacterStyleName");
                 pArr[nCurrentElement++].Value <<= aProgCharStyle;
@@ -3254,7 +3053,6 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     pArr[nCurrentElement].Name = C2U("ChapterLevel");
                     pArr[nCurrentElement].Value <<= aToken.nOutlineLevel;
                 }
-//<---
             }
             break;
             case TOKEN_ENTRY:   // no difference between Entry and Entry Text
@@ -3264,7 +3062,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenEntryText");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenEntryText"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3276,7 +3074,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenTabStop");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenTabStop"));
 
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
@@ -3307,7 +3105,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenText");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenText"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3322,7 +3120,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenPageNumber");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenPageNumber"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3334,7 +3132,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 beans::PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
-                pArr[0].Value <<= OUString::createFromAscii("TokenChapterInfo");
+                pArr[0].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("TokenChapterInfo"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3360,11 +3158,9 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     break;
                 }
                 pArr[2].Value <<= nVal;
-//--->i53420
+// #i53420#
                 pArr[3].Name = C2U("ChapterLevel");
-                //
                 pArr[3].Value <<= aToken.nOutlineLevel;
-//<---
             }
             break;
             case TOKEN_LINK_START:
@@ -3374,7 +3170,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<=
-                    OUString::createFromAscii("TokenHyperlinkStart");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkStart"));
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
             }
@@ -3386,7 +3182,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<=
-                    OUString::createFromAscii("TokenHyperlinkEnd");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenHyperlinkEnd"));
             }
             break;
             case TOKEN_AUTHORITY:
@@ -3396,7 +3192,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<=
-                    OUString::createFromAscii("TokenBibliographyDataField");
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TokenBibliographyDataField"));
 
                 pArr[1].Name = C2U("CharacterStyleName");
                 pArr[1].Value <<= aProgCharStyle;
@@ -3410,7 +3206,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 ;
         }
 
-        aIt++; // #i21237#
+        ++aIt; // #i21237#
     }
 
     uno::Any aRet;
@@ -3418,18 +3214,13 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     return aRet;
 }
 
-/*-- 13.09.99 16:52:30---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Type SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getElementType()
 throw (uno::RuntimeException)
 {
     return ::getCppuType((uno::Sequence< beans::PropertyValues >*)0);
 }
-/*-- 13.09.99 16:52:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::hasElements()
 throw (uno::RuntimeException)
@@ -3437,3 +3228,4 @@ throw (uno::RuntimeException)
     return sal_True;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

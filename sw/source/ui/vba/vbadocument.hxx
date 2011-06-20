@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,6 +66,26 @@ public:
     virtual css::uno::Any SAL_CALL Sections( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL PageSetup() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL TablesOfContents( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL FormFields( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getProtectionType() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setProtectionType( ::sal_Int32 _protectiontype ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getUpdateStylesOnOpen() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setUpdateStylesOnOpen( ::sal_Bool _updatestylesonopen ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getAutoHyphenation() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAutoHyphenation( ::sal_Bool _autohyphenation ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getHyphenationZone() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setHyphenationZone( ::sal_Int32 _hyphenationzone ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getConsecutiveHyphensLimit() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setConsecutiveHyphensLimit( ::sal_Int32 _consecutivehyphenslimit ) throw (css::uno::RuntimeException);
+    using VbaDocumentBase::Protect;
+    virtual void SAL_CALL Protect( ::sal_Int32 Type, const css::uno::Any& NOReset, const css::uno::Any& Password, const css::uno::Any& UseIRM, const css::uno::Any& EnforceStyleLock ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL PrintOut( const css::uno::Any& Background, const css::uno::Any& Append, const css::uno::Any& Range, const css::uno::Any& OutputFileName, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Item, const css::uno::Any& Copies, const css::uno::Any& Pages, const css::uno::Any& PageType, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& FileName, const css::uno::Any& ActivePrinterMacGX, const css::uno::Any& ManualDuplexPrint, const css::uno::Any& PrintZoomColumn, const css::uno::Any& PrintZoomRow, const css::uno::Any& PrintZoomPaperWidth, const css::uno::Any& PrintZoomPaperHeight ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL PrintPreview(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL ClosePrintPreview(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Revisions( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Frames( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL invoke( const ::rtl::OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
@@ -78,3 +99,5 @@ public:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_DOCUMENT_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

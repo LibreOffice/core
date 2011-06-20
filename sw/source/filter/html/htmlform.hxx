@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,11 +39,11 @@ enum HTMLEventType
     HTML_ET_END
 };
 
-extern HTMLEventType __FAR_DATA aEventTypeTable[];
-extern const sal_Char * __FAR_DATA aEventListenerTable[];
-extern const sal_Char * __FAR_DATA aEventMethodTable[];
-extern const sal_Char * __FAR_DATA aEventSDOptionTable[];
-extern const sal_Char * __FAR_DATA aEventOptionTable[];
+extern HTMLEventType aEventTypeTable[];
+extern const sal_Char * aEventListenerTable[];
+extern const sal_Char * aEventMethodTable[];
+extern const sal_Char * aEventSDOptionTable[];
+extern const sal_Char * aEventOptionTable[];
 
 
 
@@ -50,3 +51,4 @@ extern const sal_Char * __FAR_DATA aEventOptionTable[];
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

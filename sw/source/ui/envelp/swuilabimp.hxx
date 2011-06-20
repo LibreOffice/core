@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -96,9 +97,6 @@ public:
     inline SwNewDBMgr* GetNewDBMgr() const { return pNewDBMgr; }
 };
 
-/* -----------------08.07.99 13:48-------------------
-
- --------------------------------------------------*/
 class SwOneExampleFrame;
 class SwVisitingCardPage : public SfxTabPage
 {
@@ -146,9 +144,7 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
-/* -----------------29.09.99 08:51-------------------
 
- --------------------------------------------------*/
 class SwPrivateDataPage : public SfxTabPage
 {
     FixedLine       aDataFL;
@@ -198,9 +194,7 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
-/* -----------------29.09.99 08:51-------------------
 
- --------------------------------------------------*/
 class SwBusinessDataPage : public SfxTabPage
 {
     FixedLine       aDataFL;
@@ -251,3 +245,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

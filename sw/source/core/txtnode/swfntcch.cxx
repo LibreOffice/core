@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,6 @@ SwFontCache *pSwFontCache = NULL;
 |*
 |*  SwFontObj::SwFontObj(), ~SwFontObj()
 |*
-|*  Ersterstellung      AMA 25. Jun. 95
-|*  Letzte Aenderung    AMA 25. Jun. 95
-|*
 |*************************************************************************/
 
 SwFontObj::SwFontObj( const void *pOwn, ViewShell *pSh ) :
@@ -67,9 +65,6 @@ SwFontObj::~SwFontObj()
 /*************************************************************************
 |*
 |*  SwFontAccess::SwFontAccess()
-|*
-|*  Ersterstellung      AMA 25. Jun. 95
-|*  Letzte Aenderung    AMA 25. Jun. 95
 |*
 |*************************************************************************/
 
@@ -92,3 +87,4 @@ SwCacheObj *SwFontAccess::NewObj( )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

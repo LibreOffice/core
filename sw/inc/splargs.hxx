@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,7 +130,7 @@ struct SwSpellArgs : SwArgsBase
  *                      class SwInterHyphInfo
  *************************************************************************/
 
-// Parameter-Klasse fuer Hyphenate
+// Parameter-class for Hyphenate.
 // docedt.cxx:  SwDoc::Hyphenate()
 // txtedt.cxx:  SwTxtNode::Hyphenate()
 // txthyph.cxx: SwTxtFrm::Hyphenate()
@@ -178,3 +179,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

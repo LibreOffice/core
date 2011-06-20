@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,10 +46,6 @@ typedef ::cppu::WeakImplHelper2
 >
 SwSimpleEnumeration_Base;
 
-
-/* -----------------29.04.98 07:35-------------------
- *
- * --------------------------------------------------*/
 enum CursorType
 {
     CURSOR_INVALID,
@@ -66,9 +63,9 @@ enum CursorType
     CURSOR_META,         // meta/meta-field
 };
 
-/*-----------------04.03.98 11:54-------------------
+/*
     Start/EndAction or Start/EndAllAction
-  -------------------------------------------------- */
+*/
 class UnoActionContext
 {
     private:
@@ -81,9 +78,9 @@ class UnoActionContext
         void InvalidateDocument() { m_pDoc = 0; }
 };
 
-/* -----------------07.07.98 12:03-------------------
+/*
     interrupt Actions for a little while
-   -------------------------------------------------- */
+*/
 class UnoActionRemoveContext
 {
     private:
@@ -94,16 +91,13 @@ class UnoActionRemoveContext
         ~UnoActionRemoveContext();
 };
 
-
-::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
-
 /// helper function for implementing SwClient::Modify
 void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 
 #include <boost/utility.hpp>
 #include <osl/diagnose.h>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sw {
@@ -123,7 +117,7 @@ namespace sw {
 
             ~UnoImplPtr()
             {
-                ::vos::OGuard g(Application::GetSolarMutex());
+                SolarMutexGuard g;
                 delete m_p; // #i105557#: call dtor with locked solar mutex
                 m_p = 0;
             }
@@ -172,3 +166,4 @@ namespace sw {
 
 #endif // SW_UNOBASECLASS_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

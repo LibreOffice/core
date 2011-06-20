@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,43 +28,21 @@
 #ifndef SW_SWDLL_HXX
 #define SW_SWDLL_HXX
 
-class StatusBar;
-
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/module.hxx>
 
-#include <tools/shl.hxx>
-
-//-------------------------------------------------------------------------
-
-class SwDLL
-
-/*  [Description]
-
-    This class is a wrapper for a Load-On-Demand-DLL. One instance
-    per SfxApplication will be created for the runtime of
-    SfxApplication-subclass::Main().
-
-    Remember: Do export this class! It is used by the application.
+/**
+ * This class is a wrapper for a Load-On-Demand-DLL. One instance
+ * per SfxApplication will be created for the runtime of
+ * SfxApplication-subclass::Main().
 */
-
+namespace SwGlobals
 {
-
-    static void RegisterFactories();
-    static void RegisterInterfaces();
-    static void RegisterControls();
-public:
-                    // Ctor/Dtor must be linked to the application
-                    SwDLL();
-                    ~SwDLL();
-
-    static void     Init();     // called directly after loading the DLL
-    static void     Exit();     // called directly befor unloading the DLL
-};
-
-//-------------------------------------------------------------------------
+    void ensure();
+}
 
 #define SW_DLL() ( *(SwModule**) GetAppData(SHL_WRITER) )
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

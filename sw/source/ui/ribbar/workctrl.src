@@ -51,7 +51,6 @@ Menu RID_INSERT_FIELD_CTRL
             HelpId = CMD_FN_INSERT_FLD_TIME ;
             Text [ en-US ] = "Time" ;
         };
-         //#ifndef MN_SW_WEB
         MenuItem
         {
             Identifier = FN_INSERT_FLD_PGNUMBER ;
@@ -76,7 +75,6 @@ Menu RID_INSERT_FIELD_CTRL
             HelpId = CMD_FN_INSERT_FLD_TITLE ;
             Text [ en-US ] = "Title" ;
         };
-         //#endif
         MenuItem
         {
             Identifier = FN_INSERT_FLD_AUTHOR ;
@@ -134,12 +132,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         MaskColor = IMAGE_MASK_COLOR ;
         SCROLL_IMAGE_IDLIST
     };
-    ImageList ILH_VALUES
-    {
-        Prefix = "srh";
-        MaskColor = IMAGE_MASK_COLOR ;
-        SCROLL_IMAGE_IDLIST
-    };
     FixedLine FL_SEP
     {
         //no position, no text
@@ -189,7 +181,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     String ST_OUTL
     {
-        /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift : öberschrift */
         Text [ en-US ] = "Headings" ;
     };
     String ST_SEL
@@ -198,7 +189,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     String ST_FTN
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnote : Fuònote */
         Text [ en-US ] = "Footnote" ;
     };
     String ST_MARK
@@ -227,31 +217,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     };
     Text [ en-US ] = "Navigation" ;
 };
-/*
-Noch ein paar Reserven
-            ToolBoxItem
-            {
-                                Identifier = NID_NEXT;
-                Text = "Vorw‰rts" ;
-                        };
-            ToolBoxItem
-            {
-                                Identifier = NID_PREV;
-                Text = "R¸ckw‰rts" ;
-                        };
-            ToolBoxItem
-            {
-                                Identifier = NID_CTRL;
-                Text = "Control" ;
-                        };
-            ToolBoxItem
-            {
-                                Identifier = NID_DRW;
-                Text = "Zeichenobjekt" ;
-                        };
-
-
-*/
 /***************************************************************
     Strings fuer die Quickhelp der View-PgUp/Down-Buttons
 ***************************************************************/
@@ -265,73 +230,58 @@ String STR_IMGBTN_PREV_DOWN
 };
 String STR_IMGBTN_TBL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste Tabelle : Nıchste Tabelle */
     Text [ en-US ] = "Next table" ;
 };
 String STR_IMGBTN_FRM_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chster Textrahmen : Nıchster Textrahmen */
     Text [ en-US ] = "Next text frame" ;
 };
 String STR_IMGBTN_PGE_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste Seite : Nıchste Seite */
     Text [ en-US ] = "Next page" ;
 };
 String STR_IMGBTN_DRW_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chstes Zeichenobjekt : Nıchstes Zeichenobjekt */
     Text [ en-US ] = "Next drawing" ;
 };
 String STR_IMGBTN_CTRL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chstes Kontrollfeld : Nıchstes Kontrollfeld */
     Text [ en-US ] = "Next control" ;
 };
 String STR_IMGBTN_REG_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chster Bereich : Nıchster Bereich */
     Text [ en-US ] = "Next section" ;
 };
 String STR_IMGBTN_BKM_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste Textmarke : Nıchste Textmarke */
     Text [ en-US ] = "Next bookmark" ;
 };
 String STR_IMGBTN_GRF_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste Grafik : Nıchste Grafik */
     Text [ en-US ] = "Next graphic" ;
 };
 String STR_IMGBTN_OLE_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chstes OLE-Objekt : N‰chstes OLE object */
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chstes OLE-Objekt : Nıchstes OLE-Objekt */
     Text [ en-US ] = "Next OLE object" ;
 };
 String STR_IMGBTN_OUTL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste ‹berschrift : Nıchste öberschrift */
     Text [ en-US ] = "Next heading" ;
 };
 String STR_IMGBTN_SEL_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste Markierung : Nıchste Markierung */
     Text [ en-US ] = "Next selection" ;
 };
 String STR_IMGBTN_FTN_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste Fuﬂnote : Nıchste Fuònote */
     Text [ en-US ] = "Next footnote" ;
 };
 String STR_IMGBTN_MARK_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chster Merker : Nıchster Merker */
     Text [ en-US ] = "Next Reminder" ;
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? N‰chste Notiz : Nıchste Notiz */
     Text [ en-US ] = "Next Note" ;
 };
 String STR_IMGBTN_SRCH_REP_DOWN
@@ -384,12 +334,10 @@ String STR_IMGBTN_GRF_UP
 };
 String STR_IMGBTN_OLE_UP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Voriges OLE-Objekt : Voriges OLE object */
     Text [ en-US ] = "Previous OLE object" ;
 };
 String STR_IMGBTN_OUTL_UP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Vorige ‹berschrift : Vorige öberschrift */
     Text [ en-US ] = "Previous heading" ;
 };
 String STR_IMGBTN_SEL_UP
@@ -398,7 +346,6 @@ String STR_IMGBTN_SEL_UP
 };
 String STR_IMGBTN_FTN_UP
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Vorige Fuﬂnote : Vorige Fuònote */
     Text [ en-US ] = "Previous footnote" ;
 };
 String STR_IMGBTN_MARK_UP
@@ -443,11 +390,6 @@ ImageButton BTN_NAVI
     Image IMG_BTN
     {
         ImageBitmap = Bitmap { File = "punkt.bmp" ; };
-        MaskColor = IMAGE_MASK_COLOR ;
-    };
-    Image IMG_BTN_H
-    {
-        ImageBitmap = Bitmap { File = "punkt_h.bmp" ; };
         MaskColor = IMAGE_MASK_COLOR ;
     };
     String ST_QUICK

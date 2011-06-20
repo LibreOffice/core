@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #define _PORTOX_HXX
 
 #include "portxt.hxx"
-//#include "porglue.hxx"
 
 /*************************************************************************
  *                      class SwToxPortion
@@ -73,3 +73,5 @@ CLASSIO( SwIsoToxPortion )
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

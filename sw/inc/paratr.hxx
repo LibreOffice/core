@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,32 +35,28 @@
 #include <swatrset.hxx>
 #include <format.hxx>
 #include <swtypes.hxx>
+#include <editeng/adjitem.hxx>
 
 class SwCharFmt;
 class IntlWrapper;
 
-/*************************************************************************
-|*    class     SwFmtDrop
-*************************************************************************/
-
 #define DROP_WHOLEWORD ((sal_uInt16)0x0001)
 
-//Wenn ein SwFmtDrop Client ist, so ist dies das CharFmt welches den Font fuer
-//die DropCaps beschreibt. Ist es kein Client, so wird von der Formatierung
-//das CharFmt des Absatzes benutzt.
-//Wird das CharFmt verandert, so wird diese Aenderung ueber das Modify des
-//SwFmtDrop an die Absatze propagiert.
+// If SwFmtDrop is a Client, it is the CharFmt that describes the font for the
+// DropCaps. If it is not a Client, formating uses the CharFmt of the paragraph.
+// If the CharFmt is modified, this change is propagated to the paragraphs
+// via the Modify of SwFmtDrop.
 class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
 {
-    SwModify* pDefinedIn;   // Modify-Object, in dem der DropCaps steht
-                            // kann nur TxtFmtCollection/TxtNode sein
-    sal_uInt16 nDistance;   // Abstand zum Textbeginn
-    sal_uInt16 nReadFmt;    // fuer den Sw3-Reader: CharFormat-Id (Pool laden!)
-    sal_uInt8   nLines;      // Anzahl der Zeilen
-    sal_uInt8   nChars;      // Anzahl der Zeichen
-    sal_Bool   bWholeWord;   // Erstes Wort als Initialen
+    SwModify* pDefinedIn;   // Modify-Object, that contains DropCaps.
+                            // Can only be TxtFmtCollection/TxtNode.
+    sal_uInt16 nDistance;       // Distance to beginning of text.
+    sal_uInt16 nReadFmt;        // For Sw3-Reader: CharFormat-Id (load Pool!).
+    sal_uInt8  nLines;          // Line count.
+    sal_uInt8  nChars;          // Character count.
+    sal_Bool   bWholeWord;      // First word with initials.
 public:
-    TYPEINFO(); //Bereits in der Basisklasse SwClient
+    TYPEINFO(); // Already in base class SwClient.
 
     SwFmtDrop();
     virtual ~SwFmtDrop();
@@ -75,7 +72,7 @@ protected:
 
 public:
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -83,8 +80,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     inline sal_uInt8 GetLines() const { return nLines; }
     inline sal_uInt8 &GetLines() { return nLines; }
@@ -101,10 +98,10 @@ public:
    inline const SwCharFmt *GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt *pNew );
-        // erfrage vom Client Informationen
+    // Get information from Client.
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
-    // erfrage und setze den Modify-Pointer
+    // Get and set Modify pointer.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
     { pDefinedIn = (SwModify*)pNew; }
@@ -120,7 +117,7 @@ public:
     // @@@ public copy assignment, but no copy ctor?
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -145,7 +142,6 @@ class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 public:
     TYPEINFO();
 
-    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, aEmptyStr ) {}
 
@@ -157,9 +153,8 @@ public:
 
     SwNumRuleItem& operator=( const SwNumRuleItem& rCpy )
     { SetValue( rCpy.GetValue() ); return *this; }
-    // <--
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -168,8 +163,8 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 };
 
 class SwParaConnectBorderItem : public SfxBoolItem
@@ -182,7 +177,7 @@ public:
     // @@@ public copy assignment, but no copy ctor?
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -205,7 +200,7 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
 
 
 /******************************************************************************
- *  Implementierung der Paragraph-Attribut Methoden vom SwAttrSet
+ *  Implementation of paragraph-attributes methods of SwAttrSet
  ******************************************************************************/
 
 inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(sal_Bool bInP) const
@@ -242,7 +237,7 @@ inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(sal_Bool b
     {   return (const SwParaConnectBorderItem&)Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 /******************************************************************************
- *  Implementierung der Paragraph-Attribut Methoden vom SwFmt
+ *  Implementation of paragraph-attributes methods of SwFmt
  ******************************************************************************/
 
 inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(sal_Bool bInP) const
@@ -279,3 +274,5 @@ inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(sal_Bool bInP)
     {   return (const SwParaConnectBorderItem&)aSet.Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

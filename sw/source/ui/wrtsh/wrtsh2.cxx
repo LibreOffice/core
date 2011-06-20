@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,11 +73,6 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-
-
-/*------------------------------------------------------------------------
-        Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwWrtShell::Insert(SwField &rFld)
 {
@@ -153,15 +149,12 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
 sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
                                     Window* pParentWin, ByteString* pWindowState )
 {
-//JP 14.08.96: Bug 30332 - nach Umbau der modularietaet im SFX, muss jetzt
-//              das TopWindow der Application benutzt werden.
-//  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
                                                         pParentWin, *this, pFld, bNextButton);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     sal_Bool bRet = RET_CANCEL == pDlg->Execute();
@@ -172,16 +165,14 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     GetWin()->Update();
     return bRet;
 }
-/* -----------------17.06.2003 10:18-----------------
 
- --------------------------------------------------*/
 sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, ByteString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN ,bNextButton );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     sal_uInt16 nRet = pDlg->Execute();
@@ -265,7 +256,6 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             case JE_FMT_GRAPHIC:    nSlotId = SID_INSERT_GRAPHIC;       break;
             case JE_FMT_OLE:        nSlotId = SID_INSERT_OBJECT;        break;
 
-//          case JE_FMT_TEXT:
             }
 
             Right( CRSR_SKIP_CHARS, sal_True, 1, sal_False );       // Feld selektieren
@@ -383,7 +373,7 @@ sal_Bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
 void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
               const String *pTargetFrameName )
 {
-    ASSERT( rURL.Len() && pVSh, "was soll hier geladen werden?" );
+    OSL_ENSURE( rURL.Len() && pVSh, "what should be loaded here?" );
     if( !rURL.Len() || !pVSh )
         return ;
 
@@ -398,7 +388,7 @@ void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
         return;
 
     SwDocShell* pDShell = pSh->GetView().GetDocShell();
-    DBG_ASSERT( pDShell, "No DocShell?!");
+    OSL_ENSURE( pDShell, "No DocShell?!");
     String sTargetFrame;
     if( pTargetFrameName && pTargetFrameName->Len() )
         sTargetFrame = *pTargetFrameName;
@@ -422,7 +412,6 @@ void LoadURL( const String& rURL, ViewShell* pVSh, sal_uInt16 nFilter,
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
     //#39076# Silent kann lt. SFX entfernt werden.
-//  SfxBoolItem aSilent( SID_SILENT, sal_True );
     SfxBoolItem aBrowse( SID_BROWSE, sal_True );
 
     if( nFilter & URLLOAD_NEWVIEW )
@@ -496,3 +485,4 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

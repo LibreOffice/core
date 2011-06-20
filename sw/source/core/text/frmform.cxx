@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/hyznitem.hxx>
@@ -47,7 +47,6 @@
 #include <pam.hxx>
 #include <flyfrms.hxx>
 #include <fmtanchr.hxx>
-#include <txtcfg.hxx>
 #include <itrform2.hxx>     // SwTxtFormatter
 #include <widorp.hxx>       // Widows and Orphans
 #include <txtcache.hxx>
@@ -61,6 +60,9 @@
 #include <frmfmt.hxx>       // SwFrmFmt
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+
+// Toleranzwert in der Formatierung und Textausgabe.
+#define SLOPPY_TWIPS    5
 
 class FormatLevel
 {
@@ -84,23 +86,6 @@ void ValidateTxt( SwFrm *pFrm )     // Freund vom Frame
          (   pFrm->IsVertical() &&
              pFrm->Frm().Height() == pFrm->GetUpper()->Prt().Height() ) )
         pFrm->bValidSize = sal_True;
-/*
-    pFrm->bValidPrtArea = sal_True;
-    //Die Position validieren um nicht unnoetige (Test-)Moves zu provozieren.
-    //Dabei darf allerdings nicht eine tatsaechlich falsche Coordinate
-    //validiert werden.
-    if ( !pFrm->bValidPos )
-    {
-        //Leider muessen wir dazu die korrekte Position berechnen.
-        Point aOld( pFrm->Frm().Pos() );
-        pFrm->MakePos();
-        if ( aOld != pFrm->Pos() )
-        {
-            pFrm->Frm().Pos( aOld );
-            pFrm->bValidPos = sal_False;
-        }
-    }
-*/
 }
 
 void SwTxtFrm::ValidateFrm()
@@ -129,7 +114,7 @@ void SwTxtFrm::ValidateFrm()
     ValidateTxt( this );
 
     //MA: mindestens das MustFit-Flag muessen wir retten!
-    ASSERT( HasPara(), "ResetPreps(), missing ParaPortion." );
+    OSL_ENSURE( HasPara(), "ResetPreps(), missing ParaPortion." );
     SwParaPortion *pPara = GetPara();
     const sal_Bool bMustFit = pPara->IsPrepMustFit();
     ResetPreps();
@@ -185,7 +170,7 @@ sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
 {
     SWAP_IF_NOT_SWAPPED( this )
 
-    ASSERT( HasPara(), "SwTxtFrm::_GetDropRect: try again next year." );
+    OSL_ENSURE( HasPara(), "SwTxtFrm::_GetDropRect: try again next year." );
     SwTxtSizeInfo aInf( (SwTxtFrm*)this );
     SwTxtMargin aLine( (SwTxtFrm*)this, &aInf );
     if( aLine.GetDropLines() )
@@ -233,7 +218,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 {
     SWAP_IF_SWAPPED( this )
 
-    ASSERT( HasFollow(), "CalcFollow: missing Follow." );
+    OSL_ENSURE( HasFollow(), "CalcFollow: missing Follow." );
 
     SwTxtFrm* pMyFollow = GetFollow();
 
@@ -245,7 +230,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         ( pMyFollow->IsVertical() && !pMyFollow->Prt().Width() ) ||
         ( ! pMyFollow->IsVertical() && !pMyFollow->Prt().Height() ) )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         const SwFrm *pOldUp = GetUpper();
 #endif
 
@@ -332,12 +317,12 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                     pMyFollow->Calc();
                     // Der Follow merkt anhand seiner Frm().Height(), dass was schief
                     // gelaufen ist.
-                    ASSERT( !pMyFollow->GetPrev(), "SwTxtFrm::CalcFollow: cheesy follow" );
+                    OSL_ENSURE( !pMyFollow->GetPrev(), "SwTxtFrm::CalcFollow: cheesy follow" );
                     if( pMyFollow->GetPrev() )
                     {
                         pMyFollow->Prepare( PREP_CLEAR );
                         pMyFollow->Calc();
-                        ASSERT( !pMyFollow->GetPrev(), "SwTxtFrm::CalcFollow: very cheesy follow" );
+                        OSL_ENSURE( !pMyFollow->GetPrev(), "SwTxtFrm::CalcFollow: very cheesy follow" );
                     }
 
                     // OD 14.03.2003 #i11760# - reset control flag for follow format.
@@ -374,8 +359,8 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                 pPage->ValidateCntnt();
         }
 
-#ifdef DBG_UTIL
-        ASSERT( pOldUp == GetUpper(), "SwTxtFrm::CalcFollow: heavy follow" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( pOldUp == GetUpper(), "SwTxtFrm::CalcFollow: heavy follow" );
 #endif
 
         const long nRemaining =
@@ -481,7 +466,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         SwTwips nRstHeight;
         if ( IsVertical() )
         {
-            ASSERT( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
+            OSL_ENSURE( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
 
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             if ( IsVertLR() )
@@ -501,16 +486,15 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 
         //In Tabellenzellen kann ich mir evtl. noch ein wenig dazuholen, weil
         //durch eine vertikale Ausrichtung auch oben noch Raum sein kann.
-        // --> OD 2004-11-25 #115759# - assure, that first lower in upper
+        // #115759# - assure, that first lower in upper
         // is the current one or is valid.
         if ( IsInTab() &&
              ( GetUpper()->Lower() == this ||
                GetUpper()->Lower()->IsValid() ) )
-        // <--
         {
             long nAdd = (*fnRect->fnYDiff)( (GetUpper()->Lower()->Frm().*fnRect->fnGetTop)(),
                                             (GetUpper()->*fnRect->fnGetPrtTop)() );
-            ASSERT( nAdd >= 0, "Ey" );
+            OSL_ENSURE( nAdd >= 0, "Ey" );
             nRstHeight += nAdd;
         }
 
@@ -586,7 +570,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         {
             if( ((SwTxtFrm*)GetFollow())->IsLocked() )
             {
-                ASSERT( sal_False, "+SwTxtFrm::JoinFrm: Follow ist locked." );
+                OSL_FAIL( "+SwTxtFrm::JoinFrm: Follow ist locked." );
                 return;
             }
             JoinFrm();
@@ -608,7 +592,6 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         while( GetFollow() && GetFollow()->GetFollow() &&
                nNewOfst >= GetFollow()->GetFollow()->GetOfst() )
         {
-            DBG_LOOP;
             JoinFrm();
         }
     }
@@ -634,7 +617,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
 
 SwCntntFrm *SwTxtFrm::JoinFrm()
 {
-    ASSERT( GetFollow(), "+SwTxtFrm::JoinFrm: no follow" );
+    OSL_ENSURE( GetFollow(), "+SwTxtFrm::JoinFrm: no follow" );
     SwTxtFrm  *pFoll = GetFollow();
 
     SwTxtFrm *pNxt = pFoll->GetFollow();
@@ -672,18 +655,18 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
         }
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else if ( pFoll->GetValidPrtAreaFlag() ||
               pFoll->GetValidSizeFlag() )
     {
         pFoll->CalcFtnFlag();
-        ASSERT( !pFoll->HasFtn(), "Missing FtnFlag." );
+        OSL_ENSURE( !pFoll->HasFtn(), "Missing FtnFlag." );
     }
 #endif
 
     pFoll->MoveFlyInCnt( this, nStart, STRING_LEN );
     pFoll->SetFtn( sal_False );
-    // --> OD 2005-12-01 #i27138#
+    // #i27138#
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
@@ -698,7 +681,6 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
                             this );
         }
     }
-    // <--
     pFoll->Cut();
     delete pFoll;
     pFollow = pNxt;
@@ -723,7 +705,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
     SetFollow( pNew );
 
     pNew->Paste( GetUpper(), GetNext() );
-    // --> OD 2005-12-01 #i27138#
+    // #i27138#
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
     // and relation CONTENT_FLOWS_TO for current previous paragraph, which
@@ -738,7 +720,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
                             this );
         }
     }
-    // <--
 
     // Wenn durch unsere Aktionen Fussnoten in pNew landen,
     // so muessen sie umgemeldet werden.
@@ -772,11 +753,11 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
         }
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
     {
         CalcFtnFlag( nTxtPos-1 );
-        ASSERT( !HasFtn(), "Missing FtnFlag." );
+        OSL_ENSURE( !HasFtn(), "Missing FtnFlag." );
     }
 #endif
 
@@ -797,12 +778,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 
 void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 {
-#ifdef DBGTXT
-    // Es gibt tatsaechlich einen Sonderfall, in dem ein SetOfst(0)
-    // zulaessig ist: bug 3496
-    ASSERT( nNewOfst, "!SwTxtFrm::SetOfst: missing JoinFrm()." );
-#endif
-
     // Die Invalidierung unseres Follows ist nicht noetig.
     // Wir sind ein Follow, werden gleich formatiert und
     // rufen von dort aus das SetOfst() !
@@ -824,7 +799,7 @@ void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 
 sal_Bool SwTxtFrm::CalcPreps()
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(), "SwTxtFrm::CalcPreps with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(), "SwTxtFrm::CalcPreps with swapped frame" );
     SWRECTFN( this );
 
     SwParaPortion *pPara = GetPara();
@@ -847,7 +822,7 @@ sal_Bool SwTxtFrm::CalcPreps()
         {
             if( !GetFollow() )
             {
-                ASSERT( GetFollow(), "+SwTxtFrm::CalcPreps: no credits" );
+                OSL_ENSURE( GetFollow(), "+SwTxtFrm::CalcPreps: no credits" );
                 return sal_False;
             }
 
@@ -883,7 +858,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             }
             else
             {
-                ASSERT( nChgHeight < (Prt().*fnRect->fnGetHeight)(),
+                OSL_ENSURE( nChgHeight < (Prt().*fnRect->fnGetHeight)(),
                         "+SwTxtFrm::CalcPrep: wanna shrink" );
 
                 nChgHeight = (Prt().*fnRect->fnGetHeight)() - nChgHeight;
@@ -902,7 +877,6 @@ sal_Bool SwTxtFrm::CalcPreps()
                 else
                     rRepaint.Chg( Frm().Pos() + Prt().Pos(), Prt().SSize() );
 
-                // 6792: Rrand < LRand und Repaint
                 if( 0 >= rRepaint.Width() )
                     rRepaint.Width(1);
             }
@@ -1179,52 +1153,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     AdjustFrm( nChg, bHasToFit );
 
-/*
-    // FME 16.07.2003 #i16930# - removed this code because it did not
-    // work correctly. In SwCntntFrm::MakeAll, the frame did not move to the
-    // next page, instead the print area was recalculated and
-    // Prepare( PREP_POS_CHGD, (const void*)&bFormatted, sal_False ) invalidated
-    // the other flags => loop
-
-    // OD 04.04.2003 #108446# - handle special case:
-    // If text frame contains no content and just has split, because of a
-    // line stop, it has to move forward. To force this forward move without
-    // unnecessary formatting of its footnotes and its follow, especially in
-    // columned sections, adjust frame height to zero (0) and do not perform
-    // the intrinsic format of the follow.
-    // The formating method <SwCntntFrm::MakeAll()> will initiate the move forward.
-    sal_Bool bForcedNoIntrinsicFollowCalc = sal_False;
-    if ( nEnd == 0 &&
-         rLine.IsStop() && HasFollow() && nNew == 1
-       )
-    {
-        AdjustFrm( -Frm().SSize().Height(), bHasToFit );
-        Prt().Pos().Y() = 0;
-        Prt().Height( Frm().Height() );
-        if ( FollowFormatAllowed() )
-        {
-            bForcedNoIntrinsicFollowCalc = sal_True;
-            ForbidFollowFormat();
-        }
-    }
-    else
-    {
-        AdjustFrm( nChg, bHasToFit );
-    }
- */
-
     if( HasFollow() || IsInFtn() )
         _AdjustFollow( rLine, nEnd, nStrLen, nNew );
-
-    // FME 16.07.2003 #i16930# - removed this code because it did not work
-    // correctly
-    // OD 04.04.2003 #108446# - allow intrinsic format of follow, if above
-    // special case has forbit it.
-/*    if ( bForcedNoIntrinsicFollowCalc )
-    {
-        AllowFollowFormat();
-    }
- */
 
     pPara->SetPrepMustFit( sal_False );
 
@@ -1241,13 +1171,9 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
 sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 {
-    ASSERT( ! IsVertical() || IsSwapped(),
+    OSL_ENSURE( ! IsVertical() || IsSwapped(),
             "SwTxtFrm::FormatLine( rLine, bPrev) with unswapped frame" );
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
-    // Nach rLine.FormatLine() haelt nStart den neuen Wert,
-    // waehrend in pOldStart der alte Offset gepflegt wird.
-    // Ueber diesen Weg soll das nDelta ersetzt werden.
-    // *pOldStart += rLine.GetCurr()->GetLen();
     const SwLineLayout *pOldCur = rLine.GetCurr();
     const xub_StrLen nOldLen    = pOldCur->GetLen();
     const KSHORT nOldAscent = pOldCur->GetAscent();
@@ -1261,9 +1187,9 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 
     const xub_StrLen nNewStart = rLine.FormatLine( rLine.GetStart() );
 
-    ASSERT( Frm().Pos().Y() + Prt().Pos().Y() == rLine.GetFirstPos(),
+    OSL_ENSURE( Frm().Pos().Y() + Prt().Pos().Y() == rLine.GetFirstPos(),
             "SwTxtFrm::FormatLine: frame leaves orbit." );
-    ASSERT( rLine.GetCurr()->Height(),
+    OSL_ENSURE( rLine.GetCurr()->Height(),
             "SwTxtFrm::FormatLine: line height is zero" );
 
     // Das aktuelle Zeilenumbruchobjekt.
@@ -1273,7 +1199,6 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
                   bOldHyph == pNew->IsEndHyph();
     if ( bUnChg && !bPrev )
     {
-        // 6672: Toleranz von SLOPPY_TWIPS (5 Twips); vgl. 6922
         const long nWidthDiff = nOldWidth > pNew->Width()
                                 ? nOldWidth - pNew->Width()
                                 : pNew->Width() - nOldWidth;
@@ -1387,7 +1312,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                         const sal_Bool bAdjust )
 {
-    ASSERT( ! IsVertical() || IsSwapped(),"SwTxtFrm::_Format with unswapped frame" );
+    OSL_ENSURE( ! IsVertical() || IsSwapped(),"SwTxtFrm::_Format with unswapped frame" );
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     rLine.SetUnclipped( sal_False );
@@ -1432,19 +1357,17 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // AMA: Leider doch, Textgroessenaenderungen + FlyFrames, die Rueckwirkung
     // kann im Extremfall mehrere Zeilen (Frames!!!) betreffen!
 
-    // --> FME 2005-04-18 #i46560#
+    // #i46560#
     // FME: Yes, consider this case: (word ) has to go to the next line
     // because ) is a forbidden character at the beginning of a line although
     // (word would still fit on the previous line. Adding text right in front
     // of ) would not trigger a reformatting of the previous line. Adding 1
     // to the result of FindBrk() does not solve the problem in all cases,
     // nevertheless it should be sufficient.
-    // <--
     sal_Bool bPrev = rLine.GetPrev() &&
                      ( FindBrk( rString, rLine.GetStart(), rReformat.Start() + 1 )
-                       // --> FME 2005-04-18 #i46560#
+                       // #i46560#
                        + 1
-                       // <--
                        >= rReformat.Start() ||
                        rLine.GetCurr()->IsRest() );
     if( bPrev )
@@ -1477,7 +1400,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     if( pPara->IsMargin() )
         rRepaint.Width( rRepaint.Width() + pPara->GetHangingMargin() );
     rRepaint.Top( rLine.Y() );
-    // 6792: Rrand < LRand und Repaint
     if( 0 >= rRepaint.Width() )
         rRepaint.Width(1);
     WidowsAndOrphans aFrmBreak( this, rInf.IsTest() ? 1 : 0 );
@@ -1544,7 +1466,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         const SwLineLayout* pLine;
         {
             SwTxtFrm *pMaster = FindMaster();
-            ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
+            OSL_ENSURE( pMaster, "SwTxtFrm::Format: homeless follow" );
             if( !pMaster->HasPara() )
                 pMaster->GetFormatted();
             SwTxtSizeInfo aInf( pMaster );
@@ -1570,7 +1492,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
      */
     do
     {
-        DBG_LOOP;
         if( bFirst )
             bFirst = sal_False;
         else
@@ -1716,7 +1637,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
 
 void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 {
-    ASSERT( ! IsVertical() || IsSwapped(),
+    OSL_ENSURE( ! IsVertical() || IsSwapped(),
             "A frame is not swapped in SwTxtFrm::FormatOnceMore" );
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
@@ -1731,9 +1652,6 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     sal_uInt8 nGo    = 0;
     while( bGoOn )
     {
-#ifdef DBGTXT
-        aDbstream << "OnceMore!" << endl;
-#endif
         ++nGo;
         rInf.Init();
         rLine.Top();
@@ -1788,11 +1706,6 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 {
     const xub_StrLen nStrLen = GetTxt().Len();
 
-    // AMA: Wozu soll das gut sein? Scheint mir zuoft zu einem kompletten
-    // Formatieren und Repainten zu fuehren???
-//  if ( !(*pPara->GetDelta()) )
-//      *(pPara->GetDelta()) = nStrLen;
-//  else
     if ( !nStrLen )
     {
         // Leere Zeilen werden nicht lange gequaelt:
@@ -1811,7 +1724,7 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
         pPara->SetPrepMustFit( bMustFit );
     }
 
-    ASSERT( ! IsSwapped(), "A frame is swapped before _Format" );
+    OSL_ENSURE( ! IsSwapped(), "A frame is swapped before _Format" );
 
     if ( IsVertical() )
         SwapWidthAndHeight();
@@ -1830,7 +1743,7 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
     if ( IsVertical() )
         SwapWidthAndHeight();
 
-    ASSERT( ! IsSwapped(), "A frame is swapped after _Format" );
+    OSL_ENSURE( ! IsSwapped(), "A frame is swapped after _Format" );
 
     if( 1 < aLine.GetDropLines() )
     {
@@ -1861,7 +1774,6 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 
 void SwTxtFrm::Format( const SwBorderAttrs * )
 {
-    DBG_LOOP;
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
@@ -1873,7 +1785,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     const SwFrm *pDbgFtnCont = (const SwFrm*)(FindPageFrm()->FindFtnCont());
     (void)pDbgFtnCont;
 
-#ifdef DBG_UTIL
     // nStopAt laesst sich vom CV bearbeiten.
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
@@ -1882,32 +1793,10 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         (void)i;
     }
 #endif
-#endif
-
-#ifdef DEBUG_FTN
-    //Fussnote darf nicht auf einer Seite vor ihrer Referenz stehen.
-    if( IsInFtn() )
-    {
-        const SwFtnFrm *pFtn = (SwFtnFrm*)GetUpper();
-        const SwPageFrm *pFtnPage = pFtn->GetRef()->FindPageFrm();
-        const MSHORT nFtnPageNr = pFtnPage->GetPhyPageNum();
-        if( !IsLocked() )
-        {
-            if( nFtnPageNr > nDbgPageNr )
-            {
-                SwTxtFrmLocker aLock(this);
-                ASSERT( nFtnPageNr <= nDbgPageNr, "!Ftn steht vor der Referenz." );
-                MSHORT i = 0;
-            }
-        }
-    }
-#endif
 
     SWRECTFN( this )
 
-    // --> OD 2008-01-31 #newlistlevelattrs#
     CalcAdditionalFirstLineOffset();
-    // <--
 
     // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
     // gelegentlich TxtFrms mit einer Breite <=0.
@@ -1998,7 +1887,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         else if( bSetOfst && IsFollow() )
         {
             SwTxtFrm *pMaster = FindMaster();
-            ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
+            OSL_ENSURE( pMaster, "SwTxtFrm::Format: homeless follow" );
             if( pMaster )
                 pMaster->Prepare( PREP_FOLLOW_FOLLOWS );
             SwTwips nMaxY = (GetUpper()->*fnRect->fnGetPrtBottom)();
@@ -2048,9 +1937,8 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         {
             SwFrm* pPre = GetPrev();
             if( pPre &&
-                // --> FME 2004-07-22 #i10826# It's the first, it cannot keep!
+                // #i10826# It's the first, it cannot keep!
                 pPre->GetIndPrev() &&
-                // <--
                 pPre->GetAttrSet()->GetKeep().GetValue() )
             {
                 pPre->InvalidatePos();
@@ -2111,15 +1999,13 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
 sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::FormatQuick with swapped frame" );
 
-    DBG_LOOP;
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
     (void)nDbgY;
-#ifdef DBG_UTIL
     // nStopAt laesst sich vom CV bearbeiten.
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
@@ -2127,7 +2013,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         int i = GetFrmId();
         (void)i;
     }
-#endif
 #endif
 
     if( IsEmpty() && FormatEmpty() )
@@ -2162,13 +2047,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
                       ? GetFollow()->GetOfst() : aInf.GetTxt().Len();
     do
     {
-        //DBG_LOOP; shadows declaration above.
-        //resolved into:
-#if OSL_DEBUG_LEVEL > 1
-#ifdef DBG_UTIL
-        DbgLoop aDbgLoop2( (const void*) this );
-#endif
-#endif
         nStart = aLine.FormatLine( nStart );
         if( aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd) )
             aLine.Insert( new SwLineLayout() );
@@ -2183,7 +2061,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     if( !bForceQuickFormat && nNewHeight != nOldHeight && !IsUndersized() )
     {
         // Achtung: Durch FormatLevel==12 kann diese Situation auftreten, don't panic!
-        // ASSERT( nNewHeight == nOldHeight, "!FormatQuick: rosebud" );
         const xub_StrLen nStrt = GetOfst();
         _InvalidateRange( SwCharRange( nStrt, nEnd - nStrt) );
         return sal_False;
@@ -2204,3 +2081,5 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

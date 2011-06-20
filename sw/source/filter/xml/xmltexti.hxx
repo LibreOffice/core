@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _XMLTEXTI_HXX
 #define _XMLTEXTI_HXX
 
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
 #include <xmloff/functional.hxx>
 
 class XMLRedlineImportHelper;
@@ -130,3 +129,4 @@ public:
 
 #endif  //  _XMLTEXTI_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

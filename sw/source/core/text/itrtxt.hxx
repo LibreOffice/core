@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,8 +66,13 @@ protected:
     // Zuruecksetzen in die erste Zeile.
     void Init();
     void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
-    inline SwTxtIter(SwTxtNode* pTxtNode) : SwAttrIter(pTxtNode) { }
-
+    inline SwTxtIter(SwTxtNode* pTxtNode)
+        : SwAttrIter(pTxtNode)
+        , pFrm(NULL)
+        , pInf(NULL)
+        , pCurr(NULL)
+        , pPrev(NULL)
+    {}
 public:
     inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf ) : SwAttrIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
@@ -143,9 +149,8 @@ private:
           KSHORT  nDropDescent;
           MSHORT  nDropLines;
           MSHORT  nAdjust;
-          // --> OD 2008-06-30 #i91133#
+          // #i91133#
           SwTwips mnTabLeft;
-          // <--
 
 protected:
     // fuer FormatQuoVadis
@@ -175,12 +180,11 @@ public:
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
     inline sal_Bool HasNegFirst() const { return nFirst < nLeft; }
 
-    // --> OD 2008-06-30 #i91133#
+    // #i91133#
     inline SwTwips GetTabLeft() const
     {
         return mnTabLeft;
     }
-    // <--
     // DropCaps
     inline MSHORT GetDropLines() const { return nDropLines; }
     inline void SetDropLines( const MSHORT nNew ) { nDropLines = nNew; }
@@ -338,3 +342,5 @@ inline SwTwips SwTxtMargin::Left() const
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 
 #include "srtdlg.hxx"
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -86,7 +85,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-
 void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 {
     void* pDel;
@@ -97,11 +95,8 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Fuer Tabellenselektion sel. Zeilen und Spalten
-                    feststellen
+     Description: determine lines and columns for table selection
  --------------------------------------------------------------------*/
-
-
 sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
@@ -110,7 +105,7 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 
     _FndBox aFndBox( 0, 0 );
 
-    // suche alle Boxen / Lines
+    // look for all boxes / lines
     {
         SwSelBoxes aSelBoxes;
         ::GetTblSel( rSh, aSelBoxes );
@@ -127,9 +122,8 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Init-Liste
+     Description: init list
  --------------------------------------------------------------------*/
-
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
@@ -217,7 +211,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
         aColLbl.SetText(aColTxt);
     }
 
-    // Initialisieren
+    // initialise
     Link aLk = LINK(this,SwSortDlg, CheckHdl);
     aKeyCB1.SetClickHdl( aLk );
     aKeyCB2.SetClickHdl( aLk );
@@ -318,12 +312,11 @@ sal_Unicode SwSortDlg::GetDelimChar() const
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: An die Core weiterreichen
+    Description: pass on to the Core
  --------------------------------------------------------------------*/
 void SwSortDlg::Apply()
 {
-    // Alte Einstellung speichern
-    //
+    // save all settings
     bCheck1 = aKeyCB1.IsChecked();
     bCheck2 = aKeyCB2.IsChecked();
     bCheck3 = aKeyCB3.IsChecked();
@@ -407,9 +400,6 @@ void SwSortDlg::Apply()
         InfoBox( this->GetParent(), SW_RES(MSG_SRTERR)).Execute();
 }
 
-/* -----------------30.09.98 10:03-------------------
- *
- * --------------------------------------------------*/
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 {
     sal_Bool bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
@@ -438,7 +428,6 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
     }
     return 0;
 }
-
 
 IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
 {
@@ -525,8 +514,4 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     return 0;
 }
 
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

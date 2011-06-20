@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <ooo/vba/word/WdFieldType.hpp>
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/util/XUpdatable.hpp>
 #include <swtypes.hxx>
 
 using namespace ::ooo::vba;
@@ -43,6 +45,17 @@ using namespace ::com::sun::star;
 SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const  uno::Reference< css::text::XTextField >& xTextField) throw ( uno::RuntimeException ) : SwVbaField_BASE( rParent, rContext ), mxTextDocument( rDocument )
 {
     mxTextField.set( xTextField, uno::UNO_QUERY_THROW );
+}
+
+sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException)
+{
+    uno::Reference< util::XUpdatable > xUpdatable( mxTextField, uno::UNO_QUERY );
+    if( xUpdatable.is() )
+    {
+        xUpdatable->update();
+        return sal_True;
+    }
+    return sal_False;
 }
 
 // XHelperInterface
@@ -113,13 +126,11 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
     nFnd      = nNext;
     nSavPtr   = nNext;
     aFieldName = aData.Copy( 0, nFnd );
-//  cLastChar = aData.GetChar( nSavPtr );
 }
 
 
 _ReadFieldParams::~_ReadFieldParams()
 {
-//  aData.SetChar( nSavPtr, cLastChar );
 }
 
 
@@ -368,12 +379,17 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     {
         _ReadFieldParams aReadParam(sText);
         sFieldName = aReadParam.GetFieldName();
+        OSL_TRACE("SwVbaFields::Add, the field name is %s ",rtl::OUStringToOString( sFieldName, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     uno::Reference< text::XTextContent > xTextField;
     if( nType == word::WdFieldType::wdFieldFileName || sFieldName.EqualsIgnoreCaseAscii("FILENAME") )
     {
         xTextField.set( Create_Field_FileName( sText ), uno::UNO_QUERY_THROW );
+    }
+    else if( nType == word::WdFieldType::wdFieldDocProperty || sFieldName.EqualsIgnoreCaseAscii("DOCPROPERTY") )
+    {
+        xTextField.set( Create_Field_DocProperty( sText ), uno::UNO_QUERY_THROW );
     }
     else
     {
@@ -389,7 +405,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl::OUString _text ) throw (uno::RuntimeException)
 {
-    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString::createFromAscii("com.sun.star.text.TextField.FileName") ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.FileName")) ), uno::UNO_QUERY_THROW );
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
     if( _text.getLength() > 0 )
     {
@@ -415,6 +431,104 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl
 
     uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
     xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FileFormat") ), uno::makeAny( nFileFormat ) );
+
+    return xTextField;
+}
+
+struct DocPropertyTable
+{
+    const char* sDocPropertyName;
+    const char* sFieldService;
+};
+
+static const DocPropertyTable aDocPropertyTables[] =
+{
+    { "Author", "com.sun.star.text.textfield.docinfo.CreateAuthor" },
+    { "Bytes", NULL },
+    { "Category", NULL },
+    { "Characters",NULL },
+    { "CharactersWithSpaces", NULL },
+    { "Comments", "com.sun.star.text.textfield.docinfo.Description" },
+    { "Company", NULL },
+    { "CreateTime", "com.sun.star.text.textfield.docinfo.CreateDateTime" },
+    { "HyperlinkBase", NULL },
+    { "Keywords", "com.sun.star.text.textfield.docinfo.Keywords" },
+    { "LastPrinted", "com.sun.star.text.textfield.docinfo.PrintDateTime" },
+    { "LastSavedBy", "com.sun.star.text.textfield.docinfo.ChangeAuthor" },
+    { "LastSavedTime", "com.sun.star.text.textfield.docinfo.ChangeDateTime" },
+    { "Lines", NULL },
+    { "Manager", NULL },
+    { "NameofApplication", NULL },
+    { "ODMADocID", NULL },
+    { "Pages", "com.sun.star.text.textfield.PageCount" },
+    { "Paragraphs", "com.sun.star.text.textfield.ParagraphCount" },
+    { "RevisionNumber", "com.sun.star.text.textfield.docinfo.Revision" },
+    { "Security", NULL },
+    { "Subject", "com.sun.star.text.textfield.docinfo.Subject" },
+    { "Template", "com.sun.star.text.textfield.TemplateName" },
+    { "Title", "com.sun.star.text.textfield.docinfo.Title" },
+    { "TotalEditingTime", "com.sun.star.text.textfield.docinfo.EditTime" },
+    { "Words", "com.sun.star.text.textfield.WordCount" },
+    { NULL, NULL }
+};
+
+uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const rtl::OUString _text ) throw (uno::RuntimeException)
+{
+    String aDocProperty;
+    _ReadFieldParams aReadParam( _text );
+    long nRet;
+    while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
+    {
+        switch( nRet )
+        {
+            case -2:
+                if( !aDocProperty.Len() )
+                    aDocProperty = aReadParam.GetResult();
+                break;
+            case '*':
+                //Skip over MERGEFORMAT
+                aReadParam.SkipToNextToken();
+                break;
+        }
+    }
+    aDocProperty.EraseAllChars('"');
+    OSL_TRACE("SwVbaFields::Create_Field_DocProperty, the document property name is %s ",rtl::OUStringToOString( aDocProperty, RTL_TEXTENCODING_UTF8 ).getStr() );
+    if( aDocProperty.Len() == 0 )
+    {
+        throw uno::RuntimeException();
+    }
+
+    sal_Bool bCustom = sal_True;
+    rtl::OUString sFieldService;
+    // find the build in document properties
+    for( const DocPropertyTable* pTable = aDocPropertyTables; pTable->sDocPropertyName != NULL; pTable++ )
+    {
+        if( aDocProperty.EqualsIgnoreCaseAscii( pTable->sDocPropertyName ) )
+        {
+            if( pTable->sFieldService != NULL )
+                sFieldService = rtl::OUString::createFromAscii(pTable->sFieldService);
+            bCustom = sal_False;
+            break;
+        }
+    }
+
+    if( bCustom )
+    {
+        sFieldService = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.textfield.docinfo.Custom" ) );
+    }
+    else if( sFieldService.getLength() == 0 )
+    {
+        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    }
+
+    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( sFieldService ), uno::UNO_QUERY_THROW );
+
+    if( bCustom )
+    {
+        uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
+        rtl::OUString sDocPropertyName( aDocProperty );
+        xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ), uno::makeAny( sDocPropertyName ) );
+    }
 
     return xTextField;
 }
@@ -476,3 +590,4 @@ SwVbaFields::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,19 +33,12 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
-
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svx/numinf.hxx>
 #include <swtypes.hxx>
 #include <tblnumfm.hxx>
 
-#ifndef _CHRDLG_HRC
 #include <chrdlg.hrc>
-#endif
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -54,10 +48,11 @@
 SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog( pParent, rSet, 0 )
 {
-    // TabPage erzeugen
+    // Create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
+
     if ( fnCreatePage )
     {
         SfxTabPage* pNewPage = (*fnCreatePage)( this, rSet );
@@ -68,9 +63,9 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
     }
 }
 
-
 SwNumFmtDlg::~SwNumFmtDlg()
 {
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,10 +42,9 @@ class SwFtnPortion : public SwFldPortion
     SwTxtFrm *pFrm;         // um im Dtor RemoveFtn rufen zu koennen.
     SwTxtFtn *pFtn;
     KSHORT nOrigHeight;
-    // --> OD 2009-01-29 #i98418#
+    // #i98418#
     bool mbPreferredScriptTypeSet;
     sal_uInt8 mnPreferredScriptType;
-    // <--
 public:
     SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm, SwTxtFtn *pFtn,
                   KSHORT nOrig = KSHRT_MAX );
@@ -55,9 +55,8 @@ public:
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
-    // --> OD 2009-01-29 #i98418#
+    // #i98418#
     void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
-    // <--
 
     const SwTxtFtn* GetTxtFtn() const { return pFtn; };
     OUTPUT_OPERATOR
@@ -71,9 +70,7 @@ class SwFtnNumPortion : public SwNumberPortion
 {
 public:
     inline SwFtnNumPortion( const XubString &rExpand, SwFont *pFntL )
-         // --> OD 2008-01-23 #newlistlevelattrs#
          : SwNumberPortion( rExpand, pFntL, sal_True, sal_False, 0, false )
-         // <--
          { SetWhichPor( POR_FTNNUM ); }
 
     OUTPUT_OPERATOR
@@ -128,3 +125,5 @@ CLASSIO( SwErgoSumPortion )
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

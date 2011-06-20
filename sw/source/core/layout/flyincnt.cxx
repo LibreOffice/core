@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,6 @@ void DeepCalc( const SwFrm *pFrm );
 |*
 |*  SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
 |*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
-|*
 |*************************************************************************/
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pSib, pAnch )
@@ -76,15 +74,11 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
     }
 }
 
-// --> OD 2004-06-29 #i28701#
+// #i28701#
 TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
-// <--
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::SetRefPoint(),
-|*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
@@ -92,7 +86,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
                                  const Point& rRelPos )
 {
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
-    ASSERT( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
+    OSL_ENSURE( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
     SwFlyNotify *pNotify = NULL;
     // No notify at a locked fly frame, if a fly frame is locked, there's
     // already a SwFlyNotify object on the stack (MakeAll).
@@ -102,9 +96,8 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     SetCurrRelPos( rRelAttr );
     SWRECTFN( GetAnchorFrm() )
     (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
-    // --> OD 2006-08-25 #i68520#
+    // #i68520#
     InvalidateObjRectWithSpaces();
-    // <--
     if( pNotify )
     {
         InvalidatePage();
@@ -118,9 +111,6 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::Modify()
-|*
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 02. Sep. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
@@ -167,8 +157,6 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 |*  SwFlyInCntFrm::Format()
 |*
 |*  Beschreibung:       Hier wird der Inhalt initial mit Formatiert.
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 19. May. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
@@ -192,8 +180,6 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 |*  Beschreibung        Im Unterschied zu anderen Frms wird hier nur die
 |*      die RelPos berechnet. Die absolute Position wird ausschliesslich
 |*      per SetAbsPos errechnet.
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 12. Apr. 96
 |*
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
@@ -224,19 +210,15 @@ void SwFlyInCntFrm::MakeObjPos()
     }
 }
 
-// --> OD 2004-12-02 #115759#
+// #115759#
 void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 {
     if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
         AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
 }
-// <--
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::NotifyBackground()
-|*
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 26. Aug. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
@@ -252,9 +234,6 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
 |*
 |*  SwFlyInCntFrm::GetRelPos()
 |*
-|*  Ersterstellung      MA 04. Dec. 92
-|*  Letzte Aenderung    MA 04. Dec. 92
-|*
 |*************************************************************************/
 const Point SwFlyInCntFrm::GetRelPos() const
 {
@@ -266,24 +245,18 @@ const Point SwFlyInCntFrm::GetRelPos() const
 |*
 |*  SwFlyInCntFrm::RegistFlys()
 |*
-|*  Ersterstellung      MA 26. Nov. 93
-|*  Letzte Aenderung    MA 26. Nov. 93
-|*
 |*************************************************************************/
 void SwFlyInCntFrm::RegistFlys()
 {
     // vgl. SwRowFrm::RegistFlys()
     SwPageFrm *pPage = FindPageFrm();
-    ASSERT( pPage, "Flys ohne Seite anmelden?" );
+    OSL_ENSURE( pPage, "Flys ohne Seite anmelden?" );
     ::RegistFlys( pPage, this );
 }
 
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 18. Feb. 94
-|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::MakeAll()
@@ -339,7 +312,7 @@ void SwFlyInCntFrm::MakeAll()
             MakeObjPos();
         }
 
-        // --> OD 2006-04-13 #b6402800#
+        //
         // re-activate clipping of as-character anchored Writer fly frames
         // depending on compatibility option <ClipAsCharacterAnchoredWriterFlyFrames>
         if ( bValidPos && bValidSize &&
@@ -354,8 +327,8 @@ void SwFlyInCntFrm::MakeAll()
                 bWidthClipped = sal_True;
             }
         }
-        // <--
     }
     Unlock();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

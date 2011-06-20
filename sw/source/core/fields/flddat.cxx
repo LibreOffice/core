@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// #include <math.h>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -45,10 +45,6 @@ using namespace ::com::sun::star;
 SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pInitDoc)
     : SwValueFieldType( pInitDoc, RES_DATETIMEFLD )
 {}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFieldType* SwDateTimeFieldType::Copy() const
 {
@@ -80,10 +76,6 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 String SwDateTimeField::Expand() const
 {
     double fVal;
@@ -102,10 +94,6 @@ String SwDateTimeField::Expand() const
     return ExpandValue(fVal, GetFormat(), GetLanguage());
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwField* SwDateTimeField::Copy() const
 {
     SwDateTimeField *pTmp =
@@ -119,35 +107,20 @@ SwField* SwDateTimeField::Copy() const
     return pTmp;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwDateTimeField::GetSubType() const
 {
     return nSubType;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDateTimeField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDateTimeField::SetPar2(const String& rStr)
 {
     nOffset = rStr.ToInt32();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 String SwDateTimeField::GetPar2() const
 {
@@ -157,18 +130,10 @@ String SwDateTimeField::GetPar2() const
         return aEmptyStr;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDateTimeField::SetDateTime(const DateTime& rDT)
 {
     SetValue(GetDateTime(GetDoc(), rDT));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
 {
@@ -180,10 +145,6 @@ double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
     return fResult;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 double SwDateTimeField::GetValue() const
 {
     if (IsFixed())
@@ -191,10 +152,6 @@ double SwDateTimeField::GetValue() const
     else
         return GetDateTime(GetDoc(), DateTime());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 Date SwDateTimeField::GetDate(sal_Bool bUseOffset) const
 {
@@ -211,10 +168,6 @@ Date SwDateTimeField::GetDate(sal_Bool bUseOffset) const
     return aDate;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 Time SwDateTimeField::GetTime(sal_Bool bUseOffset) const
 {
     double fDummy;
@@ -226,10 +179,7 @@ Time SwDateTimeField::GetTime(sal_Bool bUseOffset) const
     return (Time)aDT;
 }
 
-/*-----------------04.03.98 11:05-------------------
-
---------------------------------------------------*/
-sal_Bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -269,12 +219,10 @@ sal_Bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) cons
     default:
         return SwField::QueryValue(rVal, nWhichId);
     }
-    return sal_True;
+    return true;
 }
-/*-----------------04.03.98 11:05-------------------
 
---------------------------------------------------*/
-sal_Bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp = 0;
     switch( nWhichId )
@@ -316,6 +264,7 @@ sal_Bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         default:
             return SwField::PutValue(rVal, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

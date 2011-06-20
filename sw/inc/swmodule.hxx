@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,6 @@
 #include <sfx2/module.hxx>
 
 #include <tools/shl.hxx>
-#include <svl/lstner.hxx>
 #include "swdllapi.h"
 #include "shellid.hxx"
 #include <fldupde.hxx>
@@ -69,7 +69,7 @@ struct SwDBData;
 #define VIEWOPT_DEST_VIEW       0
 #define VIEWOPT_DEST_TEXT       1
 #define VIEWOPT_DEST_WEB        2
-#define VIEWOPT_DEST_VIEW_ONLY  3 //ViewOptions werden nur an der ::com::sun::star::sdbcx::View, nicht an der Appl. gesetzt
+#define VIEWOPT_DEST_VIEW_ONLY  3 //ViewOptions are set only at ::com::sun::star::sdbcx::View, not at the appl.
 
 namespace com{ namespace sun{ namespace star{ namespace scanner{
     class XScannerManager;
@@ -88,8 +88,8 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     SwChapterNumRules*  pChapterNumRules;
     SwStdFontConfig*    pStdFontConfig;
     SwNavigationConfig* pNavigationConfig;
-    SwToolbarConfigItem*pToolbarConfig;     //fuer gestackte Toolbars, welche
-    SwToolbarConfigItem*pWebToolbarConfig;  //war sichtbar?
+    SwToolbarConfigItem*pToolbarConfig;     //For stacked toolbars. Which one was visible?
+    SwToolbarConfigItem*pWebToolbarConfig;
     SwDBConfig*         pDBConfig;
     svtools::ColorConfig*   pColorConfig;
     SvtAccessibilityOptions* pAccessibilityOptions;
@@ -101,13 +101,12 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
 
     SwAttrPool          *pAttrPool;
 
-    // Die aktuelle View wird hier gehalten um nicht ueber
-    // GetActiveView arbeiten zu muessen
-    // Die View ist solange gueltig bis Sie im Activate
-    // zerstoert oder ausgetauscht wird
+    // Current view is held here in order to avoid one's being forced
+    // to work via GetActiveView.
+    // View is valid until destroyed in Activate or exchanged.
     SwView*             pView;
 
-    // Liste aller Redline-Autoren
+    // List of all Redline-authors.
     SvStringsDtor*      pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
@@ -121,13 +120,13 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
     sal_Bool                bAuthorInitialised : 1;
     sal_Bool                bEmbeddedLoadSave : 1;
 
-    // Hint abfangen fuer DocInfo
+    // Catch hint for DocInfo.
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
 protected:
-    // Briefumschlaege, Etiketten
+    // Envelopes, labels.
     void                InsertEnv(SfxRequest&);
     void                InsertLab(SfxRequest&, sal_Bool bLabel);
 
@@ -138,25 +137,23 @@ public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)
 
-    // dieser Ctor nur fuer SW-Dll
+    // This Ctor only for SW-Dll.
     SwModule( SfxObjectFactory* pFact,
                 SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pGlobalFact );
 
     ~SwModule();
 
-    // View setzen nur fuer internen Gebrauch,
-    // aus techn. Gruenden public
-    //
+    // Set view for internal use only. It is public only for technical reasons.
     inline  void        SetView(SwView* pVw) { pView = pVw; }
     inline  SwView*     GetView() { return pView; }
 
-    //Die Handler fuer die Slots
-    void                StateOther(SfxItemSet &);   // andere
+    // Handler for slots.
+    void                StateOther(SfxItemSet &);
 
-    void                ExecOther(SfxRequest &);    // Felder, Formel ..
+    void                ExecOther(SfxRequest &);    // Fields, formula...
 
-    // Benutzereinstellungen modifizieren
+    // Modify user settings.
     const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
     const SwViewOption* GetViewOption(sal_Bool bWeb);
     void                ApplyUsrPref(const SwViewOption &, SwView*,
@@ -166,10 +163,12 @@ public:
     void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
-    //default page mode for text grid
+    // Default page mode for text grid.
     void ApplyDefaultPageMode(sal_Bool bIsSquaredPageMode);
 
-    // ConfigItems erzeugen
+    void ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb);  // apply_char_unit
+
+    // Create ConfigItems.
     SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
     SwPrintOptions*     GetPrtOptions(sal_Bool bWeb);
     SwChapterNumRules*  GetChapterNumRules();
@@ -184,7 +183,7 @@ public:
     SvtUserOptions&     GetUserOptions();
     SvtUndoOptions&     GetUndoOptions();
 
-    // Ueber Sichten iterieren
+    // Iterate over views.
     static SwView*      GetFirstView();
     static SwView*      GetNextView(SwView*);
 
@@ -193,12 +192,12 @@ public:
 
     void ShowDBObj( SwView& rView, const SwDBData& rData, sal_Bool bOnlyIfAvailable = sal_False);
 
-    // Tabellenmodi
+    // Table modi.
     sal_Bool            IsInsTblFormatNum(sal_Bool bHTML) const;
     sal_Bool            IsInsTblChangeNumFormat(sal_Bool bHTML) const;
     sal_Bool            IsInsTblAlignNum(sal_Bool bHTML) const;
 
-    // Redlining
+    // Redlining.
     sal_uInt16          GetRedlineAuthor();
     const String&       GetRedlineAuthor(sal_uInt16 nPos);
     sal_uInt16          InsertRedlineAuthor(const String& rAuthor);
@@ -210,27 +209,27 @@ public:
     sal_uInt16              GetRedlineMarkPos();
     const Color&            GetRedlineMarkColor();
 
-    // returne den definierten DocStat - WordDelimiter
+    // Return defined DocStat - WordDelimiter.
     const String&       GetDocStatWordDelim() const;
 
-    // Durchreichen der Metric von der ModuleConfig (fuer HTML-Export)
+    // Pass metric of ModuleConfig (for HTML-export).
     sal_uInt16 GetMetric( sal_Bool bWeb ) const;
 
-    // Update-Stati durchreichen
+    // Pass update-statuses.
     sal_uInt16 GetLinkUpdMode( sal_Bool bWeb ) const;
     SwFldUpdateFlags GetFldUpdateFlags( sal_Bool bWeb ) const;
 
-    //virtuelle Methoden fuer den Optionendialog
+    // Virtual methods for options dialog.
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
 
-    //hier wird der Pool angelegt und an der SfxShell gesetzt
+    // Pool is created here and set at SfxShell.
     void    InitAttrPool();
-    //Pool loeschen bevor es zu spaet ist
+    // Delete pool before it is too late.
     void    RemoveAttrPool();
 
-    // Invalidiert ggf. OnlineSpell-WrongListen
+    // Invalidates online spell-wrong-lists if necessary.
     void    CheckSpellChanges( sal_Bool bOnlineSpelling,
                     sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain, sal_Bool bSmartTags );
 
@@ -266,9 +265,7 @@ inline void SwModule::SetLngSvcEvtListener(
 }
 
 
-/*-----------------08.07.97 10.33-------------------
-    Zugriff auf das SwModule, die ::com::sun::star::sdbcx::View und die Shell
---------------------------------------------------*/
+//    Access to SwModule, the ::com::sun::star::sdbcx::View and the shell.
 
 #define SW_MOD() ( *(SwModule**) GetAppData(SHL_WRITER))
 
@@ -276,3 +273,5 @@ SW_DLLPUBLIC SwView*    GetActiveView();
 SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

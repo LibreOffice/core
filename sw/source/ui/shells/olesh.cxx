@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,26 +36,14 @@
 #include <sfx2/objitem.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <frmsh.hxx>
-#ifndef _OLESH_HXX
 #include <olesh.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 
 
 #define SwOleShell
@@ -78,3 +67,4 @@ SwOleShell::SwOleShell(SwView &_rView) :
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <sfx2/app.hxx>
 #include <svl/srchitem.hxx> //***
 #include <basic/sbxvar.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -61,11 +60,6 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TEXT_POPUPMENU));
@@ -76,20 +70,11 @@ SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
 
 TYPEINIT1(SwWebTextShell, SwTextShell)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwWebTextShell::SwWebTextShell(SwView &_rView) :
     SwTextShell(_rView)
 {
     SetHelpId(SW_WEBTEXTSHELL);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwWebTextShell::~SwWebTextShell()
 {
@@ -97,3 +82,4 @@ SwWebTextShell::~SwWebTextShell()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

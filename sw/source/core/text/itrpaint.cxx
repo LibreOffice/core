@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include "hintids.hxx"
 #include "flyfrm.hxx"     // SwFlyInCntFrm
 #include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
 #include <editeng/escpitem.hxx>
@@ -50,14 +50,12 @@
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
 
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
 
 
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
-#include "txtcfg.hxx"
 #include "itrpaint.hxx"
 #include "txtfrm.hxx"   // pFrm
 #include "txtfly.hxx"
@@ -100,10 +98,10 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
     pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( ALIGN_BASELINE != pMyFnt->GetAlign() )
     {
-        ASSERT( ALIGN_BASELINE == pMyFnt->GetAlign(),
+        OSL_ENSURE( ALIGN_BASELINE == pMyFnt->GetAlign(),
                 "+SwTxtPainter::CTOR: font alignment revolution" );
         pMyFnt->SetAlign( ALIGN_BASELINE );
     }
@@ -132,7 +130,6 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
         while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
         {
-            DBG_LOOP;
             if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
                 long nTmp = GetInfo().X() +pPor->Width() +
@@ -241,7 +238,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     // Alignment:
-    sal_Bool bPlus = sal_False;
     OutputDevice* pOut = GetInfo().GetOut();
     Point aPnt1( nTmpLeft, GetInfo().GetPos().Y() );
     if ( aPnt1.X() < rPaint.Left() )
@@ -253,10 +249,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if ( aPnt2.X() > rPaint.Right() )
         aPnt2.X() = rPaint.Right();
     if ( aPnt2.Y() > rPaint.Bottom() )
-    {
         aPnt2.Y() = rPaint.Bottom();
-        bPlus = sal_True;
-    }
 
     const SwRect aLineRect( aPnt1, aPnt2 );
 
@@ -267,12 +260,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     if( !pPor && !bEndPor )
-    {
-#ifdef DBGTXT
-        aDbstream << "PAINTER: done nothing" << endl;
-#endif
         return;
-    }
 
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,
@@ -319,7 +307,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     while( pPor )
     {
-        DBG_LOOP;
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
 
@@ -410,10 +397,9 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         }
 
         {
-            // --> FME 2004-06-24 #i16816# tagged pdf support
+            // #i16816# tagged pdf support
             Por_Info aPorInfo( *pPor, *this );
             SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, &aPorInfo, *pOut );
-            // <--
 
             if( pPor->IsMultiPortion() )
                 PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
@@ -438,11 +424,10 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             pArrow = (SwArrowPortion*)pPor;
 
         pPor = bDrawInWindow || GetInfo().X() <= nMaxRight ||
-               // --> FME 2004-06-24 #i16816# tagged pdf support
+               // #i16816# tagged pdf support
                ( GetInfo().GetVsh() &&
                  GetInfo().GetVsh()->GetViewOptions()->IsPDFExport() &&
                  pNext && pNext->IsHolePortion() ) ?
-               // <--
                pNext :
                0;
     }
@@ -537,8 +522,8 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     Range aRange( 0, GetInfo().GetTxt().Len() );
     MultiSelection aUnderMulti( aRange );
 
-    ASSERT( GetFnt() && UNDERLINE_NONE != GetFnt()->GetUnderline(),
-            "CheckSpecialUnderline without underlined font" )
+    OSL_ENSURE( GetFnt() && UNDERLINE_NONE != GetFnt()->GetUnderline(),
+            "CheckSpecialUnderline without underlined font" );
     const SwFont* pParaFnt = GetAttrHandler().GetFont();
     if( pParaFnt && pParaFnt->GetUnderline() == GetFnt()->GetUnderline() )
         aUnderMulti.SelectAll();
@@ -716,3 +701,5 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         // I'm sorry, we do not have a special underlining font for you.
         GetInfo().SetUnderFnt( 0 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

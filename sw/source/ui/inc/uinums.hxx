@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,12 +41,11 @@ class SvStream;
 typedef SfxPoolItem* SfxPoolItemPtr;
 SV_DECL_PTRARR_DEL( _SwNumFmtsAttrs, SfxPoolItemPtr, 5,0 )
 
-//------------------------------------------------------------------------
 class SW_DLLPUBLIC SwNumRulesWithName
 {
     String aName;
-    // die Formate der NumRule muessen! unabhaengig von einem Document sein
-    // (Sie sollen immer vorhanden sein!)
+    // the NumRule's formats _have_ to be independent of a document
+    // (They should always be there!)
     class SW_DLLPRIVATE _SwNumFmtGlobal
     {
         SwNumFmt aFmt;
@@ -83,13 +83,11 @@ public:
 
     void Store( SvStream& );
 };
-/********************************************************************
 
-********************************************************************/
 class SwBaseNumRules
 {
 public:
-    enum { nMaxRules = MAX_NUM_RULES };         // zur Zeit 9 definierte Forms
+    enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
 protected:
     SwNumRulesWithName  *pNumRules[ MAX_NUM_RULES ];
     String              sFileName;
@@ -112,9 +110,6 @@ public:
 
 };
 
-/********************************************************************
-
-********************************************************************/
 class SwChapterNumRules : public SwBaseNumRules
 {
 
@@ -129,8 +124,10 @@ public:
 // INLINE METHODE --------------------------------------------------------
 inline const SwNumRulesWithName *SwBaseNumRules::GetRules(sal_uInt16 nIdx) const
 {
-    ASSERT(nIdx < nMaxRules, Array der NumRules ueberindiziert.);
+    OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     return pNumRules[nIdx];
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,25 +30,15 @@
 
 #include <svx/stddlg.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
@@ -167,9 +158,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
 
 };
-/* -----------------27.11.2002 12:05-----------------
- *
- * --------------------------------------------------*/
+
 class SwMailMergeCreateFromDlg : public ModalDialog
 {
     FixedLine       aCreateFromFL;
@@ -185,9 +174,7 @@ public:
 
     sal_Bool    IsThisDocument() const {return aThisDocRB.IsChecked();}
 };
-/* -----------------04.02.2003 13:41-----------------
- *
- * --------------------------------------------------*/
+
 class SwMailMergeFieldConnectionsDlg : public ModalDialog
 {
     FixedLine       aConnectionsFL;
@@ -208,3 +195,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

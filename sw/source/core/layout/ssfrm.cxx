@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -215,7 +216,7 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
 
 const sal_uInt16 nMinVertCellHeight = 1135;
 
-/*-----------------------------------
+/*--------------------------------------------------
  * SwFrm::CheckDirChange(..)
  * checks the layout direction and
  * invalidates the lower frames rekursivly, if necessary.
@@ -286,7 +287,7 @@ void SwFrm::CheckDirChange()
         else if( IsTxtFrm() )
             ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
 
-        // --> OD 2004-07-27 #i31698# - notify anchored objects also for page frames.
+        // #i31698# - notify anchored objects also for page frames.
         // Remove code above for special handling of page frames
         if ( GetDrawObjs() )
         {
@@ -304,19 +305,18 @@ void SwFrm::CheckDirChange()
                     // invalidate
                     pAnchoredObj->InvalidateObjPos();
                 }
-                // --> OD 2004-07-27 #i31698# - update layout direction of
+                // #i31698# - update layout direction of
                 // anchored object
                 {
                     ::setContextWritingMode( pAnchoredObj->DrawObj(), pAnchoredObj->GetAnchorFrmContainingAnchPos() );
                     pAnchoredObj->UpdateLayoutDir();
                 }
-                // <--
             }
         }
     }
 }
 
-/*-----------------------------------
+/*--------------------------------------------------
  * SwFrm::GetFrmAnchorPos(..)
  * returns the position for anchors based on frame direction
  * --------------------------------------------------*/
@@ -376,7 +376,7 @@ SwFrm::~SwFrm()
             ViewShell *pVSh = pRootFrm->GetCurrShell();
             if( pVSh && pVSh->Imp() )
             {
-                ASSERT( !GetLower(), "Lowers should be dispose already!" );
+                OSL_ENSURE( !GetLower(), "Lowers should be dispose already!" );
                 pVSh->Imp()->DisposeAccessibleFrm( this );
             }
         }
@@ -394,7 +394,7 @@ SwFrm::~SwFrm()
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                 SwDrawContact* pContact =
                         static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                ASSERT( pContact,
+                OSL_ENSURE( pContact,
                         "<SwFrm::~SwFrm> - missing contact for drawing object" );
                 if ( pContact )
                 {
@@ -406,7 +406,7 @@ SwFrm::~SwFrm()
             delete pDrawObjs;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // JP 15.10.2001: for detection of access to deleted frames
     pDrawObjs = (SwSortedObjs*)0x33333333;
 #endif
@@ -505,7 +505,7 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
     SwIterator<SwCntntFrm,SwCntntNode> aIter( rNode );
     for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
     {
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -521,7 +521,6 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
                             dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
             }
         }
-        // <--
         if( pFrm->HasFollow() )
             pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
         if( pFrm->IsFollow() )
@@ -541,12 +540,12 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
             !pFrm->GetIndPrev() )
         {
             SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-            ASSERT( pFtn, "You promised a FtnFrm?" );
+            OSL_ENSURE( pFtn, "You promised a FtnFrm?" );
             SwCntntFrm* pCFrm;
             if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
                 0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
             {
-                ASSERT( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
                 ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
             }
         }
@@ -579,7 +578,7 @@ SwLayoutFrm::~SwLayoutFrm()
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
             {
                 nCnt = pFrm->GetDrawObjs()->Count();
-                // --> OD 2004-06-30 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
                     delete pAnchoredObj;
@@ -588,7 +587,7 @@ SwLayoutFrm::~SwLayoutFrm()
                     SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                     SwDrawContact* pContact =
                             static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                    ASSERT( pContact,
+                    OSL_ENSURE( pContact,
                             "<SwFrm::~SwFrm> - missing contact for drawing object" );
                     if ( pContact )
                     {
@@ -600,7 +599,6 @@ SwLayoutFrm::~SwLayoutFrm()
                 {
                     pFrm->GetDrawObjs()->Remove( *pAnchoredObj );
                 }
-                // <--
             }
             pFrm->Remove();
             delete pFrm;
@@ -612,7 +610,7 @@ SwLayoutFrm::~SwLayoutFrm()
         {
             nCnt = GetDrawObjs()->Count();
 
-            // --> OD 2004-06-30 #i28701#
+            // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
                 delete pAnchoredObj;
@@ -621,7 +619,7 @@ SwLayoutFrm::~SwLayoutFrm()
                 SdrObject* pSdrObj = pAnchoredObj->DrawObj();
                 SwDrawContact* pContact =
                         static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
-                ASSERT( pContact,
+                OSL_ENSURE( pContact,
                         "<SwFrm::~SwFrm> - missing contact for drawing object" );
                 if ( pContact )
                 {
@@ -632,7 +630,6 @@ SwLayoutFrm::~SwLayoutFrm()
             {
                 GetDrawObjs()->Remove( *pAnchoredObj );
             }
-            // <--
         }
     }
     else
@@ -687,7 +684,7 @@ const SwRect SwFrm::PaintArea() const
             else
                 nTmpRight = (pNxt->Frm().*fnRect->fnGetRight)();
         }
-        ASSERT( pTmp, "PaintArea lost in time and space" );
+        OSL_ENSURE( pTmp, "PaintArea lost in time and space" );
         if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() ||
             pTmp->IsCellFrm() || pTmp->IsRowFrm() || //nobody leaves a table!
             pTmp->IsRootFrm() )
@@ -810,3 +807,4 @@ const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,14 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 
 #include "docstat.hxx"
 
 /*--------------------------------------------------------------------
-    Beschreibung:   DocInfo jetzt als Page
+    Description:   DocInfo now as page
  --------------------------------------------------------------------*/
-
 class SwDocStatPage: public SfxTabPage
 {
 public:
@@ -69,6 +67,8 @@ private:
     FixedInfo       aWordNo;
     FixedText       aCharLbl;
     FixedInfo       aCharNo;
+    FixedText       aCharExclSpacesLbl;
+    FixedInfo       aCharExclSpacesNo;
     FixedText       aLineLbl;
     FixedInfo       aLineNo;
 
@@ -82,3 +82,5 @@ private:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

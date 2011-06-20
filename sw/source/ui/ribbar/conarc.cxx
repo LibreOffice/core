@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -106,11 +107,6 @@ sal_Bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
                 m_pSh->EndCreate(SDRCREATE_NEXTPOINT);
         }
     }
-/*  else if ( pView->IsCreateObj() && rMEvt.IsRight() )
-    {
-        pView->EndCreateObj( SDRCREATE_FORCEEND );
-        bReturn = sal_True;
-    }*/
 
     return (bReturn);
 }
@@ -159,3 +155,4 @@ void ConstArc::Deactivate()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

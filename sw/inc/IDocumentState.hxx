@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,49 +36,33 @@
  class IDocumentState
  {
  public:
-       /** Bei Formataenderungen muss das zu Fuss gerufen werden!
+    /** Must be called manually at changes of format.
     */
     virtual void SetModified() = 0;
 
-    /**
-    */
     virtual void ResetModified() = 0;
 
-    /** Dokumentaenderungen?
+    /** Changes of document?
     */
     virtual bool IsModified() const = 0;
 
-    /** Zustaende ueber Ladezustand
-        frueher DocInfo
+    /** State of being loaded or not.
+        Formerly DocInfo.
     */
     virtual bool IsLoaded() const = 0;
 
-    /**
-    */
     virtual bool IsUpdateExpFld() const  = 0;
 
-    /**
-    */
     virtual bool IsNewDoc() const = 0;
 
-    /**
-    */
     virtual bool IsPageNums() const = 0;
 
-    /**
-    */
     virtual void SetPageNums(bool b)    = 0;
 
-    /**
-    */
     virtual void SetNewDoc(bool b) = 0;
 
-    /**
-    */
     virtual void SetUpdateExpFldStat(bool b) = 0;
 
-    /**
-    */
     virtual void SetLoaded(bool b = sal_True) = 0;
 
  protected:
@@ -85,3 +70,5 @@
  };
 
  #endif // IDOCUMENTSTATE_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

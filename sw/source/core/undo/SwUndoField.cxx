@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,9 +76,9 @@ SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
     , pHnt(_pHnt)
     , bUpdate(_bUpdate)
 {
-    ASSERT(pOldField, "No old field!");
-    ASSERT(pNewField, "No new field!");
-    ASSERT(pDoc, "No document!");
+    OSL_ENSURE(pOldField, "No old field!");
+    OSL_ENSURE(pNewField, "No new field!");
+    OSL_ENSURE(pDoc, "No document!");
 }
 
 SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
@@ -89,7 +90,8 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
 void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    const SwField * pField = pTxtFld->GetFld().GetFld();
+
+    const SwField * pField = pTxtFld ? pTxtFld->GetFld().GetFld() : NULL;
 
     if (pField)
     {
@@ -100,7 +102,7 @@ void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 void SwUndoFieldFromDoc::DoImpl()
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
-    const SwField * pField = pTxtFld->GetFld().GetFld();
+    const SwField * pField = pTxtFld ? pTxtFld->GetFld().GetFld() : NULL;
 
     if (pField)
     {
@@ -160,3 +162,4 @@ void SwUndoFieldFromAPI::RepeatImpl(::sw::RepeatContext &)
     DoImpl();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@
 #include <ndindex.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
-#include <ndole.hxx>
 #include <calc.hxx>
 #include <frmfmt.hxx>
 #include <cellfml.hxx>
@@ -52,7 +52,7 @@
 #include <swtblfmt.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unochart.hxx>
@@ -78,7 +78,7 @@ sal_Bool SwTable::IsTblComplexForChart( const String& rSelection,
         if( '>' == sBox.GetChar( sBox.Len()-1  ) ) sBox.Erase( sBox.Len()-1 );
 
         xub_StrLen nTrenner = sBox.Search( ':' );
-        ASSERT( STRING_NOTFOUND != nTrenner, "keine gueltige Selektion" );
+        OSL_ENSURE( STRING_NOTFOUND != nTrenner, "keine gueltige Selektion" );
 
         pSttBox = GetTblBox( sBox.Copy( 0, nTrenner ));
         pEndBox = GetTblBox( sBox.Copy( nTrenner+1 ));
@@ -224,7 +224,7 @@ SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
 {
     // since there must be only one instance of this object per document
     // we need a mutex here
-    vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
 
     if (bCreate && !aChartDataProviderImplRef.get())
     {
@@ -275,3 +275,4 @@ SwChartLockController_Helper & SwDoc::GetChartControllerHelper()
     return *pChartControllerHelper;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

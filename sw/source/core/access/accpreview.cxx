@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,28 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <vcl/svapp.hxx>
-#include <rtl/uuid.h>
-#ifndef _ACCESS_HRC
+#include <comphelper/servicehelper.hxx>
 #include "access.hrc"
-#endif
 #include <accpreview.hxx>
-
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentPageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
-
-
-// using namespace accessibility;
 
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
-
-
-
 
 //
 // SwAccessiblePreview
@@ -89,16 +80,15 @@ Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     return aSeq;
 }
 
+namespace
+{
+    class theSwAccessiblePreviewImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessiblePreviewImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessiblePreviewImplementationId::get().getSeq();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

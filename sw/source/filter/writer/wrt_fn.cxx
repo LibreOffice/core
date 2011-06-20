@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
-#include "pam.hxx"
 #include "node.hxx"
 #include "format.hxx"
 
@@ -42,7 +42,7 @@
 Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 {
     sal_uInt16 nId = rHt.Which();
-    ASSERT(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
+    OSL_ENSURE(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
     FnAttrOut pOut;
     if( 0 != ( pOut = pTab[ nId - RES_CHRATR_BEGIN] ))
         (*pOut)( rWrt, rHt );
@@ -66,11 +66,11 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
         if( !pSet )
             return rWrt;
     }
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem(0);
     FnAttrOut pOut;
     if( !bDeep || !pSet->GetParent() )
     {
-        ASSERT( rSet.Count(), "Wurde doch schon behandelt oder?" );
+        OSL_ENSURE( rSet.Count(), "Wurde doch schon behandelt oder?" );
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {
@@ -119,7 +119,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
             nId = RES_OLENODE;
             break;
         default:
-            ASSERT(false, "was fuer ein Node ist es denn nun?");
+            OSL_FAIL("was fuer ein Node ist es denn nun?");
             break;
     }
     FnNodeOut pOut;
@@ -129,3 +129,4 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

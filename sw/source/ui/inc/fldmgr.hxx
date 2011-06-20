@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,10 +53,10 @@ class SbModule;
 class SvxMacroItem;
 class SvNumberFormatter;
 class Window;
-/*--------------------------------------------------------------------
-    Beschreibung: Die Gruppen von Feldern
- --------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------
+    Description: the groups of fields
+ --------------------------------------------------------------------*/
 enum SwFldGroups
 {
     GRP_DOC,
@@ -73,8 +74,8 @@ struct SwFldGroupRgn
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:  Der FeldManager handelt das Einfuegen von Felder
-                    ueber Command-Strings
+    Description:  the field manager handles the insertation of fields
+                  with command strings
  --------------------------------------------------------------------*/
 struct SwInsertFld_Data
 {
@@ -116,7 +117,7 @@ private:
     SwField*            pCurFld;
     SbModule*           pModule;
     const SvxMacroItem* pMacroItem;
-    SwWrtShell*         pWrtShell; // darf auch NULL sein!
+    SwWrtShell*         pWrtShell; // can be ZERO too!
     String          aCurPar1;
     String          aCurPar2;
     String          sCurFrame;
@@ -140,10 +141,10 @@ public:
     void                SetWrtShell( SwWrtShell* pShell )
                         {   pWrtShell = pShell;     }
 
-    // Feld einfuegen ueber TypeId (TYP_ ...)
+    // insert field using TypeID (TYP_ ...)
     sal_Bool            InsertFld(  const SwInsertFld_Data& rData );
 
-    // Direkt das aktuelle Feld aendern
+    // change the current field directly
     void            UpdateCurFld(sal_uLong nFormat,
                                  const String& rPar1,
                                  const String& rPar2,
@@ -153,7 +154,7 @@ public:
     inline const String& GetCurFldPar2() const;
     inline sal_uLong   GetCurFldFmt() const;
 
-    // Ein Feld ermitteln
+    // determine a field
     SwField*        GetCurFld();
 
     void            InsertFldType(SwFieldType& rType);
@@ -164,54 +165,54 @@ public:
     inline const String& GetMacroName() const         { return (sMacroName); }
     inline void     SetMacroModule(SbModule* pMod)    { pModule = pMod; }
 
-    // Vorheriger Naechster gleichen Typ
+    // previous and next of the same type
     sal_Bool GoNextPrev( sal_Bool bNext = sal_True, SwFieldType* pTyp = 0 );
     sal_Bool GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( sal_True, pTyp ); }
     sal_Bool GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( sal_False, pTyp ); }
 
-    // Erfragen von Werten aus Datenbankfeldern (BASIC )
+    // query values from database fields (BASIC )
 //  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
     sal_Bool            IsDBNumeric(const String& rDBName, const String& rTblQryName,
                                         sal_Bool bIsTable, const String& rFldName);
 
-    // RefMark mit Namen organisieren
+    // organise RefMark with names
     sal_Bool            CanInsertRefMark( const String& rStr );
 
 
-    // Zugriff ueber ResId auf Feldtypen
+    // access to field types via ResId
     sal_uInt16          GetFldTypeCount(sal_uInt16 nResId = USHRT_MAX) const;
     SwFieldType*    GetFldType(sal_uInt16 nResId, sal_uInt16 nId = 0) const;
     SwFieldType*    GetFldType(sal_uInt16 nResId, const String& rName) const;
 
     void            RemoveFldType(sal_uInt16 nResId, const String& rName);
 
-    // Zugriff ueber TypeId aus dem Dialog
-    // Ids fuer einen Bereich von Feldern
+    // access via TypeId from the dialog
+    // Ids for a range of fields
     const SwFldGroupRgn& GetGroupRange(sal_Bool bHtmlMode, sal_uInt16 nGrpId) const;
     sal_uInt16          GetGroup(sal_Bool bHtmlMode, sal_uInt16 nTypeId, sal_uInt16 nSubType = 0) const;
 
-    // TypeId des aktuellen Feldes
+    // the current field's TypeId
     sal_uInt16          GetCurTypeId() const;
 
-    // TypeId fuer einen konkrete Pos in der Liste
+    // TypeId for a concrete position in the list
     static sal_uInt16   GetTypeId(sal_uInt16 nPos);
-    // Name des Typen in der Liste der Felder
+    // name of the type in the list of fields
     static const String&  GetTypeStr(sal_uInt16 nPos);
 
-    // Pos in der Liste der Felder
+    // Pos in the list of fields
     static sal_uInt16   GetPos(sal_uInt16 nTypeId);
 
-    // Untertypen zu einem Typ
+    // subtypes to a type
     sal_Bool            GetSubTypes(sal_uInt16 nId, SvStringsDtor& rToFill);
 
-    // Formate zu einem Typ
+    // format to a type
     sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, sal_Bool bIsText, sal_Bool bHtmlMode = sal_False) const;
     String          GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
     sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, sal_Bool bIsText, SvNumberFormatter* pFormatter, double* pVal = 0L);
 
-    // Evaluierung der ExpressionFelder ausschalten fuer das Einfuegen
-    // vieler Expressionfelder (siehe Etiketten)
+    // turn off evaluation of expression fields for insertation
+    // of many expressino fields (see labels)
     //
     inline void     SetEvalExpFlds(sal_Bool bEval);
     void            EvalExpFlds(SwWrtShell* pSh = NULL);
@@ -229,6 +230,6 @@ inline const String& SwFldMgr::GetCurFldPar2() const
 inline sal_uLong SwFldMgr::GetCurFldFmt() const
     { return nCurFmt; }
 
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

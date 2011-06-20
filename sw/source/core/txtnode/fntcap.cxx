@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,21 +32,13 @@
 
 #include <hintids.hxx>
 #include <editeng/cmapitem.hxx>
+#include <editeng/svxfont.hxx>
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CHARTYPE_HDL
 #include <com/sun/star/i18n/CharType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
 
-#ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
-#endif
-#include <errhdl.hxx>
 #include <fntcache.hxx>
 #include <swfont.hxx>
 #include <breakit.hxx>
@@ -53,9 +46,6 @@
 #include <scriptinfo.hxx>
 
 using namespace ::com::sun::star::i18n;
-
-
-#define KAPITAELCHENPROP 66
 
 /*************************************************************************
  *                      class SwCapitalInfo
@@ -95,7 +85,7 @@ xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
 {
     int j = 0;
     const xub_StrLen nEnd = nOfst + nLen;
-    ASSERT( nEnd <= rOrigString.Len(), "lcl_CalcCaseMap: Wrong parameters" )
+    OSL_ENSURE( nEnd <= rOrigString.Len(), "lcl_CalcCaseMap: Wrong parameters" );
 
     // special case for title case:
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
@@ -298,7 +288,7 @@ protected:
     SwFntObj *pLowerFnt;
 public:
     SwDoDrawCapital( SwDrawTextInfo &rInfo ) :
-        SwDoCapitals( rInfo )
+        SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0)
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
@@ -326,7 +316,7 @@ void SwDoDrawCapital::Do()
         rInf.SetBullet( bOldBullet );
     }
 
-    ASSERT( pUpperFnt, "No upper font, dying soon!");
+    OSL_ENSURE( pUpperFnt, "No upper font, dying soon!");
     rInf.Shift( pUpperFnt->GetFont()->GetOrientation() );
     rInf.SetWidth( nOrgWidth );
 }
@@ -337,7 +327,7 @@ void SwDoDrawCapital::Do()
 
 void SwDoDrawCapital::DrawSpace( Point &rPos )
 {
-    static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+    static sal_Char const sDoubleSpace[] = "  ";
 
     long nDiff = rInf.GetPos().X() - rPos.X();
 
@@ -396,7 +386,7 @@ protected:
     sal_uInt16 nOfst;
 public:
     SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const sal_uInt16 nOfs ) :
-        SwDoCapitals( rInfo ), nCrsr( 0 ), nOfst( nOfs )
+        SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0), nCrsr( 0 ), nOfst( nOfs )
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
@@ -564,7 +554,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 
 void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 {
-    ASSERT( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
+    OSL_ENSURE( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
 
     Size aPartSize;
     long nKana = 0;
@@ -632,8 +622,13 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     else
         pBigFont = pLastFont;
 
-    // Hier entsteht der Kleinbuchstabenfont:
-    aFont.SetProportion( sal_uInt8( (aFont.GetPropr()*KAPITAELCHENPROP) / 100L) );
+    // Older LO versions had 66 as the small caps percentage size, later changed to 80,
+    // therefore a backwards compatibility option is kept (otherwise layout is changed).
+    // NOTE: There are more uses of SMALL_CAPS_PERCENTAGE in editeng, but it seems they
+    // do not matter for Writer (and if they did it'd be pretty ugly to propagate
+    // the option there).
+    int smallCapsPercentage = smallCapsPercentage66 ? 66 : SMALL_CAPS_PERCENTAGE;
+    aFont.SetProportion( (aFont.GetPropr() * smallCapsPercentage ) / 100L );
     pMagic2 = NULL;
     nIndex2 = 0;
     SwFntAccess *pSmallFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
@@ -703,8 +698,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
-        ASSERT( nPos, "nextCharBlock not implemented?" );
-#ifdef DBG_UTIL
+        OSL_ENSURE( nPos, "nextCharBlock not implemented?" );
+#if OSL_DEBUG_LEVEL > 1
         if( !nPos )
             nPos = nMaxPos;
 #endif
@@ -817,8 +812,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
-        ASSERT( nPos, "endOfCharBlock not implemented?" );
-#ifdef DBG_UTIL
+        OSL_ENSURE( nPos, "endOfCharBlock not implemented?" );
+#if OSL_DEBUG_LEVEL > 1
         if( !nPos )
             nPos = nMaxPos;
 #endif
@@ -853,3 +848,4 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

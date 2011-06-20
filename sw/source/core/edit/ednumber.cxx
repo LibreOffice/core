@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,7 +114,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
 
 SwPaM& SwPamRanges::SetPam( sal_uInt16 nArrPos, SwPaM& rPam )
 {
-    ASSERT_ID( nArrPos < Count(), ERR_VAR_IDX );
+    OSL_ASSERT( nArrPos < Count() );
     const SwPamRange& rTmp = *(GetData() + nArrPos );
     rPam.GetPoint()->nNode = rTmp.nStart;
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
@@ -181,7 +182,6 @@ sal_Bool SwEditShell::HasNumber() const
     {
         bResult = pTxtNd->HasNumber();
 
-        // --> OD 2005-10-26 #b6340308#
         // special case: outline numbered, not counted paragraph
         if ( bResult &&
              pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
@@ -189,7 +189,6 @@ sal_Bool SwEditShell::HasNumber() const
         {
             bResult = sal_False;
         }
-        // <--
     }
 
     return bResult;
@@ -234,10 +233,9 @@ void SwEditShell::DelNumRules()
     // ueberfluessig sein, aber VB hatte darueber eine Bugrep.
     CallChgLnk();
 
-    // --> OD 2005-10-24 #126346# - cursor can not be anymore in
-    // front of a label, because numbering/bullet is deleted.
+    // cursor can not be anymore in front of a label,
+    // because numbering/bullet is deleted.
     SetInFrontOfLabel( sal_False );
-    // <--
 
     GetDoc()->SetModified();
     EndAllAction();
@@ -265,10 +263,9 @@ sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
     }
     GetDoc()->SetModified();
 
-    // --> FME 2005-09-19 #i54693# Update marked numbering levels
+    // #i54693# Update marked numbering levels
     if ( IsInFrontOfLabel() )
         UpdateMarkedListLevel();
-    // <--
 
     CallChgLnk();
 
@@ -301,7 +298,7 @@ sal_Bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 // <- #i23726#
 
 // -> #i23725#
-// --> OD 2008-06-09 #i90078#
+// #i90078#
 // Remove unused default parameter <nLevel> and <bRelative>.
 // Adjust method name and parameter name
 void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
@@ -313,23 +310,19 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
     if (pCurNumRule)
     {
         SwNumRule aRule(*pCurNumRule);
-        // --> OD 2008-06-09 #i90078#
+        // #i90078#
         aRule.ChangeIndent( nDiff );
-        // <--
 
-        // --> OD 2008-03-17 #refactorlists#
         // no start of new list
         SetCurNumRule( aRule, false );
-        // <--
     }
 
     EndAllAction();
 }
 
-// --> OD 2008-06-09 #i90078#
+// #i90078#
 // Adjust method name
 void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
-// <--
 {
     StartAllAction();
 
@@ -340,14 +333,10 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         SwPaM aPaM(rPos);
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
-        // --> OD 2008-06-09 #i90078#
-//        int nLevel = -1;
-//        int nReferenceLevel = pTxtNode->GetActualListLevel();
-//        if (! IsFirstOfNumRule(aPaM))
-//            nLevel = nReferenceLevel;
+        // #i90078#
 
         SwNumRule aRule(*pCurNumRule);
-//        aRule.ChangeIndent(nIndent, nLevel, nReferenceLevel, sal_False);
+
         if ( IsFirstOfNumRule() )
         {
             aRule.SetIndentOfFirstListLevelAndChangeOthers( nIndent );
@@ -357,14 +346,11 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
             aRule.SetIndent( nIndent,
                              static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
         }
-        // <--
 
-        // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
+        // #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
-        // --> OD 2008-03-17 #refactorlists#
         // do not apply any list
         GetDoc()->SetNumRule( aPaM, aRule, false, String(), sal_False );
-        // <--
     }
 
     EndAllAction();
@@ -473,12 +459,11 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
                         {
                             ++nIdx;
                         }
-                        // --> OD 2005-11-14 #i57856#
+                        // #i57856#
                         else
                         {
                             break;
                         }
-                        // <--
                     }
 
                     if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )
@@ -559,15 +544,11 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
 
-            // --> OD 2008-04-02 #refactorlists#
-//            sal_uInt8 nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
-//                                    GetTxtColl()->GetOutlineLevel() );
- //           int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();//#outline level,zhaojianwei
             int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
- //           ASSERT( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
-            ASSERT( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,            //<-end,zhaojianwei
+
+            OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,
                     "<SwEditShell::IsProtectedOutlinePara()>" );
-            // <--
+
             if( bFirst )
             {
                 nLvl = nTmpLvl;
@@ -583,10 +564,10 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
             }
         }
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
     {
-        ASSERT(!this, "Cursor not on an outline node" );
+        OSL_ENSURE(!this, "Cursor not on an outline node" );
     }
 #endif
     return bRet;
@@ -619,7 +600,7 @@ sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
 }
 
 
-sal_Bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, sal_Bool bChkStart ) // #115901#
+sal_Bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, sal_Bool bChkStart )
 {
     sal_Bool bRet = sal_False;
     SwPaM* pCrsr = GetCrsr();
@@ -627,7 +608,6 @@ sal_Bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, sal_Bool bChkStart ) // #1159
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
     {
         StartAllAction();       // Klammern fuers Updaten !!
-        // #115901#
         bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
         EndAllAction();
     }
@@ -654,32 +634,26 @@ sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
     return bResult;
 }
 
-// --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
 sal_uInt8 SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
-    //sal_uInt8 nLevel = NO_NUMBERING;  //#outline level,zhaojianwei
     sal_uInt8 nLevel = MAXLEVEL;        //end,zhaojianwei
 
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
-    // --> FME 2005-09-12 #124972# Made code robust:
-    ASSERT( pTxtNd, "GetNumLevel() without text node" )
+    OSL_ENSURE( pTxtNd, "GetNumLevel() without text node" );
     if ( !pTxtNd )
         return nLevel;
-    // <--
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if(pRule)
     {
-        // --> OD 2008-05-09 #refactorlists#
         const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
         if ( nListLevelOfTxtNode >= 0 )
         {
             nLevel = static_cast<sal_uInt8>( nListLevelOfTxtNode );
         }
-        // <--
     }
 
     return nLevel;
@@ -690,8 +664,6 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
     return GetDoc()->GetCurrNumRule( *GetCrsr()->GetPoint() );
 }
 
-// OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
-// --> OD 2008-03-17 #refactorlists#
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
                                  const bool bCreateNewList,
                                  const String sContinuedListId,
@@ -709,19 +681,14 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
           {
             aRangeArr.SetPam( n, aPam );
-            // --> OD 2008-02-08 #newlistlevelattrs#
-            // --> OD 2008-03-17 #refactorlists#
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
                                   sal_True, bResetIndentAttrs );
-            // <--
             GetDoc()->SetCounted( aPam, true );
           }
     }
     else
     {
-        // --> OD 2008-02-08 #newlistlevelattrs#
-        // --> OD 2008-03-17 #refactorlists#
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
                               sal_True, bResetIndentAttrs );
@@ -804,7 +771,6 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
 sal_uInt16 SwEditShell::GetNodeNumStart() const
 {
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
-    // --> OD 2008-02-28 #refactorlists#
     // correction: check, if list restart value is set at text node and
     // use new method <SwTxtNode::GetAttrListRestartValue()>.
     // return USHRT_MAX, if no list restart value is found.
@@ -813,13 +779,8 @@ sal_uInt16 SwEditShell::GetNodeNumStart() const
         return static_cast<sal_uInt16>(pTxtNd->GetAttrListRestartValue());
     }
     return USHRT_MAX;
-    // <--
 }
 
-/*-- 26.08.2005 14:47:17---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-// --> OD 2008-03-18 #refactorlists#
 const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                               const bool bNum,
                                               const bool bOutline,
@@ -830,4 +791,5 @@ const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                     bForward, bNum, bOutline, nNonEmptyAllowed,
                                     sListId );
 }
-// <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

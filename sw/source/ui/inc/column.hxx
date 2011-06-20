@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,28 +30,14 @@
 #define _COLUMN_HXX
 
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/timer.hxx>
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -63,9 +50,6 @@ const int nMaxCols = 99;
 class SwColMgr;
 class SwWrtShell;
 class SwColumnPage;
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwColumnDlg : public SfxModalDialog
 {
@@ -103,9 +87,6 @@ public:
     SwWrtShell&     GetWrtShell()   { return rWrtShell; }
 };
 
-/*-----------------07.03.97 08.26-------------------
-
---------------------------------------------------*/
 class ColumnValueSet : public ValueSet
 {
     public:
@@ -118,7 +99,7 @@ class ColumnValueSet : public ValueSet
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Spaltendialog jetzt als TabPage
+    Description:    column dialog now as TabPage
  --------------------------------------------------------------------*/
 class SwColumnPage : public SfxTabPage
 {
@@ -149,13 +130,15 @@ class SwColumnPage : public SfxTabPage
     FixedLine       aFLLineType;
     FixedText       aLineTypeLbl;
     LineListBox     aLineTypeDLB;
+    FixedText       aLineWidthLbl;
+    MetricField     aLineWidthEdit;
+    FixedText       aLineColorLbl;
+    ColorListBox    aLineColorDLB;
     FixedText       aLineHeightLbl;
     MetricField     aLineHeightEdit;
     FixedText       aLinePosLbl;
     ListBox         aLinePosDLB;
 
-    FixedLine       aVertFL;
-    FixedLine       aPropertiesFL;
     FixedText       aTextDirectionFT;
     ListBox         aTextDirectionLB;
 
@@ -225,3 +208,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

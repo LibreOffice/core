@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -221,7 +222,7 @@ public:
 #if defined(UNX)
     static const sal_Char sNewLine;     // nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char sNewLine[];   // \015\012
 #endif
 
     SvStringsDtor aImgMapNames;     // geschriebene Image Maps
@@ -370,9 +371,6 @@ public:
     void OutFootEndNoteSym( const SwFmtFtn& rFmtFtn, const String& rNum,
                              sal_uInt16 nScript );
 
-#ifdef JAVA_BASIC_IDE
-    void OutBasicModule( const String& rName, const String& rLanguage );
-#endif
     void OutBasic();
 
     void OutAndSetDefList( sal_uInt16 nNewLvl );
@@ -598,6 +596,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
                                const SwHTMLNumRuleInfo& rNextInfo );
 
+Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 
 #endif  //  _WRTHTML_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

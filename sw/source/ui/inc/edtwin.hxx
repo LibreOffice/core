@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ struct  QuickHelpData;
 class SdrDropMarkerOverlay;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Eingabe-Fenster
+    Description:    input window
  --------------------------------------------------------------------*/
 
 class SwEditWin: public Window,
@@ -75,18 +76,18 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     static  sal_Bool    bReplaceQuote;
     static  long    nDDStartPosX, nDDStartPosY;
 
-    static  Color   aTextColor;     //Textfarbe, fuer die Giesskanne
-    static  sal_Bool    bTransparentBackColor; // Hintergrund transparent
-    static  Color   aTextBackColor; //Texthintergrundfarbe, fuer die Giesskanne
+    static  Color   aTextColor;     // text color; for the watering can
+    static  sal_Bool    bTransparentBackColor; // transparent background
+    static  Color   aTextBackColor; // text background; for the watering can
 
     /*
-     * Timer und Handler fuer das Weiterscrollen, wenn der
-     * Mauspointer innerhalb eines Drag-Vorgangs ausserhalb des
-     * EditWin stehen bleibt.  In regelmaessigen Intervallen wird
-     * die Selektion in Richtung der Mausposition vergroessert.
+     * timer and handler for scrolling on when the mousepointer
+     * stopps outside of EditWin during a drag-operation.
+     * The selection is increased towards the mouse position
+     * regularly.
      */
     AutoTimer       aTimer;
-    // Timer fuer verschachtelte KeyInputs (z.B. fuer Tabellen)
+    // timer for overlapping KeyInputs (e.g. for tables)
     Timer           aKeyInputTimer;
     // timer for ANY-KeyInut question without a following KeyInputEvent
     Timer           aKeyInputFlushTimer;
@@ -98,11 +99,11 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     Point           aRszMvHdlPt;
     Timer           aTemplateTimer;
 
-    // Type/Objecte ueber dem der MousePointer steht
+    // type/object where the mouse pointer is
     SwCallMouseEvent aSaveCallEvent;
 
     SwApplyTemplate     *pApplyTempl;
-    SwAnchorMarker      *pAnchorMarker; // zum Verschieben eines Ankers
+    SwAnchorMarker      *pAnchorMarker; // for relocating the anchor
 
     SdrDropMarkerOverlay    *pUserMarker;
     SdrObject               *pUserMarkerObj;
@@ -111,29 +112,29 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 
     SwView         &rView;
 
-    int             aActHitType;    // aktueller Mauspointer
+    int             aActHitType;    // current mouse pointer
 
-    sal_uLong           m_nDropFormat;   //Format aus dem letzten QueryDrop
-    sal_uInt16          m_nDropAction;   //Action aus dem letzten QueryDrop
-    sal_uInt16          m_nDropDestination;  //Ziel aus dem letzten QueryDrop
+    sal_uLong           m_nDropFormat;   // format from the last QueryDrop
+    sal_uInt16          m_nDropAction;   // action from the last QueryDrop
+    sal_uInt16          m_nDropDestination;  // destination from the last QueryDrop
 
     sal_uInt16          eBezierMode;
-    sal_uInt16          nInsFrmColCount; //Spaltenzahl fuer interaktiven Rahmen
+    sal_uInt16          nInsFrmColCount; // column number for interactive frame
     SdrObjKind      eDrawMode;
     sal_Bool            bLinkRemoved    : 1,
                     bMBPressed      : 1,
                     bInsDraw        : 1,
                     bInsFrm         : 1,
                     bIsInMove       : 1,
-                    bIsInDrag       : 1, //StartExecuteDrag nich doppelt ausfuehren
-                    bOldIdle        : 1, //Zum abschalten des Idle'ns
-                    bOldIdleSet     : 1, //waehrend QeueryDrop
+                    bIsInDrag       : 1, // don't execute StartExecuteDrag twice
+                    bOldIdle        : 1, // to stop to idle
+                    bOldIdleSet     : 1, // during QeueryDrop
                     bTblInsDelMode  : 1, //
                     bTblIsInsMode   : 1, //
                     bTblIsColMode   : 1, //
-                    bChainMode      : 1, //Rahmen verbinden
-                    bWasShdwCrsr    : 1, //ShadowCrsr war im MouseButtonDown an
-                    bLockInput      : 1, //Lock waehrend die Rechenleiste aktiv ist
+                    bChainMode      : 1, // connect frames
+                    bWasShdwCrsr    : 1, // ShadowCrsr was on in MouseButtonDown
+                    bLockInput      : 1, // lock while calc panel is active
                     bIsRowDrag      : 1, //selection of rows is used, in combination with pRowColumnSelectionStart
                     /** #i42732# display status of font size/name depending on either the input language or the
                         selection position depending on what has changed lately
@@ -157,7 +158,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_Bool            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
     sal_Bool            RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode);
 
-    //Hilfsfunktionen fuer D&D
+    // helper function for D&D
     void            DropCleanup();
     void            CleanupDropUserMarker();
     sal_uInt16          GetDropDestination( const Point& rPixPnt,
@@ -166,10 +167,10 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     sal_Bool            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );
 
     /*
-     * Handler fuer das Weiterscrollen, wenn der Mauspointer innerhalb eines
-     * Drag-Vorgangs ausserhalb des EditWin stehen bleibt. In regelmaessigen
-     * Intervallen wird die Selektion in Richtung der Mausposition
-     * vergroessert.
+     * handler for scrolling on when the mousepointer
+     * stopps outside of EditWin during a drag-operation.
+     * The selection is regularly increased towards the mouse
+     * position.
      */
     DECL_LINK( TimerHandler, Timer * );
     void            StartDDTimer();
@@ -179,10 +180,10 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     // timer for ANY-KeyInut question without a following KeyInputEvent
     DECL_LINK( KeyInputFlushHandler, Timer * );
 
-    // Timer fuer verschachtelte KeyInputs (z.B. fuer Tabellen)
+    // timer for overlapping KeyInputs (e.g. for tables)
     DECL_LINK( KeyInputTimerHandler, Timer * );
 
-    // Timer fuer das ApplyTemplates per Maus (verkapptes Drag&Drop)
+    // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
     DECL_LINK( TemplateTimerHdl, Timer* );
 
     using OutputDevice::GetTextColor;
@@ -233,10 +234,10 @@ public:
     sal_Bool            IsFrmAction()                   { return (bInsFrm); }
     inline sal_uInt16   GetBezierMode()                 { return eBezierMode; }
     void            SetBezierMode(sal_uInt16 eBezMode)  { eBezierMode = eBezMode; }
-    void            EnterDrawTextMode(const Point& aDocPos); // DrawTextEditMode einschalten
+    void            EnterDrawTextMode(const Point& aDocPos); // turn on DrawTextEditMode
     void            InsFrm(sal_uInt16 nCols);
     void            StopInsFrm();
-    sal_uInt16          GetFrmColCount() const {return nInsFrmColCount;} //Spaltenzahl fuer interaktiven Rahmen
+    sal_uInt16          GetFrmColCount() const {return nInsFrmColCount;} // column number for interactive frame
 
 
     void            SetChainMode( sal_Bool bOn );
@@ -276,7 +277,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    // Tipfenster loeschen
+    // delete tip window
     static void ClearTip();
 
     static inline long GetDDStartPosX() { return nDDStartPosX; }
@@ -288,10 +289,9 @@ public:
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     void StopQuickHelp();
 
-    // --> OD 2005-02-18 #i42921# - add parameter <bVerticalMode>
+    // #i42921# - add parameter <bVerticalMode>
     sal_Bool RulerMarginDrag( const MouseEvent& rMEvt,
                                      const bool bVerticalMode );
-    // <--
 
     /** #i42732# display status of font size/name depending on either the input
         language or the selection position depending on what has changed lately
@@ -305,3 +305,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

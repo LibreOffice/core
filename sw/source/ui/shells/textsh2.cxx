@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>
@@ -40,9 +39,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
@@ -90,7 +87,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-
 #define DB_DD_DELIM 0x0b
 
 struct DBTextStruct_Impl
@@ -100,10 +96,7 @@ struct DBTextStruct_Impl
     Reference<XResultSet>   xCursor;
     Reference<XConnection>  xConnection;
 };
-inline void AddSelList( List& rLst, long nRow )
-{
-    rLst.Insert( (void*)nRow , LIST_APPEND );
-}
+
 void SwTextShell::ExecDB(SfxRequest &rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -251,14 +244,10 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
 {
@@ -288,7 +277,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         {
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
             ::std::auto_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot( pThis->GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,
@@ -308,5 +297,4 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
     return 0;
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

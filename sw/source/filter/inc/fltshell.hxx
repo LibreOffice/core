@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -400,9 +401,8 @@ public:
 
     void Reset()
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
+        // #i73790# - method renamed
         pColl->ResetAllFmtAttr();
-        // <--
         pColl->SetAuto(sal_False); // nach Empfehlung JP
     }
     void Derived(SwTxtFmtColl* pBase)
@@ -565,8 +565,8 @@ public:
 // methoden zur verwaltung von styles:
     void BeginStyle(sal_uInt16 nUserCode, RES_POOL_COLLFMT_TYPE aType)
     {
-        ASSERT(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
-        ASSERT(pColls[nUserCode] == NULL, "user codes dublicate");
+        OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
+        OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
         if (eSubMode == Style)
             EndStyle();
         pOut = pColls[nUserCode] = new SwFltFormatCollection(GetDoc(), aType);
@@ -575,8 +575,8 @@ public:
     }
     void BeginStyle( sal_uInt16 nUserCode, const String& rName )
     {
-        ASSERT(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
-        ASSERT(pColls[nUserCode] == NULL, "user codes dublicate");
+        OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
+        OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
         if (eSubMode == Style)
             EndStyle();
         pOut = pColls[nUserCode] = new SwFltFormatCollection(GetDoc(), rName );
@@ -587,8 +587,8 @@ public:
         { return pColls[nUserCode] != 0; }
     void BaseStyle(sal_uInt16 nBased)
     {
-        ASSERT(eSubMode == Style, "wrong state for style");
-        ASSERT(pColls[nBased], "Style based on noexistent style" );
+        OSL_ENSURE(eSubMode == Style, "wrong state for style");
+        OSL_ENSURE(pColls[nBased], "Style based on noexistent style" );
         if( eSubMode == Style && pColls[nBased]->GetColl() )
             ((SwFltFormatCollection*)pOut)->Derived(pColls[nBased]->GetColl());
     }
@@ -596,7 +596,7 @@ public:
 
     void EndStyle()
     {
-//      ASSERT(eSubMode == Style, "wrong state for style");
+//   OSL_ENSURE(eSubMode == Style, "wrong state for style");
         nAktStyle = 0;
         pOut = pOutDoc;
         eSubMode = None;
@@ -626,4 +626,4 @@ SW_DLLPUBLIC void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);
 
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

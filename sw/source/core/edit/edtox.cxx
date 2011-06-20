@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@
 #include <pam.hxx>
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
-#include <errhdl.hxx>
 #include <swundo.hxx>
 #include <txttxmrk.hxx>
 #include <edimp.hxx>
@@ -118,40 +118,30 @@ sal_uInt16 SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
     return GetDoc()->GetCurTOXMark( *GetCrsr()->Start(), rMarks );
 }
 
-/* -----------------01.09.99 16:05-------------------
-
- --------------------------------------------------*/
 sal_Bool SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     return  rTOXSect.IsProtect();
 }
-/* -----------------18.10.99 15:53-------------------
 
- --------------------------------------------------*/
 void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, sal_Bool bReadonly)
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     ((SwTOXBase&)rTOXBase).SetProtected(bReadonly);
-    ASSERT( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
+    OSL_ENSURE( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
 
     SwSectionData aSectionData(rTOXSect);
     aSectionData.SetProtectFlag(bReadonly);
     UpdateSection( GetSectionFmtPos( *rTOXSect.GetFmt()  ), aSectionData, 0 );
 }
 
-/* -----------------02.09.99 07:47-------------------
-
- --------------------------------------------------*/
 const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate )
 {
     return GetDoc()->GetDefaultTOXBase( eTyp, bCreate );
 }
-/* -----------------02.09.99 08:05-------------------
 
- --------------------------------------------------*/
 void    SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
     GetDoc()->SetDefaultTOXBase(rBase);
@@ -173,7 +163,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     // Einfuegen des Verzeichnisses
     const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
                                         *GetCrsr()->GetPoint(), rTOX, pSet, sal_True );
-    ASSERT(pTOX, "Kein aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "Kein aktuelles Verzeichnis");
 
     // Formatierung anstossen
     CalcLayout();
@@ -197,9 +187,9 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
 {
     sal_Bool bRet = sal_False;
 
-    ASSERT( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
+    OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOX;
-    ASSERT(pTOX, "Keine aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "Keine aktuelles Verzeichnis");
     const SwSectionNode* pSectNd;
     if( pTOX && 0 != ( pSectNd = pTOX->GetFmt()->GetSectionNode() ) )
     {
@@ -295,7 +285,7 @@ const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
             pSect->GetFmt()->GetSectionNode() &&
             nCnt++ == nPos )
         {
-            ASSERT( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+            OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
             return (SwTOXBaseSection*)pSect;
         }
     }
@@ -315,23 +305,16 @@ sal_Bool SwEditShell::IsUpdateTOX() const
     return GetDoc()->IsUpdateTOX();
 }
 
-/* -----------------26.08.99 13:49-------------------
-
- --------------------------------------------------*/
 const String&   SwEditShell::GetTOIAutoMarkURL() const
 {
     return GetDoc()->GetTOIAutoMarkURL();
 }
-/* -----------------26.08.99 13:49-------------------
 
- --------------------------------------------------*/
 void SwEditShell::SetTOIAutoMarkURL(const String& rSet)
 {
     GetDoc()->SetTOIAutoMarkURL(rSet);
 }
-/* -----------------26.08.99 09:29-------------------
 
- --------------------------------------------------*/
 void SwEditShell::ApplyAutoMark()
 {
     StartAllAction();
@@ -369,8 +352,6 @@ void SwEditShell::ApplyAutoMark()
         //
         // SearchOptions to be used in loop below
         //
-        //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
-        //OUString aSrchStr = rText;
         sal_Bool bCaseSensitive = sal_True;
         sal_Bool bWordOnly      = sal_False;
         sal_Bool bSrchInSel     = sal_False;
@@ -431,13 +412,11 @@ void SwEditShell::ApplyAutoMark()
                     //
                     if (!bCaseSensitive)
                     {
-                        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags |=
                                      TransliterationModules_IGNORE_CASE;
                     }
                     else
                     {
-                        //aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags &=
                                     ~TransliterationModules_IGNORE_CASE;
                     }
@@ -485,3 +464,4 @@ void SwEditShell::ApplyAutoMark()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

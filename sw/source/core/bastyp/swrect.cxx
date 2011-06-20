@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,10 +30,8 @@
 #include "precompiled_sw.hxx"
 
 
-#ifdef DBG_UTIL
-#ifndef _STREAM_HXX //autogen
+#if OSL_DEBUG_LEVEL > 1
 #include <tools/stream.hxx>
-#endif
 #endif
 #include <stdlib.h>
 #include "swrect.hxx"
@@ -41,9 +40,6 @@
 /*************************************************************************
 |*
 |*  SwRect::SwRect()
-|*
-|*  Ersterstellung      MA 02. Feb. 93
-|*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
 
@@ -62,29 +58,16 @@ SwRect::SwRect( const Rectangle &rRect ) :
 |*
 |*  SwRect::Center()
 |*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 27. Jan. 93
-|*
 |*************************************************************************/
 Point SwRect::Center() const
 {
     return Point( Left() + Width()  / 2,
                   Top()  + Height() / 2 );
-
-/*  Wer ruft schon ein Center auf ein "falsches" Rechteck?
-    const long nRight = Right();
-    const long nBottom= Bottom();
-    return Point( min( Left(), nRight ) + long(abs( (nRight - Left())/2) ),
-                  min( Top(),  nBottom) + long(abs( (nBottom - Top())/2)));
-*/
 }
 
 /*************************************************************************
 |*
 |*  SwRect::Union()
-|*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 27. Jan. 93
 |*
 |*************************************************************************/
 
@@ -107,9 +90,6 @@ SwRect& SwRect::Union( const SwRect& rRect )
 /*************************************************************************
 |*
 |*  SwRect::Intersection(), _Intersection()
-|*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 05. Sep. 93
 |*
 |*************************************************************************/
 
@@ -163,9 +143,6 @@ SwRect& SwRect::_Intersection( const SwRect& rRect )
 |*
 |*  SwRect::IsInside()
 |*
-|*  Ersterstellung      MA 27. Jan. 93
-|*  Letzte Aenderung    MA 27. Jan. 93
-|*
 |*************************************************************************/
 
 
@@ -191,7 +168,7 @@ sal_Bool SwRect::IsInside( const Point& rPoint ) const
            && (Right() >= rPoint.X())
            && (Bottom()>= rPoint.Y());
 }
-/* -----------------------------11.04.00 15:46--------------------------------
+/* ---------------------------------------------------------------------------
     mouse moving of table borders
  ---------------------------------------------------------------------------*/
 sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
@@ -206,9 +183,6 @@ sal_Bool SwRect::IsNear( const Point& rPoint, long nTolerance ) const
 /*************************************************************************
 |*
 |*  SwRect::IsOver()
-|*
-|*  Ersterstellung      MA 25. Feb. 94
-|*  Letzte Aenderung    MA 27. Jun. 96
 |*
 |*************************************************************************/
 
@@ -225,9 +199,6 @@ sal_Bool SwRect::IsOver( const SwRect& rRect ) const
 /*************************************************************************
 |*
 |*  SwRect::Justify()
-|*
-|*  Ersterstellung      MA 10. Oct. 94
-|*  Letzte Aenderung    MA 23. Oct. 96
 |*
 |*************************************************************************/
 
@@ -318,7 +289,7 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
  *                  operator<<( ostream&, SwRect&)
  *************************************************************************/
@@ -334,3 +305,4 @@ SvStream &operator<<( SvStream &rStream, const SwRect &rRect )
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

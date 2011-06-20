@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <tools/debug.hxx>
 #include "viewsh.hxx"
 #include "rootfrm.hxx"  // GetOleShell()
 #include "txtfrm.hxx"   // FindRootFrm()
@@ -196,3 +195,4 @@ void SwBlink::FrmDelete( const SwRootFrm* pRoot )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

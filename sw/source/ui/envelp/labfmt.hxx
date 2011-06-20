@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -137,9 +138,7 @@ public:
 
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 };
-/* -----------------------------23.01.01 10:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwSaveLabelDlg : public ModalDialog
 {
     FixedLine       aOptionsFL;
@@ -173,3 +172,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

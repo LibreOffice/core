@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,11 @@
 #ifndef __DBGOUTSW_HXX
 #define __DBGOUTSW_HXX
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <tox.hxx>
+#include <cstdio>
 class String;
 
 namespace rtl
@@ -80,7 +82,6 @@ SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem & rItem);
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem);
 SW_DLLPUBLIC const char * dbg_out(const SfxItemSet & rSet);
 SW_DLLPUBLIC const char * dbg_out(SwNodes & rNodes);
-// const char * dbg_out(SwOutlineNodes & rNodes);
 SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos);
 SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum);
@@ -93,11 +94,11 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>
-String lcl_dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
+String lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
-    typename std::hash_map<tKey, tMember, fHashFunction>::const_iterator aIt;
+    typename boost::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
 
     for (aIt = rMap.begin(); aIt != rMap.end(); aIt++)
     {
@@ -117,11 +118,13 @@ String lcl_dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
 }
 
 template<typename tKey, typename tMember, typename fHashFunction>
-const char * dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
+const char * dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
     return dbg_out(lcl_dbg_out(rMap));
 }
 SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken);
 SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens);
-#endif // DEBUG
+#endif // OSL_DEBUG_LEVEL > 1
 #endif // __DBGOUTSW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

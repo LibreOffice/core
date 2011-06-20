@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,16 +48,10 @@
 
 #include <fldui.hrc>
 
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
-#ifndef _FLDDINF_HXX
 #include <flddinf.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -67,9 +62,6 @@
 
 using namespace nsSwDocInfoSubType;
 using namespace com::sun::star;
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     SwFldPage( pWindow, SW_RES( TP_FLD_DOKINF ), rCoreSet ),
@@ -90,8 +82,8 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aTypeTLB.SetHelpId(HID_FIELD_DINF_TYPE);
     aTypeTLB.SetSelectionMode(SINGLE_SELECTION);
     aTypeTLB.SetStyle(aTypeTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    // Font nicht setzen, damit der Font des Controls uebernommen wird!
-    // Sonst bei falschem Font Bug an OV.
+    // Don't set font, so that the control's font is adobted!
+    // Otherwise at wrong font bug to OV.
     aTypeTLB.SetSpaceBetweenEntries(0);
 
     aTypeTLB.SetNodeDefaultImages();
@@ -103,28 +95,20 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
         pItem->GetValue() >>= xCustomPropertySet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-__EXPORT SwFldDokInfPage::~SwFldDokInfPage()
+SwFldDokInfPage::~SwFldDokInfPage()
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
+void SwFldDokInfPage::Reset(const SfxItemSet& )
 {
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialisation
 
-    // TypeListBox initialisieren
+    // initialise TypeListBox
     aTypeTLB.SetUpdateMode(sal_False);
     aTypeTLB.Clear();
     pSelEntry = 0;
 
-    // SubTypes in der TypeLB anzeigen
+    // display SubTypes in TypeLB
     sal_uInt16 nTypeId = TYP_DOCINFOFLD;
     SvLBoxEntry* pEntry = 0;
 
@@ -169,11 +153,7 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
                 {
                     uno::Reference< beans::XPropertySetInfo > xSetInfo = xCustomPropertySet->getPropertySetInfo();
                     const uno::Sequence< beans::Property > rProperties = xSetInfo->getProperties();
-//                    uno::Sequence< ::rtl::OUString > aPropertyNames(rProperties.getLength());
-//                    for (sal_Int32 i = 0; i < rProperties.getLength(); ++i) {
-//                        aPropertyNames[i] = rProperties[i].Name;
-//                    }
-                    //if ( !IsFldEdit() )
+
                     if( rProperties.getLength() )
                     {
                         pInfo = aTypeTLB.InsertEntry( String(SW_RES( STR_CUSTOM )) );
@@ -206,7 +186,7 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
         }
     }
 
-    // alte Pos selektieren
+    // select old Pos
     if (pSelEntry != 0)
     {
         aTypeTLB.Select(pSelEntry);
@@ -237,16 +217,12 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     SvLBoxEntry* pOldEntry = pSelEntry;
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     pSelEntry = aTypeTLB.FirstSelected();
 
     if(!pSelEntry)
@@ -264,9 +240,6 @@ IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
     sal_uInt16 nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
@@ -402,13 +375,9 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 {
-    // Format-Listbox fuellen
+    // fill Format-Listbox
     sal_uInt16 nTypeId = TYP_DOCINFOFLD;
 
     EnableInsert(nSubType != USHRT_MAX);
@@ -430,7 +399,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
     if (nSubType < DI_CREATE || nSubType == DI_DOCNO || nSubType == DI_EDIT|| nSubType == DI_CUSTOM )
     {
-        // Format Box ist fuer Title und Time leer
+        // Format Box is empty for Title and Time
     }
     else
     {
@@ -460,11 +429,7 @@ sal_uInt16 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     return nSize;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-sal_Bool __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
+sal_Bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
 {
     if (!pSelEntry || (sal_uInt16)(sal_uLong)pSelEntry->GetUserData() == USHRT_MAX)
         return sal_False;
@@ -501,27 +466,17 @@ sal_Bool __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
     return sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-SfxTabPage* __EXPORT SwFldDokInfPage::Create(   Window* pParent,
+SfxTabPage* SwFldDokInfPage::Create(    Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokInfPage( pParent, rAttrSet ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwFldDokInfPage::GetGroup()
 {
     return GRP_REG;
 }
-/* -----------------12.01.99 11:21-------------------
- *
- * --------------------------------------------------*/
+
 void    SwFldDokInfPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
@@ -535,3 +490,4 @@ void    SwFldDokInfPage::FillUserData()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

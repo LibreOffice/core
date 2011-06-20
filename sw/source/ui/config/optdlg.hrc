@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-/* TabPage Ansicht*/
+/* TabPage View */
 #define FL_DISP                 1
 #define FL_NOPRINT              2
 #define FL_WINDOW               3
@@ -69,7 +69,7 @@
 #define CB_TEST10       34
 #define FL_TEST                 35
 
-#define CB_FLD_HIDDEN_PARA 36  //Mittendrin, damit die HelpIds zum FPII kompatibel bleiben
+#define CB_FLD_HIDDEN_PARA 36  // right in the middle of it, so that HelpIds stay compatible to FPII
 #define CB_SMOOTH_SCROLL 37
 
 #define BT_OK           38
@@ -125,7 +125,7 @@
 #define CB_TEXT_PLACEHOLDER  94
 
 
-// Tabpage Grundschriften
+// Tabpage Basic Fonts
 #define FT_STANDARD         90
 #define LB_STANDARD                     91
 #define FT_TITLE                        92
@@ -150,7 +150,7 @@
 #define LB_LABEL_SIZE                  111
 #define LB_INDEX_SIZE                  112
 
-//Tabpage Tabelle
+//Tabpage Table
 #define CB_HEADER           101
 #define CB_REPEAT_HEADER    102
 #define CB_DONT_SPLIT       103

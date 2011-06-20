@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -264,7 +265,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         sal_uInt16 nFnd = rDoc.GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + 1 ],
                             nsRedlineType_t::REDLINE_INSERT );
-        ASSERT( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
+        OSL_ENSURE( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
                     "kein Insert Object gefunden" );
         ++nFnd;
         rDoc.GetRedlineTbl()[nFnd]->Show( 1 );
@@ -536,3 +537,5 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
     SetPaM(*pPam, true);
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

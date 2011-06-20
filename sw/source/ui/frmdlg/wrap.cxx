@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-// OD 18.09.2003 #i18732#
+// #i18732#
 #include <fmtfollowtextflow.hxx>
 #include <svx/swframevalidation.hxx>
 
@@ -60,31 +61,19 @@
 
 using namespace ::com::sun::star;
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-static sal_uInt16 __FAR_DATA aWrapPageRg[] = {
+static sal_uInt16 aWrapPageRg[] = {
     RES_LR_SPACE, RES_UL_SPACE,
     RES_PROTECT, RES_SURROUND,
     RES_PRINT, RES_PRINT,
     0
 };
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode) :
     SfxSingleTabDialog(pParent, rSet, 0),
     pWrtShell(pSh)
 
 {
-    // TabPage erzeugen
+    // create TabPage
     SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(this, rSet);
     pNewPage->SetFormatUsed(sal_False, bDrawMode);
     pNewPage->SetShell(pWrtShell);
@@ -94,17 +83,9 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Boo
     SetText(sTitle);
 }
 
-
-
 SwWrapDlg::~SwWrapDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_FRM_WRAP), rSet),
@@ -135,7 +116,6 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aWrapOutsideCB      (this, SW_RES(CB_ONLYOUTSIDE)),
 
     aWrapIL             (SW_RES(IL_WRAP)),
-    aWrapILH            (SW_RES(ILH_WRAP)),
 
     nAnchorId(FLY_AT_PARA),
     nHtmlMode(0),
@@ -187,27 +167,18 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aWrapOutlineCB.SetClickHdl(LINK(this, SwWrapTabPage, ContourHdl));
 }
 
-
-
 SwWrapTabPage::~SwWrapTabPage()
 {
 }
-
-
 
 SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwWrapTabPage(pParent, rSet);
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 {
-    //Contour fuer Draw, Grafik und OLE (Einfuegen/Grafik/Eigenschaften fehlt noch!)
+    // contour for Draw, Graphic and OLE (Insert/Graphic/Properties still missing!)
     if( bDrawMode )
     {
         aWrapOutlineCB.Show();
@@ -313,9 +284,9 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     {
         pBtn->Check();
         WrapTypeHdl(pBtn);
-        // Hier wird fuer Zeichenobjekte, die im Moment auf Durchlauf stehen,
-        // schon mal der Default "Kontur an" vorbereitet, falls man spaeter auf
-        // irgendeinen Umlauf umschaltet.
+        // For character objects that currently are in passage, the default
+        // "contour on" is prepared here, in case we switch to any other
+        // passage later.
         if (bDrawMode && !aWrapOutlineCB.IsEnabled())
             aWrapOutlineCB.Check();
     }
@@ -324,7 +295,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
     const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
 
-    // Abstand zum Text
+    // gap to text
     aLeftMarginED.SetValue(aLeftMarginED.Normalize(rLR.GetLeft()), FUNIT_TWIP);
     aRightMarginED.SetValue(aRightMarginED.Normalize(rLR.GetRight()), FUNIT_TWIP);
     aTopMarginED.SetValue(aTopMarginED.Normalize(rUL.GetUpper()), FUNIT_TWIP);
@@ -335,11 +306,8 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Attribute in den Set stopfen bei OK
+    Description:    stuff attributes into the set when OK
  --------------------------------------------------------------------*/
-
-
-
 sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bModified = sal_False;
@@ -443,14 +411,11 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Bsp - Update
+    Description:    example update
  --------------------------------------------------------------------*/
-
-
-
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    // Anchor
+    // anchor
     const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
     sal_Bool bEnable = (nAnchorId != FLY_AS_CHAR);
@@ -461,11 +426,11 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
         SvxSwFrameValidation aVal;
 
-        // Size
+        // size
         const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
         Size aSize = rFrmSize.GetSize();
 
-        // Rand
+        // margin
         const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
         const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
         nOldLeftMargin  = static_cast< sal_uInt16 >(rLR.GetLeft());
@@ -473,7 +438,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         nOldUpperMargin = static_cast< sal_uInt16 >(rUL.GetUpper());
         nOldLowerMargin = static_cast< sal_uInt16 >(rUL.GetLower());
 
-        // Position
+        // position
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
         const SwFmtVertOrient& rVert = (const SwFmtVertOrient&)rSet.Get(RES_VERT_ORIENT);
 
@@ -481,7 +446,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.bAutoHeight = rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE;
         aVal.bAutoWidth = rFrmSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
-        // OD 18.09.2003 #i18732#
+        // #i18732#
         aVal.bFollowTextFlow =
             static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
 
@@ -531,7 +496,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                     if (aVal.nVPos <= aVal.nMaxHeight)
                         nTop = aVal.nMaxVPos - aVal.nHeight;
                     else
-                        nTop = nBottom = 0; // Kein Umlauf
+                        nTop = nBottom = 0; // no passage
                 }
                 else
                     nTop = aVal.nMaxVPos - aVal.nHeight - aVal.nVPos;
@@ -642,8 +607,6 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     ContourHdl(0);
 }
 
-
-
 int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if(_pSet)
@@ -653,11 +616,8 @@ int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Bereichspruefung
+    Description:    range check
  --------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 {
     if(bHtmlMode && 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS))
@@ -686,20 +646,19 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
         else if (pEdit == &aBottomMarginED)
             pOpposite = &aTopMarginED;
 
-        sal_Int64 nOpposite = pOpposite->GetValue();
+        OSL_ASSERT(pOpposite);
 
-        if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
-            pOpposite->SetValue(pOpposite->GetMax() - nValue);
+        if (pOpposite)
+        {
+            sal_Int64 nOpposite = pOpposite->GetValue();
+
+            if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
+                pOpposite->SetValue(pOpposite->GetMax() - nValue);
+        }
     }
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
 {
@@ -716,12 +675,6 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
 {
     sal_Bool bEnable = !(aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled());
@@ -729,7 +682,7 @@ IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
     aWrapOutsideCB.Enable(!bEnable);
 
     bEnable =  !aWrapOutlineCB.IsChecked();
-    if (bEnable == bContourImage) // damit es nicht immer flackert
+    if (bEnable == bContourImage) // so that it doesn't always flicker
     {
         bContourImage = !bEnable;
         ApplyImageList();
@@ -738,16 +691,11 @@ IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 sal_uInt16* SwWrapTabPage::GetRanges()
 {
     return aWrapPageRg;
 }
-/* -----------------------------08.05.2002 14:28------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -756,30 +704,29 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     SfxTabPage::DataChanged( rDCEvt );
 }
-/* -----------------------------08.05.2002 14:28------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwWrapTabPage::ApplyImageList()
 {
-    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        aWrapILH : aWrapIL;
+    ImageList& rImgLst = aWrapIL;
 
     aWrapThroughRB.SetModeRadioImage(rImgLst.GetImage(IMG_THROUGH));
     sal_Bool bWrapOutline =  !aWrapOutlineCB.IsChecked();
     if(bWrapOutline)
     {
-        aNoWrapRB.SetModeRadioImage(rImgLst.GetImage(IMG_NONE));
-        aWrapLeftRB.SetModeRadioImage(rImgLst.GetImage(IMG_LEFT));
-        aWrapRightRB.SetModeRadioImage(rImgLst.GetImage(IMG_RIGHT));
-        aWrapParallelRB.SetModeRadioImage(rImgLst.GetImage(IMG_PARALLEL));
-        aIdealWrapRB.SetModeRadioImage(rImgLst.GetImage(IMG_IDEAL));
+        aNoWrapRB.SetModeRadioImage(       rImgLst.GetImage( IMG_NONE     ));
+        aWrapLeftRB.SetModeRadioImage(     rImgLst.GetImage( IMG_LEFT     ));
+        aWrapRightRB.SetModeRadioImage(    rImgLst.GetImage( IMG_RIGHT    ));
+        aWrapParallelRB.SetModeRadioImage( rImgLst.GetImage( IMG_PARALLEL ));
+        aIdealWrapRB.SetModeRadioImage(    rImgLst.GetImage( IMG_IDEAL    ));
     }
     else
     {
-        aNoWrapRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_NONE ));
-        aWrapLeftRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_LEFT ));
-        aWrapRightRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_RIGHT ));
-        aWrapParallelRB.SetModeRadioImage(rImgLst.GetImage(IMG_KON_PARALLEL ));
-        aIdealWrapRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_IDEAL ));
+        aNoWrapRB.SetModeRadioImage(       rImgLst.GetImage( IMG_KON_NONE     ));
+        aWrapLeftRB.SetModeRadioImage(     rImgLst.GetImage( IMG_KON_LEFT     ));
+        aWrapRightRB.SetModeRadioImage(    rImgLst.GetImage( IMG_KON_RIGHT    ));
+        aWrapParallelRB.SetModeRadioImage( rImgLst.GetImage( IMG_KON_PARALLEL ));
+        aIdealWrapRB.SetModeRadioImage(    rImgLst.GetImage( IMG_KON_IDEAL    ));
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

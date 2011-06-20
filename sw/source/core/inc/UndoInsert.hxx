@@ -74,7 +74,6 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    // #111827#
     /**
        Returns rewriter for this undo object.
 
@@ -111,7 +110,6 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    // #111827#
     /**
        Returns the rewriter of this undo object.
 
@@ -180,12 +178,11 @@ class SwUndoInsertLabel : public SwUndo
     };
 
     String sText;
-    // --> PB 2005-01-06 #i39983# the separator is drawn with a character style
+    // #i39983# the separator is drawn with a character style
     String sSeparator;
-    // <--
     String sNumberSeparator;
     String sCharacterStyle;
-    // OD 2004-04-15 #i26791# - re-store of drawing object position no longer needed
+    // #i26791# - re-store of drawing object position no longer needed
     sal_uInt16 nFldId;
     SwLabelType eType;
     sal_uInt8 nLayerId;              // fuer Zeichen-Objekte
@@ -195,9 +192,8 @@ class SwUndoInsertLabel : public SwUndo
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
-    // --> PB 2005-01-06 #i39983# the separator is drawn with a character style
+    // #i39983# the separator is drawn with a character style
                         const String& rSeparator,
-    // <--
                         const String& rNumberSeparator, //#i61007# order of captions
                         const sal_Bool bBefore, const sal_uInt16 nId,
                         const String& rCharacterStyle,
@@ -208,7 +204,6 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    // #111827#
     /**
        Returns the rewriter of this undo object.
 

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_
 extern sal_Bool IsScrollMDI(ViewShell* pVwSh, const SwRect &);
 extern void SizeNotify(ViewShell* pVwSh, const Size &);
 
-//Update der Statusleiste, waehrend einer Action.
+// Update of status bar during an action.
 extern void PageNumNotify( ViewShell* pVwSh,
                             sal_uInt16 nPhyNum,
                             sal_uInt16 nVirtNum,
@@ -66,13 +67,15 @@ LAYOUT_NS Dialog* GetSearchDialog();
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
 
 // ndgrf.cxx
-// alle QuickDraw-Bitmaps des speziellen Docs loeschen
+// Delete all QuickDraw-bitmaps of the specific Document.
 void DelAllGrfCacheEntries( SwDoc* pDoc );
 
-// ChgMode fuer Tabellen aus der Konfiguration lesen
+// Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 
 sal_Bool JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

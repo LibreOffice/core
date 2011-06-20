@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,7 +53,7 @@
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>                   // for Undo-Ids
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <swunodef.hxx>
@@ -66,11 +67,6 @@
 #include <svx/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
 #include "swabstdlg.hxx"
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Bereiche einfuegen
- --------------------------------------------------------------------*/
-
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {
@@ -95,13 +91,13 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
 
-        // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
+        // height=width for more consistent preview (analog to edit region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
                                                         &GetView().GetViewFrame()->GetWindow(), aSet , rSh);
-        DBG_ASSERT(aTabDlg, "Dialogdiet fail!");
+        OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
         aTabDlg->Execute();
         rReq.Ignore();
         delete aTabDlg;
@@ -147,17 +143,15 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         const sal_Bool bProtect = SFX_ITEM_SET ==
             pSet->GetItemState(FN_PARAM_REGION_PROTECT, sal_True, &pItem)?
             (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         const sal_Bool bEditInReadonly = SFX_ITEM_SET ==
             pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, sal_True, &pItem)?
             (sal_Bool)((const SfxBoolItem *)pItem)->GetValue():sal_False;
-        // <--
 
         aSection.SetProtectFlag(bProtect);
         aSection.SetHidden(bHidden);
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // #114856# edit in readonly sections
         aSection.SetEditInReadonlyFlag(bEditInReadonly);
-        // <--
 
         if(SFX_ITEM_SET ==
                 pSet->GetItemState(FN_PARAM_REGION_CONDITION, sal_True, &pItem))
@@ -208,13 +202,13 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         pThis->CalcBoundRect(aRect, FLY_AS_CHAR);
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-        // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
+        // height=width for more consistent preview (analog to edit region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
                                                         &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
-        DBG_ASSERT(aTabDlg, "Dialogdiet fail!");
+        OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
         aTabDlg->SetSectionData(*pSectionData);
         aTabDlg->Execute();
 
@@ -222,10 +216,6 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
     }
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Bereich bearbeiten
- --------------------------------------------------------------------*/
 
 void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
 {
@@ -245,10 +235,10 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
             if(bStart)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractEditRegionDlg* pEditRegionDlg = pFact->CreateEditRegionDlg( MD_EDIT_REGION,
                                                         pParentWin, rWrtShell);
-                DBG_ASSERT(pEditRegionDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pEditRegionDlg, "Dialogdiet fail!");
                 if(pItem && pItem->ISA(SfxStringItem))
                 {
                     pEditRegionDlg->SelectSection(((const SfxStringItem*)pItem)->GetValue());
@@ -262,3 +252,5 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
         break;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

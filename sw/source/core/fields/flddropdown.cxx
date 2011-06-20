@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #endif
 #include <svl/poolitem.hxx>
 
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <unoprnms.hxx>
 
 using namespace com::sun::star;
@@ -142,7 +141,7 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
     int i = 0;
     vector<String>::const_iterator aIt;
 
-    for (aIt = aValues.begin(); aIt != aValues.end(); aIt++)
+    for (aIt = aValues.begin(); aIt != aValues.end(); ++aIt)
     {
         pSeq[i] = rtl::OUString(*aIt);
 
@@ -200,7 +199,7 @@ void SwDropDownField::SetToolTip(const String & rToolTip)
     aToolTip = rToolTip;
 }
 
-sal_Bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
+bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
 {
     nWhich &= ~CONVERT_TWIPS;
     switch( nWhich )
@@ -223,12 +222,12 @@ sal_Bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwDropDownField::PutValue(const uno::Any &rVal,
+bool SwDropDownField::PutValue(const uno::Any &rVal,
                                sal_uInt16 nWhich)
 {
     switch( nWhich )
@@ -278,7 +277,9 @@ sal_Bool SwDropDownField::PutValue(const uno::Any &rVal,
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,7 +178,7 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
         SidebarTxtControl& mrSidebarTxtControl;
         ::accessibility::AccessibleTextHelper* mpAccessibleTextHelper;
 
-        ::vos::OMutex maMutex;
+        ::osl::Mutex maMutex;
 
         void defunc();
 };
@@ -211,7 +209,7 @@ void SidebarTxtControlAccessibleContext::defunc()
 sal_Int32 SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChildCount()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
 
     sal_Int32 nChildCount( 0 );
 
@@ -226,7 +224,7 @@ sal_Int32 SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChildCount()
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChild( sal_Int32 i )
     throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException )
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
 
     css::uno::Reference< css::accessibility::XAccessible > xChild;
 
@@ -242,7 +240,7 @@ void SAL_CALL SidebarTxtControlAccessibleContext::addEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
 
     if ( mpAccessibleTextHelper )
     {
@@ -254,7 +252,7 @@ void SAL_CALL SidebarTxtControlAccessibleContext::removeEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    vos::OGuard aGuard( maMutex );
+    osl::MutexGuard aGuard( maMutex );
 
     if ( mpAccessibleTextHelper )
     {
@@ -315,3 +313,4 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SidebarTxtControlA
 
 } } // end of namespace sw::sidebarwindows
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

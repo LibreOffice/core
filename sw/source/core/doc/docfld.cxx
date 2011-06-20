@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 #define _SVSTDARR_ULONGS
 #include <svl/svarray.hxx>
 #endif
-#include <vcl/svapp.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -82,7 +82,6 @@ extern sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
 
 SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen einfuegen
  --------------------------------------------------------------------*/
@@ -91,7 +90,6 @@ SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
  *  Return immer einen gueltigen Pointer auf den Typ. Wenn er also neu
  *  zugefuegt oder schon vorhanden ist.
  */
-
 SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
 {
     sal_uInt16 nSize = pFldTypes->Count(),
@@ -177,7 +175,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     sal_uInt16 nSize = pFldTypes->Count(), nFldWhich = rFldTyp.Which();
     sal_uInt16 i = INIT_FLDTYPES;
 
-    ASSERT( RES_SETEXPFLD == nFldWhich ||
+    OSL_ENSURE( RES_SETEXPFLD == nFldWhich ||
             RES_USERFLD == nFldWhich ||
             RES_DDEFLD == nFldWhich, "Falscher FeldTyp" );
 
@@ -228,10 +226,9 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen loeschen
  --------------------------------------------------------------------*/
-
 void SwDoc::RemoveFldType(sal_uInt16 nFld)
 {
-    ASSERT( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
+    OSL_ENSURE( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
     /*
      * Abheangige Felder vorhanden -> ErrRaise
      */
@@ -264,7 +261,7 @@ void SwDoc::RemoveFldType(sal_uInt16 nFld)
 
         if( nWhich )
         {
-            ASSERT( !pTmp->GetDepends(), "Abhaengige vorh.!" );
+            OSL_ENSURE( !pTmp->GetDepends(), "Abhaengige vorh.!" );
             // Feldtype loschen
             delete pTmp;
         }
@@ -281,7 +278,6 @@ const SwFldTypes* SwDoc::GetFldTypes() const
 /*--------------------------------------------------------------------
     Beschreibung: Den ersten Typen mit ResId und Namen finden
  --------------------------------------------------------------------*/
-
 SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
          bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
                                    // to use different string matching code
@@ -329,7 +325,6 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
     return pRet;
 }
 
-
 /*************************************************************************
 |*                SwDoc::UpdateFlds()
 |*    Beschreibung      Felder updaten
@@ -337,7 +332,6 @@ SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
 /*
  *    Alle sollen neu evaluiert werden.
  */
-
 void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 {
     // Modify() fuer jeden Feldtypen rufen,
@@ -398,7 +392,6 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
 /******************************************************************************
  *                      void SwDoc::UpdateUsrFlds()
  ******************************************************************************/
-
 void SwDoc::UpdateUsrFlds()
 {
     SwCalc* pCalc = 0;
@@ -421,7 +414,6 @@ void SwDoc::UpdateUsrFlds()
 /*--------------------------------------------------------------------
     Beschreibung: Referenzfelder und TableFelder erneuern
  --------------------------------------------------------------------*/
-
 void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 {
     SwFieldType* pFldType;
@@ -432,7 +424,7 @@ void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 
 void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 {
-    ASSERT( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
+    OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
             "Was ist das fuer ein MessageItem?" );
 
     SwFieldType* pFldType(0);
@@ -592,11 +584,11 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFld->CalcField( aPara );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                         else
                         {
                             // mind. ein ASSERT
-                            ASSERT( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            OSL_ENSURE( !this, "die Kettenformel konnte nicht errechnet werden" );
                         }
 #endif
                     }
@@ -661,11 +653,11 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFml->Calc( aPara, nValue );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                         else
                         {
                             // mind. ein ASSERT
-                            ASSERT( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            OSL_ENSURE( !this, "die Kettenformel konnte nicht errechnet werden" );
                         }
 #endif
                     }
@@ -710,10 +702,6 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
     SetNewFldLst(true);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 // ---- Loesche alle nicht referenzierten FeldTypen eines Dokumentes --
 void SwDoc::GCFieldTypes()
 {
@@ -753,12 +741,8 @@ void SwDoc::SetNewFldLst(bool bFlag)
     mbNewFldLst = bFlag;
 }
 
-
-//----------------------------------------------------------------------
-
 // der StartIndex kann optional mit angegeben werden (z.B. wenn dieser
 // zuvor schon mal erfragt wurde - ist sonst eine virtuelle Methode !!)
-
 _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,
                             const SwIndex* pIdx )
 {
@@ -785,9 +769,9 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
         nCntnt = *rINet.GetStart();
 }
 
-    //Erweiterung fuer Sections:
-    //  diese haben immer als Content-Position 0xffff !!
-    //  Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
+// Erweiterung fuer Sections:
+// diese haben immer als Content-Position 0xffff !!
+// Auf dieser steht nie ein Feld, maximal bis STRING_MAXLEN moeglich
 _SetGetExpFld::_SetGetExpFld( const SwSectionNode& rSectNd,
                                 const SwPosition* pPos )
 {
@@ -900,8 +884,8 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         SwNodeIndex aIdx( *rFrm.GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
-#ifdef DBG_UTIL
-        ASSERT( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
 #else
         ::GetBodyTxtNode( rDoc, aPos, rFrm );
 #endif
@@ -1045,10 +1029,6 @@ void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
         rRet.Erase();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 {
     SwDBData aDBData( rDBFld.GetDBData( &rDoc ));
@@ -1066,10 +1046,6 @@ String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 
     return sDBNumNm;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
                         SwNewDBMgr* pMgr )
@@ -1218,8 +1194,8 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
                 if( !aNew.Len() )               // nichts gefunden, dann ist
                     aNew = pSFld->GetFormula(); // die Formel der neue Wert
 
-                // OD 11.02.2003 #i3141# - update expression of field as in
-                // method <SwDoc::UpdateExpFlds(..)> for string/text fields
+                // #i3141# - update expression of field as in method
+                // <SwDoc::UpdateExpFlds(..)> for string/text fields
                 pSFld->ChgExpStr( aNew );
 
                 // suche den Namen vom Feld
@@ -1259,7 +1235,6 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
         }
     }
 }
-
 
 void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 {
@@ -1326,15 +1301,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     // aktuelle Datensatznummer schon vorher einstellen
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
-/*
-    if(pMgr && pMgr->OpenDB(DBMGR_STD, GetDBDesc(), sal_False))
-    {
-        if(!pMgr->IsInMerge() )
-            pMgr->ToFirstSelectedRecord(DBMGR_STD);
-
-        aCalc.VarChange( sDBNumNm, pMgr->GetCurSelectedRecordId(DBMGR_STD));
-    }
-*/
 
     String aNew;
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
@@ -1343,9 +1309,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwSection* pSect = (SwSection*)(*ppSortLst)->GetSection();
         if( pSect )
         {
-            //!SECTION
 
-//          if( pGFld->IsInBodyTxt() )
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
@@ -1356,7 +1320,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwTxtFld* pTxtFld = (SwTxtFld*)(*ppSortLst)->GetFld();
         if( !pTxtFld )
         {
-            ASSERT( !this, "was ist es denn nun" );
+            OSL_ENSURE( !this, "was ist es denn nun" );
             continue;
         }
 
@@ -1567,10 +1531,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     pUpdtFlds->SetFieldsDirty( sal_False );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
@@ -1600,13 +1560,9 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
     }
     else
     {
-        DBG_ERROR("TODO: what should happen with unnamed DBFields?");
+        OSL_FAIL("TODO: what should happen with unnamed DBFields?");
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
 {
@@ -1654,7 +1610,7 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     pFldTypes->Insert( new SwSetExpFieldType(this,
                 SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ),nFldType++);
 
-    ASSERT( nFldType == INIT_FLDTYPES, "Bad initsize: SwFldTypes" );
+    OSL_ENSURE( nFldType == INIT_FLDTYPES, "Bad initsize: SwFldTypes" );
 }
 
 void SwDoc::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
@@ -1728,6 +1684,7 @@ String lcl_DBDataToString(const SwDBData& rData)
     sRet += String::CreateFromInt32(rData.nCommandType);
     return sRet;
 }
+
 void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
                             const SvStringsDtor* pAllDBNames )
 {
@@ -1804,10 +1761,6 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
@@ -1822,10 +1775,6 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
         rAllDBNames.Insert( pStr, rAllDBNames.Count() );
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
                                     const String& rFormel,
@@ -1861,20 +1810,12 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
     return rUsedDBNames;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList,
                              const SvStringsDtor& rUsedDBNames )
 {
     for (sal_uInt16 i = 0; i < rUsedDBNames.Count(); i++)
         AddUsedDBToList( rDBNameList, *rUsedDBNames.GetObject(i) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
 {
@@ -1900,10 +1841,6 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     String* pNew = new String( rDBName );
     rDBNameList.Insert( pNew, rDBNameList.Count() );
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                             const String& rNewName )
@@ -2007,10 +1944,6 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     SetModified();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
                             const String& rNewName, String& rFormel )
 {
@@ -2051,10 +1984,6 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
         }
     }
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwDoc::IsNameInArray( const SvStringsDtor& rArr, const String& rName )
 {
@@ -2196,9 +2125,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
             const SwTxtNode* pTNd = rNds[ nStt++ ]->GetTxtNode();
             if( pTNd )
             {
-                if( //pTNd->GetFmtColl() &&     //#outline level,zhaojianwei
-                //  MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
-                    pTNd->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
+                if( pTNd->GetAttrOutlineLevel() != 0 )
                     // Kapitelfelder aktualisieren
                     b = sal_True;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )
@@ -2222,9 +2149,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
     GetUpdtFlds().SetFieldsDirty( b );
     return bFldsFnd;
 }
-/* -----------------------------21.12.99 12:55--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 {
     const sal_uInt16 nSize = pFldTypes->Count();
@@ -2241,9 +2166,6 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
     }
 
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
 {
@@ -2300,7 +2222,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         delete pFldSortLst;
     pFldSortLst = new _SetGetExpFlds( 64, 16 );
 
-    /// OD 09.08.2002 [#101207#,#101216#,#101778#] - consider and unhide sections
+    /// consider and unhide sections
     ///     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
     ///     notes by OD:
     ///         eGetMode == GETFLD_CALC in call from methods SwDoc::FldsToCalc
@@ -2348,13 +2270,13 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         for (sal_uInt16 n = nArrStt; n < aTmpArr.Count(); ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            ASSERT( pSectNd, "Wo ist mein SectionNode" );
+            OSL_ENSURE( pSectNd, "Wo ist mein SectionNode" );
             pSectNd->GetSection().SetCondHidden( sal_False );
         }
         for (sal_uInt16 n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            ASSERT( pSectNd, "Wo ist mein SectionNode" );
+            OSL_ENSURE( pSectNd, "Wo ist mein SectionNode" );
             pSectNd->GetSection().SetCondHidden( sal_False );
         }
 
@@ -2366,9 +2288,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     }
 
     String sTrue( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "sal_True" ))),
+                                    RTL_CONSTASCII_STRINGPARAM( "TRUE" ))),
            sFalse( String::CreateFromAscii(
-                                       RTL_CONSTASCII_STRINGPARAM( "sal_False" )));
+                                       RTL_CONSTASCII_STRINGPARAM( "FALSE" )));
 
     sal_Bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
     sal_uInt16 nWhich, n;
@@ -2400,18 +2322,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 break;
 
             case RES_SETEXPFLD:
-                /// OD 04.10.2002 #102894#
-                /// fields of subtype <string> have also been add
-                /// for calculation (eGetMode == GETFLD_CALC).
-                /// Thus, add fields of subtype <string> in all modes
-                ///     (eGetMode == GETFLD_EXPAND||GETFLD_CALC||GETFLD_ALL)
-                /// and fields of other subtypes only in the modes
-                ///     (eGetMode == GETFLD_CALC||GETFLD_ALL)
-                /* "old" if construct - not deleted for history and code review
-                if( ( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()
-                        ? GETFLD_EXPAND : GETFLD_CALC )
-                        & eGetMode )
-                */
                 if ( !(eGetMode == GETFLD_EXPAND) ||
                      (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
                 {
@@ -2492,35 +2402,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     }
     nFldLstGetMode = static_cast<sal_uInt8>( eGetMode );
     nNodes = rDoc.GetNodes().Count();
-
-#ifdef JP_DEBUG
-    {
-    SvFileStream sOut( "f:\\x.x", STREAM_STD_WRITE );
-    sOut.Seek( STREAM_SEEK_TO_END );
-    sOut << "------------------" << endl;
-    const _SetGetExpFldPtr* pSortLst = pFldSortLst->GetData();
-    for( sal_uInt16 n = pFldSortLst->Count(); n; --n, ++pSortLst )
-    {
-        String sStr( (*pSortLst)->GetNode() );
-        sStr += "\t, ";
-        sStr += (*pSortLst)->GetCntnt();
-        sStr += "\tNode: ";
-        sStr += (*pSortLst)->GetFld()->GetTxtNode().StartOfSectionIndex();
-        sStr += "\tPos: ";
-        sStr += *(*pSortLst)->GetFld()->GetStart();
-        sStr += "\tType: ";
-        sStr += (*pSortLst)->GetFld()->GetFld().GetFld()->GetTyp()->Which();
-
-        sOut << sStr.GetStr() << endl;
-    }
-    }
-#endif
-    // JP_DEBUG
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
 {
@@ -2540,7 +2422,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
         SwNodeIndex aIdx( rTxtNd );
         bIsInBody = rDoc.GetNodes().GetEndOfExtras().GetIndex() < aIdx.GetIndex();
 
-        // #104291# dvo: We don't want to update fields in redlines, or those
+        // We don't want to update fields in redlines, or those
         // in frames whose anchor is in redline. However, we do want to update
         // fields in hidden sections. So: In order to be updated, a field 1)
         // must have a frame, or 2) it must be in the document body.
@@ -2551,8 +2433,8 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     {
         // einen Index fuers bestimmen vom TextNode anlegen
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-#ifdef DBG_UTIL
-        ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
         GetBodyTxtNode( rDoc, aPos, *pFrm );
 #endif
@@ -2599,8 +2481,8 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             if( !pFrm )
                 break;
 
-#ifdef DBG_UTIL
-            ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
             GetBodyTxtNode( rDoc, aPos, *pFrm );
 #endif
@@ -2628,7 +2510,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
         sFldName = ((SwSetExpFieldType&)rType).GetName();
         break;
     default:
-        ASSERT( !this, "kein gueltiger FeldTyp" );
+        OSL_ENSURE( !this, "kein gueltiger FeldTyp" );
     }
 
     if( sFldName.Len() )
@@ -2702,12 +2584,11 @@ SwDocUpdtFld::~SwDocUpdtFld()
         delete aFldTypeTable[n];
 }
 
-// #111840#
 bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                       SwMsgPoolItem * pMsgHnt,
                       bool bUpdateFlds)
 {
-    ASSERT(pDstTxtFld, "no field to update!");
+    OSL_ENSURE(pDstTxtFld, "no field to update!");
 
     sal_Bool bTblSelBreak = sal_False;
 
@@ -2728,10 +2609,6 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                         aPosition, *pDstFld, rSrcFld, pMsgHnt, bUpdateFlds) );
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
-
-        // Das gefundene Feld wird angepasst ...
-        //pDstFld->ChangeFormat( rSrcFld.GetFormat() );
-        //pDstFld->SetLanguage( rSrcFld.GetLanguage() );
 
         SwField * pNewFld = rSrcFld.CopyField();
         pDstFmtFld->SetFld(pNewFld);
@@ -2822,3 +2699,5 @@ bool SwDoc::PutValueToField(const SwPosition & rPos,
 
     return pField->PutValue(rVal, nWhich);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

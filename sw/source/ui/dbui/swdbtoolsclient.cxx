@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,8 +35,6 @@
 #include <swdbtoolsclient.hxx>
 #include <osl/diagnose.h>
 #include <tools/solar.h>
-
-//........................................................................
 
 using namespace ::connectivity::simple;
 using namespace ::com::sun::star;
@@ -80,12 +79,11 @@ namespace
     }
     // -----------------------------------------------------------------------------
 }
-// -----------------------------------------------------------------------------
+
 SwDbtoolsClient::SwDbtoolsClient()
 {
 }
 
-//--------------------------------------------------------------------
 SwDbtoolsClient::~SwDbtoolsClient()
 {
     if(m_xDataAccessFactory.is())
@@ -98,7 +96,6 @@ SwDbtoolsClient::~SwDbtoolsClient()
     }
 }
 
-//--------------------------------------------------------------------
 extern "C" { static void SAL_CALL thisModule() {} }
 
 void SwDbtoolsClient::registerClient()
@@ -109,9 +106,7 @@ void SwDbtoolsClient::registerClient()
         OSL_ENSURE(NULL == getDbToolsClientModule(), "SwDbtoolsClient::registerClient: inconsistence: already have a module!");
         OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
-        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-            SVLIBRARY( "dbtools" )
-        );
+        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("dbtools")));
 
         // load the dbtools library
         getDbToolsClientModule() = osl_loadModuleRelative(
@@ -120,14 +115,14 @@ void SwDbtoolsClient::registerClient()
         if (NULL != getDbToolsClientModule())
         {
             // get the symbol for the method creating the factory
-            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
+            const ::rtl::OUString sFactoryCreationFunc(RTL_CONSTASCII_USTRINGPARAM("createDataAccessToolsFactory"));
             //  reinterpret_cast<createDataAccessToolsFactoryFunction> removed for gcc permissive
             getDbToolsClientFactoryFunction() = reinterpret_cast< createDataAccessToolsFactoryFunction >(
                 osl_getFunctionSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));
 
             if (NULL == getDbToolsClientFactoryFunction())
             {   // did not find the symbol
-                OSL_ENSURE(sal_False, "SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
+                OSL_FAIL("SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(getDbToolsClientModule());
                 getDbToolsClientModule() = NULL;
             }
@@ -135,7 +130,6 @@ void SwDbtoolsClient::registerClient()
     }
 }
 
-//--------------------------------------------------------------------
 void SwDbtoolsClient::revokeClient()
 {
     ::osl::MutexGuard aGuard(getDbtoolsClientMutex());
@@ -147,9 +141,7 @@ void SwDbtoolsClient::revokeClient()
         getDbToolsClientModule() = NULL;
     }
 }
-/* -----------------------------30.08.2001 14:58------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDbtoolsClient::getFactory()
 {
     if(!m_xDataAccessFactory.is())
@@ -169,9 +161,7 @@ void SwDbtoolsClient::getFactory()
         }
     }
 }
-/* -----------------------------30.08.2001 11:32------------------------------
 
- ---------------------------------------------------------------------------*/
 ::rtl::Reference< ::connectivity::simple::IDataAccessTools >
     SwDbtoolsClient::getDataAccessTools()
 {
@@ -183,9 +173,7 @@ void SwDbtoolsClient::getFactory()
     }
     return m_xDataAccessTools;
 }
-/* -----------------------------30.08.2001 12:40------------------------------
 
- ---------------------------------------------------------------------------*/
 ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >
     SwDbtoolsClient::getAccessTypeConversion()
 {
@@ -198,9 +186,6 @@ void SwDbtoolsClient::getFactory()
     return m_xAccessTypeConversion;
 }
 
-/* -----------------------------30.08.2001 11:37------------------------------
-
- ---------------------------------------------------------------------------*/
 Reference< XDataSource > SwDbtoolsClient::getDataSource(
         const ::rtl::OUString& rRegisteredName,
         const Reference< XMultiServiceFactory>& xFactory
@@ -212,9 +197,7 @@ Reference< XDataSource > SwDbtoolsClient::getDataSource(
         xRet = xAccess->getDataSource(rRegisteredName, xFactory);
     return xRet;
 }
-/* -----------------------------30.08.2001 12:06------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
         const Reference< XPropertySet >& rxColumn,
         const Reference< XNumberFormatTypes >& rxTypes,
@@ -227,9 +210,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
         nRet = xAccess->getDefaultNumberFormat( rxColumn, rxTypes, rLocale);
     return nRet;
 }
-/* -----------------------------30.08.2001 12:38------------------------------
 
- ---------------------------------------------------------------------------*/
 ::rtl::OUString SwDbtoolsClient::getFormattedValue(
         const uno::Reference< beans::XPropertySet>& _rxColumn,
         const uno::Reference< util::XNumberFormatter>& _rxFormatter,
@@ -246,3 +227,4 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
     return sRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

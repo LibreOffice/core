@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <frmfmt.hxx>
@@ -54,9 +55,9 @@ sal_Bool SwAccessibleFrameBase::IsSelected()
 {
     sal_Bool bRet = sal_False;
 
-    DBG_ASSERT( GetMap(), "no map?" );
+    OSL_ENSURE( GetMap(), "no map?" );
     const ViewShell *pVSh = GetMap()->GetShell();
-    DBG_ASSERT( pVSh, "no shell?" );
+    OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwFEShell ) )
     {
         const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
@@ -74,7 +75,7 @@ void SwAccessibleFrameBase::GetStates(
     SwAccessibleContext::GetStates( rStateSet );
 
     const ViewShell *pVSh = GetMap()->GetShell();
-    DBG_ASSERT( pVSh, "no shell?" );
+    OSL_ENSURE( pVSh, "no shell?" );
     sal_Bool bSelectable =  pVSh->ISA( SwFEShell );
 
     // SELECTABLE
@@ -89,8 +90,8 @@ void SwAccessibleFrameBase::GetStates(
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        ASSERT( bIsSelected, "bSelected out of sync" );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
         Window *pWin = GetWindow();
@@ -136,7 +137,7 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
     SwAccessibleContext( pInitMap, nInitRole, pFlyFrm ),
     bIsSelected( sal_False )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
     const_cast< SwFrmFmt * >( pFrmFmt )->Add( this );
@@ -152,7 +153,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
     sal_Bool bOldSelected;
 
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOldSelected = bIsSelected;
         bIsSelected = bNewSelected;
     }
@@ -161,7 +162,7 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -195,10 +196,10 @@ void SwAccessibleFrameBase::_InvalidateFocus()
         sal_Bool bSelected;
 
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             bSelected = bIsSelected;
         }
-        ASSERT( bSelected, "focus object should be selected" );
+        OSL_ENSURE( bSelected, "focus object should be selected" );
 
         FireStateChangedEvent( AccessibleStateType::FOCUSED,
                                pWin->HasFocus() && bSelected );
@@ -207,7 +208,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
 
 sal_Bool SwAccessibleFrameBase::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
 }
 
@@ -226,16 +227,16 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         if(  pFlyFrm )
         {
             const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-            ASSERT( pFrmFmt == GetRegisteredIn(), "invalid frame" );
+            OSL_ENSURE( pFrmFmt == GetRegisteredIn(), "invalid frame" );
 
             OUString sOldName( GetName() );
-            ASSERT( !pOld ||
+            OSL_ENSURE( !pOld ||
                     static_cast < const SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
                     "invalid old name" );
 
             const String& rNewName = pFrmFmt->GetName();
             SetName( rNewName );
-            ASSERT( !pNew ||
+            OSL_ENSURE( !pNew ||
                     static_cast < const SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
                     "invalid new name" );
 
@@ -270,10 +271,12 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
 
 void SwAccessibleFrameBase::Dispose( sal_Bool bRecursive )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 
     SwAccessibleContext::Dispose( bRecursive );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

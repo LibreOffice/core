@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,12 @@ class SwFrmFmt;
 class IntlWrapper;
 class SwFmt;
 
-//Kopfzeile, fuer Seitenformate
-//Client von FrmFmt das den Header beschreibt.
+//Header, for PageFormats
+//Client of FrmFmt discribing the header.
 
 class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {
-    sal_Bool bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
+    sal_Bool bActive;       // Only for controlling (creation of content).
 
 public:
     SwFmtHeader( sal_Bool bOn = sal_False );
@@ -52,7 +53,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -69,13 +70,12 @@ public:
     void SetActive( sal_Bool bNew = sal_True ) { bActive = bNew; }
 };
 
-
-//Fusszeile, fuer Seitenformate
-//Client von FrmFmt das den Footer beschreibt.
+//Footer, for pageformats
+//Client of FrmFmt describing the footer
 
 class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
 {
-    sal_Bool bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
+    sal_Bool bActive;       // Only for controlling (creation of content).
 
 public:
     SwFmtFooter( sal_Bool bOn = sal_False );
@@ -86,7 +86,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -115,3 +115,4 @@ inline const SwFmtFooter &SwFmt::GetFooter(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

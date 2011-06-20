@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,14 +37,11 @@ class DateTime;
 class Date;
 class Time;
 
-/*--------------------------------------------------------------------
-    Beschreibung: Formate
- --------------------------------------------------------------------*/
 
 enum SwDateFormat
 {
     DF_BEGIN,
-    //neue Formate:
+    // new formats
     DFF_SSYS = DF_BEGIN,
     DFF_LSYS ,
     DFF_DMY ,
@@ -62,7 +60,7 @@ enum SwDateFormat
     DFF_YMD ,
     DFF_YYMD ,
     DF_END ,
-//  Kompatibilitaet:
+    // Compatibility
     DF_SSYS     = DFF_SSYS,
     DF_LSYS     = DFF_LSYS,
     DF_SHORT    = DFF_DMY,
@@ -94,9 +92,6 @@ enum SwDateSubFormat
     DATE_VAR
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datum/Uhrzeitfeld
- --------------------------------------------------------------------*/
 
 class SwDateTimeFieldType : public SwValueFieldType
 {
@@ -106,14 +101,11 @@ public:
         virtual SwFieldType*    Copy() const;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datum/Uhrzeitfeld
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {
         sal_uInt16              nSubType;
-        long                nOffset;    // Offset in Minuten
+        long                nOffset;    // Offset in minutes.
 
         virtual String      Expand() const;
         virtual SwField*    Copy() const;
@@ -141,8 +133,10 @@ public:
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
+        virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
+        virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
 };
 
 #endif // SW_FLDDAT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

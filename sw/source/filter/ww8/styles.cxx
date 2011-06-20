@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include "../inc/wwstyles.hxx"
 
 #include <functional>               //std::unary_function
 #include <algorithm>                //std::find_if
 #include <tools/string.hxx>         //do we have to...
 
-#include <tools/debug.hxx>
-#   include "staticassert.hxx"      //StaticAssert
+#include "staticassert.hxx"      //StaticAssert
 
 namespace
 {
@@ -147,7 +146,7 @@ namespace
             "Plain Text"
         };
 
-        DBG_ASSERT( (sizeof(stiName) / sizeof(stiName[0])) == ww::stiMax, "WrongSizeOfArray" );
+        OSL_ENSURE( (SAL_N_ELEMENTS(stiName)) == ww::stiMax, "WrongSizeOfArray" );
 
         return stiName;
     }
@@ -215,4 +214,4 @@ namespace ww
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <tools/debug.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <unoredlines.hxx>
@@ -58,7 +58,7 @@ SwXRedlines::~SwXRedlines()
 
 sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
@@ -68,7 +68,7 @@ sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
 uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
@@ -86,7 +86,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
 uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(*GetDoc()));
@@ -99,7 +99,7 @@ uno::Type SwXRedlines::getElementType(  ) throw(uno::RuntimeException)
 
 sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
@@ -114,14 +114,14 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
 sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return sal_False;
 }
 
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
     throw( uno::RuntimeException )
 {
-    DBG_ERROR("not implemented");
+    OSL_FAIL("not implemented");
     return uno::Sequence< OUString >();
 }
 
@@ -194,3 +194,5 @@ void SwXRedlineEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     if(!GetRegisteredIn())
         pDoc = 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

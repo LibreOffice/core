@@ -28,11 +28,11 @@
 $(eval $(call gb_Library_Library,swui))
 
 $(eval $(call gb_Library_set_include,swui,\
-    -I$(SRCDIR)/sw/inc \
-    -I$(SRCDIR)/sw/inc/pch \
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/filter/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(realpath $(SRCDIR)/sw/inc/pch) \
+    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw \
     $$(INCLUDE) \
@@ -49,14 +49,13 @@ $(eval $(call gb_Library_add_linked_libs,swui,\
     sal \
     sfx \
     sot \
-    stl \
     svl \
     svt \
     svx \
     svx \
     svxcore \
     sw \
-	swd \
+    swd \
     tk \
     tl \
     ucbhelper \
@@ -66,7 +65,6 @@ $(eval $(call gb_Library_add_linked_libs,swui,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,swui,\
-    sw/source/core/undo/SwRewriter \
     sw/source/ui/chrdlg/break \
     sw/source/ui/chrdlg/chardlg \
     sw/source/ui/chrdlg/drpcps \
@@ -151,6 +149,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/misc/pggrid \
     sw/source/ui/misc/srtdlg \
     sw/source/ui/misc/swmodalredlineacceptdlg \
+    sw/source/ui/misc/titlepage \
     sw/source/ui/table/colwd \
     sw/source/ui/table/convert \
     sw/source/ui/table/instable \

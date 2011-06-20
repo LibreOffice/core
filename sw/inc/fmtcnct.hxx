@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,11 @@
 class SwFlyFrmFmt;
 class IntlWrapper;
 
-//Verbindung (Textfluss) zwischen zwei FlyFrms
-
+// Connection (text flow) between two FlyFrms.
 class SW_DLLPUBLIC SwFmtChain: public SfxPoolItem
 {
-    SwClient aPrev, //Vorgaenger (SwFlyFrmFmt), wenn es diesen gibt.
-             aNext; //Nachfolger (SwFlyFrmFmt), wenn es diesen gibt.
+    SwClient aPrev, // Previous SwFlyFrmFmt (if existent).
+             aNext; // Next SwFlyFrmFmt (if existent).
 
 
 public:
@@ -50,7 +50,7 @@ public:
 
     inline SwFmtChain &operator=( const SwFmtChain& );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -59,7 +59,7 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
 
     SwFlyFrmFmt* GetPrev() const { return (SwFlyFrmFmt*)aPrev.GetRegisteredIn(); }
     SwFlyFrmFmt* GetNext() const { return (SwFlyFrmFmt*)aNext.GetRegisteredIn(); }
@@ -85,3 +85,4 @@ inline const SwFmtChain &SwFmt::GetChain(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

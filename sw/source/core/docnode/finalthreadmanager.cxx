@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,10 +28,7 @@
 #include "precompiled_sw.hxx"
 #include <finalthreadmanager.hxx>
 
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
-#include <errhdl.hxx>
 #include <pausethreadstarting.hxx>
 #include <swthreadjoiner.hxx>
 
@@ -61,21 +59,16 @@ class CancelJobsThread : public osl::Thread
         virtual ~CancelJobsThread() {}
 
         void addJobs( std::list< css::uno::Reference< css::util::XCancellable > >& rJobs );
-
         bool allJobsCancelled() const;
-
         void stopWhenAllJobsCancelled();
 
     private:
-
         bool existJobs() const;
 
         css::uno::Reference< css::util::XCancellable > getNextJob();
 
         bool stopped() const;
-
         virtual void SAL_CALL run();
-
         mutable osl::Mutex maMutex;
 
         std::list< css::uno::Reference< css::util::XCancellable > > maJobs;
@@ -144,9 +137,7 @@ void SAL_CALL CancelJobsThread::run()
         {
             css::uno::Reference< css::util::XCancellable > aJob( getNextJob() );
             if ( aJob.is() )
-            {
                 aJob->cancel();
-            }
         }
 
         mbAllJobsCancelled = true;
@@ -180,22 +171,17 @@ class TerminateOfficeThread : public osl::Thread
         }
 
         virtual ~TerminateOfficeThread() {}
-
         void StopOfficeTermination();
 
     private:
-
         virtual void SAL_CALL run();
         virtual void SAL_CALL onTerminated();
-
         bool OfficeTerminationStopped();
-
         void PerformOfficeTermination();
 
         osl::Mutex maMutex;
 
         const CancelJobsThread& mrCancelJobsThread;
-
         bool mbStopOfficeTermination;
 
         css::uno::Reference< css::uno::XComponentContext > mxContext;
@@ -222,15 +208,11 @@ void SAL_CALL TerminateOfficeThread::run()
         osl::MutexGuard aGuard(maMutex);
 
         if ( mrCancelJobsThread.allJobsCancelled() )
-        {
             break;
-        }
     }
 
     if ( !OfficeTerminationStopped() )
-    {
         PerformOfficeTermination();
-    }
 }
 
 void TerminateOfficeThread::PerformOfficeTermination()
@@ -242,14 +224,14 @@ void TerminateOfficeThread::PerformOfficeTermination()
         css::uno::UNO_QUERY );
     if ( !xTasksSupplier.is() )
     {
-        ASSERT( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XFramesSupplier!" );
+        OSL_FAIL( "<TerminateOfficeThread::PerformOfficeTermination()> - no XFramesSupplier!" );
         return;
     }
 
     css::uno::Reference< css::container::XElementAccess > xList( xTasksSupplier->getFrames(), css::uno::UNO_QUERY );
     if ( !xList.is() )
     {
-        ASSERT( false, "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
+        OSL_FAIL( "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
         return;
     }
 
@@ -257,18 +239,14 @@ void TerminateOfficeThread::PerformOfficeTermination()
     {
         css::uno::Reference< css::frame::XDesktop > xDesktop( xTasksSupplier, css::uno::UNO_QUERY );
         if ( xDesktop.is() && !OfficeTerminationStopped() )
-        {
             xDesktop->terminate();
-        }
     }
 }
 
 void SAL_CALL TerminateOfficeThread::onTerminated()
 {
     if ( OfficeTerminationStopped() )
-    {
         delete this;
-    }
 }
 
 
@@ -297,9 +275,7 @@ void FinalThreadManager::registerAsListenerAtDesktop()
         css::uno::UNO_QUERY );
 
     if ( xDesktop.is() )
-    {
         xDesktop->addTerminateListener( css::uno::Reference< css::frame::XTerminateListener >( static_cast< cppu::OWeakObject* >( this ), css::uno::UNO_QUERY ) );
-    }
 }
 
 FinalThreadManager::~FinalThreadManager()
@@ -318,16 +294,14 @@ FinalThreadManager::~FinalThreadManager()
 
     if ( !maThreads.empty() )
     {
-        ASSERT( false, "<FinalThreadManager::~FinalThreadManager()> - still registered jobs are existing -> perform cancellation" );
+        OSL_FAIL( "<FinalThreadManager::~FinalThreadManager()> - still registered jobs are existing -> perform cancellation" );
         cancelAllJobs();
     }
 
     if ( mpCancelJobsThread != 0 )
     {
         if ( !mpCancelJobsThread->allJobsCancelled() )
-        {
-            ASSERT( false, "<FinalThreadManager::~FinalThreadManager()> - cancellation of registered jobs not yet finished -> wait for its finish" );
-        }
+            OSL_FAIL( "<FinalThreadManager::~FinalThreadManager()> - cancellation of registered jobs not yet finished -> wait for its finish" );
 
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();
@@ -397,8 +371,6 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
             mpCancelJobsThread = new CancelJobsThread( aThreads );;
             if ( !mpCancelJobsThread->create() )
             {
-                // error handling
-                // ASSERT( false, "<FinalThreadManager::cancelAllJobs()> - thread to cancel jobs can't be setup --> synchron cancellation of jobs" );
                 delete mpCancelJobsThread;
                 mpCancelJobsThread = 0;
                 while ( !aThreads.empty() )
@@ -409,9 +381,7 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
             }
         }
         else
-        {
             mpCancelJobsThread->addJobs( aThreads );
-        }
     }
 }
 
@@ -438,20 +408,16 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
         if ( mpTerminateOfficeThread != 0 )
         {
             if ( mpTerminateOfficeThread->isRunning() )
-            {
                 mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
-            }
             else
-            {
                 delete mpTerminateOfficeThread;
-            }
+
             mpTerminateOfficeThread = 0;
         }
         mpTerminateOfficeThread = new TerminateOfficeThread( *mpCancelJobsThread,
                                                  m_xContext );
         if ( !mpTerminateOfficeThread->create() )
         {
-            // ASSERT( false, "FinalThreadManager::queryTermination(..) - thread to terminate office can't be started!" );
             delete mpTerminateOfficeThread;
             mpTerminateOfficeThread = 0;
         }
@@ -480,30 +446,18 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     if ( mpTerminateOfficeThread != 0 )
     {
         if ( mpTerminateOfficeThread->isRunning() )
-        {
-            // ASSERT( false, "<FinalThreadManager::notifyTermination()> - office termination thread still running!" );
             mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
-        }
         else
-        {
             delete mpTerminateOfficeThread;
-        }
+
         mpTerminateOfficeThread = 0;
     }
 
     if ( !maThreads.empty() )
-    {
-        // ASSERT( false, "<FinalThreadManager::notifyTermination()> - still registered jobs are existing" );
         cancelAllJobs();
-    }
 
     if ( mpCancelJobsThread != 0 )
     {
-        if ( !mpCancelJobsThread->allJobsCancelled() )
-        {
-            // ASSERT( false, "<FinalThreadManager::notifyTermination()> - cancellation of registered jobs not yet finished -> wait for its finish" );
-        }
-
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();
         delete mpCancelJobsThread;
@@ -547,3 +501,5 @@ namespace comp_FinalThreadManager {
     }
 
 } // closing component helper namespace
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

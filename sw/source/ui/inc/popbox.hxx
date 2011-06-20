@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define _POPBOX_HXX
 
 
-#ifndef _TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
 #include <svtools/transfer.hxx>
 
 class SwNavigationPI;
@@ -38,7 +37,7 @@ class SwNavigationPI;
 class SwHelpToolBox: public ToolBox, public DropTargetHelper
 {
     Link aDoubleClickLink;
-    Link aRightClickLink;       // Link bekommt MouseEvent als Parameter !!!
+    Link aRightClickLink;       // link gets mouse event as parameter !!!
 
     using ToolBox::DoubleClick;
 
@@ -65,3 +64,5 @@ inline void SwHelpToolBox::SetRightClickLink(const Link &rLink) {
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

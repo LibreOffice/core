@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,10 +106,9 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         SwNode2Layout aNode2Layout( *pTblNd );
-        // <--
 
         pTblNd->DelFrms();
         const SwTable& rTbl = pTblNd->GetTable();
@@ -130,11 +130,10 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // Restore table frames:
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         const sal_uLong nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
-        // <--
     }
     else
     {
@@ -182,10 +181,9 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         SwNode2Layout aNode2Layout( *pTblNd );
-        // <--
 
         pTblNd->DelFrms();
         const SwTable& rTbl = pTblNd->GetTable();
@@ -211,11 +209,10 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         }
 
         // Restore table frames:
-        // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+        // #i37739# A simple 'MakeFrms' after the node sorting
         // does not work if the table is inside a frame and has no prev/next.
         const sal_uLong nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
-        // <--
     }
     else
     {
@@ -277,3 +274,5 @@ void SwUndoSort::Insert( sal_uLong nOrgPos, sal_uLong nNewPos)
     aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

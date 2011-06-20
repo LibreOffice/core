@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@
 
 #include <unicode/ubidi.h>
 
-#include "txtcfg.hxx"
 #include "txtfrm.hxx"       // SwTxtFrm
 #include "inftxt.hxx"       // SwTxtSizeInfo
 #include "itrtxt.hxx"       // SwTxtCursor
@@ -114,7 +114,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
             pFrmAtPos->GetFormatted();
             pFrmAtPos = pFrmAtPos->FindMaster();
         }
-        ASSERT( pFrmAtPos, "+GetCharRect: no frame with my rightmargin" );
+        OSL_ENSURE( pFrmAtPos, "+GetCharRect: no frame with my rightmargin" );
     }
     return pFrmAtPos ? pFrmAtPos : pFrm;
 }
@@ -122,7 +122,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
 sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
 {
     // In Bereichen und ausserhalb von Flies wird nicht mehr gescrollt.
-    ASSERT( !pFrm->IsFollow(), "Illegal Scrolling by Follow!" );
+    OSL_ENSURE( !pFrm->IsFollow(), "Illegal Scrolling by Follow!" );
     if( pFrm->GetOfst() != nNew && !pFrm->IsInSct() )
     {
         SwFlyFrm *pFly = pFrm->FindFlyFrm();
@@ -201,7 +201,7 @@ SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
 sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                             SwCrsrMoveState *pCMS ) const
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::GetCharRect with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::GetCharRect with swapped frame" );
 
     if( IsLocked() || IsHiddenNow() )
         return sal_False;
@@ -355,7 +355,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     if( bRet )
     {
         SwPageFrm *pPage = pFrm->FindPageFrm();
-        ASSERT( pPage, "Text esaped from page?" );
+        OSL_ENSURE( pPage, "Text esaped from page?" );
         const SwTwips nOrigTop = (rOrig.*fnRect->fnGetTop)();
         const SwTwips nPageTop = (pPage->Frm().*fnRect->fnGetTop)();
         const SwTwips nPageBott = (pPage->Frm().*fnRect->fnGetBottom)();
@@ -619,7 +619,6 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         aLine.TwipsToLine( rPoint.Y() );
         while( aLine.Y() + aLine.GetLineHeight() > nMaxY )
         {
-            DBG_LOOP;
             if( !aLine.Prev() )
                 break;
         }
@@ -888,14 +887,16 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.Pos().X() = aCharBox.Pos().X() - 150;
 
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // Der Node soll nicht gewechselt werden
                 xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                                          aCharBox.Pos(), sal_False );
-                ASSERT( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
-                        "SwTxtFrm::UnitUp: illegal node change" )
+#if OSL_DEBUG_LEVEL > 1
+                OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
+                        "SwTxtFrm::UnitUp: illegal node change" );
+#endif
 
                 // 7684: Wir stellen sicher, dass wir uns nach oben bewegen.
                 if( nTmpOfst >= nStart && nStart && !bSecondOfDouble )
@@ -1254,7 +1255,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             if( pNextLine || bFirstOfDouble )
             {
                 aCharBox.SSize().Width() /= 2;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
@@ -1263,8 +1264,10 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 
                 xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                  aCharBox.Pos(), sal_False );
-                ASSERT( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
-                    "SwTxtFrm::UnitDown: illegal node change" )
+#if OSL_DEBUG_LEVEL > 1
+                OSL_ENSURE( nOldNode == pPam->GetPoint()->nNode.GetIndex(),
+                    "SwTxtFrm::UnitDown: illegal node change" );
+#endif
 
                 // 7684: Wir stellen sicher, dass wir uns nach unten bewegen.
                 if( nTmpOfst <= nStart && ! bFirstOfDouble )
@@ -1541,7 +1544,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 SwTwips nSpace = 0;
                 if( FILL_TAB != rFill.Mode() )
                 {
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+static sal_Char const sDoubleSpace[] = "  ";
                     const XubString aTmp( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
 
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTmp, 0, 2 );
@@ -1745,3 +1748,5 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     ((SwCrsrMoveState*)rFill.pCMS)->bFillRet = bFill;
     delete pFnt;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

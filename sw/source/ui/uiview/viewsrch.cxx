@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <svl/cjkoptions.hxx>
@@ -42,6 +42,7 @@
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/srchitem.hxx>
+#include <sal/macros.h>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>
@@ -95,12 +96,6 @@ inline Window* GetParentWindow( SvxSearchDialog* pSrchDlg )
         pWin = 0;
     return pWin;
 }
-
-
-/*-----------------12.04.97 13:04-------------------
-
---------------------------------------------------*/
-
 
 void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 {
@@ -195,14 +190,14 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 
             if (nSlot == FN_REPEAT_SEARCH)
             {
-                ASSERT(pSrchItem, "Search-Item fehlt");
+                OSL_ENSURE(pSrchItem, "SearchItem missing");
                 if( !pSrchItem )
                     pSrchItem = new SvxSearchItem(SID_SEARCH_ITEM);
             }
             else
             {
                 // SearchItem aus Request besorgen
-                ASSERT(pArgs, "Args fehlen");
+                OSL_ENSURE(pArgs, "Args missing");
                 if ( pArgs )
                 {
                     delete pSrchItem;
@@ -288,7 +283,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             case SVX_SEARCHCMD_REPLACE_ALL:
                 {
                     SwSearchOptions aOpts( pWrtShell, pSrchItem->GetBackward() );
-
+                    SwCrsrSaveState aSaveCursor( *pWrtShell->GetSwCrsr());
 
                     if( !pSrchItem->GetSelection() )
                     {
@@ -308,8 +303,11 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         SwWait aWait( *GetDocShell(), sal_True );
                         pWrtShell->StartAllAction();
                         nFound = FUNC_Search( aOpts );
+                        // #i8288# Now that everything has been replaced, restore the original cursor position.
+                        pWrtShell->GetSwCrsr()->RestoreSavePos();  // (position saved by SwCrsrSaveState above)
                         pWrtShell->EndAllAction();
                     }
+
                     rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0 && ULONG_MAX != nFound));
                     if( !nFound )
                     {
@@ -378,16 +376,16 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 
             SvUShorts aArr( 0, 16 );
             aArr.Insert(    aNormalAttr,
-                            sizeof( aNormalAttr ) / sizeof( aNormalAttr[0] ),
+                            SAL_N_ELEMENTS( aNormalAttr ),
                             0 );
             if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
                 aArr.Insert(    aCTLAttr,
-                                sizeof( aCTLAttr ) / sizeof( aCTLAttr[0] ),
+                                SAL_N_ELEMENTS( aCTLAttr ),
                                 14 );
             SvtCJKOptions aCJKOpt;
             if( aCJKOpt.IsAnyEnabled() )
                 aArr.Insert(    aCJKAttr,
-                                sizeof( aCJKAttr ) / sizeof( aCJKAttr[0] ),
+                                SAL_N_ELEMENTS( aCJKAttr ),
                                 14 );
 
             SfxItemSet aSet( pWrtShell->GetAttrPool(), aArr.GetData() );
@@ -412,13 +410,13 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
         }
         break;
         default:
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if(nSlot)
             {
                 ByteString sStr( "nSlot: " );
                 sStr += ByteString::CreateFromInt32( nSlot );
-                sStr += " falscher Dispatcher (viewsrch.cxx)";
-                DBG_ERROR( sStr.GetBuffer() );
+                sStr += " wrong Dispatcher (viewsrch.cxx)";
+                OSL_FAIL(sStr.GetBuffer() );
             }
 #endif
             return;
@@ -579,13 +577,13 @@ void SwView::Replace()
         aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
         aRewriter.AddRule(UNDO_ARG3, pSrchItem->GetReplaceString());
 
-        pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter); // #111827#
+        pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter);
 
         pWrtShell->SetTxtFmtColl( pWrtShell->GetParaStyle(
                             pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
-        pWrtShell->EndUndo(); // #111827#
+        pWrtShell->EndUndo();
     }
     else
     {
@@ -639,7 +637,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 
     pWrtShell->SttSelect();
 
-    static sal_uInt16 __READONLY_DATA aSearchAttrRange[] = {
+    static sal_uInt16 aSearchAttrRange[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -767,38 +765,6 @@ void SwView::StateSearch(SfxItemSet &rSet)
                 rSet.Put( *pSrchItem );
             }
             break;
-
-/*          case SID_SEARCH_REPLACESET:
-            case SID_SEARCH_SEARCHSET:
-            {
-                static sal_uInt16 __READONLY_DATA aSearchAttrRange[] =
-                {
-                        RES_CHRATR_CASEMAP,     RES_CHRATR_POSTURE,
-                        RES_CHRATR_SHADOWED,    RES_CHRATR_WORDLINEMODE,
-                        RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
-                        RES_LR_SPACE,           RES_UL_SPACE,
-                        SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP,
-                        0
-                };
-
-                SfxItemSet aSet(pWrtShell->GetAttrPool(), aSearchAttrRange );
-                if( SID_SEARCH_REPLACESET==nWhich )
-                {
-                    if( pReplList )
-                    {
-                        pReplList->Get( aSet );
-                        DELETEZ( pReplList );
-                    }
-                }
-                else if( pSrchList )
-                {
-                    pSrchList->Get( aSet );
-                    DELETEZ( pSrchList );
-                }
-                rSet.Put( SvxSetItem( nWhich, aSet ));
-            }
-            break;
-*/
         }
         nWhich = aIter.NextWhich();
     }
@@ -806,3 +772,4 @@ void SwView::StateSearch(SfxItemSet &rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

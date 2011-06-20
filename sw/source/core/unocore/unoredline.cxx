@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,8 +33,9 @@
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <pagedesc.hxx>
 #include "poolfmt.hxx"
@@ -55,8 +57,6 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-
-
 
 SwXRedlineText::SwXRedlineText(SwDoc* _pDoc, SwNodeIndex aIndex) :
     SwXText(_pDoc, CURSOR_REDLINE),
@@ -106,24 +106,21 @@ uno::Sequence<uno::Type> SwXRedlineText::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwXRedlineTextImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlineTextImplementationId> {};
+}
+
 uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXRedlineTextImplementationId::get().getSeq();
 }
 
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwPosition aPos(aNodeIndex);
     SwXTextCursor *const pXCursor =
@@ -176,7 +173,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursorByRange(
 uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
     ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
@@ -198,8 +195,6 @@ SwXRedlinePortion::SwXRedlinePortion(   const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
                         uno::Reference< text::XText >  xParent, sal_Bool bStart) :
     SwXTextPortion(pPortionCrsr, xParent, bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END),
-//  SwXText(pPortionCrsr->GetDoc(), CURSOR_REDLINE),
-//  SwXRedlineText(pPortionCrsr->GetDoc(), *pRed->GetContentIdx()),
     pRedline(pRed)
 {
     SetCollapsed(!pRedline->HasMark());
@@ -222,7 +217,6 @@ static util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
     return aRetDT;
 }
 
-// ---------------------------------------------------------------------------
 static OUString lcl_RedlineTypeToOUString(RedlineType_t eType)
 {
     OUString sRet;
@@ -237,7 +231,6 @@ static OUString lcl_RedlineTypeToOUString(RedlineType_t eType)
     return sRet;
 }
 
-// ---------------------------------------------------------------------------
 static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
 {
     uno::Sequence<beans::PropertyValue> aValues(4);
@@ -246,24 +239,24 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRe
     if(pNext)
     {
         beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
+        pValues[0].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
         // GetAuthorString(n) walks the SwRedlineData* chain;
         // here we always need element 1
         pValues[0].Value <<= OUString(rRedline.GetAuthorString(1));
-        pValues[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
+        pValues[1].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
         pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
-        pValues[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
+        pValues[2].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
         pValues[2].Value <<= OUString(pNext->GetComment());
-        pValues[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
+        pValues[3].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
         pValues[3].Value <<= lcl_RedlineTypeToOUString(pNext->GetType());
     }
     return aValues;
 }
-// ---------------------------------------------------------------------------
+
 uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     Validate();
     uno::Any aRet;
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TEXT)))
@@ -278,7 +271,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
                 aRet <<= xRet;
             }
             else {
-                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+                OSL_FAIL("Empty section in redline portion! (end node immediately follows start node)");
             }
         }
     }
@@ -307,17 +300,14 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
+namespace
+{
+    class theSwXRedlinePortionImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlinePortionImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXRedlinePortionImplementationId::get().getSeq();
 }
 
 uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRedline& rRedline ) throw()
@@ -371,25 +361,25 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     sRedlineIdBuf.append( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
 
     sal_Int32 nPropIdx  = 0;
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
     pRet[nPropIdx++].Value <<= OUString(rRedline.GetAuthorString());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_DATE_TIME));
     pRet[nPropIdx++].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_COMMENT));
     pRet[nPropIdx++].Value <<= OUString(rRedline.GetComment());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TYPE));
     pRet[nPropIdx++].Value <<= lcl_RedlineTypeToOUString(rRedline.GetType());
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_IDENTIFIER));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_IDENTIFIER));
     pRet[nPropIdx++].Value <<= sRedlineIdBuf.makeStringAndClear();
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_COLLAPSED));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_COLLAPSED));
     sal_Bool bTmp = !rRedline.HasMark();
     pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
 
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_IS_START));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_START));
     pRet[nPropIdx++].Value.setValue(&bIsStart, ::getBooleanCppuType()) ;
 
     bTmp = !rRedline.IsDelLastPara();
-    pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_MERGE_LAST_PARA));
+    pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_MERGE_LAST_PARA));
     pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
 
     SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
@@ -398,16 +388,16 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
         if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
         {
             uno::Reference<text::XText> xRet = new SwXRedlineText(rRedline.GetDoc(), *pNodeIdx);
-            pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TEXT));
+            pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TEXT));
             pRet[nPropIdx++].Value <<= xRet;
         }
         else {
-            DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+            OSL_FAIL("Empty section in redline portion! (end node immediately follows start node)");
         }
     }
     if(pNext)
     {
-        pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_SUCCESSOR_DATA));
+        pRet[nPropIdx].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_REDLINE_SUCCESSOR_DATA));
         pRet[nPropIdx++].Value <<= lcl_GetSuccessorProperties(rRedline);
     }
     aRet.realloc(nPropIdx);
@@ -438,19 +428,16 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
     if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_AUTHOR)))
     {
-        DBG_ERROR("currently not available");
+        OSL_FAIL("currently not available");
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME)))
     {
-        DBG_ERROR("currently not available");
-//      util::DateTime aDT;
-//      if(aValue >>= aDT)
-//              pRedline->SetTimeStamp(lcl_DateTimeFromUno(aDT));
+        OSL_FAIL("currently not available");
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT)))
     {
@@ -459,45 +446,15 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_TYPE)))
     {
-        DBG_ERROR("currently not available");
+        OSL_FAIL("currently not available");
         OUString sTmp; aValue >>= sTmp;
         if(!sTmp.getLength())
             throw lang::IllegalArgumentException();
-//      pRedline->SetType(lcl_OUStringToRedlineType(sTmp));
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
     {
-        DBG_ERROR("currently not available");
-/*      SwRedlineData* pNext = pRedline->GetRedlineData().Next();
-        uno::Sequence<beans::PropertyValue> aValues;
-        if(!(aValue =>> aValues) || !pNext)
-            throw lang::IllegalArgumentException();
-
-        const beans::PropertyValue* pValues = aValues.getConstArray();
-        for(sal_Int32 nValue = 0; nValue < aValues.getLength(); nValue++)
-        {
-            if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_AUTHOR.pName)
-            {
-                DBG_ERROR("currently not available");
-            }
-            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_DATE_TIME.pName))
-            {
-                util::DateTime aDT;
-                if(pValues[nValue].Value >>= aDT)
-                    pNext->SetTimeStamp(lcl_DateTimeFromUno(aDT));
-            }
-            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_COMMENT.pName))
-            {
-                OUString sTmp; pValues[nValue].Value >>= sTmp;
-                pNext->SetComment(sTmp);
-            }
-            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_TYPE.pName))
-            {
-                OUString sTmp; pValues[nValue].Value >>= sTmp;
-                pNext->SetType(lcl_OUStringToRedlineType(sTmp);
-            }
-        }
-*/  }
+        OSL_FAIL("currently not available");
+    }
     else
     {
         throw lang::IllegalArgumentException();
@@ -507,7 +464,7 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
 uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
     uno::Any aRet;
@@ -524,14 +481,14 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             case ND_SECTIONNODE:
             {
                 SwSectionNode* pSectNode = pNode->GetSectionNode();
-                DBG_ASSERT(pSectNode, "No section node!");
+                OSL_ENSURE(pSectNode, "No section node!");
                 xRet = SwXTextSections::GetObject( *pSectNode->GetSection().GetFmt() );
             }
             break;
             case ND_TABLENODE :
             {
                 SwTableNode* pTblNode = pNode->GetTableNode();
-                DBG_ASSERT(pTblNode, "No table node!");
+                OSL_ENSURE(pTblNode, "No table node!");
                 SwTable& rTbl = pTblNode->GetTable();
                 SwFrmFmt* pTblFmt = rTbl.GetFrmFmt();
                 xRet = SwXTextTables::GetObject( *pTblFmt );
@@ -550,7 +507,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
             }
             break;
             default:
-                DBG_ERROR("illegal node type");
+                OSL_FAIL("illegal node type");
         }
         aRet <<= xRet;
     }
@@ -565,7 +522,7 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 aRet <<= xRet;
             }
             else {
-                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+                OSL_FAIL("Empty section in redline portion! (end node immediately follows start node)");
             }
         }
     }
@@ -611,7 +568,7 @@ void SwXRedline::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 
 uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration > xRet;
     if(!pDoc)
         throw uno::RuntimeException();
@@ -642,7 +599,7 @@ sal_Bool SwXRedline::hasElements(  ) throw(uno::RuntimeException)
 
 uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
 
@@ -708,17 +665,15 @@ uno::Sequence<uno::Type> SwXRedline::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwXRedlineImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXRedlineImplementationId > {};
+}
+
 uno::Sequence<sal_Int8> SwXRedline::getImplementationId()
     throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXRedlineImplementationId::get().getSeq();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

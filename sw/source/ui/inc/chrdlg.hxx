@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,36 +29,20 @@
 #define _SWCHARDLG_HXX
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
 class SwView;
 class SvxMacroItem;
-
-/*--------------------------------------------------------------------
-   Beschreibung:    Der Tabdialog Traeger der TabPages
- --------------------------------------------------------------------*/
 
 class SwCharDlg: public SfxTabDialog
 {
@@ -72,10 +57,6 @@ public:
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 };
-
-/*-----------------14.08.96 11.03-------------------
-    Beschreibung: Tabpage fuer URL-Attribut
---------------------------------------------------*/
 
 class SwCharURLPage : public SfxTabPage
 {
@@ -117,3 +98,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <actctrl.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -44,10 +43,8 @@
 #include <swunodef.hxx>
 #include "swdllapi.h"
 
-/* -----------------------------15.12.99 09:55--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwOneExampleFrame;
+
 class SwFrmCtrlWindow : public Window
 {
     SwOneExampleFrame*  pExampleFrame;
@@ -56,9 +53,7 @@ public:
 
     virtual void    Command( const CommandEvent& rCEvt );
 };
-/* -----------------------------15.12.99 12:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 class MenuResource : public Resource
 {
     ResStringArray      aMenuArray;
@@ -68,9 +63,7 @@ public:
 
     ResStringArray& GetMenuArray() {return aMenuArray;}
 };
-/* -----------------27.07.99 15:20-------------------
 
- --------------------------------------------------*/
 #define EX_SHOW_ONLINE_LAYOUT   0x001
 
 // hard zoom value
@@ -79,6 +72,7 @@ public:
 #define EX_SHOW_DEFAULT_PAGE    0x04
 
 class SwView;
+
 class SW_DLLPUBLIC SwOneExampleFrame
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         _xControl;
@@ -133,3 +127,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

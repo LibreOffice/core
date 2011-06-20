@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <UndoAttribute.hxx>
 
 #include <svl/itemiter.hxx>
@@ -133,9 +133,8 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
                               bool bSaveDrawPt )
     : SwUndo( UNDO_INSFMTATTR )
     , m_pFmt( &rChgFmt )
-      // --> OD 2007-07-11 #i56253#
+      // #i56253#
     , m_pOldSet( new SfxItemSet( rOldSet ) )
-      // <--
     , m_nNodeIndex( 0 )
     , m_nFmtWhich( rChgFmt.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
@@ -205,7 +204,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     if ( !m_pOldSet.get() || !m_pFmt || !IsFmtInDoc( &rContext.GetDoc() ))
         return;
 
-    // --> OD 2004-10-26 #i35443# - If anchor attribute has been successfull
+    // #i35443# - If anchor attribute has been successfull
     // restored, all other attributes are also restored.
     // Thus, keep track of its restoration
     bool bAnchorAttrRestored( false );
@@ -227,7 +226,6 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     if ( !bAnchorAttrRestored )
-    // <--
     {
         SwUndoFmtAttrHelper aTmp( *m_pFmt, m_bSaveDrawPt );
         m_pFmt->SetFmtAttr( *m_pOldSet );
@@ -335,10 +333,9 @@ SwFmt* SwUndoFmtAttr::GetFmt( SwDoc& rDoc )
 
 void SwUndoFmtAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // --> OD 2004-10-26 #i35443# - Because the undo stores the attributes for
+    // #i35443# - Because the undo stores the attributes for
     // redo, the same code as for <Undo(..)> can be applied for <Redo(..)>
     UndoImpl(rContext);
-    // <--
 }
 
 void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
@@ -469,7 +466,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     m_pOldSet->Put( aAnchor );
 }
 
-// --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
+// #i35443# - Add return value, type <bool>.
 // Return value indicates, if anchor attribute is restored.
 // Note: If anchor attribute is restored, all other existing attributes
 //       are also restored.
@@ -490,10 +487,9 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
                     static_cast<SwStartNode*>(pNd)->GetStartNodeType()) )
             : !pNd->IsTxtNode() )
         {
-            // --> OD 2004-10-26 #i35443# - invalid position.
+            // #i35443# - invalid position.
             // Thus, anchor attribute not restored
             return false;
-            // <--
         }
 
         SwPosition aPos( *pNd );
@@ -504,10 +500,9 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
             if ( aPos.nContent.GetIndex() >
                     static_cast<SwTxtNode*>(pNd)->GetTxt().Len() )
             {
-                // --> OD 2004-10-26 #i35443# - invalid position.
+                // #i35443# - invalid position.
                 // Thus, anchor attribute not restored
                 return false;
-                // <--
             }
         }
         aNewAnchor.SetAnchor( &aPos );
@@ -539,10 +534,9 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     }
 
     const SwFmtAnchor &rOldAnch = pFrmFmt->GetAnchor();
-    // --> OD 2006-03-13 #i54336#
+    // #i54336#
     // Consider case, that as-character anchored object has moved its anchor position.
     if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
-    // <--
     {
         //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
         //werden. Leider reisst dies neben den Frms auch noch das Format mit
@@ -550,13 +544,13 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         //Verbindung zwischen Attribut und Format.
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = (SwTxtNode*)&pPos->nNode.GetNode();
-        ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+        OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
-        ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+        OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
-        ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
+        OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
                     "Wrong TxtFlyCnt-Hint." );
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
@@ -595,7 +589,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
         if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
         {
-            ASSERT( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
+            OSL_ENSURE( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
             pDoc->GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
         }
         pObj->SetRelativePos( aDrawSavePt );
@@ -609,7 +603,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     {
         const SwPosition* pPos = aNewAnchor.GetCntntAnchor();
         SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-        ASSERT( pTxtNd, "no Text Node at position." );
+        OSL_ENSURE( pTxtNd, "no Text Node at position." );
         SwFmtFlyCnt aFmt( pFrmFmt );
         pTxtNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
     }
@@ -620,14 +614,11 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
     rContext.SetSelections(pFrmFmt, 0);
 
-    // --> OD 2004-10-26 #i35443# - anchor attribute restored.
+    // #i35443# - anchor attribute restored.
     return true;
-    // <--
 }
 
 // -----------------------------------------------------
-
-// --> OD 2008-02-12 #newlistlevelattrs#
 SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
                                         const sal_uInt16 nWhichId )
     : SwUndo( UNDO_RESETATTR )
@@ -661,7 +652,6 @@ void SwUndoFmtResetAttr::RedoImpl(::sw::UndoRedoContext &)
         m_pChangedFormat->ResetFmtAttr( m_nWhichId );
     }
 }
-// <--
 
 // -----------------------------------------------------
 
@@ -710,7 +700,6 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     SwPaM & rPam = AddUndoRedoPaM(rContext);
-    SvUShortsSort* pIdArr = m_Ids.Count() ? &m_Ids : 0;
 
     switch ( m_nFormatId )
     {
@@ -718,10 +707,10 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.RstTxtAttrs(rPam);
         break;
     case RES_TXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, sal_False, pIdArr );
+        rDoc.ResetAttrs(rPam, sal_False, m_Ids );
         break;
     case RES_CONDTXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, sal_True, pIdArr );
+        rDoc.ResetAttrs(rPam, sal_True, m_Ids );
 
         break;
     case RES_TXTATR_TOXMARK:
@@ -772,29 +761,25 @@ void SwUndoResetAttr::RepeatImpl(::sw::RepeatContext & rContext)
         return;
     }
 
-    SvUShortsSort* pIdArr = m_Ids.Count() ? &m_Ids : 0;
     switch ( m_nFormatId )
     {
     case RES_CHRFMT:
         rContext.GetDoc().RstTxtAttrs(rContext.GetRepeatPaM());
         break;
     case RES_TXTFMTCOLL:
-        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), false, pIdArr);
+        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), false, m_Ids);
         break;
     case RES_CONDTXTFMTCOLL:
-        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), true, pIdArr);
+        rContext.GetDoc().ResetAttrs(rContext.GetRepeatPaM(), true, m_Ids);
         break;
     }
 }
 
 
-void SwUndoResetAttr::SetAttrs( const SvUShortsSort& rArr )
+void SwUndoResetAttr::SetAttrs( const std::set<sal_uInt16> &rAttrs )
 {
-    if ( m_Ids.Count() )
-    {
-        m_Ids.Remove( 0, m_Ids.Count() );
-    }
-    m_Ids.Insert( &rArr );
+    m_Ids.clear();
+    m_Ids.insert( rAttrs.begin(), rAttrs.end() );
 }
 
 // -----------------------------------------------------
@@ -1257,3 +1242,4 @@ void SwUndoDontExpandFmt::RepeatImpl(::sw::RepeatContext & rContext)
     rDoc.DontExpandFmt( *rPam.GetPoint() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

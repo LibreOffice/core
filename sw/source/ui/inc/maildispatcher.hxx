@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 #ifndef INCLUDED_MAILDISPATCHER_HXX
 #define INCLUDED_MAILDISPATCHER_HXX
 
-//#ifndef _COM_SUN_STAR_MAIL_XMAILSERVER_HPP_
-//#include "com/sun/star/mail/XMailServer.hpp"
-//#endif
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include "com/sun/star/mail/XMailMessage.hpp"
 #include <osl/thread.hxx>
@@ -166,3 +164,5 @@ private:
 };
 
 #endif // INCLUDED_MAILDISPATCHER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

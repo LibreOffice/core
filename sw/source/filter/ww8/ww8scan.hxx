@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _WW8SCAN_HXX
 #define _WW8SCAN_HXX
 
@@ -41,13 +40,10 @@
 #include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <errhdl.hxx>       // ASSERT()
 #include "hash_wrap.hxx"
 #include "sortedarray.hxx"
 
-#ifndef WW8STRUC_HXX
 #include "ww8struc.hxx"         // FIB, STSHI, STD...
-#endif
 #include <types.hxx>
 
 #include <unomid.h>
@@ -264,7 +260,7 @@ public:
         const wwSprmParser &rSprmParser);
     void  SetSprms( const sal_uInt8* pSprms_, long nLen_ );
     const sal_uInt8* FindSprm(sal_uInt16 nId);
-    const sal_uInt8*  operator ++( int );
+    void  advance();
     const sal_uInt8* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : 0; }
     const sal_uInt8* GetAktParams() const { return pAktParams; }
@@ -548,7 +544,6 @@ private:
     WW8Fkp* pFkp;
 
     /*
-        #100042#
         Keep a cache of eMaxCache entries of previously seen pFkps, which
         speeds up considerably table parsing and load save plcfs for what turn
         out to be small text frames, which frames generally are
@@ -686,7 +681,7 @@ public:
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }
 };
 
-/// Iterator for footnotes and endnotes
+/// Iterator for fields
 class WW8PLCFx_FLD : public WW8PLCFx
 {
 private:
@@ -988,6 +983,9 @@ public:
 */
 class WW8Fib
 {
+private:
+    sal_Unicode nNumDecimalSep;
+
 public:
     /**
         Program-Version asked for by us:
@@ -1445,6 +1443,7 @@ public:
     static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs);
     ww::WordVersion GetFIBVersion() const;
     WW8_CP GetBaseCp(ManTypes nType) const;
+    sal_Unicode getNumDecimalSep() const;
 };
 
 class WW8Style
@@ -1463,11 +1462,13 @@ protected:
     sal_uInt16  istdMaxFixedWhenSaved;     // How many fixed-index istds are there?
     sal_uInt16  nVerBuiltInNamesWhenSaved; // Current version of built-in stylenames
     // ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcStandardChpStsh;
+    sal_uInt16  ftcAsci;
     // CJK ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcStandardChpCJKStsh;
+    sal_uInt16  ftcFE;
+    // CTL/Other ftc used by StandardChpStsh for this document
+    sal_uInt16  ftcOther;
     // CTL ftc used by StandardChpStsh for this document
-    sal_uInt16  ftcStandardChpCTLStsh;
+    sal_uInt16  ftcBi;
 
     //No copying
     WW8Style(const WW8Style&);
@@ -1781,4 +1782,4 @@ const sal_uInt16 lLetterHeight = 15842;
 
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

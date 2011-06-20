@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,7 +51,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Core-Notify
+    Description:    Core-Notify
  --------------------------------------------------------------------*/
 
 
@@ -64,7 +65,7 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Docmdi - verschiebbar
+    Description:    Docmdi - movable
  --------------------------------------------------------------------*/
 
 
@@ -78,7 +79,7 @@ sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Groessen-Aenderung
+    Description:    Notify for size change
  --------------------------------------------------------------------*/
 
 
@@ -96,7 +97,7 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Seitenzahl-Update
+    Description:    Notify for page number update
  --------------------------------------------------------------------*/
 
 
@@ -111,10 +112,8 @@ void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
 }
 
 /******************************************************************************
- *  Methode     :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
- *  Beschreibung:
- *  Erstellt    :   OK 08.02.94 13:49
- *  Aenderung   :
+ *  Method      :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
+ *  Description:
  ******************************************************************************/
 
 
@@ -126,7 +125,7 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Seitenzahl-Update
+    Description:    Notify for page number update
  --------------------------------------------------------------------*/
 sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode)
 {
@@ -137,7 +136,7 @@ sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVertical
 }
 
 // #i23726#
-// --> OD 2005-02-18 #i42921# - add 3rd parameter <bVerticalMode> in order
+// #i42921# - add 3rd parameter <bVerticalMode> in order
 // to consider vertical layout
 sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
@@ -145,7 +144,6 @@ sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
-// <--
 
 LAYOUT_NS Dialog* GetSearchDialog()
 {
@@ -178,8 +176,8 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 
     SwWrtShell* pSh = GetView().GetWrtShellPtr();
-    //#99906#   DataChanged() is sometimes called prior to creating
-    //          the SwWrtShell
+    // DataChanged() is sometimes called prior to creating
+    // the SwWrtShell
     if(!pSh)
         return;
     sal_Bool bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = sal_False;
@@ -187,16 +185,16 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
-        // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
-        // Resize-Handler aber auch die Groesse der ScrollBars aus
-        // den Settings abgefragt werden.
+        // rearrange ScrollBars, respectively trigger resize, because
+        // the ScrollBar size can have change. For that, in the reset
+        // handler, the size of the ScrollBars also has to be queried
+        // from the settings.
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             pSh->LockPaint();
             bUnlockPaint = sal_True;
             ViewShell::DeleteReplacementBitmaps();
-            GetView().InvalidateBorder();               //Scrollbarbreiten
+            GetView().InvalidateBorder();               //Scrollbar work
         }
         break;
 
@@ -206,7 +204,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_FONTSUBSTITUTION:
         pSh->LockPaint();
         bUnlockPaint = sal_True;
-        GetView().GetDocShell()->UpdateFontList();  //z.B. Druckerwechsel
+        GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
         break;
     }
     pSh->LockView( bViewWasLocked );
@@ -214,3 +212,4 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         pSh->UnlockPaint();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

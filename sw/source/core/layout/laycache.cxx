@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@
 #include <flyfrm.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// --> OD 2006-03-22 #b6375613#
+//
 #include <pam.hxx>
 #include <docsh.hxx>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
@@ -70,11 +71,10 @@
 
 
 using namespace ::com::sun::star;
-// <--
 
 SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
 
-/*-----------------28.5.2001 10:06------------------
+/*
  *  Reading and writing of the layout cache.
  *  The layout cache is not necessary, but it improves
  *  the performance and reduces the text flow during
@@ -83,7 +83,7 @@ SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
  *  at the top of every page, so it's possible to create
  *  the right count of pages and to distribute the document content
  *  to this pages before the formatting starts.
- *--------------------------------------------------*/
+ */
 
 void SwLayoutCache::Read( SvStream &rStream )
 {
@@ -174,7 +174,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
     return !aIo.HasError();
 }
 
-/*-----------------28.5.2001 10:19------------------
+/*
  * SwLayoutCache::Write(..)
  * writes the index (more precise: the difference between
  * the index and the first index of the document content)
@@ -184,7 +184,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
  * number is stored, too.
  * The position, size and page number of the text frames
  * are stored, too
- * --------------------------------------------------*/
+ */
 
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
@@ -253,7 +253,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                     pSub = pSub->GetNext();
                                 }
                                 pTab = pTab->GetFollow();
-                                ASSERT( pTab, "Table follow without master" );
+                                OSL_ENSURE( pTab, "Table follow without master" );
                             }
                         }
                         do
@@ -291,7 +291,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                     SwPageFrm *pTabPage = pTab->FindPageFrm();
                                     if( pTabPage != pPage )
                                     {
-                                        ASSERT( pPage->GetPhyPageNum() <
+                                        OSL_ENSURE( pPage->GetPhyPageNum() <
                                                 pTabPage->GetPhyPageNum(),
                                                 "Looping Tableframes" );
                                         pPage = pTabPage;
@@ -346,7 +346,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
     }
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
     if( !pImpl )
@@ -476,15 +476,15 @@ void SwLayoutCache::ClearImpl()
 
 SwLayoutCache::~SwLayoutCache()
 {
-    ASSERT( !nLockCount, "Deleting a locked SwLayoutCache!?" );
+    OSL_ENSURE( !nLockCount, "Deleting a locked SwLayoutCache!?" );
     delete pImpl;
 }
 
-/*-----------------28.5.2001 10:47------------------
+/*
  * SwActualSection,
  *  a help class to create not nested section frames
  *  for nested sections.
- * --------------------------------------------------*/
+ */
 
 SwActualSection::SwActualSection( SwActualSection *pUp,
                                   SwSectionFrm    *pSect,
@@ -500,14 +500,14 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
     }
 }
 
-/*-----------------28.5.2001 11:09------------------
+/*
  * SwLayHelper
  *  is the helper class, which utilizes the layout cache information
  *  to distribute the document content to the rigth pages.
  * It's used by the _InsertCnt(..)-function.
  * If there's no layout cache, the distibution to the pages is more
  * a guess, but a guess with statistical background.
- * --------------------------------------------------*/
+ */
 
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
             SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rB,
@@ -544,16 +544,16 @@ SwLayHelper::~SwLayHelper()
 {
     if( pImpl )
     {
-        ASSERT( pDoc && pDoc->GetLayoutCache(), "Missing layoutcache" );
+        OSL_ENSURE( pDoc && pDoc->GetLayoutCache(), "Missing layoutcache" );
         pDoc->GetLayoutCache()->UnlockImpl();
     }
 }
 
-/*-----------------23.5.2001 16:40------------------
+/*
  * SwLayHelper::CalcPageCount() does not really calculate the page count,
  * it returns the page count value from the layout cache, if available,
  * otherwise it estimates the page count.
- * --------------------------------------------------*/
+ */
 
 sal_uLong SwLayHelper::CalcPageCount()
 {
@@ -592,11 +592,7 @@ sal_uLong SwLayHelper::CalcPageCount()
             {
                 nMaxParaPerPage = Max( sal_uLong(20),
                                        sal_uLong(20 + nNdCount / 1000 * 3) );
-#ifdef PM2
-                const sal_uLong nMax = 49;
-#else
                 const sal_uLong nMax = 53;
-#endif
                 nMaxParaPerPage = Min( nMaxParaPerPage, nMax );
                 nPgCount = nNdCount / nMaxParaPerPage;
             }
@@ -612,7 +608,7 @@ sal_uLong SwLayHelper::CalcPageCount()
     return nPgCount;
 }
 
-/*-----------------23.5.2001 16:44------------------
+/*
  * SwLayHelper::CheckInsertPage()
  * inserts a page and return sal_True, if
  * - the break after flag is set
@@ -621,7 +617,7 @@ sal_uLong SwLayHelper::CalcPageCount()
  *
  * The break after flag is set, if the actual content
  * wants a break after.
- * --------------------------------------------------*/
+ */
 
 sal_Bool SwLayHelper::CheckInsertPage()
 {
@@ -629,13 +625,12 @@ sal_Bool SwLayHelper::CheckInsertPage()
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
     const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
     const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
-    // --> FME 2004-10-26 #118195# Do not evaluate page description if frame
+    // #118195# Do not evaluate page description if frame
     // is a follow frame!
     const SwPageDesc* pDesc = rpFrm->IsFlowFrm() &&
                               SwFlowFrm::CastFlowFrm( rpFrm )->IsFollow() ?
                               0 :
                               rDesc.GetPageDesc();
-    // <--
 
     sal_Bool bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
     rbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
@@ -665,18 +660,18 @@ sal_Bool SwLayHelper::CheckInsertPage()
                          bNextPageOdd, bInsertEmpty, sal_False, rpPage->GetNext() );
         if ( bEnd )
         {
-            ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
+            OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
             do
             {   rpPage = (SwPageFrm*)rpPage->GetNext();
             } while ( rpPage->GetNext() );
         }
         else
         {
-            ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
+            OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
             rpPage = (SwPageFrm*)rpPage->GetNext();
             if ( rpPage->IsEmptyPage() )
             {
-                ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
+                OSL_ENSURE( rpPage->GetNext(), "Keine neue Seite?" );
                 rpPage = (SwPageFrm*)rpPage->GetNext();
             }
         }
@@ -688,7 +683,7 @@ sal_Bool SwLayHelper::CheckInsertPage()
     return sal_False;
 }
 
-// --> OD 2006-03-22 #b6375613#
+//
 bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
 {
     bool bHasTextFrmAnchoredObjs( false );
@@ -742,7 +737,7 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
                                         uno::UNO_QUERY );
             try
             {
-                xDocInfo->setPropertyValue( rtl::OUString::createFromAscii("WorkaroundForB6375613Applied"), uno::makeAny( true ) );
+                xDocInfo->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")), uno::makeAny( true ) );
             }
             catch( uno::Exception& )
             {
@@ -750,9 +745,8 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
         }
     }
 }
-// <--
 
-/*-----------------28.5.2001 11:31------------------
+/*
  * SwLayHelper::CheckInsert
  *  is the entry point for the _InsertCnt-function.
  *  The document content index is checked either it is
@@ -760,7 +754,7 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
  *  cause the maximal estimation of content per page is reached.
  *  A really big table or long paragraph may contains more than
  *  one page, in this case the needed count of pages will inserted.
- * --------------------------------------------------*/
+ */
 
 sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 {
@@ -882,9 +876,8 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         if( rpFrm->IsTabFrm() )
                         {
                             SwTabFrm* pTab = (SwTabFrm*)rpFrm;
-                            // --> OD 2004-09-23 #i33629#, #i29955#
+                            // #i33629#, #i29955#
                             ::RegistFlys( pTab->FindPageFrm(), pTab );
-                            // <--
                             SwFrm *pRow = pTab->Lower();
                             SwTabFrm *pFoll = new SwTabFrm( *pTab );
 
@@ -898,7 +891,7 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                                 SwRowFrm* pHeadline = 0;
                                 while( nRowIdx < nRepeat )
                                 {
-                                    ASSERT( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table ohne Zeilen?" );
+                                    OSL_ENSURE( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table ohne Zeilen?" );
                                     pHeadline =
                                         new SwRowFrm( *pTab->GetTable()->GetTabLines()[ nRowIdx ], pTab );
                                     pHeadline->SetRepeatedHeadline( true );
@@ -946,12 +939,11 @@ sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
             SwPageFrm* pLastPage = rpPage;
             if( CheckInsertPage() )
             {
-                // --> OD 2006-03-21 #b6375613#
+                //
                 if ( pDoc->ApplyWorkaroundForB6375613() )
                 {
                     lcl_ApplyWorkaroundForB6375613( rpFrm );
                 }
-                // <--
                 _CheckFlyCache( pLastPage );
                 if( rpPrv && rpPrv->IsTxtFrm() && !rpPrv->GetValidSizeFlag() )
                     rpPrv->Frm().Height( rpPrv->GetUpper()->Prt().Height() );
@@ -1013,12 +1005,12 @@ struct FlyCacheCompare
   }
 };
 
- /*-----------------28.6.2001 14:40------------------
+ /*
   * SwLayHelper::_CheckFlyCache(..)
   * If a new page is inserted, the last page is analysed.
   * If there are text frames with default position, the fly cache
   * is checked, if these frames are stored in the cache.
-  * --------------------------------------------------*/
+  */
 
 void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 {
@@ -1030,59 +1022,6 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     {
         SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         sal_uInt16 nPgNum = pPage->GetPhyPageNum();
-
-/*
-
-        //
-        // NOTE: This code assumes that all objects have already been
-        // inserted into the drawing layout, so that the cached objects
-        // can be identified by their ordnum. Unfortunately this function
-        // is called with page n if page n+1 has been inserted. Thus
-        // not all the objects have been inserted and the ordnums cannot
-        // be used to identify the objects.
-        //
-
-        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )  // check objects
-        {
-            SdrObject *pO = rObjs[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
-            {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                if( pFly->Frm().Left() == WEIT_WECH && pFly->GetAnchor() &&
-                    !pFly->GetAnchor()->FindFooterOrHeader() )
-                {   // Only frame with default position and not in header/footer
-                    const SwContact *pC = (SwContact*)GetUserCall(pO);
-                    if( pC )
-                    {
-                        sal_uLong nOrdNum = pO->GetOrdNum(); // the Id
-                        SwFlyCache* pFlyC;
-                        while( nFlyIdx < nFlyCount && ( pFlyC = pImpl->
-                               GetFlyCache(nFlyIdx) )->nPageNum < nPgNum)
-                            ++nFlyIdx;
-                        if( nFlyIdx < nFlyCount &&
-                            pFlyC->nPageNum == nPgNum )
-                        {
-                            sal_uInt16 nIdx = nFlyIdx;
-                            while( nIdx < nFlyCount && ( pFlyC = pImpl->
-                                   GetFlyCache( nIdx ) )->nPageNum == nPgNum &&
-                                   pFlyC->nOrdNum != nOrdNum )
-                                ++nIdx;
-                            if( nIdx < nFlyCount && pFlyC->nPageNum == nPgNum &&
-                                pFlyC->nOrdNum == nOrdNum )
-                            {   // we get the stored information
-                                pFly->Frm().Pos().X() = pFlyC->Left() +
-                                                        pPage->Frm().Left();
-                                pFly->Frm().Pos().Y() = pFlyC->Top() +
-                                                        pPage->Frm().Top();
-                                pFly->Frm().Width( pFlyC->Width() );
-                                pFly->Frm().Height( pFlyC->Height() );
-                            }
-                        }
-                    }
-                }
-            }
-        }
- */
 
         //
         // NOTE: Here we do not use the absolute ordnums but
@@ -1158,14 +1097,14 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     }
 }
 
-/*-----------------28.6.2001 14:48------------------
+/*
  * SwLayHelper::CheckPageFlyCache(..)
  * looks for the given text frame in the fly cache and sets
  * the position and size, if possible.
  * The fly cache is sorted by pages and we start searching with the given page.
  * If we found the page number in the fly cache, we set
  * the rpPage parameter to the right page, if possible.
- * --------------------------------------------------*/
+ */
 
 sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 {
@@ -1197,7 +1136,7 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
             SwPageFrm *pPage = rpPage;
             while( pPage && pPage->GetPhyPageNum() < pFlyC->nPageNum )
                 pPage = (SwPageFrm*)pPage->GetNext();
-            // --> OD 2005-02-22 #i43266# - if the found page is an empty page,
+            // #i43266# - if the found page is an empty page,
             // take the previous one (take next one, if previous one doesn't exists)
             if ( pPage && pPage->IsEmptyPage() )
             {
@@ -1205,7 +1144,6 @@ sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
                                                  ? pPage->GetPrev()
                                                  : pPage->GetNext() );
             }
-            // <--
             if( pPage )
             {
                 rpPage = pPage;
@@ -1245,13 +1183,10 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, sal_Bool bWrtMd ) :
 sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 {
     sal_Bool bRes = sal_True;
-    size_t nLvl = aRecTypes.size();
-    ASSERT( nLvl == aRecSizes.Count(), "OpenRec: Level" );
     sal_uInt32 nPos = pStream->Tell();
     if( bWriteMode )
     {
-        aRecTypes.push_back( cType );
-        aRecSizes.Insert( nPos, nLvl );
+        aRecords.push_back( RecTypeSize(cType, nPos) );
         *pStream << (sal_uInt32) 0;
     }
     else
@@ -1259,19 +1194,19 @@ sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
         sal_uInt32 nVal;
         *pStream >> nVal;
         sal_uInt8 cRecTyp = (sal_uInt8)nVal;
-        aRecTypes.push_back( cRecTyp );
-        sal_uInt32 nSize = nVal >> 8;
-        aRecSizes.Insert( nPos + nSize, nLvl );
         if( !nVal || cRecTyp != cType ||
             pStream->GetErrorCode() != SVSTREAM_OK || pStream->IsEof() )
         {
-            ASSERT( nVal, "OpenRec: Record-Header is 0" );
-            ASSERT( cRecTyp == cType,
-                    "OpenRec: Wrong Record Type" );
-            aRecTypes.back() = 0;
-            aRecSizes[nLvl] = pStream->Tell();
+            OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
+            OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
+            aRecords.push_back( RecTypeSize(0, pStream->Tell()) );
             bRes = sal_False;
             bError = sal_True;
+        }
+        else
+        {
+            sal_uInt32 nSize = nVal >> 8;
+            aRecords.push_back( RecTypeSize(cRecTyp, nPos+nSize) );
         }
     }
     return bRes;
@@ -1282,19 +1217,16 @@ sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
 {
     sal_Bool bRes = sal_True;
-    size_t nLvl = aRecTypes.size();
-    ASSERT( nLvl == aRecSizes.Count(), "CloseRec: wrong Level" );
-    ASSERT( nLvl, "CloseRec: no levels" );
-    if( nLvl )
+    OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
+    if( !aRecords.empty() )
     {
-        nLvl--;
         sal_uInt32 nPos = pStream->Tell();
         if( bWriteMode )
         {
-            sal_uInt32 nBgn = aRecSizes[nLvl];
+            sal_uInt32 nBgn = aRecords.back().size;
             pStream->Seek( nBgn );
             sal_uInt32 nSize = nPos - nBgn;
-            sal_uInt32 nVal = ( nSize << 8 ) | aRecTypes.back();
+            sal_uInt32 nVal = ( nSize << 8 ) | aRecords.back().type;
             *pStream << nVal;
             pStream->Seek( nPos );
             if( pStream->GetError() != SVSTREAM_OK )
@@ -1302,8 +1234,8 @@ sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
         }
         else
         {
-            sal_uInt32 n = aRecSizes[nLvl];
-            ASSERT( n >= nPos, "CloseRec: to much data read" );
+            sal_uInt32 n = aRecords.back().size;
+            OSL_ENSURE( n >= nPos, "CloseRec: to much data read" );
             if( n != nPos )
             {
                 pStream->Seek( n );
@@ -1313,9 +1245,7 @@ sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
             if( pStream->GetErrorCode() != SVSTREAM_OK )
                 bRes = sal_False;
         }
-
-        aRecTypes.pop_back();
-        aRecSizes.Remove( nLvl, 1 );
+        aRecords.pop_back();
     }
 
     if( !bRes )
@@ -1326,16 +1256,14 @@ sal_Bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
 
 sal_uInt32 SwLayCacheIoImpl::BytesLeft()
 {
-    sal_uInt16 nLvl = aRecSizes.Count();
     sal_uInt32 n = 0;
-    if( !bError && nLvl )
+    if( !bError && !aRecords.empty() )
     {
-        sal_uInt32 nEndPos = aRecSizes[ nLvl-1 ];
+        sal_uInt32 nEndPos = aRecords.back().size;
         sal_uInt32 nPos = pStream->Tell();
         if( nEndPos > nPos )
             n = nEndPos - nPos;
     }
-
     return n;
 }
 
@@ -1360,13 +1288,13 @@ void SwLayCacheIoImpl::SkipRec()
 {
     sal_uInt8 c = Peek();
     OpenRec( c );
-    pStream->Seek( aRecSizes[aRecSizes.Count()-1] );
+    pStream->Seek( aRecords.back().size );
     CloseRec( c );
 }
 
 sal_uInt8 SwLayCacheIoImpl::OpenFlagRec()
 {
-    ASSERT( !bWriteMode, "OpenFlagRec illegal in write  mode" );
+    OSL_ENSURE( !bWriteMode, "OpenFlagRec illegal in write  mode" );
     sal_uInt8 cFlags;
     *pStream >> cFlags;
     nFlagRecEnd = pStream->Tell() + ( cFlags & 0x0F );
@@ -1375,9 +1303,9 @@ sal_uInt8 SwLayCacheIoImpl::OpenFlagRec()
 
 void SwLayCacheIoImpl::OpenFlagRec( sal_uInt8 nFlags, sal_uInt8 nLen )
 {
-    ASSERT( bWriteMode, "OpenFlagRec illegal in read  mode" );
-    ASSERT( (nFlags & 0xF0) == 0, "illegal flags set" );
-    ASSERT( nLen < 16, "wrong flag record length" );
+    OSL_ENSURE( bWriteMode, "OpenFlagRec illegal in read  mode" );
+    OSL_ENSURE( (nFlags & 0xF0) == 0, "illegal flags set" );
+    OSL_ENSURE( nLen < 16, "wrong flag record length" );
     sal_uInt8 cFlags = (nFlags << 4) + nLen;
     *pStream << cFlags;
     nFlagRecEnd = pStream->Tell() + nLen;
@@ -1387,12 +1315,14 @@ void SwLayCacheIoImpl::CloseFlagRec()
 {
     if( bWriteMode )
     {
-        ASSERT( pStream->Tell() == nFlagRecEnd, "Wrong amount of data written" );
+        OSL_ENSURE( pStream->Tell() == nFlagRecEnd, "Wrong amount of data written" );
     }
     else
     {
-        ASSERT( pStream->Tell() <= nFlagRecEnd, "To many data read" );
+        OSL_ENSURE( pStream->Tell() <= nFlagRecEnd, "To many data read" );
         if( pStream->Tell() != nFlagRecEnd )
             pStream->Seek( nFlagRecEnd );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

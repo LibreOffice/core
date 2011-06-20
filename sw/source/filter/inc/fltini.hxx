@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,6 @@ public:
 void GetWW8Writer( const String&, const String&, WriterRef& );
 
 
-// JP 17.03.99 - 63049
 // Umsetzen der LRSpaces im aktuell importierten Doc. Die Fremd-Filter
 // liefern immer absolute Werte fuer die Ebenen einer NumRule. Wir
 // verarbeiten jetzt aber relative Werte bezogen auf das LR-Space-Item.
@@ -106,3 +106,5 @@ SW_DLLPUBLIC void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnch
     SwTwips nPageWidth);
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

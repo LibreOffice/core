@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svl/fstathelper.hxx>
-#endif
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
 #include <frmfmt.hxx>
@@ -46,14 +45,10 @@
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>       // Progress
 #include <SwXMLTextBlocks.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <swunohelper.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <swerror.h>
 
 SV_IMPL_OP_PTRARR_SORT( SwBlockNames, SwBlockName* );
@@ -266,8 +261,6 @@ SwTextBlocks::SwTextBlocks( const String& rFile )
     String sFileName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     switch( SwImpBlocks::GetFileType( rFile ) )
     {
-    //case SWBLK_SW2:     pImp = new Sw2TextBlocks( sFileName );  break;
-    //case SWBLK_SW3:     pImp = new Sw3TextBlocks( sFileName );  break;
     case SWBLK_XML:     pImp = new SwXMLTextBlocks( sFileName ); break;
     case SWBLK_NO_FILE: pImp = new SwXMLTextBlocks( sFileName ); break;
     }
@@ -303,156 +296,6 @@ sal_Bool SwTextBlocks::IsOld() const
     }
     return sal_False;
 }
-
-
-/*
-sal_uLong SwTextBlocks::ConvertToNew()
-{
-    // Wir nehmen die aktuelle Datei, benennen diese in .BAK um
-    // und kreieren den neuen Storage
-    if( IsOld() )
-    {
-        // Erst mal muessen wir die Datei freigeben
-        short nType = pImp->GetFileType();
-        Sw2TextBlocks *pTwo = NULL;
-        Sw3TextBlocks *pThree = NULL;
-        SwImpBlocks *pOld = NULL;
-
-        pImp->nCur = (sal_uInt16) -1;
-        String aName( pImp->aFile );
-        delete pImp; pImp = NULL;
-        // Jetzt wird umbenannt
-        INetURLObject aOldFull( aName );
-        INetURLObject aNewFull( aName );
-
-        aOldFull.SetExtension( String::CreateFromAscii("bak") );
-        String aOld( aOldFull.GetMainURL( INetURLObject::NO_DECODE ) );
-        String aNew( aNewFull.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        sal_Bool bError = !SWUnoHelper::UCB_CopyFile( aNew, aOld, sal_True );
-        if( bError )
-        {
-            if (nType == SWBLK_SW2)
-                pImp = new Sw2TextBlocks( aOld );
-            else
-                pImp = new Sw3TextBlocks( aOld );
-            return nErr = ERR_SWG_CANNOT_WRITE;
-        }
-
-        // Die Datei ist erfolgreich umbenannt. Jetzt wird der Storage
-        // aufgesetzt
-        if (nType == SWBLK_SW2)
-            pOld = pTwo = new Sw2TextBlocks( aOld );
-        else
-            pOld = pThree = new Sw3TextBlocks( aOld );
-        SwXMLTextBlocks* pNew = new SwXMLTextBlocks( aName );
-        pNew->SetName ( pOld->GetName());
-        // Wir kopieren den Doc-Ptr in das alte System
-        // den alten SvPersist heben wir uns aber auf,
-        // da dieser die ganze Zeit leben bleibt
-        // und lesen die Dateivorlagen erneut ein
-        SvPersist* pPersist2 = pOld->pDoc->GetPersist();
-        if (SWBLK_SW2 == nType )
-        {
-            delete pOld->pDoc;
-            pOld->pDoc = pNew->pDoc;nLinkCt
-            nErr = pTwo->LoadDoc();
-        }
-        else
-        {
-            nErr = pThree->OpenFile ( sal_True );
-            // Within this call, Sw3IoImp::SetDoc calls RemoveLink
-            // on the old document, and deletes it if the
-            // ref count is now zero
-            pThree->SetDoc ( pNew->pDoc );
-            pOld->pDoc->AddLink();
-        }
-        if( !nErr && 0 == ( nErr = pNew->OpenFile( sal_False )) )
-        {
-            nErr = pNew->SetConvertMode( sal_True );
-            // jetzt werden die Bausteine einfach umkopiert!
-            if( !nErr )
-            {
-                if (SWBLK_SW2 == nType)
-                    pTwo->StatLineStartPercent();
-                sal_uInt16 nCount = pOld->GetCount();
-                for( sal_uInt16 i = 0; i < nCount; i++ )
-                {
-                    pNew->ClearDoc();
-                    String aShort( pOld->GetShortName( i ) );
-                    String aLong( pOld->GetLongName( i ) );
-                    pNew->AddName( aShort, aLong );
-                    if ( SWBLK_SW3 == nType && pThree->IsOnlyTextBlock(aShort) )
-                    {
-                        String sText;
-                        pThree->GetText( aShort, sText );
-                        pNew->PutText( aShort, aLong, sText );
-                    }
-                    else
-                    {
-                        if (SWBLK_SW2 == nType )
-                        {
-                            // I think this is how it should work (!!!!!!) mtg
-                            pNew->pDoc->SetPersist( pPersist2 );
-                        }
-                        nErr = pOld->GetDocForConversion( i );
-                        if( nErr )
-                            break;
-                        nErr = pNew->BeginPutDoc( aShort, aLong );
-                        if( nErr )
-                            break;
-                        nErr = pNew->PutDoc();
-                        if( nErr )
-                            break;
-                    }
-
-                    // convert macros, too
-                    SvxMacroTableDtor aMacroTable;
-                    pOld->GetMacroTable( i, aMacroTable, sal_True );
-                    pNew->SetMacroTable( i, aMacroTable, sal_True );
-
-                    if (SWBLK_SW2 == nType )
-                        pNew->pDoc->SetPersist( 0 );
-                }
-                if (SWBLK_SW2 == nType )
-                    ::EndProgress( pOld->pDoc->GetDocShell() );
-            }
-            if( !nErr )
-                nErr = pNew->SetConvertMode( sal_False );
-        }
-        if ( SWBLK_SW3 == nType )
-        {
-            pThree->CloseFile();
-        }
-        else
-        {
-            // Haben wir es geschafft?
-            pOld->pDoc = NULL;
-        }
-        pNew->ClearDoc();
-        if( !nErr )
-        {
-            delete pOld;
-            pImp = pNew;
-            SWUnoHelper::UCB_DeleteFile( aOld );
-            pNew->MakeBlockList();
-        }
-        else
-        {
-            delete pOld; delete pNew;
-            SWUnoHelper::UCB_DeleteFile( aNew );
-            SWUnoHelper::UCB_CopyFile( aOld, aNew, sal_True );
-            if ( SWBLK_SW2 == nType )
-                pImp = new Sw2TextBlocks( aOld );
-            else
-                pImp = new Sw3TextBlocks( aOld );
-        }
-        pNew->CloseFile();
-        FStatHelper::GetModifiedDateTimeOfFile( aNew,
-                            &pImp->aDateModified, &pImp->aTimeModified );
-    }
-    return nErr;
-} */
 
 
 sal_uInt16 SwTextBlocks::GetCount() const
@@ -527,7 +370,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const String* s, const String* l 
             aLong = *l;
         if( !aNew.Len() )
         {
-            ASSERT( !this, "Kein Kurzname in Rename angegeben" );
+            OSL_ENSURE( !this, "Kein Kurzname in Rename angegeben" );
             nErr = ERR_SWG_INTERNAL_ERROR; return (sal_uInt16) -1;
         }
 
@@ -761,7 +604,7 @@ sal_Bool SwTextBlocks::IsOnlyTextBlock( const String& rShort ) const
         return IsOnlyTextBlock( nIdx );
     }
 
-    ASSERT( !this, "ungueltiger Name" );
+    OSL_ENSURE( !this, "ungueltiger Name" );
     return sal_False;
 }
 
@@ -796,9 +639,6 @@ void SwTextBlocks::EndPutMuchBlockEntries()
         pImp->PutMuchEntries( sal_False );
 }
 
-/*-- 20.09.2004 10:25:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 String    SwTextBlocks::GetBaseURL() const
 {
     String sRet;
@@ -806,9 +646,7 @@ String    SwTextBlocks::GetBaseURL() const
         sRet = pImp->GetBaseURL();
     return sRet;
 }
-/*-- 20.09.2004 10:25:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTextBlocks::SetBaseURL( const String& rURL )
 {
     if(pImp)
@@ -816,3 +654,4 @@ void SwTextBlocks::SetBaseURL( const String& rURL )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

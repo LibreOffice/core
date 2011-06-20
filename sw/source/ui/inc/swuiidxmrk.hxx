@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,30 +31,18 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <vcl/lstbox.hxx>
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include <svx/stddlg.hxx>
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <sfx2/childwin.hxx>
 #include "toxe.hxx"
 #include <svtools/stdctrl.hxx>
@@ -63,10 +52,11 @@ class SwWrtShell;
 class SwTOXMgr;
 class SwTOXMark;
 /*--------------------------------------------------------------------
-     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
+     Description:   insert mark for index entry
  --------------------------------------------------------------------*/
 class SwIndexMarkFloatDlg;
 class SwIndexMarkModalDlg;
+
 class SwIndexMarkDlg : public Window
 {
     friend class SwIndexMarkFloatDlg;
@@ -173,9 +163,7 @@ public:
     sal_Bool    IsTOXType(const String& rName)
                 {return LISTBOX_ENTRY_NOTFOUND != aTypeDCB.GetEntryPos(rName);}
 };
-/* -----------------06.10.99 10:11-------------------
 
- --------------------------------------------------*/
 class SwIndexMarkFloatDlg : public SfxModelessDialog
 {
     SwIndexMarkDlg      aDlg;
@@ -188,9 +176,7 @@ class SwIndexMarkFloatDlg : public SfxModelessDialog
                                    sal_Bool bNew=sal_True);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
-/* -----------------06.10.99 10:33-------------------
 
- --------------------------------------------------*/
 class SwIndexMarkModalDlg : public SvxStandardDialog
 {
     SwIndexMarkDlg      aDlg;
@@ -201,10 +187,8 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-/* -----------------15.09.99 08:39-------------------
-
- --------------------------------------------------*/
 class SwAuthMarkModalDlg;
+
 class SwAuthMarkDlg : public Window
 {
     static sal_Bool     bIsFromComponent;
@@ -262,9 +246,7 @@ public:
 
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
-/* -----------------06.10.99 10:11-------------------
 
- --------------------------------------------------*/
 class SwAuthMarkFloatDlg : public SfxModelessDialog
 {
     SwAuthMarkDlg       aDlg;
@@ -277,9 +259,7 @@ class SwAuthMarkFloatDlg : public SfxModelessDialog
                                    sal_Bool bNew=sal_True);
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
-/* -----------------06.10.99 10:33-------------------
 
- --------------------------------------------------*/
 class SwAuthMarkModalDlg : public SvxStandardDialog
 {
     SwAuthMarkDlg       aDlg;
@@ -290,6 +270,6 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-
 #endif // _SWUI_IDXMRK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

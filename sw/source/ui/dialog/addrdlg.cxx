@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,19 +37,13 @@
 #include <svx/svxdlg.hxx>
 #include <sfx2/sfx.hrc>
 
-/****************************************************************************
-Ctor
-****************************************************************************/
-
-
 SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
 
 {
-    // TabPage erzeugen
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );
     if ( fnCreatePage )
     {
@@ -57,13 +52,9 @@ SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
     }
 }
 
-/****************************************************************************
-Dtor
-****************************************************************************/
-
-
-__EXPORT SwAddrDlg::~SwAddrDlg()
+SwAddrDlg::~SwAddrDlg()
 {
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 
 
@@ -163,11 +164,11 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     sal_Bool bSuccess =
 #endif
         ::sw::XTextRangeToSwPaM(aPaM, rRange);
-    DBG_ASSERT(bSuccess, "illegal range");
+    OSL_ENSURE(bSuccess, "illegal range");
 
     // PaM -> Index
     Set(aPaM.GetPoint()->nNode);
@@ -176,17 +177,17 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 void
 XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
 {
-    DBG_ASSERT(IsValid(), "Can't get Position");
+    OSL_ENSURE(IsValid(), "Can't get Position");
 
     // create PAM from start cursor (if no node index is present)
     if (NULL == pIndex)
     {
         SwUnoInternalPaM aUnoPaM(rDoc);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         sal_Bool bSuccess =
 #endif
             ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
-        DBG_ASSERT(bSuccess, "illegal range");
+        OSL_ENSURE(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();
     }
@@ -200,7 +201,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
 
 SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
 {
-    DBG_ASSERT(IsValid(), "Can't get Doc");
+    OSL_ENSURE(IsValid(), "Can't get Doc");
 
     return (NULL != pIndex) ? pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
 }
@@ -339,7 +340,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         // and delete the incomplete ones. Finally, delete it.
         if( IsReady(pInfo) )
         {
-            DBG_ERROR("forgotten RedlineInfo; now inserted");
+            OSL_FAIL("forgotten RedlineInfo; now inserted");
             InsertIntoDocument( pInfo );
         }
         else
@@ -348,7 +349,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
             pInfo->bNeedsAdjustment = sal_False;
             if( IsReady(pInfo) )
             {
-                DBG_ERROR("RedlineInfo without adjustment; now inserted");
+                OSL_FAIL("RedlineInfo without adjustment; now inserted");
                 InsertIntoDocument( pInfo );
             }
             else
@@ -357,7 +358,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
                 // (i.e. end without start, or start without
                 // end). This may well be a problem in the file,
                 // rather than the code.
-                DBG_ERROR("incomplete redline (maybe file was corrupt); "
+                OSL_FAIL("incomplete redline (maybe file was corrupt); "
                           "now deleted");
             }
         }
@@ -478,7 +479,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
     Reference<XTextCursor> xReturn;
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // get RedlineInfo
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
@@ -577,7 +578,7 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
     Reference<XTextRange> & /*rRange*/)
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // start + end nodes are treated the same. For either it's
     // necessary that the target node already exists.
@@ -613,11 +614,11 @@ inline sal_Bool XMLRedlineImportHelper::IsReady(RedlineInfo* pRedline)
 
 void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 {
-    DBG_ASSERT(NULL != pRedlineInfo, "need redline info");
-    DBG_ASSERT(IsReady(pRedlineInfo), "redline info not complete yet!");
+    OSL_ENSURE(NULL != pRedlineInfo, "need redline info");
+    OSL_ENSURE(IsReady(pRedlineInfo), "redline info not complete yet!");
 
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Insert the Redline as described by pRedlineInfo into the
     // document.  If we are in insert mode, don't insert any redlines
@@ -647,7 +648,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 
 
     // cover three cases:
-    // 1) empty redlines (no range, no content) #100921#
+    // 1) empty redlines (no range, no content)
     // 2) check for:
     //    a) bIgnoreRedline (e.g. insert mode)
     //    b) illegal PaM range (CheckNodesRange())
@@ -706,9 +707,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
-                ASSERT( false, "Recursive change tracking" );
+                OSL_FAIL( "Recursive change tracking" );
 #endif
         }
 
@@ -774,3 +775,5 @@ void XMLRedlineImportHelper::SetProtectionKey(
 {
     aProtectionKey = rKey;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

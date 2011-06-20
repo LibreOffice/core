@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: postit.cxx,v $
- * $Revision: 1.8.42.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -266,3 +264,4 @@ void ShadowOverlayObject::SetPosition( const basegfx::B2DPoint& rPoint1,
 
 } } // end of namespace sw::sidebarwindows
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

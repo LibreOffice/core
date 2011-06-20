@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _DRAWDOC_HXX
 #define _DRAWDOC_HXX
 
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 
 class SwDoc;
 class SwDocShell;
@@ -46,20 +45,21 @@ public:
     const SwDoc& GetDoc() const { return *pDoc; }
           SwDoc& GetDoc()       { return *pDoc; }
 
-    virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
+    virtual SdrPage* AllocPage(bool bMasterPage);
 
-    // fuers "load on demand" von Grafiken im DrawingLayer
+
+    // For "load on demand" of graphics in DrawingLayer.
     virtual SvStream* GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const;
 
-    // fuers Speicher von Rechtecken als Control-Ersatz fuker Versionen < 5.0
+    // For saving of rectangles as control-replacement for versions < 5.0.
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
 protected:
-    // --> OD 2006-03-01 #b6382898#
     // overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
-    // <--
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

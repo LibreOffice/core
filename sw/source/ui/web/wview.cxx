@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,29 +104,14 @@ SFX_IMPL_INTERFACE( SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
 
 TYPEINIT1(SwWebView,SwView)
 
-/*-----------------22.01.97 14.27-------------------
-
---------------------------------------------------*/
-
-
 SwWebView::SwWebView(SfxViewFrame* _pFrame, SfxViewShell* _pShell) :
     SwView(_pFrame, _pShell)
 {
 }
 
-/*-----------------22.01.97 14.27-------------------
-
---------------------------------------------------*/
-
-
 SwWebView::~SwWebView()
 {
 }
-
-/*-----------------23.01.97 09.01-------------------
-
---------------------------------------------------*/
-
 
 void SwWebView::SelectShell()
 {
@@ -152,8 +138,6 @@ void SwWebView::SelectShell()
     }
     else
     {
-
-    //  DELETEZ(pxSelectionObj); //Selektionsobjekt loeschen
         SfxDispatcher &rDispatcher = *GetViewFrame()->GetDispatcher();
         SwToolbarConfigItem *pBarCfg = SW_MOD()->GetWebToolbarConfig();
 
@@ -176,7 +160,7 @@ void SwWebView::SelectShell()
                     break;
             }
             pSfxShell = rDispatcher.GetShell( --i );
-            ASSERT( pSfxShell, "My Shell ist lost in space" );
+            OSL_ENSURE( pSfxShell, "My Shell ist lost in space" );
             rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 
@@ -328,3 +312,4 @@ void SwWebView::SelectShell()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -144,7 +145,7 @@ void SwFmtFld::SetFld(SwField * _pField)
 
 int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     // OD 2004-05-14 #i29146# - correction: check, if <pField> and
     // <((SwFmtFld&)rAttr).GetFld()> are set.
     // OD 2004-05-14 #i29146# - items are equal, if both fields aren't set.
@@ -192,7 +193,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return;
 
     SwTxtNode* pTxtNd = (SwTxtNode*)&pTxtAttr->GetTxtNode();
-    ASSERT( pTxtNd, "wo ist denn mein Node?" );
+    OSL_ENSURE( pTxtNd, "wo ist denn mein Node?" );
     if( pNew )
     {
         switch( pNew->Which() )
@@ -206,10 +207,9 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 // GetReferenz-Felder aktualisieren
                 if( RES_GETREFFLD == GetFld()->GetTyp()->Which() )
                 {
-                    // --> OD 2007-09-06 #i81002#
+                    // #i81002#
 //                    ((SwGetRefField*)GetFld())->UpdateField();
                     dynamic_cast<SwGetRefField*>(GetFld())->UpdateField( pTxtAttr );
-                    // <--
                 }
                 break;
         case RES_DOCPOS_UPDATE:
@@ -283,8 +283,6 @@ sal_Bool SwFmtFld::IsProtect() const
 |*                SwTxtFld::SwTxtFld()
 |*
 |*    Beschreibung      Attribut fuer automatischen Text, Ctor
-|*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 
@@ -311,15 +309,13 @@ SwTxtFld::~SwTxtFld( )
 |*                SwTxtFld::Expand()
 |*
 |*    Beschreibung      exandiert das Feld und tauscht den Text im Node
-|*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 
 void SwTxtFld::Expand() const
 {
     // Wenn das expandierte Feld sich nicht veraendert hat, wird returnt
-    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
     XubString aNewExpand(
@@ -331,11 +327,10 @@ void SwTxtFld::Expand() const
         const sal_uInt16 nWhich = pFld->GetTyp()->Which();
         if( RES_CHAPTERFLD != nWhich && RES_PAGENUMBERFLD != nWhich &&
             RES_REFPAGEGETFLD != nWhich &&
-            // --> FME 2005-05-23 #122919# Page count fields to not use aExpand
+            // #122919# Page count fields to not use aExpand
             // during formatting, therefore an invalidation of the text frame
             // has to be triggered even if aNewExpand == aExpand:
             ( RES_DOCSTATFLD != nWhich || DS_PAGE != static_cast<const SwDocStatField*>(pFld)->GetSubType() ) &&
-            // <--
             ( RES_GETEXPFLD != nWhich || ((SwGetExpField*)pFld)->IsInBodyTxt() ) )
         {
             // BP: das muesste man noch optimieren!
@@ -361,8 +356,8 @@ void SwTxtFld::Expand() const
 
 void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
 {
-    ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
-    ASSERT( pDest->m_pTxtNode, "SwTxtFld: where is pDest's TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
+    OSL_ENSURE( pDest->m_pTxtNode, "SwTxtFld: where is pDest's TxtNode?" );
 
     IDocumentFieldsAccess* pIDFA = m_pTxtNode->getIDocumentFieldsAccess();
     IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
@@ -391,7 +386,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
             ((SwDDEFieldType*)pFldType)->IncRefCnt();
         }
 
-        ASSERT( pFldType, "unbekannter FieldType" );
+        OSL_ENSURE( pFldType, "unbekannter FieldType" );
         pFldType->Add( &rFmtFld );          // ummelden
         rFmtFld.GetFld()->ChgTyp( pFldType );
     }
@@ -414,9 +409,6 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     }
 }
 
-/* -----------------26.06.2003 13:54-----------------
-
- --------------------------------------------------*/
 void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 {
     //if not in undo section notify the change
@@ -427,3 +419,4 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

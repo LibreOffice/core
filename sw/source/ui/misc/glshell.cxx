@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <com/sun/star/frame/XTitle.hpp>
 
-#include <tools/list.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
@@ -52,14 +52,14 @@
 #include <IDocumentUndoRedo.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
-#include <initui.hxx>                   // fuer ::GetGlossaries()
+#include <initui.hxx>                   // for ::GetGlossaries()
 #include <cmdid.h>
 #include <swerror.h>
 #include <misc.hrc>
 
-
 #define SwWebGlosDocShell
 #define SwGlosDocShell
+
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 
@@ -73,10 +73,8 @@ SFX_IMPL_INTERFACE( SwWebGlosDocShell, SwWebDocShell, SW_RES(0) )
 {
 }
 
-
 TYPEINIT1( SwGlosDocShell, SwDocShell );
 TYPEINIT1( SwWebGlosDocShell, SwWebDocShell );
-
 
 void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
 {
@@ -97,7 +95,6 @@ void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
     }
 }
 
-
 void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 {
     if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, sal_False ))
@@ -109,11 +106,10 @@ void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
     }
 }
 
-
 sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
                 const String& rShortNm, const String& rLongNm )
 {
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     SwTextBlocks * pBlock = ::GetGlossaries()->GetGroupDoc( rGroupName );
 
     SvxMacro aStart(aEmptyStr, aEmptyStr);
@@ -124,7 +120,7 @@ sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
     pGlosHdl->GetMacros( rShortNm, aStart, aEnd, pBlock );
 
     sal_uInt16 nRet = rSh.SaveGlossaryDoc( *pBlock, rLongNm, rShortNm,
-                                pCfg->IsSaveRelFile(),
+                                rCfg.IsSaveRelFile(),
                                 pBlock->IsOnlyTextBlock( rShortNm ) );
 
     if(aStart.GetMacName().Len() || aEnd.GetMacName().Len() )
@@ -141,11 +137,6 @@ sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
     return nRet != USHRT_MAX;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwGlosDocShell::SwGlosDocShell(sal_Bool bNewShow)
     : SwDocShell( (bNewShow)
             ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
@@ -154,39 +145,19 @@ SwGlosDocShell::SwGlosDocShell(sal_Bool bNewShow)
     SetHelpId(SW_GLOSDOCSHELL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwGlosDocShell::~SwGlosDocShell(  )
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwGlosDocShell::Execute( SfxRequest& rReq )
 {
     ::lcl_Execute( *this, rReq );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwGlosDocShell::GetState( SfxItemSet& rSet )
 {
     ::lcl_GetState( *this, rSet );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 sal_Bool SwGlosDocShell::Save()
 {
@@ -204,52 +175,25 @@ sal_Bool SwGlosDocShell::Save()
     }
 }
 
-
-/**/
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwWebGlosDocShell::SwWebGlosDocShell()
     : SwWebDocShell( SFX_CREATE_MODE_STANDARD )
 {
     SetHelpId(SW_WEBGLOSDOCSHELL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SwWebGlosDocShell::~SwWebGlosDocShell(  )
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwWebGlosDocShell::Execute( SfxRequest& rReq )
 {
     ::lcl_Execute( *this, rReq );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwWebGlosDocShell::GetState( SfxItemSet& rSet )
 {
     ::lcl_GetState( *this, rSet );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 sal_Bool SwWebGlosDocShell::Save()
 {
@@ -263,10 +207,6 @@ sal_Bool SwWebGlosDocShell::Save()
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SV_IMPL_REF ( SwDocShell )
 
 SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName, sal_Bool bShow )
@@ -276,8 +216,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
     SwTextBlocks* pGroup = GetGroupDoc( rGroup );
     if( pGroup && pGroup->GetCount() )
     {
-        // erfrage welche View registriert ist. Im WebWriter gibts es keine
-        // normale View
+        // query which view is registered. In WebWriter there is no normal view
         sal_uInt16 nViewId = 0 != &SwView::Factory() ? 2 : 6;
         String sLongName = pGroup->GetLongName(pGroup->GetIndex( rShortName ));
 
@@ -300,7 +239,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
             pDocSh->SetGroupName( rGroup );
         }
 
-        // Dokumenttitel setzen
+        // set document title
         SfxViewFrame* pFrame = bShow ? SfxViewFrame::LoadDocument( *xDocSh, nViewId ) : SfxViewFrame::LoadHiddenDocument( *xDocSh, nViewId );
         String aDocTitle(SW_RES( STR_GLOSSARY ));
         aDocTitle += ' ';
@@ -313,8 +252,8 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         xDocSh->GetWrtShell()->InsertGlossary( *pGroup, rShortName );
         if( !xDocSh->GetDoc()->getPrinter( false ) )
         {
-            // wir erzeugen einen default SfxPrinter.
-            // Das ItemSet wird vom Sfx geloescht!
+            // we create a default SfxPrinter.
+            // ItemSet is deleted by Sfx!
             SfxItemSet *pSet = new SfxItemSet( xDocSh->GetDoc()->GetAttrPool(),
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
@@ -322,7 +261,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
                         0 );
             SfxPrinter* pPrinter = new SfxPrinter( pSet );
 
-            // und haengen ihn ans Dokument.
+            // and append it to the document.
             xDocSh->GetDoc()->setPrinter( pPrinter, true, true );
         }
 
@@ -346,4 +285,4 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
     return xDocSh;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

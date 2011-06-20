@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "txatbase.hxx"
 #include "ndhints.hxx"
 #include <txtatr.hxx>
 
-#ifndef PRODUCT
+#if OSL_DEBUG_LEVEL > 1
 #include <pam.hxx>
 #endif
 
@@ -42,40 +41,7 @@
 _SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
 _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 
-#ifdef NIE
-
-void DumpHints( const SwpHtStart &rHtStart,
-                const SwpHtEnd &rHtEnd )
-{
-#ifdef DBG_UTIL
-    aDbstream << "DumpHints:" << endl;
-    (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
-    for( sal_uInt16 i = 0; i < rHtStart.Count(); ++i )
-    {
-        const SwTxtAttr *pHt = rHtStart[i];
-        ((((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
-            << ']' << '\t').WriteNumber( long( pHt ) )
-                  << '\t').WriteNumber( *pHt->GetStart() );
-        if( pHt->GetEnd() )
-            (aDbstream << " -> " ).WriteNumber( *pHt->GetEnd() );
-        aDbstream << endl;
-    }
-    (aDbstream << "\tEnds:").WriteNumber( rHtEnd.Count() )<< endl;
-    for( i = 0; i < rHtEnd.Count(); ++i )
-    {
-        const SwTxtAttr *pHt = rHtEnd[i];
-        (((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
-            << ']' << '\t' ).WriteNumber( long( pHt ) );
-        if( pHt->GetEnd() )
-            (aDbstream << '\t').WriteNumber( *pHt->GetEnd() )<< " <- ";
-        aDbstream.WriteNumber( *pHt->GetStart() )<< endl;
-    }
-    aDbstream << endl;
-#endif
-}
-#else
 inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
-#endif
 
 /*************************************************************************
  *                        inline IsEqual()
@@ -113,7 +79,7 @@ static sal_Bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 {
                     const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
-                    ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" )
+                    OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 < nS2;
                 }
@@ -149,7 +115,7 @@ static sal_Bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 {
                     const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
-                    ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" )
+                    OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
                 }
@@ -244,21 +210,15 @@ sal_Bool SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) con
 void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nPos;
-    ASSERT(!m_HintStarts.Seek_Entry( pHt, &nPos ),
+    OSL_ENSURE(!m_HintStarts.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtStart");
-    ASSERT(!m_HintEnds.Seek_Entry( pHt, &nPos ),
+    OSL_ENSURE(!m_HintEnds.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtEnd");
 #endif
     m_HintStarts.Insert( pHt );
     m_HintEnds.Insert( pHt );
-#ifdef DBG_UTIL
-#ifdef NIE
-    (aDbstream << "Insert: " ).WriteNumber( long( pHt ) ) << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
 }
 
 void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
@@ -272,15 +232,9 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
     sal_uInt16 nEndPos;
     m_HintEnds.Seek_Entry( pHt, &nEndPos );
     m_HintEnds.Remove( nEndPos );
-#ifdef DBG_UTIL
-#ifdef NIE
-    (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) ) << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
  *                      SwpHintsArray::Check()
@@ -290,7 +244,7 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 #define CHECK_ERR(cond, text) \
         if(!(cond)) \
         { \
-            ASSERT(!this, text); \
+            OSL_ENSURE(!this, text); \
             DumpHints(m_HintStarts, m_HintEnds); \
             return !(const_cast<SwpHintsArray*>(this))->Resort(); \
         }
@@ -368,7 +322,6 @@ bool SwpHintsArray::Check() const
                    "HintsCheck: Character attribute in end array" );
 
         // 8) style portion check
-#if OSL_DEBUG_LEVEL > 1
         const SwTxtAttr* pHtThis = m_HintStarts[i];
         const SwTxtAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
         CHECK_ERR( 0 == i ||
@@ -418,7 +371,6 @@ bool SwpHintsArray::Check() const
                 }
             }
         }
-#endif
     }
     return true;
 }
@@ -445,13 +397,6 @@ bool SwpHintsArray::Resort()
         const SwTxtAttr *pHt = m_HintStarts[i];
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
-#ifdef NIE
-#ifdef DBG_UTIL
-//            ASSERT( bResort, "!Resort/Start: correcting hints-array" );
-            aDbstream << "Resort: Starts" << endl;
-            DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
             m_HintStarts.Remove( i );
             m_HintStarts.Insert( pHt );
             pHt = m_HintStarts[i];
@@ -468,12 +413,6 @@ bool SwpHintsArray::Resort()
         const SwTxtAttr *pHt = m_HintEnds[i];
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
-#ifdef NIE
-#ifdef DBG_UTIL
-            aDbstream << "Resort: Ends" << endl;
-            DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
             m_HintEnds.Remove( i );
             m_HintEnds.Insert( pHt );
             pHt = m_HintEnds[i]; // normalerweise == pLast
@@ -485,13 +424,8 @@ bool SwpHintsArray::Resort()
         }
         pLast = pHt;
     }
-#ifdef DBG_UTIL
-#ifdef NIE
-    aDbstream << "Resorted:" << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
     return bResort;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

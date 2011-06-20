@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,35 @@
 #include "vbaautotextentry.hxx"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XAutoTextContainer.hpp>
+#include <tools/urlobj.hxx>
+#include <osl/file.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel, const rtl::OUString& rName )
-    : SwVbaTemplate_BASE( rParent, rContext ), mxModel( rModel ), msName( rName )
+String lcl_CheckGroupName( const String& rGroupName )
+{
+    String sRet;
+    //group name should contain only A-Z and a-z and spaces
+    for( xub_StrLen i = 0; i < rGroupName.Len(); i++ )
+    {
+        sal_Unicode cChar = rGroupName.GetChar(i);
+        if( (cChar >= 'A' && cChar <= 'Z') ||
+            (cChar >= 'a' && cChar <= 'z') ||
+            (cChar >= '0' && cChar <= '9') ||
+            cChar == '_' || cChar == 0x20 )
+        {
+            sRet += cChar;
+        }
+    }
+    sRet.EraseLeadingChars();
+    sRet.EraseTrailingChars();
+    return sRet;
+}
+
+
+SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel, const rtl::OUString& rFullUrl )
+    : SwVbaTemplate_BASE( rParent, rContext ), mxModel( rModel ), msFullUrl( rFullUrl )
 {
 }
 
@@ -47,7 +71,27 @@ SwVbaTemplate::~SwVbaTemplate()
 rtl::OUString
 SwVbaTemplate::getName() throw ( css::uno::RuntimeException )
 {
-    return msName;
+    rtl::OUString sName;
+    if( msFullUrl.getLength() )
+    {
+        INetURLObject aURL( msFullUrl );
+        ::osl::File::getSystemPathFromFileURL( aURL.GetLastName(), sName );
+    }
+    return sName;
+}
+
+rtl::OUString
+SwVbaTemplate::getPath() throw ( css::uno::RuntimeException )
+{
+    rtl::OUString sPath;
+    if( msFullUrl.getLength() )
+    {
+        INetURLObject aURL( msFullUrl );
+        rtl::OUString sURL( aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+        sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
+        ::osl::File::getSystemPathFromFileURL( sURL, sPath );
+    }
+    return sPath;
 }
 
 uno::Any SAL_CALL
@@ -58,22 +102,22 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
 
     // the default template is "Normal.dot" in Word.
     rtl::OUString sGroup( RTL_CONSTASCII_USTRINGPARAM("Normal") );
-    sal_Int32 nIndex = msName.lastIndexOf( sal_Unicode('.') );
+    rtl::OUString sName = getName();
+    sal_Int32 nIndex = sName.lastIndexOf( sal_Unicode('.') );
     if( nIndex > 0 )
     {
-        sGroup = msName.copy( 0, msName.lastIndexOf( sal_Unicode('.') ) );
-       // OSL_TRACE("SwVbaTemplate::AutoTextEntries: %s", rtl::OUStringToOString( sGroup, RTL_TEXTENCODING_UTF8 ).getStr() );
+        sGroup = sName.copy( 0, sName.lastIndexOf( sal_Unicode('.') ) );
     }
+    String sNewGroup = lcl_CheckGroupName( sGroup );
 
     uno::Reference< container::XIndexAccess > xGroup;
-    if( xAutoTextContainer->hasByName( sGroup ) )
+    if( xAutoTextContainer->hasByName( sNewGroup ) )
     {
-        xGroup.set( xAutoTextContainer->getByName( sGroup ), uno::UNO_QUERY_THROW );
+        xGroup.set( xAutoTextContainer->getByName( sNewGroup ), uno::UNO_QUERY_THROW );
     }
     else
     {
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Auto Text Entry doesn't exist") ), uno::Reference< uno::XInterface >() );
-        //xGroup.set( xAutoTextContainer->insertNewByName( sGroup ), uno::UNO_QUERY_THROW );
     }
 
     uno::Reference< XCollection > xCol( new SwVbaAutoTextEntries( this, mxContext, xGroup ) );
@@ -101,3 +145,4 @@ SwVbaTemplate::getServiceNames()
         return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

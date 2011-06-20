@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,18 +32,12 @@
 #include <tools/string.hxx>
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/svtabbx.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <tools/resary.hxx>
 #include "swdllapi.h"
 #include "cmdid.h"
@@ -52,7 +47,6 @@
 //***********************************************************
 
 struct CollName {
-//      const char* pStr;
         sal_uLong nCnd;
         sal_uLong nSubCond;
     };
@@ -98,3 +92,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

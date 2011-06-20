@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #define UTILITY_HXX
 
 #include <sfx2/minarray.hxx>
-#ifndef _FONT_HXX //autogen
 #include <vcl/font.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
@@ -51,7 +50,7 @@ inline long SmPtsTo100th_mm(long nNumPts)
     // 72.27 [pt] = 1 [inch] = 2,54 [cm] = 2540 [100th of mm].
     // result is being rounded to the nearest integer.
 {
-    DBG_ASSERT(nNumPts >= 0, "Sm : Ooops...");
+    OSL_ENSURE(nNumPts >= 0, "Sm : Ooops...");
     // broken into multiple and fraction of 'nNumPts' to reduce chance
     // of overflow
     // (7227 / 2) is added in order to round to the nearest integer
@@ -71,7 +70,7 @@ inline Fraction Sm100th_mmToPts(long nNum100th_mm)
     // returns the length (in points) that corresponds to the length
     // 'nNum100th_mm' (in 100th of mm).
 {
-    DBG_ASSERT(nNum100th_mm >= 0, "Sm : Ooops...");
+    OSL_ENSURE(nNum100th_mm >= 0, "Sm : Ooops...");
     Fraction  aTmp (7227L, 254000L);
     return aTmp *= Fraction(nNum100th_mm);
 }
@@ -79,7 +78,7 @@ inline Fraction Sm100th_mmToPts(long nNum100th_mm)
 
 inline long SmRoundFraction(const Fraction &rFrac)
 {
-    DBG_ASSERT(rFrac > Fraction(), "Sm : Ooops...");
+    OSL_ENSURE(rFrac > Fraction(), "Sm : Ooops...");
     return (rFrac.GetNumerator() + rFrac.GetDenominator() / 2) / rFrac.GetDenominator();
 }
 
@@ -93,8 +92,8 @@ SmViewShell * SmGetActiveView();
 // SmFace
 //
 
-sal_Bool    IsItalic( const Font &rFont );
-sal_Bool    IsBold( const Font &rFont );
+bool    IsItalic( const Font &rFont );
+bool    IsBold( const Font &rFont );
 
 class SmFace : public Font
 {
@@ -130,29 +129,6 @@ public:
 SmFace & operator *= (SmFace &rFace, const Fraction &rFrac);
 
 
-#ifdef NEVER
-////////////////////////////////////////////////////////////
-//
-// SmInfoText
-//
-
-class SmInfoText : public FixedText
-{
-protected:
-    sal_uInt16  nMaxLen;
-    String  aText;
-
-public:
-    SmInfoText(Window* pParent, WinBits nWinStyle = 0, sal_uInt16 nMax = 128);
-    SmInfoText(Window* pParent, const ResId& rResId, sal_uInt16 nMax = 128);
-
-    void    SetText(const String& rStr);
-
-    XubString GetText() const { return (aText); }
-};
-#endif
-
-
 ////////////////////////////////////////////////////////////
 //
 // SmPickList
@@ -167,7 +143,7 @@ protected:
     virtual void   *CreateItem(const void *pItem) = 0;
     virtual void    DestroyItem(void *pItem) = 0;
 
-    virtual sal_Bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const = 0;
+    virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const = 0;
 
     virtual String  GetStringItem(void *pItem) = 0;
 
@@ -201,63 +177,6 @@ public:
 
 ////////////////////////////////////////////////////////////
 //
-// SmStringPickList
-//
-#ifdef NEVER
-class SmStringPickList : public SmPickList
-{
-protected:
-    virtual void   *CreateItem(const String& rString);
-    virtual void   *CreateItem(const void *pItem);
-    virtual void    DestroyItem(void *pItem);
-
-    virtual sal_Bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
-
-    virtual String  GetStringItem(void *pItem);
-
-public:
-    SmStringPickList()
-        : SmPickList(0, 5) {}
-    SmStringPickList(sal_uInt16 nInitSize, sal_uInt16 nMaxSize)
-        : SmPickList(nInitSize, nMaxSize) {}
-    SmStringPickList(const SmPickList& rOrig )
-        : SmPickList(rOrig) {}
-    virtual ~SmStringPickList() { Clear(); }
-
-    virtual void    Insert(const String &rString);
-    virtual void    Update(const String &rString, const String &rNewString);
-    virtual void    Remove(const String &rString);
-
-    inline sal_Bool     Contains(const String &rString) const;
-    inline String   Get(sal_uInt16 nPos = 0) const;
-
-    inline SmStringPickList& operator = (const SmStringPickList& rList);
-    inline String            operator [] (sal_uInt16 nPos) const;
-};
-
-inline SmStringPickList& SmStringPickList::operator = (const SmStringPickList& rList)
-{
-    *(SmPickList *)this = *(SmPickList *)&rList; return *this;
-}
-
-inline String SmStringPickList::operator [] (sal_uInt16 nPos) const
-{
-    return *((String *)SmPickList::operator[](nPos));
-}
-
-inline String SmStringPickList::Get(sal_uInt16 nPos) const
-{
-    return nPos < Count() ? *((String *)SmPickList::Get(nPos)) : String();
-}
-
-inline sal_Bool SmStringPickList::Contains(const String &rString) const
-{
-    return SmPickList::Contains((void *)&rString);
-}
-#endif
-
-////////////////////////////////////////////////////////////
-//
 // SmFontPickList
 //
 
@@ -270,7 +189,7 @@ protected:
     virtual void   *CreateItem(const void *pItem);
     virtual void    DestroyItem(void *pItem);
 
-    virtual sal_Bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
+    virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
     virtual String  GetStringItem(void *pItem);
 
@@ -291,7 +210,7 @@ public:
     virtual void    Remove(const Font &rFont);
 
     using   SmPickList::Contains;
-    inline sal_Bool     Contains(const Font &rFont) const;
+    inline bool     Contains(const Font &rFont) const;
     inline Font     Get(sal_uInt16 nPos = 0) const;
 
     inline SmFontPickList&  operator = (const SmFontPickList& rList);
@@ -317,37 +236,11 @@ inline Font SmFontPickList::Get(sal_uInt16 nPos) const
     return nPos < Count() ? *((Font *)SmPickList::Get(nPos)) : Font();
 }
 
-inline sal_Bool SmFontPickList::Contains(const Font &rFont) const
+inline bool SmFontPickList::Contains(const Font &rFont) const
 {
     return SmPickList::Contains((void *)&rFont);
 }
 
-
-////////////////////////////////////////////////////////////
-//
-// SmStringPickComboBox
-//
-#ifdef NEVER
-class SmStringPickComboBox : public SmStringPickList, public ComboBox
-{
-protected:
-    virtual void LoseFocus();
-
-    DECL_LINK(SelectHdl, ComboBox *);
-
-public:
-    SmStringPickComboBox(Window* pParent, WinBits nWinStyle = 0, sal_uInt16 nMax = 4);
-    SmStringPickComboBox(Window* pParent, const ResId& rResId, sal_uInt16 nMax = 4);
-
-    SmStringPickComboBox& operator = (const SmStringPickList& rList);
-
-    void            SetText(const String& rStr);
-
-    virtual void    Insert(const String &rString);
-    virtual void    Update(const String &rString, const String &rNewString);
-    virtual void    Remove(const String &rString);
-};
-#endif
 
 ////////////////////////////////////////////////////////////
 //
@@ -374,3 +267,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

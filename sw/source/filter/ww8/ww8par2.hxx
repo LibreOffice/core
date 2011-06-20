@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,25 +25,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR2_HXX
 #define _WW8PAR2_HXX
 
-#ifndef SWTYPES_HXX
 #include <swtypes.hxx>  // enum RndStdIds
-#endif
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <editeng/lrspitem.hxx>
 
-#ifndef WW8SCAN_HXX
 #include "ww8scan.hxx"  // class WW8Style
-#endif
-#ifndef WW8PAR_HXX
 #include "ww8par.hxx"   // WW8_BRC5
-#endif
 
 class WW8RStyle;
 
@@ -114,7 +108,6 @@ struct WW8SwFlyPara
     bool bAutoWidth;
     bool bToggelPos;
 
-    // --> OD 2007-07-03 #148498#
     // add parameter <nWWPgTop> - WW8's page top margin
     WW8SwFlyPara( SwPaM& rPaM,
                   SwWW8ImplReader& rIo,
@@ -292,4 +285,4 @@ enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 WW8LvlType GetNumType(sal_uInt8 nWwLevelNo);
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

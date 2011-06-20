@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #define _BPARR_HXX
 
 #include <tools/solar.h>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <swdllapi.h>
 
 struct BlockInfo;
@@ -53,41 +54,40 @@ typedef BigPtrEntry* ElementPtr;
 
 typedef sal_Bool (*FnForEach)( const ElementPtr&, void* pArgs );
 
-// 1000 Eintr„ge pro Block = etwas weniger als 4K
+// 1000 entries per Block = a bit less then 4K
 #define MAXENTRY 1000
 
 
-// Anzahl Eintraege, die bei der Kompression frei bleiben duerfen
-// dieser Wert ist fuer den Worst Case, da wir MAXBLOCK mit ca 25%
-// Overhead definiert haben, reichen 80% = 800 Eintraege vollkommen aus
-// Will mann voellige Kompression haben, muss eben 100 angegeben werden.
-
+// number of entries that may remain free during compression
+// this value is for the worst case; because we defined MAXBLOCK with ca 25%
+// overhead, 80% = 800 entries are enough
+// if complete compression is desired, 100 has to be specified
 #define COMPRESSLVL 80
 
-struct BlockInfo {                  // Block-Info:
-    BigPtrArray* pBigArr;           // in diesem Array steht der Block
-    ElementPtr* pData;              // Datenblock
-    sal_uLong nStart, nEnd;             // Start- und EndIndex
-    sal_uInt16 nElem;                   // Anzahl Elemente
+struct BlockInfo {                  // block info:
+    BigPtrArray* pBigArr;           // in this array the block is located
+    ElementPtr* pData;              // data block
+    sal_uLong nStart, nEnd;         // start- and end index
+    sal_uInt16 nElem;               // number of elements
 };
 
 class SW_DLLPUBLIC BigPtrArray
 {
-    BlockInfo** ppInf;              // Block-Infos
-    sal_uLong       nSize;              // Anzahl Elemente
-    sal_uInt16      nMaxBlock;          // akt. max Anzahl Bloecke
-    sal_uInt16      nBlock;             // Anzahl Bloecke
-    sal_uInt16      nCur;               // letzter Block
+    BlockInfo** ppInf;              // block info
+    sal_uLong       nSize;              // number of elements
+    sal_uInt16      nMaxBlock;          // current max. number of blocks
+    sal_uInt16      nBlock;             // number of blocks
+    sal_uInt16      nCur;               // last block
 
-    sal_uInt16      Index2Block( sal_uLong ) const; // Blocksuche
-    BlockInfo*  InsBlock( sal_uInt16 );         // Block einfuegen
-    void        BlockDel( sal_uInt16 );         // es wurden Bloecke geloescht
-    void        UpdIndex( sal_uInt16 );         // Indexe neu berechnen
+    sal_uInt16      Index2Block( sal_uLong ) const; // block search
+    BlockInfo*  InsBlock( sal_uInt16 );         // insert block
+    void        BlockDel( sal_uInt16 );         // some blocks were deleted
+    void        UpdIndex( sal_uInt16 );         // recalculate indices
 
 protected:
-    // fuelle alle Bloecke auf.
-    // Der short gibt in Prozent an, wie voll die Bloecke werden sollen.
-    // Der ReturnWert besagt, das irgendetwas "getan" wurde
+    // fill all blocks
+    // the short parameter specifies in percent, how full the blocks should be
+    // made
     sal_uInt16 Compress( short = COMPRESSLVL );
 
 public:
@@ -113,7 +113,7 @@ public:
 
 inline sal_uLong BigPtrEntry::GetPos() const
 {
-    DBG_ASSERT( this == pBlock->pData[ nOffset ], "Element nicht im Block" );
+    OSL_ENSURE( this == pBlock->pData[ nOffset ], "element not in the block" );
     return pBlock->nStart + nOffset;
 }
 
@@ -124,3 +124,5 @@ inline BigPtrArray& BigPtrEntry::GetArray() const
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

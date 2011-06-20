@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -44,9 +43,7 @@
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
@@ -55,7 +52,7 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sot/storinfo.hxx>
@@ -116,7 +113,6 @@ SwFilterDetect::~SwFilterDetect()
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
@@ -146,10 +142,6 @@ SwFilterDetect::~SwFilterDetect()
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
-
-            // if the preselected filter name is not correct, it must be erased after detection
-            // remember index of property to get access to it later
-            nIndexOfFilterName = nProperty;
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
@@ -173,9 +165,7 @@ SwFilterDetect::~SwFilterDetect()
             nIndexOfDocumentTitle = nProperty;
     }
 
-    // can't check the type for external filters, so set the "dont" flag accordingly
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
+    SolarMutexGuard aGuard;
 
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
@@ -193,7 +183,6 @@ SwFilterDetect::~SwFilterDetect()
             String aPattern( aPrefix );
             aPattern += String::CreateFromAscii("swriter");
             if ( aURL.Match( aPattern ) >= aPattern.Len() )
-                //pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
                 return aTypeName;
         }
     }
@@ -240,7 +229,7 @@ SwFilterDetect::~SwFilterDetect()
                 }
                 else
                 {
-                    DBG_ASSERT( xStorage.is(), "At this point storage must exist!" );
+                    OSL_ENSURE( xStorage.is(), "At this point storage must exist!" );
 
                     try
                     {
@@ -366,7 +355,7 @@ SwFilterDetect::~SwFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("InputStream");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -375,7 +364,7 @@ SwFilterDetect::~SwFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("UCBContent");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -385,7 +374,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -396,7 +385,7 @@ SwFilterDetect::~SwFilterDetect()
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
         bOpenAsTemplate = sal_True;
@@ -408,7 +397,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -422,7 +411,7 @@ SwFilterDetect::~SwFilterDetect()
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -466,18 +455,17 @@ UNOSEQUENCE< UNOOUSTRING > SAL_CALL SwFilterDetect::getSupportedServiceNames() t
 /* Helper for XServiceInfo */
 UNOSEQUENCE< UNOOUSTRING > SwFilterDetect::impl_getStaticSupportedServiceNames()
 {
-    UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 3 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
-    seqServiceNames.getArray() [1] = UNOOUSTRING::createFromAscii( "com.sun.star.text.FormatDetector"  );
-    seqServiceNames.getArray() [2] = UNOOUSTRING::createFromAscii( "com.sun.star.text.W4WFormatDetector"  );
+    seqServiceNames.getArray() [0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
+    seqServiceNames.getArray() [1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.FormatDetector"  ));
+    seqServiceNames.getArray() [2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.W4WFormatDetector"  ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING SwFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.writer.FormatDetector" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.writer.FormatDetector" ));
 }
 
 /* Helper for registry */
@@ -486,3 +474,4 @@ UNOREFERENCE< UNOXINTERFACE > SAL_CALL SwFilterDetect::impl_createInstance( cons
     return UNOREFERENCE< UNOXINTERFACE >( *new SwFilterDetect( xServiceManager ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

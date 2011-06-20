@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -47,12 +47,7 @@ class SwDoc;
 class SwFmtCol;
 class SwDocShell;
 class SwNumRule;
-/******************************************************************************
- *
- ******************************************************************************/
-/* -----------------04.05.98 12:28-------------------
- *
- * --------------------------------------------------*/
+
 class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
@@ -84,9 +79,6 @@ public:
     void            Invalidate() {pDoc = 0;}
 };
 
-/* -----------------04.05.98 12:28-------------------
- *
- * --------------------------------------------------*/
 class SwXEndnoteProperties : public cppu::WeakAggImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
@@ -118,9 +110,6 @@ public:
     void            Invalidate() {pDoc = 0;}
 };
 
-/* -----------------04.05.98 12:28-------------------
- *
- * --------------------------------------------------*/
 class SwXLineNumberingProperties : public cppu::WeakAggImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
@@ -152,9 +141,6 @@ public:
     void            Invalidate() {pDoc = 0;}
 };
 
-/* -----------------25.05.98 08:21-------------------
- *
- * --------------------------------------------------*/
 class SwXNumberingRules : public cppu::WeakAggImplHelper5
 <
     ::com::sun::star::container::XIndexReplace,
@@ -168,8 +154,8 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     String                      sNewCharStyleNames[MAXLEVEL];
     String                      sNewBulletFontNames[MAXLEVEL];
     String                      sCreatedNumRuleName; //connects to a numbering in SwDoc
-    SwDoc*                      pDoc; // wird nur fuers anmelden gebraucht
-    SwDocShell*                 pDocShell; //nur, wenn als ChapterNumbering verwendet
+    SwDoc*                      pDoc; // Only needed for registration.
+    SwDocShell*                 pDocShell; // Only if used as chapter numbering.
     SwNumRule*                  pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
     sal_Bool                    bOwnNumRuleCreated;
@@ -235,9 +221,7 @@ public:
     void    Invalidate()    {pDocShell = 0;}
     const String&           GetCreatedNumRuleName() const{return sCreatedNumRuleName; }
 };
-/*-----------------12.02.98 08:27-------------------
 
---------------------------------------------------*/
 class SwXChapterNumbering : public SwXNumberingRules
 {
 protected:
@@ -255,9 +239,6 @@ public:
 
 };
 
-/* -----------------27.05.98 15:44-------------------
- *
- * --------------------------------------------------*/
 class SwXTextColumns : public cppu::WeakAggImplHelper4
 <
 
@@ -280,6 +261,8 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     sal_Int8                    nSepLineHeightRelative;
     sal_Int8                    nSepLineVertAlign;//style::VerticalAlignment
     sal_Bool                    bSepLineIsOn;
+    sal_Int8                    nSepLineStyle;
+
 protected:
     virtual ~SwXTextColumns();
 public:
@@ -319,9 +302,11 @@ public:
     sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
     sal_Int8    GetSepLineVertAlign() const {return     nSepLineVertAlign;}
     sal_Bool    GetSepLineIsOn() const {return  bSepLineIsOn;}
+    sal_Int8    GetSepLineStyle() const {return nSepLineStyle;}
 
     sal_Bool    IsAutomaticWidth() const {return bIsAutomaticWidth;}
 };
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,18 +41,18 @@ class SwTxtFld;
 class SwView;
 class SwFieldType;
 
-// ATT_FLD ***********************************
+// ATT_FLD
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
 {
     friend class SwTxtFld;
     friend void _InitCore();
 
     SwField *pField;
-    SwTxtFld* pTxtAttr;     // mein TextAttribut
+    SwTxtFld* pTxtAttr;
 
-    SwFmtFld();             // das default-Attibut
+    SwFmtFld(); // Default attibute.
 
-    // geschuetzter CopyCtor
+    // Protected CopyCtor.
     // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld& operator=(const SwFmtFld& rFld);
 
@@ -62,7 +63,7 @@ protected:
 public:
     TYPEINFO();
 
-    // single argument constructors shall be explicit.
+    // Single argument constructors shall be explicit.
     explicit SwFmtFld( const SwField &rFld );
 
     // @@@ copy construction allowed, but copy assignment is not? @@@
@@ -70,7 +71,7 @@ public:
 
     virtual ~SwFmtFld();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -79,7 +80,6 @@ public:
     const SwField *GetFld() const   { return pField; }
     SwField *GetFld()               { return pField; }
 
-    // #111840#
     /**
        Sets current field.
 
@@ -123,3 +123,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

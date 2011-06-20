@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -98,7 +99,7 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
                                     pCrsr->GetPoint()->nNode.GetNode().
                                     StartOfSectionIndex() );
 
-                ASSERT( pTableBox, "Box steht nicht in dieser Tabelle" );
+                OSL_ENSURE( pTableBox, "Box steht nicht in dieser Tabelle" );
                 SwSelBoxes aBoxes;
 
                 //Das Dokument veraendert sich evtl. ohne Action wuerden die Sichten
@@ -119,8 +120,7 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
 sal_Bool SwCrsrShell::GoPrevCell()
 {
     sal_Bool bRet = sal_False;
-    const SwTableNode* pTblNd;
-    if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
+    if( IsTableMode() || IsCrsrInTbl() )
     {
         SwCursor* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
         SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
@@ -177,7 +177,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         pStt = aBoxes[0];
         pEnd = aBoxes[aBoxes.Count() - 1];
     }
-    // --> FME 2004-07-30 #i32329# Enhanced table selection
+    // #i32329# Enhanced table selection
     else if ( pTable->IsNewModel() )
     {
         const SwShellCrsr *pCrsr = _GetCrsr();
@@ -233,7 +233,6 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
             pEnd = aCells[ bVert ? (bRow ? 3 : 0) : (bRow ? 1 : 2) ]->GetTabBox();  // will become mark of table cursor
         }
     }
-    // <--
 
     // noch kein Tabellen-Cursor vorhanden, dann erzeuge einen
     if( !pTblCrsr )
@@ -304,12 +303,12 @@ sal_Bool SwCrsrShell::SelTblBox()
     const SwStartNode* pStartNode =
         pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // the old code checks whether we're in a table by asking the
     // frame. This should yield the same result as searching for the
     // table box start node, right?
     SwFrm *pFrm = GetCurrFrm();
-    DBG_ASSERT( !pFrm->IsInTab() == !(pStartNode != NULL),
+    OSL_ENSURE( !pFrm->IsInTab() == !(pStartNode != NULL),
                 "Schroedinger's table: We're in a box, and also we aren't." );
 #endif
 
@@ -364,7 +363,7 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
 
     if ( !pTblNd )
     {
-        ASSERT( false, "lcl_FindNextCell not celled with table start node!" )
+        OSL_FAIL( "lcl_FindNextCell not celled with table start node!" );
         return false;
     }
 
@@ -442,7 +441,7 @@ bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
 
     if ( !pTblNd )
     {
-        ASSERT( false, "lcl_FindPrevCell not celled with table start node!" )
+        OSL_FAIL( "lcl_FindPrevCell not celled with table start node!" );
         return false;
     }
 
@@ -755,7 +754,11 @@ String SwCrsrShell::GetBoxNms() const
             pFrm = pFrm->GetUpper();
         } while ( pFrm && !pFrm->IsCellFrm() );
 
-        ASSERT( pFrm, "kein Frame zur Box" );
+        OSL_ENSURE( pFrm, "kein Frame zur Box" );
+
+        if( !pFrm )
+            return sNm;
+
         sNm = ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
         sNm += ':';
         pPos = pTblCrsr->End();
@@ -929,3 +932,4 @@ sal_Bool SwCrsrShell::EndAllTblBoxEdit()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

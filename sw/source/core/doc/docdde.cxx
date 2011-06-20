@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 
 #include <stdlib.h>
 
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #include <tools/urlobj.hxx>
 
 #define _SVSTDARR_STRINGS
@@ -416,3 +415,4 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     return sal_False;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

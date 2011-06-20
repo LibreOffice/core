@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,6 @@
 
 #include <unomid.h>
 
-
 SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAW_POPUPMENU));
@@ -62,11 +62,6 @@ SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
 }
 
 TYPEINIT1(SwBezierShell,SwBaseShell)
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwBezierShell::SwBezierShell(SwView &_rView):
     SwBaseShell( _rView )
@@ -78,11 +73,6 @@ SwBezierShell::SwBezierShell(SwView &_rView):
     SdrView*    pSdrView = pSh->GetDrawView();
     pSdrView->SetEliminatePolyPointLimitAngle(1500L);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwBezierShell::Execute(SfxRequest &rReq)
 {
@@ -140,7 +130,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
         case SID_BEZIER_INSERT:
             {
                 GetView().GetEditWin().SetBezierMode(nSlotId);
-                static sal_uInt16 __READONLY_DATA aInva[] =
+                static sal_uInt16 aInva[] =
                                 {
                                     SID_BEZIER_INSERT,
                                     SID_BEZIER_MOVE,
@@ -200,7 +190,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                         {
                             pSdrView->SetMarkedPointsSmooth(eKind);
 
-                            static sal_uInt16 __READONLY_DATA aInva[] =
+                            static sal_uInt16 aInva[] =
                                             {
                                                 SID_BEZIER_SMOOTH,
                                                 SID_BEZIER_EDGE,
@@ -238,11 +228,6 @@ void SwBezierShell::Execute(SfxRequest &rReq)
     else if (bChanged)
         pSdrView->GetModel()->SetChanged(sal_True);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwBezierShell::GetState(SfxItemSet &rSet)
 {
@@ -352,5 +337,4 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
     }
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

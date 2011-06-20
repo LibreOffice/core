@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -104,7 +105,7 @@ String SwMacroField::GetLibName() const
         return aMacro.Copy(0, nPos );
     }
 
-    DBG_ASSERT(0, "Kein Macroname vorhanden");
+    OSL_FAIL("Kein Macroname vorhanden");
     return aEmptyStr;
 }
 
@@ -127,7 +128,7 @@ String SwMacroField::GetMacroName() const
         }
     }
 
-    DBG_ASSERT(0, "Kein Macroname vorhanden");
+    OSL_FAIL("Kein Macroname vorhanden");
     return aEmptyStr;
 }
 
@@ -172,10 +173,7 @@ String SwMacroField::GetPar2() const
     return aText;
 }
 
-/*-----------------05.03.98 13:38-------------------
-
---------------------------------------------------*/
-sal_Bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -192,14 +190,12 @@ sal_Bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= bIsScriptURL ? OUString(GetMacroName()): OUString();
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
-/*-----------------05.03.98 13:38-------------------
 
---------------------------------------------------*/
-sal_Bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -218,10 +214,10 @@ sal_Bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         bIsScriptURL = isScriptURL(aMacro);
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
 
-    return sal_True;
+    return true;
 }
 
 // create an internally used macro name from the library and macro name parts
@@ -244,8 +240,8 @@ sal_Bool SwMacroField::isScriptURL( const String& str )
 
     uno::Reference< uri::XUriReferenceFactory >
         xFactory( xSMgr->createInstance(
-            OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory" ) ), uno::UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.uri.UriReferenceFactory")) ), uno::UNO_QUERY );
 
     if ( xFactory.is() )
     {
@@ -259,3 +255,5 @@ sal_Bool SwMacroField::isScriptURL( const String& str )
     }
     return sal_False;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

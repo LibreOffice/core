@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -142,7 +143,7 @@ namespace
             for( sal_uInt16 nLine = 0; nLine < rBox.GetTabLines().Count(); ++nLine )
                 pStartLn = insertSubLine( rSubTable, *rBox.GetTabLines()[nLine],
                            pStartLn );
-            ASSERT( pStartLn == pEndLn, "Sub line confusion" );
+            OSL_ENSURE( pStartLn == pEndLn, "Sub line confusion" );
         }
         else
         {
@@ -507,19 +508,6 @@ namespace
                     if( pBox && pBox->getRowSpan() > 0 )
                         lcl_CpyBox( rSource, rInfo.mpCopy, rDstTbl, pBox,
                                     sal_True, pUndo );
-                    /* Idea: If target cell is a covered cell, append content
-                             to master cell.
-                    sal_Bool bReplace = sal_True;
-                    if( pBox->getRowSpan() < 0 )
-                    {
-                        if( rInfo.mpCopy->getRowSpan() < 0 )
-                            continue;
-                        pBox = &pBox->FindStartOfRowSpan( rDstTbl );
-                        bReplace = sal_False;
-                    }
-                    lcl_CpyBox( rSource, rInfo.mpCopy, rDstTbl, pBox,
-                                bReplace, pUndo );
-                    */
                 }
             }
         }
@@ -541,7 +529,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
                     sal_Bool bDelCntnt, SwUndoTblCpyTbl* pUndo )
 {
-    ASSERT( ( !pCpyBox || pCpyBox->GetSttNd() ) && pDstBox->GetSttNd(),
+    OSL_ENSURE( ( !pCpyBox || pCpyBox->GetSttNd() ) && pDstBox->GetSttNd(),
             "Keine inhaltstragende Box" );
 
     SwDoc* pCpyDoc = rCpyTbl.GetFrmFmt()->GetDoc();
@@ -616,7 +604,6 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             }
 
             if( pCNd &&
-                /*RES_POOLCOLL_TABLE == */
                 RES_POOLCOLL_TABLE_HDLN !=
                     pCNd->GetFmtColl()->GetPoolFmtId() )
                 bReplaceColl = sal_False;
@@ -748,8 +735,6 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
     return sal_True;
 }
 
-// ---------------------------------------------------------------
-
 // kopiere die Tabelle in diese.
 //  Kopiere alle Boxen einer Line in entsprechenden Boxen. Der alte Inhalt
 //  wird dabei geloescht.
@@ -757,8 +742,6 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
 //  Box einer "GrundLine".
 //  Ist auch keine Line mehr vorhanden, -> auch in die letzte Box
 //  einer "GrundLine"
-
-
 sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
                         SwUndoTblCpyTbl* pUndo )
 {
@@ -772,7 +755,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
     SwTableBox* pMyBox = (SwTableBox*)GetTblBox(
             rSttBox.GetNode().FindTableBoxStartNode()->GetIndex() );
 
-    ASSERT( pMyBox, "Index steht nicht in dieser Tabelle in einer Box" );
+    OSL_ENSURE( pMyBox, "Index steht nicht in dieser Tabelle in einer Box" );
 
     // loesche erstmal die Frames der Tabelle
     _FndBox aFndBox( 0, 0 );
@@ -839,18 +822,17 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
     return sal_True;
 }
 
-
 sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         SwUndoTblCpyTbl* pUndo )
 {
-    ASSERT( rSelBoxes.Count(), "Missing selection" )
+    OSL_ENSURE( rSelBoxes.Count(), "Missing selection" );
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
     if( IsNewModel() || rCpyTbl.IsNewModel() )
         return InsNewTable( rCpyTbl, rSelBoxes, pUndo );
 
-    ASSERT( !rCpyTbl.IsTblComplex(), "Table too complex" )
+    OSL_ENSURE( !rCpyTbl.IsTblComplex(), "Table too complex" );
 
             SwDoc* pDoc = GetFrmFmt()->GetDoc();
     SwDoc* pCpyDoc = rCpyTbl.GetFrmFmt()->GetDoc();
@@ -926,7 +908,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // es ist also Platz fuer das zu kopierende vorhanden, also
                 // fuege entsprechend neue Zeilen ein.
                 SwTableBox* pInsBox = pLastLn->GetTabBoxes()[ nSttBox ];
-                ASSERT( pInsBox && pInsBox->GetSttNd(),
+                OSL_ENSURE( pInsBox && pInsBox->GetSttNd(),
                     "kein CntntBox oder steht nicht in dieser Tabelle" );
                 SwSelBoxes aBoxes;
 
@@ -1061,8 +1043,6 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     return sal_True;
 }
 
-
-
 sal_Bool _FndCntntBox( const SwTableBox*& rpBox, void* pPara )
 {
     SwTableBox* pBox = (SwTableBox*)rpBox;
@@ -1073,13 +1053,11 @@ sal_Bool _FndCntntBox( const SwTableBox*& rpBox, void* pPara )
     return sal_True;
 }
 
-
 sal_Bool _FndCntntLine( const SwTableLine*& rpLine, void* pPara )
 {
     ((SwTableLine*)rpLine)->GetTabBoxes().ForEach( &_FndCntntBox, pPara );
     return sal_True;
 }
-
 
 // suche alle Inhaltstragenden-Boxen dieser Box
 SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
@@ -1096,4 +1074,4 @@ SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
     return rBoxes;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

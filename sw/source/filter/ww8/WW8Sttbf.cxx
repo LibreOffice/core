@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,12 +25,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <iostream>
 #include <dbgoutsw.hxx>
 #include "WW8Sttbf.hxx"
 #include <cstdio>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
 
 namespace ww8
 {
@@ -79,7 +83,7 @@ namespace ww8
             aResult = rtl::OUString(pNew);
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         char sBuffer[256];
         snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
                  nOffset, nCount);
@@ -105,7 +109,7 @@ namespace ww8
             aResult = rtl::OUString(aOUStr);
         }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         char sBuffer[256];
         snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
                  nOffset, nCount);
@@ -117,3 +121,5 @@ namespace ww8
         return aResult;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

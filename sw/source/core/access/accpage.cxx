@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,15 @@
 #include "precompiled_sw.hxx"
 
 
-#include <rtl/uuid.h>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <comphelper/servicehelper.hxx>
 #include "accpage.hxx"
 
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 #include <pagefrm.hxx>
 
 using namespace ::com::sun::star;
@@ -70,8 +69,8 @@ void SwAccessiblePage::GetStates(
     // FOCUSED
     if( IsSelected() )
     {
-        ASSERT( bIsSelected, "bSelected out of sync" );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
         Window *pWin = GetWindow();
@@ -86,7 +85,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
     sal_Bool bOldSelected;
 
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOldSelected = bIsSelected;
         bIsSelected = bNewSelected;
     }
@@ -95,7 +94,7 @@ void SwAccessiblePage::_InvalidateCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -115,10 +114,10 @@ void SwAccessiblePage::_InvalidateFocus()
         sal_Bool bSelected;
 
         {
-            vos::OGuard aGuard( aMutex );
+            osl::MutexGuard aGuard( aMutex );
             bSelected = bIsSelected;
         }
-        ASSERT( bSelected, "focus object should be selected" );
+        OSL_ENSURE( bSelected, "focus object should be selected" );
 
         FireStateChangedEvent( AccessibleStateType::FOCUSED,
                                pWin->HasFocus() && bSelected );
@@ -130,11 +129,11 @@ SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
     : SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
     , bIsSelected( sal_False )
 {
-    DBG_ASSERT( pFrame != NULL, "need frame" );
-    DBG_ASSERT( pInitMap != NULL, "need map" );
-    DBG_ASSERT( pFrame->IsPageFrm(), "need page frame" );
+    OSL_ENSURE( pFrame != NULL, "need frame" );
+    OSL_ENSURE( pInitMap != NULL, "need map" );
+    OSL_ENSURE( pFrame->IsPageFrm(), "need page frame" );
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sPage = OUString::valueOf(
         static_cast<sal_Int32>(
@@ -148,7 +147,7 @@ SwAccessiblePage::~SwAccessiblePage()
 
 sal_Bool SwAccessiblePage::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
 }
 
@@ -176,18 +175,15 @@ Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     return aRet;
 }
 
+namespace
+{
+    class theSwAccessiblePageImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessiblePageImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessiblePageImplementationId::get().getSeq();
 }
 
 OUString SwAccessiblePage::getAccessibleDescription( )
@@ -198,3 +194,5 @@ OUString SwAccessiblePage::getAccessibleDescription( )
     OUString sArg( GetFormattedPageNumber() );
     return GetResource( STR_ACCESS_PAGE_DESC, &sArg );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

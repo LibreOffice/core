@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@ sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
             case SetVariableType::FORMULA:  nSet = nsSwGetSetExpType::GSE_FORMULA; break;
             case SetVariableType::STRING:   nSet = nsSwGetSetExpType::GSE_STRING;   break;
             default:
-                DBG_ERROR("wrong value");
+                OSL_FAIL("wrong value");
                 nSet = -1;
         }
         return nSet;
@@ -151,7 +152,7 @@ SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         while( 0 != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
                 0 == ( pTxtNode = pCNd->GetTxtNode() ) )
                         ;
-        ASSERT( pTxtNode, "wo ist der 1.TextNode" );
+        OSL_ENSURE( pTxtNode, "wo ist der 1.TextNode" );
         rPos.nContent.Assign( pTxtNode, 0 );
     }
     else if ( !pCFrm->IsValid() )
@@ -180,7 +181,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         {
             // hole das FlyFormat
             SwFrmFmt* pFlyFmt = ((SwFlyFrm*)pLayout)->GetFmt();
-            ASSERT( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
+            OSL_ENSURE( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
 
             const SwFmtAnchor &rAnchor = pFlyFmt->GetAnchor();
 
@@ -195,7 +196,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                      (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
                      (FLY_AS_CHAR == rAnchor.GetAnchorId()))
             {
-                ASSERT( rAnchor.GetCntntAnchor(), "keine gueltige Position" );
+                OSL_ENSURE( rAnchor.GetCntntAnchor(), "keine gueltige Position" );
                 rPos = *rAnchor.GetCntntAnchor();
                 pTxtNode = rPos.nNode.GetNode().GetTxtNode();
                 if ( FLY_AT_PARA == rAnchor.GetAnchorId() )
@@ -345,7 +346,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     if( bIsInBodyTxt )      // nur Felder in Footer, Header, FootNote, Flys
         return;
 
-    ASSERT( !rFrm.IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
+    OSL_ENSURE( !rFrm.IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
 
     // bestimme mal das Dokument (oder geht es noch einfacher?)
     const SwTxtNode* pTxtNode = &rFld.GetTxtNode();
@@ -426,7 +427,7 @@ void SwGetExpField::SetLanguage(sal_uInt16 nLng)
         SwValueField::SetLanguage(nLng);
 }
 
-sal_Bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -460,10 +461,10 @@ sal_Bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     default:
         return SwField::QueryValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp = 0;
     String sTmp;
@@ -500,7 +501,7 @@ sal_Bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, sal_uInt16 nTyp )
@@ -608,7 +609,7 @@ sal_uInt16 SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
             pNd->GetNodes().IsDocNodes() )
         {
             _SeqFldLstElem* pNew = new _SeqFldLstElem(
-                    pNd->GetExpandTxt( 0, (*pF->GetTxtFld()->GetStart()) + 1 ),
+                    pNd->GetExpandTxt( 1, (*pF->GetTxtFld()->GetStart()) ),
                     ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }
@@ -639,14 +640,13 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
             }
             else
             {
-                ASSERT( false,
-                        "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
+                OSL_FAIL( "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
             }
         }
     }
 }
 
-sal_Bool SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -666,12 +666,12 @@ sal_Bool SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -703,9 +703,9 @@ sal_Bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId 
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 sal_Bool SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
@@ -870,7 +870,7 @@ void SwSetExpField::SetSubType(sal_uInt16 nSub)
     ((SwSetExpFieldType*)GetTyp())->SetType(nSub & 0xff);
     nSubType = nSub & 0xff00;
 
-    DBG_ASSERT( (nSub & 0xff) != 3, "SubType ist illegal!" );
+    OSL_ENSURE( (nSub & 0xff) != 3, "SubType ist illegal!" );
 }
 
 sal_uInt16 SwSetExpField::GetSubType() const
@@ -895,7 +895,7 @@ void SwGetExpField::SetValue( const double& rAny )
     sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue( rAny, GetFormat(),
                                                             GetLanguage());
 }
-/* -------------------------------------------------
+/* --------------------------------------------------
     Description: Find the index of the reference text
     following the current field
  --------------------------------------------------*/
@@ -1046,7 +1046,7 @@ String SwInputField::Expand() const
     return sRet;
 }
 
-sal_Bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1063,12 +1063,12 @@ sal_Bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= OUString( aToolTip );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -1085,9 +1085,9 @@ sal_Bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         ::GetString( rAny, aToolTip );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: Bedingung setzen
@@ -1152,7 +1152,7 @@ void SwInputField::SetSubType(sal_uInt16 nSub)
     nSubType = nSub;
 }
 
-sal_Bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1214,10 +1214,10 @@ sal_Bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     default:
         return SwField::QueryValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp32 = 0;
     sal_Int16 nTmp16 = 0;
@@ -1240,8 +1240,6 @@ sal_Bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if(nTmp16 <= SVX_NUMBER_NONE )
                 SetFormat(nTmp16);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;
@@ -1294,8 +1292,9 @@ sal_Bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     default:
         return SwField::PutValue(rAny, nWhichId);
     }
-    return sal_True;
+    return true;
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -85,7 +85,7 @@ TabPage TP_COLUMN
     };
     FixedText FT_COLUMN
     {
-        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Column";
@@ -99,28 +99,28 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:ImageButton:TP_COLUMN:BTN_DOWN";
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 69 ) ;
+        Pos = MAP_APPFONT ( 62 , 85 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
     };
     FixedText FT_1
     {
-        Pos = MAP_APPFONT ( 100 , 71 ) ;
+        Pos = MAP_APPFONT ( 100 , 87 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text = "~1" ;
         Center = TRUE ;
     };
     FixedText FT_2
     {
-        Pos = MAP_APPFONT ( 150 , 71 ) ;
+        Pos = MAP_APPFONT ( 150 , 87 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text = "~2" ;
         Center = TRUE ;
     };
     FixedText FT_3
     {
-        Pos = MAP_APPFONT ( 200 , 71 ) ;
+        Pos = MAP_APPFONT ( 200 , 87 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text = "~3" ;
         Center = TRUE ;
@@ -129,14 +129,14 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:ImageButton:TP_COLUMN:BTN_UP";
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 238 , 69 ) ;
+        Pos = MAP_APPFONT ( 238 , 85 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Width" ;
@@ -146,7 +146,7 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_1";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 83 ) ;
+        Pos = MAP_APPFONT ( 87 , 99 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -165,7 +165,7 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_2";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 137 , 83 ) ;
+        Pos = MAP_APPFONT ( 137 , 99 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -184,7 +184,7 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_3";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 187 , 83 ) ;
+        Pos = MAP_APPFONT ( 187 , 99 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -200,7 +200,7 @@ TabPage TP_COLUMN
     };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Spacing" ;
@@ -210,7 +210,7 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_DIST1";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 112 , 99 ) ;
+        Pos = MAP_APPFONT ( 112 , 115 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -229,7 +229,7 @@ TabPage TP_COLUMN
         HelpID = "sw:MetricField:TP_COLUMN:ED_DIST2";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 162 , 99 ) ;
+        Pos = MAP_APPFONT ( 162 , 115 ) ;
         Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -246,41 +246,76 @@ TabPage TP_COLUMN
     CheckBox CB_AUTO_WIDTH
     {
         HelpID = "sw:CheckBox:TP_COLUMN:CB_AUTO_WIDTH";
-        Pos = MAP_APPFONT ( 87 , 115 ) ;
+        Pos = MAP_APPFONT ( 87 , 131 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "Auto~Width" ;
         TabStop = TRUE ;
     };
     FixedLine FL_LAYOUT
     {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Pos = MAP_APPFONT ( 6 , 74 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Width and spacing";
     };
 
     FixedText FT_STYLE
     {
-        Pos = MAP_APPFONT ( 12 , 140 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ en-US ] = "~Line" ;
+        Pos = MAP_APPFONT ( 12 , 156 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ en-US ] = "St~yle" ;
         Left = TRUE ;
     };
     ListBox LB_STYLE
     {
         HelpID = "sw:ListBox:TP_COLUMN:LB_STYLE";
-        Pos = MAP_APPFONT ( 50 , 138 ) ;
-        Size = MAP_APPFONT ( 60 , 66 ) ;
+        Pos = MAP_APPFONT ( 45 , 154 ) ;
+        Size = MAP_APPFONT ( 40 , 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ en-US ] =
-        {
-            < "None" ; Default ; > ;
-        };
+    };
+    FixedText FT_LINEWIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ en-US ] = "~Width" ;
+        Left = TRUE ;
+    };
+    MetricField ED_LINEWIDTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 45 , 170 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        First = 25 ;
+        Last = 900 ;
+        Minimum = 25 ;
+        Maximum = 900 ;
+        DecimalDigits = 2 ;
+        SpinSize = 25 ;
+        Unit = FUNIT_POINT ;
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 165 , 156 ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text [ en-US ] = "~Color" ;
+        Left = TRUE ;
+    };
+    ListBox LB_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 193 , 154 ) ;
+        Size = MAP_APPFONT ( 60 , 68 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        TabStop = TRUE ;
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 156 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 91 , 156 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Text [ en-US ] = "H~eight" ;
         Left = TRUE ;
     };
@@ -288,8 +323,8 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:MetricField:TP_COLUMN:ED_HEIGHT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 50 , 154 ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( 124 , 154 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -304,16 +339,16 @@ TabPage TP_COLUMN
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 12 , 172 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 91 , 172 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "~Position" ;
     };
     ListBox LB_POSITION
     {
         HelpID = "sw:ListBox:TP_COLUMN:LB_POSITION";
-        Pos = MAP_APPFONT ( 50 , 170 ) ;
-        Size = MAP_APPFONT ( 60 , 40 ) ;
+        Pos = MAP_APPFONT ( 124 , 170 ) ;
+        Size = MAP_APPFONT ( 35 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList [ en-US ] =
@@ -325,28 +360,14 @@ TabPage TP_COLUMN
     };
     FixedLine FL_LINETYPE
     {
-        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Pos = MAP_APPFONT ( 6 , 143 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Separator line" ;
     };
-    FixedLine  FL_VERT
-    {
-        Pos = MAP_APPFONT ( 116 , 138 ) ;
-        Size = MAP_APPFONT ( 4 , 43 ) ;
-        Hide = TRUE ;
-        Vert = TRUE;
-    };
-    FixedLine   FL_PROPERTIES
-    {
-        Pos = MAP_APPFONT ( 121 , 127 ) ;
-        Size = MAP_APPFONT ( 133 , 8 ) ;
-        Hide = TRUE ;
-        Text [ en-US ] = "Properties";
-    };
     FixedText   FT_TEXTDIRECTION
     {
-        Pos = MAP_APPFONT ( 127 , 138 ) ;
-        Size = MAP_APPFONT ( 127 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Hide = TRUE ;
         Text [ en-US ] = "Text ~direction";
     };
@@ -354,8 +375,8 @@ TabPage TP_COLUMN
     {
         HelpID = "sw:ListBox:TP_COLUMN:LB_TEXTDIRECTION";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 127 , 149 ) ;
-        Size = MAP_APPFONT ( 127 , 50 ) ;
+        Pos = MAP_APPFONT ( 75 , 58 ) ;
+        Size = MAP_APPFONT ( 150 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
     StringList [ en-US ] =

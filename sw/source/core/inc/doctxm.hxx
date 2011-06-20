@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -73,7 +74,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void    InsertAlphaDelimitter( const SwTOXInternational& rIntl );
 
     // Textrumpf generieren
-    // OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
+    // add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
     void GenerateText( sal_uInt16 nArrayIdx,
                        sal_uInt16 nCount,
                        SvStringsDtor&,
@@ -99,7 +100,7 @@ public:
     SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt);
     virtual ~SwTOXBaseSection();
 
-    // OD 19.03.2003 #106329# - add parameter <_bNewTOX> in order to distinguish
+    // add parameter <_bNewTOX> in order to distinguish
     // between the creation of a new table-of-content or an update of
     // a table-of-content. Default value: false
     void Update( const SfxItemSet* pAttr = 0,
@@ -109,9 +110,7 @@ public:
 
     sal_Bool SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart = sal_True ) const;
 };
-/* -----------------02.09.99 07:52-------------------
 
- --------------------------------------------------*/
 struct SwDefTOXBase_Impl
 {
     SwTOXBase* pContBase;
@@ -145,3 +144,5 @@ struct SwDefTOXBase_Impl
 };
 
 #endif  // _DOCTXM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

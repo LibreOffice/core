@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,7 +62,7 @@ SwFmtRefMark::SwFmtRefMark( const SwFmtRefMark& rAttr )
 
 int SwFmtRefMark::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return aRefName == ((SwFmtRefMark&)rAttr).aRefName;
 }
 
@@ -101,3 +102,4 @@ xub_StrLen* SwTxtRefMark::GetEnd()
     return m_pEnd;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

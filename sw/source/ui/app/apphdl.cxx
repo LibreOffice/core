@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/link.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
@@ -49,7 +50,6 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/isethint.hxx>
-#include <svx/hyprlink.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/stritem.hxx>
@@ -72,7 +72,7 @@
 #include <srcview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <cmdid.h>          // Funktion-Ids
+#include <cmdid.h>          // Function-Ids
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -86,7 +86,7 @@
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <modcfg.hxx>
-#include <globals.h>        // globale Konstanten z.B.
+#include <globals.h>        // e.g. global Constants
 #include <app.hrc>
 #include <fontcfg.hxx>
 #include <barcfg.hxx>
@@ -119,12 +119,12 @@
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Slotmaps fuer Methoden der Applikation
+    Description: Slotmaps for the application's methods
  --------------------------------------------------------------------*/
 
 
-// hier werden die SlotID's included
-// siehe Idl-File
+// here are the SlotID's being included
+// see Idl-file
 //
 #define SwModule
 #define ViewSettings
@@ -140,7 +140,6 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
 {
-    SFX_CHILDWINDOW_REGISTRATION(SvxHyperlinkDlgWrapper::GetChildWindowId());
     SFX_STATUSBAR_REGISTRATION(SW_RES(CFG_STATUSBAR));
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION |
             SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
@@ -149,7 +148,7 @@ SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Andere States
+    Description: other states
  --------------------------------------------------------------------*/
 
 
@@ -206,15 +205,12 @@ void SwModule::StateOther(SfxItemSet &rSet)
                                             IsInsTblFormatNum( bWebView )));
             break;
             default:
-                DBG_ERROR("::StateOther: default");
+                OSL_FAIL("::StateOther: default");
         }
         nWhich = aIter.NextWhich();
     }
 }
 
-/*-- 06.04.2004 15:21:43---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
 {
     SwView* pNewView = 0;
@@ -260,7 +256,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
     return pNewView;
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   Felddialog starten
+    Description: start field dialog
  --------------------------------------------------------------------*/
 
 void NewXForms( SfxRequest& rReq ); // implementation: below
@@ -301,20 +297,20 @@ SwMailMergeWizardExecutor::SwMailMergeWizardExecutor()
 
 SwMailMergeWizardExecutor::~SwMailMergeWizardExecutor()
 {
-    DBG_ASSERT( m_pWizard == 0, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
-    DBG_ASSERT( m_pMMConfig == 0, "SwMailMergeWizardExecutor: m_pMMConfig must be Null!" );
+    OSL_ENSURE( m_pWizard == 0, "SwMailMergeWizardExecutor: m_pWizard must be Null!" );
+    OSL_ENSURE( m_pMMConfig == 0, "SwMailMergeWizardExecutor: m_pMMConfig must be Null!" );
 }
 
 void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs )
 {
     if ( m_pView )
     {
-        DBG_ERROR( "SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!" );
+        OSL_FAIL("SwMailMergeWizardExecutor::ExecuteMailMergeWizard: Already executing the wizard!" );
         return;
     }
 
     m_pView = ::GetActiveView(); // not owner!
-    DBG_ASSERT(m_pView, "no current view?");
+    OSL_ENSURE(m_pView, "no current view?");
     if(m_pView)
     {
         // keep self alive until done.
@@ -335,7 +331,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             m_pView->SetMailMergeConfigItem(0, 0, sal_True);
             SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
             pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, sal_False);
-            DBG_ASSERT(m_pMMConfig, "no MailMergeConfigItem available");
+            OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
             bRestoreWizard = true;
         }
         // to make it bullet proof ;-)
@@ -431,7 +427,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
 #endif
 {
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( pDialog == m_pWizard, "wrong dialog passed to EndDialogHdl!" );
+    OSL_ENSURE( pDialog == m_pWizard, "wrong dialog passed to EndDialogHdl!" );
     (void) pDialog;
 #endif
 
@@ -473,7 +469,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
             uno::Reference< frame::XFrame > xFrame =
                 m_pView->GetViewFrame()->GetFrame().GetFrameInterface();
             xFrame->getContainerWindow()->setVisible(sal_False);
-            DBG_ASSERT(pTargetView, "No target view has been created");
+            OSL_ENSURE(pTargetView, "No target view has been created");
             if(pTargetView)
             {
                 // destroy wizard asynchronously
@@ -489,7 +485,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
             }
             else
             {
-                //should not happen - just in case no target view has been created
+                // should not happen - just in case no target view has been created
                 ExecutionFinished( true );
             }
             break;
@@ -512,7 +508,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
         {
             SwView* pTargetView = m_pMMConfig->GetTargetView();
             SwView* pSourceView = m_pMMConfig->GetSourceView();
-            DBG_ASSERT(pTargetView && pSourceView, "source or target view not available" );
+            OSL_ENSURE(pTargetView && pSourceView, "source or target view not available" );
             if(pTargetView && pSourceView)
             {
                 m_pView2Close = pTargetView;
@@ -535,7 +531,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
             }
             else
             {
-                //should not happen - just in case no target view has been created
+                // should not happen - just in case no target view has been created
                 ExecutionFinished( true );
             }
             break;
@@ -547,7 +543,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
                 LINK( this, SwMailMergeWizardExecutor, CancelHdl ), m_pWizard );
             break;
         }
-    default: //finish
+    default: // finish
         {
             SwView* pSourceView = m_pMMConfig->GetSourceView();
             if(pSourceView)
@@ -682,11 +678,11 @@ void SwModule::ExecOther(SfxRequest& rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Notifies abfangen
+    Description: Catch notifications
  --------------------------------------------------------------------*/
 
 
-    // Hint abfangen fuer DocInfo
+// Catch hint for DocInfo
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxEventHint ) )
@@ -712,8 +708,8 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         pDocSh->GetDoc()->SetFixFields(false, 0);
                     }
                 }
-                break;
             case SFX_EVENT_CREATEDOC:
+                // Update all FIX-Date/Time fields
                 if( pWrtSh )
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
@@ -724,14 +720,14 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     {
                         pWrtSh->UpdateInputFlds();
 
-                        // Sind Datenbankfelder enthalten?
-                        // Erstmal alle verwendeten Datenbanken holen
+                        // Are database fields contained?
+                        // Get all used databases for the first time
                         SwDoc *pDoc = pDocSh->GetDoc();
                         SvStringsDtor aDBNameList;
                         pDoc->GetAllUsedDB( aDBNameList );
                         sal_uInt16 nCount = aDBNameList.Count();
                         if (nCount)
-                        {   // Datenbankbeamer oeffnen
+                        {   // Open database beamer
                             ShowDBObj(pWrtSh->GetView(), pDoc->GetDBData());
                         }
                     }
@@ -807,6 +803,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         sal_Int32 const nNew = GetUndoOptions().GetUndoCount();
         bool const bUndo = (nNew != 0);
         // switch Undo for all DocShells
+            // Iterate through DocShells and switch undos
         TypeId aType(TYPE(SwDocShell));
         SwDocShell * pDocShell =
             static_cast<SwDocShell *>(SfxObjectShell::GetFirst(&aType));
@@ -870,18 +867,13 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 
 }
 
-/* -----------------------------20.02.01 12:43--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwDBConfig* SwModule::GetDBConfig()
 {
     if(!pDBConfig)
         pDBConfig = new SwDBConfig;
     return pDBConfig;
 }
-/* -----------------------------11.04.2002 15:27------------------------------
 
- ---------------------------------------------------------------------------*/
 svtools::ColorConfig& SwModule::GetColorConfig()
 {
     if(!pColorConfig)
@@ -892,9 +884,7 @@ svtools::ColorConfig& SwModule::GetColorConfig()
     }
     return *pColorConfig;
 }
-/* -----------------------------06.05.2002 09:42------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
 {
     if(!pAccessibilityOptions)
@@ -904,9 +894,7 @@ SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
     }
     return *pAccessibilityOptions;
 }
-/* -----------------06.05.2003 14:52-----------------
 
- --------------------------------------------------*/
 SvtCTLOptions& SwModule::GetCTLOptions()
 {
     if(!pCTLOptions)
@@ -916,9 +904,7 @@ SvtCTLOptions& SwModule::GetCTLOptions()
     }
     return *pCTLOptions;
 }
-/* -----------------07.07.2003 09:31-----------------
 
- --------------------------------------------------*/
 SvtUserOptions& SwModule::GetUserOptions()
 {
     if(!pUserOptions)
@@ -928,9 +914,7 @@ SvtUserOptions& SwModule::GetUserOptions()
     }
     return *pUserOptions;
 }
-/* -----------------18.07.2003 13:31-----------------
 
- --------------------------------------------------*/
 SvtUndoOptions& SwModule::GetUndoOptions()
 {
     if(!pUndoOptions)
@@ -940,16 +924,14 @@ SvtUndoOptions& SwModule::GetUndoOptions()
     }
     return *pUndoOptions;
 }
-/*-----------------30.01.97 08.30-------------------
 
---------------------------------------------------*/
 const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
 {
     SwModule* pNonConstModule = (SwModule*)this;
     if(bWeb && !pWebUsrPref)
     {
-        // im Load der SwMasterUsrPref wird der SpellChecker gebraucht, dort darf
-        // er aber nicht angelegt werden #58256#
+        // The SpellChecker is needed in SwMasterUsrPref's Load, but it must not
+        // be created there #58256#
         pNonConstModule->pWebUsrPref = new SwMasterUsrPref(sal_True);
     }
     else if(!bWeb && !pUsrPref)
@@ -978,3 +960,5 @@ void NewXForms( SfxRequest& rReq )
     // set return value
     rReq.SetReturnValue( SfxVoidItem( rReq.GetSlot() ) );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

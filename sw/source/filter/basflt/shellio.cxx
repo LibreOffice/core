@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,13 +61,10 @@
 #include <docsh.hxx>
 #include <redline.hxx>
 #include <swerror.h>
-
 #include <paratr.hxx>
 
-// --> OD 2007-03-30 #i73788#
+// #i73788#
 #include <pausethreadstarting.hxx>
-// <--
-
 
 using namespace ::com::sun::star;
 
@@ -95,12 +93,6 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     sal_uLong nError = 0L;
 
     GetDoc();
-
-    // am Sw3-Reader noch den pIo-Pointer "loeschen"
-    /*
-    if( po == ReadSw3 && pDoc->GetDocShell() &&
-        ((Sw3Reader*)po)->GetSw3Io() != pDoc->GetDocShell()->GetIoSystem() )
-            ((Sw3Reader*)po)->SetSw3Io( pDoc->GetDocShell()->GetIoSystem() );*/
 
     // waehrend des einlesens kein OLE-Modified rufen
     Link aOLELink( pDoc->GetOle2Link() );
@@ -211,6 +203,16 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             else
                 nEndCntnt = nLen - nEndCntnt;
             pPam->GetPoint()->nContent.Assign( pCNd, nEndCntnt );
+
+            const SwStartNode* pTblBoxStart = pCNd->FindTableBoxStartNode();
+            if ( pTblBoxStart )
+            {
+                SwTableBox* pBox = pTblBoxStart->GetTblBox();
+                if ( pBox )
+                {
+                    pDoc->ChkBoxNumFmt( *pBox, sal_True );
+                }
+            }
         }
 
         if( pCrsr )
@@ -373,11 +375,10 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     {
         delete pPam;          // ein neues aufgemacht.
 
-        // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
+        // #i42634# Moved common code of SwReader::Read() and
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     // ATM still with Update
         pDoc->UpdateLinks( sal_True );
-        // <--
 
         // not insert: set the redline mode read from settings.xml
         eOld = static_cast<RedlineMode_t>(
@@ -391,7 +392,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
     if( pCrsr )                 // das Doc ist jetzt modifiziert
         pDoc->SetModified();
-    // --> OD 2005-02-11 #i38810# - If links have been updated, the document
+    // #i38810# - If links have been updated, the document
     // have to be modified. During update of links the OLE link at the document
     // isn't set. Thus, the document's modified state has to be set again after
     // the OLE link is restored - see above <pDoc->SetOle2Link( aOLELink )>.
@@ -399,10 +400,6 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     {
         pDoc->SetModified();
     }
-    // <--
-
-//  if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
-//      ((Sw3Reader*)po)->SetSw3Io( 0 );
 
     po->SetReadUTF8( sal_False );
     po->SetBlockMode( sal_False );
@@ -417,20 +414,6 @@ sal_uLong SwReader::Read( const Reader& rOptions )
  * Konstruktoren, Destruktor
  */
 
-// Initiales Einlesben
-
-                                       /*
-SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(0),
-    aFileName(rFileName)
-{
-}
-
-SwReader::SwReader(const uno::Reference < embed::XStorage >& rStg, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pMedium(0), pCrsr(0), xStg( rStg ), aFileName(rFileName)
-{
-}
-                                         */
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDocument)
     : SwDocFac(pDocument), pStrm(0), pMedium(&rMedium), pCrsr(0),
     aFileName(rFileName)
@@ -446,13 +429,7 @@ SwReader::SwReader(SvStream& rStrm, const String& rFileName, const String& rBase
 {
     SetBaseURL( rBaseURL );
 }
-/*
-SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(&rPam),
-    aFileName(rFileName)
-{
-}
-*/
+
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(&rMedium),
     pCrsr(&rPam), aFileName(rFileName)
@@ -497,7 +474,7 @@ SwDoc* Reader::GetTemplateDoc()
     {
         INetURLObject aTDir( aTemplateNm );
         String aFileName = aTDir.GetMainURL( INetURLObject::NO_DECODE );
-        DBG_ASSERT( !aTDir.HasError(), "No absolute path for template name!" );
+        OSL_ENSURE( !aTDir.HasError(), "No absolute path for template name!" );
         DateTime aCurrDateTime;
         sal_Bool bLoad = sal_False;
 
@@ -526,9 +503,9 @@ SwDoc* Reader::GetTemplateDoc()
         if( bLoad )
         {
             ClearTemplate();
-            ASSERT( !pTemplate, "Who holds the template doc?" );
+            OSL_ENSURE( !pTemplate, "Who holds the template doc?" );
 
-                // #95605#: If the writer module is not installed,
+                // If the writer module is not installed,
                 // we cannot create a SwDocShell. We could create a
                 // SwWebDocShell however, because this exists always
                 // for the help.
@@ -558,7 +535,7 @@ SwDoc* Reader::GetTemplateDoc()
                 }
         }
 
-        ASSERT( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
+        OSL_ENSURE( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
                 aTemplateNm.EqualsAscii( "$$Dummy$$" ),
                 "TemplatePtr but no template exist!" );
     }
@@ -617,7 +594,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
 // muessen die Methode ueberladen
 int Reader::SetStrmStgPtr()
 {
-    ASSERT( pMedium, "Wo ist das Medium??" );
+    OSL_ENSURE( pMedium, "Wo ist das Medium??" );
 
     if( pMedium->IsStorage() )
     {
@@ -660,7 +637,7 @@ void Reader::SetFltName( const String& )
 
 void Reader::SetNoOutlineNum( SwDoc& /*rDoc*/ )
 {
-    // JP 10.03.96: jetzt wieder keine Nummerierung in den Vorlagen
+    // jetzt wieder keine Nummerierung in den Vorlagen
 }
 
 
@@ -680,7 +657,7 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
         switch (i)
         {
             default:
-                ASSERT(i == 0, "Impossible");
+                OSL_ENSURE(i == 0, "Impossible");
                 //fallthrough
             case 0:
                 nPoolId = RES_POOLFRM_FRAME;
@@ -805,9 +782,8 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
 
 sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 {
-    // --> OD 2007-03-30 #i73788#
+    // #i73788#
     SwPauseThreadStarting aPauseThreadStarting;
-    // <--
 
     sal_Bool bHasMark = sal_False;
     SwPaM * pPam;
@@ -830,7 +806,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->StartOfSectionNode();
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
         SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
-        ASSERT( pNd, "Node not found" );
+        OSL_ENSURE( pNd, "Node not found" );
         SwPosition aPos( aIdx, SwIndex( pNd ) );
         pTblNd->GetTable().MakeCopy( pDoc, aPos, aBoxes );
     }
@@ -896,10 +872,9 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 
     // falls der Standart PageDesc. immer noch auf initalen Werten steht
     // (wenn z.B. kein Drucker gesetzt wurde) dann setze jetzt auf DIN A4
-    // --> OD 2004-11-17 #i37248# - Modifications are only allowed at a new document.
+    // #i37248# - Modifications are only allowed at a new document.
     // <pOutDoc> contains a new document, if <pDoc> is set - see above.
     if ( pDoc && !pOutDoc->getPrinter( false ) )
-    // <--
     {
         const SwPageDesc& rPgDsc = const_cast<const SwDoc *>(pOutDoc)->GetPageDesc( 0 );
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );;
@@ -967,10 +942,8 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         if ( !IsError( nError ) && !pDoc )
         {
             rDoc.ResetModified();
-            // --> OD 2005-02-11 #i38810# - reset also flag, that indicates
-            // updated links
+            // #i38810# - reset also flag, that indicates updated links
             rDoc.SetLinksUpdated( sal_False );
-            // <-
         }
     }
 
@@ -1012,3 +985,4 @@ sal_Bool SetHTMLTemplate( SwDoc & rDoc )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

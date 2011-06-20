@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -147,14 +148,14 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCode"), uno::makeAny( ::rtl::OUString( rCode ) ) );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletName"), uno::makeAny( ::rtl::OUString( rName ) ) );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript"), uno::makeAny( sal_Bool(bMayScript) ) );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletDocBase"), uno::makeAny( ::rtl::OUString(sDocBase) ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")), uno::makeAny( ::rtl::OUString( rCode ) ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")), uno::makeAny( ::rtl::OUString( rName ) ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletIsScript")), uno::makeAny( sal_Bool(bMayScript) ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletDocBase")), uno::makeAny( ::rtl::OUString(sDocBase) ) );
         if ( rCodeBase.Len() )
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), uno::makeAny( ::rtl::OUString( rCodeBase ) ) );
+            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")), uno::makeAny( ::rtl::OUString( rCodeBase ) ) );
         else
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), uno::makeAny( ::rtl::OUString( sDocBase ) ) );
+            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")), uno::makeAny( ::rtl::OUString( sDocBase ) ) );
     }
 }
 #ifdef SOLAR_JAVA
@@ -163,8 +164,8 @@ sal_Bool SwApplet_Impl::CreateApplet( const String& rBaseURL )
     String aCode, aName, aCodeBase;
     sal_Bool bMayScript = sal_False;
 
-    sal_uInt32 nArgCount = aCommandList.Count();
-    for( sal_uInt32 i=0; i<nArgCount; i++ )
+    size_t nArgCount = aCommandList.size();
+    for( size_t i = 0; i < nArgCount; i++ )
     {
         const SvCommand& rArg = aCommandList[i];
         const String& rName = rArg.GetCommand();
@@ -190,13 +191,12 @@ SwApplet_Impl::~SwApplet_Impl()
 }
 void SwApplet_Impl::FinishApplet()
 {
-    //xApplet->EnableSetModified( sal_True );
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
         uno::Sequence < beans::PropertyValue > aProps;
         aCommandList.FillSequence( aProps );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), uno::makeAny( aProps ) );
+        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands")), uno::makeAny( aProps ) );
     }
 }
 
@@ -206,3 +206,5 @@ void SwApplet_Impl::AppendParam( const String& rName, const String& rValue )
     aCommandList.Append( rName, rValue );
 }
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

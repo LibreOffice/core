@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -155,9 +156,9 @@ static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                         const SdrObject& rSdrObj    );
 //-----------------------------------------------------------------------
 
-extern HTMLOutEvent __FAR_DATA aAnchorEventTable[];
+extern HTMLOutEvent aAnchorEventTable[];
 
-static HTMLOutEvent __FAR_DATA aImageEventTable[] =
+static HTMLOutEvent aImageEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonload,           OOO_STRING_SVTOOLS_HTML_O_onload,       SVX_EVENT_IMAGE_LOAD        },
     { OOO_STRING_SVTOOLS_HTML_O_SDonabort,      OOO_STRING_SVTOOLS_HTML_O_onabort,  SVX_EVENT_IMAGE_ABORT       },
@@ -165,7 +166,7 @@ static HTMLOutEvent __FAR_DATA aImageEventTable[] =
     { 0,                        0,                  0                       }
 };
 
-static HTMLOutEvent __FAR_DATA aIMapEventTable[] =
+static HTMLOutEvent aIMapEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,       OOO_STRING_SVTOOLS_HTML_O_onmouseout,       SFX_EVENT_MOUSEOUT_OBJECT   },
@@ -279,7 +280,6 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                 if( bEmpty )
                 {
                     const SvxBrushItem& rBrush = rFrmFmt.GetBackground();
-                    /// OD 02.09.2002 #99657#
                     /// background is not empty, if it has a background graphic
                     /// or its background color is not "no fill"/"auto fill".
                     if( GPOS_NONE != rBrush.GetGraphicPos() ||
@@ -310,7 +310,7 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
 
 void SwHTMLWriter::CollectFlyFrms()
 {
-    ASSERT( HTML_CFG_MAX+1 == MAX_BROWSERS,
+    OSL_ENSURE( HTML_CFG_MAX+1 == MAX_BROWSERS,
             "number of browser configurations has changed" );
 
     sal_uInt8 nSz = (sal_uInt8)Min( pDoc->GetSpzFrmFmts()->Count(), sal_uInt16(255) );
@@ -487,7 +487,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
     switch( nOutMode )
     {
     case HTML_OUT_TBLNODE:      // OK
-        ASSERT( !pCntnrStr, "Table: Container ist hier nicht vorgesehen" );
+        OSL_ENSURE( !pCntnrStr, "Table: Container ist hier nicht vorgesehen" );
         OutHTML_FrmFmtTableNode( *this, rFrmFmt );
         break;
     case HTML_OUT_GRFNODE:      // OK
@@ -501,14 +501,14 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         break;
     case HTML_OUT_DIV:
     case HTML_OUT_SPAN:
-        ASSERT( !pCntnrStr, "Div: Container ist hier nicht vorgesehen" );
+        OSL_ENSURE( !pCntnrStr, "Div: Container ist hier nicht vorgesehen" );
         OutHTML_FrmFmtAsDivOrSpan( *this, rFrmFmt, HTML_OUT_SPAN==nOutMode );
         break;
     case HTML_OUT_MULTICOL:     // OK
         OutHTML_FrmFmtAsMulticol( *this, rFrmFmt, pCntnrStr != 0 );
         break;
     case HTML_OUT_SPACER:       // OK
-        ASSERT( !pCntnrStr, "Spacer: Container ist hier nicht vorgesehen" );
+        OSL_ENSURE( !pCntnrStr, "Spacer: Container ist hier nicht vorgesehen" );
         OutHTML_FrmFmtAsSpacer( *this, rFrmFmt );
         break;
     case HTML_OUT_CONTROL:      // OK
@@ -520,7 +520,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         OutHTML_FrmFmtAsMarquee( *this, rFrmFmt, *pSdrObject );
         break;
     case HTML_OUT_MARQUEE:
-        ASSERT( !pCntnrStr, "Marquee: Container ist hier nicht vorgesehen" );
+        OSL_ENSURE( !pCntnrStr, "Marquee: Container ist hier nicht vorgesehen" );
         OutHTML_DrawFrmFmtAsMarquee( *this,
                     (const SwDrawFrmFmt &)rFrmFmt, *pSdrObject );
         break;
@@ -709,7 +709,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                       (nPrcHeight ? 0
                                   : pFSItem->GetHeight()-aTwipSpc.Height()) );
 
-        ASSERT( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0,
+        OSL_ENSURE( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0,
                 "Rahmengroesse minus Abstand < 0!!!???" );
         if( aTwipSz.Width() < 0 )
             aTwipSz.Width() = 0;
@@ -787,7 +787,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
             break;
 
         default:
-            // #67508#: If a frame is centered, it gets left aligned. This
+            // If a frame is centered, it gets left aligned. This
             // should be taken into account here, too.
             {
                 switch( eSurround )
@@ -897,7 +897,6 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         } while( bFound );
 
         sal_Bool bScale = sal_False;
-        //Size aGrfSize( rNode.GetTwipSize() );
         Fraction aScaleX( 1, 1 );
         Fraction aScaleY( 1, 1 );
 
@@ -910,7 +909,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             nWidth -= ( rBox.CalcLineSpace(BOX_LINE_LEFT) +
                         rBox.CalcLineSpace(BOX_LINE_RIGHT) );
 
-            ASSERT( nWidth>0, "Gibt es 0 twip breite Grafiken!?" );
+            OSL_ENSURE( nWidth>0, "Gibt es 0 twip breite Grafiken!?" );
             if( nWidth<=0 ) // sollte nicht passieren
                 nWidth = 1;
 
@@ -926,7 +925,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             nHeight -= ( rBox.CalcLineSpace(BOX_LINE_TOP) +
                          rBox.CalcLineSpace(BOX_LINE_BOTTOM) );
 
-            ASSERT( nHeight>0, "Gibt es 0 twip hohe Grafiken!?" );
+            OSL_ENSURE( nHeight>0, "Gibt es 0 twip hohe Grafiken!?" );
             if( nHeight<=0 )
                 nHeight = 1;
 
@@ -1074,8 +1073,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         Size aTwipBorder( 0, 0 );
         const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
 
-        const SvxBorderLine *pColBorderLine = 0;
-        const SvxBorderLine *pBorderLine = pBoxItem->GetLeft();
+        const ::editeng::SvxBorderLine *pColBorderLine = 0;
+        const ::editeng::SvxBorderLine *pBorderLine = pBoxItem->GetLeft();
         if( pBorderLine )
         {
             pColBorderLine = pBorderLine;
@@ -1340,11 +1339,11 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
         bTopCaption = sal_True;
         pTblNd = rHTMLWrt.pDoc->GetNodes()[nStt+1]->GetTableNode();
     }
-    ASSERT( pTblNd, "Rahmen enthaelt keine Tabelle" );
+    OSL_ENSURE( pTblNd, "Rahmen enthaelt keine Tabelle" );
     if( pTblNd )
     {
         sal_uLong nTblEnd = pTblNd->EndOfSectionIndex();
-        ASSERT( nTblEnd == nEnd - 1 ||
+        OSL_ENSURE( nTblEnd == nEnd - 1 ||
                 (nTblEnd == nEnd - 2 && !bTopCaption),
                 "Ungeuelter Rahmen-Inhalt fuer Tabelle" );
 
@@ -1426,7 +1425,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
-    ASSERT( pSttNd, "Wo ist der Start-Node" );
+    OSL_ENSURE( pSttNd, "Wo ist der Start-Node" );
 
     {
         // in einem Block damit rechtzeitig vor dem Ende der alte Zustand
@@ -1437,8 +1436,6 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
         rHTMLWrt.bOutFlyFrame = sal_True;
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
-
-//  rHTMLWrt.ChangeParaToken( 0 );  // MIB 8.7.97: Passiert jetzt in Out_SwDoc
 
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
@@ -1517,7 +1514,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     rHTMLWrt.OutFlyFrm( nStt, 0, HTML_POS_ANY );
 
     const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
-    ASSERT( pSttNd, "Wo ist der Start-Node" );
+    OSL_ENSURE( pSttNd, "Wo ist der Start-Node" );
 
     {
         // in einem Block damit rechtzeitig vor dem Ende der alte Zustand
@@ -1581,7 +1578,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwGrfNode *pGrfNd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetGrfNode();
-    ASSERT( pGrfNd, "Grf-Node erwartet" );
+    OSL_ENSURE( pGrfNd, "Grf-Node erwartet" );
     if( !pGrfNd )
         return rWrt;
 
@@ -1708,7 +1705,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
-    ASSERT( pSttNd, "Wo ist der Start-Node" );
+    OSL_ENSURE( pSttNd, "Wo ist der Start-Node" );
 
     if( !bHeader && aSpacer.Len() )
     {
@@ -1891,7 +1888,7 @@ SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
         // Auto-gebundene Rahmen werden ein Zeichen weiter hinten
         // ausgegeben, weil dann die Positionierung mit Netscape
         // uebereinstimmt.
-        ASSERT( rAnchor.GetCntntAnchor(), "Keine Anker-Position?" );
+        OSL_ENSURE( rAnchor.GetCntntAnchor(), "Keine Anker-Position?" );
         if( rAnchor.GetCntntAnchor() )
         {
             nCntntIdx = rAnchor.GetCntntAnchor()->nContent.GetIndex();
@@ -1900,7 +1897,7 @@ SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
             {
                 const SwCntntNode *pCNd = pNdIdx->GetNode().GetCntntNode();
-                ASSERT( pCNd, "Kein Content-Node an PaM-Position" );
+                OSL_ENSURE( pCNd, "Kein Content-Node an PaM-Position" );
                 if( pCNd && nCntntIdx < pCNd->Len() )
                     nCntntIdx++;
             }
@@ -1927,3 +1924,4 @@ sal_Bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,19 +40,14 @@ struct TextSegment;
 
 class SwAccessiblePortionData;
 class SwTxtNode;
-// --> OD 2010-02-19 #i108125#
-class SwWrongList;
-// <--
-
+class SwWrongList; // #i108125#
 class SwTextMarkupHelper
 {
     public:
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                             const SwTxtNode& rTxtNode );
-        // --> OD 2010-02-19 #i108125#
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
-                            const SwWrongList& rTextMarkupList );
-        // <--
+                            const SwWrongList& rTextMarkupList ); // #i108125#
         ~SwTextMarkupHelper() {}
 
         sal_Int32 getTextMarkupCount( const sal_Int32 nTextMarkupType )
@@ -78,10 +74,10 @@ class SwTextMarkupHelper
 
         const SwAccessiblePortionData& mrPortionData;
 
-        // --> OD 2010-02-19 #i108125#
+        // #i108125#
         const SwTxtNode* mpTxtNode;
         const SwWrongList* mpTextMarkupList;
-        // <--
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

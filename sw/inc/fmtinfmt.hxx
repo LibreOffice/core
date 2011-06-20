@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,30 +37,30 @@ class SvxMacroTableDtor;
 class SwTxtINetFmt;
 class IntlWrapper;
 
-// ATT_INETFMT *********************************************
+// ATT_INETFMT
 
 class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    String aURL;                    // die URL
-    String aTargetFrame;            // in diesen Frame soll die URL
+    String aURL;                    // URL.
+    String aTargetFrame;            // Target frame for URL.
     String aINetFmt;
     String aVisitedFmt;
-    String aName;                   // Name des Links
+    String aName;                   // Name of the link.
     SvxMacroTableDtor* pMacroTbl;
-    SwTxtINetFmt* pTxtAttr;         // mein TextAttribut
+    SwTxtINetFmt* pTxtAttr;         // My TextAttribute.
     sal_uInt16 nINetId;
     sal_uInt16 nVisitedId;
 public:
     SwFmtINetFmt( const String& rURL, const String& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
-    SwFmtINetFmt();                     // for TypeInfo
+    SwFmtINetFmt();                     // For TypeInfo.
     virtual ~SwFmtINetFmt();
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -68,9 +69,9 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 );
 
 
@@ -96,11 +97,11 @@ public:
     sal_uInt16 GetVisitedFmtId() const          { return nVisitedId; }
     void SetVisitedFmtId( sal_uInt16 nNew )     { nVisitedId = nNew; }
 
-    // setze eine neue oder loesche die akt. MakroTabelle
+    // Set a new MacroTable or clear the current one.
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
-    // setze / erfrage ein Makro
+    // Macro getter and setter.
     void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
     const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
@@ -108,3 +109,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

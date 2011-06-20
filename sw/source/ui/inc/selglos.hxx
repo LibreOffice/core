@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,12 @@
 #ifndef _SELGLOS_HXX
 #define _SELGLOS_HXX
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 class SwSelGlossaryDlg : public ModalDialog
 {
@@ -72,3 +67,5 @@ inline void SwSelGlossaryDlg::SelectEntryPos(sal_uInt16 nIdx)
 {   aGlosBox.SelectEntryPos(nIdx); }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

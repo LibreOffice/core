@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,6 +60,7 @@
 #include "switerator.hxx"
 #include <UndoTable.hxx>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 
@@ -108,7 +110,7 @@ void SwTblFmtCmp::Delete( SvPtrarr &rArr )
 void lcl_GetStartEndCell( const SwCursor& rCrsr,
                         SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd )
 {
-    ASSERT( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
+    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
             "Tabselection nicht auf Cnt." );
 
     Point aPtPos, aMkPos;
@@ -157,8 +159,6 @@ sal_Bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetRowHeight(), GetRowHeight()
-#*  Datum      :  MA 17. May. 93
-#*  Update     :  JP 28.04.98
 #***********************************************************************/
 //Die Zeilenhoehe wird ausgehend von der Selektion ermittelt/gesetzt.
 //Ausgehend von jeder Zelle innerhalb der Selektion werden nach oben alle
@@ -547,8 +547,6 @@ sal_Bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetTabBorders(), GetTabBorders()
-#*  Datum      :  MA 18. May. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 inline void InsertCell( SvPtrarr& rCellArr, SwCellFrm* pCellFrm )
 {
@@ -567,7 +565,7 @@ void lcl_CollectCells( SvPtrarr &rArr, const SwRect &rUnion,
         // uns erst wieder zur Zelle hochhangeln
         while ( !pCell->IsCellFrm() )
             pCell = pCell->GetUpper();
-        ASSERT( pCell, "Frame ist keine Zelle." );
+        OSL_ENSURE( pCell, "Frame ist keine Zelle." );
         if ( rUnion.IsOver( pCell->Frm() ) )
             ::InsertCell( rArr, (SwCellFrm*)pCell );
         //Dafuer sorgen, dass die Zelle auch verlassen wird (Bereiche)
@@ -697,9 +695,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
                 if ( pTab->IsFollow() &&
                      ( pTab->IsInHeadline( *pCell ) ||
-                       // --> FME 2006-02-07 #126092# Same holds for follow flow rows.
+                       // Same holds for follow flow rows.
                        pCell->IsInFollowFlowRow() ) )
-                       // <--
                     continue;
 
                 SvxBoxItem aBox( pCell->GetFmt()->GetBox() );
@@ -768,7 +765,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
 
                 if( pSetBox )
                 {
-                    static sal_uInt16 __READONLY_DATA aBorders[] = {
+                    static sal_uInt16 const aBorders[] = {
                         BOX_LINE_BOTTOM, BOX_LINE_TOP,
                         BOX_LINE_RIGHT, BOX_LINE_LEFT };
                     const sal_uInt16* pBrd = aBorders;
@@ -1081,7 +1078,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 // Abstand zum Text
                 if (aSetBoxInfo.IsValid(VALID_DISTANCE))
                 {
-                    static sal_uInt16 __READONLY_DATA aBorders[] = {
+                    static sal_uInt16 const aBorders[] = {
                         BOX_LINE_BOTTOM, BOX_LINE_TOP,
                         BOX_LINE_RIGHT, BOX_LINE_LEFT };
                     const sal_uInt16* pBrd = aBorders;
@@ -1115,8 +1112,6 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetBoxAttr
-#*  Datum      :  MA 18. Dec. 96
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 {
@@ -1164,8 +1159,6 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  GetBoxAttr()
-#*  Datum      :  MA 01. Jun. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 
 sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
@@ -1208,6 +1201,18 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
                     else if( rToFill != rDir )
                         bRet = sal_False;
                 }
+                case RES_VERT_ORIENT:
+                {
+                    const SwFmtVertOrient& rOrient =
+                                    aBoxes[i]->GetFrmFmt()->GetVertOrient();
+                    if( !bOneFound )
+                    {
+                        (SwFmtVertOrient&)rToFill = rOrient;
+                        bOneFound = sal_True;
+                    }
+                    else if( rToFill != rOrient )
+                        bRet = sal_False;
+                }
             }
 
             if ( sal_False == bRet )
@@ -1220,12 +1225,10 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  SetBoxAlign, SetBoxAlign
-#*  Datum      :  MA 18. Dec. 96
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 void SwDoc::SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign )
 {
-    ASSERT( nAlign == text::VertOrientation::NONE   ||
+    OSL_ENSURE( nAlign == text::VertOrientation::NONE   ||
             nAlign == text::VertOrientation::CENTER ||
             nAlign == text::VertOrientation::BOTTOM, "wrong alignment" );
     SwFmtVertOrient aVertOri( 0, nAlign );
@@ -1257,8 +1260,6 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
 /***********************************************************************
 #*  Class      :  SwDoc
 #*  Methoden   :  AdjustCellWidth()
-#*  Datum      :  MA 20. Feb. 95
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
 {
@@ -1270,11 +1271,10 @@ sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
         const SwTwips nAdd = (pFrm->Frm().*fnRect->fnGetWidth)() -
                              (pFrm->Prt().*fnRect->fnGetWidth)();
 
-        // --> FME 2005-12-02 #127801# pFrm does not necessarily have to be a SwTxtFrm!
+        // pFrm does not necessarily have to be a SwTxtFrm!
         const SwTwips nCalcFitToContent = pFrm->IsTxtFrm() ?
                                           ((SwTxtFrm*)pFrm)->CalcFitToContent() :
                                           (pFrm->Prt().*fnRect->fnGetWidth)();
-        // <--
 
         nRet = Max( nRet, nCalcFitToContent + nAdd );
         pFrm = pFrm->GetNext();
@@ -1595,3 +1595,4 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, sal_Bool bBalance )
     SetModified();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,11 @@
 #include "precompiled_sw.hxx"
 #include "SwSmartTagMgr.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swmodule.hxx>
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -47,7 +46,7 @@ SwSmartTagMgr& SwSmartTagMgr::Get()
     if ( !mpTheSwSmartTagMgr )
     {
         mpTheSwSmartTagMgr = new SwSmartTagMgr( SwDocShell::Factory().GetModuleName() );
-        mpTheSwSmartTagMgr->Init( rtl::OUString::createFromAscii("Writer") );
+        mpTheSwSmartTagMgr->Init(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Writer")));
     }
     return *mpTheSwSmartTagMgr;
 }
@@ -64,7 +63,7 @@ SwSmartTagMgr::~SwSmartTagMgr()
 // ::com::sun::star::util::XModifyListener
 void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Installed recognizers have changed. We remove all existing smart tags:
     SW_MOD()->CheckSpellChanges( sal_False, sal_True, sal_True, sal_True );
@@ -75,7 +74,7 @@ void SwSmartTagMgr::modified( const lang::EventObject& rEO ) throw( RuntimeExcep
 // ::com::sun::star::util::XChangesListener
 void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Configuration has changed. We remove all existing smart tags:
     SW_MOD()->CheckSpellChanges( sal_False, sal_True, sal_True, sal_True );
@@ -83,13 +82,4 @@ void SwSmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( R
     SmartTagMgr::changesOccurred( rEvent );
 }
 
-/*
-SmartTagMgr& SwSmartTagMgr::Get()
-{
-    if ( !pSmartTagMgr )
-        pSmartTagMgr = new SmartTagMgr( SwDocShell::Factory().GetModuleName() );
-
-     return *pSmartTagMgr;
-}
-*/
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

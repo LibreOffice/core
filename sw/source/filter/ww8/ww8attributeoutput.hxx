@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@ public:
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby );
+    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
 
     /// Output ruby end.
     virtual void EndRuby();
@@ -101,31 +102,18 @@ public:
     virtual void ParagraphStyle( sal_uInt16 nStyle );
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo );
-
     virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo );
-
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner );
-
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableRowEnd( sal_uInt32 nDepth = 1 );
 
     /// Start of the styles table.
@@ -139,7 +127,8 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwIdi, sal_uInt16 nId );
+            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwIdi, sal_uInt16 nId,
+            bool bAutoUpdate );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
@@ -438,7 +427,8 @@ public:
     virtual ~WW8AttributeOutput() {}
 
     /// Return the right export class.
-    virtual MSWordExportBase& GetExport() { return m_rWW8Export; }
+    virtual WW8Export& GetExport() { return m_rWW8Export; }
+    const WW8Export& GetExport() const { return m_rWW8Export; }
 
 protected:
     /// Output the bold etc. attributes
@@ -451,4 +441,4 @@ protected:
 
 #endif // _WW8ATTRIBUTEOUTPUT_HXX_
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

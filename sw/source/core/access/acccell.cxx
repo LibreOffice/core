@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,12 +30,12 @@
 #include "precompiled_sw.hxx"
 
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <cellfrm.hxx>
 #include <tabfrm.hxx>
@@ -48,10 +49,7 @@
 #include "accmap.hxx"
 #include <acccell.hxx>
 
-#ifndef _STLP_CFLOAT
 #include <cfloat>
-#endif
-
 #include <limits.h>
 
 using namespace ::com::sun::star;
@@ -66,9 +64,9 @@ sal_Bool SwAccessibleCell::IsSelected()
 {
     sal_Bool bRet = sal_False;
 
-    DBG_ASSERT( GetMap(), "no map?" );
+    OSL_ENSURE( GetMap(), "no map?" );
     const ViewShell *pVSh = GetMap()->GetShell();
-    DBG_ASSERT( pVSh, "no shell?" );
+    OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
     {
         const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
@@ -91,7 +89,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 
     // SELECTABLE
     const ViewShell *pVSh = GetMap()->GetShell();
-    DBG_ASSERT( pVSh, "no shell?" );
+    OSL_ENSURE( pVSh, "no shell?" );
     if( pVSh->ISA( SwCrsrShell ) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
@@ -99,8 +97,8 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        ASSERT( bIsSelected, "bSelected out of sync" );
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 }
@@ -110,7 +108,7 @@ SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
     : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrm )
     , bIsSelected( sal_False )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     OUString sBoxName( pCellFrm->GetTabBox()->GetName() );
     SetName( sBoxName );
 
@@ -122,7 +120,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     sal_Bool bNew = IsSelected();
     sal_Bool bOld;
     {
-        vos::OGuard aGuard( aMutex );
+        osl::MutexGuard aGuard( aMutex );
         bOld = bIsSelected;
         bIsSelected = bNew;
     }
@@ -130,7 +128,7 @@ sal_Bool SwAccessibleCell::_InvalidateMyCursorPos()
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
-        ::vos::ORef < SwAccessibleContext > xThis( this );
+        ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
 
@@ -155,14 +153,14 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
         {
             if( rLower.IsAccessible( GetMap()->GetShell()->IsPreView() )  )
             {
-                ::vos::ORef< SwAccessibleContext > xAccImpl(
+                ::rtl::Reference< SwAccessibleContext > xAccImpl(
                     GetMap()->GetContextImpl( pLower, sal_False ) );
-                if( xAccImpl.isValid() )
+                if( xAccImpl.is() )
                 {
-                    ASSERT( xAccImpl->GetFrm()->IsCellFrm(),
-                             "table child is not a cell frame" )
+                    OSL_ENSURE( xAccImpl->GetFrm()->IsCellFrm(),
+                             "table child is not a cell frame" );
                     bChanged |= static_cast< SwAccessibleCell *>(
-                            xAccImpl.getBodyPtr() )->_InvalidateMyCursorPos();
+                            xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
                 else
                     bChanged = sal_True; // If the context is not know we
@@ -185,7 +183,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
 {
 
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    ASSERT( pParent->IsTabFrm(), "parent is not a tab frame" );
+    OSL_ENSURE( pParent->IsTabFrm(), "parent is not a tab frame" );
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( pParent );
     if( pTabFrm->IsFollow() )
         pTabFrm = pTabFrm->FindMaster();
@@ -195,9 +193,9 @@ void SwAccessibleCell::_InvalidateCursorPos()
         sal_Bool bChanged = _InvalidateChildrenCursorPos( pTabFrm );
         if( bChanged )
         {
-            ::vos::ORef< SwAccessibleContext > xAccImpl(
+            ::rtl::Reference< SwAccessibleContext > xAccImpl(
                 GetMap()->GetContextImpl( pTabFrm, sal_False ) );
-            if( xAccImpl.isValid() )
+            if( xAccImpl.is() )
             {
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::SELECTION_CHANGED;
@@ -211,7 +209,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
 
 sal_Bool SwAccessibleCell::HasCursor()
 {
-    vos::OGuard aGuard( aMutex );
+    osl::MutexGuard aGuard( aMutex );
     return bIsSelected;
 }
 
@@ -254,9 +252,9 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
 void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 {
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    ::vos::ORef< SwAccessibleContext > xAccImpl(
+    ::rtl::Reference< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
-    if( xAccImpl.isValid() )
+    if( xAccImpl.is() )
         xAccImpl->DisposeChild( SwAccessibleChild(GetFrm()), bRecursive );
     SwAccessibleContext::Dispose( bRecursive );
 }
@@ -264,9 +262,9 @@ void SwAccessibleCell::Dispose( sal_Bool bRecursive )
 void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
 {
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    ::vos::ORef< SwAccessibleContext > xAccImpl(
+    ::rtl::Reference< SwAccessibleContext > xAccImpl(
             GetMap()->GetContextImpl( pParent, sal_False ) );
-    if( xAccImpl.isValid() )
+    if( xAccImpl.is() )
         xAccImpl->InvalidateChildPosOrSize( SwAccessibleChild(GetFrm()), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
 }
@@ -305,26 +303,23 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwAccessibleCellImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleCellImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleCellImplementationId::get().getSeq();
 }
 
 // =====  XAccessibleValue  ===============================================
 
 SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 {
-    DBG_ASSERT( GetFrm() != NULL, "no frame?" );
-    DBG_ASSERT( GetFrm()->IsCellFrm(), "no cell frame?" );
+    OSL_ENSURE( GetFrm() != NULL, "no frame?" );
+    OSL_ENSURE( GetFrm()->IsCellFrm(), "no cell frame?" );
 
     const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
     return pCellFrm->GetTabBox()->GetFrmFmt();
@@ -334,7 +329,7 @@ SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 uno::Any SwAccessibleCell::getCurrentValue( )
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     uno::Any aAny;
@@ -345,7 +340,7 @@ uno::Any SwAccessibleCell::getCurrentValue( )
 sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     throw( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
     double fValue = 0;
@@ -373,3 +368,5 @@ uno::Any SwAccessibleCell::getMinimumValue(  )
     aAny <<= -DBL_MAX;
     return aAny;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

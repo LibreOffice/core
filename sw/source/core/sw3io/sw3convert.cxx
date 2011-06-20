@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,26 +71,6 @@
 #define SWG_EXPORT40    0x0110      // Version fuer 4.0-Export ab 5.0
 
 using namespace nsSwDocInfoSubType;
-
-
-//#include "poolfmt.hxx"        // fuer InSetExpField
-//#include "poolfmt.hrc"        // fuer InSetExpField
-
-//#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC)
-
-//#define FIELDFNTAB_SIZE 37
-//#if FIELDFNTAB_SIZE != RES_FIELDS_END - RES_FIELDS_BEGIN
-//#error Feld-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
-//#endif
-
-//#endif
-
-//#define SWG_AUTHORITY_ENTRY_LCL   'E'
-
-//sal_Char __FAR_DATA sSW3IO_FixedField[] = "FixedExport";
-//sal_Char __FAR_DATA sSW3IO_AuthorityField[] = "AuthorityExport";
-/* #108791# */
-//sal_Char __FAR_DATA sSW3IO_DropDownField[] = "DropDownExport";
 
 struct OldFormats
 {
@@ -397,8 +378,6 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, sal_uInt16& rWhi
                     break;
 
                 default:
-                // case REF_UPDOWN:
-                // case REF_PAGE_PGDESC:
                     rFmt = REF_PAGE;
                     break;
                 }
@@ -408,13 +387,12 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, sal_uInt16& rWhi
 
     if( pOldFmt && nOldFmt )
     {
-        sal_uInt16 i = 0;
-
         SvNumberFormatter *pFormatter = ((SwValueField*)pFld)->GetDoc()->GetNumberFormatter();
         const SvNumberformat* pEntry = pFormatter->GetEntry( nOldFmt );
 
         if( pEntry )
         {
+            sal_uInt16 i = 0;
             while( pOldFmt[i].eFormatIdx != NF_NUMERIC_START ||
                    pOldFmt[i].nOldFormat )
             {
@@ -431,3 +409,5 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, sal_uInt16& rWhi
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

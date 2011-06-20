@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,10 +69,9 @@ class SwFtnFrm: public SwLayoutFrm
 
     sal_Bool bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
                                 //nicht rueckwaerts fliessen.
-    // --> OD 2005-05-18 #i49383# - control unlock of position of lower anchored objects.
+    // #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
-    // <--
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 protected:
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
@@ -86,14 +86,14 @@ public:
 
     sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
 
-#ifndef DBG_UTIL
-    const SwCntntFrm *GetRef() const    { return pRef; }
-         SwCntntFrm  *GetRef()          { return pRef; }
-#else
-    //JP 15.10.2001: in a non pro version test if the attribute has the same
-    //              meaning which his reference is
+#if OSL_DEBUG_LEVEL > 1
+    // in a non pro version test if the attribute has the same
+    // meaning which his reference is
     const SwCntntFrm *GetRef() const;
          SwCntntFrm  *GetRef();
+#else
+    const SwCntntFrm *GetRef() const    { return pRef; }
+         SwCntntFrm  *GetRef()          { return pRef; }
 #endif
     const SwCntntFrm *GetRefFromAttr()  const;
           SwCntntFrm *GetRefFromAttr();
@@ -121,7 +121,7 @@ public:
     inline void ColLock()       { bColLocked = sal_True; }
     inline void ColUnlock()     { bColLocked = sal_False; }
 
-    // --> OD 2005-05-18 #i49383#
+    // #i49383#
     inline void UnlockPosOfLowerObjs()
     {
         mbUnlockPosOfLowerObjs = true;
@@ -134,7 +134,6 @@ public:
     {
         return mbUnlockPosOfLowerObjs;
     }
-    // <--
     /** search for last content in the current footnote frame
 
         OD 2005-12-02 #i27138#
@@ -148,3 +147,5 @@ public:
 };
 
 #endif  //_FTNFRM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

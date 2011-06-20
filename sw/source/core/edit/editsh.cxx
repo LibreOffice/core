@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/cmdevt.hxx>
 #include <unotools/charclass.hxx>
@@ -86,7 +86,7 @@ void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
     FOREACHPAM_START(this)
 
         const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, c);
-        ASSERT( bSuccess, "Doc->Insert() failed." );
+        OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
         (void) bSuccess;
 
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
@@ -120,7 +120,7 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
             //OPT: GetSystemCharSet
             const bool bSuccess =
                 GetDoc()->InsertString(*_pStartCrsr, rStr, nInsertFlags);
-            ASSERT( bSuccess, "Doc->Insert() failed." );
+            OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
             (void) bSuccess;
 
             SaveTblBoxCntnt( _pStartCrsr->GetPoint() );
@@ -188,7 +188,7 @@ void SwEditShell::Overwrite(const String &rStr)
     FOREACHPAM_START(this)
         if( !GetDoc()->Overwrite(*PCURCRSR, rStr ) )
         {
-            ASSERT( sal_False, "Doc->Overwrite(Str) failed." )
+            OSL_FAIL( "Doc->Overwrite(Str) failed." );
         }
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
     FOREACHPAM_END()
@@ -222,9 +222,6 @@ long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
     return(1L);
 }
 
-/*-- 11.05.2004 09:41:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SwEditShell::AppendTxtNode()
 {
     sal_Bool bRet = sal_False;
@@ -266,24 +263,22 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
  *                   oder auf die gleiche Graphic zeigt)
  ******************************************************************************/
 
-// --> OD 2005-02-09 #119353# - robust
 const Graphic* SwEditShell::GetGraphic( sal_Bool bWait ) const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
-    // --> OD 2005-02-09 #119353# - robust
     const Graphic* pGrf( 0L );
     if ( pGrfNode )
     {
         pGrf = &(pGrfNode->GetGrf());
-        // --> OD 2007-03-01 #i73788#
+        // --> #i73788#
         // no load of linked graphic, if its not needed now (bWait = sal_False).
         if ( bWait )
         {
             if( pGrf->IsSwapOut() ||
                 ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
             {
-#ifdef DBG_UTIL
-                ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
+#if OSL_DEBUG_LEVEL > 1
+                OSL_ENSURE( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
 #endif
@@ -293,17 +288,15 @@ const Graphic* SwEditShell::GetGraphic( sal_Bool bWait ) const
         {
             if ( pGrf->IsSwapOut() && !pGrfNode->IsLinkedFile() )
             {
-#ifdef DBG_UTIL
-                ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
+#if OSL_DEBUG_LEVEL > 1
+                OSL_ENSURE( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
 #endif
             }
         }
-        // <--
     }
     return pGrf;
-    // <--
 }
 
 sal_Bool SwEditShell::IsGrfSwapOut( sal_Bool bOnlyLinked ) const
@@ -316,13 +309,10 @@ sal_Bool SwEditShell::IsGrfSwapOut( sal_Bool bOnlyLinked ) const
                      : pGrfNode->GetGrfObj().IsSwappedOut());
 }
 
-// --> OD 2005-02-09 #119353# - robust
 const GraphicObject* SwEditShell::GetGraphicObj() const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
-    // --> OD 2005-02-09 #119353# - robust
     return pGrfNode ? &(pGrfNode->GetGrfObj()) : 0L;
-    // <--
 }
 
 sal_uInt16 SwEditShell::GetGraphicType() const
@@ -375,7 +365,7 @@ void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
 void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
                             const SwFlyFrmFmt* pFmt ) const
 {
-    ASSERT( pGrfName || pFltName, "was wird denn nun erfragt?" );
+    OSL_ENSURE( pGrfName || pFltName, "was wird denn nun erfragt?" );
     if( pFmt )
         GetDoc()->GetGrfNms( *pFmt, pGrfName, pFltName );
     else
@@ -385,30 +375,6 @@ void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
             pGrfNode->GetFileFilterNms( pGrfName, pFltName );
     }
 }
-
-
-// alternativen Text abfragen/setzen
-//const String& SwEditShell::GetAlternateText() const
-//{
-//    SwPaM* pCrsr = GetCrsr();
-//    const SwNoTxtNode* pNd;
-//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-//        return pNd->GetAlternateText();
-
-//    return aEmptyStr;
-//}
-
-
-//void SwEditShell::SetAlternateText( const String& rTxt )
-//{
-//    SwPaM* pCrsr = GetCrsr();
-//    SwNoTxtNode* pNd;
-//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-//    {
-//        pNd->SetAlternateText( rTxt, sal_True );
-//        GetDoc()->SetModified();
-//    }
-//}
 
 
 const PolyPolygon *SwEditShell::GetGraphicPolygon() const
@@ -433,7 +399,7 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
 void SwEditShell::ClearAutomaticContour()
 {
     SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
-    ASSERT( pNd, "is no NoTxtNode!" );
+    OSL_ENSURE( pNd, "is no NoTxtNode!" );
     if( pNd->HasAutomaticContour() )
     {
         StartAllAction();
@@ -456,14 +422,14 @@ void SwEditShell::ClearAutomaticContour()
 
 svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
 {
-    ASSERT(  CNT_OLE == GetCntType(), "GetOLEObj: kein OLENode." );
-    ASSERT( !GetCrsr()->HasMark() ||
+    OSL_ENSURE(  CNT_OLE == GetCntType(), "GetOLEObj: kein OLENode." );
+    OSL_ENSURE( !GetCrsr()->HasMark() ||
             (GetCrsr()->HasMark() &&
                 GetCrsr()->GetPoint()->nNode == GetCrsr()->GetMark()->nNode),
             "GetOLEObj: kein OLENode." );
 
     SwOLENode *pOLENode = GetCrsr()->GetNode()->GetOLENode();
-    ASSERT( pOLENode, "GetOLEObj: kein OLENode." );
+    OSL_ENSURE( pOLENode, "GetOLEObj: kein OLENode." );
     SwOLEObj& rOObj = pOLENode->GetOLEObj();
     return rOObj.GetObject();
 }
@@ -491,7 +457,7 @@ sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
 void SwEditShell::SetChartName( const String &rName )
 {
     SwOLENode *pONd = GetCrsr()->GetNode()->GetOLENode();
-    ASSERT( pONd, "ChartNode not found" );
+    OSL_ENSURE( pONd, "ChartNode not found" );
     pONd->SetChartTblName( rName );
 }
 
@@ -612,19 +578,13 @@ void SwEditShell::ReplaceDropTxt( const String &rStr )
         SwPaM aPam( rNd, rStr.Len(), rNd, 0 );
         if( !GetDoc()->Overwrite( aPam, rStr ) )
         {
-            ASSERT( sal_False, "Doc->Overwrite(Str) failed." );
+            OSL_FAIL( "Doc->Overwrite(Str) failed." );
         }
 
         EndAllAction();
     }
 }
 
-/******************************************************************************
- *  Methode     :
- *  Beschreibung:
- *  Erstellt    :   OK 25.04.94 13:45
- *  Aenderung   :
- ******************************************************************************/
 
 String SwEditShell::Calculate()
 {
@@ -706,7 +666,7 @@ void *SwEditShell::GetIMapInventor() const
     return (void*)GetCrsr()->GetNode();
 }
 
-// --> OD 2007-03-01 #i73788#
+// #i73788#
 // remove default parameter, because method is always called this default value
 Graphic SwEditShell::GetIMapGraphic() const
 {
@@ -723,8 +683,8 @@ Graphic SwEditShell::GetIMapGraphic() const
             if( rGrf.IsSwapOut() || ( ((SwGrfNode*)pNd)->IsLinkedFile() &&
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
             {
-#ifdef DBG_UTIL
-                ASSERT( ((SwGrfNode*)pNd)->SwapIn( sal_True ) || !sal_True, "Grafik konnte nicht geladen werden" );
+#if OSL_DEBUG_LEVEL > 1
+                OSL_ENSURE( ((SwGrfNode*)pNd)->SwapIn( sal_True ), "Grafik konnte nicht geladen werden" );
 #else
                 ((SwGrfNode*)pNd)->SwapIn( sal_True );
 #endif
@@ -985,16 +945,16 @@ sal_uInt16 SwEditShell::GetLineCount( sal_Bool bActPos )
                 SwFrm* pFrm = pCntFrm;
                 while( pFrm && !(pFrm->GetType() & nTyp) )
                     pFrm = pFrm->GetUpper();
-                ASSERT( pFrm, "Wo bin ich?" );
+                OSL_ENSURE( pFrm, "Wo bin ich?" );
                 if( pFrm && ( pFrm->GetType() & FRM_FOOTER ) )
                     pTmp = pCNd->FindFooterStartNode();
                 else
                     pTmp = pCNd->FindHeaderStartNode();
             }
-            ASSERT( pTmp, "Missing StartNode" );
+            OSL_ENSURE( pTmp, "Missing StartNode" );
             aStart  = *pTmp;
         }
-        ASSERT( pCNd && pCntFrm, "Missing Layout-Information" );
+        OSL_ENSURE( pCNd && pCntFrm, "Missing Layout-Information" );
     }
 
     while( 0 != ( pCNd = GetDoc()->GetNodes().GoNextSection(
@@ -1202,3 +1162,4 @@ void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

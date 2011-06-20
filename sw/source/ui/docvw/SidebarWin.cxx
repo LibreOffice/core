@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,7 +93,7 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_SHADOW_BRIGHT    Color(180,180,180)
 #define POSTIT_SHADOW_DARK      Color(83,83,83)
 
-#define EMPTYSTRING             rtl::OUString::createFromAscii("")
+#define EMPTYSTRING             rtl::OUString()
 
 /************** SwSidebarWin************************************/
 SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
@@ -399,7 +400,7 @@ void SwSidebarWin::CheckMetaText()
     else if (sMeta.Len() > 22)
     {
         sMeta.Erase(20);
-        sMeta = sMeta + rtl::OUString::createFromAscii("...");
+        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("..."));
     }
     if ( mpMetadataAuthor->GetText() != sMeta )
     {
@@ -425,7 +426,7 @@ void SwSidebarWin::CheckMetaText()
     }
     if (GetTime()!=0)
     {
-        sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( GetTime(),false );
+        sMeta = sMeta + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( GetTime(),false );
     }
     if ( mpMetadataDate->GetText() != sMeta )
     {
@@ -492,8 +493,7 @@ void SwSidebarWin::SetPosAndSize()
             }
             break;
             default:
-                ASSERT( false,
-                        "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
+                OSL_FAIL( "<SwSidebarWin::SetPosAndSize()> - unexpected position of sidebar" );
             break;
         }
 
@@ -555,25 +555,22 @@ void SwSidebarWin::SetPosAndSize()
     {
         if (IsFollow() && !HasChildPathFocus())
         {
-            // --> OD 2010-06-03 #i111964#
+            // #i111964#
             if ( mpAnchor )
             {
                 mpAnchor->SetAnchorState(AS_END);
             }
-            // <--
         }
         else
         {
-            // --> OD 2010-06-03 #i111964#
+            // #i111964#
             if ( mpAnchor )
             {
                 mpAnchor->SetAnchorState(AS_ALL);
             }
-            // <--
             SwSidebarWin* pWin = GetTopReplyNote();
-            // --> OD 2010-06-03 #i111964#
+            // #i111964#
             if ( pWin && pWin->Anchor() )
-            // <--
             {
                 pWin->Anchor()->SetAnchorState(AS_END);
             }
@@ -757,7 +754,7 @@ void SwSidebarWin::SetColor(Color aColorDark,Color aColorLight, Color aColorAnch
         AllSettings aSettings2 = mpVScrollbar->GetSettings();
         StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
         aStyleSettings2.SetButtonTextColor(Color(0,0,0));
-        aStyleSettings2.SetCheckedColor(mColorLight); //hintergund
+        aStyleSettings2.SetCheckedColor(mColorLight); // backgound
         aStyleSettings2.SetShadowColor(mColorAnchor);
         aStyleSettings2.SetFaceColor(mColorDark);
         aSettings2.SetStyleSettings(aStyleSettings2);
@@ -996,11 +993,7 @@ IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
             }
             else if ( pMouseEvt->IsLeaveWindow())
             {
-                if (IsPreview())
-                {
-                    //doLazyDelete();
-                }
-                else
+                if (!IsPreview())
                 {
                     mbMouseOver = false;
                     if ( !HasFocus() )
@@ -1055,18 +1048,14 @@ IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK(SwSidebarWin, ModifyHdl, void*, pVoid)
+IMPL_LINK(SwSidebarWin, ModifyHdl, void*, EMPTYARG)
 {
-    // no warnings, please
-    pVoid=0;
     mrView.GetDocShell()->SetModified(sal_True);
     return 0;
 }
 
-IMPL_LINK(SwSidebarWin, DeleteHdl, void*, pVoid)
+IMPL_LINK(SwSidebarWin, DeleteHdl, void*, EMPTYARG)
 {
-    // no warnings, please
-    pVoid=0;
     mnEventId = 0;
     Delete();
     return 0;
@@ -1135,9 +1124,8 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
             {
                 mpAnchor->SetAnchorState(AS_ALL);
                 SwSidebarWin* pWin = GetTopReplyNote();
-                // --> OD 2010-06-03 #i111964#
+                // #i111964#
                 if ( pWin && pWin->Anchor() )
-                // <--
                 {
                     pWin->Anchor()->SetAnchorState(AS_END);
                 }
@@ -1168,10 +1156,9 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                     SwSidebarWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
                                                   : 0;
-                    // --> OD 2010-06-03 #i111964#
+                    // #i111964#
                     if ( pTopWinSelf && ( pTopWinSelf != pTopWinActive ) &&
                          pTopWinSelf->Anchor() )
-                    // <--
                     {
                         if ( pTopWinSelf != mrMgr.GetActiveSidebarWin() )
                         {
@@ -1256,7 +1243,7 @@ void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
     {
         SidebarWinAccessible* pAcc =
                         static_cast<SidebarWinAccessible*>( GetWindowPeer() );
-        ASSERT( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
+        OSL_ENSURE( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
                 "<SwSidebarWin::ChangeSidebarItem(..)> - unexpected type of window peer -> crash possible!" );
         pAcc->ChangeSidebarItem( mrSidebarItem );
     }
@@ -1283,110 +1270,4 @@ css::uno::Reference< css::accessibility::XAccessible > SwSidebarWin::CreateAcces
 
 } } // eof of namespace sw::sidebarwindows
 
-/********** SwRedComment**************/
-/*
-SwRedComment::SwRedComment( Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits,SwRedline* pRed)
-    : SwSidebarWin(pParent,nBits,aMgr,aBits),
-    pRedline(pRed)
-{
-}
-
-void SwRedComment::SetPopup()
-{
-    mpButtonPopup = new PopupMenu(SW_RES(MN_REDCOMMENT_BUTTON));
-    //mpButtonPopup->SetMenuFlags(MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES);
-}
-
-void SwRedComment::UpdateData()
-{
-    if ( Engine()->IsModified() )
-    {
-        // so we get a new layout of notes (Anchor position is still the same and we would otherwise not get one)
-        Mgr()->SetLayout();
-        // SetRedline is calling SetModified already
-        DocView()->GetWrtShell().SetRedlineComment(Engine()->GetEditEngine().GetText());
-    }
-    Engine()->ClearModifyFlag();
-    Engine()->GetUndoManager().Clear();
-}
-
-void SwRedComment::SetPostItText()
-{
-    Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( sal_False );
-
-    Engine()->Clear();
-    View()->SetAttribs(DefaultItem());
-    View()->InsertText(pRedline->GetComment(),false);
-
-    Engine()->ClearModifyFlag();
-    Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( sal_True );
-    Engine()->SetModifyHdl( LINK( this, SwSidebarWin, ModifyHdl ) );
-    Invalidate();
-}
-
-void SwRedComment::DeactivatePostIt()
-{
-    SwSidebarWin::DeactivatePostIt();
-    // current Redline is still selected
-    DocView()->GetWrtShellPtr()->ClearMark();
-}
-
-void SwRedComment::ActivatePostIt()
-{
-    SwSidebarWin::ActivatePostIt();
-
-    // do we want the redline selected?
-    // otherwise, SwRedComment::ActivatePostIt() as well as SwRedComment::DeactivatePostIt()
-    // can be thrown out completly
-    DocView()->GetDocShell()->GetWrtShell()->GotoRedline(
-        DocView()->GetDocShell()->GetWrtShell()->FindRedlineOfData(pRedline->GetRedlineData()),true);
-}
-
-void SwRedComment::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if (mRectMetaButton.IsInside(PixelToLogic(rMEvt.GetPosPixel())) && rMEvt.IsLeft())
-    {
-        ExecuteCommand( mpButtonPopup->Execute( this,Rectangle(LogicToPixel(mRectMetaButton.BottomLeft()),LogicToPixel(mRectMetaButton.BottomLeft())),POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE) );
-    }
-}
-
-void SwRedComment::Delete()
-{
-    SwSidebarWin::Delete();
-    // we are not neccessarily on our redline, so let's move there
-    GotoPos();
-    DocView()->GetWrtShell().SetRedlineComment(EMPTYSTRING);
-    DocView()->GetWrtShell().ClearMark();
-    // so we get a new layout of notes (Anchor position is still the same and we would otherwise not get one)
-    Mgr()->SetLayout();
-    Mgr()->RemoveItem(pRedline);
-}
-
-void SwRedComment::GotoPos()
-{
-    DocView()->GetDocShell()->GetWrtShell()->GotoRedline(
-        DocView()->GetDocShell()->GetWrtShell()->FindRedlineOfData(pRedline->GetRedlineData()));
-}
-
-String SwRedComment::GetAuthor()
-{
-    return pRedline->GetAuthorString();
-}
-
-Date SwRedComment::GetDate()
-{
-    return pRedline->GetTimeStamp().GetDate();
-}
-
-Time SwRedComment::GetTime()
-{
-    return pRedline->GetTimeStamp().GetTime();
-}
-
-bool SwRedComment::IsProtected()
-{
-    return SwSidebarWin::IsProtected() || pRedline->Start()->nNode.GetNode().GetTxtNode()->IsInProtectSect();
-}
-*/
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

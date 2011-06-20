@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 
 class SwWriterApp;
 class SwModule;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 class SwTestTabPage;
 #endif
 class SwAddPrinterTabPage;
@@ -50,9 +51,8 @@ class SwDocEditDialog;
 SfxPrinter* GetPrt( ViewShell* );
 void        SetPrt( SfxPrinter* );
 
-
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog - Dokumentanzeige
+Item for settings dialog - document view
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 {
@@ -87,8 +87,9 @@ public:
     void                        operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
+
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog, Elementeseite
+Item for settings dialog, element page
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
@@ -127,10 +128,10 @@ public:
     void                    FillViewOptions( SwViewOption& rVOpt) const;
 
 };
-/*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog - Drucker/Zusaetze
---------------------------------------------------------- */
 
+/*--------OS 12.01.95 -----------------------------------
+Item for settings dialog - printer/add ons
+--------------------------------------------------------- */
 class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend class SwAddPrinterTabPage;
@@ -175,11 +176,9 @@ public:
 
 };
 
-
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog, ShadowCursorSeite
+Item for settings dialog, ShadowCursorPage
 --------------------------------------------------------- */
-
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
     sal_uInt8 eMode;
@@ -204,9 +203,10 @@ public:
     void SetOn( sal_Bool bFlag )            { bOn = bFlag; }
 };
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
+
 /*--------OS 12.01.95 -----------------------------------
-Item fuer Einstellungsdialog - Testeinstellungen
+Item for settings dialog - test settings
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
 {
@@ -239,4 +239,4 @@ public:
 
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

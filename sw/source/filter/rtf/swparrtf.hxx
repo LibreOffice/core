@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,22 +25,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _SWPARRTF_HXX
 #define _SWPARRTF_HXX
 
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
+#include <map>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_BOOLS
-#include <svl/svstdarr.hxx>
-#endif
 #include <editeng/svxrtf.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -153,8 +146,6 @@ struct SwListEntry
                     bRuleUsed = sal_False; }
 };
 
-DECLARE_TABLE( SwRTFStyleTbl, SwTxtFmtColl* )
-DECLARE_TABLE( SwRTFCharStyleTbl, SwCharFmt* )
 typedef SwFlySave* SwFlySavePtr;
 SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
 typedef std::deque< SwListEntry > SwListArr;
@@ -245,7 +236,7 @@ private:
     {
         bool bHasHeader, bHasFooter;
         short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
-        wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
+        wwULSpaceData() : bHasHeader(false), bHasFooter(false), nSwHLo(0), nHdUL(0), nSwFUp(0), nFtUL(0), nSwUp(0),  nSwLo(0) {}
     };
 
     void SetSegmentToPageDesc(const rtfSection &rSection, bool bTitlePage,
@@ -294,10 +285,10 @@ class SwRTFParser : public SvxRTFParser
     rtfSections maSegments;
 
     sw::util::InsertedTablesManager maInsertedTables;
-    SwRTFStyleTbl aTxtCollTbl;
-    SwRTFCharStyleTbl aCharFmtTbl;
+    std::map<sal_Int32,SwTxtFmtColl*> aTxtCollTbl;
+    std::map<sal_Int32,SwCharFmt*> aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
-    SvBools aMergeBoxes;                // Flags fuer gemergte Zellen
+    std::vector<bool> aMergeBoxes;      // Flags fuer gemergte Zellen
     SwListArr aListArr;
     SvPtrarr aTblFmts;
     SvPtrarr aRubyCharFmts;
@@ -327,9 +318,7 @@ class SwRTFParser : public SvxRTFParser
 
     bool bSwPageDesc;
     bool bReadSwFly;        // lese Swg-Fly (wichtig fuer Bitmaps!)
-    // --> OD 2008-12-22 #i83368#
-    bool mbReadCellWhileReadSwFly;
-    // <--
+    bool mbReadCellWhileReadSwFly; // #i83368#
     bool mbReadNoTbl;       // verhinder Tabelle in Tabelle/FootNote
     bool mbIsFootnote;
     bool bFootnoteAutoNum;  // automatische Numerierung ?
@@ -475,4 +464,4 @@ public:
 
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

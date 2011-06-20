@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,36 +28,39 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include "ww8scan.hxx"
-
 
 #include <functional>
 #include <algorithm>
 
 #include <string.h>         // memset()
 #include <rtl/tencinfo.h>
+#include <sal/macros.h>
 
 #ifdef DUMP
 
 #define ERR_SWG_READ_ERROR 1234
-#define ASSERT( a, b )
+#define OSL_ENSURE( a, b )
 
 #else                       // dump
 #include <swerror.h>        // ERR_WW6_...
 #include <swtypes.hxx>      // DELETEZ
 
 #endif                      // dump
-#include <tools/debug.hxx>
+#include <comphelper/processfactory.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
+#include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>    // Application  #i90932#
 
 #include <stdio.h>
 
 #define ASSERT_RET_ON_FAIL( aCon, aError, aRet ) \
-    ASSERT(aCon, aError); \
+    OSL_ENSURE(aCon, aError); \
     if (!(aCon)) \
         return aRet;
+
+using namespace ::com::sun::star::lang;
 
 //-begin
 namespace SL
@@ -251,7 +255,7 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
         {164, 4, L_FIX}, // "sprmTSetShd", tap.rgshd complex 4 bytes
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -434,7 +438,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         {207, 0, L_VAR}  // rtl property ?
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
@@ -623,8 +627,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x0868, 1, L_FIX}, // "sprmCFUsePgsuSettings"
                             // chp.fUsePgsuSettings;1 or 0
         {0x486B, 2, L_FIX}, // "sprmCCpg" ;;word;
-        {0x486D, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
-        {0x486E, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
+        {0x486D, 2, L_FIX}, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
+        {0x486E, 2, L_FIX}, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
         {0x286F, 1, L_FIX}, // "sprmCIdctHint" chp.idctHint;IDCT:
         {0x2E00, 1, L_FIX}, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
         {0xCE01, 0, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
@@ -740,8 +744,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xC650, 0, L_VAR}, // undocumented
         {0xC651, 0, L_VAR}, // undocumented
         {0xF661, 3, L_FIX}, // undocumented
-        {0x4873, 2, L_FIX}, // undocumented
-        {0x4874, 2, L_FIX}, // undocumented
+        {0x4873, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
+        {0x4874, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
         {0x6463, 4, L_FIX}, // undocumented
         {0x2461, 1, L_FIX}, // undoc, must be asian version of "sprmPJc"
         {0x845D, 2, L_FIX}, // undoc, must be asian version of "sprmPDxaRight"
@@ -773,13 +777,13 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x246D, 1, L_FIX}
     };
 
-    static wwSprmSearcher aSprmSrch(aSprms, sizeof(aSprms) / sizeof(aSprms[0]));
+    static wwSprmSearcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
     return &aSprmSrch;
 };
 
 wwSprmParser::wwSprmParser(ww::WordVersion eVersion) : meVersion(eVersion)
 {
-    ASSERT((meVersion >= ww::eWW2 && meVersion <= ww::eWW8),
+   OSL_ENSURE((meVersion >= ww::eWW2 && meVersion <= ww::eWW8),
         "Impossible value for version");
 
     mnDelta = (ww::IsSevenMinus(meVersion)) ? 0 : 1;
@@ -800,7 +804,7 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
     const SprmInfo* pFound = mpKnownSprms->search(aSrch);
     if (pFound == 0)
     {
-        ASSERT(ww::IsEightPlus(meVersion),
+        OSL_ENSURE(ww::IsEightPlus(meVersion),
            "Unknown ww7- sprm, dangerous, report to development");
 
         aSrch.nId = 0;
@@ -890,27 +894,22 @@ void WW8SprmIter::SetSprms(const sal_uInt8* pSprms_, long nLen_)
     UpdateMyMembers();
 }
 
-const sal_uInt8* WW8SprmIter::operator ++( int )
+void WW8SprmIter::advance()
 {
     if (nRemLen > 0 )
     {
-        if( nRemLen >= nAktSize )
-        {
-            pSprms += nAktSize;
-            nRemLen -= nAktSize;
-            UpdateMyMembers();
-        }
-        else
-        {
-            throw( ::std::exception() );
-        }
+        sal_uInt16 nSize = nAktSize;
+        if (nSize > nRemLen)
+            nSize = nRemLen;
+        pSprms += nSize;
+        nRemLen -= nSize;
+        UpdateMyMembers();
     }
-    return pSprms;
 }
 
 void WW8SprmIter::UpdateMyMembers()
 {
-    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0)) //see #125180#
+    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0))
     {
         nAktId = mrSprmParser.GetSprmId(pSprms);
         pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
@@ -931,7 +930,7 @@ const sal_uInt8* WW8SprmIter::FindSprm(sal_uInt16 nId)
     {
         if( GetAktId() == nId )
             return GetAktParams();              // SPRM found!
-        operator ++(0);
+        advance();
     }
 
     return 0;                                   // SPRM _not_ found
@@ -1192,7 +1191,7 @@ WW8PLCFx& WW8PLCFx_PCD::operator ++( int )
     if (pPcdI)
         (*pPcdI)++;
     else {
-        ASSERT( !this, "pPcdI fehlt");
+        OSL_ENSURE( !this, "pPcdI fehlt");
     }
     return *this;
 }
@@ -1204,11 +1203,11 @@ WW8_FC WW8PLCFx_PCD::AktPieceStartCp2Fc( WW8_CP nCp )
 
     if ( !pPcdI->Get(nCpStart, nCpEnd, pData) )
     {
-        ASSERT( !this, "AktPieceStartCp2Fc() with false Cp found (1)" );
+        OSL_ENSURE( !this, "AktPieceStartCp2Fc() with false Cp found (1)" );
         return WW8_FC_MAX;
     }
 
-    ASSERT( nCp >= nCpStart && nCp < nCpEnd,
+    OSL_ENSURE( nCp >= nCpStart && nCp < nCpEnd,
         "AktPieceCp2Fc() with false Cp found (2)" );
 
     if( nCp < nCpStart )
@@ -1242,7 +1241,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
     void* pData;
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
-        ASSERT( !this, "AktPieceStartFc2Cp() - Fehler" );
+        OSL_ENSURE( !this, "AktPieceStartFc2Cp() - Fehler" );
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
@@ -1288,8 +1287,8 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
         //Dashed/Dotted unsets double/thick
         if (nMSTotalWidth > 5)
         {
+            nIdx = nMSTotalWidth;
             nMSTotalWidth=1;
-            nIdx = 1;
         }
         nMSTotalWidth = nMSTotalWidth * nIdx * 15;
     }
@@ -1307,28 +1306,13 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
         {
             //Note that codes over 25 are undocumented, and I can't create
             //these 4 here in the wild.
-            default:
             case 2:
             case 4:
             case 5:
             case 22:
-                DBG_WARNING("Can't create these from the menus, please report");
-            case 1:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
+                OSL_FAIL("Can't create these from the menus, please report");
+            default:
             case 23:    //Only 3pt in the menus, but honours the size setting.
-                break;
-            case 3:
-                /*
-                double line is three times the width of an ordinary line,
-                except for the smallest 1/4 point size which appears to have
-                exactly the same total border width as a 1/2 point size
-                ordinary line, i.e. twice the nominal line width
-                */
-                nMSTotalWidth = (nMSTotalWidth == 5) ?
-                    nMSTotalWidth*2 : nMSTotalWidth*3;
                 break;
             case 10:
                 /*
@@ -1345,97 +1329,6 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
                     nMSTotalWidth = nMSTotalWidth*9/2;
                 else
                     nMSTotalWidth*=5;
-                break;
-            case 11:
-            case 12:
-                /*
-                small gap thin thick and thick thin appears to have a 3/4
-                point line, a 3/4 point gap and a thick line of the specified
-                width
-                */
-                nMSTotalWidth = nMSTotalWidth + 15*2;
-                break;
-            case 13:
-                /*
-                thin thick thin appears to have two outside 3/4 point lines,
-                two 3/4 point gaps and a thick line of the specified width
-                */
-                nMSTotalWidth = nMSTotalWidth + 15*4;
-                break;
-            case 14:
-            case 15:
-                /*
-                medium gap thin thick and thick thin appears to have a line
-                50% of the thick line, and an equal sized gap and then the
-                thick line of the specified width. But it appears to only
-                use one of the existing predefined widths for the thin line,
-                so the closest smallest existing border to the halved thick
-                line is used.
-                */
-                switch (nMSTotalWidth)
-                {
-                    case 45:    //2 1/4, closest to half is 1
-                        nMSTotalWidth += 20 + (nMSTotalWidth-1)/2;
-                        break;
-                    case 5:
-                    case 10:
-                        nMSTotalWidth += 5;
-                        break;
-                    case 15:    //3/4, closest to half is 1/4
-                        nMSTotalWidth += 5 + (nMSTotalWidth-1)/2;
-                        break;
-                    default:
-                        nMSTotalWidth*=2;
-                        break;
-                }
-                break;
-            case 16:
-                /*
-                medium gap thin thick thin appears to have a line
-                50% of the thick line, and an equal sized gap and then the
-                thick line of the specified width. But it appears to only
-                use one of the existing predefined widths for the thin
-                line, so the closest smallest existing border to the halved
-                thick line is used. Though some fudging at smaller sizes is
-                still required.
-                */
-                switch (nMSTotalWidth)
-                {
-                    case 45:    //2 1/4, closest to half is 1
-                        nMSTotalWidth += nMSTotalWidth + 20 * 2;
-                        break;
-                    case 20:
-                    case 15:
-                        nMSTotalWidth += nMSTotalWidth + 7 * 2;
-                        break;
-                    case 10:
-                    case 5:
-                        nMSTotalWidth += 5 + 4;
-                        break;
-                    default:
-                        nMSTotalWidth*=3;
-                        break;
-                }
-                break;
-            case 17:
-            case 18:
-                /*
-                large gap thin thick and thick thin appears to have a thick
-                line of 1 1/2 pt and a narrow of 3/4 point, with a distance
-                between the two of the explicitly set line width
-                */
-                nMSTotalWidth+=15+30;
-                break;
-            case 19:
-                /*
-                large gap thin thick thin appears to have a thick line of 1
-                1/2 pt and two narrows of 3/4 point, with a distance between
-                the two of the explicitly set line width, though the narrowest
-                line appears to behave as if it was even smaller
-                */
-                if (nMSTotalWidth == 5)
-                    nMSTotalWidth = 3;
-                nMSTotalWidth = nMSTotalWidth*2 + 15*2 + 30;
                 break;
             case 20:
                 /*
@@ -1455,19 +1348,6 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
                 */
                 nMSTotalWidth += 45*2;
                 break;
-            case 24:
-            case 25:
-                /*
-                emboss and engrave consist of a three lines, the central is of
-                the explicit point width, the other two (of equal size to each
-                other are the shadows and are either 3/4 pt of 1 1/2 depending
-                on if the central line is greater of less than 2 1/4 pt
-                */
-                if (nMSTotalWidth <= 45)
-                    nMSTotalWidth += 2*15;
-                else
-                    nMSTotalWidth += 2*30;
-                break;
         }
     }
 
@@ -1480,15 +1360,21 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
     return nMSTotalWidth;
 }
 
+/*
+ * WW8Cp2Fc is a good method, a CP always maps to a FC
+ * WW8Fc2Cp on the other hand is more dubious, a random FC
+ * may not map to a valid CP. Try and avoid WW8Fc2Cp where
+ * possible
+ */
 WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
 {
     WW8_CP nFallBackCpEnd = WW8_CP_MAX;
     if( nFcPos == WW8_FC_MAX )
         return nFallBackCpEnd;
 
-    bool bIsUnicode = false;
     if( pPieceIter )    // Complex File ?
     {
+        bool bIsUnicode = false;
         sal_uLong nOldPos = pPieceIter->GetIdx();
 
         for (pPieceIter->SetIdx(0);
@@ -1498,7 +1384,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
             void* pData;
             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
             {   // ausserhalb PLCFfpcd ?
-                ASSERT( !this, "PLCFpcd-WW8Fc2Cp() ging schief" );
+                OSL_ENSURE( !this, "PLCFpcd-WW8Fc2Cp() ging schief" );
                 break;
             }
             sal_Int32 nFcStart  = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
@@ -1546,9 +1432,11 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         return nFallBackCpEnd;
     }
     // No complex file
-    if (pWw8Fib->fExtChar)
-        bIsUnicode=true;
-    return ((nFcPos - pWw8Fib->fcMin) / (bIsUnicode ? 2 : 1));
+    if (!pWw8Fib->fExtChar)
+        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin);
+    else
+        nFallBackCpEnd = (nFcPos - pWw8Fib->fcMin + 1) / 2;
+    return nFallBackCpEnd;
 }
 
 WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
@@ -1573,7 +1461,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
             if( pTestFlag )
                 *pTestFlag = false;
             else {
-                ASSERT( !this, "Falscher CP an WW8Cp2Fc() uebergeben" );
+                OSL_ENSURE( !this, "Falscher CP an WW8Cp2Fc() uebergeben" );
             }
             return WW8_FC_MAX;
         }
@@ -1584,7 +1472,7 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
             if( pTestFlag )
                 *pTestFlag = false;
             else {
-                ASSERT( !this, "PLCFfpcd-Get ging schief" );
+                OSL_ENSURE( !this, "PLCFfpcd-Get ging schief" );
             }
             return WW8_FC_MAX;
         }
@@ -1593,10 +1481,12 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
 
         WW8_FC nRet = SVBT32ToUInt32( ((WW8_PCD*)pData)->fc );
         if (8 > pWw8Fib->nVersion)
-        if (pWw8Fib->fExtChar)
+        {
+            if (pWw8Fib->fExtChar)
                 *pIsUnicode=true;
             else
-                    *pIsUnicode = false;
+                *pIsUnicode = false;
+        }
         else
             nRet = WW8PLCFx_PCD::TransformPieceAddress( nRet, *pIsUnicode );
 
@@ -1682,7 +1572,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     }
     else
         *pStr >> nPLCFfLen;
-    ASSERT( 65536 > nPLCFfLen, "PLCFfpcd ueber 64 k" );
+    OSL_ENSURE( 65536 > nPLCFfLen, "PLCFfpcd ueber 64 k" );
     return new WW8PLCFpcd( pStr, pStr->Tell(), nPLCFfLen, 8 );
 }
 
@@ -1816,7 +1706,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
 
             break;
         default:
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            OSL_ENSURE( !this, "Es wurde vergessen, nVersion zu kodieren!" );
             break;
     }
 
@@ -2028,7 +1918,7 @@ String WW8ReadPString(SvStream& rStrm, rtl_TextEncoding eEnc,
 
 String WW8Read_xstz(SvStream& rStrm, sal_uInt16 nChars, bool bAtEndSeekRel1)
 {
-    sal_uInt16 b;
+    sal_uInt16 b(0);
 
     if( nChars )
         b = nChars;
@@ -2252,7 +2142,7 @@ bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
 WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
     WW8_CP nStartPos ) : pPLCF_PosArray(0), nIdx(0), nStru(nStruct)
 {
-    ASSERT( nPLCF, "WW8PLCF: nPLCF ist Null!" );
+    OSL_ENSURE( nPLCF, "WW8PLCF: nPLCF ist Null!" );
 
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 
@@ -2313,7 +2203,7 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
 
     pSt->Seek( nOldPos );
 
-    ASSERT( !failure, "Document has corrupt PLCF, ignoring it" );
+    OSL_ENSURE( !failure, "Document has corrupt PLCF, ignoring it" );
 
     if (failure)
         MakeFailedPLCF();
@@ -2330,7 +2220,7 @@ void WW8PLCF::MakeFailedPLCF()
 
 void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
 {
-    ASSERT( nIMax < ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
+    OSL_ENSURE( nIMax < ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
 
     bool failure = false;
     nIMax = ncpN;
@@ -2385,7 +2275,7 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, sal_Int32 nPN, sal_Int32 ncpN )
         }
     }
 
-    ASSERT( !failure, "Document has corrupt PLCF, ignoring it" );
+    OSL_ENSURE( !failure, "Document has corrupt PLCF, ignoring it" );
 
     if (failure)
         MakeFailedPLCF();
@@ -2561,6 +2451,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     long nOldPos = pSt->Tell();
 
     pSt->Seek(nFilePos);
+    memset(maRawData, 0, 512);
     pSt->Read(maRawData, 512);
     mnIMax = maRawData[511];
 
@@ -2605,24 +2496,36 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             aEntry.mnLen = maRawData[nOfs+1];
                             nDelta++;
                         }
-
                         aEntry.mnLen *= 2;
 
                         //stylecode, std/istd
                         if (eVersion == ww::eWW2)
                         {
-                            aEntry.mnIStd = *(maRawData+nOfs+1+nDelta);
-                            aEntry.mnLen--;  //style code
-                            aEntry.mnLen-=6; //PHE
-                            //skipi stc, len byte + 6 byte PHE
-                            aEntry.mpData = maRawData + nOfs + 8;
+                            if (aEntry.mnLen >= 1)
+                            {
+                                aEntry.mnIStd = *(maRawData+nOfs+1+nDelta);
+                                aEntry.mnLen--;  //style code
+                                if (aEntry.mnLen >= 6)
+                                {
+                                    aEntry.mnLen-=6; //PHE
+                                    //skipi stc, len byte + 6 byte PHE
+                                    aEntry.mpData = maRawData + nOfs + 8;
+                                }
+                                else
+                                    aEntry.mnLen=0; //Too short
+                            }
                         }
                         else
                         {
-                            aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
-                            aEntry.mnLen-=2; //istd
-                            //skip istd, len byte + optional extra len byte
-                            aEntry.mpData = maRawData + nOfs + 3 + nDelta;
+                            if (aEntry.mnLen >= 2)
+                            {
+                                aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
+                                aEntry.mnLen-=2; //istd
+                                //skip istd, len byte + optional extra len byte
+                                aEntry.mpData = maRawData + nOfs + 3 + nDelta;
+                            }
+                            else
+                                aEntry.mnLen=0; //Too short, ignore
                         }
 
                         sal_uInt16 nSpId = aEntry.mnLen ? maSprmParser.GetSprmId(aEntry.mpData) : 0;
@@ -2660,19 +2563,29 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                     }
                     break;
                 default:
-                    ASSERT(false, "sweet god, what have you done!");
+                    OSL_FAIL("sweet god, what have you done!");
                     break;
             }
         }
 
         maEntries.push_back(aEntry);
+
+#ifdef DEBUGSPRMREADER
+        {
+            sal_Int32 nLen;
+            sal_uInt8* pSprms = GetLenAndIStdAndSprms( nLen );
+
+            WW8SprmIter aIter(pSprms, nLen, maSprmParser);
+            while(aIter.GetSprms())
+                aIter.advance();
+        }
+#endif
     }
 
     //one more FC than grrpl entries
     maEntries.push_back(Entry(Get_Long(pStart)));
 
-    //#104773#, we expect them sorted, but it appears possible
-    //for them to arive unsorted
+    //we expect them sorted, but it appears possible for them to arive unsorted
     std::sort(maEntries.begin(), maEntries.end());
 
     mnIdx = 0;
@@ -2699,6 +2612,9 @@ WW8PLCFx_Fc_FKP::WW8Fkp::Entry::Entry(const Entry &rEntry)
 WW8PLCFx_Fc_FKP::WW8Fkp::Entry&
     WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator=(const Entry &rEntry)
 {
+    if (this == &rEntry)
+        return *this;
+
     if (mbMustDelete)
         delete[] mpData;
 
@@ -2823,7 +2739,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
     {
         if (aIter.GetAktId() == nId)
             rResult.push_back(aIter.GetAktParams());
-        aIter++;
+        aIter.advance();
     };
     return !rResult.empty();
 }
@@ -2831,7 +2747,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(sal_uInt16 nId,
 //-----------------------------------------
 void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 {
-    ASSERT( !this, "Falsches GetSprms gerufen" );
+    OSL_ENSURE( !this, "Falsches GetSprms gerufen" );
     p->nStartPos = p->nEndPos = WW8_CP_MAX;
     p->pMemPos = 0;
     p->nSprmsLen = 0;
@@ -2841,7 +2757,7 @@ void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
 
 long WW8PLCFx::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
 {
-    ASSERT( !this, "Falsches GetNoSprms gerufen" );
+    OSL_ENSURE( !this, "Falsches GetNoSprms gerufen" );
     rStart = rEnd = WW8_CP_MAX;
     rLen = 0;
     return 0;
@@ -2902,7 +2818,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             break;
         default:
             // Programm-Fehler!
-            ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+            OSL_ENSURE( !this, "Es wurde vergessen, nVersion zu kodieren!" );
             return false;
     }
 
@@ -2917,7 +2833,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
 
     long nAktFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
     if (nAktFkpFilePos == nPo)
-        pFkp->Reset(GetStartFc()); // #79464# //
+        pFkp->Reset(GetStartFc());
     else
     {
         myiter aIter =
@@ -3082,7 +2998,7 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
     {
         if( !pFkp )
         {
-            DBG_WARNING(
+            OSL_FAIL(
                 "+Problem: GetPCDSprms: NewFkp necessay (not possible!)" );
             if( !NewFkp() )
                 return;
@@ -3097,7 +3013,7 @@ const sal_uInt8* WW8PLCFx_Fc_FKP::HasSprm( sal_uInt16 nId )
     // wegfallen
     if( !pFkp )
     {
-        DBG_WARNING( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
+        OSL_FAIL( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
         // Passiert bei BugDoc 31722
         if( !NewFkp() )
             return 0;
@@ -3127,7 +3043,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
     // wegfallen
     if (!pFkp)
     {
-       DBG_WARNING( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
+       OSL_FAIL( "+Motz: HasSprm: NewFkp noetig ( kein const moeglich )" );
        // Passiert bei BugDoc 31722
        if( !NewFkp() )
            return 0;
@@ -3146,7 +3062,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rR
         {
             if (aIter.GetAktId() == nId)
                 rResult.push_back(aIter.GetAktParams());
-            aIter++;
+            aIter.advance();
         };
     }
     return !rResult.empty();
@@ -3243,7 +3159,6 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
     else
     {
         /*
-        #93702#
         For the odd case where we have a location in a fastsaved file which
         does not have an entry in the FKP, perhaps its para end is in the next
         piece, or perhaps the cp just doesn't exist at all in this document.
@@ -3357,7 +3272,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         {
                             if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
                             {
-                                ASSERT( !this, "piece iter broken!" );
+                                OSL_ENSURE( !this, "piece iter broken!" );
                                 break;
                             }
                             bIsUnicode = false;
@@ -3858,7 +3773,7 @@ WW8PLCFx& WW8PLCFx_FLD::operator ++( int )
 
 bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 {
-    ASSERT( pPLCF, "Aufruf ohne Feld PLCFspecial" );
+    OSL_ENSURE( pPLCF, "Aufruf ohne Feld PLCFspecial" );
     if( !pPLCF )
         return false;
 
@@ -3932,7 +3847,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     rStrm.SeekRel( nExtraLen );
             }
         }
-        // #129053# read the value of the document variables, if requested.
+        // read the value of the document variables, if requested.
         if (pValueArray)
         {
                 for( sal_uInt16 i=0; i < nStrings; i++ )
@@ -3955,7 +3870,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
         sal_uInt8 nBChar;
         if( nLen2 != nLen )
         {
-            ASSERT( nLen2 == nLen, "Fib length and read length are different" );
+            OSL_ENSURE( nLen2 == nLen, "Fib length and read length are different" );
             if (nLen > USHRT_MAX)
                 nLen = USHRT_MAX;
             else if (nLen < 2 )
@@ -3975,8 +3890,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
             else
                 rArray.push_back(aEmptyStr);
 
-            // #89125# Skip the extra data (for bVer67 versions this must come
-            // from external knowledge)
+            // Skip the extra data (for bVer67 versions this must come from external knowledge)
             if (nExtraLen)
             {
                 if (pExtraArray)
@@ -4129,14 +4043,14 @@ long WW8PLCFx_Book::GetLen() const
 {
     if( nIsEnd )
     {
-        ASSERT( !this, "Falscher Aufruf (1) von PLCF_Book::GetLen()" );
+        OSL_ENSURE( !this, "Falscher Aufruf (1) von PLCF_Book::GetLen()" );
         return 0;
     }
     void * p;
     WW8_CP nStartPos;
     if( !pBook[0]->Get( nStartPos, p ) )
     {
-        ASSERT( !this, "Falscher Aufruf (2) von PLCF_Book::GetLen()" );
+        OSL_ENSURE( !this, "Falscher Aufruf (2) von PLCF_Book::GetLen()" );
         return 0;
     }
     sal_uInt16 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
@@ -4147,7 +4061,7 @@ long WW8PLCFx_Book::GetLen() const
 
 void WW8PLCFx_Book::SetStatus(sal_uInt16 nIndex, eBookStatus eStat )
 {
-    ASSERT(nIndex < nIMax, "set status of non existing bookmark!");
+    OSL_ENSURE(nIndex < nIMax, "set status of non existing bookmark!");
     pStatus[nIndex] = (eBookStatus)( pStatus[nIndex] | eStat );
 }
 
@@ -4191,7 +4105,7 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
                 nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
             else
             {
-                ASSERT( !this, "Bookmark-EndIdx nicht lesbar" );
+                OSL_ENSURE( !this, "Bookmark-EndIdx nicht lesbar" );
                 nEndIdx = i;
             }
 
@@ -4238,20 +4152,8 @@ bool WW8PLCFx_Book::MapName(String& rName)
 
     bool bFound = false;
     sal_uInt16 i = 0;
-    WW8_CP nStartAkt, nEndAkt;
     do
     {
-        void* p;
-        sal_uInt16 nEndIdx;
-
-        if( pBook[0]->GetData( i, nStartAkt, p ) && p )
-            nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
-        else
-        {
-            ASSERT( !this, "Bookmark-EndIdx nicht lesbar" );
-            nEndIdx = i;
-        }
-        nEndAkt = pBook[1]->GetPos( nEndIdx );
         if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(aBookNames[i]))
         {
             rName = aBookNames[i];
@@ -4325,7 +4227,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
 
 void WW8PLCFxDesc::ReduceByOffset()
 {
-    ASSERT((WW8_CP_MAX == nStartPos) || (nStartPos <= nEndPos),
+   OSL_ENSURE((WW8_CP_MAX == nStartPos) || (nStartPos <= nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
     if( nStartPos != WW8_CP_MAX )
@@ -4343,7 +4245,7 @@ void WW8PLCFxDesc::ReduceByOffset()
     }
     if( nEndPos != WW8_CP_MAX )
     {
-        ASSERT(nCpOfs <= nEndPos,
+        OSL_ENSURE(nCpOfs <= nEndPos,
             "oh oh, so much for the subdocument piece theory");
         nEndPos   -= nCpOfs;
     }
@@ -4364,7 +4266,7 @@ void WW8PLCFMan::GetNewNoSprms( WW8PLCFxDesc& rDesc )
     rDesc.nCp2OrIdx = rDesc.pPLCFx->GetNoSprms(rDesc.nStartPos, rDesc.nEndPos,
         rDesc.nSprmsLen);
 
-    ASSERT((WW8_CP_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
+   OSL_ENSURE((WW8_CP_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
     rDesc.ReduceByOffset();
@@ -4578,7 +4480,7 @@ WW8PLCFMan::~WW8PLCFMan()
 // 2. CP, wo ist naechste Attr.-Aenderung
 sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
 {
-    ASSERT(nPLCF,"What the hell");
+    OSL_ENSURE(nPLCF,"What the hell");
     long nNext = LONG_MAX;  // SuchReihenfolge:
     sal_uInt16 nNextIdx = nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
     bool bStart = true;     // dann Anfaenge finden ( ( SEP ), PAP, CHP )
@@ -4703,7 +4605,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
         pRes->nSprmId = p->pIdStk->top();       // get end position
     else
     {
-        ASSERT( !this, "No Id on the Stack" );
+        OSL_ENSURE( !this, "No Id on the Stack" );
         pRes->nSprmId = 0;
     }
 }
@@ -4819,7 +4721,6 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
                 /*
-                #93702#
                 On failed seek we have run out of sprms, probably.  But if its
                 a fastsaved file (has pPcd) then we may be just in a sprm free
                 gap between pieces that have them, so set dirty flag in sprm
@@ -4874,7 +4775,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nSprmsLen = 0;
                 GetNewSprms( *p );
             }
-            ASSERT( p->nStartPos <= p->nEndPos, "Attribut ueber Kreuz" );
+            OSL_ENSURE( p->nStartPos <= p->nEndPos, "Attribut ueber Kreuz" );
         }
     }
 }
@@ -4965,7 +4866,7 @@ bool WW8PLCFMan::Get(WW8PLCFManResult* pRes) const
 
     if( nIdx >= nPLCF )
     {
-        ASSERT( !this, "Position not found" );
+        OSL_ENSURE( !this, "Position not found" );
         return true;
     }
 
@@ -5003,7 +4904,7 @@ sal_uInt16 WW8PLCFMan::GetColl() const
         return  pPap->pPLCFx->GetIstd();
     else
     {
-        ASSERT( !this, "GetColl ohne PLCF_Pap" );
+        OSL_ENSURE( !this, "GetColl ohne PLCF_Pap" );
         return 0;
     }
 }
@@ -5157,15 +5058,16 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
         case MAN_HDFT:
             nOffset = ccpText + ccpFtn;
             break;
-/*
- * A subdocument of this kind probably exists in some defunct version
- * of MSWord, but now ccpMcr is always 0
- */
-#if 0
+        /*
+         A subdocument of this kind (MAN_MACRO) probably exists in some defunct
+         version of MSWord, but now ccpMcr is always 0. If some example that
+         uses this comes to light, this is the likely calculation required
+
         case MAN_MACRO:
             nOffset = ccpText + ccpFtn + ccpHdr;
             break;
-#endif
+
+        */
         case MAN_AND:
             nOffset = ccpText + ccpFtn + ccpHdr + ccpMcr;
             break;
@@ -5186,6 +5088,22 @@ WW8_CP WW8Fib::GetBaseCp(ManTypes nType) const
 ww::WordVersion WW8Fib::GetFIBVersion() const
 {
     ww::WordVersion eVer = ww::eWW8;
+    /*
+     * Word for Windows 2 I think (1.X might work too if anyone has an example.
+     * Various pages claim that the fileformats of Word 1 and 2 for Windows are
+     * equivalent to Word for Macintosh 4 and 5. On the other hand
+     *
+     * wIdents for Word for Mac versions...
+     * 0xFE32 for Word 1
+     * 0xFE34 for Word 3
+     * 0xFE37 for Word 4 et 5.
+     *
+     * and this document
+     * http://cmsdoc.cern.ch/documents/docformat/CMS_CERN_LetterHead.word is
+     * claimed to be "Word 5 for Mac" by Office etc and has that wIdent, but
+     * its format isn't the same as that of Word 2 for windows. Nor is it
+     * the same as that of Word for DOS/PCWord 5
+     */
     if (wIdent == 0xa5db)
         eVer = ww::eWW2;
     else
@@ -5248,7 +5166,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 nFibMin = 0;            // Programm-Fehler!
                 nFibMax = 0;
                 nFib    = 1;
-                ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
+                OSL_ENSURE( !this, "Es wurde vergessen, nVersion zu kodieren!" );
                 break;
         }
         if ( (nFib < nFibMin) || (nFib > nFibMax) )
@@ -5616,11 +5534,6 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
         fExtChar = true;
         fWord97Saved = fWord2000Saved = true;
 
-        // diese Flags muessen nicht gesetzt werden; koennen aber.
-        //  wMagicCreated = wMagicRevised = 0x6a62;
-        //  wMagicCreatedPrivate = wMagicRevisedPrivate = 0xb3b2;
-        //
-
         wMagicCreated = 0x6143;
         wMagicRevised = 0x6C6F;
         wMagicCreatedPrivate = 0x6E61;
@@ -5657,7 +5570,16 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
             fFarEast = false;
             break;
     };
-    // <-- #i90932#
+
+    Locale aTempLocale;
+    SvxLanguageToLocale( aTempLocale, lid );
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+    nNumDecimalSep = aLocaleWrapper.getNumDecimalSep().GetChar( 0 );
+}
+
+sal_Unicode WW8Fib::getNumDecimalSep() const
+{
+    return nNumDecimalSep;
 }
 
 bool WW8Fib::WriteHeader(SvStream& rStrm)
@@ -5977,7 +5899,7 @@ bool WW8Fib::Write(SvStream& rStrm)
 
 rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs)
 {
-    ASSERT(chs <= 0x100, "overflowed winword charset set");
+    OSL_ENSURE(chs <= 0x100, "overflowed winword charset set");
     rtl_TextEncoding eCharSet =
         (0x0100 == chs)
         ? RTL_TEXTENCODING_APPLE_ROMAN
@@ -5988,7 +5910,7 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs)
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     : rFib(rFibPara), rSt(rStream), cstd(0), cbSTDBaseInFile(0),
     stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0), nVerBuiltInNamesWhenSaved(0),
-    ftcStandardChpStsh(0), ftcStandardChpCJKStsh(0), ftcStandardChpCTLStsh(0)
+    ftcAsci(0), ftcFE(0), ftcOther(0), ftcBi(0)
 {
     nStyleStart = rFib.fcStshf;
     nStyleLen = rFib.lcbStshf;
@@ -6033,17 +5955,22 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         rSt >> nVerBuiltInNamesWhenSaved;
 
         if( 14 > nRead ) break;
-        rSt >> ftcStandardChpStsh;
+        rSt >> ftcAsci;
 
         if( 16 > nRead ) break;
-        rSt >> ftcStandardChpCJKStsh;
+        rSt >> ftcFE;
 
         if ( 18 > nRead ) break;
-        rSt >> ftcStandardChpCTLStsh;
+        rSt >> ftcOther;
+
+        ftcBi = ftcOther;
+
+        if ( 20 > nRead ) break;
+        rSt >> ftcBi;
 
         // ggfs. den Rest ueberlesen
-        if( 18 < nRead )
-            rSt.SeekRel( nRead-18 );
+        if( 20 < nRead )
+            rSt.SeekRel( nRead-20 );
     }
     while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
                     //   und kann vorzeitig per "break" verlassen werden.
@@ -6176,7 +6103,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, String* pString, short* pcbStd )
                     }
                     break;
                 default:
-                    ASSERT(!this, "Es wurde vergessen, nVersion zu kodieren!");
+                    OSL_ENSURE(!this, "Es wurde vergessen, nVersion zu kodieren!");
                     break;
             }
         }
@@ -6257,7 +6184,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
     if( rFib.lcbSttbfffn <= 2 )
     {
-        ASSERT( !this, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
+        OSL_ENSURE( !this, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
         pFontA = 0;
         nMax = 0;
         return;
@@ -6729,7 +6656,6 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) 
                 a32Bit = Get_Long( pData );      // 512 0x200
 
                 // i#78591#
-                // fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
                 SetCompatabilityOptions2(a32Bit);
             }
             if (nRead >= 550)
@@ -7229,7 +7155,6 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
     //i.e. i.e. whats with the powers of two ?
 
     /*
-    #84082#
     One example of 3 for reserved1 which was really Japanese, perhaps last bit
     is for some other use ?, or redundant. If more examples trigger the assert
     we might be able to figure it out.
@@ -7249,7 +7174,7 @@ sal_uInt16 WW8DopTypography::GetConvertedLang() const
             nLang = LANGUAGE_CHINESE_TRADITIONAL;
             break;
         default:
-            ASSERT(!this, "Unknown MS Asian Typography language, report");
+            OSL_ENSURE(!this, "Unknown MS Asian Typography language, report");
             nLang = LANGUAGE_CHINESE;
             break;
         case 0:
@@ -7306,7 +7231,7 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                     nL = static_cast< sal_uInt16 >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
                     break;
                 default:
-                    ASSERT(!this, "Unknown sprm varient");
+                    OSL_ENSURE(!this, "Unknown sprm varient");
                     break;
             }
             break;
@@ -7371,4 +7296,4 @@ SEPr::SEPr() :
     memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

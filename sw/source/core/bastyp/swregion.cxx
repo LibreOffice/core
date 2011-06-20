@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
-#include <tools/debug.hxx>
 #include "swtypes.hxx"
 #include "swrect.hxx"
 #include "swregion.hxx"
@@ -40,12 +37,7 @@
 SV_IMPL_VARARR( SwRects, SwRect );
 
 /*************************************************************************
-|*
 |*  SwRegionRects::SwRegionRects()
-|*
-|*  Ersterstellung      MA 28. Oct. 92
-|*  Letzte Aenderung    MA 01. Feb. 93
-|*
 |*************************************************************************/
 
 SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit,
@@ -86,8 +78,6 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect, const sal_uInt16 nPo
 |*      entfernt.
 |*      Dazu muessen die vorhandenen Rechtecke entweder aufgeteilt oder
 |*      geloescht werden.
-|*  Ersterstellung      MA 28. Oct. 92
-|*  Letzte Aenderung    MA 09. Sep. 93
 |*
 |*************************************************************************/
 
@@ -195,8 +185,6 @@ void SwRegionRects::Invert()
 |*  SwRegionRects::Compress()
 |*
 |*  Beschreibung        Zusammenfassen von benachbarten Rechtecken.
-|*  Ersterstellung      MA 16. Apr. 93
-|*  Letzte Aenderung    MA 21. Apr. 93
 |*
 |*************************************************************************/
 inline SwTwips CalcArea( const SwRect &rRect )
@@ -252,3 +240,4 @@ void SwRegionRects::Compress( sal_Bool bFuzzy )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

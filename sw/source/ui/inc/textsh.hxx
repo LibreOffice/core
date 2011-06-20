@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #define _SWTEXTSH_HXX
 
 #include <basesh.hxx>
+#include <unotools/caserotate.hxx>
 
 class AbstractSvxPostItDialog;
 class SwFldMgr;
@@ -37,6 +39,7 @@ class SvxHyperlinkItem;
 class SwTextShell: public SwBaseShell
 {
     SwFldMgr*   pPostItFldMgr;
+    RotateTransliteration m_aRotateCase;
 
     void InsertSymbol( SfxRequest& );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
@@ -47,10 +50,6 @@ public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
     TYPEINFO();
 
-//CHINA001  DECL_LINK( PostItNextHdl, Button * );
-//CHINA001  DECL_LINK( PostItPrevHdl, Button * );
-//CHINA001  DECL_LINK( RedlineNextHdl, Button * );
-//CHINA001  DECL_LINK( RedlinePrevHdl, Button * );
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
     DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );
 
@@ -80,6 +79,7 @@ public:
     void    ExecAttr(SfxRequest &);
     void    ExecDB(SfxRequest &);
     void    ExecTransliteration(SfxRequest &);
+    void    ExecRotateTransliteration(SfxRequest &);
 
     void    GetAttrState(SfxItemSet &);
 
@@ -88,3 +88,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
@@ -54,13 +54,11 @@
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
-#include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
-#include <fmtinfmt.hxx>
 #include "frmatr.hxx"
 #include "charatr.hxx"
 #include <frmfmt.hxx>
@@ -83,7 +81,7 @@
 using namespace ::com::sun::star;
 
 
-HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
+HTMLOptionEnum aHTMLImgHAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
     { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
@@ -91,7 +89,7 @@ HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
 };
 
 
-HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[] =
+HTMLOptionEnum aHTMLImgVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::LINE_TOP       },
     { OOO_STRING_SVTOOLS_HTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
@@ -110,7 +108,7 @@ ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
 {
     ImageMap *pMap = 0;
 
-    ASSERT( rName.GetChar(0) != '#', "FindImageName: Name beginnt mit #!" );
+    OSL_ENSURE( rName.GetChar(0) != '#', "FindImageName: Name beginnt mit #!" );
 
     if( pImageMaps )
     {
@@ -454,7 +452,7 @@ IMAGE_SETEVENT:
 
         if( pTxtNode && ! pTxtNode->IsCountedInList())
         {
-            ASSERT( pTxtNode->GetActualListLevel() == GetNumInfo().GetLevel(),
+            OSL_ENSURE( pTxtNode->GetActualListLevel() == GetNumInfo().GetLevel(),
                     "Numerierungs-Ebene stimmt nicht" );
 
             pTxtNode->SetCountedInList( true );
@@ -490,21 +488,8 @@ IMAGE_SETEVENT:
         nVBorderWidth = (long)nBorder;
         SvxCSS1Parser::PixelToTwip( nVBorderWidth, nHBorderWidth );
 
-        SvxBorderLine aHBorderLine;
-        SvxBorderLine aVBorderLine;
-
-        SvxCSS1Parser::SetBorderWidth( aHBorderLine,
-                                       (sal_uInt16)nHBorderWidth, sal_False );
-        if( nHBorderWidth == nVBorderWidth )
-            aVBorderLine.SetOutWidth( aHBorderLine.GetOutWidth() );
-        else
-            SvxCSS1Parser::SetBorderWidth( aVBorderLine,
-                                           (sal_uInt16)nVBorderWidth, sal_False );
-
-        // die tatsaechlich gesetzter Rahmenbreite benutzen und nicht die
-        // Wunschbreite!
-        nHBorderWidth = aHBorderLine.GetOutWidth();
-        nVBorderWidth = aVBorderLine.GetOutWidth();
+        ::editeng::SvxBorderLine aHBorderLine( NULL, nHBorderWidth );
+        ::editeng::SvxBorderLine aVBorderLine( NULL, nVBorderWidth );
 
         if( aAttrTab.pINetFmt )
         {
@@ -689,7 +674,7 @@ IMAGE_SETEVENT:
     // min. Werte einhalten !!
     if( nPrcWidth )
     {
-        ASSERT( !aTwipSz.Width(),
+        OSL_ENSURE( !aTwipSz.Width(),
                 "Wieso ist da trotz %-Angabe eine Breite gesetzt?" );
         aTwipSz.Width() = aGrfSz.Width() ? aGrfSz.Width()
                                          : HTML_DFLT_IMG_WIDTH;
@@ -702,7 +687,7 @@ IMAGE_SETEVENT:
     }
     if( nPrcHeight )
     {
-        ASSERT( !aTwipSz.Height(),
+        OSL_ENSURE( !aTwipSz.Height(),
                 "Wieso ist da trotz %-Angabe eine Hoehe gesetzt?" );
         aTwipSz.Height() = aGrfSz.Height() ? aGrfSz.Height()
                                            : HTML_DFLT_IMG_HEIGHT;
@@ -763,7 +748,7 @@ IMAGE_SETEVENT:
 
         {
             const SvxMacro *pMacro;
-            static sal_uInt16 __READONLY_DATA aEvents[] = {
+            static sal_uInt16 aEvents[] = {
                 SFX_EVENT_MOUSEOVER_OBJECT,
                 SFX_EVENT_MOUSECLICK_OBJECT,
                 SFX_EVENT_MOUSEOUT_OBJECT,
@@ -893,9 +878,6 @@ void SwHTMLParser::InsertBodyOptions()
                 break;
 
             case HTML_O_ONERROR:
-//              if( bAnyStarBasic )
-//                  InsertBasicDocEvent( SFX_EVENT_ACTIVATEDOC,
-//                                       pOption->GetString() );
                 break;
 
             case HTML_O_STYLE:
@@ -1018,9 +1000,9 @@ void SwHTMLParser::InsertBodyOptions()
     if( aLang.Len() )
     {
         LanguageType eLang = MsLangId::convertIsoStringToLanguage( aLang );
-        sal_uInt16 nWhich = 0;
         if( LANGUAGE_DONTKNOW != eLang )
         {
+            sal_uInt16 nWhich = 0;
             switch( SvtLanguageOptions::GetScriptTypeOfLanguage( eLang ) )
             {
             case SCRIPTTYPE_LATIN:
@@ -1384,10 +1366,10 @@ void SwHTMLParser::StripTrailingPara()
                     SwCntntNode* pNd = pDoc->GetNodes().GoPrevious(&nNewNdIdx);
                     if(!pNd)
                     {
-                        ASSERT(!this, "Hoppla, wo ist mein Vorgaenger-Node");
+                        OSL_ENSURE(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-                    // --> OD 2007-09-27 #i81002# - refactoring
+                    // #i81002# - refactoring
                     // Do not directly manipulate member of <SwBookmark>
                     {
                         SwPosition aNewPos(*pNd);
@@ -1395,7 +1377,6 @@ void SwHTMLParser::StripTrailingPara()
                         const SwPaM aPaM(aNewPos);
                         pMarkAccess->repositionMark(ppMark->get(), aPaM);
                     }
-                    // <--
                 }
                 else if( nBookNdIdx > nNodeIdx )
                     break;
@@ -1445,3 +1426,4 @@ void SwHTMLParser::StripTrailingPara()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
-#include <errhdl.hxx>
 #include <ndindex.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -301,7 +301,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
     if( rFmtFtn.IsEndNote() )
     {
         nPos = rHTMLWrt.pFootEndNotes ? rHTMLWrt.pFootEndNotes->Count() : 0;
-        ASSERT( nPos == rHTMLWrt.nFootNote + rHTMLWrt.nEndNote,
+        OSL_ENSURE( nPos == rHTMLWrt.nFootNote + rHTMLWrt.nEndNote,
                 "OutHTML_SwFmtFtn: Position falsch" );
         sClass.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc );
         sFtnName.AssignAscii( OOO_STRING_SVTOOLS_HTML_sdendnote );
@@ -346,12 +346,12 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
 
 void SwHTMLWriter::OutFootEndNotes()
 {
-    ASSERT( pFootEndNotes,
+    OSL_ENSURE( pFootEndNotes,
             "SwHTMLWriter::OutFootEndNotes(): unnoetiger Aufruf" );
     if( !pFootEndNotes )
         return;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_uInt16 nFtn = nFootNote, nEn = nEndNote;
 #endif
     nFootNote = 0, nEndNote = 0;
@@ -386,9 +386,9 @@ void SwHTMLWriter::OutFootEndNotes()
         bLFPossible = sal_True;
         IncIndentLevel();   // Inhalt von <DIV> einruecken
 
-        ASSERT( pTxtFtn, "SwHTMLWriter::OutFootEndNotes: SwTxtFtn fehlt" );
+        OSL_ENSURE( pTxtFtn, "SwHTMLWriter::OutFootEndNotes: SwTxtFtn fehlt" );
         SwNodeIndex *pSttNdIdx = pTxtFtn->GetStartNode();
-        ASSERT( pSttNdIdx,
+        OSL_ENSURE( pSttNdIdx,
                 "SwHTMLWriter::OutFootEndNotes: StartNode-Index fehlt" );
         if( pSttNdIdx )
         {
@@ -403,7 +403,7 @@ void SwHTMLWriter::OutFootEndNotes()
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
         bLFPossible = sal_True;
 
-        ASSERT( !pFmtFtn,
+        OSL_ENSURE( !pFmtFtn,
                 "SwHTMLWriter::OutFootEndNotes: Ftn wurde nicht ausgegeben" );
         if( pFmtFtn )
         {
@@ -416,10 +416,10 @@ void SwHTMLWriter::OutFootEndNotes()
         }
     }
 
-#ifdef DBG_UTIL
-    ASSERT( nFtn == nFootNote,
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( nFtn == nFootNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Fussnoten stimmt nicht" );
-    ASSERT( nEn == nEndNote,
+    OSL_ENSURE( nEn == nEndNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Endnoten stimmt nicht" );
 #endif
 
@@ -619,3 +619,4 @@ void SwHTMLWriter::OutFootEndNoteInfo()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

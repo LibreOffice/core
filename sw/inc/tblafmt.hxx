@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,7 @@
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-JP 20.07.95:
-
-    Die akt. Struktur der Autoformatierung darf nicht mehr veraendert werden.
-    Diese wird durch unterschiedlichen Code vom StartWriter und vom StarCalc
-    eingelesen/geschrieben.
-    Sollte sich doch mal eine Aenderung nicht vermeiden lassen, dann auf
-    jedenfall in beiden Applikationen aendern.
-
-    The structure of table auto formatting should not changed. It is used
+    The structure of table auto formatting should not be changed. It is used
     by different code of Writer and Calc. If a change is necessary, the
     source code of both applications must be changed!
 
@@ -45,7 +38,7 @@ JP 20.07.95:
 **************************************************************************/
 
 #include <svl/svarray.hxx>
-#include "hintids.hxx"          //_immmer_ vor den solar-items!
+#include "hintids.hxx"          // _Always_ before the solar-items!
 #include <svx/algitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -53,14 +46,13 @@ JP 20.07.95:
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
-#ifndef _SVX_CNTRTITEM_HXX //autogen
 #include <editeng/cntritem.hxx>
-#endif
 #include <editeng/shdditem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/adjitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/bolnitem.hxx>
@@ -124,7 +116,7 @@ public:
     int operator==( const SwBoxAutoFmt& rCmp ) const;
     SwBoxAutoFmt& operator=( const SwBoxAutoFmt& rNew );
 
-    // die Get-Methoden
+    // The get-methods.
     const SvxFontItem       &GetFont() const        { return aFont; }
     const SvxFontHeightItem &GetHeight() const      { return aHeight; }
     const SvxWeightItem     &GetWeight() const      { return aWeight; }
@@ -151,7 +143,7 @@ public:
     void GetValueFormat( String& rFmt, LanguageType& rLng, LanguageType& rSys ) const
         { rFmt = sNumFmtString; rLng = eNumFmtLanguage; rSys = eSysLanguage; }
 
-    // die SetMethoden
+    // The set-methods.
     void SetFont( const SvxFontItem& rNew )             { aFont = rNew; }
     void SetHeight( const SvxFontHeightItem& rNew )     { aHeight = rNew; }
     void SetWeight( const SvxWeightItem& rNew )         { aWeight = rNew; }
@@ -186,27 +178,27 @@ public:
     sal_Bool SaveVerionNo( SvStream& rStream ) const;
 
 #ifdef READ_OLDVERS
-    // lade alte Version
+    // load old version.
     sal_Bool LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] );
 #endif
 };
 
 class SW_DLLPUBLIC SwTableAutoFmt
 {
-    friend void _FinitCore();       // zum Zerstoeren des dflt. Pointers
+    friend void _FinitCore();       // To destroy dflt. pointer.
     static SwBoxAutoFmt* pDfltBoxAutoFmt;
 
     String aName;
     sal_uInt16 nStrResId;
 
-    // common flags of Calc and Writer
+    // Common flags of Calc and Writer.
     sal_Bool bInclFont : 1;
     sal_Bool bInclJustify : 1;
     sal_Bool bInclFrame : 1;
     sal_Bool bInclBackground : 1;
     sal_Bool bInclValueFormat : 1;
 
-    // Calc specific flags
+    // Calc specific flags.
     sal_Bool bInclWidthHeight : 1;
 
     SwBoxAutoFmt* aBoxAutoFmt[ 16 ];
@@ -247,7 +239,7 @@ public:
     sal_Bool Save( SvStream& rStream ) const;
 
 #ifdef READ_OLDVERS
-    // lade alte Version
+    // Load old versions.
     sal_Bool LoadOld( SvStream& rStream, sal_uInt16 aLoadVer[] );
 #endif
 };
@@ -268,3 +260,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

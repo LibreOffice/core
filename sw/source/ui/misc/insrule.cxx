@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 
 #include "hintids.hxx"
 #include <svx/gallery.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <editeng/brshitem.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/graph.hxx>
@@ -50,11 +49,6 @@
 #include "insrule.hrc"
 #include "misc.hrc"
 #include "helpid.h"
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_RULER)),
@@ -74,7 +68,7 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->SetDoubleClickHdl(LINK(this, SwInsertGrfRulerDlg, DoubleClickHdl));
     pExampleVS->GrabFocus();
 
-    // Grafiknamen ermitteln
+    // determine graphic name
     GalleryExplorer::BeginLocking(GALLERY_THEME_RULERS);
     GalleryExplorer::FillObjList( GALLERY_THEME_RULERS, aGrfNames );
     pExampleVS->SetHelpId(HID_VS_RULER);
@@ -82,17 +76,14 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     pExampleVS->InsertItem( 1, 1);
     pExampleVS->SetItemText( 1, sSimple);
 
-    for(sal_uInt16 i = 1; i <= aGrfNames.Count(); i++)
+    for(sal_uInt16 i = 1; i <= aGrfNames.size(); i++)
     {
         pExampleVS->InsertItem( i + 1, i);
-        pExampleVS->SetItemText( i + 1, *((String*)aGrfNames.GetObject(i-1)));
+        pExampleVS->SetItemText( i + 1, aGrfNames[i-1]);
     }
     pExampleVS->Show();
 
 }
-/*-----------------14.02.97 13.18-------------------
-
---------------------------------------------------*/
 
 SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
 {
@@ -100,24 +91,16 @@ SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
     delete pExampleVS;
 }
 
-/*-----------------14.02.97 13.17-------------------
-
---------------------------------------------------*/
-
 String SwInsertGrfRulerDlg::GetGraphicName()
 {
     String sRet;
     sal_uInt16 nSel = nSelPos - 2; //align selection position with ValueSet index
-    if(nSel < aGrfNames.Count())
+    if(nSel < aGrfNames.size())
         sRet = URIHelper::SmartRel2Abs(
-            INetURLObject(), *(String*) aGrfNames.GetObject(nSel),
+            INetURLObject(), aGrfNames[nSel],
             URIHelper::GetMaybeFileHdl());
     return sRet;
 }
-
-/*-----------------14.02.97 13.20-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
 {
@@ -126,31 +109,24 @@ IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
     return 0;
 }
 
-/*-----------------14.02.97 14.17-------------------
-
---------------------------------------------------*/
 SwRulerValueSet::SwRulerValueSet(   Window* pParent, const ResId& rResId ) :
     SvxBmpNumValueSet(pParent, rResId)
 {
     SetStyle(  GetStyle() & ~WB_ITEMBORDER     );
 }
-/*-----------------14.02.97 14.17-------------------
 
---------------------------------------------------*/
 SwRulerValueSet::~SwRulerValueSet()
 {
 }
-/*-----------------14.02.97 13.42-------------------
 
---------------------------------------------------*/
-void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();
     OutputDevice*  pDev = rUDEvt.GetDevice();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
-    // Itemzaehlung beginnt bei 1, und die 1. ist die einfache Linie
+    // item count starts with 1 and the 1st is the simple line
     if(nItemId > 1)
     {
         Graphic aGraphic;
@@ -194,7 +170,7 @@ void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
     else
     {
-        // Text fuer einfache Linie painten
+        // paint text for simple line
         Font aOldFont = pDev->GetFont();
         Font aFont = pDev->GetFont();
         Size aSize = aFont.GetSize();
@@ -214,13 +190,10 @@ void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-/*-----------------15.02.97 10.03-------------------
-
---------------------------------------------------*/
-
 IMPL_LINK(SwInsertGrfRulerDlg, DoubleClickHdl, ValueSet*, EMPTYARG)
 {
     EndDialog(RET_OK);
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

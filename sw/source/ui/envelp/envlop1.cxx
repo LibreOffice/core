@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
 #include "dbmgr.hxx"
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
@@ -40,7 +39,6 @@
 #include <viewopt.hxx>
 
 #include "wrtsh.hxx"
-#include "errhdl.hxx"
 #include "cmdid.h"
 #include "helpid.h"
 #include "envfmt.hxx"
@@ -65,8 +63,6 @@ using namespace ::rtl;
 //impl in envimg.cxx
 extern SW_DLLPUBLIC String MakeSender();
 
-// --------------------------------------------------------------------------
-
 SwEnvPreview::SwEnvPreview(SfxTabPage* pParent, const ResId& rResID) :
 
     Window(pParent, rResID)
@@ -75,23 +71,16 @@ SwEnvPreview::SwEnvPreview(SfxTabPage* pParent, const ResId& rResID) :
     SetMapMode(MapMode(MAP_PIXEL));
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwEnvPreview::~SwEnvPreview()
 {
 }
 
-// ----------------------------------------------------------------------------
 void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
     if ( DATACHANGED_SETTINGS == rDCEvt.GetType() )
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
 }
-
-// ----------------------------------------------------------------------------
 
 void SwEnvPreview::Paint(const Rectangle &)
 {
@@ -116,7 +105,7 @@ void SwEnvPreview::Paint(const Rectangle &)
 
     SetLineColor( aFront );
 
-    // Umschlag
+    // Envelope
     long   nW = (sal_uInt16) (f * nPageW),
            nH = (sal_uInt16) (f * nPageH),
            nX = (GetOutputSizePixel().Width () - nW) / 2,
@@ -124,7 +113,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetFillColor( aBack );
     DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
 
-    // Absender
+    // Sender
     if (rItem.bSend)
     {
         long   nSendX = nX + (sal_uInt16) (f * rItem.lSendFromLeft),
@@ -136,7 +125,7 @@ void SwEnvPreview::Paint(const Rectangle &)
         DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
-    // Empfaenger
+    // Addressee
     long   nAddrX = nX + (sal_uInt16) (f * rItem.lAddrFromLeft),
            nAddrY = nY + (sal_uInt16) (f * rItem.lAddrFromTop ),
            nAddrW = (sal_uInt16) (f * (nPageW - rItem.lAddrFromLeft - 566)),
@@ -144,7 +133,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetFillColor( aMedium );
     DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
-    // Briefmarke
+    // Stamp
     long   nStmpW = (sal_uInt16) (f * 1417 /* 2,5 cm */),
            nStmpH = (sal_uInt16) (f * 1701 /* 3,0 cm */),
            nStmpX = nX + nW - (sal_uInt16) (f * 566) - nStmpW,
@@ -153,10 +142,6 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetFillColor( aBack );
     DrawRect(Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert) :
@@ -174,7 +159,7 @@ SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEWDOC)));
     GetOKButton().SetHelpId(HID_ENVELOP_PRINT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);   // in order for generated help text to get used
     if (GetUserButton())
     {
         GetUserButton()->SetText(bInsert ? sInsert : sChange);
@@ -186,19 +171,11 @@ SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
     AddTabPage(TP_ENV_PRT, SwEnvPrtPage::Create, 0);
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwEnvDlg::~SwEnvDlg()
 {
     delete pAddresseeSet;
     delete pSenderSet;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
@@ -207,8 +184,6 @@ void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         ((SwEnvPrtPage*)&rPage)->SetPrt(pPrinter);
     }
 }
-
-// --------------------------------------------------------------------------
 
 short SwEnvDlg::Ok()
 {
@@ -230,10 +205,6 @@ short SwEnvDlg::Ok()
 
     return nRet;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
 
@@ -257,7 +228,7 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
     SetExchangeSupport();
     pSh = GetParent()->pSh;
 
-    // Handler installieren
+    // Install handlers
     aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     aTableLB       .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     aInsertBT      .SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
@@ -271,17 +242,9 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
     InitDatabaseBox();
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SwEnvPage::~SwEnvPage()
 {
 }
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
 {
@@ -295,26 +258,20 @@ IMPL_LINK( SwEnvPage, DatabaseHdl, ListBox *, pListBox )
     }
     else
         sActDBName.SetToken(1, DB_DELIM, aTableLB.GetSelectEntry());
-    pSh->GetNewDBMgr()->GetColumnNames(
-        &aDBFieldLB, aDatabaseLB.GetSelectEntry(), aTableLB.GetSelectEntry());
+        pSh->GetNewDBMgr()->GetColumnNames(&aDBFieldLB, aDatabaseLB.GetSelectEntry(),
+                                           aTableLB.GetSelectEntry());
     return 0;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
 {
     String aStr ( '<' );
     aStr += aDatabaseLB.GetSelectEntry();
     aStr += '.';
-//  aStr += DB_DELIM;
     aStr += aTableLB.GetSelectEntry();
     aStr += '.';
     aStr += aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1';
     aStr += '.';
-//  aStr += DB_DELIM;
     aStr += aDBFieldLB.GetSelectEntry();
     aStr += '>';
     aAddrEdit.ReplaceSelected(aStr);
@@ -323,10 +280,6 @@ IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
     aAddrEdit.SetSelection(aSel);
     return 0;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwEnvPage, SenderHdl, Button *, EMPTYARG )
 {
@@ -343,10 +296,6 @@ IMPL_LINK( SwEnvPage, SenderHdl, Button *, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 void SwEnvPage::InitDatabaseBox()
 {
     if (pSh->GetNewDBMgr())
@@ -354,6 +303,7 @@ void SwEnvPage::InitDatabaseBox()
         aDatabaseLB.Clear();
         Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
         const OUString* pDataNames = aDataNames.getConstArray();
+
         for (long i = 0; i < aDataNames.getLength(); i++)
             aDatabaseLB.InsertEntry(pDataNames[i]);
 
@@ -371,18 +321,10 @@ void SwEnvPage::InitDatabaseBox()
     }
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SfxTabPage* SwEnvPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwEnvPage(pParent, rSet);
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -390,10 +332,6 @@ void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
     aSet.Put(GetParent()->aEnvItem);
     Reset(aSet);
 }
-
-// --------------------------------------------------------------------------
-
-
 
 int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 {
@@ -403,10 +341,6 @@ int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
     return SfxTabPage::LEAVE_PAGE;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 void SwEnvPage::FillItem(SwEnvItem& rItem)
 {
     rItem.aAddrText = aAddrEdit  .GetText();
@@ -414,20 +348,12 @@ void SwEnvPage::FillItem(SwEnvItem& rItem)
     rItem.aSendText = aSenderEdit.GetText();
 }
 
-// --------------------------------------------------------------------------
-
-
-
 sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
     rSet.Put(GetParent()->aEnvItem);
     return sal_True;
 }
-
-// ----------------------------------------------------------------------------
-
-
 
 void SwEnvPage::Reset(const SfxItemSet& rSet)
 {
@@ -439,3 +365,4 @@ void SwEnvPage::Reset(const SfxItemSet& rSet)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

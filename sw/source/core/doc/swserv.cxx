@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,9 +42,7 @@
 #include <bookmrk.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -163,10 +162,6 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
             SvLinkSource::NotifyDataChanged();
         }
     }
-    // sonst melden wir uns ab !!
-// ????? JP 27.06.95: geht das so ????
-//  else
-//      Closed();
 }
 
 
@@ -206,10 +201,6 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
             SvLinkSource::NotifyDataChanged();
         }
     }
-    // sonst melden wir uns ab !!
-// ????? JP 27.06.95: geht das so ????
-//  else
-//      Closed();
 }
 
 
@@ -260,10 +251,6 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 // um Rekursionen zu Verhindern: ServerType umsetzen!
 SwServerObject::ServerModes eSave = eType;
 if( !pChkLnk )
-// sowas sollte man nicht tun, wer weiss schon, wie gross ein enum ist
-// ICC nimmt keinen int
-// #41723#
-//  *((int*)&eType) = SECTION_SERVER+1;
     ((SwServerObject*)this)->eType = NONE_SERVER;
         for( sal_uInt16 n = rLnks.Count(); n; )
         {
@@ -314,8 +301,7 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
         pDdeBookmark->SetRefObject(this);
     }
     else
-        OSL_ENSURE(false,
-            "SwServerObject::SetNoServer(..)"
+        OSL_FAIL("SwServerObject::SetNoServer(..)"
             " - setting an bookmark that is not DDE-capable");
 }
 
@@ -369,3 +355,5 @@ SwDataChanged::~SwDataChanged()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

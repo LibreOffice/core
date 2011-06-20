@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <mailmergehelper.hxx>
 #include <svtools/stdctrl.hxx>
 #include <mmconfigitem.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
@@ -47,9 +46,7 @@
 #include "com/sun/star/mail/XSmtpService.hpp"
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _PASSWD_HXX
 #include <sfx2/passwd.hxx>
-#endif
 
 #include <dbui.hrc>
 
@@ -62,14 +59,9 @@ using namespace ::com::sun::star::sdbcx;
 
 using rtl::OUString;
 
-//using ::rtl::OUString;
-
 namespace SwMailMergeHelper
 {
 
-/*-- 14.06.2004 12:29:19---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 String  CallSaveAsDialog(String& rFilter)
 {
     ErrCode nRet;
@@ -88,11 +80,12 @@ String  CallSaveAsDialog(String& rFilter)
     }
     return sRet;
 }
-/*-- 20.08.2004 09:39:18---------------------------------------------------
+
+/*
     simple address check: check for '@'
                             for at least one '.' after the '@'
                             and for at least to characters before and after the dot
-  -----------------------------------------------------------------------*/
+*/
 bool CheckMailAddress( const ::rtl::OUString& rMailAddress )
 {
     String sAddress(rMailAddress);
@@ -106,9 +99,6 @@ bool CheckMailAddress( const ::rtl::OUString& rMailAddress )
     return true;
 }
 
-/*-- 28.12.2004 10:16:02---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         SwMailMergeConfigItem& rConfigItem,
         uno::Reference< mail::XMailService >&  rxInMailService,
@@ -152,7 +142,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                         new SwConnectionContext(
                             rConfigItem.GetInServerName(),
                             rConfigItem.GetInServerPort(),
-                            ::rtl::OUString::createFromAscii( "Insecure" ));
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
                 xInMailService->connect(xConnectionContext, xAuthenticator);
                 rxInMailService = xInMailService;
             }
@@ -179,13 +169,13 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetMailServer(),
                         rConfigItem.GetMailPort(),
-                        ::rtl::OUString::createFromAscii( rConfigItem.IsSecureConnection() ? "Ssl" : "Insecure"));
+                        rConfigItem.IsSecureConnection() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")) );
             xSmtpServer->connect(xConnectionContext, xAuthenticator);
             rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
         }
         catch(uno::Exception& )
         {
-            DBG_ERROR("exception caught");
+            OSL_FAIL("exception caught");
         }
     return xSmtpServer;
 }
@@ -193,9 +183,6 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
 
 } //namespace
 
-/*-- 06.04.2004 10:31:27---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwBoldFixedInfo::SwBoldFixedInfo(Window* pParent, const ResId& rResId) :
     FixedInfo(pParent, rResId)
 {
@@ -203,12 +190,11 @@ SwBoldFixedInfo::SwBoldFixedInfo(Window* pParent, const ResId& rResId) :
     aFont.SetWeight( WEIGHT_BOLD );
     SetFont( aFont );
 }
-/*-- 06.04.2004 10:31:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwBoldFixedInfo::~SwBoldFixedInfo()
 {
 }
+
 struct  SwAddressPreview_Impl
 {
     ::std::vector< ::rtl::OUString >    aAdresses;
@@ -225,9 +211,7 @@ struct  SwAddressPreview_Impl
     {
     }
 };
-/*-- 27.04.2004 14:01:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddressPreview::SwAddressPreview(Window* pParent, const ResId rResId) :
     Window( pParent, rResId ),
     aVScrollBar(this, WB_VSCROLL),
@@ -242,31 +226,23 @@ SwAddressPreview::SwAddressPreview(Window* pParent, const ResId rResId) :
     aVScrollBar.SetPosPixel(aSrollPos);
     Show();
 }
-/*-- 27.04.2004 14:01:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddressPreview::~SwAddressPreview()
 {
 }
-/*-- 25.06.2004 11:50:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressPreview, ScrollHdl, ScrollBar*, EMPTYARG)
 {
     Invalidate();
     return 0;
 }
-/*-- 27.04.2004 14:01:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::AddAddress(const ::rtl::OUString& rAddress)
 {
     pImpl->aAdresses.push_back(rAddress);
     UpdateScrollBar();
 }
-/*-- 27.04.2004 14:01:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
 {
     pImpl->aAdresses.clear();
@@ -274,20 +250,16 @@ void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
     aVScrollBar.Show(sal_False);
     Invalidate();
 }
-/*-- 27.04.2004 14:01:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_uInt16   SwAddressPreview::GetSelectedAddress()const
 {
-    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
     return pImpl->nSelectedAddress;
 }
-/*-- 25.06.2004 10:32:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
-    DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid");
     pImpl->nSelectedAddress = nSelect;
     // now make it visible..
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
@@ -295,26 +267,20 @@ void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
     if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))
         aVScrollBar.SetThumbPos( nSelectRow );
 }
-/*-- 25.06.2004 11:00:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::Clear()
 {
     pImpl->aAdresses.clear();
     pImpl->nSelectedAddress = 0;
     UpdateScrollBar();
 }
-/*-- 28.04.2004 12:05:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::ReplaceSelectedAddress(const ::rtl::OUString& rNew)
 {
     pImpl->aAdresses[pImpl->nSelectedAddress] = rNew;
     Invalidate();
 }
-/*-- 25.06.2004 11:30:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::RemoveSelectedAddress()
 {
     pImpl->aAdresses.erase(pImpl->aAdresses.begin() + pImpl->nSelectedAddress);
@@ -323,25 +289,19 @@ void SwAddressPreview::RemoveSelectedAddress()
     UpdateScrollBar();
     Invalidate();
 }
-/*-- 27.04.2004 14:01:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
 {
     pImpl->nRows = nRows;
     pImpl->nColumns = nColumns;
     UpdateScrollBar();
 }
-/*-- 25.06.2004 13:54:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::EnableScrollBar(bool bEnable)
 {
     pImpl->bEnableScrollBar = bEnable;
 }
-/*-- 25.06.2004 11:55:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::UpdateScrollBar()
 {
     if(pImpl->nColumns)
@@ -355,9 +315,7 @@ void SwAddressPreview::UpdateScrollBar()
             aVScrollBar.SetThumbPos(nResultingRows);
     }
 }
-/*-- 27.04.2004 14:01:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::Paint(const Rectangle&)
 {
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
@@ -402,9 +360,6 @@ void SwAddressPreview::Paint(const Rectangle&)
     SetClipRegion();
 }
 
-/*-- 07.06.2004 15:44:15---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Window::MouseButtonDown(rMEvt);
@@ -431,9 +386,7 @@ void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
         Invalidate();
     }
 }
-/*-- 01.07.2004 12:33:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 {
     sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
@@ -473,18 +426,14 @@ void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
     else
         Window::KeyInput(rKEvt);
 }
-/*-- 05.07.2004 12:02:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::StateChanged( StateChangedType nStateChange )
 {
     if(nStateChange == STATE_CHANGE_ENABLE)
         Invalidate();
     Window::StateChanged(nStateChange);
 }
-/*-- 27.04.2004 14:01:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAddressPreview::DrawText_Impl(
         const ::rtl::OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
@@ -507,9 +456,7 @@ void SwAddressPreview::DrawText_Impl(
         aStart.Y() += nHeight;
     }
 }
-/*-- 29.04.2004 11:24:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String SwAddressPreview::FillData(
         const ::rtl::OUString& rAddress,
         SwMailMergeConfigItem& rConfigItem,
@@ -594,7 +541,7 @@ String SwAddressPreview::FillData(
                     }
                     catch( sdbc::SQLException& )
                     {
-                        DBG_ERROR("SQLException caught");
+                        OSL_FAIL("SQLException caught");
                     }
                 }
             }
@@ -609,9 +556,6 @@ String SwAddressPreview::FillData(
     return sAddress;
 }
 
-/*-- 11.05.2004 15:42:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMergeAddressItem   SwAddressIterator::Next()
 {
     //currently the string may either start with a '<' then it's a column
@@ -623,7 +567,7 @@ SwMergeAddressItem   SwAddressIterator::Next()
         {
             aRet.bIsColumn = true;
             xub_StrLen nClose = sAddress.Search('>');
-            DBG_ASSERT(nClose != STRING_NOTFOUND, "closing '>' not found");
+            OSL_ENSURE(nClose != STRING_NOTFOUND, "closing '>' not found");
             if( nClose != STRING_NOTFOUND )
             {
                 aRet.sText = sAddress.Copy(1, nClose - 1);
@@ -662,22 +606,16 @@ SwMergeAddressItem   SwAddressIterator::Next()
     return aRet;
 
 }
-/*-- 21.05.2004 10:36:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAuthenticator::~SwAuthenticator()
 {
 }
-/*-- 21.05.2004 10:36:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwAuthenticator::getUserName( ) throw (RuntimeException)
 {
     return m_aUserName;
 }
-/*-- 21.05.2004 10:36:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwAuthenticator::getPassword(  ) throw (RuntimeException)
 {
     if(m_aUserName.getLength() && !m_aPassword.getLength() && m_pParentWindow)
@@ -690,9 +628,7 @@ OUString SwAuthenticator::getPassword(  ) throw (RuntimeException)
     }
     return m_aPassword;
 }
-/*-- 25.08.2004 12:53:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwConnectionContext::SwConnectionContext(
         const ::rtl::OUString& rMailServer, sal_Int16 nPort,
         const ::rtl::OUString& rConnectionType) :
@@ -701,15 +637,11 @@ SwConnectionContext::SwConnectionContext(
     m_sConnectionType(rConnectionType)
 {
 }
-/*-- 25.08.2004 12:53:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwConnectionContext::~SwConnectionContext()
 {
 }
-/*-- 25.08.2004 12:53:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwConnectionContext::getValueByName( const ::rtl::OUString& rName )
                                                 throw (uno::RuntimeException)
 {
@@ -722,51 +654,37 @@ uno::Any SwConnectionContext::getValueByName( const ::rtl::OUString& rName )
         aRet <<= m_sConnectionType;
     return aRet;
 }
-/*-- 21.05.2004 10:45:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwConnectionListener::~SwConnectionListener()
 {
 }
-/*-- 21.05.2004 10:45:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwConnectionListener::connected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
-    //OSL_ENSURE(false, "Connection opened");
 }
-/*-- 21.05.2004 10:45:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwConnectionListener::disconnected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
-    //OSL_ENSURE(false, "Connection closed");
 }
-/*-- 21.05.2004 10:45:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
     throw(uno::RuntimeException)
 {
 }
-/*-- 21.05.2004 10:17:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< uno::XComponentContext> getCurrentCmpCtx(
                         uno::Reference<lang::XMultiServiceFactory> rSrvMgr)
 {
     uno::Reference< beans::XPropertySet > xPropSet =
                 uno::Reference< beans::XPropertySet>(rSrvMgr, uno::UNO_QUERY);
-    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii("DefaultContext"));
+    Any aAny = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")));
     uno::Reference< uno::XComponentContext> rCmpCtx;
     aAny >>= rCmpCtx;
     return rCmpCtx;
 }
-/*-- 13.07.2004 09:07:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OUString& rMimeType) :
     cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType( rMimeType ),
@@ -774,9 +692,7 @@ SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OU
     m_bIsBody( true )
 {
 }
-/*-- 13.07.2004 09:07:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailTransferable::SwMailTransferable(const rtl::OUString& rURL,
                 const rtl::OUString& rName, const rtl::OUString& rMimeType) :
     cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
@@ -786,15 +702,11 @@ SwMailTransferable::SwMailTransferable(const rtl::OUString& rURL,
     m_bIsBody( false )
 {
 }
-/*-- 13.07.2004 09:07:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailTransferable::~SwMailTransferable()
 {
 }
-/*-- 13.07.2004 09:07:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*aFlavor*/ )
                             throw (datatransfer::UnsupportedFlavorException,
                             io::IOException, uno::RuntimeException)
@@ -819,9 +731,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
     }
     return aRet;
 }
-/*-- 13.07.2004 09:07:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFlavors(  )
                             throw (uno::RuntimeException)
 {
@@ -838,70 +748,54 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
     }
     return aRet;
 }
-/*-- 13.07.2004 09:07:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwMailTransferable::isDataFlavorSupported(
             const datatransfer::DataFlavor& aFlavor )
                             throw (uno::RuntimeException)
 {
     return (aFlavor.MimeType == ::rtl::OUString(m_aMimeType));
 }
-/*-- 28.04.2004 09:52:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     return uno::Reference< beans::XPropertySetInfo >();
 }
-/*-- 28.04.2004 09:52:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailTransferable::setPropertyValue( const ::rtl::OUString& , const uno::Any& )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-/*-- 28.04.2004 09:52:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwMailTransferable::getPropertyValue( const ::rtl::OUString& rPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
-    if( rPropertyName.equalsAscii( "URL" ) )
+    if( rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
         aRet <<= m_aURL;
     return aRet;
 }
-/*-- 28.04.2004 09:52:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailTransferable::addPropertyChangeListener(
     const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >&  )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-/*-- 28.04.2004 09:52:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailTransferable::removePropertyChangeListener(
     const ::rtl::OUString&,
     const uno::Reference< beans::XPropertyChangeListener >& )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-/*-- 28.04.2004 09:52:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailTransferable::addVetoableChangeListener(
     const ::rtl::OUString&,
     const uno::Reference< beans::XVetoableChangeListener >& )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-/*-- 28.04.2004 09:52:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailTransferable::removeVetoableChangeListener(
     const ::rtl::OUString& ,
     const uno::Reference< beans::XVetoableChangeListener >&  )
@@ -909,89 +803,64 @@ void SwMailTransferable::removeVetoableChangeListener(
 {
 }
 
-/*-- 22.06.2004 16:46:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMessage::SwMailMessage() :
         cppu::WeakComponentImplHelper1< mail::XMailMessage>(m_aMutex)
 {
 }
-/*-- 22.06.2004 16:46:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMessage::~SwMailMessage()
 {
 }
-/*-- 02.07.2007 16:00:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString SwMailMessage::getSenderName() throw (uno::RuntimeException)
 {
     return m_sSenderName;
 }
-/*-- 22.06.2004 16:46:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString SwMailMessage::getSenderAddress() throw (uno::RuntimeException)
 {
     return m_sSenderAddress;
 }
-/*-- 22.06.2004 16:46:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString SwMailMessage::getReplyToAddress() throw (uno::RuntimeException)
 {
     return m_sReplyToAddress;
 }
-/*-- 22.06.2004 16:46:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMessage::setReplyToAddress( const ::rtl::OUString& _replytoaddress ) throw (uno::RuntimeException)
 {
     m_sReplyToAddress = _replytoaddress;
 }
-/*-- 22.06.2004 16:46:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ::rtl::OUString SwMailMessage::getSubject() throw (uno::RuntimeException)
 {
     return m_sSubject;
 }
-/*-- 22.06.2004 16:46:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMessage::setSubject( const ::rtl::OUString& _subject ) throw (uno::RuntimeException)
 {
     m_sSubject = _subject;
 }
-/*-- 13.07.2004 09:57:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< datatransfer::XTransferable > SwMailMessage::getBody() throw (uno::RuntimeException)
 {
     return m_xBody;
 }
-/*-- 13.07.2004 09:57:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMessage::setBody(
         const uno::Reference< datatransfer::XTransferable >& rBody )
                                                 throw (uno::RuntimeException)
 {
     m_xBody = rBody;
 }
-/*-- 22.06.2004 16:46:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  SwMailMessage::addRecipient( const ::rtl::OUString& rRecipientAddress )
         throw (uno::RuntimeException)
 {
     m_aRecipients.realloc(m_aRecipients.getLength() + 1);
     m_aRecipients[m_aRecipients.getLength() - 1] = rRecipientAddress;
 }
-/*-- 22.06.2004 16:46:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  SwMailMessage::addCcRecipient( const ::rtl::OUString& rRecipientAddress )
         throw (uno::RuntimeException)
 {
@@ -999,49 +868,39 @@ void  SwMailMessage::addCcRecipient( const ::rtl::OUString& rRecipientAddress )
     m_aCcRecipients[m_aCcRecipients.getLength() - 1] = rRecipientAddress;
 
 }
-/*-- 22.06.2004 16:46:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  SwMailMessage::addBccRecipient( const ::rtl::OUString& rRecipientAddress ) throw (uno::RuntimeException)
 {
     m_aBccRecipients.realloc(m_aBccRecipients.getLength() + 1);
     m_aBccRecipients[m_aBccRecipients.getLength() - 1] = rRecipientAddress;
 }
-/*-- 22.06.2004 16:46:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString > SwMailMessage::getRecipients(  ) throw (uno::RuntimeException)
 {
     return m_aRecipients;
 }
-/*-- 22.06.2004 16:46:10---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString > SwMailMessage::getCcRecipients(  ) throw (uno::RuntimeException)
 {
     return m_aCcRecipients;
 }
-/*-- 22.06.2004 16:46:10---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< ::rtl::OUString > SwMailMessage::getBccRecipients(  ) throw (uno::RuntimeException)
 {
     return m_aBccRecipients;
 }
-/*-- 13.07.2004 09:59:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMessage::addAttachment( const mail::MailAttachment& rMailAttachment )
             throw (uno::RuntimeException)
 {
     m_aAttachments.realloc(m_aAttachments.getLength() + 1);
     m_aAttachments[m_aAttachments.getLength() - 1] = rMailAttachment;
 }
-/*-- 13.07.2004 09:59:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Sequence< mail::MailAttachment > SwMailMessage::getAttachments(  )
                                             throw (uno::RuntimeException)
 {
     return m_aAttachments;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

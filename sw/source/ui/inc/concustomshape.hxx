@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@ class SfxRequest;
 
 /*************************************************************************
 |*
-|* Rechteck zeichnen
+|* draw rectangle
 |*
 \************************************************************************/
 
@@ -55,7 +56,7 @@ class ConstCustomShape : public SwDrawBase
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate(const sal_uInt16 nSlotId);    // Function aktivieren
+    virtual void Activate(const sal_uInt16 nSlotId);    // activate function
 
     rtl::OUString GetShapeType() const;
     static rtl::OUString GetShapeTypeFromRequest( SfxRequest& rReq );
@@ -70,3 +71,4 @@ class ConstCustomShape : public SwDrawBase
 
 #endif      // _SW_CONRECT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

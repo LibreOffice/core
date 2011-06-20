@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
@@ -42,14 +40,13 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
 #include "dlelstnr.hxx"
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -59,11 +56,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 
-#define A2OU(x) OUString::createFromAscii(x)
-
-/* -----------------------------17.03.00 09:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
@@ -71,20 +63,20 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
     {
         try
         {
-            OUString aSvcName( A2OU( "com.sun.star.frame.Desktop" ) );
+            OUString aSvcName( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) );
             xDesktop = Reference< frame::XDesktop >(
                     xMgr->createInstance( aSvcName ), UNO_QUERY );
             if (xDesktop.is())
                 xDesktop->addTerminateListener( this );
 
-            aSvcName = A2OU( "com.sun.star.linguistic2.LinguServiceManager" );
+            aSvcName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ));
             xLngSvcMgr = Reference< XLinguServiceManager >( xMgr->createInstance( aSvcName ), UNO_QUERY );
             if (xLngSvcMgr.is())
                 xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
 
             if (SvtLinguConfig().HasGrammarChecker())
             {
-                aSvcName = A2OU( "com.sun.star.linguistic2.ProofreadingIterator" );
+                aSvcName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.ProofreadingIterator" ));
                 xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
                 Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
                 if (xBC.is())
@@ -93,26 +85,20 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
         }
         catch (uno::Exception &)
         {
-            DBG_ASSERT(0, "exception caught in SwLinguServiceEventListener c-tor" );
+            OSL_FAIL("exception caught in SwLinguServiceEventListener c-tor" );
         }
     }
 }
-/* -----------------------------17.03.00 09:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwLinguServiceEventListener::~SwLinguServiceEventListener()
 {
 }
-
-/* -----------------------------17.03.00 09:06--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 void SwLinguServiceEventListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent)
         throw( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
 
@@ -133,12 +119,11 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
         SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
 }
 
-
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
     sal_Bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
@@ -164,33 +149,29 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
     }
 }
 
-
 void SAL_CALL SwLinguServiceEventListener::disposing(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
-    if (xLngSvcMgr.is()  &&  rEventObj.Source == xLngSvcMgr)
+    if (xLngSvcMgr.is() && rEventObj.Source == xLngSvcMgr)
         xLngSvcMgr = 0;
-    if (xLngSvcMgr.is()  &&  rEventObj.Source == xGCIterator)
+    if (xLngSvcMgr.is() && rEventObj.Source == xGCIterator)
         xGCIterator = 0;
 }
-
 
 void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& /*rEventObj*/ )
         throw(TerminationVetoException, RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
 }
-
 
 void SAL_CALL SwLinguServiceEventListener::notifyTermination(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
     {
@@ -202,3 +183,4 @@ void SAL_CALL SwLinguServiceEventListener::notifyTermination(
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

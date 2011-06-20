@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -354,9 +355,8 @@ SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
-// --> OD 2006-05-10 #i65250#
+// #i65250#
 sal_uInt32 SwFrm::mnLastFrmId=0;
-// <--
 
 TYPEINIT1(SwFrm,SwClient);      //rtti fuer SwFrm
 TYPEINIT1(SwCntntFrm,SwFrm);    //rtti fuer SwCntntFrm
@@ -366,7 +366,7 @@ void _FrmInit()
 {
     SwRootFrm::pVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100, 100
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , "static SwBorderAttrs::pCache"
 #endif
     );
@@ -377,13 +377,13 @@ void _FrmInit()
 
 void _FrmFinit()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // im Chache duerfen nur noch 0-Pointer stehen
     for( sal_uInt16 n = SwFrm::GetCachePtr()->Count(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
-            ASSERT( !pObj, "Wer hat sich nicht ausgetragen?")
+            OSL_ENSURE( !pObj, "Wer hat sich nicht ausgetragen?");
         }
 #endif
     delete SwRootFrm::pVout;
@@ -394,9 +394,6 @@ void _FrmFinit()
 |*
 |*  RootFrm::Alles was so zur CurrShell gehoert
 |*
-|*  Ersterstellung      MA 09. Sep. 98
-|*  Letzte Aenderung    MA 18. Feb. 99
-|*
 |*************************************************************************/
 
 typedef CurrShell* CurrShellPtr;
@@ -405,7 +402,7 @@ SV_IMPL_PTRARR_SORT(SwCurrShells,CurrShellPtr)
 
 CurrShell::CurrShell( ViewShell *pNew )
 {
-    ASSERT( pNew, "0-Shell einsetzen?" );
+    OSL_ENSURE( pNew, "0-Shell einsetzen?" );
     pRoot = pNew->GetLayout();
     if ( pRoot )
     {
@@ -474,8 +471,6 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*      Der RootFrm laesst sich grundsaetzlich vom Dokument ein eigenes
 |*      FrmFmt geben. Dieses loescht er dann selbst im DTor.
 |*      Das eigene FrmFmt wird vom uebergebenen Format abgeleitet.
-|*  Ersterstellung      SS 05-Apr-1991
-|*  Letzte Aenderung    MA 12. Dec. 94
 |*
 |*************************************************************************/
 
@@ -490,7 +485,6 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     mbBookMode( false ),
     mbSidebarChanged( false ),
     mbNeedGrammarCheck( false ),
-    // <--
     nBrowseWidth( MM50*4 ), //2cm Minimum
     pTurbo( 0 ),
     pLastPage( 0 ),
@@ -538,9 +532,8 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     SwDoc* pDoc = pFmt->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
     SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, sal_True, sal_False );
-    // --> FME 2005-05-25 #123067# pNode = 0 can really happen:
+    // #123067# pNode = 0 can really happen
     SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
-    // <--
 
     //PageDesc besorgen (entweder vom FrmFmt des ersten Node oder den
     //initialen.)
@@ -589,7 +582,6 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
         SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
         pFieldsAccess->UpdatePageFlds( &aMsgHnt );
     }
-    // <---
 
     pTimerAccess->StartIdling();
     bCallbackActionEnabled = sal_True;
@@ -603,9 +595,6 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
 |*
 |*  SwRootFrm::~SwRootFrm()
 |*
-|*  Ersterstellung      SS 05-Apr-1991
-|*  Letzte Aenderung    MA 12. Dec. 94
-|*
 |*************************************************************************/
 
 
@@ -616,7 +605,8 @@ SwRootFrm::~SwRootFrm()
     pTurbo = 0;
     if(pBlink)
         pBlink->FrmDelete( this );
-    static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->GetDoc()->DelFrmFmt( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) );
+    if ( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) )
+        static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->GetDoc()->DelFrmFmt( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) );
     delete pDestroy;
     pDestroy = 0;
 
@@ -626,15 +616,12 @@ SwRootFrm::~SwRootFrm()
 
     delete pCurrShells;
 
-    ASSERT( 0==nAccessibleShells, "Some accessible shells are left" );
+    OSL_ENSURE( 0==nAccessibleShells, "Some accessible shells are left" );
 }
 
 /*************************************************************************
 |*
 |*  SwRootFrm::RemoveMasterObjs()
-|*
-|*  Ersterstellung      MA 19.10.95
-|*  Letzte Aenderung    MA 19.10.95
 |*
 |*************************************************************************/
 
@@ -686,3 +673,4 @@ void SwRootFrm::AllInvalidateSmartTagsOrSpelling(sal_Bool bSmartTags) const
     }   //swmod 080218
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

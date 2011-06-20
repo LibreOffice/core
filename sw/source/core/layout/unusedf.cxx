@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,52 +32,51 @@
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
-#include "errhdl.hxx"
 
 
 void SwFrm::Format( const SwBorderAttrs * )
 {
-    ASSERT( sal_False, "Format() der Basisklasse gerufen." );
+    OSL_FAIL( "Format() der Basisklasse gerufen." );
 }
 
 void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
 {
-    ASSERT( sal_False, "Paint() der Basisklasse gerufen." );
+    OSL_FAIL( "Paint() der Basisklasse gerufen." );
 }
 
 sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 {
-    ASSERT( sal_False, "WouldFit des CntntFrm gerufen." );
+    OSL_FAIL( "WouldFit des CntntFrm gerufen." );
     return sal_False;
 }
 
 bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
 {
-    ASSERT( false, "Don't call this function at the base class!" );
+    OSL_FAIL( "Don't call this function at the base class!" );
     return false;
 }
 
 sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 {
-    ASSERT( sal_False, "GetCrsrOfst der Basisklasse, hi!" );
+    OSL_FAIL( "GetCrsrOfst der Basisklasse, hi!" );
     return sal_False;
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwRootFrm::Cut()
 {
-    ASSERT( sal_False, "Cut() des RootFrm gerufen." );
+    OSL_FAIL( "Cut() des RootFrm gerufen." );
 }
 
 void SwRootFrm::Paste( SwFrm *, SwFrm * )
 {
-    ASSERT( sal_False, "Paste() des RootFrm gerufen." );
+    OSL_FAIL( "Paste() des RootFrm gerufen." );
 }
 
 void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 {
-    ASSERT( sal_False, "Paste() des FlyFrm gerufen." );
+    OSL_FAIL( "Paste() des FlyFrm gerufen." );
 }
 
 #endif
@@ -84,8 +84,9 @@ void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 sal_Bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
                          SwCrsrMoveState* ) const
 {
-    ASSERT( sal_False, "GetCharRect() der Basis gerufen." );
+    OSL_FAIL( "GetCharRect() der Basis gerufen." );
     return sal_False;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

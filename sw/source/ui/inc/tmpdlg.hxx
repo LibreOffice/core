@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,8 @@ class SfxItemSet;
 class SwWrtShell;
 
 /*--------------------------------------------------------------------
-   Beschreibung:    Der Tabdialog Traeger der TabPages
+   Description:    the tab dialog carrier of TabPages
  --------------------------------------------------------------------*/
-
 class SwTemplateDlg: public SfxStyleDialog
 {
 
@@ -45,6 +45,7 @@ class SwTemplateDlg: public SfxStyleDialog
     sal_Bool        bNewStyle;
 
     DECL_LINK( NumOptionsHdl, PushButton* );
+    DECL_LINK( ApplyHdl, void* );
 
 public:
     SwTemplateDlg(  Window*             pParent,
@@ -61,6 +62,6 @@ public:
     virtual short Ok();
 };
 
-
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

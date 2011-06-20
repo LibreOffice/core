@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,8 +88,8 @@ void SwMultiTOXMarkDlg::Apply()
     rMgr.SetCurTOXMark(nPos);
 }
 
-/*-----------------25.02.94 22:06-------------------
- dtor ueberladen
+/*--------------------------------------------------
+ overload dtor
 --------------------------------------------------*/
 
 
@@ -96,3 +97,4 @@ SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg() {}
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

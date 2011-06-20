@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,18 +222,18 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
         SwRewriter aRewriter;
         aRewriter.AddRule(UNDO_ARG1, pWin->GetAuthor());
         aText = aRewriter.Apply(aText);
-        aText.Append(String(rtl::OUString::createFromAscii(" (") +
-        String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString::createFromAscii(", ") +
-        String(rLocalData.getTime( pWin->GetTime(),false)) + rtl::OUString::createFromAscii("): \"")));
+        aText.Append(String(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (")) +
+        String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", ")) +
+        String(rLocalData.getTime( pWin->GetTime(),false)) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("): \""))));
     GetOutlinerView()->InsertText(aText,false);
 
     // insert old, selected text or "..."
     // TOOD: iterate over all paragraphs, not only first one to find out if it is empty
-    if (pText->GetTextObject().GetText(0) != String(rtl::OUString::createFromAscii("")))
+    if (pText->GetTextObject().GetText(0).Len())
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
-        GetOutlinerView()->InsertText(rtl::OUString::createFromAscii("..."),false);
-    GetOutlinerView()->InsertText(rtl::OUString::createFromAscii("\"\n"),false);
+        GetOutlinerView()->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("...")),false);
+    GetOutlinerView()->InsertText(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"\n")),false);
 
     GetOutlinerView()->SetSelection(ESelection(0x0,0x0,0xFFFF,0xFFFF));
     SfxItemSet aAnswerSet( DocView().GetDocShell()->GetPool() );
@@ -282,7 +280,7 @@ SvxLanguageItem SwAnnotationWin::GetLanguage(void)
         case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
         case SCRIPTTYPE_ASIAN :    nLangWhichId = EE_CHAR_LANGUAGE_CJK; break;
         case SCRIPTTYPE_COMPLEX :  nLangWhichId = EE_CHAR_LANGUAGE_CTL; break;
-        default: DBG_ERROR("GetLanguage: wrong script tye");
+        default: OSL_FAIL("GetLanguage: wrong script type");
     }
     return SvxLanguageItem(mpFld->GetLanguage(),nLangWhichId);
 }
@@ -310,3 +308,5 @@ Time SwAnnotationWin::GetTime()
 }
 
 } } // end of namespace sw::annotation
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -289,15 +290,4 @@ bool SwList::IsListLevelMarked( const int nListLevel ) const
     return mpListImpl->IsListLevelMarked( nListLevel );
 }
 
-//void SwList::ContinueList( SwList& rList )
-//{
-//    mpListImpl->ContinueList( rList );
-//}
-//const SwList* SwList::GetContinuedList() const
-//{
-//    return mpListImpl->GetContinuedList();
-//}
-//void SwList::ClearContinuation()
-//{
-//    mpListImpl->ClearContinuation();
-//}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

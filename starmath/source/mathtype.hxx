@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,12 +108,12 @@ private:
         sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
         sal_Bool bSilent);
     void HandleNudge();
-    int xfLMOVE(sal_uInt8 nTest) {return nTest&0x80;}
-    int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
-    int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
-    int xfNULL(sal_uInt8 nTest) {return nTest&0x10;}
-    int xfLSPACE(sal_uInt8 nTest) {return nTest&0x40;}
-    int xfRULER(sal_uInt8 nTest) {return nTest&0x20;}
+    int xfLMOVE(sal_uInt8 nTest) const {return nTest&0x80;}
+    int xfAUTO(sal_uInt8 nTest) const {return nTest&0x10;}
+    int xfEMBELL(sal_uInt8 nTest) const {return nTest&0x20;}
+    int xfNULL(sal_uInt8 nTest) const {return nTest&0x10;}
+    int xfLSPACE(sal_uInt8 nTest) const {return nTest&0x40;}
+    int xfRULER(sal_uInt8 nTest) const {return nTest&0x20;}
 
     sal_uInt8 HandleNodes(SmNode *pNode,int nLevel=0);
     int StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation=0);
@@ -172,3 +173,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

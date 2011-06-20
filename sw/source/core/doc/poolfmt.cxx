@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,6 +75,7 @@
 #include <numrule.hxx>
 
 
+using namespace ::editeng;
 using namespace ::com::sun::star;
 
 const sal_uInt16 PT_3   =  3 * 20;      //  3 pt
@@ -94,7 +96,7 @@ const sal_uInt16 PT_24  = 24 * 20;      // 22 pt
 //const sal_uInt16 HTML_PARSPACE = ((CM_05 * 7) / 10);
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
-static const sal_Char __FAR_DATA sKomma[] = ", ";
+static const sal_Char sKomma[] = ", ";
 
 static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
 //  PT_16, PT_14, PT_14, PT_12, PT_12,          // normal
@@ -226,17 +228,15 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
     {
         if( !( nOutLvlBits & ( 1 << nLevel )) )
         {
-            //pColl->SetOutlineLevel( nLevel );          //#outline level zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle(nLevel);//<-end,zhaojianwei
             if( !bHTMLMode )
             {
                 SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
                 const SwNumFmt& rNFmt = pOutlineRule->Get( nLevel );
-                // --> OD 2008-02-01 #newlistlevelattrs#
+
                 if ( rNFmt.GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
                      ( rNFmt.GetAbsLSpace() || rNFmt.GetFirstLineOffset() ) )
-                // <--
                 {
                     SvxLRSpaceItem aLR( (SvxLRSpaceItem&)pColl->GetFmtAttr( RES_LR_SPACE ) );
                     aLR.SetTxtFirstLineOfstValue( rNFmt.GetFirstLineOffset() );
@@ -244,7 +244,7 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                     pColl->SetFmtAttr( aLR );
                 }
 
-                // --> OD 2006-11-20 #i71764#
+                // #i71764#
                 // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
                 // All paragraph styles, which are assigned to a level of the
                 // outline style has to have the outline style set as its list style.
@@ -253,7 +253,6 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
                     pColl->SetFmtAttr(aItem);
                 }
-                // <--
             }
         }
         pColl->SetNextTxtFmtColl( *pDoc->GetTxtCollFromPool(
@@ -301,7 +300,7 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
     rSet.Put( aLR );
     rSet.Put( aUL );
 
-    if( !pColl )
+    if( pColl )
         pColl->SetNextTxtFmtColl( *pDoc->GetTxtCollFromPool( nNxt ));
 }
 
@@ -321,7 +320,7 @@ SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage)
 
 SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 {
-    ASSERT(
+    OSL_ENSURE(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
         (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END) ||
         (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END) ||
@@ -338,8 +337,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         {
             return pNewColl;
         }
-        //if( pNewColl->GetOutlineLevel() < MAXLEVEL )          //#outline level,zhaojianwei
-        //nOutLvlBits |= ( 1 << pNewColl->GetOutlineLevel() );
+
         if( pNewColl->IsAssignedToListLevelOfOutlineStyle())
             nOutLvlBits |= ( 1 << pNewColl->GetAssignedOutlineStyleLevel() );//<-end,zhaojianwei
     }
@@ -359,7 +357,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
     else if (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END)
         nResId = RC_POOLCOLL_HTML_BEGIN - RES_POOLCOLL_HTML_BEGIN;
 
-    ASSERT( nResId, "Ungueltige Pool-ID" );
+    OSL_ENSURE( nResId, "Ungueltige Pool-ID" );
     if( !nResId )
         return GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
@@ -390,7 +388,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
     {
     // allgemeine Inhaltsformen
     case RES_POOLCOLL_STANDARD:
-        /* #111214# koreans do not like SvxScriptItem(sal_True) */
+        /* koreans do not like SvxScriptItem(TRUE) */
         if (bRegardLanguage)
         {
             sal_uLong nAppLanguage = GetAppLanguage();
@@ -971,7 +969,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aLR.SetLeft( GetMetricVal( CM_1 ));
             aLR.SetRight( GetMetricVal( CM_1 ));
             aSet.Put( aLR );
-//          aSet.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, RES_PARATR_ADJUST ) );
             SvxULSpaceItem aUL( RES_UL_SPACE );
             aUL = pNewColl->GetULSpace();
             aUL.SetLower( HTML_PARSPACE );
@@ -1000,9 +997,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         {
             SvxBoxItem aBox( RES_BOX );
             Color aColor( COL_GRAY );
-            SvxBorderLine aNew( &aColor, DEF_DOUBLE_LINE0_OUT,
-                                         DEF_DOUBLE_LINE0_IN,
-                                         DEF_DOUBLE_LINE0_DIST );
+            SvxBorderLine aNew( &aColor, 1, DOUBLE );
             aBox.SetLine( &aNew, BOX_LINE_BOTTOM );
 
             aSet.Put( aBox );
@@ -1050,9 +1045,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
     {
         {
             pNewColl->SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewColl;
@@ -1064,7 +1056,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
     // benutzt wird
 bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
 {
-    ASSERT(
+    OSL_ENSURE(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
         (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END) ||
         (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END) ||
@@ -1118,7 +1110,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             //          -> returne das erste
             if( RES_POOLCHR_BEGIN > nId || nId >= RES_POOLCHR_END )
             {
-                ASSERT( !this, "ungueltige Id" );
+                OSL_ENSURE( !this, "ungueltige Id" );
                 nId = RES_POOLCHR_BEGIN;
             }
         }
@@ -1136,7 +1128,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             //          -> returne das erste
             if( RES_POOLFRM_BEGIN > nId || nId >= RES_POOLFRM_END )
             {
-                ASSERT( !this, "ungueltige Id" );
+                OSL_ENSURE( !this, "ungueltige Id" );
                 nId = RES_POOLFRM_BEGIN;
             }
         }
@@ -1144,10 +1136,10 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
 
     default:
         // Fehlerfall, unbekanntes Format
-        ASSERT( nId, "ungueltige Id" );
+        OSL_ENSURE( nId, "ungueltige Id" );
         return 0;
     }
-    ASSERT( nRCId, "ungueltige Id" );
+    OSL_ENSURE( nRCId, "ungueltige Id" );
 
     while( nArrCnt-- )
         for( sal_uInt16 n = 0; n < (*pArray[nArrCnt]).Count(); ++n )
@@ -1211,10 +1203,6 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                       rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet(), RES_CHRATR_FONT ));
-            // --> OD 2008-06-02 #i63395#
-            // no font and no font size any more
-//            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9, 100, RES_CHRATR_FONTSIZE ));
-            // <--
         }
         break;
 
@@ -1284,10 +1272,6 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
    case RES_POOLCHR_VERT_NUM:
             aSet.Put( SvxCharRotateItem( 900, sal_False, RES_CHRATR_ROTATE ) );
     break;
-//nichts besonderes
-//  case RES_POOLCHR_HTML_DEFINSTANCE:
-//          break;
-
 
     case RES_POOLFRM_FRAME:
         {
@@ -1323,7 +1307,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
-            aSet.Put( SwFmtSurround( SURROUND_NONE ));
+            aSet.Put( SwFmtSurround( SURROUND_IDEAL ));
         }
         break;
     case RES_POOLFRM_FORMEL:
@@ -1375,9 +1359,6 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
     {
         {
             pNewFmt->SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewFmt;
@@ -1414,7 +1395,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     }
     else
     {
-        ASSERT( sal_False, "ungueltige Id" );
+        OSL_FAIL( "ungueltige Id" );
         bFnd = sal_False;
     }
 
@@ -1459,7 +1440,7 @@ void lcl_GetStdPgSize( SwDoc* pDoc, SfxItemSet& rSet )
 
 SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
 {
-    ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
+    OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
 
     SwPageDesc *pNewPgDsc;
@@ -1474,7 +1455,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     // Fehlerfall: unbekannte Poolvorlage
     if( RES_POOLPAGE_BEGIN > nId ||  nId >= RES_POOLPAGE_END )
     {
-        ASSERT( !this, "ungueltige Id" );
+        OSL_ENSURE( !this, "ungueltige Id" );
         nId = RES_POOLPAGE_BEGIN;
     }
 
@@ -1538,7 +1519,12 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
             bSetLeft = sal_False;
             if( pNewPgDsc )
+            {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
+                // this relies on GetPageDescFromPool() not going into infinite recursion
+                // (by this point RES_POOLPAGE_LEFT will not reach this place again)
+                pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_RIGHT ));
+            }
         }
         break;
     case RES_POOLPAGE_RIGHT:                // Rechte Seite
@@ -1548,7 +1534,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
             bSetLeft = sal_False;
             if( pNewPgDsc )
+            {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
+                pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_LEFT ));
+            }
         }
         break;
 
@@ -1624,9 +1613,6 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             if( bSetLeft )
                 pNewPgDsc->GetLeft().SetFmtAttr( aSet );
             pNewPgDsc->GetMaster().SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewPgDsc;
@@ -1634,7 +1620,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
 SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 {
-    ASSERT( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END,
+    OSL_ENSURE( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END,
             "Falsche AutoFormat-Id" );
 
     SwNumRule* pNewRule;
@@ -1649,7 +1635,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     // Fehlerfall: unbekannte Poolvorlage
     if( RES_POOLNUMRULE_BEGIN > nId ||  nId >= RES_POOLNUMRULE_END )
     {
-        ASSERT( !this, "ungueltige Id" );
+        OSL_ENSURE( !this, "ungueltige Id" );
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
@@ -1658,17 +1644,13 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
 
     SwCharFmt *pNumCFmt = 0, *pBullCFmt = 0;
 
-    // --> OD 2008-02-11 #newlistlevelattrs#
     const SvxNumberFormat::SvxNumPositionAndSpaceMode eNumberFormatPositionAndSpaceMode
-                                  // --> OD 2008-06-06 #i89178#
-                                  = numfunc::GetDefaultPositionAndSpaceMode();
-                                  // <--
-    // <--
+                                  = numfunc::GetDefaultPositionAndSpaceMode(); //#i89178#
     {
         sal_Bool bIsModified = IsModified();
-        // --> OD 2008-02-11 #newlistlevelattrs#
+
         n = MakeNumRule( aNm, 0, sal_False, eNumberFormatPositionAndSpaceMode );
-        // <--
+
         pNewRule = GetNumRuleTbl()[ n ];
         pNewRule->SetPoolFmtId( nId );
         pNewRule->SetAutoRule( sal_False );
@@ -1689,9 +1671,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_NUM1:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetCharFmt( pNumCFmt );
             aFmt.SetStart( 1 );
@@ -1716,7 +1696,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr = aAbsSpace;
 #endif
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - (*pArr) );
@@ -1726,10 +1705,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
-            // <--
+
             for( n = 0; n < MAXLEVEL; ++n, ++pArr )
             {
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( *pArr );
@@ -1739,7 +1717,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( *pArr );
                     aFmt.SetIndentAt( *pArr );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -1770,22 +1748,20 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr = aAbsSpace;
 #endif
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetCharFmt( pNumCFmt );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
             }
-            // <--
+
             sal_uInt16 nSpace = 0;
             for( n = 0; n < MAXLEVEL; ++n )
             {
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( nSpace = nSpace + pArr[ n ] );
@@ -1797,7 +1773,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetIndentAt( nSpace );
                     aFmt.SetFirstLineIndent( - pArr[ n ] );
                 }
-                // <--
+
                 aFmt.SetStart( n+1 );
                 pNewRule->Set( n, aFmt );
             }
@@ -1806,15 +1782,14 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_NUM3:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetCharFmt( pNumCFmt );
             aFmt.SetIncludeUpperLevels( 1 );
 
             sal_uInt16 nOffs = GetMetricVal( CM_1 ) * 3;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - nOffs );
@@ -1824,11 +1799,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                 aFmt.SetFirstLineIndent( - nOffs );
             }
-            // <--
 
             for( n = 0; n < MAXLEVEL; ++n )
             {
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( (n+1) * nOffs );
@@ -1838,7 +1811,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( (n+1) * nOffs );
                     aFmt.SetIndentAt( (n+1) * nOffs );
                 }
-                // <--
+
                 aFmt.SetStart( n+1 );
                 pNewRule->Set( n, aFmt );
             }
@@ -1847,9 +1820,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_NUM4:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);
             aFmt.SetCharFmt( pNumCFmt );
             aFmt.SetIncludeUpperLevels( 1 );
@@ -1873,7 +1845,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr = aAbsSpace;
 #endif
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - (*pArr) );
@@ -1883,11 +1854,11 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::SPACE );
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
-            // <--
+
             for( n = 0; n < MAXLEVEL; ++n, ++pArr )
             {
                 aFmt.SetStart( n + 1 );
-                // --> OD 2008-02-11 #newlistlevelattrs#
+
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( *pArr );
@@ -1897,7 +1868,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( *pArr );
                     aFmt.SetIndentAt( *pArr );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -1927,21 +1898,18 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr0to2 = aAbsSpace0to2;
 #endif
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetSuffix( aDotStr );
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
             }
-            // <--
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( -pArr0to2[0] );    // == 0.40 cm
@@ -1953,14 +1921,13 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetListtabPos( pArr0to2[1] );
                 aFmt.SetIndentAt( pArr0to2[1] );
             }
-            // <--
 
             aFmt.SetCharFmt( pNumCFmt );
             pNewRule->Set( 0, aFmt );
 
             aFmt.SetIncludeUpperLevels( 2 );
             aFmt.SetStart( 2 );
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( -pArr0to2[2] );    // == 0.65 cm
@@ -1972,14 +1939,14 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetListtabPos( pArr0to2[3] );
                 aFmt.SetIndentAt( pArr0to2[3] );
             }
-            // <--
+
             pNewRule->Set( 1, aFmt );
 
             aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER);
             aFmt.SetSuffix( ')');
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetStart( 3 );
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - pArr0to2[4] );   // == 0.45cm
@@ -1991,20 +1958,17 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetListtabPos( pArr0to2[5] );
                 aFmt.SetIndentAt( pArr0to2[5] );
             }
-            // <--
+
             pNewRule->Set( 2, aFmt );
 
 
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
             aFmt.SetBulletChar( cBulletChar );
             sal_uInt16 nOffs = GetMetricVal( CM_01 ) * 4,
                    nOffs2 = GetMetricVal( CM_1 ) * 2;
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - nOffs );
@@ -2013,12 +1977,12 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             {
                 aFmt.SetFirstLineIndent( - nOffs );
             }
-            // <--
+
             aFmt.SetSuffix( aEmptyStr );
             for( n = 3; n < MAXLEVEL; ++n )
             {
                 aFmt.SetStart( n+1 );
-                // --> OD 2008-02-11 #newlistlevelattrs#
+
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( nOffs2 + ((n-3) * nOffs) );
@@ -2028,7 +1992,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( nOffs2 + ((n-3) * nOffs) );
                     aFmt.SetIndentAt( nOffs2 + ((n-3) * nOffs) );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -2037,16 +2001,13 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_BUL1:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
-            // <--
             aFmt.SetBulletChar( cBulletChar );
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
@@ -2067,7 +2028,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr = aAbsSpace;
 #endif
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - (*pArr) );
@@ -2077,10 +2037,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
-            // <--
+
             for( n = 0; n < MAXLEVEL; ++n, ++pArr )
             {
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( *pArr );
@@ -2090,7 +2049,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( *pArr );
                     aFmt.SetIndentAt( *pArr );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -2098,16 +2057,13 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_BUL2:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
             aFmt.SetBulletChar( 0x2013 );
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
@@ -2128,7 +2084,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr = aAbsSpace;
 #endif
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - (*pArr) );
@@ -2138,10 +2093,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
-            // <--
+
             for( n = 0; n < MAXLEVEL; ++n, ++pArr )
             {
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( *pArr );
@@ -2151,7 +2105,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( *pArr );
                     aFmt.SetIndentAt( *pArr );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -2159,19 +2113,17 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_BUL3:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
+
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
 
             sal_uInt16 nOffs = GetMetricVal( CM_01 ) * 4;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - nOffs );
@@ -2181,12 +2133,11 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                 aFmt.SetFirstLineIndent( - nOffs );
             }
-            // <--
 
             for( n = 0; n < MAXLEVEL; ++n )
             {
                 aFmt.SetBulletChar( ( n & 1 ? 0x25a1 : 0x2611 ) );
-                // --> OD 2008-02-11 #newlistlevelattrs#
+
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( ((n & 1) +1) * nOffs );
@@ -2196,7 +2147,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( ((n & 1) +1) * nOffs );
                     aFmt.SetIndentAt( ((n & 1) +1) * nOffs );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -2204,16 +2155,13 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_BUL4:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
@@ -2233,7 +2181,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr = aAbsSpace;
 #endif
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - (*pArr) );
@@ -2243,7 +2190,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::SPACE );
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
-            // <--
+
             for( n = 0; n < MAXLEVEL; ++n, ++pArr )
             {
                 switch( n )
@@ -2252,7 +2199,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 case 1:     aFmt.SetBulletChar( 0xE006 );   break;
                 default:    aFmt.SetBulletChar( 0xE004 );   break;
                 }
-                // --> OD 2008-02-11 #newlistlevelattrs#
+
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( *pArr );
@@ -2262,7 +2209,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( *pArr );
                     aFmt.SetIndentAt( *pArr );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -2270,17 +2217,14 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     case RES_POOLNUMRULE_BUL5:
         {
             SwNumFmt aFmt;
-            // --> OD 2008-02-11 #newlistlevelattrs#
+
             aFmt.SetPositionAndSpaceMode( eNumberFormatPositionAndSpaceMode );
-            // <--
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletChar( 0x2717 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
-            // <--
 
             static const sal_uInt16 aAbsSpace[ MAXLEVEL ] =
                 {
@@ -2300,7 +2244,6 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             const sal_uInt16* pArr = aAbsSpace;
 #endif
 
-            // --> OD 2008-02-11 #newlistlevelattrs#
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aFmt.SetFirstLineOffset( - (*pArr) );
@@ -2310,10 +2253,9 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                 aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                 aFmt.SetFirstLineIndent( - (*pArr) );
             }
-            // <--
+
             for( n = 0; n < MAXLEVEL; ++n, ++pArr )
             {
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
                     aFmt.SetAbsLSpace( *pArr );
@@ -2323,7 +2265,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
                     aFmt.SetListtabPos( *pArr );
                     aFmt.SetIndentAt( *pArr );
                 }
-                // <--
+
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -2339,7 +2281,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     // benutzt wird
 bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
 {
-    ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
+    OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
     SwPageDesc *pNewPgDsc = 0;
     sal_Bool bFnd = sal_False;
@@ -2372,48 +2314,17 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 // erfrage ob die NumRule benutzt wird
 sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 {
-    // --> OD 2008-03-04 #refactorlists#
-//    // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
-//    // (auch indirekte fuer Format-Ableitung! )
-//    sal_Bool bUsed = sal_False;
-//    SwAutoFmtGetDocNode aGetHt( &aNodes );
-//    SwModify* pMod;
-//    const SfxPoolItem* pItem;
-//    sal_uInt16 i, nMaxItems = GetAttrPool().GetItemCount( RES_PARATR_NUMRULE);
-//    for( i = 0; i < nMaxItems; ++i )
-//    {
-//        if( 0 != (pItem = GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
-//            0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
-//            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
-//            ((SwNumRuleItem*)pItem)->GetValue() == rRule.GetName() )
-//        {
-//            if( pMod->IsA( TYPE( SwFmt )) )
-//            {
-//                bUsed = !pMod->GetInfo( aGetHt );
-//                if( bUsed )
-//                    break;
-//            }
-//            else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
-//            {
-//                bUsed = sal_True;
-//                break;
-//            }
-//        }
-//    }
-
-//    return bUsed;
     sal_Bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
                      rRule.GetParagraphStyleListSize() > 0;
 
     return bUsed;
-    // <--
 }
 
     // Suche die Position vom Vorlagen-Namen. Ist nicht vorhanden
     // dann fuege neu ein
 sal_uInt16 SwDoc::SetDocPattern( const String& rPatternName )
 {
-    ASSERT( rPatternName.Len(), "kein Dokument-Vorlagenname" );
+    OSL_ENSURE( rPatternName.Len(), "kein Dokument-Vorlagenname" );
 
     sal_uInt16 nNewPos = aPatternNms.Count();
     for( sal_uInt16 n = 0; n < aPatternNms.Count(); ++n )
@@ -2563,13 +2474,13 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
 
 void SwDoc::RemoveAllFmtLanguageDependencies()
 {
-    /* #106748# Restore the language independ pool defaults and styles. */
+    /* Restore the language independ pool defaults and styles. */
     GetAttrPool().ResetPoolDefaultItem( RES_PARATR_ADJUST );
 
     SwTxtFmtColl * pTxtFmtColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
     pTxtFmtColl->ResetFmtAttr( RES_PARATR_ADJUST );
-    /* #111214# koreans do not like SvxScriptItem(sal_True) */
+    /* koreans do not like SvxScriptItem(TRUE) */
     pTxtFmtColl->ResetFmtAttr( RES_PARATR_SCRIPTSPACE );
 
     SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
@@ -2582,10 +2493,12 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
         rDesc.GetLeft().SetFmtAttr( aFrameDir );
     }
 
-    // OD 09.10.2003 #i18732# - restore static pool default for item
+    // #i18732# - restore static pool default for item
     // RES_FOLLOW_TEXT_FLOW.
     GetAttrPool().ResetPoolDefaultItem( RES_FOLLOW_TEXT_FLOW );
 
     //#i16874# AutoKerning as default for new documents
     GetAttrPool().ResetPoolDefaultItem( RES_CHRATR_AUTOKERN );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

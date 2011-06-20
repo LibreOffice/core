@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
@@ -41,9 +40,6 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-/*-- 08.04.2004 14:04:39---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwSelectDBTableDialog : public SfxModalDialog
 {
     FixedText       m_aSelectFI;
@@ -77,3 +73,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

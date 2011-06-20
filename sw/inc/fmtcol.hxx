@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,9 @@
 #include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <format.hxx>
-#include <swtypes.hxx>      // fuer MAXLEVEL
+#include <swtypes.hxx> // For MAXLEVEL.
 
-class SwDoc;        // fuer friend
+class SwDoc; // For friend.
 
 class SwFmtColl : public SwFmt
 {
@@ -49,13 +50,12 @@ protected:
           : SwFmt( rPool, rFmtName, pWhichRanges, pDerFrom, nFmtWhich )
     { SetAuto( sal_False ); }
 
-
 private:
-    // erstmal wird nicht kopiert und nicht zugewiesen
+
+    // For now don't copy and don't assign.
     SwFmtColl(const SwFmtColl & );
     const SwFmtColl &operator=(const SwFmtColl &);
 };
-
 
 class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
 {
@@ -63,13 +63,11 @@ class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
 
     SwTxtFmtColl(const SwTxtFmtColl & rRef);
 
-    // --> OD 2007-01-24 #i73790#
     bool mbStayAssignedToListLevelOfOutlineStyle;
-    // <--
 
 protected:
-    //sal_uInt8 nOutlineLevel;       //<-#outline level, removed by zhaojianwei
-    bool mbAssignedToOutlineStyle;//<-#outline level added by zhaojianwei
+
+    bool mbAssignedToOutlineStyle;
 
     SwTxtFmtColl *pNextTxtFmtColl;
 
@@ -78,11 +76,9 @@ protected:
                     sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, pFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
-          // --> OD 2007-01-24 #i73790#
           mbStayAssignedToListLevelOfOutlineStyle( false ),
-          // <--
-          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
-          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
+
+          mbAssignedToOutlineStyle(false)
     { pNextTxtFmtColl = this; }
 
     SwTxtFmtColl( SwAttrPool& rPool, const String &rFmtCollName,
@@ -90,27 +86,24 @@ protected:
                     sal_uInt16 nFmtWh = RES_TXTFMTCOLL )
         : SwFmtColl( rPool, rFmtCollName, aTxtFmtCollSetRange,
                         pDerFrom, nFmtWh ),
-          // --> OD 2007-01-24 #i73790#
+
           mbStayAssignedToListLevelOfOutlineStyle( false ),
-          // <--
-          //nOutlineLevel( NO_NUMBERING )   //<-#outline level,removed by zhaojianwei
-          mbAssignedToOutlineStyle(false)   //<-#outline level,added by zhaojianwei
+
+          mbAssignedToOutlineStyle(false)
     { pNextTxtFmtColl = this; }
 
-    // zum "abfischen" von UL-/LR-/FontHeight Aenderungen
+    // To get UL- / LR- / FontHeight-changes.
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
 
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO(); // Already in base class Client.
 
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
     SwTxtFmtColl& GetNextTxtFmtColl() const { return *pNextTxtFmtColl; }
 
     sal_Bool IsAtDocNodeSet() const;
 
-    // --> OD 2006-11-22 #i71574#
-   //<-#outline level,zhaojianwei
     void SetAttrOutlineLevel( int );
     int  GetAttrOutlineLevel() const;
     int  GetAssignedOutlineStyleLevel() const;
@@ -120,38 +113,28 @@ public:
     }
     void AssignToListLevelOfOutlineStyle(const int nAssignedListLevel);
     void DeleteAssignmentToListLevelOfOutlineStyle();
-    //<-end
-    // <--
 
-    // --> OD 2008-03-04 #refactorlists#
-    // override to recognize changes on the <SwNumRuleItem> and register/unregister
-    // the paragragh style at the corresponding <SwNumRule> instance
+    // Override to recognize changes on the <SwNumRuleItem> and register/unregister
+    // the paragragh style at the corresponding <SwNumRule> instance.
     virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
     virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
     virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
-    // <--
 
-    // --> OD 2007-01-24 #i73790#
-    // override <ResetAllFmtAttr()> to stay assigned to list level of outline style
+    // Override <ResetAllFmtAttr()> to stay assigned to list level of outline style.
     virtual sal_uInt16 ResetAllFmtAttr();
 
     inline bool StayAssignedToListLevelOfOutlineStyle() const
     {
         return mbStayAssignedToListLevelOfOutlineStyle;
     }
-    // <--
 
-    // --> OD 2008-02-13 #newlistleveattrs#
     bool AreListLevelIndentsApplicable() const;
-    // <--
 
-/*----------------- JP 09.08.94 17:36 -------------------
- wird die Funktionalitaet von Zeichenvorlagen an Absatzvorlagen
- ueberhaupt benoetigt ??
-
- Wenn, ja dann muessen im TextNode und hier in der TxtCollection ein 2.
- Attset fuer die Char-Attribute angelegt werden; damit die Vererbung
- und der Zugriff auf die gesetzen Attribute richtig funktioniert!!
+/*
+ Is the functionality of character styles at paragraph styles needed?
+ If so, a second Attset for char-attributes has to be created
+ in TextNode and here in TxtCollection in order to make both
+ the inheritance of and the access to set attributes function correctly!
 
     virtual sal_Bool SetDerivedFrom( SwFmtColl* pDerFrom = 0 );
 
@@ -159,20 +142,19 @@ public:
     inline sal_Bool IsCharFmtSet() const;
     void SetCharFmt(SwCharFmt *);
     void ResetCharFmt();
-inline sal_Bool SwTxtFmtColl::IsCharFmtSet() const
-{
-    return aCharDepend.GetRegisteredIn() ? sal_True : sal_False;
-}
-inline SwCharFmt* SwTxtFmtColl::GetCharFmt() const
-{
-    return (SwCharFmt*)aCharDepend.GetRegisteredIn();
-}
---------------------------------------------------*/
+    inline sal_Bool SwTxtFmtColl::IsCharFmtSet() const
+    {
+        return aCharDepend.GetRegisteredIn() ? sal_True : sal_False;
+    }
+    inline SwCharFmt* SwTxtFmtColl::GetCharFmt() const
+    {
+        return (SwCharFmt*)aCharDepend.GetRegisteredIn();
+    }
+*/
 };
 
 typedef SwTxtFmtColl* SwTxtFmtCollPtr;
 SV_DECL_PTRARR(SwTxtFmtColls,SwTxtFmtCollPtr,2,4)
-
 
 class SwGrfFmtColl: public SwFmtColl
 {
@@ -191,17 +173,14 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO(); // Already in base class Client.
 };
 
 typedef SwGrfFmtColl* SwGrfFmtCollPtr;
 SV_DECL_PTRARR(SwGrfFmtColls,SwGrfFmtCollPtr,2,4)
 
-
-
-//FEATURE::CONDCOLL
-// --------- Bedingte Vorlagen -------------------------------
-
+// FEATURE::CONDCOLL
+// Conditional styles.
 enum Master_CollConditions
 {
     PARA_IN_LIST        = 0x0001,
@@ -218,7 +197,6 @@ enum Master_CollConditions
     USRFLD_EXPRESSION   = (int)0x8000
 };
 
-
 class SW_DLLPUBLIC SwCollCondition : public SwClient
 {
     sal_uLong nCondition;
@@ -229,8 +207,7 @@ class SW_DLLPUBLIC SwCollCondition : public SwClient
     } aSubCondition;
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
-
+    TYPEINFO(); // Already in base class Client.
 
     SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,
                     sal_uLong nSubCond = 0 );
@@ -259,7 +236,6 @@ public:
     void RegisterToFormat( SwFmt& );
 };
 
-
 typedef SwCollCondition* SwCollConditionPtr;
 SV_DECL_PTRARR_DEL( SwFmtCollConditions, SwCollConditionPtr, 0, 5 )
 
@@ -279,7 +255,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO(); // Already in base class Client.
 
     virtual ~SwConditionTxtFmtColl();
 
@@ -291,13 +267,12 @@ public:
     void SetConditions( const SwFmtCollConditions& );
 };
 
-//FEATURE::CONDCOLL
-
-// ------------- Inline Implementierungen --------------------
-
+// FEATURE::CONDCOLL
+// Inline implementations.
 inline void SwTxtFmtColl::SetNextTxtFmtColl( SwTxtFmtColl& rNext )
 {
     pNextTxtFmtColl = &rNext;
 }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

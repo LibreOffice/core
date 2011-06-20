@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,12 +33,8 @@
 
 
 #include <hintids.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <format.hxx>
 #include <charfmt.hxx>
 #include <fmtcol.hxx>
@@ -67,14 +64,7 @@
 #include <swundo.hxx>           // fuer die UndoIds
 #include <boost/shared_ptr.hpp>
 
-//#define FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES 1
 
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-#include <cellatr.hxx>
-#endif
-
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
 
 namespace
 {
@@ -129,9 +119,6 @@ SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool
                         FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE,
                         FN_TABLE_BOX_TEXTDIRECTION, FN_TABLE_BOX_TEXTDIRECTION,
                         FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-                        RES_BOXATR_FORMAT,      RES_BOXATR_FORMAT,
-#endif
                         0);
     }
     else if( nSelectionType & nsSelectionType::SEL_TXT )
@@ -192,11 +179,6 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetRowSplit(pSplit);
     if(pSplit)
         rSet.Put(*pSplit);
-
-    //-- numberformat in cells
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-    rSh.GetTblBoxFormulaAttrs( rSet ); //RES_BOXATR_FORMAT
-#endif
 }
 
 void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
@@ -285,17 +267,6 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 
     if( SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pItem) )
         rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pItem));
-
-    //-- numberformat in cells
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem ))
-    {
-        SfxItemSet aBoxSet( *rSet.GetPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
-        aBoxSet.Put( SwTblBoxNumFormat( ((SfxUInt32Item*)pItem)->GetValue() ));
-        rSh.SetTblBoxFormulaAttrs( aBoxSet );
-
-    }
-#endif
 }
 }//end anonymous namespace
 
@@ -451,7 +422,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 }
 typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
 typedef std::vector< SfxPoolItemSharedPtr > ItemVector;
-// #144857# collect all PoolItems from the applied styles
+// collect all PoolItems from the applied styles
 void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
     const sal_uInt16*  pRanges = rStyleAttrSet.GetRanges();
@@ -468,7 +439,7 @@ void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSe
         pRanges += 2;
     }
 }
-// #144857# remove all items that are inherited from the styles
+// remove all items that are inherited from the styles
 void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, ItemVector& rItemVector )
 {
     ItemVector::iterator aEnd = rItemVector.end();
@@ -510,9 +481,9 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 if( pStyle )
                 {
                     SwFmtCharFmt aFmt(pStyle->GetCharFmt());
-                    // #144857# collect items from character style
+                    // collect items from character style
                     lcl_AppendSetItems( aItemVector, aFmt.GetCharFmt()->GetAttrSet());
-                    sal_uInt16 nFlags=0; //(nMode & KEY_SHIFT) ? SETATTR_DONTREPLACE : SETATTR_DEFAULT;
+                    sal_uInt16 nFlags=0;
                     rWrtShell.SetAttr( aFmt, nFlags );
                 }
             }
@@ -521,7 +492,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 SwDocStyleSheet* pStyle = (SwDocStyleSheet*)pPool->Find(m_aParaStyle, SFX_STYLE_FAMILY_PARA);
                 if( pStyle )
                 {
-                    // #144857# collect items from paragraph style
+                    // collect items from paragraph style
                     lcl_AppendSetItems( aItemVector, pStyle->GetCollection()->GetAttrSet());
                     rWrtShell.SetTxtFmtColl( pStyle->GetCollection() );
                 }
@@ -547,7 +518,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             if(pTemplateItemSet)
             {
                 pTemplateItemSet->Put( *m_pItemSet );
-                // #144857# only _set_ attributes that differ from style attributes should be applied - the style is applied anyway
+                // only _set_ attributes that differ from style attributes should be applied - the style is applied anyway
                 lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
 
                 if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
@@ -615,3 +586,5 @@ void SwFormatClipboard::Erase()
 
     m_bPersistentCopy = false;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

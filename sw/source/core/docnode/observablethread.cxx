@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 
 /** class for an observable thread
 
-    OD 2007-01-29 #i73788#
+   #i73788#
 
     @author OD
 */
@@ -95,3 +96,5 @@ void ObservableThread::threadFinished()
 {
     // empty default implementation
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

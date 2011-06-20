@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/ulspitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -101,6 +101,8 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <numrule.hxx>
 
+using ::editeng::SvxBorderLine;
+
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
  * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
@@ -110,7 +112,7 @@
  * diese Section und die dazugeherigen Tabellen muessen in folgenden Files
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
  */
-#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC) && !defined(__MINGW32__) && !defined(OS2)
+#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(__MINGW32__)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
@@ -138,11 +140,11 @@ using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------
 
-sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
-sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
 const sal_Char cCSS1_style_opt_end = '\"';
 
-sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
+sal_Char CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
 
 extern SwAttrFnTab aCSS1AttrFnTab;
 
@@ -175,7 +177,6 @@ static Writer& OutCSS1_SvxULSpace_SvxLRSpace( Writer& rWrt,
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                                  sal_uInt16 nMode, const String *pGrfName );
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt );
-static Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
                                      sal_uInt16 nMode );
 static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
@@ -337,7 +338,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     switch( eUnit )
     {
     case FUNIT_100TH_MM:
-        ASSERT( FUNIT_MM == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_MM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_MM:
         // 0.01mm = 0.57twip
         nMul = 25400;   // 25.4 * 1000
@@ -348,51 +349,30 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
 
     case FUNIT_M:
     case FUNIT_KM:
-        ASSERT( FUNIT_CM == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_CM == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_CM:
-#ifdef EXACT_VALUES
-        // 0.001cm = 0.57twip
-        nMul = 25400;   // 2.54 * 10000
-        nDiv = 1440;    // 72 * 20;
-        nFac = 1000;
-#else
         // 0.01cm = 5.7twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 2540;    // 2.54 * 1000
         nDiv = 1440;    // 72 * 20;
         nFac = 100;
-#endif
         pUnit = sCSS1_UNIT_cm;
         break;
 
     case FUNIT_TWIP:
-        ASSERT( FUNIT_POINT == eUnit, "Masseinheit wird nicht unterstuetzt" );
+        OSL_ENSURE( FUNIT_POINT == eUnit, "Masseinheit wird nicht unterstuetzt" );
     case FUNIT_POINT:
-#ifdef EXACT_VALUES
-        // 0.01pt = 0.2twip
-        nMul = 1000;
-        nDiv = 20;
-        nFac = 100;
-#else
         // 0.1pt = 2.0twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 100;
         nDiv = 20;
         nFac = 10;
-#endif
         pUnit = sCSS1_UNIT_pt;
         break;
 
     case FUNIT_PICA:
-#ifdef EXACT_VALUES
-        // 0.001pc = 0.24twip
-        nMul = 10000;
-        nDiv = 12 * 20;
-        nFac = 1000;
-#else
         // 0.01pc = 2.40twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
         nDiv = 240;     // 12 * 20;
         nFac = 100;
-#endif
         pUnit = sCSS1_UNIT_pc;
         break;
 
@@ -403,18 +383,11 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
     case FUNIT_PERCENT:
     case FUNIT_INCH:
     default:
-        ASSERT( FUNIT_INCH == eUnit, "Masseinheit wird nicht unterstuetzt" );
-#ifdef EXACT_VALUES
-        // 0.0001in = 0.144twip
-        nMul = 100000;
-        nDiv = 1440;    // 72 * 20;
-        nFac = 10000;
-#else
+        OSL_ENSURE( FUNIT_INCH == eUnit, "Masseinheit wird nicht unterstuetzt" );
         // 0.01in = 14.4twip (ist zwar ungenau, aber die UI ist auch ungenau)
         nMul = 1000;
         nDiv = 1440;    // 72 * 20;
         nFac = 100;
-#endif
         pUnit = sCSS1_UNIT_inch;
         break;
     }
@@ -878,7 +851,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
             // Vorlage dem szugehoerigen Token
-            ASSERT( rRefPoolId != 0 == rToken.Len() > 0,
+            OSL_ENSURE( (rRefPoolId != 0) == (rToken.Len() > 0),
                     "Token missing" );
         }
         else
@@ -1105,7 +1078,7 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( sal_uInt16 nPoolFmtId,
 
     if( pTemplate )
     {
-        ASSERT( !(USER_FMT & nPoolFmtId),
+        OSL_ENSURE( !(USER_FMT & nPoolFmtId),
                 "In der Dok-Vorlage gibt es keine Benutzer-Vorlagen" );
         if( POOLGRP_NOCOLLID & nPoolFmtId )
             pRefFmt = pTemplate->GetCharFmtFromPool( nPoolFmtId );
@@ -1118,7 +1091,7 @@ const SwFmt *SwHTMLWriter::GetTemplateFmt( sal_uInt16 nPoolFmtId,
 
 const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep )
 {
-    ASSERT( nDeep != USHRT_MAX, "GetParent fuer HTML-Vorlage aufgerufen!" );
+    OSL_ENSURE( nDeep != USHRT_MAX, "GetParent fuer HTML-Vorlage aufgerufen!" );
     const SwFmt *pRefFmt = 0;
 
     if( nDeep > 0 )
@@ -1150,7 +1123,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                                     sal_Bool bClearSame,
                                      const SfxItemSet *pRefScriptItemSet )
 {
-    ASSERT( bSetDefaults || bClearSame,
+    OSL_ENSURE( bSetDefaults || bClearSame,
             "SwHTMLWriter::SubtractItemSet: Bei diesen Flags passiert nix" );
     SfxItemSet aRefItemSet( *rRefItemSet.GetPool(), rRefItemSet.GetRanges() );
     aRefItemSet.Set( rRefItemSet );
@@ -2159,10 +2132,10 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 sal_Bool bOutXPos = sal_False, bOutYPos = sal_False;
                 if( RES_DRAWFRMFMT == rFrmFmt.Which() )
                 {
-                    ASSERT( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
+                    OSL_ENSURE( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
                     if( !pSdrObj )
                         pSdrObj = rFrmFmt.FindSdrObject();
-                    ASSERT( pSdrObj, "Wo ist das SdrObject" );
+                    OSL_ENSURE( pSdrObj, "Wo ist das SdrObject" );
                     if( pSdrObj )
                     {
                         Point aPos( pSdrObj->GetRelativePos() );
@@ -2226,10 +2199,10 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
     {
         if( RES_DRAWFRMFMT == rFrmFmt.Which() )
         {
-            ASSERT( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
+            OSL_ENSURE( pSdrObj, "Kein SdrObject uebergeben. Ineffizient" );
             if( !pSdrObj )
                 pSdrObj = rFrmFmt.FindSdrObject();
-            ASSERT( pSdrObj, "Wo ist das SdrObject" );
+            OSL_ENSURE( pSdrObj, "Wo ist das SdrObject" );
             if( pSdrObj )
             {
                 Size aTwipSz( pSdrObj->GetLogicRect().GetSize() );
@@ -2253,9 +2226,9 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         }
         else
         {
-            ASSERT( HTML_FRMOPT_ABSSIZE & nFrmOpts,
+            OSL_ENSURE( HTML_FRMOPT_ABSSIZE & nFrmOpts,
                     "Absolute Groesse wird exportiert" );
-            ASSERT( HTML_FRMOPT_ANYSIZE & nFrmOpts,
+            OSL_ENSURE( HTML_FRMOPT_ANYSIZE & nFrmOpts,
                     "Jede Groesse wird exportiert" );
             sal_uInt16 nMode = 0;
             if( nFrmOpts & HTML_FRMOPT_S_WIDTH )
@@ -2345,7 +2318,6 @@ static sal_Bool OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
                                  const SvxBrushItem& rBrushItem )
 {
     sal_Bool bWritten = sal_False;
-    /// OD 02.09.2002 #99657#
     /// output brush of frame format, if its background color is not "no fill"/"auto fill"
     /// or it has a background graphic.
     if( rBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -2425,7 +2397,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 
     // Schliesslich bleibt noch der Hintergrund der Seite uebrig und als
     // letzte Rettung das Item der Config.
-    ASSERT( pCurrPageDesc, "Keine Seiten-Vorlage gemerkt" );
+    OSL_ENSURE( pCurrPageDesc, "Keine Seiten-Vorlage gemerkt" );
     if( !OutCSS1_FrmFmtBrush( *this,
                               pCurrPageDesc->GetMaster().GetBackground() ) )
     {
@@ -2477,7 +2449,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // das geht auch in HTML und muss nicht als STYLE-Option
                 // und darf nicht als Hint geschrieben werden
-                ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "Underline als Hint schreiben?" );
                 pUStr = sCSS1_PV_underline;
             }
@@ -2500,7 +2472,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // das geht auch in HTML und muss nicht als STYLE-Option
                 // und darf nicht als Hint geschrieben werden
-                ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "Overline als Hint schreiben?" );
                 pOStr = sCSS1_PV_overline;
             }
@@ -2523,7 +2495,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
             {
                 // das geht auch in HTML und muss nicht als STYLE-Option
                 // und darf nicht als Hint geschrieben werden
-                ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+                OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                         "CrossedOut als Hint schreiben?" );
                 pCOStr = sCSS1_PV_line_through;
             }
@@ -2542,7 +2514,7 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
         {
             // das geht auch in HTML und muss nicht als STYLE-Option
             // und darf nicht als Hint geschrieben werden
-            ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+            OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "Blink als Hint schreiben?" );
             pBStr = sCSS1_PV_blink;
         }
@@ -2592,17 +2564,26 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsHTMLMode(HTMLMODE_SMALL_CAPS) )
         return rWrt;
 
-    const sal_Char *pStr = 0;
     switch( ((const SvxCaseMapItem&)rHt).GetCaseMap() )
     {
-    case SVX_CASEMAP_NOT_MAPPED:    pStr = sCSS1_PV_normal;     break;
-    case SVX_CASEMAP_KAPITAELCHEN:  pStr = sCSS1_PV_small_caps; break;
+    case SVX_CASEMAP_NOT_MAPPED:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, sCSS1_PV_normal );
+        break;
+    case SVX_CASEMAP_KAPITAELCHEN:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, sCSS1_PV_small_caps );
+        break;
+    case SVX_CASEMAP_VERSALIEN:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_uppercase );
+        break;
+    case SVX_CASEMAP_GEMEINE:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_lowercase );
+        break;
+    case SVX_CASEMAP_TITEL:
+        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_transform, sCSS1_PV_capitalize );
+        break;
     default:
         ;
     }
-
-    if( pStr )
-        rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, pStr );
 
     return rWrt;
 }
@@ -2616,7 +2597,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) &&
         !rHTMLWrt.bCfgPreferStyles )
         return rWrt;
-    ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+    OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Farbe wirklich als Hint ausgeben?" );
 
     Color aColor( ((const SvxColorItem&)rHt).GetValue() );
@@ -2661,7 +2642,7 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+    OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Font wirklich als Hint ausgeben?" );
 
     String sOut;
@@ -2735,7 +2716,7 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
         {
             // das geht auch in HTML und muss nicht als STYLE-Option
             // und darf nicht als Hint geschrieben werden
-            ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+            OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "Italic als Hint schreiben?" );
             pStr = sCSS1_PV_italic;
         }
@@ -2803,7 +2784,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+    OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Language wirklich als Hint ausgeben?" );
 
     LanguageType eLang = ((const SvxLanguageItem &)rHt).GetLanguage();
@@ -2869,7 +2850,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
         {
             // das geht auch in HTML und muss nicht als STYLE-Option
             // und darf nicht als Hint geschrieben werden
-            ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
+            OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
                     "Fett als Hint schreiben?" );
             pStr = sCSS1_PV_bold;
         }
@@ -2901,7 +2882,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // #60393#: Netscape4 hat massive Probleme mit den Zellenhoehen
+    // Netscape4 hat massive Probleme mit den Zellenhoehen
     // wenn der Zeilenabstand innerhalb einer Tabelle geaendert wird
     // und die Breite der Tabelle nicht automatisch berechnet wird
     // (also wenn eine WIDTH-Option vorhanden ist).
@@ -3122,7 +3103,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
             bOutHeight = (nMode & CSS1_FRMSIZE_VARHEIGHT) != 0;
             break;
         default:
-            ASSERT( bOutHeight, "Hoehe wird nicht exportiert" );
+            OSL_ENSURE( bOutHeight, "Hoehe wird nicht exportiert" );
             break;
         }
 
@@ -3381,14 +3362,13 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     {
         // Fuer Seitenvorlagen wurde der Grafik-Name uebergeben. Es wird
         // nur ein Attribut ausgegeben, wenn die Grafik nicht gekachelt ist.
-        ASSERT( pLink, "Wo ist der Grafik-Name der Seitenvorlage?" );
+        OSL_ENSURE( pLink, "Wo ist der Grafik-Name der Seitenvorlage?" );
         if( !pLink || !pLink->Len() || GPOS_TILED==ePos )
             return rWrt;
     }
 
     // Erstmal die Farbe holen
     sal_Bool bColor = sal_False;
-    /// OD 02.09.2002 #99657#
     /// set <bTransparent> to sal_True, if color is "no fill"/"auto fill"
     sal_Bool bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
     Color aColor;
@@ -3563,20 +3543,13 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
                                    const sal_Char *pProperty,
                                    const SvxBorderLine *pLine )
 {
-    if( !pLine )
+    if( !pLine || pLine->isEmpty() )
     {
         rHTMLWrt.OutCSS1_PropertyAscii( pProperty, sCSS1_PV_none );
         return;
     }
 
-    sal_Bool bDouble = sal_False;
-    sal_Int32 nWidth = pLine->GetOutWidth();
-    if( pLine->GetInWidth() )
-    {
-        nWidth += pLine->GetDistance();
-        nWidth += pLine->GetInWidth();
-        bDouble = sal_True;
-    }
+    sal_Int32 nWidth = pLine->GetWidth();
 
     ByteString sOut;
     if( Application::GetDefaultDevice() &&
@@ -3599,8 +3572,43 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     }
 
     // Linien-Stil: solid oder double
-    ((sOut += ' ')
-        += (bDouble ? sCSS1_PV_double : sCSS1_PV_solid)) += ' ';
+    sOut += ' ';
+    switch ( pLine->GetStyle( ) )
+    {
+        case ::editeng::SOLID:
+            sOut += sCSS1_PV_solid;
+            break;
+        case ::editeng::DOTTED:
+            sOut += sCSS1_PV_dotted;
+            break;
+        case ::editeng::DASHED:
+            sOut += sCSS1_PV_dashed;
+            break;
+        case ::editeng::DOUBLE:
+        case ::editeng::THINTHICK_SMALLGAP:
+        case ::editeng::THINTHICK_MEDIUMGAP:
+        case ::editeng::THINTHICK_LARGEGAP:
+        case ::editeng::THICKTHIN_SMALLGAP:
+        case ::editeng::THICKTHIN_MEDIUMGAP:
+        case ::editeng::THICKTHIN_LARGEGAP:
+            sOut += sCSS1_PV_double;
+            break;
+        case ::editeng::EMBOSSED:
+            sOut += sCSS1_PV_ridge;
+            break;
+        case ::editeng::ENGRAVED:
+            sOut += sCSS1_PV_groove;
+            break;
+        case ::editeng::INSET:
+            sOut += sCSS1_PV_inset;
+            break;
+        case ::editeng::OUTSET:
+            sOut += sCSS1_PV_outset;
+            break;
+        default:
+            sOut += sCSS1_PV_none;
+    }
+    sOut += ' ';
 
     // und noch die Farbe
     GetCSS1Color( pLine->GetColor(), sOut );
@@ -3608,14 +3616,9 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     rHTMLWrt.OutCSS1_PropertyAscii( pProperty, sOut );
 }
 
-static Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
+Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
-
-    // Das Zeichen-Attribut wird nicht ausgegeben, wenn gerade
-    // Optionen ausgegeben werden
-    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_PARA_BORDER))
-        return rWrt;
 
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)rHt;
     const SvxBorderLine *pTop = rBoxItem.GetTop();
@@ -3856,3 +3859,5 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_BOXATR_FORMULA */            0,
 /* RES_BOXATR_VALUE */              0
 };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

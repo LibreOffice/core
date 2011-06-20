@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,11 +106,10 @@
 #include <unoidx.hxx>
 #include <unoframe.hxx>
 #include <fmthdft.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtflcnt.hxx>
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 #include <editeng/brshitem.hxx>
@@ -124,10 +124,10 @@
 #include <iterator>
 #include <boost/bind.hpp>
 #include <switerator.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-
 
 namespace sw {
 
@@ -152,13 +152,12 @@ GetSupportedServiceNamesImpl(
     uno::Sequence< ::rtl::OUString > ret(nServices);
     for (size_t i = 0; i < nServices; ++i)
     {
-        ret[i] = C2U(pServices[i]);
+        ret[i] = rtl::OUString::createFromAscii(pServices[i]);
     }
     return ret;
 }
 
 } // namespace sw
-
 
 namespace sw {
 
@@ -186,7 +185,7 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 struct FrameDependSortListLess
 {
     bool operator() (FrameDependSortListEntry const& r1,
-                     FrameDependSortListEntry const& r2)
+                     FrameDependSortListEntry const& r2) const
     {
         return  (r1.nIndex <  r2.nIndex)
             || ((r1.nIndex == r2.nIndex) && (r1.nOrder < r2.nOrder));
@@ -303,9 +302,6 @@ UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
     }
 }
 
-/* -----------------07.07.98 12:05-------------------
- *
- * --------------------------------------------------*/
 UnoActionRemoveContext::~UnoActionRemoveContext()
 {
     SwRootFrm *const pRootFrm = m_pDoc->GetCurrentLayout();
@@ -314,7 +310,6 @@ UnoActionRemoveContext::~UnoActionRemoveContext()
         pRootFrm->UnoRestoreAllActions();
     }
 }
-
 
 void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
@@ -334,7 +329,6 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
         break;
     }
 }
-
 
 void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
         const SfxItemSet& rSet,
@@ -380,7 +374,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     //<-end,zhaojianwei
 }
 
-// --> OD 2006-07-12 #i63870#
+// #i63870#
 // split third parameter <bCurrentAttrOnly> into new parameters <bOnlyTxtAttr>
 // and <bGetFromChrFmt> to get better control about resulting <SfxItemSet>
 void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
@@ -452,7 +446,6 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
 /******************************************************************
  * SwXParagraphEnumeration
  ******************************************************************/
-
 class SwXParagraphEnumeration::Impl
     : public SwClient
 {
@@ -556,8 +549,9 @@ static char const*const g_ServicesParagraphEnum[] =
 {
     "com.sun.star.text.ParagraphEnumeration",
 };
+
 static const size_t g_nServicesParagraphEnum(
-    sizeof(g_ServicesParagraphEnum)/sizeof(g_ServicesParagraphEnum[0]));
+    SAL_N_ELEMENTS(g_ServicesParagraphEnum));
 
 sal_Bool SAL_CALL
 SwXParagraphEnumeration::supportsService(const OUString& rServiceName)
@@ -578,7 +572,7 @@ throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 SwXParagraphEnumeration::hasMoreElements() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return (m_pImpl->m_bFirstParagraph) ? sal_True : m_pImpl->m_xNextPara.is();
 }
@@ -600,7 +594,6 @@ lcl_FindTopLevelTable(
     return pLast;
 }
 
-
 static bool
 lcl_CursorIsInSection(
         SwUnoCrsr const*const pUnoCrsr, SwStartNode const*const pOwnStartNode)
@@ -617,7 +610,6 @@ lcl_CursorIsInSection(
     }
     return bRes;
 }
-
 
 uno::Reference< text::XTextContent >
 SwXParagraphEnumeration::Impl::NextElement_Impl()
@@ -727,7 +719,7 @@ uno::Any SAL_CALL SwXParagraphEnumeration::nextElement()
 throw (container::NoSuchElementException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (m_pImpl->m_bFirstParagraph)
     {
@@ -749,7 +741,6 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 /******************************************************************
  * SwXTextRange
  ******************************************************************/
-
 class SwXTextRange::Impl
     : public SwClient
 {
@@ -825,7 +816,6 @@ void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew
     }
 }
 
-
 SwXTextRange::SwXTextRange(SwPaM& rPam,
         const uno::Reference< text::XText > & xParent,
         const enum RangePosition eRange)
@@ -859,7 +849,6 @@ SwDoc * SwXTextRange::GetDoc()
 {
     return & m_pImpl->m_rDoc;
 }
-
 
 void SwXTextRange::Invalidate()
 {
@@ -909,10 +898,14 @@ throw (uno::RuntimeException)
     }
 }
 
+namespace
+{
+    class theSwXTextRangeUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextRangeUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextRangeUnoTunnelId::get().getSeq();
 }
 
 // XUnoTunnel
@@ -926,7 +919,7 @@ throw (uno::RuntimeException)
 OUString SAL_CALL
 SwXTextRange::getImplementationName() throw (uno::RuntimeException)
 {
-    return OUString::createFromAscii("SwXTextRange");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXTextRange"));
 }
 
 static char const*const g_ServicesTextRange[] =
@@ -939,8 +932,9 @@ static char const*const g_ServicesTextRange[] =
     "com.sun.star.style.ParagraphPropertiesAsian",
     "com.sun.star.style.ParagraphPropertiesComplex",
 };
+
 static const size_t g_nServicesTextRange(
-    sizeof(g_ServicesTextRange)/sizeof(g_ServicesTextRange[0]));
+    SAL_N_ELEMENTS(g_ServicesTextRange));
 
 sal_Bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -959,7 +953,7 @@ SwXTextRange::getSupportedServiceNames() throw (uno::RuntimeException)
 uno::Reference< text::XText > SAL_CALL
 SwXTextRange::getText() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->m_xParentText.is())
     {
@@ -982,7 +976,7 @@ SwXTextRange::getText() throw (uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXTextRange::getStart() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange >  xRet;
     ::sw::mark::IMark const * const pBkmk = m_pImpl->GetBookmark();
@@ -1010,7 +1004,7 @@ SwXTextRange::getStart() throw (uno::RuntimeException)
 uno::Reference< text::XTextRange > SAL_CALL
 SwXTextRange::getEnd() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< text::XTextRange >  xRet;
     ::sw::mark::IMark const * const pBkmk = m_pImpl->GetBookmark();
@@ -1037,7 +1031,7 @@ SwXTextRange::getEnd() throw (uno::RuntimeException)
 
 OUString SAL_CALL SwXTextRange::getString() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     OUString sRet;
     // for tables there is no bookmark, thus also no text
@@ -1053,7 +1047,7 @@ OUString SAL_CALL SwXTextRange::getString() throw (uno::RuntimeException)
 void SAL_CALL SwXTextRange::setString(const OUString& rString)
 throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     DeleteAndInsert(rString, false);
 }
@@ -1133,7 +1127,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
                 : ((pPortion) ? pPortion->GetCursor() : 0);
             if (pUnoCrsr && pDoc == rToFill.GetDoc())
             {
-                DBG_ASSERT((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr,
+                OSL_ENSURE((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr,
                         "what to do about rings?");
                 bRet = true;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();
@@ -1313,9 +1307,9 @@ uno::Reference< container::XEnumeration > SAL_CALL
 SwXTextRange::createContentEnumeration(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
-    if (!rServiceName.equalsAscii("com.sun.star.text.TextContent"))
+    if (!rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent")))
     {
         throw uno::RuntimeException();
     }
@@ -1340,7 +1334,7 @@ throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXTextRange::createEnumeration() throw (uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1380,14 +1374,14 @@ SwXTextRange::getAvailableServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = OUString::createFromAscii("com.sun.star.text.TextContent");
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextContent"));
     return aRet;
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXTextRange::getPropertySetInfo() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     static uno::Reference< beans::XPropertySetInfo > xRef =
         m_pImpl->m_rPropSet.getPropertySetInfo();
@@ -1401,7 +1395,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1418,7 +1412,7 @@ SwXTextRange::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1437,8 +1431,7 @@ SwXTextRange::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextRange::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXTextRange::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1448,8 +1441,7 @@ SwXTextRange::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextRange::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXTextRange::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1459,8 +1451,7 @@ SwXTextRange::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextRange::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXTextRange::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1470,15 +1461,14 @@ SwXTextRange::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextRange::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXTextRange::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState SAL_CALL
 SwXTextRange::getPropertyState(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1494,7 +1484,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL
 SwXTextRange::getPropertyStates(const uno::Sequence< OUString >& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard g(Application::GetSolarMutex());
+    SolarMutexGuard g;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1509,7 +1499,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
 void SAL_CALL SwXTextRange::setPropertyToDefault(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1526,7 +1516,7 @@ SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1544,7 +1534,7 @@ SwXTextRange::makeRedline(
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!GetDoc() || !m_pImpl->GetBookmark())
     {
@@ -1558,7 +1548,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 /******************************************************************
  * SwXTextRanges
  ******************************************************************/
-
 class SwXTextRanges::Impl
     : public SwClient
 {
@@ -1636,10 +1625,14 @@ SwXTextRanges::~SwXTextRanges()
 {
 }
 
+namespace
+{
+    class theSwXTextRangesUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextRangesUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextRanges::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextRangesUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL
@@ -1665,8 +1658,9 @@ static char const*const g_ServicesTextRanges[] =
 {
     "com.sun.star.text.TextRanges",
 };
+
 static const size_t g_nServicesTextRanges(
-    sizeof(g_ServicesTextRanges)/sizeof(g_ServicesTextRanges[0]));
+    SAL_N_ELEMENTS(g_ServicesTextRanges));
 
 sal_Bool SAL_CALL SwXTextRanges::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
@@ -1684,7 +1678,7 @@ SwXTextRanges::getSupportedServiceNames() throw (uno::RuntimeException)
 
 sal_Int32 SAL_CALL SwXTextRanges::getCount() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     return static_cast<sal_Int32>(m_pImpl->m_Ranges.size());
 }
@@ -1693,7 +1687,7 @@ uno::Any SAL_CALL SwXTextRanges::getByIndex(sal_Int32 nIndex)
 throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if ((nIndex < 0) ||
         (static_cast<size_t>(nIndex) >= m_pImpl->m_Ranges.size()))
@@ -1732,7 +1726,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         String aText(rString);
         const bool bSuccess( SwUnoCursorHelper::DocInsertStringSplitCR(
                     *pDoc, rCursor, aText, false ) );
-        DBG_ASSERT( bSuccess, "DocInsertStringSplitCR" );
+        OSL_ENSURE( bSuccess, "DocInsertStringSplitCR" );
         (void) bSuccess;
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
@@ -1743,7 +1737,6 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
 /******************************************************************
  * SwXParaFrameEnumeration
  ******************************************************************/
-
 class SwXParaFrameEnumeration::Impl
     : public SwClient
 {
@@ -1828,7 +1821,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     else
     {
         const SwNodeIndex* pIdx = pFormat->GetCntnt().GetCntntIdx();
-        DBG_ASSERT(pIdx, "where is the index?");
+        OSL_ENSURE(pIdx, "where is the index?");
         SwNode const*const pNd =
             i_rUnoCrsr.GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
 
@@ -1843,7 +1836,7 @@ lcl_CreateNextObject(SwUnoCrsr& i_rUnoCrsr,
     return o_rNextObject.is();
 }
 
-/* -----------------------------03.04.00 10:15--------------------------------
+/* ---------------------------------------------------------------------------
     Description: Search for a FLYCNT text attribute at the cursor point
                 and fill the frame into the array
  ---------------------------------------------------------------------------*/
@@ -1891,7 +1884,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
         {
             SwPosFlyFrms aFlyFrms;
             //get all frames that are bound at paragraph or at character
-            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor());
+            rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor(), sal_False, sal_True);
             for(sal_uInt16 i = 0; i < aFlyFrms.Count(); i++)
             {
                 SwPosFlyFrm* pPosFly = aFlyFrms[i];
@@ -1902,20 +1895,6 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
                     new SwDepend(m_pImpl.get(), pFrmFmt);
                 m_pImpl->m_Frames.push_back(
                         ::boost::shared_ptr<SwDepend>(pNewDepend) );
-            }
-            //created from any text range
-            if (m_pImpl->GetCursor()->HasMark())
-            {
-                m_pImpl->GetCursor()->Normalize();
-                do
-                {
-                    lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(),
-                            m_pImpl->m_Frames);
-                    m_pImpl->GetCursor()->Right(
-                            1, CRSR_SKIP_CHARS, sal_False, sal_False);
-                }
-                while (*m_pImpl->GetCursor()->GetPoint() <
-                        *m_pImpl->GetCursor()->GetMark());
             }
         }
         lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(), m_pImpl->m_Frames);
@@ -1929,7 +1908,7 @@ SwXParaFrameEnumeration::~SwXParaFrameEnumeration()
 sal_Bool SAL_CALL
 SwXParaFrameEnumeration::hasMoreElements() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->GetCursor())
         throw uno::RuntimeException();
@@ -1944,7 +1923,7 @@ uno::Any SAL_CALL SwXParaFrameEnumeration::nextElement()
 throw (container::NoSuchElementException,
         lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!m_pImpl->GetCursor())
     {
@@ -1976,8 +1955,9 @@ static char const*const g_ServicesParaFrameEnum[] =
 {
     "com.sun.star.util.ContentEnumeration",
 };
+
 static const size_t g_nServicesParaFrameEnum(
-    sizeof(g_ServicesParaFrameEnum)/sizeof(g_ServicesParaFrameEnum[0]));
+    SAL_N_ELEMENTS(g_ServicesParaFrameEnum));
 
 sal_Bool SAL_CALL
 SwXParaFrameEnumeration::supportsService(const OUString& rServiceName)
@@ -1995,3 +1975,4 @@ throw (uno::RuntimeException)
             g_nServicesParaFrameEnum, g_ServicesParaFrameEnum);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

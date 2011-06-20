@@ -58,6 +58,11 @@ interface BaseTextGraphic
         StateMethod = GetAttrState ;
     ]
 
+    FN_EXTERNAL_EDIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
     SID_INSERT_GRAPHIC // zeigt auf FN_FORMAT_GRAFIC_DLG
     [
         ExecMethod = Execute ;

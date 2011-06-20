@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,10 +46,6 @@
 class SwTOXBaseSection;
 class SwTOXMark;
 class SwTOXType;
-
-/* -----------------07.12.98 10:08-------------------
- *
- * --------------------------------------------------*/
 
 typedef ::cppu::ImplInheritanceHelper5
 <   ::sfx2::MetadatableMixin
@@ -190,9 +187,6 @@ public:
 
 };
 
-/* -----------------07.12.98 10:08-------------------
- *
- * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper4
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -318,9 +312,6 @@ public:
 
 };
 
-/* -----------------05.05.99 12:27-------------------
- *
- * --------------------------------------------------*/
 class SwXDocumentIndexes
     : public SwCollectionBaseClass
     , public SwUnoCollection
@@ -373,3 +364,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

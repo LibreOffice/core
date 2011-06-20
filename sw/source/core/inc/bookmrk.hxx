@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <map>
+#include <rtl/ustring.hxx>
 
 #include <IMark.hxx>
 
@@ -74,7 +76,7 @@ namespace sw { namespace mark
             virtual SwPosition& GetMarkEnd() const
             {
                 if( !IsExpanded() ) return GetMarkPos();
-                if ( GetMarkPos( ) > GetOtherMarkPos( ) )
+                if ( GetMarkPos( ) >= GetOtherMarkPos( ) )
                     return GetMarkPos( );
                 else
                     return GetOtherMarkPos( );
@@ -254,7 +256,11 @@ namespace sw { namespace mark
             virtual void InitDoc(SwDoc* const io_pDoc);
             bool IsChecked() const;
             void SetChecked(bool checked);
+
+            virtual rtl::OUString toString( ) const;
     };
 
 }}
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

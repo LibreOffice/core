@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,8 +38,8 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtLineNumber: public SfxPoolItem
 {
-    sal_uLong nStartValue   :24; //Startwert fuer den Absatz, 0 == kein Startwert
-    sal_uLong bCountLines   :1;  //Zeilen des Absatzes sollen mitgezaehlt werden.
+    sal_uLong nStartValue   :24; // Starting value for the paragraph. 0 == no starting value.
+    sal_uLong bCountLines   :1;  // Also count lines of paragraph.
 
 public:
     SwFmtLineNumber();
@@ -46,7 +47,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -54,8 +55,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     sal_uLong GetStartValue() const { return nStartValue; }
     sal_Bool  IsCount()       const { return bCountLines != 0; }
@@ -69,3 +70,4 @@ inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

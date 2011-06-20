@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 class SwPaM;
 class SwNodeIndex;
 
-/*
- * MACROS um ueber alle Bereiche zu iterieren
- */
+// Macros to iterate over all ranges.
 #define PCURCRSR (_pStartCrsr)
 
 #define FOREACHPAM_START(pCURSH) \
@@ -81,3 +80,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

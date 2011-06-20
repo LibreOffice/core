@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,8 +44,8 @@ using namespace ::comphelper;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-RtfExportFilter::RtfExportFilter( const uno::Reference< lang::XMultiServiceFactory >& xMSF)  :
-    m_xMSF( xMSF )
+RtfExportFilter::RtfExportFilter( const uno::Reference< uno::XComponentContext >& xCtx) :
+    m_xCtx( xCtx )
 {
 }
 
@@ -129,60 +130,9 @@ uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*) new RtfExportFilter( rSMgr );
-}
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    return (cppu::OWeakObject*) new RtfExportFilter( xCtx );
 }
 
-// ------------------------
-// - component_getFactory -
-// ------------------------
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
-{
-    OSL_TRACE("%s, pImplName is '%s'", OSL_THIS_FUNC, pImplName);
-    uno::Reference< lang::XSingleServiceFactory > xFactory;
-    void* pRet = 0;
-
-    if ( rtl_str_compare( pImplName, IMPL_NAME_RTFEXPORT ) == 0 ) {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFEXPORT ) );
-
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                    RtfExport_getImplementationName(),
-                    RtfExport_createInstance,
-                    RtfExport_getSupportedServiceNames() ) );
-    }
-    else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFIMPORT ) == 0 ) {
-        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFIMPORT ) );
-
-        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
-                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                    RtfImport_getImplementationName(),
-                    RtfImport_createInstance,
-                    RtfImport_getSupportedServiceNames() ) );
-    }
-
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-
-    return pRet;
-}
-
-#ifdef __cplusplus
-}
-#endif
-
-/* vi:set shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

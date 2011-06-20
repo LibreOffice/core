@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <vcl/outdev.hxx>
 #include <IDocumentSettingAccess.hxx>
 
 #include "frame.hxx"       // CalcFlyAdjust()
 #include "paratr.hxx"
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "porglue.hxx"
 #include "porlay.hxx"
@@ -271,9 +269,9 @@ bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& 
 void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                                   const SwLinePortion *pStopAt, SwTwips nReal, bool bSkipKashida )
 {
-    ASSERT( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
+    OSL_ENSURE( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
             "CalcNewBlock: Why?" );
-    ASSERT( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
     pCurrent->InitSpaceAdd();
     xub_StrLen nGluePortion = 0;
@@ -306,10 +304,9 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
     if (!bSkipKashida)
         CalcRightMargin( pCurrent, nReal );
 
-    // --> FME 2005-06-08 #i49277#
+    // #i49277#
     const sal_Bool bDoNotJustifyLinesWithManualBreak =
                 GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
-    // <--
 
     SwLinePortion *pPos = pCurrent->GetPortion();
 
@@ -423,8 +420,8 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
 SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 {
-    ASSERT( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
-    ASSERT( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
+    OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    OSL_ENSURE( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
 
     SvUShorts *pNewKana = new SvUShorts;
     pCurrent->SetKanaComp( pNewKana );
@@ -714,7 +711,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 
 void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 {
-    ASSERT( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
+    OSL_ENSURE( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
 
     pCurrent->SetFormatAdj(sal_False);
 
@@ -731,21 +728,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
         }
         case SVX_ADJUST_BLOCK:
         {
-            // disabled for #i13507#
-            // 8311: In Zeilen mit LineBreaks gibt es keinen Blocksatz!
-/*          if( pCurrent->GetLen() &&
-                CH_BREAK == GetInfo().GetChar( nStart + pCurrent->GetLen() - 1 ) &&
-                !IsLastBlock() )
-            {
-                if( IsLastCenter() )
-                {
-                    CalcFlyAdjust( pCurrent );
-                    pPara->GetRepaint()->SetOfst( 0 );
-                    break;
-                }
-                return;
-            }
-*/          FormatBlock();
+            FormatBlock();
             break;
         }
         default : return;
@@ -815,8 +798,8 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
 
 void SwTxtAdjuster::CalcDropAdjust()
 {
-    ASSERT( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
-            "CalcDropAdjust: No reason for DropAdjustment." )
+    OSL_ENSURE( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
+            "CalcDropAdjust: No reason for DropAdjustment." );
 
     const MSHORT nLineNumber = GetLineNr();
 
@@ -883,9 +866,6 @@ void SwTxtAdjuster::CalcDropAdjust()
                         pLeft->MoveAllGlue( pRight );
                     else
                         pLeft->MoveGlue( pRight, nGlue );
-#ifdef DBGTXT
-                    aDbstream << "Drop adjusted: " << nGlue << endl;
-#endif
                 }
             }
         }
@@ -917,3 +897,4 @@ void SwTxtAdjuster::CalcDropRepaint()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

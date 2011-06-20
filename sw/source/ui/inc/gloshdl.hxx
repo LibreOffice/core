@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,8 +78,8 @@ public:
     sal_Bool    CopyOrMove( const String& rSourceGroupName,  String& rSourceShortName,
                         const String& rDestGroupName, const String& rLongName, sal_Bool bMove );
     sal_Bool    HasShortName(const String &rShortName) const;
-    //wird NewGlossary vom Basic gerufen, dann soll dir zuvor eingestellte
-    //Gruppe ggf. neu erstellt werden
+    // when NewGlossary is called from Basic then the previously set group should
+    // be newly created if applicable.
     sal_Bool    NewGlossary(const String &rName, const String &rShortName,
                 sal_Bool bApiCall = sal_False, sal_Bool bNoAttr = sal_False );
     sal_Bool    DelGlossary(const String&);
@@ -99,7 +100,7 @@ public:
     sal_Bool    IsReadOnly( const String* = 0 ) const;
     sal_Bool    IsOld() const;
 
-    sal_Bool    FindGroupName(String & rGroup); // Gruppe ohne Pfadindex finden
+    sal_Bool    FindGroupName(String & rGroup); // find group without path index
 
     sal_Bool    ImportGlossaries( const String& rName );
 
@@ -108,3 +109,5 @@ public:
 };
 
 #endif // _GLOSHDL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

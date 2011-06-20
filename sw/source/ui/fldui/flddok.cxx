@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,23 +36,13 @@
 #include <vcl/svapp.hxx>
 #include <flddat.hxx>
 #include <docufld.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <chpfld.hxx>
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDDOK_HXX
 #include <flddok.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <svl/zformat.hxx>
 
@@ -59,10 +50,6 @@
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldDokPage::SwFldDokPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     SwFldPage( pWindow, SW_RES( TP_FLD_DOK ), rCoreSet ),
@@ -99,24 +86,16 @@ SwFldDokPage::SwFldDokPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aNumFormatLB.SetShowLanguageControl(sal_True);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-__EXPORT SwFldDokPage::~SwFldDokPage()
+SwFldDokPage::~SwFldDokPage()
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
+void SwFldDokPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialisation
 
-    // TypeListBox initialisieren
+    // initialise TypeListBox
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
     aTypeLB.SetUpdateMode(sal_False);
@@ -127,7 +106,7 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
 
     if (!IsFldEdit())
     {
-        // Typ-Listbox fuellen
+        // fill Type-Listbox
         for(short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
@@ -174,7 +153,7 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
         }
     }
 
-    // alte Pos selektieren
+    // select old Pos
     RestorePos(&aTypeLB);
 
     aTypeLB.SetUpdateMode(sal_True);
@@ -213,16 +192,12 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -237,7 +212,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
-        // Auswahl-Listbox fuellen
+        // fill Selection-Listbox
         aSelectionLB.Clear();
 
         if (nTypeId != USHRT_MAX)
@@ -329,7 +304,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
         aSelectionLB.Enable( bEnable );
         aSelectionFT.Enable( bEnable );
 
-        // Format-Listbox fuellen
+        // fill Format-Listbox
         sal_uInt16 nSize = FillFormatLB(nTypeId);
 
         sal_Bool bValue = sal_False, bLevel = sal_False, bNumFmt = sal_False, bOffset = sal_False;
@@ -345,7 +320,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 nFmtType = NUMBERFORMAT_DATE;
                 aValueFT.SetText(sDateOffset);
-                aDateOffsetED.SetFirst(-31);    // Ein Monat
+                aDateOffsetED.SetFirst(-31);    // one month
                 aDateOffsetED.SetLast(31);
 
                 if (IsFldEdit())
@@ -357,7 +332,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 nFmtType = NUMBERFORMAT_TIME;
                 aValueFT.SetText(sTimeOffset);
-                aDateOffsetED.SetFirst(-1440);  // Ein Tag
+                aDateOffsetED.SetFirst(-1440);  // one day
                 aDateOffsetED.SetLast(1440);
 
                 if (IsFldEdit())
@@ -422,11 +397,11 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                 if (aNumFormatLB.GetFormatType() == (NUMBERFORMAT_DATE|NUMBERFORMAT_TIME))
                 {
-                    // Format-Typ immer einstellen, da sonst bei kombinierten Datum/Zeitformaten
-                    // beide Formate gleichzeitig angezeigt werden wuerden
+                    // always set Format-Type because otherwise when date/time formats are combined,
+                    // both formats would be displayed at the same time
                     aNumFormatLB.SetFormatType(0);
                     aNumFormatLB.SetFormatType(nFmtType);
-                    // Nochmal richtiges Format einstellen
+                    // set correct format once again
                     aNumFormatLB.SetDefFormat(GetCurField()->GetFormat());
                 }
             }
@@ -471,19 +446,11 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDokPage::AddSubType(sal_uInt16 nTypeId)
 {
     sal_uInt16 nPos = aSelectionLB.InsertEntry(SwFieldType::GetTypeStr(nTypeId));
     aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDokPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
@@ -519,13 +486,9 @@ IMPL_LINK( SwFldDokPage, SubTypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
 {
-    // Format-Listbox fuellen
+    // fill Format-Listbox
     aFormatLB.Clear();
 
     if (nTypeId == TYP_AUTHORFLD)
@@ -558,10 +521,6 @@ sal_uInt16 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
     return nSize;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
@@ -577,7 +536,7 @@ IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
 
     if (nTypeId == TYP_NEXTPAGEFLD || nTypeId == TYP_PREVPAGEFLD)
     {
-        // Prev/Next - PageNumFelder Sonderbehandlung:
+        // Prev/Next - PageNumFields special treatment:
         sal_uInt16 nTmp = (sal_uInt16)(sal_uLong)aFormatLB.GetEntryData(
                                         aFormatLB.GetSelectEntryPos() );
         String sOldTxt( aValueFT.GetText() );
@@ -594,13 +553,8 @@ IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-sal_Bool __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
+sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
 {
-    sal_Bool bPage = sal_False;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     if (nTypeId == USHRT_MAX)
@@ -609,7 +563,6 @@ sal_Bool __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
             nPos = 0;
         nTypeId = (sal_uInt16)(sal_uLong)aSelectionLB.GetEntryData(nPos);
-        bPage = sal_True;
     }
 
     String aVal(aValueED.GetText());
@@ -635,7 +588,7 @@ sal_Bool __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
         case TYP_AUTHORFLD:
             nFormat = nSubType;
             nSubType = 0;
-            // kein break!
+            // no break!
         case TYP_EXTUSERFLD:
             nFormat |= aFixedCB.IsChecked() ? AF_FIXED : 0;
             break;
@@ -692,28 +645,17 @@ sal_Bool __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
     return sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-SfxTabPage* __EXPORT SwFldDokPage::Create(  Window* pParent,
+SfxTabPage* SwFldDokPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokPage( pParent, rAttrSet ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_uInt16 SwFldDokPage::GetGroup()
 {
     return GRP_DOC;
 }
 
-/* -----------------12.01.99 10:09-------------------
- *
- * --------------------------------------------------*/
 void    SwFldDokPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
@@ -728,4 +670,4 @@ void    SwFldDokPage::FillUserData()
     SetUserData(sData);
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <tools/string.hxx>
 
-#ifndef _DATE_HXX //autogen
 #include <tools/datetime.hxx>
-#endif
 #include <svl/svarray.hxx>
 
 
@@ -144,99 +143,6 @@ public:
     virtual sal_Bool PutMuchEntries( sal_Bool bOn );
 };
 
-/*
-class Sw3Persist : public SvPersist
-{
-    virtual void FillClass( SvGlobalName * pClassName,
-                            sal_uLong * pClipFormat,
-                            String * pAppName,
-                            String * pLongUserName,
-                            String * pUserName,
-                            sal_Int32 nFileFormat=SOFFICE_FILEFORMAT_CURRENT ) const;
-    virtual sal_Bool Save();
-    virtual sal_Bool SaveCompleted( SvStorage * );
-public:
-    Sw3Persist();
-};
-
-class SwSwgReader;
-
-class Sw2TextBlocks : public SwImpBlocks
-{
-    SvPersistRef refPersist;            // Fuer OLE-Objekte
-    SwSwgReader* pRdr;                  // Lese-Routinen
-    SfxMedium* pMed;                    // der logische Input-Stream
-    String* pText;                      // String fuer GetText()
-    long   nDocStart;                   // Beginn des Doc-Records
-    long   nDocSize;                    // Laenge des Doc-Records
-    long   nStart;                      // Beginn des CONTENTS-Records
-    long   nSize;                       // Laenge des CONTENTS-Records
-    sal_uInt16 nNamedFmts;                  // benannte Formate
-    sal_uInt16 nColls;                      // Text-Collections
-    sal_uInt16 nBlks;                       // Anzahl Elemente im CONTENTS-Record
-public:
-    Sw2TextBlocks( const String& );
-    virtual ~Sw2TextBlocks();
-    virtual sal_uLong Delete( sal_uInt16 );
-    virtual sal_uLong Rename( sal_uInt16, const String&, const String& );
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
-    virtual sal_uLong GetDoc( sal_uInt16 );
-    virtual sal_uLong BeginPutDoc( const String&, const String& );
-    virtual sal_uLong PutDoc();
-    virtual sal_uLong GetText( sal_uInt16, String& );
-    virtual sal_uLong PutText( const String&, const String&, const String& );
-    virtual sal_uLong MakeBlockList();
-    virtual short GetFileType( ) const;
-    sal_uLong LoadDoc();
-
-    virtual sal_uLong OpenFile( sal_Bool bReadOnly = sal_True );
-    virtual void  CloseFile();
-
-    void StatLineStartPercent();                // zum Anzeigen des Prozessbars
-};
-
-class Sw3Io;
-class Sw3IoImp;
-
-class Sw3TextBlocks : public SwImpBlocks
-{
-    Sw3Io*       pIo3;
-    Sw3IoImp*    pImp;
-    sal_Bool         bAutocorrBlock;
-
-public:
-    Sw3TextBlocks( const String& );
-    Sw3TextBlocks( SvStorage& );
-    virtual ~Sw3TextBlocks();
-    virtual sal_uLong Delete( sal_uInt16 );
-    virtual sal_uLong Rename( sal_uInt16, const String&, const String& );
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, String& rShort, const String& rLong);
-    virtual sal_uLong GetDoc( sal_uInt16 );
-    virtual sal_uLong GetDocForConversion( sal_uInt16 );
-    virtual sal_uLong BeginPutDoc( const String&, const String& );
-    virtual sal_uLong PutDoc();
-    virtual void SetDoc( SwDoc * pNewDoc);
-    virtual sal_uLong GetText( sal_uInt16, String& );
-    virtual sal_uLong PutText( const String&, const String&, const String& );
-    virtual sal_uLong MakeBlockList();
-    virtual short GetFileType( ) const;
-
-    virtual sal_uLong OpenFile( sal_Bool bReadOnly = sal_True );
-    virtual void  CloseFile();
-
-    // Methoden fuer die neue Autokorrektur
-    sal_uLong GetText( const String& rShort, String& );
-    SwDoc* GetDoc() const { return pDoc; }
-
-    virtual sal_Bool IsOnlyTextBlock( const String& rShort ) const;
-
-    virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTbl,
-                                 sal_Bool bFileAlreadyOpen = sal_False );
-    virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
-                                 const SvxMacroTableDtor& rMacroTbl,
-                                 sal_Bool bFileAlreadyOpen = sal_False );
-
-    void ReadInfo();
-};
-*/
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

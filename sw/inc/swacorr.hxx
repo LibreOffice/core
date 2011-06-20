@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,13 +38,12 @@ class SwAutoCorrect : public SvxAutoCorrect
     using  SvxAutoCorrect::PutText;
 
 protected:
-    //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
-    //      koennen aus der Wortliste herausgeholt werden!)
-    //      rShort ist der Stream-Name - gecryptet!
+    // Return replacement text (only for SWG-format, all others can be obtained from wordlist!).
+    // rShort is stream-name - encrypted!
     virtual sal_Bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& , const String& rFileName, const String& rShort, String& rLong );
 
-    //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
-    //      rShort ist der Stream-Name - gecryptet!
+    // Text with attributes (only SWG-format!).
+    // rShort is stream-name - encrypted!
     virtual sal_Bool PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFileName, const String& rShort, SfxObjectShell& ,
                             String& );
 
@@ -57,3 +57,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

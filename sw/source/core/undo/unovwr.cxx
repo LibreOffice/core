@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -79,7 +80,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     nSttCntnt = rPos.nContent.GetIndex();
 
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
 
     bInsChar = sal_True;
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
@@ -204,7 +205,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
-    ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
     rIdx.Assign( pTxtNd, nSttCntnt );
 
@@ -287,7 +288,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
-    ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
 
     if( pRedlSaveData )
@@ -500,3 +501,4 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

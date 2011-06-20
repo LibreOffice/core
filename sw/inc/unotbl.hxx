@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,9 +65,6 @@ class SwChartDataProvider;
 class SwFrmFmt;
 
 
-/* -----------------------------22.09.00 11:10--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwChartEventListenerContainer : public SwEventListenerContainer
 {
     public:
@@ -74,9 +72,7 @@ class SwChartEventListenerContainer : public SwEventListenerContainer
             SwEventListenerContainer(pxParentL){}
         void ChartDataChanged();
 };
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 typedef
 cppu::WeakImplHelper4
 <
@@ -165,7 +161,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    //XEnumerationAccess - frueher XParagraphEnumerationAccess
+    //XEnumerationAccess - was: XParagraphEnumerationAccess
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XElementAccess
@@ -178,9 +174,7 @@ public:
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
-/* -----------------27.06.98 15:40-------------------
- *
- * --------------------------------------------------*/
+
 class SwXTextTableRow : public cppu::WeakImplHelper2
 <
     ::com::sun::star::beans::XPropertySet,
@@ -220,9 +214,7 @@ public:
     const SwTableLine*  GetTblRow() const {return pLine;}
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine* pLine);
 };
-/* -----------------20.07.98 13:03-------------------
- *
- * --------------------------------------------------*/
+
 typedef cppu::WeakImplHelper3<
                                 ::com::sun::star::text::XTextTableCursor,
                                 ::com::sun::star::lang::XServiceInfo,
@@ -234,8 +226,6 @@ class SW_DLLPUBLIC SwXTextTableCursor : public SwXTextTableCursor_Base
 {
     SwDepend                aCrsrDepend;
     const SfxItemPropertySet*   m_pPropSet;
-
-    //  SwUnoCrsr*      GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
 
 protected:
     virtual ~SwXTextTableCursor();
@@ -287,9 +277,6 @@ public:
     SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 
-/*-----------------11.12.97 09:38-------------------
-
---------------------------------------------------*/
 struct SwRangeDescriptor
 {
     sal_Int32 nTop;
@@ -337,7 +324,7 @@ public:
     SwXTextTable(SwFrmFmt& rFrmFmt);
 
 
-    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    SW_DLLPUBLIC static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
@@ -423,9 +410,6 @@ public:
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
 };
 
-/* -----------------27.04.98 16:41-------------------
- *
- * --------------------------------------------------*/
 class SwXCellRange : public cppu::WeakImplHelper7
 <
     ::com::sun::star::table::XCellRange,
@@ -519,9 +503,7 @@ public:
             sal_Bool bForceNumberResults = sal_False ) throw (::com::sun::star::uno::RuntimeException);
 
 };
-/* -----------------03.02.99 07:31-------------------
- *
- * --------------------------------------------------*/
+
 class SwXTableRows : public cppu::WeakImplHelper2
 <
     ::com::sun::star::table::XTableRows,
@@ -538,14 +520,6 @@ public:
 
 
     TYPEINFO();
-
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
-
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual sal_Bool        queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
-
-//  SMART_UNO_DECLARATION( SwXTableRows, UsrObject );
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -568,9 +542,6 @@ public:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
-/* -----------------03.02.99 07:31-------------------
- *
- * --------------------------------------------------*/
 class SwXTableColumns : public cppu::WeakImplHelper2
 <
     ::com::sun::star::table::XTableColumns,
@@ -587,13 +558,6 @@ public:
 
 
     TYPEINFO();
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  > getIdlClasses(void) throw( ::com::sun::star::uno::RuntimeException );
-
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  virtual sal_Bool        queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  & rOut );
-
-//  SMART_UNO_DECLARATION( SwXTableColumns, UsrObject );
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -621,3 +585,4 @@ public:
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

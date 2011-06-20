@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ public:
     bool        DependsOn( const SwPageDesc* ) const;
 
     void SetFtnTxtColl(SwTxtFmtColl& rColl);
-    SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // kann 0 sein
+    SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // can be 0.
 
     SwCharFmt* GetCharFmt(SwDoc &rDoc) const;
     void SetCharFmt( SwCharFmt* );
@@ -83,7 +84,7 @@ public:
 
 enum SwFtnPos
 {
-    //Derzeit nur PAGE und CHAPTER. CHAPTER == Dokumentendenoten.
+    // Momentarily only PAGE and CHAPTER. CHAPTER == document-endnotes.
     FTNPOS_PAGE = 1,
     FTNPOS_CHAPTER = 8
 };
@@ -114,3 +115,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

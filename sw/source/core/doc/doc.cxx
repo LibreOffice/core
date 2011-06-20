@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,6 @@
 #include <txtrfmrk.hxx>
 #include <frmatr.hxx>
 #include <linkenum.hxx>
-#include <errhdl.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <swtable.hxx>
@@ -86,7 +86,7 @@
 #include <UndoInsert.hxx>
 #include <UndoSplitMove.hxx>
 #include <UndoTable.hxx>
-#include <pagedesc.hxx> //DTor
+#include <pagedesc.hxx>         //DTor
 #include <breakit.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
@@ -135,13 +135,10 @@
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
 */
-// --> OD 2005-08-29 #125370#
 #include <layouter.hxx>
-// <--
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-
 
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
@@ -150,11 +147,10 @@ SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
 // FeldTypen
 SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 
-/** IInterface
-*/
+/* IInterface */
 sal_Int32 SwDoc::acquire()
 {
-    OSL_ASSERT(mReferenceCount >= 0 && "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
     return osl_incrementInterlockedCount(&mReferenceCount);
 }
 
@@ -166,12 +162,11 @@ sal_Int32 SwDoc::release()
 
 sal_Int32 SwDoc::getReferenceCount() const
 {
-    OSL_ASSERT(mReferenceCount >= 0 && "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
     return mReferenceCount;
 }
 
-/** IDocumentSettingAccess
-*/
+/* IDocumentSettingAccess */
 bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
 {
     switch (id)
@@ -196,17 +191,17 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case TABLE_ROW_KEEP: return mbTableRowKeep;
         case IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
         case DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
-        // --> OD 2006-08-25 #i68949#
+        // #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
-        // <--
         case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
         case USE_OLD_PRINTER_METRICS: return mbOldPrinterMetrics;
         case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
         case PROTECT_FORM: return mbProtectForm;
-        // --> OD 2008-06-05 #i89181#
+        // #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST: return mbTabAtLeftIndentForParagraphsInList;
-        // <--
-         // COMPATIBILITY FLAGS END
+        case INVERT_BORDER_SPACING: return mbInvertBorderSpacing;
+        case COLLAPSE_EMPTY_CELL_PARA: return mbCollapseEmptyCellPara;
+        case SMALL_CAPS_PERCENTAGE_66: return mbSmallCapsPercentage66;
 
         case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the ViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
@@ -218,7 +213,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
         case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
         default:
-            ASSERT(false, "Invalid setting id");
+            OSL_FAIL("Invalid setting id");
     }
     return false;
 }
@@ -263,9 +258,8 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
                 if (pOutlineRule)
                 {
                     pOutlineRule->Validate();
-                    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+                    // counting of phantoms depends on <IsOldNumbering()>
                     pOutlineRule->SetCountPhantoms( !mbOldNumbering );
-                    // <--
                 }
             }
             break;
@@ -307,52 +301,71 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbDoNotCaptureDrawObjsOnPage = value;
             break;
 
-        // --> OD 2006-08-25 #i68949#
+        // #i68949#
         case CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME:
             mbClipAsCharacterAnchoredWriterFlyFrames = value;
             break;
-        // <--
+
         case UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
             break;
+
         case PROTECT_FORM:
-        mbProtectForm = value;
-        break;
+            mbProtectForm = value;
+            break;
 
         case USE_OLD_PRINTER_METRICS:
             mbOldPrinterMetrics = value;
             break;
         case TABS_RELATIVE_TO_INDENT:
             mbTabRelativeToIndent = value;
-        break;
-        // --> OD 2008-06-05 #i89181#
+            break;
+        // #i89181#
         case TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             mbTabAtLeftIndentForParagraphsInList = value;
-        break;
-        // <--
+            break;
+
+        case INVERT_BORDER_SPACING:
+            mbInvertBorderSpacing = value;
+            break;
+
+        case COLLAPSE_EMPTY_CELL_PARA:
+            mbCollapseEmptyCellPara = value;
+            break;
+
+        case SMALL_CAPS_PERCENTAGE_66:
+            mbSmallCapsPercentage66 = value;
+            break;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: //can be used temporary (load/save) when no ViewShell is avaiable
             mbLastBrowseMode = value;
             break;
+
         case HTML_MODE:
             mbHTMLMode = value;
             break;
+
         case GLOBAL_DOCUMENT:
             mbIsGlobalDoc = value;
             break;
+
         case GLOBAL_DOCUMENT_SAVE_LINKS:
             mbGlblDocSaveLinks = value;
             break;
+
         case LABEL_DOCUMENT:
             mbIsLabelDoc = value;
             break;
+
         case PURGE_OLE:
             mbPurgeOLE = value;
             break;
+
         case KERN_ASIAN_PUNCTUATION:
             mbKernAsianPunctuation = value;
             break;
+
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
             mbDoNotResetParaAttrsForNumFont = value;
             break;
@@ -360,7 +373,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             mbMathBaselineAlignment  = value;
             break;
         default:
-            ASSERT(false, "Invalid setting id");
+            OSL_FAIL("Invalid setting id");
     }
 }
 
@@ -368,7 +381,7 @@ const i18n::ForbiddenCharacters*
     SwDoc::getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const
 {
     const i18n::ForbiddenCharacters* pRet = 0;
-    if( xForbiddenCharsTable.isValid() )
+    if( xForbiddenCharsTable.is() )
         pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, sal_False );
     if( bLocaleData && !pRet && pBreakIt )
         pRet = &pBreakIt->GetForbidden( (LanguageType)nLang );
@@ -378,7 +391,7 @@ const i18n::ForbiddenCharacters*
 void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
                                    /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
 {
-    if( !xForbiddenCharsTable.isValid() )
+    if( !xForbiddenCharsTable.is() )
     {
         uno::Reference<
             lang::XMultiServiceFactory > xMSF =
@@ -404,9 +417,9 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
     SetModified();
 }
 
-vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
+rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
 {
-    if( !xForbiddenCharsTable.isValid() )
+    if( !xForbiddenCharsTable.is() )
     {
         uno::Reference<
             lang::XMultiServiceFactory > xMSF =
@@ -416,7 +429,7 @@ vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
     return xForbiddenCharsTable;
 }
 
-const vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
+const rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable() const
 {
     return xForbiddenCharsTable;
 }
@@ -476,8 +489,7 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
     }
 }
 
-/** IDocumentDeviceAccess
-*/
+/* IDocumentDeviceAccess */
 SfxPrinter* SwDoc::getPrinter(/*[in]*/ bool bCreate ) const
 {
     SfxPrinter* pRet = 0;
@@ -512,10 +524,9 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
     }
 
     if ( bCallPrtDataChanged &&
-         // --> FME 2005-01-21 #i41075# Do not call PrtDataChanged() if we do not
+         // #i41075# Do not call PrtDataChanged() if we do not
          // use the printer for formatting:
          !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
-        // <--
         PrtDataChanged();
 }
 
@@ -581,14 +592,13 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
         }
         else
         {
-            // --> FME 2005-01-21 #i41075#
+            // #i41075#
             // We have to take care that a printer exists before calling
             // PrtDataChanged() in order to prevent that PrtDataChanged()
             // triggers this funny situation:
             // getReferenceDevice()->getPrinter()->CreatePrinter_()
             // ->setPrinter()-> PrtDataChanged()
             SfxPrinter* pPrinter = getPrinter( true );
-            // <--
             if( pDrawModel )
                 pDrawModel->SetRefDevice( pPrinter );
         }
@@ -657,7 +667,7 @@ const SwPrintData & SwDoc::getPrintData() const
         // the respective config item is implememted by SwPrintOptions which
         // is also derived from SwPrintData
         const SwDocShell *pDocSh = GetDocShell();
-        DBG_ASSERT( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
+        OSL_ENSURE( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
         bool bWeb = 0 != dynamic_cast< const SwWebDocShell * >(pDocSh);
         SwPrintOptions aPrintOptions( bWeb );
         *pThis->pPrtData = aPrintOptions;
@@ -672,8 +682,7 @@ void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
     *pPrtData = rPrtData;
 }
 
-/** Implementations the next Interface here
-*/
+/* Implementations the next Interface here */
 
 /*
  * Dokumenteditieren (Doc-SS) zum Fuellen des Dokuments
@@ -696,7 +705,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         return false;
 
     {
-        // Bug 26675:   DataChanged vorm loeschen verschicken, dann bekommt
+        // BUG 26675:   DataChanged vorm loeschen verschicken, dann bekommt
         //          man noch mit, welche Objecte sich im Bereich befinden.
         //          Danach koennen sie vor/hinter der Position befinden.
         SwDataChanged aTmp( this, rPos, 0 );
@@ -791,7 +800,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                     aBkmkArr, SAVEFLY_SPLIT );
     // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
-    ASSERT(pNode->IsTxtNode(), "splitting non-text node?");
+    OSL_ENSURE(pNode->IsTxtNode(), "splitting non-text node?");
     pNode = pNode->SplitCntntNode( rPos );
     if (pNode)
     {
@@ -893,11 +902,10 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
     }
     else
     {           // ist Undo und Gruppierung eingeschaltet, ist alles anders !
-        SwUndoInsert * pUndo = NULL; // #111827#
+        SwUndoInsert * pUndo = NULL;
 
         // don't group the start if hints at the start should be expanded
         if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
-        // -> #111827#
         {
             SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
             SwUndoInsert *const pUndoInsert(
@@ -907,7 +915,6 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
                 pUndo = pUndoInsert;
             }
         }
-        // <- #111827#
 
         CharClass const& rCC = GetAppCharClass();
         xub_StrLen nInsPos = rPos.nContent.GetIndex();
@@ -985,6 +992,7 @@ SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                             pDfltGrfFmtColl ),
                             pFlyAttrSet, pGrfAttrSet, pFrmFmt );
 }
+
 SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
                             const SfxItemSet* pFlyAttrSet,
                             const SfxItemSet* pGrfAttrSet,
@@ -1044,7 +1052,6 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
 |*                SwDoc::GetFldType()
 |*    Beschreibung: liefert den am Doc eingerichteten Feldtypen zurueck
 *************************************************************************/
-
 SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
 {
     for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
@@ -1052,10 +1059,10 @@ SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
             return (*pFldTypes)[i];
     return 0;
 }
+
 /*************************************************************************
  *             void SetDocStat( const SwDocStat& rStat );
  *************************************************************************/
-
 void SwDoc::SetDocStat( const SwDocStat& rStat )
 {
     *pDocStat = rStat;
@@ -1065,9 +1072,6 @@ const SwDocStat& SwDoc::GetDocStat() const
 {
     return *pDocStat;
 }
-
-/*************************************************************************/
-
 
 struct _PostItFld : public _SetGetExpFld
 {
@@ -1083,7 +1087,6 @@ struct _PostItFld : public _SetGetExpFld
         return (SwPostItField*) GetFld()->GetFld().GetFld();
     }
 };
-
 
 sal_uInt16 _PostItFld::GetPageNo(
     const StringRangeEnumerator &rRangeEnum,
@@ -1116,7 +1119,6 @@ sal_uInt16 _PostItFld::GetPageNo(
     return 0;
 }
 
-
 bool lcl_GetPostIts(
     IDocumentFieldsAccess* pIDFA,
     _SetGetExpFlds * pSrtLst )
@@ -1124,7 +1126,7 @@ bool lcl_GetPostIts(
     bool bHasPostIts = false;
 
     SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
-    DBG_ASSERT( pFldType, "kein PostItType ? ");
+    OSL_ENSURE( pFldType, "kein PostItType ? ");
 
     if( pFldType->GetDepends() )
     {
@@ -1152,7 +1154,6 @@ bool lcl_GetPostIts(
     return bHasPostIts;
 }
 
-
 static void lcl_FormatPostIt(
     IDocumentContentOperations* pIDCO,
     SwPaM& aPam,
@@ -1160,9 +1161,9 @@ static void lcl_FormatPostIt(
     bool bNewPage, bool bIsFirstPostIt,
     sal_uInt16 nPageNo, sal_uInt16 nLineNo )
 {
-    static char __READONLY_DATA sTmp[] = " : ";
+    static char const sTmp[] = " : ";
 
-    DBG_ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
+    OSL_ENSURE( ViewShell::GetShellRes(), "missing ShellRes" );
 
     if (bNewPage)
     {
@@ -1198,13 +1199,12 @@ static void lcl_FormatPostIt(
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
-#if defined( WNT ) || defined( PM2 )
+#if defined( WNT )
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
     pIDCO->InsertString( aPam, aStr );
 }
-
 
 // provide the paper tray to use according to the page style in use,
 // but do that only if the respective item is NOT just the default item
@@ -1221,7 +1221,6 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
 
     return nRes;
 }
-
 
 void SwDoc::CalculatePagesForPrinting(
     const SwRootFrm& rLayout,
@@ -1251,7 +1250,6 @@ void SwDoc::CalculatePagesForPrinting(
 
     sal_uInt16 nFirstPageNo = 0;
     sal_uInt16 nLastPageNo  = 0;
-    sal_uInt16 nPageNo      = 1;
 
     for( sal_uInt16 i = 1; i <= (sal_uInt16)aPages.Max(); ++i )
     {
@@ -1279,7 +1277,7 @@ void SwDoc::CalculatePagesForPrinting(
         }
     }
 
-    DBG_ASSERT( nFirstPageNo, "first page not found!  Should not happen!" );
+    OSL_ENSURE( nFirstPageNo, "first page not found!  Should not happen!" );
     if (nFirstPageNo)
     {
 // HACK: Hier muss von der MultiSelection noch eine akzeptable Moeglichkeit
@@ -1298,7 +1296,7 @@ void SwDoc::CalculatePagesForPrinting(
         aMulti = aTmpMulti;
 // Ende des HACKs
 
-        nPageNo = nFirstPageNo;
+        sal_uInt16 nPageNo = nFirstPageNo;
 
         std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
         std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
@@ -1312,9 +1310,8 @@ void SwDoc::CalculatePagesForPrinting(
                 ( (bRightPg && bPrintRightPages) ||
                     (!bRightPg && bPrintLeftPages) ) )
             {
-                // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
+                // Feature - Print empty pages
                 if ( bPrintEmptyPages || pStPage->Frm().Height() )
-                // <--
                 {
                     rValidPages.insert( nPageNo );
                     rValidStartFrms[ nPageNo ] = pStPage;
@@ -1344,14 +1341,8 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get PageRange value to use
     OUString aPageRange;
-    // --> PL, OD #i116085# - adjusting fix for i113919
-//    if (bIsPDFExport)
-//    {
-//        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
-//    }
-//    else
+    // #i116085# - adjusting fix for i113919
     if ( !bIsPDFExport )
-    // <--
     {
         // PageContent :
         // 0 -> print all pages (default if aPageRange is empty)
@@ -1386,7 +1377,6 @@ void SwDoc::CalculatePagesForPrinting(
             1, nDocPageCount, 0, &rData.GetValidPagesSet() );
 }
 
-
 void SwDoc::UpdatePagesForPrintingWithPostItData(
     /* out */ SwRenderData &rData,
     const SwPrintUIOptions &rOptions,
@@ -1395,7 +1385,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 {
 
     sal_Int16 nPostItMode = (sal_Int16) rOptions.getIntValue( "PrintAnnotationMode", 0 );
-    DBG_ASSERT(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
+    OSL_ENSURE(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
             "print post-its without post-it data?" );
     const sal_uInt16 nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->Count() : 0;
     if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
@@ -1481,14 +1471,14 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             const SwPageFrm * pPageFrm = (SwPageFrm*)rData.m_pPostItShell->GetLayout()->Lower();
             while( pPageFrm && nPageNum < nPostItDocPageCount )
             {
-                DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+                OSL_ENSURE( pPageFrm, "Empty page frame. How are we going to print this?" );
                 ++nPageNum;
                 rData.GetPagesToPrint().push_back( 0 );  // a page number of 0 indicates this page is from the post-it doc
-                DBG_ASSERT( pPageFrm, "pPageFrm is NULL!" );
+                OSL_ENSURE( pPageFrm, "pPageFrm is NULL!" );
                 rData.GetPostItStartFrames().push_back( pPageFrm );
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
-            DBG_ASSERT( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
+            OSL_ENSURE( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
         }
         else if (nPostItMode == POSTITS_ENDPAGE)
         {
@@ -1502,12 +1492,12 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             const SwPageFrm * pPageFrm = (SwPageFrm*)rData.m_pPostItShell->GetLayout()->Lower();
             while( pPageFrm && sal_Int32(aAllPostItStartFrames.size()) < nPostItDocPageCount )
             {
-                DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+                OSL_ENSURE( pPageFrm, "Empty page frame. How are we going to print this?" );
                 ++nPostItPageNum;
                 aAllPostItStartFrames.push_back( pPageFrm );
                 pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
             }
-            DBG_ASSERT( sal_Int32(aAllPostItStartFrames.size()) == nPostItDocPageCount,
+            OSL_ENSURE( sal_Int32(aAllPostItStartFrames.size()) == nPostItDocPageCount,
                     "unexpected number of frames; does not match number of pages" );
 
             // get a map that holds all post-it frames to be printed for a
@@ -1519,13 +1509,13 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 const sal_Int32 nFrames = aIt->second - nLastStartPageNum;
                 const sal_Int32 nFirstStartPageNum = aIt == aPostItLastStartPageNum.begin() ?
                         1 : aIt->second - nFrames + 1;
-                DBG_ASSERT( 1 <= nFirstStartPageNum && nFirstStartPageNum <= nPostItDocPageCount,
+                OSL_ENSURE( 1 <= nFirstStartPageNum && nFirstStartPageNum <= nPostItDocPageCount,
                         "page number for first frame out of range" );
                 std::vector<  const SwPageFrm * > aStartFrames;
                 for (sal_Int32 i = 0; i < nFrames; ++i)
                 {
                     const sal_Int32 nIdx = nFirstStartPageNum - 1 + i;   // -1 because lowest page num is 1
-                    DBG_ASSERT( 0 <= nIdx && nIdx < sal_Int32(aAllPostItStartFrames.size()),
+                    OSL_ENSURE( 0 <= nIdx && nIdx < sal_Int32(aAllPostItStartFrames.size()),
                             "index out of range" );
                     aStartFrames.push_back( aAllPostItStartFrames[ nIdx ] );
                 }
@@ -1569,7 +1559,6 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         }
     }
 }
-
 
 void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwRootFrm& rLayout,
@@ -1617,7 +1606,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwPageFrm *pPageFrm  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
     while( pPageFrm && nPageNum < nDocPageCount )
     {
-        DBG_ASSERT( pPageFrm, "Empty page frame. How are we going to print this?" );
+        OSL_ENSURE( pPageFrm, "Empty page frame. How are we going to print this?" );
         ++nPageNum;
         rValidPagesSet.insert( nPageNum );
         rValidStartFrms[ nPageNum ] = pPageFrm;
@@ -1625,7 +1614,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 
         rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
     }
-    DBG_ASSERT( nPageNum == nDocPageCount, "unexpected number of pages" );
+    OSL_ENSURE( nPageNum == nDocPageCount, "unexpected number of pages" );
 
     // properties to take into account when calcualting the set of pages
     // Note: here bPrintLeftPages and bPrintRightPages refer to the (virtual) resulting pages
@@ -1711,7 +1700,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         nSPg = nSPg + nStep;
         nEPg = nEPg - nStep;
     }
-    DBG_ASSERT( size_t(nCntPage) == rPagePairs.size(), "size mismatch for number of page pairs" );
+    OSL_ENSURE( size_t(nCntPage) == rPagePairs.size(), "size mismatch for number of page pairs" );
 
     // luckily prospect printing does not make use of post-its so far,
     // thus we are done here.
@@ -1720,7 +1709,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 /*************************************************************************
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
-
 void SwDoc::UpdateDocStat( SwDocStat& rStat )
 {
     if( rStat.bModified )
@@ -1762,25 +1750,27 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         rStat.bModified = sal_False;
         SetDocStat( rStat );
 
-        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 7 : 6);
+        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 8 : 7);
         sal_Int32 n=0;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("TableCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nTbl;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ImageCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nGrf;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ObjectCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nOLE;
         if ( rStat.nPage )
         {
-            aStat[n].Name = ::rtl::OUString::createFromAscii("PageCount");
+            aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageCount"));
             aStat[n++].Value <<= (sal_Int32)rStat.nPage;
         }
-        aStat[n].Name = ::rtl::OUString::createFromAscii("ParagraphCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nPara;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("WordCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nWord;
-        aStat[n].Name = ::rtl::OUString::createFromAscii("CharacterCount");
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterCount"));
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
+        aStat[n].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NonWhitespaceCharacterCount"));
+        aStat[n++].Value <<= (sal_Int32)rStat.nCharExcludingSpaces;
 
         // For e.g. autotext documents there is no pSwgInfo (#i79945)
         SfxObjectShell * const pObjShell( GetDocShell() );
@@ -1806,9 +1796,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
     }
 }
 
-
 // Dokument - Info
-
 void SwDoc::DocInfoChgd( )
 {
     GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
@@ -1816,7 +1804,7 @@ void SwDoc::DocInfoChgd( )
     SetModified();
 }
 
-    // returne zum Namen die im Doc gesetzte Referenz
+// returne zum Namen die im Doc gesetzte Referenz
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
@@ -1835,7 +1823,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
     return 0;
 }
 
-    // returne die RefMark per Index - fuer Uno
+// returne die RefMark per Index - fuer Uno
 const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 {
     const SfxPoolItem* pItem;
@@ -1859,10 +1847,10 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
    return pRet;
 }
 
-    // returne die Namen aller im Doc gesetzten Referenzen
-    //JP 24.06.96: Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine
-    //              RefMark gesetzt ist
-    // OS 25.06.96: ab jetzt wird immer die Anzahl der Referenzen returnt
+// returne die Namen aller im Doc gesetzten Referenzen
+//JP 24.06.96: Ist der ArrayPointer 0 dann returne nur, ob im Doc. eine
+//              RefMark gesetzt ist
+// OS 25.06.96: ab jetzt wird immer die Anzahl der Referenzen returnt
 sal_uInt16 SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
 {
     const SfxPoolItem* pItem;
@@ -1933,14 +1921,11 @@ bool SwDoc::IsModified() const
 
 void SwDoc::SetModified()
 {
-    // --> OD 2005-08-29 #125370#
     SwLayouter::ClearMovedFwdFrms( *this );
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
     SwLayouter::ClearFrmsNotToWrap( *this );
-    // <--
-    // --> OD 2006-05-10 #i65250#
+    // #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( *this );
-    // <--
     // dem Link wird der Status returnt, wie die Flags waren und werden
     //  Bit 0:  -> alter Zustand
     //  Bit 1:  -> neuer Zustand
@@ -1967,7 +1952,7 @@ void SwDoc::ResetModified()
     mbModified = sal_False;
     // If there is already a document statistic, we assume that
     // it is correct. In this case we reset the modified flag.
-    if ( 0 != pDocStat->nChar )
+    if ( 0 != pDocStat->nCharExcludingSpaces )
         pDocStat->bModified = sal_False;
     GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && aOle2Link.IsSet() )
@@ -1977,7 +1962,6 @@ void SwDoc::ResetModified()
         mbInCallModified = sal_False;
     }
 }
-
 
 void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
                     const String& rFltName, const Graphic* pGraphic,
@@ -2050,7 +2034,6 @@ sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
     return sal_True;
 }
 
-
 /*************************************************************************
  *      SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong )
  *
@@ -2061,11 +2044,10 @@ sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
  * Mit bOnlyWrong kann man dann steuern, ob nur die Bereiche mit falschen
  * Woertern oder die kompletten Bereiche neu ueberprueft werden muessen.
  ************************************************************************/
-
 void SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags )
 {
     std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080307
-    ASSERT( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
+    OSL_ENSURE( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
     {
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::AllInvalidateSmartTagsOrSpelling),bSmartTags));//swmod 080305
@@ -2127,8 +2109,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
         {
             ::SetProgressState( i, GetDocShell() );
             const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
-            //sal_uInt8 nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetTxtColl()//#outline level,zhaojianwei
-                        // ->GetOutlineLevel();
+
             const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nLvl > nLevel )
                 continue;
@@ -2167,7 +2148,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
                 if( bImpress )
                 {
                     SwTxtFmtColl* pMyColl = pNd->GetTxtColl();
-                    //sal_uInt16 nHeadLine = static_cast<sal_uInt16>(pMyColl->GetOutlineLevel()==NO_NUMBERING ?//#outlinelevel,zhaojianwei
+
                     const sal_uInt16 nHeadLine = static_cast<sal_uInt16>(
                                 !pMyColl->IsAssignedToListLevelOfOutlineStyle() //<-end,zhaojianwei
                                 ? RES_POOLCOLL_HEADLINE2
@@ -2189,8 +2170,8 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
     }
 }
 
-    // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
-    // versteckte Bereiche, versteckte Absaetze
+// loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
+// versteckte Bereiche, versteckte Absaetze
 bool SwDoc::RemoveInvisibleContent()
 {
     sal_Bool bRet = sal_False;
@@ -2269,12 +2250,10 @@ bool SwDoc::RemoveInvisibleContent()
                 SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
             }
 
-            // --> FME 2006-01-11 #120473#
             // Footnotes/Frames may have been removed, therefore we have
             // to reset n:
             if ( bRemoved )
                 n = aPam.GetPoint()->nNode.GetIndex();
-            // <--
         }
     }
 
@@ -2423,9 +2402,7 @@ bool SwDoc::RestoreInvisibleContent()
     return bRet;
 }
 
-/*-- 11.06.2004 08:34:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwDoc::ConvertFieldsToText()
 {
     sal_Bool bRet = sal_False;
@@ -2533,7 +2510,7 @@ bool SwDoc::LinksUpdated() const
     return mbLinksUpdated;
 }
 
-    // embedded alle lokalen Links (Bereiche/Grafiken)
+// embedded alle lokalen Links (Bereiche/Grafiken)
 ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
     for( sal_uInt16 n = 0; n < rLinks.Count(); ++n )
@@ -2586,10 +2563,6 @@ bool SwDoc::EmbedAllLinks()
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SwDoc::IsInsTblFormatNum() const
 {
     return SW_MOD()->IsInsTblFormatNum(get(IDocumentSettingAccess::HTML_MODE));
@@ -2600,16 +2573,12 @@ sal_Bool SwDoc::IsInsTblChangeNumFormat() const
     return SW_MOD()->IsInsTblChangeNumFormat(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SwDoc::IsInsTblAlignNum() const
 {
     return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-        // setze das InsertDB als Tabelle Undo auf:
+// setze das InsertDB als Tabelle Undo auf:
 void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
 {
     if( bIsTable )
@@ -2650,7 +2619,6 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     }
 }
 
-// #111827#
 String SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
     String aResult;
@@ -2689,7 +2657,6 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
     return aResult;
 }
 
-// -> #111840#
 SwField * SwDoc::GetField(const SwPosition & rPos)
 {
     SwTxtFld * const pAttr = GetTxtFld(rPos);
@@ -2706,7 +2673,6 @@ SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
                     rPos.nContent.GetIndex(), RES_TXTATR_FIELD) )
         : 0;
 }
-// <- #111840#
 
 bool SwDoc::ContainsHiddenChars() const
 {
@@ -2743,7 +2709,6 @@ void SwDoc::ChkCondColls()
      }
 }
 
-#ifdef FUTURE_VBA
 uno::Reference< script::vba::XVBAEventProcessor >
 SwDoc::GetVbaEventProcessor()
 {
@@ -2762,7 +2727,6 @@ SwDoc::GetVbaEventProcessor()
     }
     return mxVbaEvents;
 }
-#endif
 
 void SwDoc::setExternalData(::sw::tExternalDataType eType,
                             ::sw::tExternalDataPointer pPayload)
@@ -2774,3 +2738,5 @@ void SwDoc::setExternalData(::sw::tExternalDataType eType,
 {
     return m_externalData[eType];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

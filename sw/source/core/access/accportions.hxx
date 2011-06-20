@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,12 +122,11 @@ public:
     // get start and end position of the last line
     void GetLastLineBoundary( com::sun::star::i18n::Boundary& rBound ) const;
 
-    // --> OD 2008-05-30 #i89175#
+    // #i89175#
     sal_Int32 GetLineCount() const;
     sal_Int32 GetLineNo( const sal_Int32 nPos ) const;
     void GetBoundaryOfLine( const sal_Int32 nLineNo,
                             com::sun::star::i18n::Boundary& rLineBound );
-    // <--
 
     /// get the position in the model string for a given
     /// (accessibility) position
@@ -173,3 +173,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

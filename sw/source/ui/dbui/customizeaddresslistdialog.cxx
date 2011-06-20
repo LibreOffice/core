@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,11 +41,6 @@
 #include <dbui.hrc>
 #include <helpid.h>
 
-
-
-/*-- 13.04.2004 14:27:21---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         Window* pParent, const SwCSVData& rOldData) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZE_ADDRESS_LIST)),
@@ -86,24 +82,17 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     m_aFieldsLB.SelectEntryPos(0);
     UpdateButtons();
 }
-/*-- 13.04.2004 14:34:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwCustomizeAddressListDialog::~SwCustomizeAddressListDialog()
 {
 }
 
-/*-- 12.08.2004 12:58:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, ListBox*, EMPTYARG)
 {
     UpdateButtons();
     return 0;
 }
-/*-- 13.04.2004 15:02:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
 {
     bool bRename = pButton == &m_aRenamePB;
@@ -147,9 +136,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
     UpdateButtons();
     return 0;
 }
-/*-- 13.04.2004 15:02:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
 {
     sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
@@ -166,9 +153,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
     UpdateButtons();
     return 0;
 }
-/*-- 13.04.2004 15:02:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
 {
     sal_uInt16 nPos;
@@ -196,9 +181,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
     UpdateButtons();
     return 0;
 }
-/*-- 19.04.2004 14:51:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwCustomizeAddressListDialog::UpdateButtons()
 {
     sal_uInt16 nPos = m_aFieldsLB.GetSelectEntryPos();
@@ -208,17 +191,12 @@ void SwCustomizeAddressListDialog::UpdateButtons()
     m_aDeletePB.Enable(nEntries > 0);
     m_aRenamePB.Enable(nEntries > 0);
 }
-/*-- 19.04.2004 14:51:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwCSVData*    SwCustomizeAddressListDialog::GetNewData()
 {
     return m_pNewData;
 }
 
-/*-- 13.04.2004 13:48:41---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
         Window* pParent, bool bRename, const ::std::vector< ::rtl::OUString >& rCSVHeader) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADD_RENAME_ENTRY)),
@@ -243,15 +221,11 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
     m_aFieldNameED.SetModifyHdl(LINK(this, SwAddRenameEntryDialog, ModifyHdl_Impl));
     ModifyHdl_Impl( &m_aFieldNameED );
 }
-/*-- 13.04.2004 13:48:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
 {
 }
-/*-- 19.04.2004 15:31:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
 {
     ::rtl::OUString sEntry = pEdit->GetText();
@@ -272,3 +246,5 @@ IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
     m_aOK.Enable(!bFound);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

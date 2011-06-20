@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,8 +52,8 @@ using namespace ::com::sun::star;
 static void lcl_copyDocumentProperties(
         uno::Reference<document::XDocumentProperties> i_xSource,
         uno::Reference<document::XDocumentProperties> i_xTarget) {
-    DBG_ASSERT(i_xSource.is(), "null reference");
-    DBG_ASSERT(i_xTarget.is(), "null reference");
+    OSL_ENSURE(i_xSource.is(), "null reference");
+    OSL_ENSURE(i_xTarget.is(), "null reference");
 
     i_xTarget->setAuthor(i_xSource->getAuthor());
     i_xTarget->setGenerator(i_xSource->getGenerator());
@@ -105,7 +106,7 @@ static void lcl_copyDocumentProperties(
     }
 }
 
-/* -----------------22.07.99 11:47-------------------
+/* --------------------------------------------------
     Description: inserts an AutoText block
  --------------------------------------------------*/
 sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
@@ -115,8 +116,6 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
     sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
     if( (sal_uInt16) -1 != nIdx )
     {
-        // Bug #70238# ask the TextOnly-Flag before BeginGetDoc, because
-        //              the method closed the Storage!
         sal_Bool bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
         mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
 
@@ -131,8 +130,8 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             // entry document.
             // To be able to do this, we copy the document properties of the
             // target document to the glossary document
-//            DBG_ASSERT(GetDocShell(), "no SwDocShell"); // may be clipboard!
-            DBG_ASSERT(pGDoc->GetDocShell(), "no SwDocShell at glossary");
+//            OSL_ENSURE(GetDocShell(), "no SwDocShell"); // may be clipboard!
+            OSL_ENSURE(pGDoc->GetDocShell(), "no SwDocShell at glossary");
             if (GetDocShell() && pGDoc->GetDocShell()) {
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
@@ -201,3 +200,4 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

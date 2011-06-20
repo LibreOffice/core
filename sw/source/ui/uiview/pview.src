@@ -29,7 +29,6 @@
 #include "pview.hrc"
 #include "helpid.h"
 #include "cmdid.h"
-
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
     HelpID = HID_PPREV_ZOOM ;

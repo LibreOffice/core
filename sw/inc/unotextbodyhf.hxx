@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,9 +120,6 @@ public:
 };
 
 
-/* -----------------25.08.98 11:02-------------------
- *
- * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper2
 <   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::container::XEnumerationAccess
@@ -208,3 +206,4 @@ public:
 
 #endif // SW_UNOTEXTBODYHF_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

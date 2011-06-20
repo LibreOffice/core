@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,8 @@
 #define SW_UNOMID_HXX
 
 #define C2S(cChar) String::CreateFromAscii( cChar )
-#define C2U(cChar) rtl::OUString::createFromAscii( cChar )
+//#define C2U(cChar) rtl::OUString::createFromAscii( cChar )
+#define C2U(cChar) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( cChar ))
 
 #define MID_MIRROR_VERT                         0
 #define MID_MIRROR_HORZ_EVEN_PAGES              1
@@ -116,6 +118,7 @@
 #define MID_LINE_ADJUST                         4
 #define MID_LINE_TEXT_DIST                      5
 #define MID_LINE_FOOTNOTE_DIST                  6
+#define MID_FTN_LINE_STYLE                      7
 
 //SwFmtRuby
 #define MID_RUBY_TEXT           0
@@ -151,7 +154,9 @@
 #define MID_ENV_SHIFT_RIGHT     12
 #define MID_ENV_SHIFT_DOWN      13
 
-// OD 2004-05-04 #i28701# - SwFmtWrapInfluenceOnObjPos
+// SwFmtWrapInfluenceOnObjPos
 #define MID_WRAP_INFLUENCE      0
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

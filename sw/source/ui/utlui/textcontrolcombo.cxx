@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ void TextControlCombo::Arrange( FixedText& _rFTcomplete, sal_Bool /*bShow*/ )
         nYCtrl += aMetricVals.Height();
 
     // separate text parts
-    const String    aReplStr( RTL_CONSTASCII_STRINGPARAM( "%POSITION_OF_CONTROL" ) );
+    const String    aReplStr( RTL_CONSTASCII_USTRINGPARAM( "%POSITION_OF_CONTROL" ) );
     String          aTxtBefore( _rFTcomplete.GetText() );
     String          aTxtAfter;
     xub_StrLen      nReplPos = aTxtBefore.Search( aReplStr );
@@ -111,3 +112,4 @@ void TextControlCombo::Enable( sal_Bool _bEnable, sal_Bool _bChild )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

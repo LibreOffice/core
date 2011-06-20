@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ class SwTabFrm;
 class SwViewImp;
 class SwCntntNode;
 class SwWait;
-// --> OD 2004-06-28 #i28701#
+// #i28701#
 class SfxProgress;
 
 //Die Verwendung der LayAction laeuft immer gleich ab:
@@ -191,10 +192,10 @@ public:
     //Auch andere sollen den Wartecrsr einschalten koennen.
     void CheckWaitCrsr();
 
-    // --> OD 2004-06-09 #i28701# - method is now public;
+    // #i28701# - method is now public;
     // delete 2nd parameter, because its not used;
     sal_Bool FormatLayoutFly( SwFlyFrm * );
-    // --> OD 2004-06-09 #i28701# - method is now public
+    // #i28701# - method is now public
     sal_Bool _FormatFlyCntnt( const SwFlyFrm * );
 
 };
@@ -209,13 +210,13 @@ class SwLayIdle
     sal_Bool        bPageValid;     // Konnte die Seite alles validiert werden?
     sal_Bool        bAllValid;      // Konnte alles validiert werden?
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bIndicator;
 #endif
 
 #ifdef _LAYACT_CXX
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void ShowIdle( ColorData eName );
 #endif
 
@@ -237,3 +238,5 @@ inline void SwLayAction::SetCheckPageNum( sal_uInt16 nNew )
 }
 
 #endif  //_LAYACT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

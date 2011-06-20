@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -119,7 +120,6 @@
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
-
 //Fuer die Erkennung der Id, die variable von Gallery mit SID_GALLERY_BG_BRUSH
 //ankommt.
 static sal_uInt8 nParagraphPos;
@@ -152,7 +152,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-
 SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxIMapDlgChildWindow::GetChildWindowId());
@@ -164,8 +163,6 @@ TYPEINIT1(SwBaseShell,SfxShell)
 /*--------------------------------------------------------------------
     Beschreibung:   statics
  --------------------------------------------------------------------*/
-
-
 void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
     Graphic aGrf( rSh.GetIMapGraphic() );
@@ -181,15 +178,10 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     SvxIMapDlgChildWindow::UpdateIMapDlg(
             aGrf, rURL.GetMap(), pList, pEditObj );
 
-    sal_uInt16 nCount = (sal_uInt16)pList->Count();
-    if(nCount)
-        for( sal_uInt16 i = nCount; i; i--  )
-        {
-            delete pList->GetObject(i-1);
-        }
+    for ( size_t i = 0, n = pList->size(); i < n; ++i )
+        delete pList->at( i );
     delete pList;
 }
-
 
 sal_Bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 {
@@ -212,7 +204,6 @@ sal_Bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 /*--------------------------------------------------------------------
     Beschreibung:   loeschen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::ExecDelete(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -231,10 +222,6 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 sal_Bool bLeft = rSh.Left( CRSR_SKIP_CHARS, sal_True, 1, sal_False  );
                 if( bLeft )
                 {
-                    // JP 28.03.96: ein Backspace im Absatz ohne Nummer wird zum Delete
-                    //rSh.SwapPam();
-                    //rSh.DelRight( sal_False );
-
                     rSh.DelLeft();
                 }
                 else
@@ -252,7 +239,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLeft();
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_FAIL("wrong Dispatcher");
             return;
     }
     rReq.Done();
@@ -260,10 +247,6 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
     //#i42732# - notify the edit window that from now on we do not use the input language
     rTmpEditWin.SetUseInputLanguage( sal_False );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 {
@@ -420,7 +403,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_FAIL("wrong Dispatcher");
             return;
     }
     if(!bIgnore)
@@ -430,7 +413,6 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   ClipBoard-Status
  --------------------------------------------------------------------*/
-
 void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -487,7 +469,6 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Undo ausfuehren
  --------------------------------------------------------------------*/
-
 void SwBaseShell::ExecUndo(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -519,7 +500,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
             rSh.Do( SwWrtShell::REPEAT );
             break;
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_FAIL("wrong Dispatcher");
     }
 
     if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
@@ -528,7 +509,6 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Zustand Undo
  --------------------------------------------------------------------*/
-
 void SwBaseShell::StateUndo(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -602,7 +582,6 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Slot-Id auswerten bzw. Dispatchen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::Execute(SfxRequest &rReq)
 {
     const SfxPoolItem *pItem;
@@ -765,22 +744,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
                        GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
-/*
-                    String sURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
-                    String sLabel( pGal->GetURL().getBase() );
-                    String sTarget; // empty string!
-
-                    bool bIsHTMLMode =
-                        0 == ( HTMLMODE_ON &
-                               ::GetHtmlMode( GetView().GetDocShell() ) );
-
-                    // in Writer, we insert a button which plays the
-                    // sound. In Writer/Web, we just insert a (text) link.
-                    if( bIsHTMLMode )
-                        InsertURLButton( sURL, sTarget, sLabel );
-                    else
-                        rSh.InsertURL( SwFmtINetFmt( sURL, sTarget ), sLabel );
-*/
                 }
             }
         }
@@ -875,11 +838,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(
                             GetView(),DLG_CONV_TEXT_TABLE , bToTable);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
@@ -1182,7 +1145,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     static_cast<const SfxBoolItem*>( pItem )->GetValue();
 
                 // set form design mode
-                DBG_ASSERT( GetView().GetFormShell() != NULL, "form shell?" );
+                OSL_ENSURE( GetView().GetFormShell() != NULL, "form shell?" );
                 SfxRequest aReq( GetView().GetViewFrame(), SID_FM_DESIGN_MODE );
                 aReq.AppendItem( SfxBoolItem( SID_FM_DESIGN_MODE, bDesignMode ) );
                 GetView().GetFormShell()->Execute( aReq );
@@ -1241,7 +1204,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_PAGE_STYLE_SET_PAPER_SIZE:
         case FN_PAGE_STYLE_SET_PAPER_BIN:
         {
-            DBG_ERROR("not implemented");
+            OSL_FAIL("not implemented");
         }
         break;
 
@@ -1268,13 +1231,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         }
         break;
         default:
-                DBG_ERROR("falscher Dispatcher");
+                OSL_FAIL("wrong Dispatcher");
         }
 
     }
 }
 
-/* -----------------14.04.99 15:10-------------------
+/* --------------------------------------------------
  * Hier wird der State fuer SID_IMAP / SID_CONTOUR behandelt,
  * wenn die Grafik ausgeswappt ist
  * --------------------------------------------------*/
@@ -1284,16 +1247,17 @@ IMPL_LINK(SwBaseShell, GraphicArrivedHdl, SwCrsrShell* , EMPTYARG )
     SwWrtShell &rSh = GetShell();
     if( CNT_GRF == rSh.SwEditShell::GetCntType() &&
         GRAPHIC_NONE != ( nGrfType = rSh.GetGraphicType() ) &&
-        aGrfUpdateSlots.Count() )
+        !aGrfUpdateSlots.empty() )
     {
         sal_Bool bProtect = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT);
         SfxViewFrame* pVFrame = GetView().GetViewFrame();
         sal_uInt16 nSlot;
-        for( sal_uInt16 n = 0; n < aGrfUpdateSlots.Count(); ++n )
+        std::set<sal_uInt16>::iterator it;
+        for( it = aGrfUpdateSlots.begin(); it != aGrfUpdateSlots.end(); ++it )
         {
             sal_Bool bSetState = sal_False;
             sal_Bool bState = sal_False;
-            switch( nSlot = aGrfUpdateSlots[ n ] )
+            switch( nSlot = *it )
             {
             case SID_IMAP:
             case SID_IMAP_EXEC:
@@ -1365,7 +1329,7 @@ IMPL_LINK(SwBaseShell, GraphicArrivedHdl, SwCrsrShell* , EMPTYARG )
                     pVFrame->GetBindings().SetState( aBool );
             }
         }
-        aGrfUpdateSlots.RemoveAt( 0, aGrfUpdateSlots.Count() );
+        aGrfUpdateSlots.clear();
     }
     return 0;
 }
@@ -1454,7 +1418,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case SID_IMAP:
             {
-                // --> OD 2006-11-08 #i59688#
+                // #i59688#
                 // improve efficiency:
                 // If selected object is protected, item has to disabled.
                 const sal_Bool bProtect = 0 != rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT);
@@ -1470,7 +1434,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     const sal_Bool bIsGraphicSelection =
                                 rSh.GetSelectionType() == nsSelectionType::SEL_GRF;
 
-                    // --> OD 2006-11-08 #i59688#
+                    // #i59688#
                     // avoid unnecessary loading of selected graphic.
                     // The graphic is only needed, if the dialog is open.
                     //wenn die Grafik ausgeswappt ist, dann muss der
@@ -1498,9 +1462,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             rSet.Put(aBool);
                         }
                     }
-                    // <--
                 }
-                // <--
             }
             break;
             case SID_IMAP_EXEC:
@@ -1549,7 +1511,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     sal_Bool bDisable = sal_False;
                     if( !bHas && !bOk )
                         bDisable = sal_True;
-                    // --> OD 2006-11-08 #i59688#
+                    // #i59688#
                     // avoid unnecessary loading of selected graphic.
                     // The graphic is only needed, if the dialog is open.
                     // wenn die Grafik ausgeswappt ist, dann muss der Status
@@ -1560,23 +1522,20 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(sal_False);  // start the loading
-                        // --> OD 2007-07-04 #i75481#
+                        // #i75481#
                         bDisable = sal_True;
-                        // <--
                     }
                     else if( bHas && bOk )
                         bDisable = !lcl_UpdateContourDlg( rSh, nSel );
                     else if( bOk )
                     {
-                        // --> OD 2007-07-04 #i75481#
+                        // #i75481#
                         // apply fix #i59688# only for selected graphics
                         if ( nSel & nsSelectionType::SEL_GRF )
                             bDisable = GRAPHIC_NONE == rSh.GetGraphicType();
                         else
                             bDisable = GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
-                        // <--
                     }
-                    // <--
 
                     if( bDisable )
                         rSet.DisableItem( nWhich );
@@ -1820,8 +1779,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
-
 void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
@@ -1837,8 +1794,6 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 /*--------------------------------------------------------------------
     Beschreibung:   Slots mit dieser Statusmethode disablen
  --------------------------------------------------------------------*/
-
-
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {
     sal_Bool bParentCntProt = GetShell().IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
@@ -1862,11 +1817,6 @@ void SwBaseShell::StateStyle( SfxItemSet &rSet )
     else
         GetView().GetDocShell()->StateStyleSheet(rSet, &GetShell());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 {
@@ -1895,15 +1845,14 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 break;
             case FN_WRAP_ANCHOR_ONLY:
                 aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
-                // --> OD 2006-06-02 #b6432130#
+                //
                 // keep previous wrapping
-                // --> OD 2006-09-21 #138144# - adjust fix #b6432130#
+                //
                 // switch to wrap SURROUND_PARALLEL, if previous wrap is SURROUND_NONE
                 if ( nOldSurround != SURROUND_NONE )
                 {
                     nSurround = nOldSurround;
                 }
-                // <--
                 break;
             case FN_FRAME_WRAP_CONTOUR:
                 aWrap.SetContour(!aWrap.IsContour());
@@ -1959,7 +1908,6 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 /*--------------------------------------------------------------------
     Beschreibung:   Update der Statuszeile erzwingen
  --------------------------------------------------------------------*/
-
 void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 {
     eFrameMode = eMode;
@@ -1975,7 +1923,7 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
     }
     else if( eMode == FLY_DRAG_END )
     {
-        static sal_uInt16 __READONLY_DATA aInval[] =
+        static sal_uInt16 aInval[] =
         {
             SID_ATTR_POSITION, SID_ATTR_SIZE, 0
         };
@@ -1986,7 +1934,6 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor
  --------------------------------------------------------------------*/
-
 SwBaseShell::SwBaseShell(SwView& rVw) :
     SfxShell( &rVw ),
     rView(rVw),
@@ -1999,7 +1946,6 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     rWrtSh.SetGrfArrivedLnk( LINK( this, SwBaseShell, GraphicArrivedHdl));
 }
 
-
 SwBaseShell::~SwBaseShell()
 {
     if( rView.GetCurShell() == this )
@@ -2009,10 +1955,6 @@ SwBaseShell::~SwBaseShell()
     if( aTmp == rView.GetWrtShell().GetGrfArrivedLnk() )
         rView.GetWrtShell().SetGrfArrivedLnk( Link() );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
 {
@@ -2139,10 +2081,6 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
     rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwBaseShell::GetTxtCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
@@ -2229,10 +2167,6 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
     delete pFntCoreSet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwBaseShell::GetBckColState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -2240,7 +2174,6 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     int nSelType = rSh.GetSelectionType();
 
-//  if ( nSelType & nsSelectionType::SEL_GRF ||
     if( nSelType & nsSelectionType::SEL_OLE )
     {
         rSet.DisableItem( SID_BACKGROUND_COLOR );
@@ -2290,10 +2223,6 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -2324,8 +2253,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         aBrushItem = (const SvxBrushItem&)aCoreSet.Get(RES_BACKGROUND);
     }
 
-//  sal_Bool bMsgOk = sal_False;
-
     switch (nSlot)
     {
         // RES_BACKGROUND (=SID_ATTR_BRUSH) muss ueber zwei IDs
@@ -2334,7 +2261,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
             {
                 aBrushItem.SetGraphicPos(GPOS_NONE);
 
-                //Brush &rBrush = aBrushItem.GetBrush();
                 if(pArgs)
                 {
                     const SvxColorItem& rNewColorItem = (const SvxColorItem&)
@@ -2360,9 +2286,8 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         }
         break;
         default:
-//          bMsgOk = sal_False;
             rReq.Ignore();
-            DBG_ERROR( "Unbekannte Message bei ExecuteAttr!" );
+            OSL_FAIL("unknown message in ExecuteAttr!" );
             return;
     }
 
@@ -2398,11 +2323,6 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     rReq.Done();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwBaseShell::GetBorderState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -2434,11 +2354,6 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_BORDER_REDUCED_MODE, !bTableMode ));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwBaseShell::ExecDlg(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -2456,6 +2371,14 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
     switch ( nSlot )
     {
+        case FN_FORMAT_TITLEPAGE_DLG:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            VclAbstractDialog* pDlg = pFact->CreateTitlePageDlg( pMDI );
+            pDlg->Execute();
+            delete pDlg;
+        }
+        break;
         case FN_FORMAT_PAGE_COLUMN_DLG:
         case FN_FORMAT_PAGE_DLG:
         {
@@ -2487,10 +2410,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetTabBorders( *pDlg->GetOutputItemSet() );
@@ -2504,10 +2427,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2522,10 +2445,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA, RC_DLG_SWBORDERDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2547,7 +2470,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
             SfxAbstractDialog * pDlg = 0;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
 
             // Tabellenzelle(n) selektiert?
@@ -2559,11 +2482,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    //aBrush = (SvxBrushItem) pDlg->GetOutputItemSet()->Get( RES_BACKGROUND );
 
                     rSh.SetBoxBackground( (SvxBrushItem&)
                         pDlg->GetOutputItemSet()->Get( RES_BACKGROUND ));
@@ -2578,7 +2500,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetFlyFrmAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
@@ -2593,7 +2515,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttr( *pDlg->GetOutputItemSet() );
@@ -2609,28 +2531,21 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
         }
         break;
-        default:DBG_ERROR("falscher Dispatcher (basesh.cxx)");
+        default:OSL_FAIL("wrong Dispatcher (basesh.cxx)");
     }
     if(!bDone)
         rReq.Done();
 }
-
-// ----------------------------------------------------------------------------
-
 
 SwWrtShell& SwBaseShell::GetShell()
 {
     return rView.GetWrtShell();
 }
 
-// ----------------------------------------------------------------------------
-
 SwWrtShell* SwBaseShell::GetShellPtr()
 {
     return rView.GetWrtShellPtr();
 }
-
-// ----------------------------------------------------------------------------
 
 void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 {
@@ -2710,9 +2625,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             if( !nCols || !nRows )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( DLG_INSERT_TABLE, rTempView );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
@@ -2768,8 +2683,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     }
 }
 
-// ----------------------------------------------------------------------------
-
 void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
 {
     SwWrtShell &rSh = GetShell();
@@ -2781,12 +2694,12 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
         {
             int nSel = rSh.GetSelectionType();
             SfxStringListItem aLst( nWhich );
-            List *pLst = aLst.GetList();
+            std::vector<String> &rLst = aLst.GetList();
             nParagraphPos = nGraphicPos = nOlePos = nFramePos = nTablePos =
             nTableRowPos  = nTableCellPos = nPagePos =
             nHeaderPos    = nFooterPos = 0;
             sal_uInt8 nPos = 1;
-            pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_PAGE ), pLst->Count() );
+            rLst.push_back( SW_RESSTR( STR_SWBG_PAGE ) );
             nPagePos = nPos++;
             sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             sal_Bool bHtmlMode = 0 != (nHtmlMode & HTMLMODE_ON);
@@ -2794,62 +2707,61 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES)) &&
                  (nSel & nsSelectionType::SEL_TXT) )
             {
-                pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_PARAGRAPH ), pLst->Count() );
+                rLst.push_back( SW_RESSTR( STR_SWBG_PARAGRAPH ) );
                 nParagraphPos = nPos++;
             }
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_SOME_STYLES)) &&
                     nSel & (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
             {
-                pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_TABLE ), pLst->Count() );
+                rLst.push_back( SW_RESSTR( STR_SWBG_TABLE ) );
                 nTablePos = nPos++;
 
                 if(!bHtmlMode)
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_TABLE_ROW ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_TABLE_ROW ) );
                     nTableRowPos = nPos++;
                 }
 
-                pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_TABLE_CELL), pLst->Count() );
+                rLst.push_back( SW_RESSTR( STR_SWBG_TABLE_CELL) );
                 nTableCellPos = nPos++;
             }
             if(!bHtmlMode)
             {
                 if ( nSel & nsSelectionType::SEL_FRM )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_FRAME ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_FRAME ) );
                     nFramePos = nPos++;
                 }
                 if ( nSel & nsSelectionType::SEL_GRF )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_GRAPHIC ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_GRAPHIC ) );
                     nGraphicPos = nPos++;
                 }
                 if ( nSel & nsSelectionType::SEL_OLE )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_OLE ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_OLE ) );
                     nOlePos = nPos++;
                 }
                 const sal_uInt16 nType = rSh.GetFrmType(0,sal_True);
                 if ( nType & FRMTYPE_HEADER )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_HEADER ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_HEADER ) );
                     nHeaderPos = nPos++;
                 }
                 if ( nType & FRMTYPE_FOOTER )
                 {
-                    pLst->Insert( (void*) new SW_RESSTR( STR_SWBG_FOOTER ), pLst->Count() );
+                    rLst.push_back( SW_RESSTR( STR_SWBG_FOOTER ) );
                     nFooterPos = nPos;
                 }
             }
-            if ( pLst->Count() )
-                rSet.Put( aLst );
-            else
+            if ( rLst.empty() )
                 rSet.DisableItem( nWhich );
+            else
+                rSet.Put( aLst );
             break;
         }
     }
 }
-
 
 void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
 {
@@ -2919,16 +2831,17 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
         case FN_CHANGE_DBFIELD:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwChangeDBDlg(GetView(), DLG_CHANGE_DB );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
         break;
         default:
-            ASSERT(sal_False, falscher Dispatcher);
+            OSL_FAIL("wrong dispatcher");
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

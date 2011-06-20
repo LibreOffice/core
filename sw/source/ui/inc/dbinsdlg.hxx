@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,18 +30,10 @@
 #define _DBINSDLG_HXX
 
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
@@ -167,7 +160,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     virtual void            Commit();
     void                    Load();
 
-    // setze die Tabellen - Eigenschaften
+    // set the tables - properties
     void SetTabSet();
 
 public:
@@ -186,3 +179,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

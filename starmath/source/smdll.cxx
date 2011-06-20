@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 
 #include <sot/factory.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/modctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <sfx2/docfac.hxx>
@@ -42,74 +41,74 @@
 #include <sfx2/app.hxx>
 #include <sfx2/taskpane.hxx>
 
-#ifndef _SMDLL_HXX
 #include <smdll.hxx>
-#endif
 #include <document.hxx>
 #include <toolbox.hxx>
 #include <view.hxx>
 
-#ifndef _STARMATH_HRC
 #include <starmath.hrc>
-#endif
 
 #include <svx/xmlsecctrl.hxx>
 
-
-
-sal_Bool SmDLL::bInitialized = sal_False;
-
-/*************************************************************************
-|*
-|* Initialisierung
-|*
-\************************************************************************/
-void SmDLL::Init()
+namespace
 {
-    if ( bInitialized )
-        return;
+    class SmDLL
+    {
+    public:
+        SmDLL();
+        ~SmDLL();
+    };
 
-    bInitialized = sal_True;
+    SmDLL::SmDLL()
+    {
+        SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
+        if ( *ppShlPtr )
+            return;
 
-    SfxObjectFactory& rFactory = SmDocShell::Factory();
+        SfxObjectFactory& rFactory = SmDocShell::Factory();
+        SmModule *pModule = new SmModule( &rFactory );
+        *ppShlPtr = pModule;
 
-    SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
-    *ppShlPtr = new SmModule( &rFactory );
+        rFactory.SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
 
-    SfxModule *p = SM_MOD();
-    SmModule *pp = (SmModule *) p;
+        SmModule::RegisterInterface(pModule);
+        SmDocShell::RegisterInterface(pModule);
+        SmViewShell::RegisterInterface(pModule);
 
-    rFactory.SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
+        SmViewShell::RegisterFactory(1);
 
-    SmModule::RegisterInterface(pp);
-    SmDocShell::RegisterInterface(pp);
-    SmViewShell::RegisterInterface(pp);
+        SvxZoomStatusBarControl::RegisterControl(SID_ATTR_ZOOM, pModule);
+        SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
+        SvxUndoRedoControl::RegisterControl(SID_UNDO, pModule);
+        SvxUndoRedoControl::RegisterControl(SID_REDO, pModule);
+        XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
 
-    SmViewShell::RegisterFactory(1);
+        SmToolBoxWrapper::RegisterChildWindow(true);
+        SmCmdBoxWrapper::RegisterChildWindow(true);
 
-    SvxZoomStatusBarControl::RegisterControl( SID_ATTR_ZOOM, pp );
-    SvxModifyControl::RegisterControl( SID_TEXTSTATUS, pp );
-    SvxUndoRedoControl::RegisterControl( SID_UNDO, pp );
-    SvxUndoRedoControl::RegisterControl( SID_REDO, pp );
-    XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pp );
+        ::sfx2::TaskPaneWrapper::RegisterChildWindow(false, pModule);
+    }
 
-    SmToolBoxWrapper::RegisterChildWindow(sal_True);
-    SmCmdBoxWrapper::RegisterChildWindow(sal_True);
+    SmDLL::~SmDLL()
+    {
+#if 0
+        // the SdModule must be destroyed
+        SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
+        delete (*ppShlPtr);
+        (*ppShlPtr) = NULL;
+        *GetAppData(SHL_SM) = 0;
+#endif
+    }
 
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( sal_False, pp );
+    struct theSmDLLInstance : public rtl::Static<SmDLL, theSmDLLInstance> {};
 }
 
-/*************************************************************************
-|*
-|* Deinitialisierung
-|*
-\************************************************************************/
-void SmDLL::Exit()
+namespace SmGlobals
 {
-    // the SdModule must be destroyed
-    SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = NULL;
-
-    *GetAppData(SHL_SM) = 0;
+    void ensure()
+    {
+        theSmDLLInstance::get();
+    }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

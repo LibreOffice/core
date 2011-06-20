@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -110,8 +111,8 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             sal_uInt16 nMode )
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_SETRUBYATTR, NULL );
-    SvUShortsSort aDelArr;
-    aDelArr.Insert( RES_TXTATR_CJK_RUBY );
+    std::set<sal_uInt16> aDelArr;
+    aDelArr.insert( RES_TXTATR_CJK_RUBY );
 
     sal_uInt16 nListEntry = 0;
 
@@ -146,7 +147,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         }
                         else
                         {
-                            ResetAttrs( aPam, sal_True, &aDelArr );
+                            ResetAttrs( aPam, sal_True, aDelArr );
                         }
                     }
 
@@ -298,28 +299,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
 
         case UnicodeType::OTHER_LETTER:
             bChkNxtWrd = sal_True;
-            // no break!
-//      case UnicodeType::UNASSIGNED:
-//      case UnicodeType::MODIFIER_LETTER:
-//      case UnicodeType::NON_SPACING_MARK:
-//      case UnicodeType::ENCLOSING_MARK:
-//      case UnicodeType::COMBINING_SPACING_MARK:
-//      case UnicodeType::LETTER_NUMBER:
-//      case UnicodeType::OTHER_NUMBER:
-//      case UnicodeType::LINE_SEPARATOR:
-//      case UnicodeType::PARAGRAPH_SEPARATOR:
-//      case UnicodeType::FORMAT:
-//      case UnicodeType::SURROGATE:
-//      case UnicodeType::DASH_PUNCTUATION:
-//      case UnicodeType::CONNECTOR_PUNCTUATION:
-///*?? */case UnicodeType::OTHER_PUNCTUATION:
-//--> char '!' is to ignore!
-//      case UnicodeType::MATH_SYMBOL:
-//      case UnicodeType::CURRENCY_SYMBOL:
-//      case UnicodeType::MODIFIER_SYMBOL:
-//      case UnicodeType::OTHER_SYMBOL:
-//      case UnicodeType::INITIAL_PUNCTUATION:
-//      case UnicodeType::FINAL_PUNCTUATION:
+
         default:
                 bIsAlphaNum = sal_False;
                 break;
@@ -359,3 +339,5 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
 SwRubyListEntry::~SwRubyListEntry()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

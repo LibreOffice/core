@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svx/dialmgr.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 
 #define READ_OLDVERS        // erstmal noch alte Versionen lesen
 #include <swtypes.hxx>
@@ -51,6 +50,8 @@
 #include <tblafmt.hxx>
 #include <cellatr.hxx>
 #include <SwStyleNameMapper.hxx>
+
+using ::editeng::SvxBorderLine;
 
 // bis SO5PF
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
@@ -73,11 +74,11 @@ const sal_uInt16 AUTOFORMAT_DATA_ID_641 = 10002;
 const sal_uInt16 AUTOFORMAT_ID_680DR14      = 10011;
 const sal_uInt16 AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
-// --- from 680/dr25 on: #21549# store strings as UTF-8
+// --- from 680/dr25 on: store strings as UTF-8
 const sal_uInt16 AUTOFORMAT_ID_680DR25      = 10021;
 const sal_uInt16 AUTOFORMAT_DATA_ID_680DR25 = 10022;
 
-// --- from DEV300/overline2 on: #5991# overline
+// --- from DEV300/overline2 on: overline
 const sal_uInt16 AUTOFORMAT_ID_300OVRLN      = 10031;
 const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 
@@ -400,7 +401,7 @@ sal_Bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, s
     if( 0 == rVersions.nNumFmtVersion )
     {
         sal_uInt16 eSys, eLge;
-        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         rStream.ReadByteString( sNumFmtString, eCharSet )
                 >> eSys >> eLge;
@@ -486,7 +487,7 @@ sal_Bool SwBoxAutoFmt::Save( SvStream& rStream ) const
     aRotateAngle.Store( rStream, aRotateAngle.GetVersion(SOFFICE_FILEFORMAT_40) );
     aRotateMode.Store( rStream, aRotateMode.GetVersion(SOFFICE_FILEFORMAT_40) );
 
-    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    // --- from 680/dr25 on: store strings as UTF-8
     rStream.WriteByteString( sNumFmtString, RTL_TEXTENCODING_UTF8 )
         << (sal_uInt16)eSysLanguage << (sal_uInt16)eNumFmtLanguage;
 
@@ -587,7 +588,7 @@ SwTableAutoFmt::~SwTableAutoFmt()
 
 void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos )
 {
-    ASSERT( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( pFmt )      // ist gesetzt -> kopieren
@@ -599,7 +600,7 @@ void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos )
 
 const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( sal_uInt8 nPos ) const
 {
-    ASSERT( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( pFmt )      // ist gesetzt -> kopieren
@@ -620,7 +621,7 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
                                             UpdateFlags eFlags,
                                             SvNumberFormatter* pNFmtr )
 {
-    ASSERT( nPos < 16, "falscher Bereich" );
+    OSL_ENSURE( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( !pFmt )     // ist gesetzt -> kopieren
@@ -693,7 +694,7 @@ void SwTableAutoFmt::UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetHeight() );
             rSet.Put( rChg.GetWeight() );
             rSet.Put( rChg.GetPosture() );
-            // #103065# do not insert empty CJK font
+            // do not insert empty CJK font
             const SvxFontItem& rCJKFont = rChg.GetCJKFont();
             if( rCJKFont.GetStyleName().Len() )
             {
@@ -708,7 +709,7 @@ void SwTableAutoFmt::UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet,
                 rSet.Put( rChg.GetWeight(), RES_CHRATR_CJK_WEIGHT );
                 rSet.Put( rChg.GetPosture(), RES_CHRATR_CJK_POSTURE );
             }
-            // #103065# do not insert empty CTL font
+            // do not insert empty CTL font
             const SvxFontItem& rCTLFont = rChg.GetCTLFont();
             if( rCTLFont.GetStyleName().Len() )
             {
@@ -779,7 +780,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
     {
         sal_Bool b;
-        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         rStream.ReadByteString( aName, eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
@@ -861,7 +862,7 @@ sal_Bool SwTableAutoFmt::Save( SvStream& rStream ) const
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
     sal_Bool b;
     rStream << nVal;
-    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    // --- from 680/dr25 on: store strings as UTF-8
     rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
     rStream << nStrResId;
     rStream << ( b = bInclFont );
@@ -998,7 +999,7 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
 //                  rStream >> nFileVers;
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
-                    ASSERT( !this, "Der Header enthaelt mehr/neuere Daten" );
+                    OSL_ENSURE( !this, "Der Header enthaelt mehr/neuere Daten" );
                     rStream.Seek( nPos + nCnt );
                 }
                 rStream.SetStreamCharSet( (CharSet)nChrSet );
@@ -1080,9 +1081,7 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         rStream << nVal
                 << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
                 << (sal_uInt8)GetStoreCharSet( ::gsl_getSystemTextEncoding() );
-//              << (sal_uInt8)4         // Anzahl von Zeichen des Headers incl. diesem
-//              << (sal_uInt8)::GetSystemCharSet()
-//              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
+
         bRet = 0 == rStream.GetError();
 
         //-----------------------------------------------------------
@@ -1104,3 +1103,4 @@ sal_Bool SwTableAutoFmtTbl::Save( SvStream& rStream ) const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

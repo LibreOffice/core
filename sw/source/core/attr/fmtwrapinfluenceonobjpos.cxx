@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <fmtwrapinfluenceonobjpos.hxx>
 
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -66,7 +65,7 @@ SwFmtWrapInfluenceOnObjPos& SwFmtWrapInfluenceOnObjPos::operator=(
 
 int SwFmtWrapInfluenceOnObjPos::operator==( const SfxPoolItem& _rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( _rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( _rAttr ), "keine gleichen Attribute" );
     return ( mnWrapInfluenceOnPosition ==
                     static_cast<const SwFmtWrapInfluenceOnObjPos&>(_rAttr).
                                                 GetWrapInfluenceOnObjPos() );
@@ -77,10 +76,10 @@ SfxPoolItem* SwFmtWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
     return new SwFmtWrapInfluenceOnObjPos(*this);
 }
 
-sal_Bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch ( nMemberId )
     {
         case MID_WRAP_INFLUENCE:
@@ -89,17 +88,17 @@ sal_Bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId 
         }
         break;
         default:
-            ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
-            bRet = sal_False;
+            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            bRet = false;
     }
 
     return bRet;
 }
 
-sal_Bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId )
+bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     switch ( nMemberId )
     {
@@ -107,25 +106,24 @@ sal_Bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMembe
         {
             sal_Int16 nNewWrapInfluence = 0;
             rVal >>= nNewWrapInfluence;
-            // --> OD 2004-10-18 #i35017# - constant names have changed and
+            // #i35017# - constant names have changed and
             // <ITERATIVE> has been added
             if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
                  nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
                  nNewWrapInfluence == text::WrapInfluenceOnPosition::ITERATIVE )
-            // <--
             {
                 SetWrapInfluenceOnObjPos( nNewWrapInfluence );
             }
             else
             {
-                ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
-                bRet = sal_False;
+                OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::PutValue(..)> - invalid attribute value" );
+                bRet = false;
             }
         }
         break;
         default:
-            ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
-            bRet = sal_False;
+            OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::QueryValue()> - unknown MemberId" );
+            bRet = false;
     }
 
     return bRet;
@@ -133,22 +131,21 @@ sal_Bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMembe
 
 void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
 {
-    // --> OD 2004-10-18 #i35017# - constant names have changed and consider
+    // #i35017# - constant names have changed and consider
     // new value <ITERATIVE>
     if ( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ITERATIVE )
-    // <--
     {
         mnWrapInfluenceOnPosition = _nWrapInfluenceOnPosition;
     }
     else
     {
-        ASSERT( false, "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
+        OSL_FAIL( "<SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos(..)> - invalid attribute value" );
     }
 }
 
-// --> OD 2004-10-18 #i35017# - add parameter <_bIterativeAsOnceConcurrent>
+// #i35017# - add parameter <_bIterativeAsOnceConcurrent>
 // to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
 sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
                                 const bool _bIterativeAsOnceConcurrent ) const
@@ -163,4 +160,5 @@ sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
 
     return nWrapInfluenceOnPosition;
 }
-// <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

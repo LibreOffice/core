@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,9 +27,7 @@
  ************************************************************************/
 #ifndef _ACCDOC_HXX
 #define _ACCDOC_HXX
-#ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <accselectionhelper.hxx>
 
@@ -197,7 +196,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+    // index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
@@ -211,3 +210,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,24 +29,18 @@
 #ifndef _BMPWIN_HXX
 #define _BMPWIN_HXX
 
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
 #include <vcl/window.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Extended Page fuer Grafiken
+    Description:    extended page for graphics
  --------------------------------------------------------------------*/
-
 class BmpWindow : public Window
 {
 private:
     Graphic     aGraphic;
     BitmapEx    aBmp;
-    BitmapEx    aBmpHC;
 
     sal_Bool        bHorz : 1;
     sal_Bool        bVert : 1;
@@ -56,7 +51,7 @@ private:
 
 public:
     BmpWindow(Window* pPar, sal_uInt16 nId,
-                const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC);
+                const Graphic& rGraphic, const BitmapEx& rBmp);
     BmpWindow(Window* pParent, const ResId rResId) :
         Window(pParent, rResId),
         bHorz(sal_False), bVert(sal_False),bGraphic(sal_False), bLeftAlign(sal_True) {}
@@ -67,3 +62,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 
 #include <hintids.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -96,10 +95,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     break;
     case FN_NUMBER_BULLETS:
     {
-        // --> OD 2008-02-29 #refactorlists#
-//        // per default sal_True, damit die Schleife im Dialog richtig arbeitet!
-//        sal_Bool bHasChild = sal_True;
-        // <--
         SfxItemSet aSet(GetPool(),
                 SID_HTML_MODE, SID_HTML_MODE,
                 SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
@@ -130,11 +125,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
 
             aSet.Put(SvxNumBulletItem(aRule));
-            // --> OD 2008-02-29 #refactorlists# - removed <bHasChild>
-            ASSERT( GetShell().GetNumLevel() < MAXLEVEL,
+            OSL_ENSURE( GetShell().GetNumLevel() < MAXLEVEL,
                     "<SwTextShell::ExecEnterNum()> - numbered node without valid list level. Serious defect -> please inform OD." );
             sal_uInt16 nLevel = GetShell().GetNumLevel();
-            // <--
             if( nLevel < MAXLEVEL )
             {
                 nLevel = 1<<nLevel;
@@ -143,12 +136,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         }
         else
         {
-            // --> OD 2008-02-11 #newlistlevelattrs#
             SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
-                             // --> OD 2008-06-06 #i89178#
+                             // #i89178#
                              numfunc::GetDefaultPositionAndSpaceMode() );
-                             // <--
-            // <--
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
             const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
 
@@ -163,13 +153,12 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                         aFmt.SetLSpace(720);
                         aFmt.SetAbsLSpace(n * 720);
                     }
-                    // --> FME 2005-01-21 #i38904#  Default alignment for
+                    // #i38904#  Default alignment for
                     // numbering/bullet should be rtl in rtl paragraph:
                     if ( bRightToLeft )
                     {
                         aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
                     }
-                    // <--
                     aSvxRule.SetLevel( n, aFmt, sal_False );
                 }
                 aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, sal_False);
@@ -183,10 +172,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell());
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         sal_uInt16 nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
         if( RET_OK == nRet )
@@ -197,22 +186,17 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 pSetRule->UnLinkGraphics();
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule aSetRule( pCurRule
                                         ? pCurRule->GetName()
                                         : GetShell().GetUniqueNumRuleName(),
-                                    // --> OD 2008-06-06 #i89178#
+                                    // #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
-                                    // <--
-                // <--
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( sal_True );
-                // --> OD 2008-03-17 #refactorlists#
                 // No start of new list, if an existing list style is edited.
                 // Otherwise start a new list.
                 const bool bCreateList = (pCurRule == 0);
                 GetShell().SetCurNumRule( aSetRule, bCreateList );
-                // <--
             }
             // wenn der Dialog mit OK verlassen wurde, aber nichts ausgewaehlt
             // wurde dann muss die Numerierung zumindest eingeschaltet werden,
@@ -222,18 +206,13 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 rReq.AppendItem( *pItem );
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
-                // --> OD 2008-02-11 #newlistlevelattrs#
                 SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
-                                    // --> OD 2008-06-06 #i89178#
+                                    // #i89178#
                                     numfunc::GetDefaultPositionAndSpaceMode() );
-                                    // <--
-                // <--
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( sal_True );
-                // --> OD 2008-03-17 #refactorlists#
                 // start new list
                 GetShell().SetCurNumRule( aSetRule, true );
-                // <--
             }
         }
         else if(RET_USER == nRet)
@@ -243,9 +222,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     }
     break;
     default:
-        ASSERT(sal_False,  falscher Dispatcher);
+        OSL_FAIL("wrong dispatcher");
         return;
     }
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

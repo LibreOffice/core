@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -113,16 +114,6 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
             if( !pNd && nSttNode )
                 pNd = rDoc.GetNodes()[ nSttNode ]->GetTxtNode();
 
-            // This code seems to be superfluous because the methods
-            // don't have any known side effects.
-            // ToDo: iasue i83806 should be used to remove this code
-            const SwNumRule* pNdRule;
-            if( pNd )
-                pNdRule = pNd->GetNumRule();
-            else
-                pNdRule = rDoc.FindNumRulePtr( aNumRule.GetName() );
-            // End of ToDo for issue i83806
-
             pHistory->TmpRollback( &rDoc, nLRSavePos );
 
         }
@@ -152,10 +143,8 @@ void SwUndoInsNum::RedoImpl(::sw::UndoRedoContext & rContext)
         }
         else
         {
-            // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            // --> OD 2008-03-18 #refactorlists#
+            // #i42921# - adapt to changed signature
             rDoc.SetNumRule(rPam, aNumRule, false);
-            // <--
         }
     }
 }
@@ -173,10 +162,8 @@ void SwUndoInsNum::RepeatImpl(::sw::RepeatContext & rContext)
     {
         if( !sReplaceRule.Len() )
         {
-            // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            // --> OD 2008-03-18 #refactorlists#
+            // #i42921# - adapt to changed signature
             rDoc.SetNumRule(rContext.GetRepeatPaM(), aNumRule, false);
-            // <--
         }
     }
     else
@@ -202,9 +189,9 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 
 
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
-    : SwUndo( UNDO_DELNUM ), SwUndRng( rPam ),
-    aNodeIdx( sal_uInt8( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
+    : SwUndo( UNDO_DELNUM ), SwUndRng( rPam )
 {
+    aNodes.reserve( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode );
     pHistory = new SwHistory;
 }
 
@@ -220,11 +207,11 @@ void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    for( sal_uInt16 n = 0; n < aNodeIdx.Count(); ++n )
+    for( std::vector<NodeLevel>::const_iterator i = aNodes.begin(); i != aNodes.end(); ++i )
     {
-        SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
-        ASSERT( pNd, "Where is TextNode gone?" );
-        pNd->SetAttrListLevel(aLevels[ n ] );
+        SwTxtNode* pNd = rDoc.GetNodes()[ i->index ]->GetTxtNode();
+        OSL_ENSURE( pNd, "Where has the TextNode gone?" );
+        pNd->SetAttrListLevel( i->level );
 
         if( pNd->GetCondFmtColl() )
             pNd->ChkCondColl();
@@ -248,10 +235,7 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, sal_Bool )
 {
     if( rNd.GetNumRule() )
     {
-        sal_uInt16 nIns = aNodeIdx.Count();
-        aNodeIdx.Insert( rNd.GetIndex(), nIns );
-
-        aLevels.insert( aLevels.begin() + nIns, static_cast<sal_uInt8>(rNd.GetActualListLevel()) );
+        aNodes.push_back( NodeLevel( rNd.GetIndex(), rNd.GetActualListLevel() ) );
     }
 }
 
@@ -409,7 +393,6 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt 
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if ( pTxtNd )
     {
-        // --> OD 2008-02-28 #refactorlists#
         if ( pTxtNd->HasAttrListRestartValue() )
         {
             nOldStt = static_cast<sal_uInt16>(pTxtNd->GetAttrListRestartValue());
@@ -418,7 +401,6 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt 
         {
             nOldStt = USHRT_MAX; // indicating, that the list restart value is not set
         }
-        // <--
     }
 }
 
@@ -467,3 +449,4 @@ void SwUndoNumRuleStart::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

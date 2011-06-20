@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,25 +30,13 @@
 
 
 #include <sfx2/tabdlg.hxx>
-#ifndef _MENUBTN_HXX //autogen
 #include <vcl/menubtn.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <svx/stddlg.hxx>
 #include <numprevw.hxx>
 #include "numrule.hxx"
@@ -56,36 +45,23 @@ class SwWrtShell;
 class SvxBrushItem;
 class SwOutlineTabDialog;
 
-
-/*-----------------13.02.97 14.02-------------------
-
---------------------------------------------------*/
-
 struct SwBmpItemInfo
 {
     SvxBrushItem*   pBrushItem;
     sal_uInt16          nItemId;
 };
 
-
-/*-----------------07.02.97 15.37-------------------
-
---------------------------------------------------*/
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 #define NUM_PAGETYPE_NUM            2
 #define NUM_PAGETYPE_BMP            3
 #define PAGETYPE_USER_START         10
 
-/*-----------------03.12.97 10:18-------------------
-
---------------------------------------------------*/
 class SwNumPositionTabPage : public SfxTabPage
 {
         FixedLine       aLevelFL;
     MultiListBox    aLevelLB;
 
-    // --> OD 2008-02-01 #newlistlevelattrs#
     // former set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
     FixedLine       aPositionFL;
@@ -98,9 +74,7 @@ class SwNumPositionTabPage : public SfxTabPage
     MetricField         aDistNumMF;
     FixedText           aAlignFT;
     ListBox             aAlignLB;
-    // <--
 
-    // --> OD 2008-02-01 #newlistlevelattrs#
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
     FixedText           aLabelFollowedByFT;
@@ -113,7 +87,6 @@ class SwNumPositionTabPage : public SfxTabPage
     MetricField         aAlignedAtMF;
     FixedText           aIndentAtFT;
     MetricField         aIndentAtMF;
-    // <--
 
     PushButton          aStandardPB;
 
@@ -128,10 +101,8 @@ class SwNumPositionTabPage : public SfxTabPage
 
     sal_Bool                bModified           : 1;
     sal_Bool                bPreset             : 1;
-    sal_Bool                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
-    // --> OD 2008-02-01 #newlistlevelattrs#
+    sal_Bool                bInInintControl     : 1;  // work around modify-error; should be resolved from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
-    // <--
 
     void                InitControls();
 
@@ -141,7 +112,6 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( RelativeHdl, CheckBox * );
     DECL_LINK( StandardHdl, PushButton * );
 
-    // --> OD 2008-02-01 #newlistlevelattrs#
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
@@ -149,7 +119,6 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );
-    // <--
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -203,3 +172,4 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
 };
 #endif // _NUM_CXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#if OSL_DEBUG_LEVEL > 0
-#   include <cstdio>
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
 #endif
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
 #include <svl/itemiter.hxx>
@@ -48,7 +48,6 @@
 
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/shaditem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <editeng/lrspitem.hxx> // SvxLRSpaceItem
@@ -79,17 +78,12 @@
 #include "docsh.hxx"
 #include <cstdio>
 
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
-
-// Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
-// temporaer dieses Debug gesetzt. Ist ausserdem noch das passende IniFlag
-// gesetzt, dann werden in d:\ Hilfsdateien erzeugt.
-// !! sollte demnaechst wieder entfernt werden !!
-// #define DEBUG_KA
-
 
 // ToDo:
 // 5. Die MapModes, die Win nicht kann, umrechnen
@@ -102,7 +96,7 @@ using namespace nsFieldFlags;
 void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
     OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )\n" );
-    ASSERT( mpParentFrame, "frame not set!" );
+    OSL_ENSURE( mpParentFrame, "frame not set!" );
     if ( mpParentFrame )
     {
         OutGrf( *mpParentFrame );
@@ -114,9 +108,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
     SwOLENode *pOLENd)
 {
-#ifdef NO_OLE_SIZE_OPTIMIZE
-    return true;
-#else
     bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -185,21 +176,21 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                     pGraphicStream =
                             ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( xPersist->getEntryName() ) );
                 }
-                catch( uno::Exception& )
+                catch( const uno::Exception& )
                 {}
 
-                DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+                OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
                 if ( pGraphicStream && !pGraphicStream->GetError() )
                 {
                     Graphic aGr1;
-                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    if( pGF->ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+                    if( rGF.ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         Graphic aGr2;
                         delete pGraphicStream;
                         pGraphicStream =
                                 ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
-                        if( pGF->ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                        if( rGF.ImportGraphic( aGr2, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                         {
                             if ( aGr1 == aGr2 )
                                 bGraphicNeeded = false;
@@ -216,7 +207,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     else
         bGraphicNeeded = true;
     return bGraphicNeeded;
-#endif
 }
 
 void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
@@ -366,6 +356,48 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     }
 }
 
+void WW8Export::OutputLinkedOLE( const rtl::OUString& rOleId )
+{
+    uno::Reference< embed::XStorage > xDocStg = pDoc->GetDocStorage();
+    uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OLELinks")), embed::ElementModes::READ );
+    SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, STREAM_READ );
+
+    SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
+        CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
+        STREAM_SHARE_DENYALL );
+
+    if( xObjStg.Is() && xObjSrc.Is() )
+    {
+        SotStorageRef xOleDst = xObjStg->OpenSotStorage( rOleId,
+                STREAM_READWRITE | STREAM_SHARE_DENYALL );
+        if ( xOleDst.Is() )
+            xObjSrc->CopyTo( xOleDst );
+
+        if ( !xOleDst->GetError( ) )
+        {
+            xOleDst->Commit();
+
+            // Ouput the cPicLocation attribute
+            WW8Bytes* pBuf = new WW8Bytes( 128, 128 );
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CPicLocation );
+            GetWriter().InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );
+
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFOle2 );
+            pBuf->Insert( 1, pBuf->Count() );
+
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFSpec );
+            pBuf->Insert( 1, pBuf->Count() );
+
+            GetWriter().InsUInt16( *pBuf, NS_sprm::LN_CFObj );
+            pBuf->Insert( 1, pBuf->Count() );
+
+            pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->Count(), pBuf->GetData() );
+            delete pBuf;
+        }
+    }
+}
+
 void WW8Export::OutGrf(const sw::Frame &rFrame)
 {
     // GrfNode fuer spaeteres rausschreiben der Grafik merken
@@ -374,7 +406,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     pChpPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
     pO->Remove( 0, pO->Count() );                   // leeren
 
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     const SwGrfNode* pGrfNd = rFrame.IsInline() && rFrame.GetContent()
                               ? rFrame.GetContent()->GetGrfNode() : 0;
@@ -395,7 +427,6 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         OutputField( 0, ww::eINCLUDEPICTURE, sStr,
                    WRITEFIELD_START | WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
     }
-    // <--
 
     WriteChar( (char)1 );   // Grafik-Sonderzeichen in Haupttext einfuegen
 
@@ -460,18 +491,17 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     Set_UInt8( pArr, nAttrMagicIdx++ );
     pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 
-    // --> OD 2007-04-23 #i75464#
+    // #i75464#
     // Check, if graphic isn't exported as-character anchored.
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
     if ( !rFrame.IsInline() &&
-         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !bIsInTable )) ||
+         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !IsInTable() )) ||
            (eAn == FLY_AT_PAGE)) )
-    // <--
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
 
-        static sal_uInt8 __READONLY_DATA nSty[2] = { 0, 0 };
+        static sal_uInt8 nSty[2] = { 0, 0 };
         pO->Insert( nSty, 2, pO->Count() );     // Style #0
         bool bOldGrf = bOutGrf;
         bOutGrf = true;
@@ -482,13 +512,12 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         pPapPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
         pO->Remove( 0, pO->Count() );                   // leeren
     }
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
         OutputField( 0, ww::eINCLUDEPICTURE, String(), WRITEFIELD_CLOSE );
     }
-    // <--
 }
 
 GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
@@ -555,7 +584,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                                 BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
             for( sal_uInt8 i = 0; i < 4; ++i )
             {
-                const SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
+                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
                 WW8_BRC aBrc;
                 if (pLn)
                 {
@@ -600,7 +629,6 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     Set_UInt16( pArr, mm );                         // set mm
 
     /*
-    #92494#
     Just in case our original size is too big to fit inside a ushort we can
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.
@@ -653,21 +681,6 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         String aFileN;
         rGrfNd.GetFileFilterNms( &aFileN, 0 );
 
-        // --> OD 2007-06-06 #i29408# - take the file URL as it is.
-//        aFileN = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-//                                          aFileN);
-//        INetURLObject aUrl( aFileN );
-//        if( aUrl.GetProtocol() == INET_PROT_FILE )
-//            aFileN = aUrl.PathToFileName();
-        // <--
-
-//JP 05.12.98: nach einigen tests hat sich gezeigt, das WW mit 99 nicht
-//              klarkommt. Sie selbst schreiben aber bei Verknuepfunfen,
-//              egal um welchen Type es sich handelt, immer den Wert 94.
-//              Bug 59859
-//      if ( COMPARE_EQUAL == aFiltN.ICompare( "TIF", 3 ) )
-//          mm = 99;                    // 99 = TIFF
-//      else
             sal_uInt16 mm = 94;                    // 94 = BMP, GIF
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,
@@ -737,7 +750,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         {
             const SwNode *pNode = rItem.maFly.GetContent();
             const SwGrfNode *pNd = pNode ? pNode->GetGrfNode() : 0;
-            ASSERT(pNd, "Impossible");
+            OSL_ENSURE(pNd, "Impossible");
             if (pNd)
                 WriteGrfFromGrfNode(rStrm, *pNd, rItem.maFly, nWidth, nHeight);
         }
@@ -747,23 +760,23 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 #ifdef OLE_PREVIEW_AS_EMF
             const SwNode *pNode = rItem.maFly.GetContent();
             const SwOLENode *pNd = pNode ? pNode->GetOLENode() : 0;
-            ASSERT(pNd, "Impossible");
+            OSL_ENSURE(pNd, "Impossible");
             if (!rWrt.bWrtWW8)
             {
                 SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
-                ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
+                OSL_ENSURE( pOleNd, " Wer hat den OleNode versteckt ?" );
                 SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
                 uno::Reference < embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
 
                 comphelper::EmbeddedObjectContainer aCnt( pOleNd->GetDoc()->GetDocStorage() );
 
                 SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rObj ) );
-                DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+                OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
                 if ( pGraphicStream && !pGraphicStream->GetError() )
                 {
                     Graphic aGr;
-                    GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    if( pGF->ImportGraphic( aGr, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+                    if( rGF.ImportGraphic( aGr, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         //TODO/LATER: do we really want to use GDIMetafile?!
                         GDIMetaFile aMtf;
@@ -794,7 +807,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 #else
             // cast away const
             SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
-            ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
+            OSL_ENSURE( pOleNd, " Wer hat den OleNode versteckt ?" );
             SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
 
             // TODO/LATER: do we need to load object?
@@ -820,7 +833,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         case sw::Frame::eDrawing:
         case sw::Frame::eTxtBox:
         case sw::Frame::eFormControl:
-            ASSERT(rWrt.bWrtWW8,
+            OSL_ENSURE(rWrt.bWrtWW8,
                 "You can't try and export these in WW8 format, a filter bug");
             /*
             #i3958# We only export an empty dummy picture frame here, this is
@@ -837,7 +850,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             }
             break;
         default:
-            ASSERT(!this,
+            OSL_ENSURE(!this,
            "Some inline export not implemented, remind cmc before we ship :-)");
             break;
     }
@@ -886,4 +899,4 @@ void SwWW8WrGrf::Write()
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,8 @@
 #include "viewopt.hxx"
 #include <tools/fldunit.hxx>
 
-/* -----------------------------28.09.00 09:45--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwMasterUsrPref;
+
 class SwContentViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&        rParent;
@@ -55,9 +54,7 @@ class SwContentViewConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------28.09.00 09:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwLayoutViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
@@ -73,9 +70,7 @@ class SwLayoutViewConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------19.01.01 13:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwGridConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
@@ -91,9 +86,7 @@ class SwGridConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------19.01.01 13:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwCursorConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
@@ -108,9 +101,7 @@ class SwCursorConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------28.09.00 09:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwWebColorConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&        rParent;
@@ -125,9 +116,7 @@ class SwWebColorConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
-/* -----------------------------28.09.00 09:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwMasterUsrPref : public SwViewOption
 {
     friend class SwContentViewConfig;
@@ -155,6 +144,7 @@ class SwMasterUsrPref : public SwViewOption
     SwCursorConfig      aCursorConfig;
     SwWebColorConfig*   pWebColorConfig;
 
+    sal_Bool bApplyCharUnit; // apply_char_unit
 public:
     SwMasterUsrPref(sal_Bool bWeb);
     ~SwMasterUsrPref();
@@ -256,6 +246,17 @@ public:
                         aLayoutConfig.SetModified();
                 }
 
+    sal_Bool    IsApplyCharUnit() const
+    {
+        return bApplyCharUnit;
+    }
+    void   SetApplyCharUnit(sal_Bool bSet, sal_Bool bNoModify = sal_False)
+    {
+        bApplyCharUnit = bSet;
+        if(!bNoModify)
+            aLayoutConfig.SetModified();
+    }
+
     sal_Int32   GetDefTab() const { return nDefTab;}
     void        SetDefTab( sal_Int32  nSet, sal_Bool bNoModify = sal_False )
                 {
@@ -284,3 +285,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

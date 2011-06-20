@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
-#include <errhdl.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -62,8 +62,8 @@ public:
     {}
 
     virtual void Closed();
-    virtual void DataChanged( const String& rMimeType,
-                                const uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
@@ -71,7 +71,7 @@ public:
 };
 
 
-void SwIntrnlRefLink::DataChanged( const String& rMimeType,
+::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const String& rMimeType,
                                 const uno::Any & rValue )
 {
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
@@ -105,10 +105,10 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
 
     // weitere Formate ...
     default:
-        return;
+        return SUCCESS;
     }
 
-    ASSERT( rFldType.GetDoc(), "Kein pDoc" );
+    OSL_ENSURE( rFldType.GetDoc(), "Kein pDoc" );
 
     // keine Abhaengigen mehr?
     if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
@@ -155,6 +155,8 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                 pSh->GetDoc()->SetModified();
         }
     }
+
+    return SUCCESS;
 }
 
 void SwIntrnlRefLink::Closed()
@@ -298,7 +300,7 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
 
     if( pDoc && refLink.Is() )
     {
-        ASSERT( !nRefCnt, "wie kommen die Referenzen rueber?" );
+        OSL_ENSURE( !nRefCnt, "wie kommen die Referenzen rueber?" );
         pDoc->GetLinkManager().Remove( refLink );
     }
 
@@ -326,10 +328,8 @@ void SwDDEFieldType::_RefCntChgd()
         pDoc->GetLinkManager().Remove( refLink );
     }
 }
-/* -----------------------------28.08.00 16:23--------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
+bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     sal_uInt8 nPart = 0;
     switch( nWhichId )
@@ -347,16 +347,14 @@ sal_Bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= ::rtl::OUString(aExpansion);
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( nPart )
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
-    return sal_True;
+    return true;
 }
-/* -----------------------------28.08.00 16:23--------------------------------
 
- ---------------------------------------------------------------------------*/
-sal_Bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
+bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     sal_uInt8 nPart = 0;
     switch( nWhichId )
@@ -377,7 +375,7 @@ sal_Bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( nPart )
     {
@@ -387,11 +385,9 @@ sal_Bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         sCmd.SetToken( nPart-1, sfx2::cTokenSeperator, ::GetString( rVal, sTmp ) );
         SetCmd( sCmd );
     }
-    return sal_True;
+    return true;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
     : SwField(pInitType)
 {
@@ -446,3 +442,4 @@ void SwDDEField::SetPar2(const String& rStr)
     ((SwDDEFieldType*)GetTyp())->SetCmd(rStr);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,22 +29,9 @@
 #define _ROWHT_HXX
 
 #include <svx/stddlg.hxx>
-
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
 
 class SwWrtShell;
 
@@ -65,3 +53,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,6 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
-#include <docsh.hxx>
-#endif
 #include <shellres.hxx>
 #include <viewimp.hxx>
 #include <pagefrm.hxx>
@@ -50,9 +48,7 @@
 #include <dpage.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <usrfld.hxx>
 #include <flyfrm.hxx>
 #include <ndnotxt.hxx>
@@ -80,15 +76,12 @@ SwDPage::~SwDPage()
 |*
 |*  SwDPage::ReplaceObject()
 |*
-|*  Ersterstellung      MA 07. Aug. 95
-|*  Letzte Aenderung    MA 07. Aug. 95
-|*
 *************************************************************************/
 
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
-    ASSERT( pOld, "Oups, Object not replaced" );
+    OSL_ENSURE( pOld, "Oups, Object not replaced" );
     SdrObjUserCall* pContact;
     if ( 0 != ( pContact = GetUserCall(pOld) ) &&
          RES_DRAWFRMFMT == ((SwContact*)pContact)->GetFmt()->Which())
@@ -99,9 +92,6 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
 /*************************************************************************
 |*
 |*  SwDPage::GetGridFrameList()
-|*
-|*  Ersterstellung      MA 04. Sep. 95
-|*  Letzte Aenderung    MA 15. Feb. 96
 |*
 *************************************************************************/
 
@@ -209,7 +199,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
             if ( sTxt.Len() )
             {
-                // --> OD 2007-07-26 #i80029#
+                // #i80029#
                 sal_Bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
@@ -223,7 +213,6 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     }
                 }
 
-                // <--
 
                 if( rEvt.GetMode() & HELPMODE_BALLOON )
                 {
@@ -245,9 +234,7 @@ sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
     return bWeiter;
 }
-/* -----------------------------27.11.00 07:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XInterface > SwDPage::createUnoPage()
 {
     Reference < XInterface > xRet;
@@ -263,3 +250,4 @@ Reference< XInterface > SwDPage::createUnoPage()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
-/* -----------------08.01.99 14:55-------------------
+/*
  * Und hier die Beschreibung:
  *
  * Durch die PROTOCOL-Makros wird es ermoeglicht, Ereignisse im Frame-Methoden zu protokollieren.
@@ -105,8 +106,8 @@
  *
  * --------------------------------------------------*/
 
-#ifndef DBG_UTIL
-#error Wer fummelt denn an den makefiles rum?
+#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL <= 1
+#error Who broken the makefiles?
 #endif
 
 
@@ -116,8 +117,6 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
-#define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
 #endif
 
@@ -138,7 +137,7 @@ SwImplProtocol* SwProtocol::pImpl = NULL;
 
 sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static sal_Bool bFrameId = sal_False;
     if( bFrameId )
         return pFrm->GetFrmId();
@@ -151,8 +150,8 @@ sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 class SwImplProtocol
 {
     SvFileStream *pStream;      // Ausgabestream
-    SvUShortsSort *pFrmIds;     // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
-    SvLongs *pVar;              // Variables
+    std::set<sal_uInt16> *pFrmIds;      // welche FrmIds sollen aufgezeichnet werden ( NULL == alle )
+    std::vector<long> aVars;    // Variables
     ByteString aLayer;          // Einrueckung der Ausgabe ("  " pro Start/End)
     sal_uInt16 nTypes;              // welche Typen sollen aufgezeichnet werden
     sal_uInt16 nLineCount;          // Ausgegebene Zeilen
@@ -176,10 +175,10 @@ public:
     void ChkStream() { if( !pStream ) NewStream(); }
     void SnapShot( const SwFrm* pFrm, sal_uLong nFlags );
     void GetVar( const sal_uInt16 nNo, long& rVar )
-        { if( pVar && nNo < pVar->Count() ) rVar = (*pVar)[ nNo ]; }
+        { if( nNo < aVars.size() ) rVar = aVars[ nNo ]; }
 };
 
-/* -----------------11.01.99 10:43-------------------
+/* --------------------------------------------------
  * Durch das PROTOCOL_ENTER-Makro wird ein SwEnterLeave-Objekt erzeugt,
  * wenn die aktuelle Funktion aufgezeichnet werden soll, wird ein
  * SwImplEnterLeave-Objekt angelegt. Der Witz dabei ist, das der Ctor
@@ -302,7 +301,7 @@ void SwProtocol::GetVar( const sal_uInt16 nNo, long& rVar )
 }
 
 SwImplProtocol::SwImplProtocol()
-    : pStream( NULL ), pFrmIds( NULL ), pVar( NULL ), nTypes( 0xffff ),
+    : pStream( NULL ), pFrmIds( NULL ), nTypes( 0xffff ),
       nLineCount( 0 ), nMaxLines( USHRT_MAX ), nTestMode( 0 )
 {
     NewStream();
@@ -328,11 +327,12 @@ SwImplProtocol::~SwImplProtocol()
         pStream->Close();
         delete pStream;
     }
+    pFrmIds->clear();
     delete pFrmIds;
-    delete pVar;
+    aVars.clear();
 }
 
-/* -----------------11.01.99 11:03-------------------
+/* --------------------------------------------------
  * SwImplProtocol::CheckLine analysiert eine Zeile der INI-Datei
  * --------------------------------------------------*/
 
@@ -349,6 +349,7 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
         if( "[frmid" == aTmp )      // Bereich FrmIds
         {
             nInitFile = 1;
+            pFrmIds->clear();
             delete pFrmIds;
             pFrmIds = NULL;         // Default: Alle Frames aufzeichnen
         }
@@ -375,8 +376,6 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
         else if( "[var" == aTmp )// variables
         {
             nInitFile = 6;
-            if( !pVar )
-                pVar = new SvLongs( 5, 5 );
         }
         else
             nInitFile = 0;          // Nanu: Unbekannter Bereich?
@@ -427,14 +426,14 @@ void SwImplProtocol::CheckLine( ByteString& rLine )
                         break;
                 case 5: nMaxLines = (sal_uInt16)nVal;
                         break;
-                case 6: pVar->Insert( (long)nVal, pVar->Count() );
+                case 6: aVars.push_back( (long)nVal );
                         break;
             }
         }
     }
 }
 
-/* -----------------11.01.99 11:17-------------------
+/* --------------------------------------------------
  * SwImplProtocol::FileInit() liest die Datei "dbg_lay.ini"
  * im aktuellen Verzeichnis und wertet sie aus.
  * --------------------------------------------------*/
@@ -467,7 +466,7 @@ void SwImplProtocol::FileInit()
     aStream.Close();
 }
 
-/* -----------------11.01.99 11:20-------------------
+/* --------------------------------------------------
  * lcl_Start sorgt fuer Einrueckung um zwei Blanks bei ACT_START
  * und nimmt diese bei ACT_END wieder zurueck.
  * --------------------------------------------------*/
@@ -489,7 +488,7 @@ void lcl_Start( ByteString& rOut, ByteString& rLay, sal_uLong nAction )
     }
 }
 
-/* -----------------11.01.99 11:21-------------------
+/* --------------------------------------------------
  * lcl_Flags gibt das ValidSize-, ValidPos- und ValidPrtArea-Flag ("Sz","Ps","PA")
  * des Frames aus, "+" fuer valid, "-" fuer invalid.
  * --------------------------------------------------*/
@@ -504,7 +503,7 @@ void lcl_Flags( ByteString& rOut, const SwFrm* pFrm )
     rOut += pFrm->GetValidPrtAreaFlag() ? '+' : '-';
 }
 
-/* -----------------11.01.99 11:23-------------------
+/* --------------------------------------------------
  * lcl_FrameType gibt den Typ des Frames in Klartext aus.
  * --------------------------------------------------*/
 
@@ -553,7 +552,7 @@ void lcl_FrameType( ByteString& rOut, const SwFrm* pFrm )
         rOut += "Not impl. ";
 }
 
-/* -----------------11.01.99 11:25-------------------
+/* --------------------------------------------------
  * SwImplProtocol::Record(..) wird nur gerufen, wenn das PROTOCOL-Makro
  * feststellt, dass die Funktion aufgezeichnet werden soll ( SwProtocol::nRecord ).
  * In dieser Methode werden noch die beiden weiteren Einschraenkungen ueberprueft,
@@ -570,7 +569,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         {
             case 1: InsertFrm( nId ); break;
             case 2: DeleteFrm( nId ); break;
-            case 3: delete pFrmIds; pFrmIds = NULL; break;
+            case 3: pFrmIds->clear(); delete pFrmIds; pFrmIds = NULL; break;
             case 4: delete pStream; pStream = NULL; break;
         }
         return;
@@ -578,7 +577,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
     if( !pStream && !NewStream() )
         return; // Immer noch kein Stream
 
-    if( pFrmIds && !pFrmIds->Seek_Entry( sal_uInt16(lcl_GetFrameId( pFrm )) ) )
+    if( pFrmIds && !pFrmIds->count( sal_uInt16(lcl_GetFrameId( pFrm )) ) )
         return; // gehoert nicht zu den gewuenschten FrmIds
 
     if( !(pFrm->GetType() & nTypes) )
@@ -702,7 +701,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
         SwProtocol::SetRecord( 0 );        // => Ende der Aufzeichnung
 }
 
-/* -----------------13.01.99 11:39-------------------
+/* --------------------------------------------------
  * SwImplProtocol::SectFunc(...) wird von SwImplProtocol::_Record(..) gerufen,
  * hier werden die Ausgaben rund um SectionFrms abgehandelt.
  * --------------------------------------------------*/
@@ -728,7 +727,7 @@ void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* , sal_uLong nAct, 
     }
 }
 
-/* -----------------11.01.99 11:31-------------------
+/* --------------------------------------------------
  * SwImplProtocol::InsertFrm(..) nimmt eine neue FrmId zum Aufzeichnen auf,
  * wenn pFrmIds==NULL, werden alle aufgezeichnet, sobald durch InsertFrm(..)
  * pFrmIds angelegt wird, werden nur noch die enthaltenen FrmIds aufgezeichnet.
@@ -737,27 +736,27 @@ void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* , sal_uLong nAct, 
 sal_Bool SwImplProtocol::InsertFrm( sal_uInt16 nId )
 {
     if( !pFrmIds )
-        pFrmIds = new SvUShortsSort(5,5);
-    if( pFrmIds->Seek_Entry( nId ) )
+        pFrmIds = new std::set<sal_uInt16>;
+    if( pFrmIds->count( nId ) )
         return sal_False;
-    pFrmIds->Insert( nId );
+    pFrmIds->insert( nId );
     return sal_True;
 }
 
-/* -----------------11.01.99 11:52-------------------
+/* --------------------------------------------------
  * SwImplProtocol::DeleteFrm(..) entfernt eine FrmId aus dem pFrmIds-Array,
  * so dass diese Frame nicht mehr aufgezeichnet wird.
  * --------------------------------------------------*/
 sal_Bool SwImplProtocol::DeleteFrm( sal_uInt16 nId )
 {
-    sal_uInt16 nPos;
-    if( !pFrmIds || !pFrmIds->Seek_Entry( nId, &nPos ) )
+    if( !pFrmIds )
         return sal_False;
-    pFrmIds->Remove( nPos );
-    return sal_True;
+    if ( pFrmIds->erase(nId) )
+        return sal_True;
+    return sal_False;
 }
 
-/*-----------------20.9.2001 10:29------------------
+/*--------------------------------------------------
  * SwProtocol::SnapShot(..)
  * creates a snapshot of the given frame and its content.
  * --------------------------------------------------*/
@@ -791,7 +790,7 @@ void SwImplProtocol::SnapShot( const SwFrm* pFrm, sal_uLong nFlags )
     }
 }
 
-/* -----------------11.01.99 11:53-------------------
+/* --------------------------------------------------
  * SwEnterLeave::Ctor(..) wird vom eigentlichen (inline-)Kontruktor gerufen,
  * wenn die Funktion aufgezeichnet werden soll.
  * Die Aufgabe ist es abhaengig von der Funktion das richtige SwImplEnterLeave-Objekt
@@ -812,7 +811,7 @@ void SwEnterLeave::Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, voi
     pImpl->Enter();
 }
 
-/* -----------------11.01.99 11:56-------------------
+/* --------------------------------------------------
  * SwEnterLeave::Dtor() ruft lediglich den Destruktor des SwImplEnterLeave-Objekts,
  * ist nur deshalb nicht inline, damit die SwImplEnterLeave-Definition nicht
  * im dbg_lay.hxx zu stehen braucht.
@@ -865,5 +864,6 @@ void SwFrmChangesLeave::Leave()
         SwProtocol::Record( pFrm, PROT_FRMCHANGES, 0, &aFrm );
 }
 
-#endif // DBG_UTIL
+#endif // OSL_DEBUG_LEVEL > 1
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

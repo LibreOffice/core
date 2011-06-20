@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
@@ -44,9 +43,7 @@ class SwWrtShell;
 class SwView;
 
 namespace com{ namespace sun{ namespace star{ namespace beans{ class XPropertySet;}}}}
-/*-- 02.04.2004 09:21:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailMergeLayoutPage : public svt::OWizardPage
 {
     SwBoldFixedInfo     m_aHeaderFI;
@@ -112,3 +109,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

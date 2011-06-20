@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
 #include <sfx2/childwin.hxx>
@@ -49,9 +48,8 @@ class SwView;
 class SwNavigationConfig;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
-
-//-----------------------------------------------------------------------
 class SwNavigationPI;
+
 class SwNavHelpToolBox : public SwHelpToolBox
 {
     virtual void    MouseButtonDown(const MouseEvent &rEvt);
@@ -59,7 +57,6 @@ class SwNavHelpToolBox : public SwHelpToolBox
     public:
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
-
 
 // CLASS -----------------------------------------------------------------
 class SwNavigationPI : public Window,
@@ -73,7 +70,6 @@ class SwNavigationPI : public Window,
     SwNavHelpToolBox    aContentToolBox;
     SwHelpToolBox       aGlobalToolBox;
     ImageList           aContentImageList;
-    ImageList           aContentImageListH;
     SwContentTree       aContentTree;
     SwGlobalTree        aGlobalTree;
     ListBox             aDocListBox;
@@ -81,7 +77,7 @@ class SwNavigationPI : public Window,
     String              sContentFileName;
     String              aContextArr[3];
     String              aStatusArr[4];
-    Point               aBoxBottomLeft; // Pos., wenn Box unten ist
+    Point               aBoxBottomLeft; // Pos when Box is at bottom
 
     SfxObjectShellLock  *pxObjectShell;
     SwView              *pContentView;
@@ -99,7 +95,7 @@ class SwNavigationPI : public Window,
     long    nDocLBIniHeight;
     long    nWishWidth;
     sal_uInt16  nAutoMarkIdx;
-    sal_uInt16  nRegionMode; // 0 - URL, 1 - Bereich mit Link 2 - B. ohne Link
+    sal_uInt16  nRegionMode; // 0 - URL, 1 - region with link 2 - region without link
     short   nZoomIn;
     short   nZoomOutInit;
     short   nZoomOut;
@@ -147,7 +143,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 
-    // zum App-Ende rechtzeitig ObjectShellLock loslassen
+    // release ObjectShellLock early enough for app end
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     NumEditAction&  GetPageEdit();
@@ -159,7 +155,7 @@ public:
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, Window*);
     ~SwNavigationPI();
 
-    void            GotoPage(); // Seite anspringen; bindbare Funktion
+    void            GotoPage(); // jump to page; bindable function
 
     void            Update() { FillBox(); }
     void            UpdateListBox();
@@ -196,3 +192,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

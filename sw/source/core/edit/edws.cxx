@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -175,7 +176,7 @@ sal_uInt16 SwEditShell::GetCntType() const
         case ND_OLENODE:    nRet = CNT_OLE; break;
         }
 
-    ASSERT( nRet, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nRet );
     return nRet;
 }
 
@@ -324,7 +325,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
     rACorr.AutoCorrect( aSwAutoCorrDoc,
                     pTNd->GetTxt(), pCrsr->GetPoint()->nContent.GetIndex(),
-                    cChar, bInsert );
+                    cChar, bInsert, GetWin() );
     if( cChar )
         SaveTblBoxCntnt( pCrsr->GetPoint() );
     EndAllAction();
@@ -363,3 +364,4 @@ SwAutoCompleteWord& SwEditShell::GetAutoCompleteWords()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

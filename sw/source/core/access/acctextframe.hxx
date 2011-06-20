@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,10 +38,9 @@ namespace com { namespace star {
 class SwAccessibleTextFrame : public SwAccessibleFrameBase
 {
 private:
-    // --> OD 2009-07-14 #i73249#
+    // #i73249#
     ::rtl::OUString msTitle;
     ::rtl::OUString msDesc;
-    // <--
 
 protected:
 
@@ -54,12 +54,10 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    // --> OD 2009-07-14 #i73249#
-    /// Return the object's current name.
+    // #i73249# - Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
-    // <--
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleDescription (void)
@@ -112,3 +110,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

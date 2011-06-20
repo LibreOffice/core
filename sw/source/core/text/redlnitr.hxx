@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include "ndhints.hxx"
 
-#ifndef IDOCUMENTREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
-#endif
 
 #include "swfont.hxx"
 #ifndef _SVSTDARR_USHORTS
@@ -114,10 +113,11 @@ public:
         { return pExt->Leave(rFnt, nNew ); }
     inline sal_Bool ExtOn() { if( pExt ) return pExt->IsOn(); return sal_False; }
     inline void UpdateExtFont( SwFont &rFnt ) {
-        ASSERT( ExtOn(), "UpdateExtFont without ExtOn" )
+        OSL_ENSURE( ExtOn(), "UpdateExtFont without ExtOn" );
         pExt->UpdateFont( rFnt ); }
 };
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

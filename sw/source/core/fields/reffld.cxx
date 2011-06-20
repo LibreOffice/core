@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
@@ -69,6 +69,11 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <switerator.hxx>
+
+#include <set>
+#include <map>
+
+#include "../../../../../libs-core/sfx2/inc/sfx2/childwin.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -238,7 +243,7 @@ void SwGetRefField::SetSubType( sal_uInt16 n )
     nSubType = n;
 }
 
-// --> OD 2007-11-09 #i81002#
+// #i81002#
 bool SwGetRefField::IsRefToHeadingCrossRefBookmark() const
 {
     return GetSubType() == REF_BOOKMARK &&
@@ -257,8 +262,7 @@ const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
     sal_uInt16 nDummy = USHRT_MAX;
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
-// <--
-// --> OD 2008-01-09 #i85090#
+// #i85090#
 String SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
 {
     const SwTxtNode* pReferencedTxtNode( GetReferencedTxtNode() );
@@ -281,7 +285,7 @@ String SwGetRefField::GetFieldName() const
     return aStr;
 }
 
-// --> OD 2007-09-07 #i81002# - parameter <pFldTxtAttr> added
+// #i81002# - parameter <pFldTxtAttr> added
 void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 {
     sTxt.Erase();
@@ -427,7 +431,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
     case REF_UPDOWN:
         {
-            // --> OD 2007-09-07 #i81002#
+            // #i81002#
             // simplified: use parameter <pFldTxtAttr>
             if( !pFldTxtAttr || !pFldTxtAttr->GetpTxtNode() )
                 break;
@@ -452,7 +456,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                         : aLocaleData.getBelowWord();
         }
         break;
-    // --> OD 2007-08-24 #i81002#
+    // #i81002#
     case REF_NUMBER:
     case REF_NUMBER_NO_CONTEXT:
     case REF_NUMBER_FULL_CONTEXT:
@@ -463,13 +467,12 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             }
         }
         break;
-    // <--
     default:
-        DBG_ERROR("<SwGetRefField::UpdateField(..)> - unknown format type");
+        OSL_FAIL("<SwGetRefField::UpdateField(..)> - unknown format type");
     }
 }
 
-// --> OD 2007-09-06 #i81002#
+// #i81002#
 String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                                      const SwTxtNode& rTxtNodeOfReferencedItem,
                                      const sal_uInt32 nRefNumFormat ) const
@@ -477,7 +480,7 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
     if ( rTxtNodeOfReferencedItem.HasNumber() &&
          rTxtNodeOfReferencedItem.IsCountedInList() )
     {
-        ASSERT( rTxtNodeOfReferencedItem.GetNum(),
+        OSL_ENSURE( rTxtNodeOfReferencedItem.GetNum(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance --> please inform OD!" );
 
         // Determine, up to which level the superior list labels have to be
@@ -533,7 +536,7 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
             ( nRestrictInclToThisLevel < rTxtNodeOfReferencedItem.GetActualListLevel() &&
               ( nRefNumFormat == REF_NUMBER || nRefNumFormat == REF_NUMBER_FULL_CONTEXT ) ) );
 
-        ASSERT( rTxtNodeOfReferencedItem.GetNumRule(),
+        OSL_ENSURE( rTxtNodeOfReferencedItem.GetNumRule(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced numbered paragraph has no numbering rule set --> please inform OD!" );
         return rTxtNodeOfReferencedItem.GetNumRule()->MakeRefNumString(
                                             *(rTxtNodeOfReferencedItem.GetNum()),
@@ -543,7 +546,6 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
 
     return String();
 }
-// <--
 
 SwField* SwGetRefField::Copy() const
 {
@@ -576,7 +578,7 @@ String SwGetRefField::GetPar2() const
     return Expand();
 }
 
-sal_Bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -593,11 +595,10 @@ sal_Bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
             case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
             case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
-            // --> OD 2007-09-06 #i81002#
+            // #i81002#
             case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
             case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
             case REF_NUMBER_FULL_CONTEXT: nPart = ReferenceFieldPart::NUMBER_FULL_CONTEXT; break;
-            // <--
             }
             rAny <<= nPart;
         }
@@ -610,7 +611,7 @@ sal_Bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             case  REF_SETREFATTR : nSource = ReferenceFieldSource::REFERENCE_MARK; break;
             case  REF_SEQUENCEFLD: nSource = ReferenceFieldSource::SEQUENCE_FIELD; break;
             case  REF_BOOKMARK   : nSource = ReferenceFieldSource::BOOKMARK; break;
-            case  REF_OUTLINE    : DBG_ERROR("not implemented"); break;
+            case  REF_OUTLINE    : OSL_FAIL("not implemented"); break;
             case  REF_FOOTNOTE   : nSource = ReferenceFieldSource::FOOTNOTE; break;
             case  REF_ENDNOTE    : nSource = ReferenceFieldSource::ENDNOTE; break;
             }
@@ -643,12 +644,12 @@ sal_Bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= (sal_Int16)nSeqNo;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     String sTmp;
     switch( nWhichId )
@@ -667,12 +668,11 @@ sal_Bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             case ReferenceFieldPart::CATEGORY_AND_NUMBER:   nPart = REF_ONLYNUMBER; break;
             case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
             case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
-            // --> OD 2007-09-06 #i81002#
+            // #i81002#
             case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
             case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
             case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
-            // <--
-            default: return sal_False;
+            default: return false;
             }
             SetFormat(nPart);
         }
@@ -718,9 +718,9 @@ sal_Bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 void SwGetRefField::ConvertProgrammaticToUIName()
@@ -786,9 +786,8 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
                                                 *pTFld->GetStart() ) );
             }
 
-            // --> OD 2007-09-06 #i81002#
+            // #i81002#
             pGRef->UpdateField( pFld->GetTxtFld() );
-            // <--
         }
     }
     // weiter an die Text-Felder, diese "Expandieren" den Text
@@ -799,7 +798,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_uInt16* pStt, sal_uInt16* pEnd )
 {
-    ASSERT( pStt, "warum wird keine StartPos abgefragt?" );
+    OSL_ENSURE( pStt, "warum wird keine StartPos abgefragt?" );
 
     SwTxtNode* pTxtNd = 0;
     switch( nSubType )
@@ -856,14 +855,13 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                     if(!pBkmk->IsExpanded())
                     {
                         *pEnd = *pStt;
-                        // --> OD 2007-10-18 #i81002#
+                        // #i81002#
                         if(dynamic_cast< ::sw::mark::CrossRefBookmark const *>(pBkmk))
                         {
-                            ASSERT( pTxtNd,
+                            OSL_ENSURE( pTxtNd,
                                     "<SwGetRefFieldType::FindAnchor(..)> - node marked by cross-reference bookmark isn't a text node --> crash" );
                             *pEnd = pTxtNd->Len();
                         }
-                        // <--
                     }
                     else if(pBkmk->GetOtherMarkPos().nNode == pBkmk->GetMarkPos().nNode)
                         *pEnd = pBkmk->GetMarkEnd().nContent.GetIndex();
@@ -907,87 +905,127 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
 
 struct _RefIdsMap
 {
+private:
     String aName;
-    SvUShortsSort aIds, aDstIds, aIdsMap;
-    SvUShorts aMap;
+    std::set<sal_uInt16> aIds;
+    std::set<sal_uInt16> aDstIds;
+    std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.
     sal_Bool bInit;
 
-    _RefIdsMap( const String& rName )
-        : aName( rName ), aIds( 16, 16 ), aIdsMap( 16, 16 ), aMap( 16, 16 ),
-        bInit( sal_False )
-    {}
+    void       Init(SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField );
+    void       GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
+    void       GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds );
+    void       AddId( sal_uInt16 id, sal_uInt16 seqNum );
+    sal_uInt16 GetFirstUnusedId( std::set<sal_uInt16> &rIds );
 
-    void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
-                    sal_Bool bField = sal_True );
+public:
+    _RefIdsMap( const String& rName ) : aName( rName ), bInit( sal_False ) {}
 
-    sal_Bool IsInit() const { return bInit; }
+    void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld, sal_Bool bField );
+
+    String GetName() { return aName; }
 };
 
 SV_DECL_PTRARR_DEL( _RefIdsMaps, _RefIdsMap*, 5, 5 )
 SV_IMPL_PTRARR( _RefIdsMaps, _RefIdsMap* )
 
+/// Get a sorted list of the field IDs from a document.
+/// @param[in]     rDoc The document to search.
+/// @param[in,out] rIds The list of IDs found in the document.
+void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
+{
+    const SwTxtNode* pNd;
+    SwFieldType* pType;
+
+    if( 0 != ( pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
+    {
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+        for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
+            if( pF->GetTxtFld() &&
+                0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
+                pNd->GetNodes().IsDocNodes() )
+                rIds.insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
+    }
+}
+
+/// Get a sorted list of the footnote/endnote IDs from a document.
+/// @param[in]     rDoc The document to search.
+/// @param[in,out] rIds The list of IDs found in the document.
+void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
+{
+    for( sal_uInt16 n = rDoc.GetFtnIdxs().Count(); n; )
+        rIds.insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
+}
+
+/// Initialise the aIds and aDestIds collections from the source documents.
+/// @param[in] rDoc     The source document.
+/// @param[in] rDestDoc The destination document.
+/// @param[in] bField   True if we're interested in all fields, false for footnotes.
+void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, sal_Bool bField )
+{
+    if( bInit )
+        return;
+
+    if( bField )
+    {
+        GetFieldIdsFromDoc( rDestDoc, aIds );
+        GetFieldIdsFromDoc( rDoc, aDstIds );
+    }
+    else
+    {
+        GetNoteIdsFromDoc( rDestDoc, aIds );
+        GetNoteIdsFromDoc( rDoc, aDstIds );
+    }
+    bInit = sal_True;
+}
+
+/// Get the lowest unused ID in the passed set.
+/// @param[in] rIds The set of used ID numbers.
+/// @returns The lowest unused ID.
+sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
+{
+    sal_uInt16 num(0);
+    std::set<sal_uInt16>::iterator it;
+
+    for( it = rIds.begin(); it != rIds.end(); ++it )
+    {
+        if( num != *it )
+        {
+            return num;
+        }
+        ++num;
+    }
+    return num;
+}
+
+/// Add a new ID and sequence number to the "occupied" collection.
+/// @param[in] id     The ID number.
+/// @param[in] seqNum The sequence number.
+void _RefIdsMap::AddId( sal_uInt16 id, sal_uInt16 seqNum )
+{
+    aIds.insert( id );
+    sequencedIds[ seqNum ] = id;
+}
+
 void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
                         sal_Bool bField )
 {
-
-    if( !bInit )
-    {
-        if( bField )
-        {
-            const SwTxtNode* pNd;
-            SwFieldType* pType;
-            if( 0 != ( pType = rDestDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
-            {
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
-                    if( pF->GetTxtFld() &&
-                        0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
-                        pNd->GetNodes().IsDocNodes() )
-                        aIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
-            }
-            if( 0 != ( pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false ) ))
-            {
-                SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
-                for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
-                    if( pF->GetTxtFld() &&
-                        0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
-                        pNd->GetNodes().IsDocNodes() )
-                        aDstIds.Insert( ((SwSetExpField*)pF->GetFld())->GetSeqNumber() );
-            }
-        }
-        else
-        {
-            sal_uInt16 n;
-
-            for( n = rDestDoc.GetFtnIdxs().Count(); n; )
-                aIds.Insert( rDestDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
-            for( n = rDoc.GetFtnIdxs().Count(); n; )
-                aDstIds.Insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
-        }
-        bInit = sal_True;
-    }
+    Init( rDoc, rDestDoc, bField);
 
     // dann teste mal, ob die Nummer schon vergeben ist
     // oder ob eine neue bestimmt werden muss.
-    sal_uInt16 nPos, nSeqNo = rFld.GetSeqNo();
-    if( aIds.Seek_Entry( nSeqNo ) && aDstIds.Seek_Entry( nSeqNo ))
+    sal_uInt16 nSeqNo = rFld.GetSeqNo();
+    if( aIds.count( nSeqNo ) && aDstIds.count( nSeqNo ))
     {
-        // ist schon vergeben, also muss eine neue
-        // erzeugt werden.
-        if( aIdsMap.Seek_Entry( nSeqNo, &nPos ))
-            rFld.SetSeqNo( aMap[ nPos ] );
+        // Number already taken, so need a new one.
+        if( sequencedIds.count(nSeqNo) )
+            rFld.SetSeqNo( sequencedIds[nSeqNo] );
         else
         {
-            sal_uInt16 n;
-
-            for( n = 0; n < aIds.Count(); ++n )
-                if( n != aIds[ n ] )
-                    break;
+            sal_uInt16 n = GetFirstUnusedId( aIds );
 
             // die neue SeqNo eintragen, damit die "belegt" ist
-            aIds.Insert( n );
-            aIdsMap.Insert( nSeqNo, nPos );
-            aMap.Insert( n, nPos );
+            AddId( n, nSeqNo );
             rFld.SetSeqNo( n );
 
             // und noch die Felder oder Fuss-/EndNote auf die neue
@@ -1018,9 +1056,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
     }
     else
     {
-        aIds.Insert( nSeqNo );
-        aIdsMap.Insert( nSeqNo, nPos );
-        aMap.Insert( nSeqNo, nPos );
+        AddId( nSeqNo, nSeqNo );
     }
 }
 
@@ -1046,7 +1082,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                 {
                     _RefIdsMap* pMap = 0;
                     for( sal_uInt16 n = aFldMap.Count(); n; )
-                        if( aFldMap[ --n ]->aName == rRefFld.GetSetRefName() )
+                        if( aFldMap[ --n ]->GetName() == rRefFld.GetSetRefName() )
                         {
                             pMap = aFldMap[ n ];
                             break;
@@ -1070,3 +1106,4 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

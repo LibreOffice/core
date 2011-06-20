@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,8 +47,6 @@ SwEnvironmentOfAnchoredObject::~SwEnvironmentOfAnchoredObject()
 
 /** determine environment layout frame for possible horizontal object positions
 
-    OD 05.11.2003
-
     @author OD
 */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
@@ -57,10 +56,9 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
 
     if ( !mbFollowTextFlow )
     {
-        // --> OD 2005-01-20 #118546# - no exception any more for page alignment.
+        // No exception any more for page alignment.
         // the page frame determines the horizontal layout environment.
         pHoriEnvironmentLayFrm = _rHoriOrientFrm.FindPageFrm();
-        // <--
     }
     else
     {
@@ -69,22 +67,18 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(
                 !pHoriEnvironmentLayFrm->IsPageFrm() )
         {
             pHoriEnvironmentLayFrm = pHoriEnvironmentLayFrm->GetUpper();
-            ASSERT( pHoriEnvironmentLayFrm,
+            OSL_ENSURE( pHoriEnvironmentLayFrm,
                     "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - no page|fly|cell frame found" );
         }
     }
 
-    ASSERT( pHoriEnvironmentLayFrm->ISA(SwLayoutFrm),
+    OSL_ENSURE( pHoriEnvironmentLayFrm->ISA(SwLayoutFrm),
                 "SwEnvironmentOfAnchoredObject::GetHoriEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
 
     return static_cast<const SwLayoutFrm&>(*pHoriEnvironmentLayFrm);
 }
 
 /** determine environment layout frame for possible vertical object positions
-
-    OD 05.11.2003
-
-    @author OD
 */
 const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
                                             const SwFrm& _rVertOrientFrm ) const
@@ -93,10 +87,9 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
 
     if ( !mbFollowTextFlow )
     {
-        // --> OD 2005-01-20 #118546# - no exception any more for page alignment.
+        // No exception any more for page alignment.
         // the page frame determines the vertical layout environment.
         pVertEnvironmentLayFrm = _rVertOrientFrm.FindPageFrm();
-        // <--
     }
     else
     {
@@ -109,13 +102,15 @@ const SwLayoutFrm& SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(
                 !pVertEnvironmentLayFrm->IsPageFrm() )
         {
             pVertEnvironmentLayFrm = pVertEnvironmentLayFrm->GetUpper();
-            ASSERT( pVertEnvironmentLayFrm,
+            OSL_ENSURE( pVertEnvironmentLayFrm,
                     "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - proposed frame not found" );
         }
     }
 
-    ASSERT( pVertEnvironmentLayFrm->ISA(SwLayoutFrm),
+    OSL_ENSURE( pVertEnvironmentLayFrm->ISA(SwLayoutFrm),
                 "SwEnvironmentOfAnchoredObject::GetVertEnvironmentLayoutFrm(..) - found frame isn't a layout frame" );
 
     return static_cast<const SwLayoutFrm&>(*pVertEnvironmentLayFrm);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

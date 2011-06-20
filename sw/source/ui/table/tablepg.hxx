@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,9 @@
 #ifndef _SWTABLEPG_HXX
 #define _SWTABLEPG_HXX
 #include <sfx2/tabdlg.hxx>
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <actctrl.hxx>
 #include "prcntfld.hxx"
 #include "swtypes.hxx"
@@ -176,9 +171,6 @@ public:
 
 };
 
-/*-----------------12.12.96 11.48-------------------
-        Textfluss
---------------------------------------------------*/
 class SwTextFlowPage : public SfxTabPage
 {
     FixedLine       aFlowFL;
@@ -236,3 +228,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

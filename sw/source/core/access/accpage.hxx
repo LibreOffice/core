@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _ACCPAGE_HXX
 #define _ACCPAGE_HXX
 
-#ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
 
 
 /**
@@ -97,3 +96,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

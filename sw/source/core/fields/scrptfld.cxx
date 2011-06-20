@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,12 +31,8 @@
 
 
 #include <docufld.hxx>
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <tools/resid.hxx>
 
 using namespace ::com::sun::star;
@@ -108,10 +105,8 @@ String SwScriptField::GetPar2() const
 {
     return sCode;
 }
-/*-----------------05.03.98 15:00-------------------
 
---------------------------------------------------*/
-sal_Bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -125,14 +120,12 @@ sal_Bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny.setValue(&bCodeURL, ::getBooleanCppuType());
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
-/*-----------------05.03.98 15:00-------------------
 
---------------------------------------------------*/
-sal_Bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -146,8 +139,9 @@ sal_Bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         bCodeURL = *(sal_Bool*)rAny.getValue();
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

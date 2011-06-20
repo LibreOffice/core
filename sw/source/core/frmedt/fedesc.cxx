@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,9 +49,6 @@
 |*
 |*  SwFEShell::GetPageDescCnt()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 25. Jan. 93
-|*
 |*************************************************************************/
 
 sal_uInt16 SwFEShell::GetPageDescCnt() const
@@ -62,21 +60,18 @@ sal_uInt16 SwFEShell::GetPageDescCnt() const
 |*
 |*  SwFEShell::ChgCurPageDesc()
 |*
-|*  Ersterstellung      ST ??
-|*  Letzte Aenderung    MA 01. Aug. 94
-|*
 |*************************************************************************/
 
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Die SS veraendert keinen PageDesc, sondern setzt nur das Attribut.
     //Der Pagedesc muss im Dokument vorhanden sein!
     sal_Bool bFound = sal_False;
     for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
         if ( &rDesc == &GetPageDesc( nTst ) )
             bFound = sal_True;
-    ASSERT( bFound, "ChgCurPageDesc mit ungueltigem Descriptor." );
+    OSL_ENSURE( bFound, "ChgCurPageDesc mit ungueltigem Descriptor." );
 #endif
 
     StartAllAction();
@@ -85,7 +80,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     const SwFrm *pFlow = 0;
     sal_uInt16 nPageNmOffset = 0;
 
-    ASSERT( !GetCrsr()->HasMark(), "ChgCurPageDesc nur ohne Selektion!");
+    OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc nur ohne Selektion!");
 
     SET_CURR_SHELL( this );
     while ( pPage )
@@ -113,7 +108,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         {
             pPage   = (SwPageFrm*)pPage->GetNext();
             pFlow = pPage->FindFirstBodyCntnt();
-            ASSERT( pFlow, "Dokuemnt ohne Inhalt?!?" );
+            OSL_ENSURE( pFlow, "Dokuemnt ohne Inhalt?!?" );
         }
     }
 
@@ -134,9 +129,6 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 /*************************************************************************
 |*
 |*  SwFEShell::ChgPageDesc()
-|*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 24. Jan. 95
 |*
 |*************************************************************************/
 
@@ -159,9 +151,6 @@ void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 |*
 |*  SwFEShell::GetPageDesc(), GetCurPageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 23. Apr. 93
-|
 |*************************************************************************/
 
 const SwPageDesc& SwFEShell::GetPageDesc( sal_uInt16 i ) const
@@ -291,3 +280,4 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,12 +46,10 @@ class SdrObject;
 class SwAttrSetChg;
 class Font;
 
-// OD 2004-05-07 #i28701# - replaced by class <SwSortedObjs>
-//SV_DECL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr,1,2);
+// #i28701# - replaced by class <SwSortedObjs>
 class SwSortedObjs;
-// --> OD 2004-07-02 #i28701#
+// #i28701#
 class SwAnchoredObject;
-// <--
 
 enum SwPageChg
 {
@@ -63,7 +62,7 @@ class SwPageFrm: public SwFtnBossFrm
 {
     friend class SwFrm;
 
-    // OD 2004-05-07 #i28701# - use <SwSortedObjs>
+    // #i28701# - use <SwSortedObjs>
     SwSortedObjs *pSortedObjs;
 
     SwPageDesc *pDesc;      //PageDesc der die Seite beschreibt.
@@ -84,12 +83,10 @@ class SwPageFrm: public SwFtnBossFrm
     sal_Bool bInvalidWordCount  :1;
     sal_Bool bHasGrid           :1; // Grid for Asian layout
 
-    // OD 2004-05-17 #i28701# - boolean, indicating that layout of page frame
+    // #i28701# - boolean, indicating that layout of page frame
     // is in progress.
     bool mbLayoutInProgress;
 
-    // OD 12.02.2003 #i9719#, #105645#
-    static const sal_Int8 mnBorderPxWidth;
     static const sal_Int8 mnShadowPxWidth;
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
@@ -98,59 +95,9 @@ class SwPageFrm: public SwFtnBossFrm
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
     void SetColMaxFtnHeight();
 
-    /** determine rectangle for page border
+    /** determine rectangle for horizontal page shadow
 
-        OD 12.02.2003 for #i9719# and #105645#
-
-        @author OD
-
-        @param _rPageRect
-        input parameter - constant instance reference of the page rectangle.
-        Generally, it's the frame area of the page, but for empty pages in print
-        preview, this parameter is useful.
-
-        @param _pViewShell
-        input parameter - instance of the view shell, for which the rectangle
-        has to be generated.
-
-        @param _orBorderRect
-        output parameter - instance reference of the border rectangle for
-        the given page rectangle
-    */
-    static void GetBorderRect( const SwRect& _rPageRect,
-                               ViewShell*    _pViewShell,
-                               SwRect& _orBorderRect,
-                               bool bRightSidebar );
-
-    /** determine rectangle for right page shadow
-
-        OD 12.02.2003 for #i9719# and #105645#
-
-        @author OD
-
-        @param _rPageRect
-        input parameter - constant instance reference of the page rectangle.
-        Generally, it's the frame area of the page, but for empty pages in print
-        preview, this parameter is useful.
-
-        @param _pViewShell
-        input parameter - instance of the view shell, for which the rectangle
-        has to be generated.
-
-        @param _orRightShadowRect
-        output parameter - instance reference of the right shadow rectangle for
-        the given page rectangle
-    */
-    static void GetRightShadowRect( const SwRect& _rPageRect,
-                                    ViewShell*    _pViewShell,
-                                    SwRect&       _orRightShadowRect,
-                                    bool bRightSidebar );
-
-    /** determine rectangle for bottom page shadow
-
-        OD 12.02.2003 for #i9719# and #105645#
-
-        @author OD
+        #i9719#
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
@@ -166,15 +113,15 @@ class SwPageFrm: public SwFtnBossFrm
         the given page rectangle
     */
 
-    static void GetBottomShadowRect( const SwRect& _rPageRect,
-                                     ViewShell*    _pViewShell,
+    static void GetHorizontalShadowRect( const SwRect& _rPageRect,
+                                     const ViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
+                                     bool bPaintLeftShadow,
+                                     bool bPaintRightShadow,
                                      bool bRightSidebar );
 
     /** adds the sidebar used for notes to right and left border
-        mod 20.10.2007 for #i6193#
-
-        @author mod
+        #i6193#
 
         @param aRect
         input parameter - current rect, we change borders if we want a sidebar
@@ -207,10 +154,9 @@ public:
     const SwSortedObjs  *GetSortedObjs() const  { return pSortedObjs; }
           SwSortedObjs  *GetSortedObjs()          { return pSortedObjs; }
 
-    // --> OD 2004-07-02 #i28701# - new methods to append/remove drawing objects
+    // #i28701# - new methods to append/remove drawing objects
     void AppendDrawObjToPage( SwAnchoredObject& _rNewObj );
     void RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj );
-    // <--
 
     void AppendFlyToPage( SwFlyFrm *pNew );
     void RemoveFlyFromPage( SwFlyFrm *pToRemove );
@@ -226,6 +172,8 @@ public:
     inline const SwCntntFrm  *FindFirstBodyCntnt() const;
     inline const SwCntntFrm  *FindLastBodyCntnt() const;
 
+    SwRect GetBoundRect() const;
+
     //Spezialisiertes GetCntntPos() fuer Felder in Rahmen.
     void GetCntntPosition( const Point &rPt, SwPosition &rPos ) const;
 
@@ -240,7 +188,7 @@ public:
     //Schickt an alle ContentFrames ein Prepare wg. geaenderter Registervorlage
     void PrepareRegisterChg();
 
-    // --> OD 2005-06-09 #i50432# - adjust method description and synopsis.
+    // #i50432# - adjust method description and synopsis.
     // Appends a fly frame - the given one or a new one - at the page frame.
     // Needed for <Modify> and <MakeFrms>
     // - return value not needed any more
@@ -248,7 +196,6 @@ public:
     // - third parameter only needed for assertion, but calling method assures
     //   this assertion. Thus, delete it.
     void PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt );
-    // <--
 
     virtual sal_Bool GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
@@ -301,6 +248,8 @@ public:
     inline void ValidateWordCount() const;
     inline sal_Bool IsInvalid() const;
     inline sal_Bool IsInvalidFly() const;
+    sal_Bool IsRightShadowNeeded() const;
+    sal_Bool IsLeftShadowNeeded() const;
     sal_Bool IsInvalidFlyLayout() const { return bInvalidFlyLayout; }
     sal_Bool IsInvalidFlyCntnt() const { return bInvalidFlyCntnt; }
     sal_Bool IsInvalidFlyInCnt() const { return bInvalidFlyInCnt; }
@@ -311,13 +260,10 @@ public:
     sal_Bool IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
     sal_Bool IsInvalidWordCount() const { return bInvalidWordCount; }
 
-    /** SwPageFrm::GetDrawBackgrdColor - for #102450#
+    /** SwPageFrm::GetDrawBackgrdColor
 
-        29.08.2002:
         determine the color, that is respectively will be drawn as background
         for the page frame.
-
-        @author OD
 
         @return reference to an instance of class Color
     */
@@ -325,11 +271,8 @@ public:
 
     /** paint margin area of a page
 
-        OD 20.11.2002 for #104598#:
         implement paint of margin area; margin area will be painted for a
         view shell with a window and if the document is not in online layout.
-
-        @author OD
 
         @param _rOutputRect
         input parameter - constant instance reference of the rectangle, for
@@ -344,10 +287,8 @@ public:
 
     /** paint page border and shadow
 
-        OD 12.02.2003 for #i9719# and #105645#
+        #i9719#
         implement paint of page border and shadow
-
-        @author OD
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
@@ -357,17 +298,27 @@ public:
         @param _pViewShell
         input parameter - instance of the view shell, on which the output
         has to be generated.
+
+        @param bPaintRightShadow
+        Should we paint shadow on the right or not (used in book mode)
+
+        @param bFullBottomShadow
+        Should we have a bottom shadow of the same size as the pages or
+        not (for right pages in book mode in a LTR environment).
+
+        @param bRightSidebar
+        Is the note sidebar on the right or not (used to adjust the
+        shadow with & position).
     */
     static void PaintBorderAndShadow( const SwRect& _rPageRect,
-                                      ViewShell*    _pViewShell,
+                                      const ViewShell*    _pViewShell,
+                                      bool bPaintLeftShadow,
                                       bool bPaintRightShadow,
                                       bool bRightSidebar );
 
     /** get bound rectangle of border and shadow for repaints
 
-        OD 12.02.2003 for #i9719# and #105645#
-
-        author OD
+        #i9719#
 
         @param _rPageRect
         input parameter - constant instance reference of the page rectangle.
@@ -383,15 +334,16 @@ public:
         rectangle for the given page rectangle
     */
     static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
-                                             ViewShell*    _pViewShell,
+                                             const ViewShell*    _pViewShell,
                                              SwRect& _orBorderAndShadowBoundRect,
-                                             const bool bRightSidebar );
+                                             const bool bLeftShadow,
+                                             const bool bRightShadow,
+                                             const bool bRightSidebar
+                                            );
 
     static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, sal_uInt16 nPageNum, bool bRight);
     static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);
     /**
-        mod #6i193#
-
         asks the page on which side a margin should be shown, e.g for notes
         returns true for left side, false for right side
     */
@@ -399,20 +351,14 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    // OD 12.02.2003 #i9719#, #105645#
-    inline sal_Int8 BorderPxWidth() const
-    {
-        return mnBorderPxWidth;
-    }
     inline sal_Int8 ShadowPxWidth() const
     {
         return mnShadowPxWidth;
     }
 
-    // OD 22.09.2003 #110978#
     const SwRect PrtWithoutHeaderAndFooter() const;
 
-    // OD 2004-05-17 #i28701#
+    // #i28701#
     inline bool IsLayoutInProgress() const
     {
         return mbLayoutInProgress;
@@ -540,3 +486,5 @@ inline sal_Bool SwPageFrm::IsInvalidFly() const
 
 
 #endif  //_PAGEFRM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,9 @@
 
 
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #include <doc.hxx>
-#include <cntfrm.hxx>       // ASSERT in ~SwTxtFtn()
+#include <cntfrm.hxx>       // OSL_ENSURE(in ~SwTxtFtn()
 #include <pagefrm.hxx>      // RemoveFtn()
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -48,6 +48,87 @@
 #include <fmtftntx.hxx>
 #include <section.hxx>
 #include <switerator.hxx>
+
+namespace {
+    /// Get a sorted list of the used footnote reference numbers.
+    /// @param[in]  rDoc     The active document.
+    /// @param[in]  pExclude A footnote whose reference number should be excluded from the set.
+    /// @param[out] rInvalid  A returned list of all items that had an invalid reference number.
+    /// @returns The set of used reference numbers.
+    static std::set<sal_uInt16> lcl_GetUsedFtnRefNumbers(SwDoc &rDoc,
+                                                         SwTxtFtn *pExclude,
+                                                         std::vector<SwTxtFtn*> &rInvalid)
+    {
+        int n;
+        std::set<sal_uInt16> aArr;
+        SwFtnIdxs& ftnIdxs = rDoc.GetFtnIdxs();
+        SwTxtFtn* pTxtFtn;
+
+        rInvalid.clear();
+
+        for( n = 0; n < ftnIdxs.Count(); ++n )
+        {
+            pTxtFtn = ftnIdxs[ n ];
+            if ( pTxtFtn != pExclude )
+            {
+                if ( USHRT_MAX == pTxtFtn->GetSeqRefNo() )
+                {
+                    rInvalid.push_back(pTxtFtn);
+                }
+                else
+                {
+                    aArr.insert( pTxtFtn->GetSeqRefNo() );
+                }
+            }
+        }
+        return aArr;
+    }
+
+    /// Check whether a requested reference number is available.
+    /// @param[in] rUsedNums Set of used reference numbers.
+    /// @param[in] requested The requested reference number.
+    /// @returns true if the number is available, false if not.
+    static bool lcl_IsRefNumAvailable(std::set<sal_uInt16> &rUsedNums,
+                                         sal_uInt16 requested)
+    {
+        if ( USHRT_MAX == requested )
+            return false;  // Invalid sequence number.
+        if ( rUsedNums.count(requested) )
+            return false;  // Number already used.
+        return true;
+    }
+
+    /// Get the first few unused sequential reference numbers.
+    /// @param[in] rUsedNums   The set of used sequential reference numbers.
+    /// @param[in] numRequired The number of reference number required.
+    /// @returns The lowest unused sequential reference numbers.
+    static std::vector<sal_uInt16> lcl_GetUnusedSeqRefNums(std::set<sal_uInt16> &rUsedNums,
+                                                           size_t numRequired)
+    {
+        std::vector<sal_uInt16> unusedNums;
+        sal_uInt16 newNum = 0;
+        std::set<sal_uInt16>::iterator it;
+        //Start by using numbers from gaps in rUsedNums
+        for( it = rUsedNums.begin(); it != rUsedNums.end(); ++it )
+        {
+            while ( newNum < *it )
+            {
+                unusedNums.push_back( newNum++ );
+                if ( unusedNums.size() >= numRequired )
+                    return unusedNums;
+            }
+            newNum++;
+        }
+        //Filled in all gaps. Fill the rest of the list with new numbers.
+        while ( unusedNums.size() < numRequired )
+        {
+            unusedNums.push_back( newNum++ );
+        }
+
+        return unusedNums;
+    }
+
+}
 
 /*************************************************************************
 |*
@@ -67,7 +148,7 @@ SwFmtFtn::SwFmtFtn( bool bEndNote )
 
 int SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return nNumber  == ((SwFmtFtn&)rAttr).nNumber &&
            aNumber  == ((SwFmtFtn&)rAttr).aNumber &&
            m_bEndNote == ((SwFmtFtn&)rAttr).m_bEndNote;
@@ -267,7 +348,7 @@ void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const XubString* pStr )
         rFtn.aNumber = aEmptyStr;
     }
 
-    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     SwNodes &rNodes = m_pTxtNode->GetDoc()->GetNodes();
     m_pTxtNode->ModifyNotification( 0, &rFtn );
     if ( m_pStartNode )
@@ -362,7 +443,7 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 void SwTxtFtn::DelFrms( const SwFrm* pSib )
 {
     // delete the FtnFrames from the pages
-    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     if ( !m_pTxtNode )
         return;
 
@@ -404,7 +485,7 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
                 SwFtnFrm *pFtn = (SwFtnFrm*)pFrm;
                 while ( pFtn && pFtn->GetMaster() )
                     pFtn = pFtn->GetMaster();
-                ASSERT( pFtn->GetAttr() == this, "Ftn mismatch error." );
+                OSL_ENSURE( pFtn->GetAttr() == this, "Ftn mismatch error." );
 
                 while ( pFtn )
                 {
@@ -423,7 +504,8 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
     }
 }
 
-
+/// Set the sequence number for the current footnote.
+/// @returns The new sequence number or USHRT_MAX if invalid.
 sal_uInt16 SwTxtFtn::SetSeqRefNo()
 {
     if( !m_pTxtNode )
@@ -433,100 +515,25 @@ sal_uInt16 SwTxtFtn::SetSeqRefNo()
     if( pDoc->IsInReading() )
         return USHRT_MAX;
 
-    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
-
-    const sal_uInt8 nTmp = 255 < nFtnCnt ? 255 : static_cast<sal_uInt8>(nFtnCnt);
-    SvUShortsSort aArr( nTmp, nTmp );
-
-    // dann testmal, ob die Nummer schon vergeben ist oder ob eine neue
-    // bestimmt werden muss.
-    SwTxtFtn* pTxtFtn;
-    for( n = 0; n < nFtnCnt; ++n )
-    {
-        pTxtFtn = pDoc->GetFtnIdxs()[ n ];
-        if ( pTxtFtn != this )
-        {
-            aArr.Insert( pTxtFtn->m_nSeqNo );
-        }
-    }
-
-    // test if number is already in use
-    if ( USHRT_MAX != m_nSeqNo )
-    {
-        for( n = 0; n < aArr.Count(); ++n )
-        {
-            if ( aArr[ n ] > m_nSeqNo )
-            {
-                return m_nSeqNo;    // free -> use
-            }
-            else if ( aArr[ n ] == m_nSeqNo )
-            {
-                break;              // used -> create new one
-            }
-        }
-
-        if ( n == aArr.Count() )
-        {
-            return m_nSeqNo;        // free -> use
-        }
-    }
-
-    // alle Nummern entsprechend geflag, also bestimme die richtige Nummer
-    for( n = 0; n < aArr.Count(); ++n )
-        if( n != aArr[ n ] )
-            break;
-
-    return m_nSeqNo = n;
+    std::vector<SwTxtFtn*> badRefNums;
+    std::set<sal_uInt16> aUsedNums = ::lcl_GetUsedFtnRefNumbers(*pDoc, this, badRefNums);
+    if ( ::lcl_IsRefNumAvailable(aUsedNums, m_nSeqNo) )
+        return m_nSeqNo;
+    std::vector<sal_uInt16> unused = ::lcl_GetUnusedSeqRefNums(aUsedNums, 1);
+    return m_nSeqNo = unused[0];
 }
 
+/// Set a unique sequential reference number for every footnote in the document.
+/// @param[in] rDoc The document to be processed.
 void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
 {
-    sal_uInt16 n, nStt = 0, nFtnCnt = rDoc.GetFtnIdxs().Count();
+    std::vector<SwTxtFtn*> badRefNums;
+    std::set<sal_uInt16> aUsedNums = ::lcl_GetUsedFtnRefNumbers(rDoc, NULL, badRefNums);
+    std::vector<sal_uInt16> unused = ::lcl_GetUnusedSeqRefNums(aUsedNums, badRefNums.size());
 
-    const sal_uInt8 nTmp = 255 < nFtnCnt ? 255 : static_cast<sal_uInt8>(nFtnCnt);
-    SvUShortsSort aArr( nTmp, nTmp );
-
-    // dann alle Nummern zusammensammeln die schon existieren
-    SwTxtFtn* pTxtFtn;
-    for( n = 0; n < nFtnCnt; ++n )
+    for (size_t i = 0; i < badRefNums.size(); ++i)
     {
-        pTxtFtn = rDoc.GetFtnIdxs()[ n ];
-        if ( USHRT_MAX != pTxtFtn->m_nSeqNo )
-        {
-            aArr.Insert( pTxtFtn->m_nSeqNo );
-        }
-    }
-
-
-    for( n = 0; n < nFtnCnt; ++n )
-    {
-        pTxtFtn = rDoc.GetFtnIdxs()[ n ];
-        if ( USHRT_MAX == pTxtFtn->m_nSeqNo )
-        {
-            for( ; nStt < aArr.Count(); ++nStt )
-            {
-                if ( nStt != aArr[ nStt ] )
-                {
-                    pTxtFtn->m_nSeqNo = nStt;
-                    break;
-                }
-            }
-
-            if ( USHRT_MAX == pTxtFtn->m_nSeqNo )
-            {
-                break; // found nothing
-            }
-        }
-    }
-
-    // alle Nummern schon vergeben, also mit nStt++ weitermachen
-    for( ; n < nFtnCnt; ++n )
-    {
-        pTxtFtn = rDoc.GetFtnIdxs()[ n ];
-        if ( USHRT_MAX == pTxtFtn->m_nSeqNo )
-        {
-            pTxtFtn->m_nSeqNo = nStt++;
-        }
+        badRefNums[i]->m_nSeqNo = unused[i];
     }
 }
 
@@ -541,3 +548,4 @@ void SwTxtFtn::CheckCondColl()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

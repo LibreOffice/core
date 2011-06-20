@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <ooo/vba/word/WdOutlineLevel.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include "vbatabstops.hxx"
 
 
 using namespace ::ooo::vba;
@@ -200,9 +202,12 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel() throw (uno::RuntimeEx
     return nLevel;
 }
 
-void SAL_CALL SwVbaParagraphFormat::setOutlineLevel( sal_Int32 /*_outlinelevel*/ ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaParagraphFormat::setOutlineLevel( sal_Int32 _outlinelevel ) throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    if( _outlinelevel != getOutlineLevel() )
+    {
+        // TODO: in my test in msword, there is no effect for this function.
+    }
 }
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getPageBreakBefore() throw (uno::RuntimeException)
@@ -296,7 +301,7 @@ void SAL_CALL SwVbaParagraphFormat::setRightIndent( float _rightindent ) throw (
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getTabStops() throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    return uno::makeAny( uno::Reference< word::XTabStops >( new SwVbaTabStops( this, mxContext, mxParaProps ) ) );
 }
 
 void SAL_CALL SwVbaParagraphFormat::setTabStops( const uno::Any& /*_tabstops*/ ) throw (uno::RuntimeException)
@@ -571,3 +576,4 @@ SwVbaParagraphFormat::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
-#include <svx/htmlmode.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -49,53 +47,25 @@
 #include <fmtrowsplt.hxx>
 #include <svx/htmlmode.hxx>
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <frmatr.hxx>
 
-#ifndef _TABLEPG_HXX
 #include <tablepg.hxx>
-#endif
 #include <tablemgr.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _TABLEDLG_HRC
 #include <tabledlg.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 #include "swtablerep.hxx"
 
-#ifdef DEBUG_TBLDLG
 
-void DbgTColumn(TColumn* pTColumn, sal_uInt16 nCount)
-{
-    for(sal_uInt16 i = 0; i < nCount; i++)
-    {
-        String sMsg(i);
-        sMsg += pTColumn[i].bVisible ? " v " : " h ";
-        sMsg += pTColumn[i].nWidth;
-        DBG_ERROR(sMsg)
-    }
-}
-#endif
-
-
-/*-----------------20.08.96 09.43-------------------
---------------------------------------------------*/
 SwTableRep::SwTableRep( const SwTabCols& rTabCol, sal_Bool bCplx )
     :
     nTblWidth(0),
@@ -128,15 +98,11 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, sal_Bool bCplx )
     nAllCols++;
 }
 
-/*-----------------20.08.96 09.43-------------------
---------------------------------------------------*/
 SwTableRep::~SwTableRep()
 {
     delete[] pTColumns;
 }
 
-/*-----------------20.08.96 13.33-------------------
---------------------------------------------------*/
 sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {
     long nOldLeft = rTabCols.GetLeft(),
@@ -151,10 +117,6 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             bSingleLine = sal_True;
             break;
         }
-
-#ifdef DEBUG_TBLDLG
-#define DbgTColumn(pTColumns, nAllCols);
-#endif
 
     SwTwips nPos = 0;
     SwTwips nLeft = GetLeftSpace();
@@ -175,10 +137,6 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         }
         pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
         pOldTColumns[nAllCols - 1].bVisible = sal_True;
-
-#ifdef DEBUG_TBLDLG
-#define DbgTColumn(pOldTColumns, nAllCols);
-#endif
 
         sal_uInt16 nOldPos = 0;
         sal_uInt16 nNewPos = 0;
@@ -239,3 +197,5 @@ sal_Bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         rTabCols.SetRight(rTabCols.GetRightMax());
     return bSingleLine;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

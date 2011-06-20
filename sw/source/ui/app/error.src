@@ -24,18 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #define __RSC
 
-
- //#include <tools/errcode.hxx>
 #include "globals.hrc"
 #include "app.hrc"
 #include "swerror.h"
-#include "comcore.hrc" // MS:   Warum gibst auf der Core-Seite
- //         jetzt Resourcen
+#include "comcore.hrc" // MS:   Why are there resources at the Core-Side now
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Strings
+    Description:    Strings
  --------------------------------------------------------------------*/
 
 String STR_COMCORE_READERROR
@@ -47,7 +45,7 @@ String STR_COMCORE_CANT_SHOW
     Text [ en-US ] = "Graphic cannot be displayed." ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung:   Boxes
+    Description:    Boxes
  --------------------------------------------------------------------*/
 InfoBox ERR_CLPBRD_WRITE
 {
@@ -95,10 +93,6 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
-        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
-        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
-        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
         Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
@@ -149,12 +143,10 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Zellen können nicht mehr geteilt werden : Zellen k÷nnen nicht mehr geteilt werden */
         Text [ en-US ] = "Cells cannot be further split." ;
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
     {
-        /* ### ACHTUNG: Neuer Text in Resource? weitere Spalten können nicht eingefügt werden : weitere Spalten k÷nnen nicht eingef³gt werden */
         Text [ en-US ] = "Additional columns cannot be inserted." ;
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
@@ -180,22 +172,18 @@ Resource RID_SW_ERRHDL
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken übernommen werden : Einige OLE-Objekte konnten nur als Grafiken ³bernommen werden */
         Text [ en-US ] = "Some OLE objects could only be loaded as graphics." ;
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken übernommen werden : Einige OLE-Objekte konnten nur als Grafiken ³bernommen werden */
         Text [ en-US ] = "Some OLE objects could only be saved as graphics." ;
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollständig geladen werden : Dokument konnte nicht vollstõndig geladen werden */
         Text [ en-US ] = "Document could not be completely loaded." ;
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollständig gespeichert werden : Dokument konnte nicht vollstõndig gespeichert werden */
         Text [ en-US ] = "Document could not be completely saved." ;
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)

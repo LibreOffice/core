@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,8 @@
 #include <tblsel.hxx>
 #include <swtable.hxx>
 
-class SvxBorderLine;
+namespace editeng { class SvxBorderLine; }
+
 class SwDoc;
 class SwTableNode;
 class _FndLine;
@@ -66,7 +68,7 @@ sal_Bool lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 sal_Bool lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
 
@@ -153,12 +155,12 @@ struct _SwGCLineBorder
 
 class _SwGCBorder_BoxBrd
 {
-    const SvxBorderLine* pBrdLn;
+    const editeng::SvxBorderLine* pBrdLn;
     sal_Bool bAnyBorderFnd;
 public:
     _SwGCBorder_BoxBrd() : pBrdLn( 0 ), bAnyBorderFnd( sal_False ) {}
 
-    void SetBorder( const SvxBorderLine& rBorderLine )
+    void SetBorder( const editeng::SvxBorderLine& rBorderLine )
         { pBrdLn = &rBorderLine; bAnyBorderFnd = sal_False; }
 
     // checke, ob die linke Border dieselbe wie die gesetzte ist
@@ -226,3 +228,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

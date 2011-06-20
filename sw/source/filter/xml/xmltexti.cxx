@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,7 +68,7 @@
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
@@ -153,7 +154,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "Couldn't set visual area of the object!\n" );
+            OSL_FAIL( "Couldn't set visual area of the object!\n" );
         }
     }
 }
@@ -176,8 +177,8 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
-    // #90463# the redline helper destructor sets properties on the document
-    //         and may through an exception while doing so... catch this
+    // the redline helper destructor sets properties on the document
+    // and may through an exception while doing so... catch this
     try
     {
         delete pRedlineHelper;
@@ -201,10 +202,10 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
 {
     uno::Reference<XUnoTunnel> xCrsrTunnel(
             ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     return pDoc && pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
@@ -219,7 +220,7 @@ SwOLENode *lcl_GetOLENode( const SwFrmFmt *pFrmFmt )
         const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
         pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
     }
-    ASSERT( pOLENd, "Where is the OLE node" );
+    OSL_ENSURE( pOLENd, "Where is the OLE node" );
     return pOLENd;
 }
 
@@ -231,7 +232,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
 
@@ -245,10 +246,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         return xPropSet;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -289,7 +290,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             {
                 // create object with desired ClassId
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+                ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
@@ -330,7 +331,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 ::rtl::OUString aExistingName = pExistingOLENd->GetOLEObj().GetCurrentPersistName();
                 if ( aExistingName.equals( aObjName ) )
                 {
-                    OSL_ENSURE( sal_False, "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
+                    OSL_FAIL( "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
 
                     ::rtl::OUString aTmpName = pDoc->GetPersist()->GetEmbeddedObjectContainer().CreateUniqueObjectName();
                     try
@@ -342,7 +343,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     }
                     catch ( uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "Couldn't create a copy of the object!\n" );
+                        OSL_FAIL( "Couldn't create a copy of the object!\n" );
                     }
 
                     break;
@@ -384,7 +385,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
         const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
         SwOLENode *pOLENode = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
-        ASSERT( pOLENode, "Where is the OLE node" );
+        OSL_ENSURE( pOLENode, "Where is the OLE node" );
 
         OUStringBuffer aBuffer( rTblName.getLength() );
         sal_Bool bQuoted = sal_False;
@@ -466,7 +467,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             UniReference < SvXMLImportPropertyMapper > xImpPrMap =
                 pStyle->GetStyles()
                       ->GetImportPropertyMapper(pStyle->GetFamily());
-            ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
+            OSL_ENSURE( xImpPrMap.is(), "Where is the import prop mapper?" );
             if( xImpPrMap.is() )
             {
                 UniReference<XMLPropertySetMapper> rPropMapper =
@@ -549,15 +550,15 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -580,13 +581,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Reference < embed::XLinkCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OOoEmbeddedObjectFactory")) ),
                 uno::UNO_QUERY_THROW );
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
-        aMediaDescriptor[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+        aMediaDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
         aMediaDescriptor[0].Value <<= ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
         {
@@ -638,14 +639,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -687,10 +688,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
 {
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
             sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -712,7 +713,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
@@ -733,10 +734,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             if ( xSet.is() )
             {
                 if( bValidURL )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                         makeAny( ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 if( bValidMimeType )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")),
                         makeAny( ::rtl::OUString( rMimeType ) ) );
             }
 
@@ -765,14 +766,14 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -792,7 +793,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             UniReference < SvXMLImportPropertyMapper > xImpPrMap =
                 pStyle->GetStyles()
                       ->GetImportPropertyMapper(pStyle->GetFamily());
-            ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
+            OSL_ENSURE( xImpPrMap.is(), "Where is the import prop mapper?" );
             if( xImpPrMap.is() )
             {
                 UniReference<XMLPropertySetMapper> rPropMapper =
@@ -844,7 +845,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName = ::rtl::OUString::createFromAscii( "DummyName" );
+        ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DummyName"));
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbedObjectCreator > xFactory( ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator")) ), uno::UNO_QUERY );
@@ -864,31 +865,31 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")),
                     makeAny( ::rtl::OUString( URIHelper::SmartRel2Abs(
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")),
                     makeAny( ::rtl::OUString( rName ) ) );
 
                 if ( eScrollMode == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
                         makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                         makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
 
                 if ( bIsBorderSet )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                         makeAny( bHasBorder ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
                         makeAny( sal_True ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                     makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 
@@ -916,13 +917,13 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
         ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > &rParamMap)
 {
     // this method will modify the document directly -> lock SolarMutex
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
-    ASSERT( pFrame, "SwXFrame missing" );
+    OSL_ENSURE( pFrame, "SwXFrame missing" );
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
@@ -951,14 +952,14 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             }
 
             // unfortunately the names of the properties are depending on the object
-            ::rtl::OUString aParaName = ::rtl::OUString::createFromAscii("AppletCommands");
+            ::rtl::OUString aParaName(RTL_CONSTASCII_USTRINGPARAM("AppletCommands"));
             try
             {
                 xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
             }
             catch ( uno::Exception& )
             {
-                aParaName = ::rtl::OUString::createFromAscii("PluginCommands");
+                aParaName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands"));
                 try
                 {
                     xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
@@ -993,7 +994,7 @@ void SwXMLTextImportHelper::RedlineAdd(
     sal_Bool bMergeLastPara)
 {
     // create redline helper on demand
-    DBG_ASSERT(NULL != pRedlineHelper, "helper should have been created in constructor");
+    OSL_ENSURE(NULL != pRedlineHelper, "helper should have been created in constructor");
     if (NULL != pRedlineHelper)
         pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
                             bMergeLastPara);
@@ -1060,3 +1061,4 @@ void SwXMLTextImportHelper::SetChangesProtectionKey(
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

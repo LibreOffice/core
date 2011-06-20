@@ -92,12 +92,6 @@ Window DLG_NAVIGATION_PI
         MaskColor = IMAGE_MASK_COLOR ;
         NAVI_IDLIST
     };
-    ImageList ILH_CONTENT
-    {
-        Prefix = "sch";
-        MaskColor = IMAGE_MASK_COLOR ;
-        NAVI_IDLIST
-    };
     Toolbox TB_CONTENT
     {
         Pos = MAP_PIXEL ( 5 , 5 ) ;
@@ -123,7 +117,6 @@ Window DLG_NAVIGATION_PI
                 Identifier = FN_UP ;
                  //                 ItemBitmap = Bitmap { File = "navup.bmp"; };
                 HelpID = HID_NAVI_TBX2 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Rückwärts : R³ckwõrts */
                 Text [ en-US ] = "Back" ;
             };
             ToolBoxItem
@@ -131,14 +124,12 @@ Window DLG_NAVIGATION_PI
                 Identifier = FN_DOWN ;
                  //                 ItemBitmap = Bitmap { File = "navdn.bmp"; };
                 HelpID = HID_NAVI_TBX3 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Vorwärts : Vorwõrts */
                 Text [ en-US ] = "Forward" ;
             };
             ToolBoxItem
             {
                 Identifier = FN_DROP_REGION ;
                 HelpID = HID_NAVI_TBX4 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Modus für Drag & Drop auswählen : Modus f³r Drag & Drop auswõhlen */
                 DropDown = TRUE ;
                 Text [ en-US ] = "Drag Mode" ;
             };
@@ -204,9 +195,7 @@ Window DLG_NAVIGATION_PI
                 Identifier = FN_SELECT_FOOTER ;
                  //                 ItemBitmap = Bitmap { File = "navfoot.bmp"; };
                 HelpID = HID_NAVI_TBX11 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
                 Text [ en-US ] = "Footer" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Springen zur Fußzeile : Springen zur Fu˜zeile */
             };
             ToolBoxItem
             {
@@ -214,7 +203,6 @@ Window DLG_NAVIGATION_PI
                  //                 ItemBitmap = Bitmap { File = "navnote.bmp"; };
                 HelpID = HID_NAVI_TBX12 ;
                 Text [ en-US ] = "Anchor<->Text" ;
-                /* ### ACHTUNG: Neuer Text in Resource? Springen zwischen Fußnotenankern und dem Fußnotentext : Springen zwischen Fu˜notenankern und dem Fu˜notentext */
             };
             ToolBoxItem
             {
@@ -224,7 +212,6 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_OUTLINE_LEVEL ;
                 HelpID = HID_NAVI_TBX13 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Angezeigte Überschriftenebenen : Angezeigte šberschriftenebenen */
                 Text [ en-US ] = "Heading Levels Shown" ;
                 DropDown = TRUE ;
             };
@@ -282,7 +269,6 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_GLOBAL_OPEN ;
                 HelpID = HID_NAVI_TBX20 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
                 Text [ en-US ] = "Insert" ;
             };
             ToolBoxItem
@@ -303,14 +289,12 @@ Window DLG_NAVIGATION_PI
             {
                 Identifier = FN_ITEM_UP ;
                 HelpID = HID_NAVI_TBX22 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Nach oben verschieben : Nach unten verschieben */
                 Text [ en-US ] = "Move Up" ;
             };
             ToolBoxItem
             {
                 Identifier = FN_ITEM_DOWN ;
                 HelpID = HID_NAVI_TBX23 ;
-                /* ### ACHTUNG: Neuer Text in Resource? Nach unten verschieben : Nach oben verschieben */
                 Text [ en-US ] = "Move Down" ;
             };
         };
@@ -369,17 +353,14 @@ Window DLG_NAVIGATION_PI
     };
     String ST_HYPERLINK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Als Hyperlink einfügen : Als Hyperlink einf³gen */
         Text [ en-US ] = "Insert as Hyperlink" ;
     };
     String ST_LINK_REGION
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Als Verknüpfung einfügen : Als Verkn³pfung einf³gen */
         Text [ en-US ] = "Insert as Link" ;
     };
     String ST_COPY_REGION
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Als Kopie einfügen : Als Kopie einf³gen */
         Text [ en-US ] = "Insert as Copy" ;
     };
     String ST_DISPLAY
@@ -420,7 +401,6 @@ Window DLG_NAVIGATION_PI
     };
     String ST_INSERT
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
         Text [ en-US ] = "Insert" ;
     };
     String ST_INDEX
@@ -441,7 +421,6 @@ Window DLG_NAVIGATION_PI
     };
     String ST_DELETE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
         Text [ en-US ] = "Delete" ;
     };
     String ST_DELETE_ENTRY
@@ -458,7 +437,6 @@ Window DLG_NAVIGATION_PI
     };
     String ST_UPDATE_LINK
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Verknüpfungen : Verkn³pfungen */
         Text [ en-US ] = "Links" ;
     };
     String ST_UPDATE_ALL
@@ -520,8 +498,6 @@ Window DLG_NAVIGATION_PI
     };                 \
     IdCount = { 12 ; };
 
-
-
 ImageList IMG_NAVI_ENTRYBMP
 {
     Prefix = "nc";
@@ -529,12 +505,6 @@ ImageList IMG_NAVI_ENTRYBMP
     NAVI_ENTRY_IDS
 };
 
-ImageList IMG_NAVI_ENTRYBMPH
-{
-    Prefix = "nch";
-    MaskColor = IMAGE_MASK_COLOR ;
-    NAVI_ENTRY_IDS
-};
 
 //IAccessibility2 Implementation 2009-----
 String STR_ACCESS_TL_GLOBAL
@@ -546,4 +516,3 @@ String STR_ACCESS_TL_CONTENT
     Text [ en-US ] = "Content View";
 };
 //-----IAccessibility2 Implementation 2009
-

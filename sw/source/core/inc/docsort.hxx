@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef _SORT_HXX
 #define _SORT_HXX
 
@@ -174,3 +176,5 @@ private:
 inline sal_Bool FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
 
 #endif // _NDSORT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,38 +30,38 @@
 
 #include <tools/stream.hxx>
 
-typedef long long3;                     // Zur Dokumentation: 3-byte-Longs
+typedef long long3;                     // For documentation: 3-byte-longs.
 
-#define MAX_BEGIN 64                    // Maximale Blockschachtelung
-#define PASSWDLEN 16                    // Maximale Passwortlaenge
+#define MAX_BEGIN 64                    // Maximum block nesting.
+#define PASSWDLEN 16                    // Maximum password length.
 
-// Neue Version mit SvStreams
+// New version with SvStreams.
 
-// Passwort- und Codierungs-Funktionalitaet
+// Functionality for passwords and encoding.
 
 class swcrypter {
 protected:
-    sal_Char   cPasswd[ PASSWDLEN ];    // Passwort-Puffer
-    sal_Bool   bPasswd;                     // sal_True wenn mit Passwort
-    void   encode( sal_Char*, sal_uInt16 ); // Puffer codieren/decodieren
+    sal_Char   cPasswd[ PASSWDLEN ];    // Password buffer.
+    sal_Bool   bPasswd;                     // sal_True if with password.
+    void   encode( sal_Char*, sal_uInt16 ); // Encode/decode buffer.
 public:
     swcrypter();
-    sal_Bool setpasswd( const String& );    // Passwort setzen
-    void copypasswd( const sal_Char* ); // Passwort direkt setzen
+    sal_Bool setpasswd( const String& );    // Set password.
+    void copypasswd( const sal_Char* ); // Set password directly.
     const sal_Char* getpasswd() { return cPasswd; }
 };
 
-// Reader/Writer-Stream-Basisklasse mit Pufferverwaltung fuer Texte
-// und Spezial-I/O fuer 3-Byte-Longs
+// Reader/Writer-stream base class with buffer administration for texts
+// ans special I/O for 3-byte-longs.
 
 class swstreambase : public swcrypter {
 protected:
-    SvStream* pStrm;                    // eigentlicher Stream
-    sal_Char*  pBuf;                        // Zwischenpuffer
-    sal_uInt16 nBuflen;                     // Laenge des Zwischenpuffers
-    short  nLong;                       // Long-Laenge (3 oder 4)
-    sal_Bool   bTempStrm;                   // sal_True: Stream loeschen
-    void   checkbuf( sal_uInt16 );          // Testen der Pufferlaenge
+    SvStream* pStrm;                    // The actual stream.
+    sal_Char*  pBuf;                        // Temporary buffer.
+    sal_uInt16 nBuflen;                     // Length of temporary buffer.
+    short  nLong;                       // Long-length (3 or 4).
+    sal_Bool   bTempStrm;                   // sal_True: delete stream.
+    void   checkbuf( sal_uInt16 );          // Test buffer length.
 
     swstreambase( SvStream& );
 
@@ -69,18 +70,19 @@ protected:
 public:
     ~swstreambase();
     SvStream& Strm()                    { return *pStrm; }
-    void clear();                       // Puffer loeschen
+    void clear();                       // Delete buffer.
 
-    // Zusatzfunktionen zur I/O von LONGs als 3-Byte-Zahlen
+    // Supplementary functions for I/O of LONGs as 3-byte numbers.
 
     void long3()                        { nLong = 3; }
     void long4()                        { nLong = 4; }
 
-    // Alias- und Hilfsfunktionen
+
+    // Alias and helper functions.
 
     void seek( long nPos )              { pStrm->Seek( nPos );  }
     long tell()                         { return pStrm->Tell(); }
-    long filesize();                    // Dateigroesse
+    long filesize();
 
     void setbad();
     int good()                          { return ( pStrm->GetError() == SVSTREAM_OK ); }
@@ -124,20 +126,20 @@ inline swstreambase& swstreambase::operator>>( sal_uLong& c )
 }
 
 class swistream : public swstreambase {
-    sal_uInt8   cType;                      // Record-Typ
-    sal_uLong  nOffset;                     // Record-Offset-Portion
+    sal_uInt8   cType;                      // Record type.
+    sal_uLong  nOffset;                     // Record offset portion.
 public:
     swistream( SvStream& );
 
-    sal_uInt8 peek();                       // 1 Byte testen
-    sal_uInt8 next();                       // Blockstart
-    sal_uInt8 cur() { return cType; }       // aktueller Block
-    sal_uInt8 skipnext();                   // Record ueberspringen
-    void undonext();                    // next() rueckgaengig machen
+    sal_uInt8 peek();                       // Test 1 byte.
+    sal_uInt8 next();                       // Block start.
+    sal_uInt8 cur() { return cType; }       // Current block.
+    sal_uInt8 skipnext();                   // Skip record.
+    void undonext();                    // Undo next().
     long getskip()                      { return nOffset; }
-    void skip( long = -1L );            // Block ueberspringen
-    sal_Char* text();                   // Textstring lesen (nach BEGIN)
-    long size();                        // aktuelle Record-Laenge
+    void skip( long = -1L );            // Skip block.
+    sal_Char* text();                   // Read text string (after BEGIN).
+    long size();                        // Current record length.
 
 private:
     swistream( const swistream& );
@@ -146,3 +148,5 @@ private:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

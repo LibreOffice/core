@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 #define SW_FLDBAS_HXX
 
 #include <i18npool/lang.h>
-#include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
 #include <calbck.hxx>
@@ -39,13 +39,9 @@ class SvStringsDtor;
 class SvNumberFormatter;
 
 
-/*--------------------------------------------------------------------
-    Beschreibung:   die ID's fuer die Feldtypen
- --------------------------------------------------------------------*/
-
 enum RES_FIELDS
 {
-// Fuer die alten Dokumente muessen die Field-Which IDS erhalten bleiben !!!!
+// For old documents the Field-Which IDs must be preserved !!!
     RES_FIELDS_BEGIN,
     RES_DBFLD = RES_FIELDS_BEGIN,
     RES_USERFLD,
@@ -90,10 +86,7 @@ enum RES_FIELDS
     RES_FIELDS_END
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Liste der FieldTypes am UI
- --------------------------------------------------------------------*/
-
+// List of FieldTypes at UI.
 enum SwFldTypesEnum
 {
     TYP_BEGIN,
@@ -159,28 +152,28 @@ enum SwFileNameFormat
 
 enum SwVarFormat
 {
-    VVF_CMD         = 0x0010,   // Kommando anzeigen
-    VVF_INVISIBLE   = 0x0040,   // unsichtbar
+    VVF_CMD         = 0x0010,   // Show command.
+    VVF_INVISIBLE   = 0x0040,   // Invisible.
     VVF_XXP         = 0x0400,   // 1234%
     VVF_XX_XXP      = 0x0800,   // 1.234,56%
     VVF_CLEAR       = 0x000f,
 
-// ab hier neue Formate
-    VVF_SYS         = 0x2000,   //Zahlenformat aus der Systemeinstellung
+// From here new formats:
+    VVF_SYS         = 0x2000,   // Format for numbers from system.
     VVF_X           = 0x2100,   // 1234
-    VVF_X_X         = 0x2200,   // 1234,5
-    VVF_X_XX        = 0x2300,   // 1245,56
-    VVF_XX_X        = 0x2400,   // 1.234,5
-    VVF_XX_XX       = 0x2500,   // 1.234,56
-    VVF_XX_XXX      = 0x2600,   // 1.234,567
-    VVF_SYS_CUR     = 0x2700,   // W???hrungsformat aus der Systemeinstellung
-    VVF_CUR_X       = 0x2800,   // DM 1234
-    VVF_CUR_XX_XX   = 0x2900,   // DM 1234,56 DM 1234,00
-    VVF_CUR_XX_X0   = 0x2a00,   // DM 1234,56 DM 1234,--
-    VVF_X_CUR       = 0x2b00,   // 1234 DM
-    VVF_XX_XX_CUR   = 0x2c00,   // 1234,56 DM 1234,00 DM
-    VVF_XX_X0_CUR   = 0x2d00,    // 1234,56 DM 1234,-- DM
-// Kompatibilitaet:
+    VVF_X_X         = 0x2200,   // 1234.5
+    VVF_X_XX        = 0x2300,   // 1245.56
+    VVF_XX_X        = 0x2400,   // 1.234.5
+    VVF_XX_XX       = 0x2500,   // 1.234.56
+    VVF_XX_XXX      = 0x2600,   // 1.234.567
+    VVF_SYS_CUR     = 0x2700,   // Format for currency from system.
+    VVF_CUR_X       = 0x2800,   // EUR 1234
+    VVF_CUR_XX_XX   = 0x2900,   // EUR 1234.56 EUR 1234.00
+    VVF_CUR_XX_X0   = 0x2a00,   // EUR 1234.56 EUR 1234.--
+    VVF_X_CUR       = 0x2b00,   // 1234 EUR
+    VVF_XX_XX_CUR   = 0x2c00,   // 1234.56 EUR 1234.00 EUR
+    VVF_XX_X0_CUR   = 0x2d00,   // 1234.56 EUR 1234.-- EUR
+// Compatibility:
     VF_CMD          = VVF_CMD,
     VF_INVISIBLE    = VVF_INVISIBLE,
     VF_XXP          = VVF_XXP,
@@ -200,16 +193,15 @@ namespace nsSwGetSetExpType
     const SwGetSetExpType GSE_EXPR    = 0x0002; // Expression
     const SwGetSetExpType GSE_INP     = 0x0004; // InputField
     const SwGetSetExpType GSE_SEQ     = 0x0008; // Sequence
-    const SwGetSetExpType GSE_FORMULA = 0x0010; // Formel
+    const SwGetSetExpType GSE_FORMULA = 0x0010; // Formula
 }
 
 typedef sal_uInt16 SwExtendedSubType;
 namespace nsSwExtendedSubType
 {
-    const SwExtendedSubType SUB_CMD         = 0x0100;   // Kommando anzeigen
-    const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   // unsichtbar
-    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   // SwDBField: Uebernimmt Formatierung nicht
-                                                        // aus Datenbank
+    const SwExtendedSubType SUB_CMD         = 0x0100;   // Show command.
+    const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   // Invisible.
+    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   // SwDBField: Don't accept formating from database.
 }
 
 enum SwInputFieldSubType
@@ -234,52 +226,39 @@ enum SwDateTimeSubType
 };
 
 
-extern sal_uInt16 __FAR_DATA aTypeTab[];
+extern sal_uInt16 aTypeTab[];
 
-/*--------------------------------------------------------------------
-    Beschreibung: Allgemeine Tools
- --------------------------------------------------------------------*/
-
+// General tools.
 String  GetResult(double nVal, sal_uInt32 nNumFmt, sal_uInt16 nLang = LANGUAGE_SYSTEM);
 void    SetErrorStr(const String& rStr);
-//String    ExpandDate(const Date& rDate, sal_uLong nFmt, sal_uInt16 nLang);
-//String    ExpandTime(const Time& rTime, sal_uLong nFmt, sal_uInt16 nLang);
 String  FormatNumber(sal_uInt16 nNum, sal_uInt32 nFormat);
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Instanzen von SwFields und Abgeleiteten kommen 0-n mal vor.
-                    Zu jeder Klasse SwFields existiert
-                    1 Instanz der zugehoerigen Typenklasse
-                    Basisklasse aller Feldtypen ist SwFieldType
- --------------------------------------------------------------------*/
-
-DBG_NAMEEX(SwFieldType)
+// Instances of SwFields and those derived from it occur 0 to n times.
+// For each class there is one instance of the associated type class.
+// Base class of all field types is SwFieldType.
 
 class SW_DLLPUBLIC SwFieldType : public SwModify
 {
     sal_uInt16 nWhich;
 
-    friend void _FinitUI();     // um den Pointer zu loeschen!
+    friend void _FinitUI();     // In order to delete pointer!
     static  SvStringsDtor*  pFldNames;
 
-    static void _GetFldName();          // legt die FldNames an, fldmgr.cxx!
+    static void _GetFldName();  // Sets up FldNames; fldmgr.cxx!
 
 protected:
-    // single argument ctors shall be explicit.
+    // Single argument ctors shall be explicit.
     explicit SwFieldType( sal_uInt16 nWhichId );
 
 public:
 
-#ifdef DBG_UTIL
-    virtual ~SwFieldType();
-#endif
     static  const String&   GetTypeStr( sal_uInt16 nTypeId );
 
-    // nur in abgeleiteten Klassen
+    // Only in derived classes.
     virtual const String&   GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
             sal_uInt16          Which() const { return nWhich; }
 
@@ -291,18 +270,14 @@ inline void SwFieldType::UpdateFlds() const
     ((SwFieldType*)this)->ModifyNotification( 0, 0 );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:  Basisklasse aller Felder.
-                   Ueber Which wird der Typ des Feldes abgefragt.
-                   Ueber Expand() wird der expandierte Inhalt
-                   des Feldes in Erfahrung gebracht.
- --------------------------------------------------------------------*/
-
+// Base class of all fields.
+// Type of field is queried via Which.
+// Expanded content of field is queried via Expand().
 class SW_DLLPUBLIC SwField
 {
 private:
-    mutable String      m_Cache; /// #i85766# cached expansion (for clipboard)
-    sal_uInt16              nLang;  // Immer ueber SetLanguage aendern!
+    mutable String      m_Cache; // Cached expansion (for clipboard).
+    sal_uInt16              nLang;   // Always change via SetLanguage!
     sal_Bool                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
 
@@ -319,10 +294,9 @@ protected:
 public:
     virtual             ~SwField();
 
-    // Typ feststellen
     inline SwFieldType* GetTyp() const;
 
-    // neuen Typ setzen (wird fuer das Kopieren zwischen Dokumenten benutzt)
+    // Set new type (used for copying among documents).
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
     /** expand the field.
@@ -335,16 +309,17 @@ public:
       */
     String              ExpandField(bool const bCached) const;
 
+    // Returns name or content.
     virtual String      GetFieldName() const;
 
     SwField *           CopyField() const;
 
     // ResId
     sal_uInt16              Which() const
-#ifndef DBG_UTIL
-        { return pType->Which(); }
+#if OSL_DEBUG_LEVEL > 1
+        ;       // implemented in fldbas.cxx
 #else
-        ;       // in fldbas.cxx implementiert
+        { return pType->Which(); }
 #endif
 
     // TYP_ID
@@ -352,11 +327,11 @@ public:
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType(sal_uInt16);
 
-    // Sprache an der Feldposition
+    // Language at field position.
     inline sal_uInt16       GetLanguage() const;
     virtual void        SetLanguage(sal_uInt16 nLng);
 
-    // Parameter fuer Dialog und BASIC erfragen
+    // Query parameters for dialog and for BASIC.
     inline sal_uInt32   GetFormat() const;
     virtual const String& GetPar1() const;
     virtual String      GetPar2()   const;
@@ -367,11 +342,11 @@ public:
     virtual void        SetPar1(const String& rStr);
     virtual void        SetPar2(const String& rStr);
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
-    // hat das Feld eine Action auf dem ClickHandler ? (z.B. INetFelder,..)
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+
+    // Does the field possess an action on its ClickHandler? (e.g. INetFields, ...).
     sal_Bool            HasClickHdl() const;
-    // ist es ein Fix-Feld?
     sal_Bool            IsFixed() const;
 
     sal_Bool                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
@@ -389,15 +364,12 @@ inline sal_uInt32 SwField::GetFormat() const
 inline sal_uInt16 SwField::GetLanguage() const
     { return nLang;     }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Felder mit Values, die ueber der Numberformatter
-                    formatiert werden muessen
- --------------------------------------------------------------------*/
 
+//Fields containing values that have to be formated via number formatter.
 class SwValueFieldType : public SwFieldType
 {
     SwDoc*  pDoc;
-    sal_Bool    bUseFormat; // Numberformatter verwenden
+    sal_Bool    bUseFormat; // Use number formatter.
 
 protected:
     SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId );
@@ -418,7 +390,6 @@ public:
 class SW_DLLPUBLIC SwValueField : public SwField
 {
     double fValue;
-//  String sExpand;
 
 protected:
     SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt = 0, sal_uInt16 nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
@@ -429,8 +400,6 @@ public:
 
     virtual SwFieldType*    ChgTyp( SwFieldType* );
     virtual void            SetLanguage(sal_uInt16 nLng);
-//  os: wozu war das denn da?
-//  virtual void            ChangeFormat(sal_uLong n);
 
     inline SwDoc*           GetDoc() const          { return ((SwValueFieldType*)GetTyp())->GetDoc(); }
 
@@ -460,3 +429,5 @@ public:
 };
 
 #endif // SW_FLDBAS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

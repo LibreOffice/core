@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,6 +32,7 @@
 
 #include <hintids.hxx>
 
+#include <osl/diagnose.h>
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -41,17 +43,13 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <editeng/pmdlitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/style.hxx>
-#ifndef _VCL_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -66,14 +64,10 @@
 #include <fmtpdsc.hxx>
 #include <wview.hxx>
 #include <uiitems.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <uitool.hxx>
 #include <frmatr.hxx>
 #include <paratr.hxx>
@@ -81,18 +75,9 @@
 #include <poolfmt.hxx>
 #include "usrpref.hxx"
 
-#ifndef _ERROR_H
-#include <error.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include <doc.hxx>
 #include <docary.hxx>
 #include <charfmt.hxx>
@@ -231,7 +216,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             //
             SwFmtHeader aHeaderFmt(rMaster.GetHeader());
             SwFrmFmt *pHeaderFmt = aHeaderFmt.GetHeaderFmt();
-            ASSERT(pHeaderFmt != 0, "kein HeaderFormat");
+            OSL_ENSURE(pHeaderFmt != 0, "no header format");
 
             ::FillHdFt(pHeaderFmt, rHeaderSet);
 
@@ -267,7 +252,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             //
             SwFmtFooter aFooterFmt(rMaster.GetFooter());
             SwFrmFmt *pFooterFmt = aFooterFmt.GetFooterFmt();
-            ASSERT(pFooterFmt != 0, "kein FooterFormat");
+            OSL_ENSURE(pFooterFmt != 0, "no footer format");
 
             ::FillHdFt(pFooterFmt, rFooterSet);
 
@@ -326,11 +311,6 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 {
     const SwFrmFmt& rMaster = rPageDesc.GetMaster();
@@ -385,7 +365,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFmtHeader &rHeaderFmt = rMaster.GetHeader();
         const SwFrmFmt *pHeaderFmt = rHeaderFmt.GetHeaderFmt();
-        ASSERT(pHeaderFmt != 0, kein HeaderFormat.);
+        OSL_ENSURE(pHeaderFmt != 0, "no header format");
 
         // HeaderInfo, Raender, Hintergrund, Umrandung
         //
@@ -431,7 +411,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     {
         const SwFmtFooter &rFooterFmt = rMaster.GetFooter();
         const SwFrmFmt *pFooterFmt = rFooterFmt.GetFooterFmt();
-        ASSERT(pFooterFmt != 0, kein FooterFormat.);
+        OSL_ENSURE(pFooterFmt != 0, "no footer format");
 
         // FooterInfo, Raender, Hintergrund, Umrandung
         //
@@ -622,9 +602,6 @@ void    SetDfltMetric( FieldUnit eMetric, sal_Bool bWeb )
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
-/*-----------------09.04.98 16:58-------------------
-
---------------------------------------------------*/
 sal_uInt16 InsertStringSorted(const String& rEntry, ListBox& rToFill, sal_uInt16 nOffset )
 {
     sal_uInt16 i = nOffset;
@@ -681,9 +658,6 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, sal_Bool bSorted
     }
 };
 
-/* -----------------27.04.98 08:26-------------------
- *
- * --------------------------------------------------*/
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
             SwWrtShell* pSh )
 {
@@ -715,7 +689,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
             }
             else
             {
-                DBG_ERROR("wo soll die Breite denn herkommen?");
+                OSL_FAIL("where to get the actual width from?");
             }
             const SvxLRSpaceItem& rLRSpace = pFmt->GetLRSpace();
             nWidth -= (rLRSpace.GetRight() + rLRSpace.GetLeft());
@@ -726,8 +700,6 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
     return nWidth;
 }
 
-/*------------------------------------------------------------------------*/
-
 String GetAppLangDateTimeString( const DateTime& rDT )
 {
     const SvtSysLocale aSysLocale;
@@ -737,9 +709,19 @@ String GetAppLangDateTimeString( const DateTime& rDT )
     return sRet;
 }
 
-/*-- 26.01.2006 08:06:33---------------------------------------------------
+/*----------------------------------------------------------------------------
+ * add a new function which can get and set the current "SID_ATTR_APPLYCHARUNIT" value
+ *---------------------------------------------------------------------------*/
+sal_Bool HasCharUnit( sal_Bool bWeb)
+{
+    return SW_MOD()->GetUsrPref(bWeb)->IsApplyCharUnit();
+}
 
-  -----------------------------------------------------------------------*/
+void SetApplyCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
+{
+    SW_MOD()->ApplyUserCharUnit(bApplyChar, bWeb);
+}
+
 bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 nId )
 {
     bool bRet = false;
@@ -761,7 +743,7 @@ bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 
         uno::Reference < frame::XDispatchProvider > xProv( xFrame, uno::UNO_QUERY );
         util::URL aURL;
         aURL.Complete = sCommand;
-        uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
+        uno::Reference < util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
         xTrans->parseStrict( aURL );
         uno::Reference< frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
         if( xDisp.is() )
@@ -773,3 +755,5 @@ bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

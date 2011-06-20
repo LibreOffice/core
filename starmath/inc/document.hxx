@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef DOCUMENT_HXX
 #define DOCUMENT_HXX
 
@@ -48,6 +50,7 @@ class SmNode;
 class SfxMenuBarManager;
 class SfxPrinter;
 class Printer;
+class SmCursor;
 
 #define HINT_DATACHANGED    1004
 
@@ -55,8 +58,8 @@ class Printer;
 #define SM30IDENT    ((sal_uLong)0x30334d53L)
 #define SM304AIDENT  ((sal_uLong)0x34303330L)
 #define SM30VERSION  ((sal_uLong)0x00010000L)
-#define SM50VERSION  ((sal_uLong)0x00010001L)   //Unterschied zur SM30VERSION ist
-                                            //der neue Border im Format.
+#define SM50VERSION  ((ULONG)0x00010001L)   //Difference to SM30VERSION is
+                                            //the new border in the format.
 
 #define FRMIDENT    ((sal_uLong)0x03031963L)
 #define FRMVERSION  ((sal_uLong)0x00010001L)
@@ -64,20 +67,19 @@ class Printer;
 #define STAROFFICE_XML  "StarOffice XML (Math)"
 #define MATHML_XML      "MathML XML (Math)"
 
-/* Zugriff auf den Drucker sollte ausschliesslich ueber diese Klasse erfolgen
+/* Access to printer should happen through this class only
  * ==========================================================================
  *
- * Der Drucker kann dem Dokument oder auch dem OLE-Container gehoeren. Wenn
- * das Dokument also eine OLE-Dokument ist, so gehoert der Drucker auch
- * grundsaetzlich dem Container. Der Container arbeitet aber eventuell mit
- * einer anderen MapUnit als der Server. Der Drucker wird bezueglich des MapMode
- * im Konstruktor entsprechend eingestellt und im Destruktor wieder restauriert.
- * Das bedingt natuerlich, das diese Klasse immer nur kurze Zeit existieren darf
- * (etwa waehrend des Paints).
- * Die Kontrolle darueber ob der Drucker selbst angelegt, vom Server besorgt
- * oder dann auch NULL ist, uebernimmt die DocShell in der Methode GetPrt(),
- * fuer die der Access auch Friend der DocShell ist.
-*/
+ * The printer can belong to the document or the OLE-Container. If the document
+ * is an OLE-Document the printer generally belongs to the container too.
+ * But the container mayby works with a different MapUnit than the server.
+ * Referring to the MapMode the printer will be accordingly adjusted in the
+ * constructor and restored in the destructor. This brings that this class
+ * is always allowed to exists only a short time (e.g. while painting).
+ * The control whether the printer is self-generated, gotten from the server
+ * or is NULL then, is taken by the DocShell in the method GetPrt(), for
+ * which the access is friend of the DocShell too.
+ */
 
 class SmDocShell;
 class EditEngine;
@@ -108,6 +110,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 {
     friend class SmPrinterAccess;
     friend class SmModel;
+    friend class SmCursor;
 
     String              aText;
     SmFormat            aFormat;
@@ -117,15 +120,15 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     SfxMenuBarManager  *pMenuMgr;
     SfxItemPool        *pEditEngineItemPool;
     EditEngine         *pEditEngine;
-    SfxPrinter         *pPrinter;       //Siehe Kommentar zum SmPrinter Access!
-    Printer            *pTmpPrinter;    //ebenfalls
+    SfxPrinter         *pPrinter;       //q.v. comment to SmPrinter Access!
+    Printer            *pTmpPrinter;    //ditto
     long                nLeftBorder,
                         nRightBorder,
                         nTopBorder,
                         nBottomBorder;
     sal_uInt16          nModifyCount;
-    sal_Bool            bIsFormulaArranged;
-
+    bool                bIsFormulaArranged;
+    SmCursor           *pCursor;
     std::set< rtl::OUString >    aUsedSymbols;   // to export used symbols only when saving
 
 
@@ -133,7 +136,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                         const SfxHint& rHint, const TypeId& rHintType);
 
-    sal_Bool        WriteAsMathType3( SfxMedium& );
+    bool        WriteAsMathType3( SfxMedium& );
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
@@ -161,10 +164,15 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
 
-    sal_Bool                IsFormulaArranged() const { return bIsFormulaArranged; }
-    void                SetFormulaArranged(sal_Bool bVal) { bIsFormulaArranged = bVal; }
+    bool                IsFormulaArranged() const { return bIsFormulaArranged; }
+    void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
 
     virtual sal_Bool        ConvertFrom(SfxMedium &rMedium);
+
+    /** Called whenever the formula is changed
+     * Deletes the current cursor
+     */
+    void                InvalidateCursor();
 
 public:
     TYPEINFO();
@@ -180,11 +188,10 @@ public:
 
     void        ArrangeFormula();
 
-    //Zugriff fuer die View. Diese Zugriffe sind nur fuer den nicht OLE-Fall!
-    //und fuer die Kommunikation mit dem SFX!
-    //Alle internen Verwendungen des Printers sollten ausschlieslich uber
-    //den SmPrinterAccess funktionieren.
-    sal_Bool        HasPrinter()    { return 0 != pPrinter; }
+    //Access for the View. This access is not for the OLE-case!
+    //and for the communication with the SFX!
+    //All internal printer uses should work with the SmPrinterAccess only
+    bool        HasPrinter()    { return 0 != pPrinter; }
     SfxPrinter *GetPrinter()    { GetPrt(); return pPrinter; }
     void        SetPrinter( SfxPrinter * );
 
@@ -211,7 +218,7 @@ public:
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();
 
-    void        Draw(OutputDevice &rDev, Point &rPosition);
+    void        DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection = false);
     Size        GetSize();
 
     void        Repaint();
@@ -225,8 +232,17 @@ public:
 
     virtual void SetVisArea (const Rectangle & rVisArea);
     virtual void SetModified(sal_Bool bModified);
-};
 
+    /** Get a cursor for modifying this document
+     * @remarks Don't store this reference, a new cursor may be made...
+     */
+    SmCursor&   GetCursor();
+    /** True, if cursor have previously been requested and thus
+     * has some sort of position.
+     */
+    bool        HasCursor() { return pCursor != NULL; }
+};
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

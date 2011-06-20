@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,10 +83,9 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         if ( pDrawContact )
         {
             pDrawContact->InsertMasterIntoDrawPage();
-            // --> OD 2005-01-31 #i40845# - follow-up of #i35635#
+            // #i40845# - follow-up of #i35635#
             // move object to visible layer
             pDrawContact->MoveObjToVisibleLayer( pDrawContact->GetMaster() );
-            // <--
         }
     }
 
@@ -125,7 +125,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
     {
         // es muss mindestens das Attribut im TextNode stehen
         SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
-        ASSERT( pCNd->IsTxtNode(), "no Text Node at position." );
+        OSL_ENSURE( pCNd->IsTxtNode(), "no Text Node at position." );
         SwFmtFlyCnt aFmt( pFrmFmt );
         static_cast<SwTxtNode*>(pCNd)->InsertItem( aFmt, nCntPos, nCntPos );
     }
@@ -178,7 +178,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     {
         // gibt es ueberhaupt Inhalt, dann sicher diesen
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-        ASSERT( rCntnt.GetCntntIdx(), "Fly ohne Inhalt" );
+        OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly ohne Inhalt" );
 
         SaveSection( pDoc, *rCntnt.GetCntntIdx() );
         ((SwFmtCntnt&)rCntnt).SetNewCntntIdx( (const SwNodeIndex*)0 );
@@ -203,7 +203,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
         SwTxtNode *const pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-        OSL_ENSURE(pTxtNd, "no Textnode");
+        OSL_ENSURE( pTxtNd, "Kein Textnode gefunden" );
         SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
             pTxtNd->GetTxtAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
         // Attribut steht noch im TextNode, loeschen
@@ -265,7 +265,7 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_Str
         }
         break;
     default:
-        ASSERT( sal_False, "Was denn fuer ein FlyFrame?" );
+        OSL_FAIL( "Was denn fuer ein FlyFrame?" );
     }
 }
 
@@ -344,7 +344,7 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
         aAnchor.SetPageNum( pDoc->GetCurrentLayout()->GetCurrPage( &rContext.GetRepeatPaM() ));
     }
     else {
-        ASSERT( sal_False, "was fuer ein Anker ist es denn nun?" );
+        OSL_FAIL( "was fuer ein Anker ist es denn nun?" );
     }
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
@@ -596,13 +596,13 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
                 // Attribut und Format.
                 const SwPosition *pPos = rOldAnch.GetCntntAnchor();
                 SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-                ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                 const xub_StrLen nIdx = pPos->nContent.GetIndex();
                 SwTxtAttr * pHnt = pTxtNode->GetTxtAttrForCharAt(
                         nIdx, RES_TXTATR_FLYCNT );
-                ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                             "Missing FlyInCnt-Hint." );
-                ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
+                OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
                             "Wrong TxtFlyCnt-Hint." );
                 const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
@@ -661,7 +661,7 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
         if( RES_ANCHOR == nWhich )
         {
             // nur den 1. Ankerwechsel vermerken
-            ASSERT( !bAnchorChgd, "mehrfacher Ankerwechsel nicht erlaubt!" );
+            OSL_ENSURE( !bAnchorChgd, "mehrfacher Ankerwechsel nicht erlaubt!" );
 
             bAnchorChgd = sal_True;
 
@@ -725,3 +725,4 @@ void SwUndoSetFlyFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

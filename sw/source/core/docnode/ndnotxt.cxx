@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,7 @@
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 
-// --> OD 2009-07-13 #i73249#
-#include <frmfmt.hxx>
-// <--
+#include <frmfmt.hxx> // #i73249#
 
 SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
                   const sal_uInt8 nNdType,
@@ -75,7 +74,7 @@ SwNoTxtNode::~SwNoTxtNode()
 // fuer Frame- und Grafik-Attributen
 void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
 {
-    ASSERT( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
+    OSL_ENSURE( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
     SwAttrSet aNewAttrSet( rPool, aNoTxtNodeSetRange );
 
     // put names of parent style and conditional style:
@@ -120,7 +119,7 @@ void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, sal_Bool bAutomatic )
 
 void SwNoTxtNode::CreateContour()
 {
-    ASSERT( !pContour, "Contour available." );
+    OSL_ENSURE( !pContour, "Contour available." );
     pContour = new PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
     bAutomaticContour = sal_True;
     bContourMapModeValid = sal_True;
@@ -136,7 +135,7 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
         const MapMode aContourMap( bPixelGrf ? MAP_PIXEL : MAP_100TH_MM );
         if( bPixelGrf ? !bPixelContour : aGrfMap != aContourMap )
         {
-            // --> OD #i102238#
+            // #i102238#
             double nGrfDPIx = 0.0;
             double nGrfDPIy = 0.0;
             {
@@ -159,9 +158,8 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
                     }
                 }
             }
-            // <--
-            ASSERT( !bPixelGrf || aGrfMap == aContourMap,
-                    "scale factor for pixel unsupported" );
+            OSL_ENSURE( !bPixelGrf || aGrfMap == aContourMap,
+                        "scale factor for pixel unsupported" );
             OutputDevice* pOutDev =
                 (bPixelGrf || bPixelContour) ? Application::GetDefaultDevice()
                                              : 0;
@@ -179,13 +177,12 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
                     else if( bPixelContour )
                     {
                         rPoly[i] = pOutDev->PixelToLogic( rPoly[i], aGrfMap );
-                        // --> OD #i102238#
+                        // #i102238#
                         if ( nGrfDPIx != 0 && nGrfDPIy != 0 )
                         {
                             rPoly[i] = Point( rPoly[i].X() * pOutDev->ImplGetDPIX() / nGrfDPIx,
                                               rPoly[i].Y() * pOutDev->ImplGetDPIY() / nGrfDPIy );
                         }
-                        // <--
                     }
                     else
                         rPoly[i] = OutputDevice::LogicToLogic( rPoly[i],
@@ -203,7 +200,7 @@ const PolyPolygon *SwNoTxtNode::HasContour() const
 
 void SwNoTxtNode::GetContour( PolyPolygon &rPoly ) const
 {
-    ASSERT( pContour, "Contour not available." );
+    OSL_ENSURE( pContour, "Contour not available." );
     rPoly = *HasContour();
 }
 
@@ -227,7 +224,7 @@ sal_Bool SwNoTxtNode::GetContourAPI( PolyPolygon &rContour ) const
     {
         const MapMode aGrfMap( GetGraphic().GetPrefMapMode() );
         const MapMode aContourMap( MAP_100TH_MM );
-        ASSERT( aGrfMap.GetMapUnit() != MAP_PIXEL ||
+        OSL_ENSURE( aGrfMap.GetMapUnit() != MAP_PIXEL ||
                 aGrfMap == MapMode( MAP_PIXEL ),
                     "scale factor for pixel unsupported" );
         if( aGrfMap.GetMapUnit() != MAP_PIXEL &&
@@ -280,18 +277,18 @@ Graphic SwNoTxtNode::GetGraphic() const
     }
     else
     {
-        ASSERT( GetOLENode(), "new type of Node?" );
+        OSL_ENSURE( GetOLENode(), "new type of Node?" );
         aRet = *((SwOLENode*)this)->SwOLENode::GetGraphic();
     }
     return aRet;
 }
 
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
 {
     // Title attribute of <SdrObject> replaces own AlternateText attribute
     SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
-    ASSERT( pFlyFmt,
+    OSL_ENSURE( pFlyFmt,
             "<SwNoTxtNode::SetTitle(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
@@ -304,7 +301,7 @@ void SwNoTxtNode::SetTitle( const String& rTitle, bool bBroadcast )
 const String SwNoTxtNode::GetTitle() const
 {
     const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
-    ASSERT( pFlyFmt,
+    OSL_ENSURE( pFlyFmt,
             "<SwNoTxtNode::GetTitle(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
@@ -317,7 +314,7 @@ const String SwNoTxtNode::GetTitle() const
 void SwNoTxtNode::SetDescription( const String& rDescription, bool bBroadcast )
 {
     SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(GetFlyFmt());
-    ASSERT( pFlyFmt,
+    OSL_ENSURE( pFlyFmt,
             "<SwNoTxtNode::SetDescription(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
@@ -330,7 +327,7 @@ void SwNoTxtNode::SetDescription( const String& rDescription, bool bBroadcast )
 const String SwNoTxtNode::GetDescription() const
 {
     const SwFlyFrmFmt* pFlyFmt = dynamic_cast<const SwFlyFrmFmt*>(GetFlyFmt());
-    ASSERT( pFlyFmt,
+    OSL_ENSURE( pFlyFmt,
             "<SwNoTxtNode::GetDescription(..)> - missing <SwFlyFrmFmt> instance" );
     if ( !pFlyFmt )
     {
@@ -339,4 +336,5 @@ const String SwNoTxtNode::GetDescription() const
 
     return pFlyFmt->GetObjDescription();
 }
-// <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

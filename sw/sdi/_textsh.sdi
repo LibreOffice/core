@@ -768,9 +768,6 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    /*-----------------24.01.97 07.33-------------------
-    Fussnoten - Befehle
---------------------------------------------------*/
 
     FN_INSERT_ENDNOTE // status(final|play)
     [
@@ -804,9 +801,7 @@ interface BaseText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    /*-----------------24.01.97 07.34-------------------
-    Ende Fussnoten
-    --------------------------------------------------*/
+
     FN_INSERT_FIELD // status(final|play)
     [
         ExecMethod = ExecField ;
@@ -1494,6 +1489,12 @@ interface BaseText
     SID_TRANSLITERATE_TOGGLE_CASE
     [
         ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_ROTATE_CASE
+    [
+        ExecMethod = ExecRotateTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

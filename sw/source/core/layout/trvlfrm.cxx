@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -108,8 +109,6 @@ static SwCrsrOszControl aOszCtrl = { 0, 0, 0 };
 |*
 |*  Beschreibung:       Sucht denjenigen CntntFrm, innerhalb dessen
 |*                      PrtArea der Point liegt.
-|*  Ersterstellung      MA 20. Jul. 92
-|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -121,12 +120,11 @@ sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     {
         pFrm->Calc();
 
-        // --> FME 2005-05-13 #i43742# New function: SW_CONTENT_CHECK
+        // #i43742# New function
         const bool bCntntCheck = pFrm->IsTxtFrm() && pCMS && pCMS->bCntntCheck;
         const SwRect aPaintRect( bCntntCheck ?
                                  pFrm->UnionFrm() :
                                  pFrm->PaintArea() );
-        // <--
 
         if ( aPaintRect.IsInside( rPoint ) &&
              ( bCntntCheck || pFrm->GetCrsrOfst( pPos, rPoint, pCMS ) ) )
@@ -145,8 +143,6 @@ sal_Bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*
 |*  Beschreibung:       Sucht die Seite, innerhalb der der gesuchte Point
 |*                      liegt.
-|*  Ersterstellung      MA 20. Jul. 92
-|*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
 
@@ -210,7 +206,7 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             if ( pCMS && pCMS->bStop )
                 return sal_False;
 
-            ASSERT( pCnt, "Crsr is gone to a Black hole" );
+            OSL_ENSURE( pCnt, "Crsr is gone to a Black hole" );
             if( pCMS && pCMS->pFill && pCnt->IsTxtFrm() )
                 bRet = pCnt->GetCrsrOfst( pPos, rPoint, pCMS );
             else
@@ -295,8 +291,6 @@ bool SwRootFrm::FillSelection( SwSelectionList& aSelList, const SwRect& rRect) c
 |*  Beschreibung:       Reicht Primaer den Aufruf an die erste Seite weiter.
 |*                      Wenn der 'reingereichte Point veraendert wird,
 |*                      so wird sal_False zurueckgegeben.
-|*  Ersterstellung      MA 01. Jun. 92
-|*  Letzte Aenderung    MA 30. Nov. 94
 |*
 |*************************************************************************/
 sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -304,7 +298,7 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 {
     sal_Bool bOldAction = IsCallbackActionEnabled();
     ((SwRootFrm*)this)->SetCallbackActionEnabled( sal_False );
-    ASSERT( (Lower() && Lower()->IsPageFrm()), "Keinen PageFrm gefunden." );
+    OSL_ENSURE( (Lower() && Lower()->IsPageFrm()), "Keinen PageFrm gefunden." );
     if( pCMS && pCMS->pFill )
         ((SwCrsrMoveState*)pCMS)->bFillRet = sal_False;
     Point aOldPoint = rPoint;
@@ -313,7 +307,7 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     // search for page containing rPoint. The borders around the pages are considerd
     const SwPageFrm* pPage = GetPageAtPos( rPoint, 0, true );
 
-    // --> OD 2008-12-23 #i95626#
+    // #i95626#
     // special handling for <rPoint> beyond root frames area
     if ( !pPage &&
          rPoint.X() > Frm().Right() &&
@@ -325,7 +319,6 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             pPage = dynamic_cast<const SwPageFrm*>(pPage->GetNext());
         }
     }
-    // <--
     if ( pPage )
     {
         pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS );
@@ -350,8 +343,6 @@ sal_Bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*                      der Crsr notfalls mit Gewalt in einen der CntntFrms
 |*                      gesetzt.
 |*                      In geschuetzte Zellen gibt es hier keinen Eingang.
-|*  Ersterstellung      MA 04. Jun. 93
-|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 sal_Bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
@@ -419,9 +410,6 @@ sal_Bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 /*************************************************************************
 |*
 |*  SwFlyFrm::GetCrsrOfst()
-|*
-|*  Ersterstellung      MA 15. Dec. 92
-|*  Letzte Aenderung    MA 23. May. 95
 |*
 |*************************************************************************/
 //Problem: Wenn zwei Flys genau gleich gross sind und auf derselben
@@ -515,8 +503,6 @@ sal_Bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 /*************************************************************************
 |*
 |*    Beschreibung      Layoutabhaengiges Cursortravelling
-|*    Ersterstellung    MA 23. Jul. 92
-|*    Letzte Aenderung  MA 06. Sep. 93
 |*
 |*************************************************************************/
 sal_Bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
@@ -579,10 +565,10 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
             if ( !pCell ||
-                    ( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
+                    (( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
                       ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) &&
-                        !pCell->IsCoveredCell() ) )
+                       !pCell->IsCoveredCell()) ) )
                 bProtect = sal_False;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
@@ -598,7 +584,7 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
 sal_Bool MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                     GetNxtPrvCnt fnNxtPrv, sal_Bool bInReadOnly )
 {
-    ASSERT( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
+    OSL_ENSURE( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
             "lcl_UpDown arbeitet nicht fuer andere." );
 
     const SwCntntFrm *pCnt = 0;
@@ -677,7 +663,7 @@ sal_Bool MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const SwFrm *pCell = pStart->GetUpper();
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
-            ASSERT( pCell, "Zelle nicht gefunden." );
+            OSL_ENSURE( pCell, "Zelle nicht gefunden." );
             nX =  (pCell->Frm().*fnRect->fnGetLeft)() +
                   (pCell->Frm().*fnRect->fnGetWidth)() / 2;
 
@@ -701,14 +687,14 @@ sal_Bool MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const long nPrtLeft = bRTL ?
                                 (pTable->*fnRect->fnGetPrtRight)() :
                                 (pTable->*fnRect->fnGetPrtLeft)();
-            if ( (bRTL != (nX < nPrtLeft)) )
+            if ( bRTL != (nX < nPrtLeft) )
                 nX = nPrtLeft;
             else
             {
                    const long nPrtRight = bRTL ?
                                     (pTable->*fnRect->fnGetPrtLeft)() :
                                     (pTable->*fnRect->fnGetPrtRight)();
-                if ( (bRTL != (nX > nPrtRight)) )
+                if ( bRTL != (nX > nPrtRight) )
                     nX = nPrtRight;
             }
         }
@@ -885,13 +871,11 @@ sal_Bool SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, sal_Bool bInReadOnly 
 |*          diejenige in der der PaM sitzt. Anderfalls ist die aktuelle
 |*          Seite die erste Seite innerhalb der VisibleArea.
 |*          Es wird nur auf den vorhandenen Seiten gearbeitet!
-|*  Ersterstellung      MA 20. May. 92
-|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
-    ASSERT( pActualCrsr, "Welche Seite soll's denn sein?" );
+    OSL_ENSURE( pActualCrsr, "Welche Seite soll's denn sein?" );
     SwFrm const*const pActFrm = pActualCrsr->GetPoint()->nNode.GetNode().
                                     GetCntntNode()->getLayoutFrm( this, 0,
                                                     pActualCrsr->GetPoint(),
@@ -909,13 +893,11 @@ sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 |*          Liefert Null, wenn die Operation nicht moeglich ist.
 |*          Der PaM sitzt in der letzten Seite, wenn die Seitenzahl zu gross
 |*          gewaehlt wurde.
-|*  Ersterstellung      MA 20. May. 92
-|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 {
-    ASSERT( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
+    OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
 
     SwPageFrm *pPage = (SwPageFrm*)Lower();
     sal_Bool bEnd =sal_False;
@@ -981,8 +963,6 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 |*      andere Anfang/Ende.
 |*      Fuer die Bestimmung der Seite und des Cntnt (Anfang/Ende) werden
 |*      die im folgenden definierten Funktionen benutzt.
-|*    Ersterstellung    MA 15. Oct. 92
-|*    Letzte Aenderung  MA 28. Feb. 93
 |*
 |*************************************************************************/
 SwCntntFrm *GetFirstSub( const SwLayoutFrm *pLayout )
@@ -1097,8 +1077,6 @@ sal_Bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
  *                      erweitert bis einer gefunden wird.
 |*                      Zurueckgegeben wird die 'Semantisch richtige' Position
 |*                      innerhalb der PrtArea des gefundenen CntntFrm
-|*  Ersterstellung      MA 15. Jul. 92
-|*  Letzte Aenderung    MA 09. Jan. 97
 |*
 |*************************************************************************/
 sal_uLong CalcDiff( const Point &rPt1, const Point &rPt2 )
@@ -1283,10 +1261,10 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
             break;
     }
 
-#ifdef DBG_UTIL
-    ASSERT( pActual, "Keinen Cntnt gefunden." );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( pActual, "Keinen Cntnt gefunden." );
     if ( bBodyOnly )
-        ASSERT( pActual->IsInDocBody(), "Cnt nicht im Body." );
+        OSL_ENSURE( pActual->IsInDocBody(), "Cnt nicht im Body." );
 #endif
 
     //Spezialfall fuer das selektieren von Tabellen, nicht in wiederholte
@@ -1351,9 +1329,6 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
 |*
 |*  Beschreibung        Analog zu SwLayoutFrm::GetCntntPos().
 |*                      Spezialisiert fuer Felder in Rahmen.
-|*
-|*  Ersterstellung      MA 22. Mar. 95
-|*  Letzte Aenderung    MA 07. Nov. 95
 |*
 |*************************************************************************/
 void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
@@ -1432,7 +1407,7 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
     {
         // CntntFrm nicht formatiert -> immer auf Node-Anfang
         SwCntntNode* pCNd = (SwCntntNode*)pAct->GetNode();
-        ASSERT( pCNd, "Wo ist mein CntntNode?" );
+        OSL_ENSURE( pCNd, "Wo ist mein CntntNode?" );
         rPos.nNode = *pCNd;
         rPos.nContent.Assign( pCNd, 0 );
     }
@@ -1449,12 +1424,10 @@ void SwPageFrm::GetCntntPosition( const Point &rPt, SwPosition &rPos ) const
 |*
 |*  Beschreibung        Es wird der naechstliegende Cntnt zum uebergebenen
 |*                      Point gesucht. Es wird nur im BodyText gesucht.
-|*  Ersterstellung      MA 15. Jul. 92
-|*  Letzte Aenderung    JP 11.10.2001
 |*
 |*************************************************************************/
 
-// --> OD 2005-05-25 #123110# - helper class to disable creation of an action
+// #123110# - helper class to disable creation of an action
 // by a callback event - e.g., change event from a drawing object
 class DisableCallbackAction
 {
@@ -1475,17 +1448,15 @@ class DisableCallbackAction
             mrRootFrm.SetCallbackActionEnabled( mbOldCallbackActionState );
         }
 };
-// <--
 
 //!!!!! Es wird nur der vertikal naechstliegende gesucht.
 //JP 11.10.2001: only in tables we try to find the right column - Bug 72294
 Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, sal_Bool bNext ) const
 {
-    // --> OD 2005-05-25 #123110# - disable creation of an action by a callback
+    // #123110# - disable creation of an action by a callback
     // event during processing of this method. Needed because formatting is
     // triggered by this method.
     DisableCallbackAction aDisableCallbackAction( *this );
-    // <--
     //Ersten CntntFrm und seinen Nachfolger im Body-Bereich suchen
     //Damit wir uns nicht tot suchen (und vor allem nicht zuviel formatieren)
     //gehen wir schon mal von der richtigen Seite aus.
@@ -1571,13 +1542,11 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, sal_Bool bNext ) cons
 |*          Liefert Null, wenn die Operation nicht moeglich ist.
 |*          Die Pos ist die der letzten Seite, wenn die Seitenzahl zu gross
 |*          gewaehlt wurde.
-|*  Ersterstellung      MA 01. Jun. 92
-|*  Letzte Aenderung    MA 09. Oct. 97
 |*
 |*************************************************************************/
 Point SwRootFrm::GetPagePos( sal_uInt16 nPageNum ) const
 {
-    ASSERT( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
+    OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Keine Seite vorhanden." );
 
     const SwPageFrm *pPage = (const SwPageFrm*)Lower();
     while ( sal_True )
@@ -1640,8 +1609,6 @@ sal_Bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
 |*                      geschuetzt?
 |*                      Auch Fly in Fly in ... und Fussnoten
 |*
-|*    Ersterstellung    MA 28. Jul. 93
-|*    Letzte Aenderung  MA 06. Nov. 97
 |*
 |*************************************************************************/
 sal_Bool SwFrm::IsProtected() const
@@ -1705,8 +1672,6 @@ sal_Bool SwFrm::IsProtected() const
 |*    SwFrm::GetPhyPageNum()
 |*    Beschreibung:     Liefert die physikalische Seitennummer
 |*
-|*    Ersterstellung    OK 06.07.93 08:35
-|*    Letzte Aenderung  MA 30. Nov. 94
 |*
 |*************************************************************************/
 sal_uInt16 SwFrm::GetPhyPageNum() const
@@ -1715,7 +1680,7 @@ sal_uInt16 SwFrm::GetPhyPageNum() const
     return pPage ? pPage->GetPhyPageNum() : 0;
 }
 
-/*-----------------26.02.01 11:25-------------------
+/*--------------------------------------------------
  * SwFrm::WannaRightPage()
  * decides if the page want to be a rightpage or not.
  * If the first content of the page has a page descriptor,
@@ -1763,7 +1728,7 @@ sal_Bool SwFrm::WannaRightPage() const
             pDesc = (SwPageDesc*)&pDoc->GetPageDesc( 0 );
         }
     }
-    ASSERT( pDesc, "No pagedescriptor" );
+    OSL_ENSURE( pDesc, "No pagedescriptor" );
     sal_Bool bOdd;
     if( nPgNum )
         bOdd = nPgNum % 2 ? sal_True : sal_False;
@@ -1787,9 +1752,6 @@ sal_Bool SwFrm::WannaRightPage() const
 |*
 |*    SwFrm::GetVirtPageNum()
 |*    Beschreibung:     Liefert die virtuelle Seitennummer mit Offset
-|*
-|*    Ersterstellung    OK 06.07.93 08:35
-|*    Letzte Aenderung  MA 30. Nov. 94
 |*
 |*************************************************************************/
 sal_uInt16 SwFrm::GetVirtPageNum() const
@@ -1844,9 +1806,6 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
 |*
 |*  SwRootFrm::MakeTblCrsrs()
 |*
-|*  Ersterstellung      MA 14. May. 93
-|*  Letzte Aenderung    MA 02. Feb. 94
-|*
 |*************************************************************************/
 //Ermitteln und einstellen derjenigen Zellen die von der Selektion
 //eingeschlossen sind.
@@ -1854,7 +1813,7 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
 bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 {
     //Union-Rects und Tabellen (Follows) der Selektion besorgen.
-    ASSERT( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( sal_False ),
+    OSL_ENSURE( rTblCrsr.GetCntntNode() && rTblCrsr.GetCntntNode( sal_False ),
             "Tabselection nicht auf Cnt." );
 
     bool bRet = false;
@@ -1874,7 +1833,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
         }
     }
 
-    // --> FME 2008-01-14 #151012# Made code robust here:
+    // #151012# Made code robust here
     const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
     const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(sal_False);
 
@@ -1884,8 +1843,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
     const SwLayoutFrm* pStart = pTmpStartFrm ? pTmpStartFrm->GetUpper() : 0;
     const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;
 
-    ASSERT( pStart && pEnd, "MakeTblCrsrs: Good to have the code robust here!" )
-    // <--
+    OSL_ENSURE( pStart && pEnd, "MakeTblCrsrs: Good to have the code robust here!" );
 
     /* #109590# Only change table boxes if the frames are
         valid. Needed because otherwise the table cursor after moving
@@ -1917,7 +1875,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
                     while ( pCell && pRow->IsAnLower( pCell ) )
                     {
-                        ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                        OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Celle" );
                         if( IsFrmInTblSel( pUnion->GetUnion(), pCell ) &&
                             (bReadOnlyAvailable ||
                              !pCell->GetFmt()->GetProtect().IsCntntProtected()))
@@ -1945,7 +1903,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                                 while( !pCell->IsCellFrm() )
                                 {
                                     pCell = pCell->GetUpper();
-                                    ASSERT( pCell, "Where's my cell?" );
+                                    OSL_ENSURE( pCell, "Where's my cell?" );
                                 }
                             }
                         }
@@ -1966,9 +1924,6 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 /*************************************************************************
 |*
 |*  SwRootFrm::CalcFrmRects
-|*
-|*  Ersterstellung      MA 24. Aug. 92
-|*  Letzte Aenderung    MA 24. Aug. 93
 |*
 |*************************************************************************/
 
@@ -2017,30 +1972,16 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 
     ViewShell *pSh = GetCurrShell();
 
-// --> FME 2004-06-08 #i12836# enhanced pdf
+// #i12836# enhanced pdf
     SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?
                            pSh->VisArea() :
                            Frm() );
-// <--
     if( !pStartPos->nNode.GetNode().IsCntntNode() ||
         !pStartPos->nNode.GetNode().GetCntntNode()->getLayoutFrm(this) ||
         ( pStartPos->nNode != pEndPos->nNode &&
           ( !pEndPos->nNode.GetNode().IsCntntNode() ||
             !pEndPos->nNode.GetNode().GetCntntNode()->getLayoutFrm(this) ) ) )
     {
-        /* For SelectAll we will need something like this later on...
-        const SwFrm* pPageFrm = GetLower();
-        while( pPageFrm )
-        {
-            SwRect aTmp( pPageFrm->Prt() );
-            aTmp.Pos() += pPageFrm->Frm().Pos();
-            Sub( aRegion, aTmp );
-            pPageFrm = pPageFrm->GetNext();
-        }
-        aRegion.Invert();
-        rCrsr.Remove( 0, rCrsr.Count() );
-        rCrsr.Insert( &aRegion, 0 );
-        */
         return;
     }
 
@@ -2052,7 +1993,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
     SwCntntFrm const* pEndFrm   = pEndPos->nNode.GetNode().
         GetCntntNode()->getLayoutFrm( this, &rCrsr.GetEndPos(), pEndPos );
 
-    ASSERT( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
+    OSL_ENSURE( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
 
     //Damit die FlyFrms, in denen selektierte Frames stecken, nicht
     //abgezogen werden
@@ -2060,9 +2001,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
     if ( pStartFrm->IsInFly() )
     {
         const SwAnchoredObject* pObj = pStartFrm->FindFlyFrm();
-        aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
+        OSL_ENSURE( pObj, "No Start Object." );
+        if (pObj) aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
         const SwAnchoredObject* pObj2 = pEndFrm->FindFlyFrm();
-        aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
+        OSL_ENSURE( pObj2, "No Start Object." );
+        if (pObj2) aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
     }
 
     //Fall 4: Tabellenselection
@@ -2096,7 +2039,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             if( !pEndLFrm )
                 break;
 
-            ASSERT( pEndLFrm->GetType() == pSttLFrm->GetType(),
+            OSL_ENSURE( pEndLFrm->GetType() == pSttLFrm->GetType(),
                     "Selection ueber unterschiedliche Inhalte" );
             switch( pSttLFrm->GetType() )
             {
@@ -2510,13 +2453,12 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
             SwRect aPrvRect;
 
-            // --> OD 2006-01-24 #123908# - introduce robust code:
+            // #123908# - introduce robust code
             // The stacktrace issue reveals that <pCntnt> could be NULL.
             // One root cause found by AMA - see #130650#
-            ASSERT( pCntnt,
+            OSL_ENSURE( pCntnt,
                     "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
             while ( pCntnt && pCntnt != pEndFrm )
-            // <--
             {
                 if ( pCntnt->IsInFly() )
                 {
@@ -2553,10 +2495,9 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                     }
                 }
                 pCntnt = pCntnt->GetNextCntntFrm();
-                // --> OD 2006-01-24 #123908#
-                ASSERT( pCntnt,
+                // #123908#
+                OSL_ENSURE( pCntnt,
                         "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
-                // <--
             }
             if ( aPrvRect.HasArea() )
                 Sub( aRegion, aPrvRect );
@@ -2620,7 +2561,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                     const sal_uInt32 nPos = pObj->GetOrdNum();
                     for ( sal_uInt16 k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
-                        ASSERT( aSortObjs[k]->ISA(SwFlyFrm),
+                        OSL_ENSURE( aSortObjs[k]->ISA(SwFlyFrm),
                                 "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do
@@ -2659,3 +2600,4 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

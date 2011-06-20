@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 
 #include <format.hxx>
 
-class SwCharFmt : public SwFmt
+class SW_DLLPUBLIC SwCharFmt : public SwFmt
 {
     friend class SwDoc;
     friend class SwTxtFmtColl;
@@ -45,7 +46,7 @@ class SwCharFmt : public SwFmt
 
 
 public:
-    TYPEINFO();    //Bereits in Basisklasse Client drin.
+    TYPEINFO();    // already in base class Client
 };
 
 namespace CharFmt
@@ -59,3 +60,4 @@ namespace CharFmt
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

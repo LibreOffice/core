@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,7 @@ public:
     void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }
     const SwRect& GetOrgRect() const { return aOrgRect; }
 
-    sal_Bool IsFlushable() { return 0 != pOut; }
+    sal_Bool IsFlushable() const { return 0 != pOut; }
     void _Flush();
     void Flush() { if( pOut ) _Flush(); }
 };
@@ -72,3 +73,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <frmfmt.hxx>
 #include <wrtasc.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 
 //-----------------------------------------------------------------
 
@@ -52,10 +51,8 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
     switch( 5 <= rFltNm.Len() ? rFltNm.GetChar( 4 ) : 0 )
     {
     case 'D':
-#if !defined(PM2)
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
-#endif
                 if( 5 < rFltNm.Len() )
                     switch( rFltNm.Copy( 5 ).ToInt32() )
                     {
@@ -181,7 +178,6 @@ sal_uLong SwASCWriter::WriteStream()
                                     sal_uInt8(0xBF);
                                 break;
                             case RTL_TEXTENCODING_UCS2:
-                                //Strm().StartWritingUnicodeText();
                                 Strm().SetEndianSwap(sal_False);
 #ifdef OSL_LITENDIAN
                                 Strm() << sal_uInt8(0xFF) << sal_uInt8(0xFE);
@@ -223,3 +219,4 @@ void GetASCWriter( const String& rFltNm, const String& /*rBaseURL*/, WriterRef& 
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

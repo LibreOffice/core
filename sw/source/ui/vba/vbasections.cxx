@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -87,6 +88,15 @@ public:
         }
     }
 
+    SectionCollectionHelper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) throw (uno::RuntimeException) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel )
+    {
+        // Hacky implementation of Range.Sections, only support 1 secction
+        uno::Reference< beans::XPropertySet > xRangeProps( xTextRange, uno::UNO_QUERY_THROW );
+        uno::Reference< style::XStyle > xStyle = word::getCurrentPageStyle( mxModel, xRangeProps );
+        uno::Reference< beans::XPropertySet > xPageProps( xStyle, uno::UNO_QUERY_THROW );
+        mxSections.push_back( xPageProps );
+    }
+
     ~SectionCollectionHelper(){}
 
     // XIndexAccess
@@ -131,6 +141,10 @@ public:
 };
 
 SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ): SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel ) ) ),  mxModel( xModel )
+{
+}
+
+SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ): SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel, xTextRange ) ) ),  mxModel( xModel )
 {
 }
 
@@ -184,3 +198,5 @@ SwVbaSections::getServiceNames()
     }
     return sNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

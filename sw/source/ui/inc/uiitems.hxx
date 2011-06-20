@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@ class SwNumRule;
 class IntlWrapper;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Container fuer FootNote
+    Description: container for FootNote
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwPageFtnInfoItem : public SfxPoolItem
 {
@@ -56,15 +57,13 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     SwPageFtnInfo& GetPageFtnInfo()             { return aFtnInfo; }
     const SwPageFtnInfo& GetPageFtnInfo() const { return aFtnInfo; }
     void SetPageFtnInfo(SwPageFtnInfo& rInf)    { aFtnInfo = rInf; }
 };
-
-/*******************************************************************/
 
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
 {
@@ -81,8 +80,6 @@ public:
     void*   GetValue() const        { return pMisc; }
 };
 
-/*******************************************************************/
-
 class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
 {
     SwNumRule* pRule;
@@ -95,16 +92,13 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     const SwNumRule* GetNumRule() const         { return pRule; }
           SwNumRule* GetNumRule()               { return pRule; }
 };
 
-/* -----------------17.06.98 17:40-------------------
- *
- * --------------------------------------------------*/
 class SwBackgroundDestinationItem : public SfxUInt16Item
 {
 public:
@@ -114,3 +108,5 @@ public:
 };
 
 #endif // _UIITEMS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,17 +32,13 @@
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HXX_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
 #include <map>
 
 #include <boost/weak_ptr.hpp>
+
 class SwAsyncRetrieveInputStreamThreadConsumer;
-//#ifndef _RETRIEVEINPUTSTREAMCONSUMER_HXX
-//#include <retrieveinputstreamconsumer.hxx>
-//#endif
 
 /** Singleton class to manage retrieved input stream data in Writer
 
@@ -109,3 +106,5 @@ class SwRetrievedInputStreamDataManager
         };
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

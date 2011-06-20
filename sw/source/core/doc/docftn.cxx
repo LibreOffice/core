@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -175,7 +176,7 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
 
 void SwEndNoteInfo::SetCharFmt( SwCharFmt* pChFmt )
 {
-    DBG_ASSERT(pChFmt, "kein CharFmt?");
+    OSL_ENSURE(pChFmt, "kein CharFmt?");
     pChFmt->Add( &((SwClient&)aCharFmtDep) );
 }
 
@@ -192,7 +193,7 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
 
 void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
 {
-    DBG_ASSERT(pChFmt, "kein CharFmt?");
+    OSL_ENSURE(pChFmt, "kein CharFmt?");
     pChFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
 }
 
@@ -329,8 +330,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             pFtnInfo->ModifyNotification( &aOld, &aNew );
         }
 
-        // --> OD 2008-01-09 #i81002#
-        // no update during loading
+        // #i81002# no update during loading
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);
@@ -399,8 +399,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             pEndNoteInfo->ModifyNotification( &aOld, &aNew );
         }
 
-        // --> OD 2008-01-09 #i81002#
-        // no update during loading
+        // #i81002# no update during loading
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);
@@ -445,8 +444,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 nSttCnt <= *pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( /*rFtn.GetNumber() != nNumber ||*/
-                rFtn.GetNumStr() != rNumStr ||
+            if( rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
                 bChg = sal_True;
@@ -477,8 +475,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             nEndCnt >= *pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( /*rFtn.GetNumber() != nNumber ||*/
-                rFtn.GetNumStr() != rNumStr ||
+            if( rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
                 bChg = sal_True;
@@ -529,3 +526,4 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,15 +31,13 @@
 
 
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/htmlmode.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 #include <sfx2/mnumgr.hxx>
 
 
@@ -49,17 +48,12 @@
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "viewopt.hxx"
-#include "errhdl.hxx"
 #include "ribbar.hrc"
 #include "tbxanchr.hxx"
 
 
 
 SFX_IMPL_TOOLBOX_CONTROL(SwTbxAnchor, SfxUInt16Item);
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 SwTbxAnchor::SwTbxAnchor( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
@@ -68,17 +62,9 @@ SwTbxAnchor::SwTbxAnchor( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
-
  SwTbxAnchor::~SwTbxAnchor()
 {
 }
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -93,19 +79,11 @@ void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const
 
 }
 
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
-
 SfxPopupWindow* SwTbxAnchor::CreatePopupWindow()
 {
     SwTbxAnchor::Click();
     return 0;
 }
-
-/******************************************************************************
- *  Beschreibung:
- ******************************************************************************/
 
 void  SwTbxAnchor::Click()
 {
@@ -122,8 +100,6 @@ void  SwTbxAnchor::Click()
             pDispatch = pViewFrame->GetDispatcher();
     }
 
-//    SfxDispatcher* pDispatch = GetBindings().GetDispatcher();
-//    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
     SwView* pActiveView = 0;
     if(pViewFrame)
     {
@@ -141,7 +117,7 @@ void  SwTbxAnchor::Click()
     }
     if(!pActiveView)
     {
-        DBG_ERROR("No active view could be found");
+        OSL_FAIL("No active view found");
         return;
     }
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();
@@ -164,3 +140,5 @@ void  SwTbxAnchor::Click()
     if (nSlotId)
         pDispatch->Execute(nSlotId, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

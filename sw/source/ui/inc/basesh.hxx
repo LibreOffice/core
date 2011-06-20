@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <shellid.hxx>
 
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_USHORTS
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
@@ -39,6 +39,7 @@
 #include <svl/svstdarr.hxx>
 
 #include <mdiexp.hxx>
+#include <set>
 
 class SwWrtShell;
 class SwCrsrShell;
@@ -51,15 +52,15 @@ class SwBaseShell: public SfxShell
 {
     SwView      &rView;
 
-    // DragModus
+    // DragMode
     static FlyMode eFrameMode;
 
     // Bug 75078 - if in GetState the asynch call of GetGraphic returns
     //              synch, the set the state directly into the itemset
     SfxItemSet*         pGetStateSet;
 
-    //Update-Timer fuer Graphic
-    SvUShortsSort aGrfUpdateSlots;
+    // Update-Timer for graphic
+    std::set<sal_uInt16> aGrfUpdateSlots;
 
     DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
 
@@ -69,7 +70,7 @@ protected:
 
     inline SwView&      GetView()                       { return rView; }
     inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    inline sal_Bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.Insert( nSlot ); }
+    inline sal_Bool     AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
 
     DECL_STATIC_LINK(   SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 
@@ -117,7 +118,7 @@ public:
 
     void        ExecField(SfxRequest& rReq);
 
-    static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  //Mit Update!
+    static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  // with update!
     static void   _SetFrmMode( FlyMode eMode )   { eFrameMode = eMode; }
     static FlyMode  GetFrmMode()                 { return eFrameMode;  }
 
@@ -125,3 +126,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

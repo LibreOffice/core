@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,136 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <mathtype.hxx>
-
-#ifndef _TOOLS_DEBUG_H
-#include <tools/debug.hxx>
-#endif
-
+#include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
 
 #define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
-
-#if 0
-String aEmbelList[21] =
-{
-    " ",
-    " ",
-    "single dot",
-    "double dot",
-    "triple dot",
-    "single prime",
-    "double prime",
-    "backwards prime (left of character)",
-    "tilde",
-    "hat (circumflex)",
-    "diagonal slash through character",
-    "right arrow",
-    "left arrow",
-    "double-headed arrow",
-    "right single-barbed arrow",
-    "left single-barbed arrow",
-    "mid-height horizontal bar",
-    "over-bar",
-    "triple prime",
-    "over-arc, concave downward",
-    "over-arc, concave upward"
-};
-
-String aSelectorList[49] =
-{
-    "angle brackets",
-    "parentheses",
-    "braces (curly brackets)",
-    "square brackets",
-    "vertical bars",
-    "double vertical bars",
-    "floor brackets",
-    "ceiling brackets",
-    "left brace, left brace",
-    "right brace, right brace",
-    "right brace, left brace",
-    "left brace, right parenthesis",
-    "left parenthesis, right brace",
-    "radical",
-    "fractions",
-    "subscript/superscript",
-    "underbar",
-    "overbar",
-    "left-pointing arrow",
-    "right-pointing arrow",
-    "left- and right-pointing arrow",
-    "single integral",
-    "double integral",
-    "triple integral",
-    "single summation-style integral",
-    "double summation-style integral",
-    "triple summation-style integral",
-    "upper horizontal brace",
-    "lower horizontal brace",
-    "summation",
-    "summation (integral-style limits)",
-    "product",
-    "product (integral-style limits)",
-    "coproduct",
-    "coproduct (integral-style limits)",
-    "union",
-    "union (integral-style limits)",
-    "intersection",
-    "intersection (integral-style limits)",
-    "limit",
-    "long division",
-    "slash fractions",
-    "big integral-style operators",
-    "big summation-style operators",
-    "leading sub- and superscripts",
-    "Dirac delta",
-    "under arrow",
-    "over arrow",
-    "over arc"
-};
-
-String aIntegralOpt[2] =
-{
-    "fixed-size integral",
-    "integral expands vertically to fit its contents"
-};
-
-String aFenceOpt[3] =
-{
-    "center fence on math axis",
-    "center fence on contents, place math axis of contents on math axis of containing line",
-    "center fence on contents, center contents on math axis of containing line"
-};
-
-String aTypeFaces[12] =
-{
-    "",
-    "fnTEXT",
-    "fnFUNCTION",
-    "fnVARIABLE",
-    "fnLCGREEK",
-    "fnUCGREEK",
-    "fnSYMBOL",
-    "fnVECTOR",
-    "fnNUMBER",
-    "fnUSER1",
-    "fnUSER2",
-    "fnMTEXTRA"
-};
-
-String aSizes[7] =
-{
-    "full",
-    "subscript",
-    "sub-subscript",
-    "symbol",
-    "sub-symbol",
-    "user 1",
-    "user 2"
-};
-#endif
 
 static sal_Unicode Convert(sal_Unicode nIn)
 {
@@ -246,7 +122,7 @@ void MathType::Init()
 sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
     sal_uInt8 nTypeFace)
 {
-    sal_Bool bRet=sal_False;
+    bool bRet=false;
     const char *pC = NULL;
     switch(nChar)
     {
@@ -280,56 +156,56 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             else
             {
                 rRet.Append(nChar);
-                bRet=sal_True;
+                bRet=true;
             }
             break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
                 nChar = 0xDF;
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 'a':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b1;
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 'b':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3b2;
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 'l':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bb;
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 'n':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3bd;
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 'r':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x3c1;
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 'D':
             if ((nVersion < 3) && (nTypeFace == 0x84))
                 nChar = 0x394;
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 0xa9:
             if ((nVersion < 3) && (nTypeFace == 0x82))
                 nChar = '\'';
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
         case 0x00f1:
             if ((nVersion < 3) && (nTypeFace == 0x86))
@@ -337,7 +213,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             else
             {
                 rRet.Append(nChar);
-                bRet=sal_True;
+                bRet=true;
             }
             break;
         case 0x00a3:
@@ -346,7 +222,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             else
             {
                 rRet.Append(nChar);
-                bRet=sal_True;
+                bRet=true;
             }
             break;
         case 0x00de:
@@ -355,7 +231,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             else
             {
                 rRet.Append(nChar);
-                bRet=sal_True;
+                bRet=true;
             }
             break;
         case 0x0057:
@@ -364,7 +240,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             else
             {
                 rRet.Append(nChar);
-                bRet=sal_True;
+                bRet=true;
             }
             break;
         case 0x007b:
@@ -620,7 +496,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         case 0xe083:
             rRet.Append('+');
-            bRet=sal_True;
+            bRet=true;
             break;
         case '^':
         case 0xe091:
@@ -640,7 +516,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         case 0xeb01:    //no space
         case 0xeb08:    //normal space
-            bRet=sal_True;
+            bRet=true;
             break;
         case 0xef04:    //tiny space
         case 0xef05:    //tiny space
@@ -656,7 +532,7 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         default:
             rRet.Append(nChar);
-            bRet=sal_True;
+            bRet=true;
             break;
     }
     if (pC)
@@ -740,7 +616,7 @@ int MathType::Parse(SotStorage *pStor)
     //sigh, theres no point! MathType (in some bizarre subvarient) pads
     //the end of the formula with ENDs (0)'s
     sal_uLong nEnd = pS->Tell();
-    DBG_ASSERT(nEnd == pS->Seek(STREAM_SEEK_TO_END),
+    OSL_ENSURE(nEnd == pS->Seek(STREAM_SEEK_TO_END),
         "Possibly unfully parsed formula");
 #   endif
 #endif
@@ -761,7 +637,7 @@ static void lcl_PrependDummyTerm(String &rRet, xub_StrLen &rTextStart)
 
 static void lcl_AppendDummyTerm(String &rRet)
 {
-    sal_Bool bOk=sal_False;
+    bool bOk=false;
     for(int nI=rRet.Len()-1;nI >= 0; nI--)
     {
         xub_StrLen nIdx = sal::static_int_cast< xub_StrLen >(nI);
@@ -769,7 +645,7 @@ static void lcl_AppendDummyTerm(String &rRet)
         if (nChar == ' ')
             continue;
         if (rRet.GetChar(nIdx) != '{')
-            bOk=sal_True;
+            bOk=true;
         break;
     }
     if (!bOk)   //No term, use dummy
@@ -801,12 +677,12 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     sal_Char nChar8;
     String sFontName;
     int i,nRet=1,newline=0;
-    sal_Bool bSilent=sal_False;
+    bool bSilent=false;
     int nPart=0;
     String sPush,sMainTerm;
     int nSetSize=0,nSetAlign=0;
     int nCurRow=0,nCurCol=0;
-    sal_Bool bOpenString=sal_False;
+    bool bOpenString=false;
     xub_StrLen nTextStart = 0;
     xub_StrLen nSubSupStartPos = 0;
     xub_StrLen nLastTemplateBracket=STRING_NOTFOUND;
@@ -828,12 +704,12 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
          */
         if ((nRecord == CHAR) && (!bIsSilent) && (!bOpenString))
         {
-            bOpenString=sal_True;
+            bOpenString=true;
             nTextStart = rRet.Len();
         }
         else if ((nRecord != CHAR) && (bOpenString))
         {
-            bOpenString=sal_False;
+            bOpenString=false;
             if ((rRet.Len() - nTextStart) > 1)
             {
                 String aStr;
@@ -862,8 +738,6 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 {
                     if (xfLMOVE(nTag))
                         HandleNudge();
-                    //if (xfLSPACE(nTag))
-                    //if (xfRULER(nTag))
 
                     if (newline>0)
                         APPEND(rRet,"\nnewline\n");
@@ -1408,19 +1282,19 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         nRet = HandleRecords(nLevel+1);
                         while (nSetSize)
                         {
-                            sal_Bool bOk=sal_False;
+                            bool bOk=false;
                             xub_StrLen nI = rRet.SearchBackward('{');
                             if (nI != STRING_NOTFOUND)
                             {
                                 for(nI=nI+1;nI<rRet.Len();nI++)
                                     if (rRet.GetChar(nI) != ' ')
                                     {
-                                        bOk=sal_True;
+                                        bOk=true;
                                         break;
                                     }
                             }
                             else
-                                bOk=sal_True;
+                                bOk=true;
 
                             if (bOk)
                                 APPEND(rRet,"} ");
@@ -1533,19 +1407,19 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                     ((nVariation == 2) || (nVariation == 1)))
                                 newline--;
 
-                            sal_Bool bOk=sal_False;
+                            bool bOk=false;
                             xub_StrLen nI = rRet.SearchBackward('{');
                             if (nI != STRING_NOTFOUND)
                             {
                                 for(nI=nI+1;nI<rRet.Len();nI++)
                                     if (rRet.GetChar(nI) != ' ')
                                     {
-                                        bOk=sal_True;
+                                        bOk=true;
                                         break;
                                     }
                             }
                             else
-                                bOk=sal_True;
+                                bOk=true;
 
                             if (bOk)
                                 APPEND(rRet,"} ");
@@ -1827,7 +1701,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                         default:
                             break;
                         }
-                        bSilent = sal_True; //Skip the optional brackets and/or
+                        bSilent = true; //Skip the optional brackets and/or
                                         //symbols that follow some of these
                                         //records. Foo Data.
 
@@ -1874,7 +1748,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                     *pS >> nTabType;
                     *pS >> nTabOffset;
                 }
-                DBG_ASSERT(sal_False,"Not seen in the wild Equation Ruler Field");
+                OSL_FAIL("Not seen in the wild Equation Ruler Field");
                 break;
             case FONT:
                 {
@@ -1972,12 +1846,6 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSet
         APPEND(rRet,"alignr {");
         break;
     }
-#if 0
-    switch(nVAlign)
-    {
-    }
-    rSetAlign+=2;
-#endif
     rSetAlign++;
 }
 
@@ -1985,7 +1853,7 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSet
  * indicator by mathtype file format*/
 sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
 {
-    sal_Bool bRet=sal_False;
+    bool bRet=false;
     if (nLstSize < 0)
     {
         if ((-nLstSize/32 != nDefaultSize) && (-nLstSize/32 != nCurSize))
@@ -1994,7 +1862,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
             {
                 rSetSize--;
                 rRet += '}';
-                bRet=sal_True;
+                bRet=true;
             }
             if (-nLstSize/32 != nLastSize)
             {
@@ -2002,7 +1870,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
                 APPEND(rRet," size ");
                 rRet += String::CreateFromInt32(-nLstSize/32);
                 rRet += '{';
-                bRet=sal_True;
+                bRet=true;
                 rSetSize++;
             }
             nCurSize = -nLstSize/32;
@@ -2017,14 +1885,13 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
          itself anyway in which case the size setting could be ignored*/
         nLstSize = aSizeTable[nLstSize];
         nLstSize = nLstSize + nDefSize;
-        //if (nLstSize != nDefaultSize)
         if (nLstSize != nCurSize)
         {
             if (rSetSize)
             {
                 rSetSize--;
                 rRet += '}';
-                bRet=sal_True;
+                bRet=true;
             }
             if (nLstSize != nLastSize)
             {
@@ -2032,7 +1899,7 @@ sal_Bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSi
                 APPEND(rRet," size ");
                 rRet += String::CreateFromInt32(nLstSize);
                 rRet += '{';
-                bRet=sal_True;
+                bRet=true;
                 rSetSize++;
             }
             nCurSize = nLstSize;
@@ -2049,13 +1916,13 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
     SvStream *pStream = rMedium.GetOutStream();
     if ( pStream )
     {
-        SvStorageRef pStor = new SotStorage( pStream, sal_False );
+        SvStorageRef pStor = new SotStorage( pStream, false );
 
         SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
             0x00,0x00,0x00,0x00,0x00,0x46 );
         pStor->SetClass( aGName, 0, C2S("Microsoft Equation 3.0"));
 
-        static sal_uInt8 __READONLY_DATA aCompObj[] = {
+        static sal_uInt8 const aCompObj[] = {
             0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
             0xFF, 0xFF, 0xFF, 0xFF, 0x02, 0xCE, 0x02, 0x00,
             0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00,
@@ -2073,7 +1940,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
         SvStorageStreamRef xStor( pStor->OpenSotStream( C2S("\1CompObj")));
         xStor->Write(aCompObj,sizeof(aCompObj));
 
-        static sal_uInt8 __READONLY_DATA aOle[] = {
+        static sal_uInt8 const aOle[] = {
             0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00
@@ -2116,7 +1983,7 @@ int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 
 sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
 {
-    sal_Bool bRet=sal_False;
+    bool bRet=false;
     switch(pNode->GetType())
     {
         case NATTRIBUT:
@@ -2297,7 +2164,6 @@ void MathType::HandleTable(SmNode *pNode,int nLevel)
 
 void MathType::HandleRoot(SmNode *pNode,int nLevel)
 {
-    //sal_uInt16  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
     *pS << sal_uInt8(TMPL); //Template
     *pS << sal_uInt8(0x0D); //selector
@@ -2307,10 +2173,6 @@ void MathType::HandleRoot(SmNode *pNode,int nLevel)
         *pS << sal_uInt8(0x00); //variation
     *pS << sal_uInt8(0x00); //options
 
-    /*
-    if (pTemp = pNode->GetSubNode(1))
-            HandleNodes(pTemp,nLevel+1);
-    */
     if (NULL != (pTemp = pNode->GetSubNode(2)))
     {
         *pS << sal_uInt8(LINE); //line
@@ -2397,7 +2259,6 @@ sal_uInt8 MathType::HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
  */
 void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 {
-    //sal_uInt16  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
 
     sal_uInt8 nVariation=0xff;
@@ -2443,10 +2304,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
     {
-//      *pS << sal_uInt8(0x0A);
-//      *pS << sal_uInt8(LINE);
         HandleNodes(pTemp,nLevel+1);
-//      *pS << sal_uInt8(END);
     }
 
     if (nVariation2 != 0xff)
@@ -2496,7 +2354,6 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 
 void MathType::HandleFractions(SmNode *pNode,int nLevel)
 {
-    //sal_uInt16  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
     *pS << sal_uInt8(TMPL); //Template
     *pS << sal_uInt8(0x0E); //selector
@@ -2521,7 +2378,6 @@ void MathType::HandleFractions(SmNode *pNode,int nLevel)
 
 void MathType::HandleBrace(SmNode *pNode,int nLevel)
 {
-    //sal_uInt16  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp;
     SmNode *pLeft=pNode->GetSubNode(0);
     SmNode *pRight=pNode->GetSubNode(2);
@@ -2632,8 +2488,6 @@ void MathType::HandleVerticalBrace(SmNode *pNode,int nLevel)
 
 void MathType::HandleOperator(SmNode *pNode,int nLevel)
 {
-    //sal_uInt16  nSize = pNode->GetNumSubNodes();
-
     if (HandleLim(pNode,nLevel))
         return;
 
@@ -2875,27 +2729,27 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     *pS >> rSelector;
     *pS >> rVariation;
     *pS >> nOption;
-    DBG_ASSERT(rSelector < 48,"Selector out of range");
+    OSL_ENSURE(rSelector < 48,"Selector out of range");
     if ((rSelector >= 21) && (rSelector <=26))
     {
-        DBG_ASSERT(nOption < 2,"Option out of range");
+        OSL_ENSURE(nOption < 2,"Option out of range");
     }
     else if (/*(rSelector >= 0) &&*/ (rSelector <=12))
     {
-        DBG_ASSERT(nOption < 3,"Option out of range");
+        OSL_ENSURE(nOption < 3,"Option out of range");
     }
 
     //For the (broken) case where one subscript template ends, and there is
     //another one after it, mathtype handles it as if the second one was
     //inside the first one and renders it as sub of sub
-    sal_Bool bRemove=sal_False;
+    bool bRemove=false;
     if ( (rSelector == 0xf) && (rLastTemplateBracket != STRING_NOTFOUND) )
     {
-        bRemove=sal_True;
+        bRemove=true;
         for (xub_StrLen nI = rLastTemplateBracket+1; nI < rRet.Len(); nI++ )
             if (rRet.GetChar(nI) != ' ')
             {
-                bRemove=sal_False;
+                bRemove=false;
                 break;
             }
     }
@@ -2990,7 +2844,7 @@ void MathType::HandleEmblishments()
             APPEND(rRet," breve ");
             break;
         default:
-            DBG_ASSERT(nEmbel < 21,"Embel out of range");
+            OSL_ENSURE(nEmbel < 21,"Embel out of range");
             break;
         }
         if (nVersion < 3)
@@ -3045,7 +2899,6 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
         *pS >> nChar;
 
     /*
-    ##912##
     bad character, old mathtype < 3 has these
     */
     if (nChar < 0x20)
@@ -3092,7 +2945,6 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
     if (!bSilent)
     {
         xub_StrLen nOldLen = rRet.Len();
-        //nLastSize = nCurSize;
         if (
             HandleSize(nLSize,nDSize,rSetSize) ||
             (nOldTypeFace != nTypeFace)
@@ -3136,7 +2988,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
 
 sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
 {
-    sal_Bool bRet=0;
+    bool bRet=false;
     //Special case for the "lim" option in StarMath
     if ((pNode->GetToken().eType == TLIM)
         || (pNode->GetToken().eType == TLIMSUP)
@@ -3205,7 +3057,7 @@ sal_Bool MathType::HandleLim(SmNode *pNode,int nLevel)
             }
             HandleNodes(pNode->GetSubNode(1),nLevel+1);
             //*pS << sal_uInt8(END); //options
-            bRet = 1;
+            bRet = true;
         }
     }
     return bRet;
@@ -3344,12 +3196,8 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
 void MathType::HandleAttributes(SmNode *pNode,int nLevel)
 {
     int nOldPending = 0;
-    //sal_uInt16  nSize = pNode->GetNumSubNodes();
     SmNode *pTemp       = 0;
     SmTextNode *pIsText = 0;
-
-    //SmTextNode *pTemp=(SmTextNode *)pNode;
-    //for(int i=0;i<pTemp->GetText().Len();i++)
 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
     {
@@ -3481,22 +3329,13 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
         }
         else
             *pS << sal_uInt8(CHAR);
-            //*pS << sal_uInt8(CHAR|0x10); //char with formula recognition
 
-#if 1
         sal_uInt8 nFace = 0x1;
         if (pNode->GetFont().GetItalic() == ITALIC_NORMAL)
             nFace = 0x3;
         else if (pNode->GetFont().GetWeight() == WEIGHT_BOLD)
             nFace = 0x7;
         *pS << sal_uInt8(nFace+128); //typeface
-#else
-        if ((pTemp->GetText().GetChar(i) >= '0') &&
-            (pTemp->GetText().GetChar(i) <= '9'))
-            *pS << sal_uInt8(0x8+128); //typeface
-        else
-            *pS << sal_uInt8(0x3+128); //typeface
-#endif
         sal_uInt16 nChar = pTemp->GetText().GetChar(i);
         *pS << Convert(nChar);
 
@@ -3530,4 +3369,4 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

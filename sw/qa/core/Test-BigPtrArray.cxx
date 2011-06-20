@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,43 +28,43 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#define TIMELOG
 
-#include <testshl/simpleheader.hxx>
-#include <bparr.hxx>
-#include <string>
+//#define TIMELOG for measuring performance
+
+#include <string.h>
 #include <stdlib.h>
+
+#include <sal/cppunit.h>
+
+#include <sal/config.h>
 #include <rtl/logfile.hxx>
 
-#undef ENABLE_DEBUG_OUTPUT
+#include <bparr.hxx>
 
 using namespace std;
 
 
 namespace /* private */
 {
-    const int NUM_ENTRIES = 100000;
+    const sal_uLong NUM_ENTRIES = 10;
 
     class BigPtrEntryMock : public BigPtrEntry
     {
     public:
-        BigPtrEntryMock(int count) : count_(count)
+        BigPtrEntryMock(sal_uLong count) : count_(count)
         {
         }
 
         ~BigPtrEntryMock()
         {
-        #ifdef ENABLE_DEBUG_OUTPUT
-            printf("Destructor called (%i)\n", count_);
-        #endif
         }
 
-        int getCount() const
+        sal_uLong getCount() const
         {
             return count_;
         }
 
-        void setCount(int newCount)
+        void setCount(sal_uLong newCount)
         {
             count_ = newCount;
         }
@@ -74,7 +75,7 @@ namespace /* private */
         }
 
     private:
-        int count_;
+        sal_uLong count_;
     };
 
     sal_Bool AddToCount(const ElementPtr& rElem, void* pArgs)
@@ -86,30 +87,23 @@ namespace /* private */
 
     void dumpBigPtrArray(const BigPtrArray& bparr)
     {
-    #ifdef ENABLE_DEBUG_OUTPUT
-        for (int i = 0; i < bparr.Count(); i++)
-            printf("bparr[%i,%i]: %i\n", i, static_cast<BigPtrEntryMock*>(bparr[i])->Position(), static_cast<BigPtrEntryMock*>(bparr[i])->getCount());
-
-        printf("\n");
-    #endif
+        (void)bparr;
     }
 
     void fillBigPtrArray(BigPtrArray& bparr, sal_uLong numEntries)
     {
-        for (int i = 0; i < numEntries; i++)
+        for (sal_uLong i = 0; i < numEntries; i++)
             bparr.Insert(new BigPtrEntryMock(i), bparr.Count());
     }
 
     void printMethodName(const char* name)
     {
-    #ifdef ENABLE_DEBUG_OUTPUT
-        printf(name);
-    #endif
+        (void)name;
     }
 
     bool checkElementPositions(const BigPtrArray& bparr)
     {
-        for (int i = 0; i < bparr.Count(); i++)
+        for (sal_uLong i = 0; i < bparr.Count(); i++)
         {
             if (static_cast<BigPtrEntryMock*>(bparr[i])->Position() != i)
                 return false;
@@ -119,11 +113,13 @@ namespace /* private */
 
     void releaseBigPtrArrayContent(BigPtrArray& bparr)
     {
-        for (int i = 0; i < bparr.Count(); i++)
+        for (sal_uLong i = 0; i < bparr.Count(); i++)
             delete bparr[i];
     }
 
+#ifdef TIMELOG
     RTL_LOGFILE_CONTEXT(logFile, "BigPtrArray performance measures" );
+#endif
 }
 
 class BigPtrArrayUnittest : public CppUnit::TestFixture
@@ -156,11 +152,13 @@ public:
     {
         printMethodName("test_insert_entries_at_front\n");
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_insert_entries_at_front");
+#endif
 
         BigPtrArray bparr;
 
-        for (int i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             sal_uLong oldCount = bparr.Count();
             bparr.Insert(new BigPtrEntryMock(i), 0);
@@ -168,25 +166,27 @@ public:
             (
                 "test_insert_entries_at_front failed",
                 (bparr.Count() == oldCount + 1)
-            )
+            );
         }
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_entries_at_front");
+#endif
 
-        for (int i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
+        for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_insert_entries_at_front failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == j
-            )
+            );
         }
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_insert_entries_at_front failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
         dumpBigPtrArray(bparr);
@@ -196,7 +196,9 @@ public:
     {
         printMethodName("test_insert_entries_in_the_middle\n");
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_insert_entries_in_the_middle");
+#endif
 
         BigPtrArray bparr;
 
@@ -207,19 +209,21 @@ public:
 
         bparr.Insert(new BigPtrEntryMock(NUM_ENTRIES), bparr.Count() / 2);
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_entries_in_the_middle");
+#endif
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_insert_entries_in_the_middle failed",
             (oldCount + 1 == bparr.Count() && static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount() == NUM_ENTRIES)
-        )
+        );
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_insert_entries_in_the_middle failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
         dumpBigPtrArray(bparr);
@@ -229,40 +233,44 @@ public:
     {
         printMethodName("test_insert_at_already_used_index\n");
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_insert_at_already_used_index");
+#endif
 
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        int oldCount = bparr.Count();
+        sal_uLong oldCount = bparr.Count();
 
-        for (int i = 0, j = -5; i < 5; i++, j++)
+        for (sal_uLong i = 0, j = -5; i < 5; i++, j++)
             bparr.Insert(new BigPtrEntryMock(j), i);
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_insert_at_already_used_index");
+#endif
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_insert_at_already_used_index failed",
             (oldCount + 5 == bparr.Count())
-        )
+        );
 
-        for (int i = 0, j = -5; i < bparr.Count(); i++, j++)
+        for (sal_uLong i = 0, j = -5; i < bparr.Count(); i++, j++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_insert_at_already_used_index failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == j
-            )
+            );
         }
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_insert_at_already_used_index failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
         dumpBigPtrArray(bparr);
@@ -284,13 +292,13 @@ public:
         (
             "test_insert_at_end failed",
             (oldCount + 1 == bparr.Count() && static_cast<BigPtrEntryMock*>(bparr[bparr.Count()-1])->getCount() == NUM_ENTRIES)
-        )
+        );
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_insert_at_end failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
         dumpBigPtrArray(bparr);
@@ -300,14 +308,16 @@ public:
     {
         printMethodName("test_remove_at_front\n");
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_remove_at_front");
+#endif
 
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (int i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             sal_uLong oldCount = bparr.Count();
 
@@ -318,27 +328,29 @@ public:
             (
                 "test_remove_at_front failed (wrong count)",
                 (oldCount - 1 == bparr.Count())
-            )
+            );
 
-            for (int j = 0, k = i + 1; j < bparr.Count(); j++, k++)
+            for (sal_uLong j = 0, k = i + 1; j < bparr.Count(); j++, k++)
             {
                 CPPUNIT_ASSERT_MESSAGE
                 (
                     "test_remove_at_front failed",
                     static_cast<BigPtrEntryMock*>(bparr[j])->getCount() == k
-                )
+                );
             }
 
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_remove_at_front failed",
                 checkElementPositions(bparr)
-            )
+            );
 
             dumpBigPtrArray(bparr);
         }
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_remove_at_front");
+#endif
     }
 
     void test_remove_at_back()
@@ -360,22 +372,22 @@ public:
             (
                 "test_remove_at_back failed (wrong count)",
                 (oldCount - 1 == bparr.Count())
-            )
+            );
 
-            for (int j = 0; j < bparr.Count(); j++)
+            for (sal_uLong j = 0; j < bparr.Count(); j++)
             {
                 CPPUNIT_ASSERT_MESSAGE
                 (
                     "test_remove_at_back failed",
                     static_cast<BigPtrEntryMock*>(bparr[j])->getCount() == j
-                )
+                );
             }
 
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_remove_at_back failed",
                 checkElementPositions(bparr)
-            )
+            );
 
             dumpBigPtrArray(bparr);
         }
@@ -385,7 +397,9 @@ public:
     {
         printMethodName("test_remove_in_the_middle\n");
 
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "START: test_remove_in_the_middle");
+#endif
 
         BigPtrArray bparr;
 
@@ -395,7 +409,7 @@ public:
         while (bparr.Count())
         {
             sal_uLong oldCount = bparr.Count();
-            int oldElement = static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount();
+            sal_uLong oldElement = static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount();
 
             delete bparr[bparr.Count() / 2];
             bparr.Remove(bparr.Count() / 2);
@@ -404,26 +418,28 @@ public:
             (
                 "test_remove_in_the_middle failed (wrong count)",
                 (oldCount - 1 == bparr.Count())
-            )
+            );
 
-            for (int i = 0; i < bparr.Count(); i++)
+            for (sal_uLong i = 0; i < bparr.Count(); i++)
             {
                 CPPUNIT_ASSERT_MESSAGE
                 (
                     "test_remove_in_the_middle failed",
                     static_cast<BigPtrEntryMock*>(bparr[i])->getCount() != oldElement
-                )
+                );
             }
 
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_remove_in_the_middle failed",
                 checkElementPositions(bparr)
-            )
+            );
 
             dumpBigPtrArray(bparr);
         }
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, "END: test_remove_in_the_middle");
+#endif
     }
 
     void test_remove_multiple_elements_at_once()
@@ -440,7 +456,7 @@ public:
             sal_uLong nRemove = (bparr.Count() > 3) ? 3 : bparr.Count();
             sal_uLong oldCount = bparr.Count();
 
-            for (int i = 0; i < nRemove; i++)
+            for (sal_uLong i = 0; i < nRemove; i++)
                 delete bparr[i];
 
             bparr.Remove(0, nRemove);
@@ -449,13 +465,13 @@ public:
             (
                 "test_remove_multiple_elements_at_once failed",
                 (oldCount - nRemove == bparr.Count())
-            )
+            );
 
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_remove_multiple_elements_at_once failed",
                 checkElementPositions(bparr)
-            )
+            );
 
             dumpBigPtrArray(bparr);
         }
@@ -477,7 +493,7 @@ public:
         (
             "test_remove_all_elements_at_once failed",
             bparr.Count() == 0
-        )
+        );
 
         dumpBigPtrArray(bparr);
     }
@@ -491,32 +507,32 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (int i = 0; i < NUM_ENTRIES - 1; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES - 1; i++)
         {
             bparr.Move(i, i + 2);
             dumpBigPtrArray(bparr);
         }
 
-        for (int i = 0; i < (NUM_ENTRIES - 1); i++)
+        for (sal_uLong i = 0; i < (NUM_ENTRIES - 1); i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_move_elements_from_lower_to_higher_pos failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i + 1)
-            )
+            );
         }
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_move_elements_from_lower_to_higher_pos failed",
             static_cast<BigPtrEntryMock*>(bparr[NUM_ENTRIES -1])->getCount() == 0
-        )
+        );
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_move_elements_from_lower_to_higher_pos failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
     }
@@ -540,22 +556,22 @@ public:
         (
             "test_move_elements_from_higher_to_lower_pos failed",
             static_cast<BigPtrEntryMock*>(bparr[0])->getCount() == (NUM_ENTRIES - 1)
-        )
+        );
 
-        for (int i = 1; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 1; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_move_elements_from_higher_to_lower_pos failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i - 1)
-            )
+            );
         }
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_move_elements_from_higher_to_lower_pos failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
     }
@@ -569,27 +585,27 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (int i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             bparr.Move(i, i);
         }
 
         dumpBigPtrArray(bparr);
 
-        for (int i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_move_to_same_position failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == i
-            )
+            );
         }
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_move_to_same_position failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
         dumpBigPtrArray(bparr);
@@ -604,27 +620,27 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        for (int i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
+        for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
             delete bparr[i];
             bparr.Replace(i, new BigPtrEntryMock(j));
             dumpBigPtrArray(bparr);
         }
 
-        for (int i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_replace_elements failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (NUM_ENTRIES - i - 1)
-            )
+            );
         }
 
         CPPUNIT_ASSERT_MESSAGE
         (
             "test_replace_elements failed",
             checkElementPositions(bparr)
-        )
+        );
 
         releaseBigPtrArrayContent(bparr);
     }
@@ -641,13 +657,13 @@ public:
         int addCount = 1;
         bparr.ForEach(AddToCount, &addCount);
 
-        for (int i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_for_each failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i+1)
-            )
+            );
         }
 
         releaseBigPtrArrayContent(bparr);
@@ -656,24 +672,24 @@ public:
 
     void test_for_some1()
     {
-         printMethodName("test_for_some1\n");
+        printMethodName("test_for_some1\n");
 
         BigPtrArray bparr;
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        int addCount = 1;
+        sal_uLong addCount = 1;
         bparr.ForEach(0, NUM_ENTRIES / 2, AddToCount, &addCount);
 
-        int i = 0;
+        sal_uLong i = 0;
         for (/* */; i < NUM_ENTRIES / 2; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_for_some1 failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i+1)
-            )
+            );
         }
 
         for (/* */; i < NUM_ENTRIES; i++)
@@ -682,7 +698,7 @@ public:
             (
                 "test_for_some1 failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i)
-            )
+            );
         }
 
         releaseBigPtrArrayContent(bparr);
@@ -701,14 +717,14 @@ public:
         int addCount = 1;
         bparr.ForEach(NUM_ENTRIES / 2, NUM_ENTRIES, AddToCount, &addCount);
 
-        int i = 0;
+        sal_uLong i = 0;
         for (/* */; i < NUM_ENTRIES / 2; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_for_some2 failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i)
-            )
+            );
         }
 
         for (/* */; i < NUM_ENTRIES; i++)
@@ -717,7 +733,7 @@ public:
             (
                 "test_for_some2 failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i+1)
-            )
+            );
         }
 
         releaseBigPtrArrayContent(bparr);
@@ -733,16 +749,16 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        int addCount = 1;
+        sal_uLong addCount = 1;
         bparr.ForEach(0, 0, AddToCount, &addCount);
 
-        for (int i = 0; i < NUM_ENTRIES; i++)
+        for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test_for_some3 failed",
                 static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == i
-            )
+            );
         }
         releaseBigPtrArrayContent(bparr);
     }
@@ -782,12 +798,16 @@ public:
     {
         startString_ += methodName;
         endString_ += methodName;
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, startString_.c_str());
+#endif
     }
 
     ~PerformanceTracer()
     {
+#ifdef TIMELOG
         RTL_LOGFILE_CONTEXT_TRACE(logFile, endString_.c_str());
+#endif
     }
 
 private:
@@ -867,11 +887,10 @@ private:
     }
 };
 
-
-//#####################################
 // register test suites
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BigPtrArrayUnittest, "BigPtrArrayUnittest");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(BigPtrArrayPerformanceTest, "BigPtrArrayPerformanceTest");
+CPPUNIT_TEST_SUITE_REGISTRATION(BigPtrArrayUnittest);
+#ifdef TIMELOG
+CPPUNIT_TEST_SUITE_REGISTRATION(BigPtrArrayPerformanceTest);
+#endif
 
-NOADDITIONAL;
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

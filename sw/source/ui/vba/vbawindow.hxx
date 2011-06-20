@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,6 +49,8 @@ public:
     // Attributes
     virtual css::uno::Any SAL_CALL getView() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setView( const css::uno::Any& _view ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getWindowState() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) throw (css::uno::RuntimeException);
     // Methods
     virtual void SAL_CALL Activate(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& RouteDocument ) throw (css::uno::RuntimeException);
@@ -59,3 +62,5 @@ public:
 };
 
 #endif //SW_VBA_WINDOW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

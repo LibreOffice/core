@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <numberingtypelistbox.hxx>
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
 #include <cnttab.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -40,18 +39,14 @@
 #include <unomid.h>
 
 using namespace com::sun::star;
-using namespace rtl;
 
-/* -----------------------------01.03.01 16:04--------------------------------
+using ::rtl::OUString;
 
- ---------------------------------------------------------------------------*/
 struct SwNumberingTypeListBox_Impl
 {
     uno::Reference<text::XNumberingTypeInfo> xInfo;
 };
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
         sal_uInt16 nTypeFlags ) :
     ListBox(pWin, rResId),
@@ -59,23 +54,19 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, const ResId& rResI
 {
     uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     uno::Reference < uno::XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.DefaultNumberingProvider")) );
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(xI, uno::UNO_QUERY);
-    DBG_ASSERT(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
+    OSL_ENSURE(xDefNum.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
 
     pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
     Reload(nTypeFlags);
 }
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNumberingTypeListBox::~SwNumberingTypeListBox()
 {
     delete pImpl;
 }
-/* -----------------------------01.03.01 16:02--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
 {
     Clear();
@@ -150,24 +141,20 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
         SelectEntryPos(0);
     }
 }
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
 {
     sal_Int16 nRet = 0;
     sal_uInt16 nSelPos = GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
         nRet = (sal_Int16)(sal_uLong)GetEntryData(nSelPos);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
-        DBG_ERROR("SwNumberingTypeListBox not selected");
+        OSL_FAIL("SwNumberingTypeListBox not selected");
 #endif
     return nRet;
 }
-/* -----------------------------01.03.01 14:46--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
 {
     sal_uInt16 nPos = GetEntryPos((void*)(sal_uLong)nType);
@@ -175,3 +162,4 @@ sal_Bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
     return LISTBOX_ENTRY_NOTFOUND != nPos;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,10 +44,6 @@ class SwDoc;
 class SwModify;
 class SwFmtRefMark;
 
-
-/* -----------------27.08.98 15:11-------------------
- *
- * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper5
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -172,3 +169,4 @@ public:
 
 #endif // SW_UNOREFMARK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

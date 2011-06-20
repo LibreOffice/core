@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 class SW_DLLPUBLIC Ring
 {
     Ring *pNext;
-    Ring* pPrev;    // zur Optimierung, damit das ein/ausketten schneller geht!
+    Ring* pPrev;    // In order to speed up inserting and deleting.
 
 protected:
     Ring()          { pNext = this; pPrev = this; }
@@ -51,3 +52,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

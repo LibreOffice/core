@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <unotextmarkup.hxx>
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
@@ -60,7 +61,7 @@ SwXTextMarkup::~SwXTextMarkup()
 
 uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfoContainer() throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference< container::XStringKeyMap > xProp = new SwXStringKeyMap;
     return xProp;
@@ -74,7 +75,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
     throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // paragraph already dead or modified?
     if ( !mpTxtNode || nLength <= 0 )
@@ -102,7 +103,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( pGrammarContact )
         {
             pWList = pGrammarContact->getGrammarCheck( *mpTxtNode, true );
-            ASSERT( pWList, "GrammarContact _has_ to deliver a wrong list" )
+            OSL_ENSURE( pWList, "GrammarContact _has_ to deliver a wrong list" );
         }
         else
         {
@@ -128,7 +129,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     }
     else
     {
-        ASSERT( false, "Unknown mark-up type" )
+        OSL_FAIL( "Unknown mark-up type" );
         return;
     }
 
@@ -242,7 +243,7 @@ void lcl_commitGrammarMarkUp(
     ::sal_Int32 nLength,
     const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
 {
-    ASSERT( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" )
+    OSL_ENSURE( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" );
     const ModelToViewHelper::ModelPosition aStartPos =
             ModelToViewHelper::ConvertToModelPosition( pConversionMap, nStart );
     const ModelToViewHelper::ModelPosition aEndPos   =
@@ -333,7 +334,7 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     const uno::Sequence< text::TextMarkupDescriptor > &rMarkups )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // paragraph already dead or modified?
     if ( !mpTxtNode )
@@ -374,7 +375,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if( pGrammarContact )
     {
         pWList = pGrammarContact->getGrammarCheck( *mpTxtNode, true );
-        ASSERT( pWList, "GrammarContact _has_ to deliver a wrong list" )
+        OSL_ENSURE( pWList, "GrammarContact _has_ to deliver a wrong list" );
     }
     else
     {
@@ -429,9 +430,8 @@ void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pN
     // therefore I remove the assertion in SwModify::_Remove()
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
-    // <--
 
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     mpTxtNode = 0;
 }
 
@@ -486,3 +486,4 @@ uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex) throw (un
     return uno::Any();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

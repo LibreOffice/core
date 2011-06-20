@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ using namespace ::com::sun::star;
 SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition( _rDrawObj ),
       maRelPos( Point() ),
-      // --> OD 2004-06-17 #i26791#
+      // #i26791#
       maOffsetToFrmAnchorPos( Point() )
 {}
 
@@ -93,7 +94,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         {
             eVertOrient = text::VertOrientation::TOP;
         }
-        // --> OD 2004-06-17 #i26791# - get vertical offset to frame anchor position.
+        // #i26791# - get vertical offset to frame anchor position.
         SwTwips nVertOffsetToFrmAnchorPos( 0L );
         SwTwips nRelPosY =
                 _GetVertRelPos( GetAnchorFrm(), GetAnchorFrm(), eVertOrient,
@@ -116,11 +117,11 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         }
 
         // determine absolute 'vertical' position, depending on layout-direction
-        // --> OD 2004-06-17 #i26791# - determine offset to 'vertical' frame
+        // #i26791# - determine offset to 'vertical' frame
         // anchor position, depending on layout-direction
         if( bVert )
         {
-            ASSERT( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
+            OSL_ENSURE( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             if ( bVertL2R )
                    aRelPos.X() = nRelPosY;
@@ -208,12 +209,11 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         }
 
         // determine absolute 'horizontal' position, depending on layout-direction
-        // --> OD 2004-06-17 #i26791# - determine offset to 'horizontal' frame
+        // #i26791# - determine offset to 'horizontal' frame
         // anchor position, depending on layout-direction
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         // --> OD 2009-09-04 #mongolianlayout#
         if( bVert || bVertL2R )
-        // <--
         {
 
             aRelPos.Y() = nRelPosX;
@@ -253,3 +253,4 @@ Point SwToLayoutAnchoredObjectPosition::GetRelPos() const
     return maRelPos;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

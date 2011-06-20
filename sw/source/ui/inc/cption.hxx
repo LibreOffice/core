@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,25 +30,15 @@
 
 #include <svx/stddlg.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <actctrl.hxx>
 
 
@@ -104,8 +95,8 @@ class SwCaptionDialog : public SvxStandardDialog
 
     SwCaptionPreview    aPrevWin;
 
-    SwView       &rView; //Suchen per aktive ::com::sun::star::sdbcx::View vermeiden.
-    SwFldMgr     *pMgr;      //Ptr um das include zu sparen
+    SwView       &rView; // search per active, avoid ::com::sun::star::sdbcx::View
+    SwFldMgr     *pMgr;      // pointer to save the include
     SelectionType eType;
 
     String       sCharacterStyle;
@@ -127,6 +118,7 @@ class SwCaptionDialog : public SvxStandardDialog
     void    CheckButtonWidth();
     void    ApplyCaptionOrder(); //#i61007# order of captions
 
+    static String our_aSepTextSave; // Save caption separator text
 public:
      SwCaptionDialog( Window *pParent, SwView &rV );
     ~SwCaptionDialog();
@@ -135,3 +127,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

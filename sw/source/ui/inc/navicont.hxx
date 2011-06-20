@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,16 +35,16 @@ class SwDocShell;
 class TransferDataContainer;
 class TransferableDataHelper;
 
-/*  [Beschreibung]
-    Navigator-Bookmark zur eindeutigen Identifizierung im Sw
+/*
+    navigator bookmark for distinct identification in Sw
 */
 
 class NaviContentBookmark
 {
-    String          aUrl;       // URL inkl. Sprungmarke
-    String          aDescr;     // Description
-    long            nDocSh;     // Adresse der DocShell
-    sal_uInt16          nDefDrag;   // Description enthaelt defaultDragType
+    String          aUrl;       // URL including jump mark
+    String          aDescr;     // description
+    long            nDocSh;     // adress of DocShell
+    sal_uInt16          nDefDrag;   // description contains defaultDragType
 
 public:
     NaviContentBookmark();
@@ -59,3 +60,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

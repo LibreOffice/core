@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,11 +35,9 @@
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <accselectionhelper.hxx>
-// --> OD 2010-02-19 #i108125#
-#include <calbck.hxx>
-// <--
+#include <calbck.hxx> // #i108125#
 
 class SwTxtFrm;
 class SwTxtNode;
@@ -46,9 +45,7 @@ class SwPaM;
 class SwAccessiblePortionData;
 class SwAccessibleHyperTextData;
 class SwXTextPortion;
-// --> OD 2010-02-19 #i108125#
-class SwParaChangeTrackingInfo;
-// <--
+class SwParaChangeTrackingInfo; //#i108125#
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
@@ -56,15 +53,13 @@ namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessibleHyperlink; }
 } } }
 
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                          ::com::sun::star::beans::PropertyValue,
                          ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > tAccParaPropValMap;
 
 class SwAccessibleParagraph :
-        // --> OD 2010-02-19 #i108125#
-        public SwClient,
-        // <--
+        public SwClient, // #i108125#
         public SwAccessibleContext,
         public ::com::sun::star::accessibility::XAccessibleEditableText,
         public com::sun::star::accessibility::XAccessibleSelection,
@@ -94,9 +89,7 @@ class SwAccessibleParagraph :
     // implementation for XAccessibleSelection
     SwAccessibleSelectionHelper aSelectionHelper;
 
-    // --> OD 2010-02-19 #i108125#
-    SwParaChangeTrackingInfo* mpParaChangeTrackInfo;
-    // <--
+    SwParaChangeTrackingInfo* mpParaChangeTrackInfo; // #i108125#
 
     /// get the SwTxtNode (requires frame; check before)
     const SwTxtNode* GetTxtNode() const;
@@ -114,9 +107,8 @@ class SwAccessibleParagraph :
     sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
 
     // helper for GetSelection and getCaretPosition
-    // --> OD 2005-12-20 #i27301#
-    // - add parameter <_bForSelection>, which indicates, if the cursor is
-    //   retrieved for selection or for caret position.
+    // #i27301# - add parameter <_bForSelection>, which indicates,
+    // if the cursor is retrieved for selection or for caret position.
     SwPaM* GetCursor( const bool _bForSelection );
 
     /// for cut/copy/paste: execute a particular slot at the view shell
@@ -148,7 +140,7 @@ class SwAccessibleParagraph :
         }
     }
 
-    // --> OD 2006-07-13 #i63870#
+    // #i63870#
     void _getDefaultAttributesImpl(
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
             tAccParaPropValMap& rDefAttrSeq,
@@ -157,7 +149,6 @@ class SwAccessibleParagraph :
             const sal_Int32 nIndex,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
             tAccParaPropValMap& rRunAttrSeq );
-    // <--
 
 public:
 
@@ -259,12 +250,7 @@ public:
         getLocale (void)
         throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
 
-    /** paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO
-
-        OD 2005-12-02 #i27138#
-
-        @author OD
-    */
+    /** #i27138# - paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO */
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet (void)
@@ -274,12 +260,11 @@ public:
 
     virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException);
-    // --> OD 2007-01-17 #i71385#
+    // #i71385#
     virtual sal_Int32 SAL_CALL getForeground()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBackground()
         throw (::com::sun::star::uno::RuntimeException);
-    // <--
 
     //=====  XServiceInfo  ====================================================
 
@@ -372,7 +357,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+    // index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
@@ -390,7 +375,7 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // --> OD 2008-05-19 #i71360#
+    // #i71360#
     //=====  XAccesibleTextMarkup  ============================================
     virtual sal_Int32 SAL_CALL getTextMarkupCount( sal_Int32 nTextMarkupType )
             throw (::com::sun::star::lang::IllegalArgumentException,
@@ -409,9 +394,8 @@ public:
             throw (::com::sun::star::lang::IndexOutOfBoundsException,
                    ::com::sun::star::lang::IllegalArgumentException,
                    ::com::sun::star::uno::RuntimeException);
-    // <--
 
-    // --> OD 2008-05-29 #i89175#
+    // #i89175#
     //=====  XAccessibleMultiLineText  ========================================
     virtual sal_Int32 SAL_CALL getLineNumberAtIndex( sal_Int32 nIndex )
             throw (::com::sun::star::lang::IndexOutOfBoundsException,
@@ -428,13 +412,11 @@ public:
 
     virtual sal_Int32 SAL_CALL getNumberOfLineWithCaret()
             throw (::com::sun::star::uno::RuntimeException);
-    // <--
 
-    // --> OD 2006-07-11 #i63870#
+    // #i63870#
     //=====  XAccesibleTextAttributes  ========================================
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    // <--
 };
 
 inline SwAccessibleParagraph::operator ::com::sun::star::accessibility::XAccessibleText *()
@@ -445,3 +427,4 @@ inline SwAccessibleParagraph::operator ::com::sun::star::accessibility::XAccessi
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

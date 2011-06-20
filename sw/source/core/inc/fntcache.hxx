@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ class SwFntCache : public SwCache
 public:
 
     inline SwFntCache() : SwCache(50,50
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , ByteString( RTL_CONSTASCII_STRINGPARAM(
                         "Globaler Font-Cache pFntCache" ))
 #endif
@@ -158,3 +159,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,7 +54,7 @@ public:
     SwGlblDocContent( const SwTOXBaseSection* pTOX );
     SwGlblDocContent( const SwSection* pSect );
 
-    // Inhalte abfragen
+    // Query contents.
     GlobalDocContentType GetType() const { return eType; }
     const SwSection* GetSection() const
                             { return GLBLDOC_SECTION == eType ? PTR.pSect : 0; }
@@ -61,7 +62,7 @@ public:
                             { return GLBLDOC_TOXBASE == eType ? PTR.pTOX : 0; }
     sal_uLong GetDocPos() const { return nDocPos; }
 
-    // fuers Sortieren
+    // For sorting.
     inline int operator==( const SwGlblDocContent& rCmp ) const
         {   return GetDocPos() == rCmp.GetDocPos(); }
     inline int operator<( const SwGlblDocContent& rCmp ) const
@@ -75,3 +76,5 @@ SV_DECL_PTRARR_SORT_DEL( SwGlblDocContents, SwGlblDocContentPtr, 10, 10 )
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

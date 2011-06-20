@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemiter.hxx>
@@ -52,29 +51,19 @@
 #include "paratr.hxx"
 
 #include <fmtinfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <uitool.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <num.hxx>
 #include <swundo.hxx>
 #include <fmtcol.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <globals.h>
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
@@ -191,7 +180,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 rSh.DontExpandFmt();
         break;
         default:
-            ASSERT(sal_False, falscher Dispatcher);
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
@@ -291,71 +280,10 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(sal_False, falscher Dispatcher);
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
-
-
-
-#ifdef CFRONT
-
-void lcl_SetAdjust(SvxAdjust eAdjst, SfxItemSet& rSet)
-{
-    rSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST ));
-}
-
-
-
-void lcl_SetLineSpace(sal_uInt8 ePropL,SfxItemSet& rSet)
-{
-    SvxLineSpacingItem aLineSpacing(ePropL, RES_PARATR_LINESPACING );
-    aLineSpacing.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
-    if( 100 == ePropL )
-        aLineSpacing.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
-    else
-        aLineSpacing.SetPropLineSpace(ePropL);
-    rSet.Put( aLineSpacing );
-}
-
-
-
-void SwTextShell::ExecParaAttr(SfxRequest &rReq)
-{
-    // gleiche beide Attribute holen, ist nicht teuerer !!
-    SfxItemSet aSet( GetPool(), RES_PARATR_LINESPACING, RES_PARATR_ADJUST );
-
-    switch (rReq.GetSlot())
-    {
-    case FN_SET_LEFT_PARA:          lcl_SetAdjust(ADJLEFT,aSet);    break;
-    case FN_SET_RIGHT_PARA:         lcl_SetAdjust(ADJRIGHT,aSet);   break;
-    case FN_SET_CENTER_PARA:        lcl_SetAdjust(ADJCENTER,aSet);  break;
-    case SID_ATTR_PARA_ADJUST_BLOCK:lcl_SetAdjust(ADJBLOCK,aSet);   break;
-
-    case FN_SET_LINE_SPACE_1:   lcl_SetLineSpace(100,aSet);     break;
-    case FN_SET_LINE_SPACE_15:  lcl_SetLineSpace(150,aSet);     break;
-    case FN_SET_LINE_SPACE_2:   lcl_SetLineSpace(200,aSet);     break;
-
-    default:
-        DBG_ERROR("SwTextShell::ExecParaAttr falscher Dispatcher");
-        return;
-    }
-    SwWrtShell& rWrtSh = GetShell();
-    SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-    if(pColl && pColl->IsAutoUpdateFmt())
-    {
-        rWrtSh.AutoUpdatePara(pColl, *pSet);
-    }
-    else
-    {
-        rWrtSh.SetAttr( aSet );
-        rReq.Done( aSet );
-    }
-}
-
-#else
-
-
 
 void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 {
@@ -427,18 +355,6 @@ SET_LINESPACE:
         case SID_ATTR_PARA_LEFT_TO_RIGHT :
         case SID_ATTR_PARA_RIGHT_TO_LEFT :
         {
-            sal_Bool bSet = sal_True;
-            int eState = pArgs ? pArgs->GetItemState(nSlot) : SFX_ITEM_DISABLED;
-            if (pArgs && SFX_ITEM_SET == eState)
-                bSet = ((const SfxBoolItem&)pArgs->Get(nSlot)).GetValue();
-/*
-// toggling of the slots not used anymore
-
-           if(!bSet)
-                nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot ?
-                    SID_ATTR_PARA_RIGHT_TO_LEFT :
-                    SID_ATTR_PARA_LEFT_TO_RIGHT;
-*/
             SfxItemSet aAdjustSet( GetPool(),
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetCurAttr(aAdjustSet);
@@ -448,7 +364,6 @@ SET_LINESPACE:
             {
                 int eAdjust = (int)(( const SvxAdjustItem& )
                         aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
-//                bChgAdjust = SVX_ADJUST_CENTER  != eAdjust  &&  SVX_ADJUST_BLOCK != eAdjust;
                 bChgAdjust = (SVX_ADJUST_LEFT  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
                              (SVX_ADJUST_RIGHT == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
             }
@@ -485,23 +400,19 @@ SET_LINESPACE:
 
                         aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
                     }
-                    // --> OD 2008-02-11 #newlistlevelattrs#
                     SwNumRule aSetRule( pCurRule->GetName(),
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
-                    // <--
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule( sal_True );
-                    // --> OD 2008-03-17 #refactorlists#
                     // no start or continuation of a list - list style is only changed
                     GetShell().SetCurNumRule( aSetRule, false );
-                    // <--
                 }
             }
         }
         break;
 
         default:
-            ASSERT(sal_False, falscher Dispatcher);
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
     SwWrtShell& rWrtSh = GetShell();
@@ -514,10 +425,6 @@ SET_LINESPACE:
         rWrtSh.SetAttr( aSet );
     rReq.Done();
 }
-
-#endif
-
-
 
 void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
 {
@@ -558,11 +465,11 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                                            HINT_END, HINT_END, 0);
                 rSh.GetCurAttr(aSet);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
                     rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();
@@ -604,7 +511,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(sal_False, falscher Dispatcher);
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
@@ -845,3 +752,4 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

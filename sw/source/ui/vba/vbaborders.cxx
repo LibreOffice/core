@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,6 +29,7 @@
 #include <ooo/vba/word/XBorder.hpp>
 #include <ooo/vba/word/WdBorderType.hpp>
 #include <ooo/vba/word/WdLineStyle.hpp>
+#include <sal/macros.h>
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
@@ -268,7 +270,7 @@ public:
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
-        return sizeof( supportedIndexTable ) / sizeof( supportedIndexTable[0] );
+        return SAL_N_ELEMENTS( supportedIndexTable );
     }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
     {
@@ -348,14 +350,14 @@ SwVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )  throw (uno::RuntimeEx
 
 sal_Bool SAL_CALL SwVbaBorders::getShadow() throw (uno::RuntimeException)
 {
-    table::ShadowFormat aShadowFormat;
-    m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ShadowFormat") ) ) >>= aShadowFormat;
-    return ( aShadowFormat.Location != table::ShadowLocation_NONE );
+    // always return False for table border in MS Word
+    return sal_False;
 }
 
 void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    // not support in Table border in Word
+    // TODO:
 }
 
 rtl::OUString&
@@ -376,3 +378,5 @@ SwVbaBorders::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

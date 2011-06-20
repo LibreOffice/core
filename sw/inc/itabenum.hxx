@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,8 +34,6 @@ namespace tabopts
 {
     const sal_uInt16 DEFAULT_BORDER     = 0x01;
     const sal_uInt16 HEADLINE           = 0x02;
-//    const sal_uInt16 REPEAT             = 0x04;
-//    const sal_uInt16 HEADLINE_REPEAT    = 0x06;  // Headline + Repeat
     const sal_uInt16 SPLIT_LAYOUT       = 0x08;
     const sal_uInt16 HEADLINE_NO_BORDER = HEADLINE | SPLIT_LAYOUT;
     const sal_uInt16 ALL_TBL_INS_ATTR   = DEFAULT_BORDER | HEADLINE | SPLIT_LAYOUT;
@@ -52,3 +51,4 @@ struct SwInsertTableOptions
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

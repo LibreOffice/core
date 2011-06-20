@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,11 +58,6 @@
 #include <node2lay.hxx>
 #include <unochart.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-//nur zum debugen
-#include <cellatr.hxx>
-#endif
-
 using namespace ::com::sun::star::lang;
 
 SwSortOptions*      SwSortElement::pOptions = 0;
@@ -74,16 +70,13 @@ LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
 SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Ein Sortierelement fuers Sort konstruieren
  --------------------------------------------------------------------*/
-
-
 void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
                             FlatFndBox* pFltBx )
 {
-    ASSERT( !pDoc && !pOptions && !pBox, "wer hat das Finit vergessen?" );
+    OSL_ENSURE( !pDoc && !pOptions && !pBox, "wer hat das Finit vergessen?" );
     pDoc = pD;
     pOptions = new SwSortOptions( rOpt );
     pBox = pFltBx;
@@ -100,10 +93,7 @@ void SwSortElement::Init( SwDoc* pD, const SwSortOptions& rOpt,
 
     pSortCollator = new CollatorWrapper(
                                 ::comphelper::getProcessServiceFactory() );
-//  pSortCollator->loadCollatorAlgorithm( sAlgorithm, aLocale,
-//                      rOpt.bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
 }
-
 
 void SwSortElement::Finit()
 {
@@ -116,11 +106,9 @@ void SwSortElement::Finit()
     pBox = 0;
 }
 
-
 SwSortElement::~SwSortElement()
 {
 }
-
 
 double SwSortElement::StrToDouble( const String& rStr ) const
 {
@@ -143,8 +131,6 @@ double SwSortElement::StrToDouble( const String& rStr ) const
 /*--------------------------------------------------------------------
     Beschreibung: Operatoren zum Vergleichen
  --------------------------------------------------------------------*/
-
-
 sal_Bool SwSortElement::operator==(const SwSortElement& )
 {
     return sal_False;
@@ -153,7 +139,6 @@ sal_Bool SwSortElement::operator==(const SwSortElement& )
 /*--------------------------------------------------------------------
     Beschreibung: Kleiner-Operator fuers sortieren
  --------------------------------------------------------------------*/
-
 sal_Bool SwSortElement::operator<(const SwSortElement& rCmp)
 {
 
@@ -211,24 +196,18 @@ double SwSortElement::GetValue( sal_uInt16 nKey ) const
 /*--------------------------------------------------------------------
     Beschreibung: SortierElemente fuer Text
  --------------------------------------------------------------------*/
-
-
 SwSortTxtElement::SwSortTxtElement(const SwNodeIndex& rPos)
     : nOrg(rPos.GetIndex()), aPos(rPos)
 {
 }
 
-
 SwSortTxtElement::~SwSortTxtElement()
 {
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Key ermitteln
  --------------------------------------------------------------------*/
-
-
 String SwSortTxtElement::GetKey(sal_uInt16 nId) const
 {
     SwTxtNode* pTxtNd = aPos.GetNode().GetTxtNode();
@@ -255,16 +234,13 @@ String SwSortTxtElement::GetKey(sal_uInt16 nId) const
     return rStr.Copy( nStart, nEnd-nStart );
 }
 
-
 /*--------------------------------------------------------------------
     Beschreibung: Sortier-Elemente fuer Tabellen
  --------------------------------------------------------------------*/
-
 SwSortBoxElement::SwSortBoxElement( sal_uInt16 nRC )
     : nRow( nRC )
 {
 }
-
 
 SwSortBoxElement::~SwSortBoxElement()
 {
@@ -273,8 +249,6 @@ SwSortBoxElement::~SwSortBoxElement()
 /*--------------------------------------------------------------------
     Beschreibung: Schluessel zu einer Zelle ermitteln
  --------------------------------------------------------------------*/
-
-
 String SwSortBoxElement::GetKey(sal_uInt16 nKey) const
 {
     const _FndBox* pFndBox;
@@ -290,7 +264,7 @@ String SwSortBoxElement::GetKey(sal_uInt16 nKey) const
     if( pFndBox )
     {   // StartNode holen und ueberlesen
         const SwTableBox* pMyBox = pFndBox->GetBox();
-        ASSERT(pMyBox, "Keine atomare Box");
+        OSL_ENSURE(pMyBox, "Keine atomare Box");
 
         if( pMyBox->GetSttNd() )
         {
@@ -332,8 +306,6 @@ double SwSortBoxElement::GetValue( sal_uInt16 nKey ) const
 /*--------------------------------------------------------------------
     Beschreibung: Text sortieren im Document
  --------------------------------------------------------------------*/
-
-
 sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 {
     // pruefen ob Rahmen im Text
@@ -519,11 +491,10 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 /*--------------------------------------------------------------------
     Beschreibung: Tabelle sortieren im Document
  --------------------------------------------------------------------*/
-
 sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 {
     // uebers SwDoc fuer Undo !!
-    ASSERT( rBoxes.Count(), "keine gueltige Box-Liste" );
+    OSL_ENSURE( rBoxes.Count(), "keine gueltige Box-Liste" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
@@ -580,10 +551,9 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // MIB 9.7.97: HTML-Layout loeschen
     pTblNd->GetTable().SetHTMLTableLayout( 0 );
 
-    // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+    // #i37739# A simple 'MakeFrms' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     SwNode2Layout aNode2Layout( *pTblNd );
-    // <--
 
     // loesche die Frames der Tabelle
     pTblNd->DelFrms();
@@ -629,11 +599,10 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     }
 
     // Restore table frames:
-    // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+    // #i37739# A simple 'MakeFrms' after the node sorting
     // does not work if the table is inside a frame and has no prev/next.
     const sal_uLong nIdx = pTblNd->GetIndex();
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
-    // <--
 
     // TL_CHART2: need to inform chart of probably changed cell names
     UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
@@ -649,8 +618,6 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 /*--------------------------------------------------------------------
     Beschreibung: Zeilenweise verschieben
  --------------------------------------------------------------------*/
-
-
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
@@ -697,8 +664,6 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 /*--------------------------------------------------------------------
     Beschreibung: Spaltenweise verschieben
  --------------------------------------------------------------------*/
-
-
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
              SwMovedBoxes& rMovedList, SwUndoSort* pUD)
 {
@@ -745,12 +710,10 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
 /*--------------------------------------------------------------------
     Beschreibung: Eine einzelne Zelle verschieben
  --------------------------------------------------------------------*/
-
-
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
               sal_Bool bMovedBefore, SwUndoSort* pUD)
 {
-    ASSERT(pSource && pTar,"Fehlende Quelle oder Ziel");
+    OSL_ENSURE(pSource && pTar,"Fehlende Quelle oder Ziel");
 
     if(pSource == pTar)
         return;
@@ -780,7 +743,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     sal_Bool bDelFirst = sal_False;
     if( nCount == 2 )
     {
-        ASSERT( pNd->GetCntntNode(), "Kein ContentNode");
+        OSL_ENSURE( pNd->GetCntntNode(), "Kein ContentNode");
         bDelFirst = !pNd->GetCntntNode()->Len() && bMovedBefore;
     }
 
@@ -803,8 +766,6 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
 /*--------------------------------------------------------------------
     Beschreibung: Zweidimensionales Array aus FndBoxes generieren
  --------------------------------------------------------------------*/
-
-
 FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     pDoc(pDocPtr),
     rBoxRef(rBox),
@@ -829,7 +790,6 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
     }
 }
 
-
 FlatFndBox::~FlatFndBox()
 {
     _FndBox** ppTmp = (_FndBox**)pArr;
@@ -842,8 +802,6 @@ FlatFndBox::~FlatFndBox()
 /*--------------------------------------------------------------------
     Beschreibung:   Alle Lines einer Box muessen gleichviel Boxen haben
  --------------------------------------------------------------------*/
-
-
 sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
     const _FndLines &rLines = rBox.GetLines();
@@ -870,8 +828,6 @@ sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
     Beschreibung:   Box auf Symmetrie pruefen
                     Alle Boxen einer Line muessen gleichviele Lines haben
  --------------------------------------------------------------------*/
-
-
 sal_Bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
     const _FndBoxes &rBoxes = rLn.GetBoxes();
@@ -897,8 +853,6 @@ sal_Bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 /*--------------------------------------------------------------------
     Beschreibung: max Anzahl der Spalten (Boxes)
  --------------------------------------------------------------------*/
-
-
 sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
@@ -926,8 +880,6 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
 /*--------------------------------------------------------------------
     Beschreibung: max Anzahl der Zeilen (Lines)
  --------------------------------------------------------------------*/
-
-
 sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
 {
     const _FndLines& rLines = rBox.GetLines();
@@ -952,8 +904,6 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
 /*--------------------------------------------------------------------
     Beschreibung: lineares Array aus atomaren FndBoxes erzeugen
  --------------------------------------------------------------------*/
-
-
 void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
 {
     sal_Bool bModRow = sal_False;
@@ -1015,22 +965,20 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
 /*--------------------------------------------------------------------
     Beschreibung: Zugriff auf eine bestimmte Zelle
  --------------------------------------------------------------------*/
-
-
 const _FndBox* FlatFndBox::GetBox(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
     sal_uInt16 nOff = n_Row * nCols + n_Col;
     const _FndBox* pTmp = *(pArr + nOff);
 
-    ASSERT(n_Col < nCols && n_Row < nRows && pTmp, "unzulaessiger Array-Zugriff");
+    OSL_ENSURE(n_Col < nCols && n_Row < nRows && pTmp, "unzulaessiger Array-Zugriff");
     return pTmp;
 }
 
 const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) const
 {
-    ASSERT( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "unzulaessiger Array-Zugriff");
+    OSL_ENSURE( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "unzulaessiger Array-Zugriff");
 
     return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

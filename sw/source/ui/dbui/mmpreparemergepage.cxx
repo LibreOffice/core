@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,16 +35,10 @@
 #include <mmpreparemergepage.hxx>
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
-#ifndef _DBUI_HRC
 #include <dbui.hrc>
-#endif
 #include <swtypes.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -51,7 +46,6 @@
 
 
 #include <mmpreparemergepage.hrc>
-#include <dbui.hrc>
 
 #include <unomid.h>
 
@@ -60,9 +54,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using ::rtl::OUString;
 
-/*-- 02.04.2004 16:42:49---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_PREPAREMERGE_PAGE)),
 #ifdef MSC
@@ -96,24 +87,18 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     m_ExcludeCB.SetClickHdl(LINK(this, SwMailMergePrepareMergePage, ExcludeHdl_Impl));
     aMoveLink.Call(&m_aRecordED);
 }
-/*-- 02.04.2004 16:42:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergePrepareMergePage::~SwMailMergePrepareMergePage()
 {
 }
-/*-- 13.05.2004 15:36:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergePrepareMergePage, EditDocumentHdl_Impl, PushButton*, EMPTYARG)
 {
     m_pWizard->SetRestartPage(MM_PREPAREMERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_DOC);
     return 0;
 }
-/*-- 27.05.2004 14:16:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -172,23 +157,20 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     rSh.GetNewDBMgr()->MergeNew(aMergeDesc);
     return 0;
 }
-/*-- 27.05.2004 14:46:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwMailMergePrepareMergePage, ExcludeHdl_Impl, CheckBox*, pBox)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.ExcludeRecord( rConfigItem.GetResultSetPosition(), pBox->IsChecked());
     return 0;
 };
-/*-- 18.08.2004 10:36:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void  SwMailMergePrepareMergePage::ActivatePage()
 {
     MoveHdl_Impl(&m_aRecordED);
 }
-/*-- 13.05.2004 15:38:32---------------------------------------------------
+
+/*-------------------------------------------------------------------------
     merge the data into a new file
   -----------------------------------------------------------------------*/
 sal_Bool  SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
@@ -202,3 +184,5 @@ sal_Bool  SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPag
     }
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

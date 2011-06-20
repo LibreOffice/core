@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,6 +35,7 @@
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 
+using namespace ::editeng;
 
 inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, sal_Bool bTop )
 {
@@ -396,7 +398,7 @@ sal_Bool lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
             SwTableLines& rLns = *pGCPara->pLns;
             const SwTableLine* pTmp = pLn;
             sal_uInt16 nInsPos = rLns.GetPos( pTmp );
-            ASSERT( USHRT_MAX != nInsPos, "Line nicht gefunden!" );
+            OSL_ENSURE( USHRT_MAX != nInsPos, "Line nicht gefunden!" );
 
             SwTableBox* pUpper = pLn->GetUpper();
 
@@ -449,3 +451,4 @@ void SwTable::GCLines()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

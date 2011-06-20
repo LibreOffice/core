@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,7 +136,6 @@ public:
         {
             // Characters, ParagraphCount & WordCount are available from
             // the model ( and addtionally these also update the statics object )
-            //return mxProps->getPropertyValue( rPropName );
             return mxModelProps->getPropertyValue( rPropName );
         }
         catch( uno::Exception& )
@@ -203,16 +203,16 @@ public:
 
     static DocPropInfo createDocPropInfo( const rtl::OUString& sDesc, const rtl::OUString& sPropName, boost::shared_ptr< PropertGetSetHelper >& rHelper )
     {
-        return createDocPropInfo( rtl::OUStringToOString( sDesc, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString( sPropName, RTL_TEXTENCODING_UTF8 ).getStr(), rHelper );
+        DocPropInfo aItem;
+        aItem.msMSODesc = sDesc;
+        aItem.msOOOPropName = sPropName;
+        aItem.mpPropGetSetHelper = rHelper;
+        return aItem;
     }
 
     static DocPropInfo createDocPropInfo( const sal_Char* sDesc, const sal_Char* sPropName, boost::shared_ptr< PropertGetSetHelper >& rHelper )
     {
-        DocPropInfo aItem;
-        aItem.msMSODesc = rtl::OUString::createFromAscii( sDesc );
-        aItem.msOOOPropName = rtl::OUString::createFromAscii( sPropName );
-        aItem.mpPropGetSetHelper = rHelper;
-        return aItem;
+        return createDocPropInfo( rtl::OUString::createFromAscii( sDesc ), rtl::OUString::createFromAscii( sPropName ), rHelper );
     }
     uno::Any getValue()
     {
@@ -236,7 +236,7 @@ public:
 };
 
 
-typedef std::hash_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
+typedef boost::unordered_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
 
 class BuiltInIndexHelper
 {
@@ -305,7 +305,7 @@ public:
     virtual rtl::OUString SAL_CALL getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setLinkSource( const rtl::OUString& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException);
     //XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString::createFromAscii("Value"); }
+    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual uno::Sequence<rtl::OUString> getServiceNames();
@@ -482,7 +482,7 @@ typedef ::cppu::WeakImplHelper3< com::sun::star::container::XIndexAccess
         ,com::sun::star::container::XEnumerationAccess
         > PropertiesImpl_BASE;
 
-typedef std::hash_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
+typedef boost::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
 
 typedef ::cppu::WeakImplHelper1< com::sun::star::container::XEnumeration > DocPropEnumeration_BASE;
 class DocPropEnumeration : public DocPropEnumeration_BASE
@@ -504,7 +504,7 @@ public:
     }
 };
 
-typedef std::hash_map< rtl::OUString, uno::Reference< XDocumentProperty >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > DocPropsByName;
+typedef boost::unordered_map< rtl::OUString, uno::Reference< XDocumentProperty >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > DocPropsByName;
 
 class BuiltInPropertiesImpl : public PropertiesImpl_BASE
 {
@@ -762,3 +762,5 @@ SwVbaCustomDocumentProperties::getServiceImplName()
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaCustomDocumentProperties") );
     return sImplName;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

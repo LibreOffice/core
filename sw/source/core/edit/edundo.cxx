@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
-    // #105332# current undo state was not saved
+    // current undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
     sal_Bool bRet = sal_False;
 
@@ -148,7 +149,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        //JP 18.09.97: autom. Erkennung  fuer die neue "Box"
+        // autom. Erkennung  fuer die neue "Box"
         SaveTblBoxCntnt();
     }
     EndAllAction();
@@ -162,7 +163,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
 
     sal_Bool bRet = sal_False;
 
-    // #105332# undo state was not saved
+    // undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
 
     StartAllAction();
@@ -197,7 +198,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        //JP 18.09.97: autom. Erkennung  fuer die neue "Box"
+        // autom. Erkennung  fuer die neue "Box"
         SaveTblBoxCntnt();
     }
 
@@ -232,8 +233,8 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
 void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList )
 {
-    ASSERT( pShell != NULL, "need shell!" );
-    ASSERT( pSdrMarkList != NULL, "need mark list" );
+    OSL_ENSURE( pShell != NULL, "need shell!" );
+    OSL_ENSURE( pSdrMarkList != NULL, "need mark list" );
 
     if( pShell->ISA( SwFEShell ) )
     {
@@ -252,7 +253,8 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
         // the old implementation would always unselect
         // objects, even if no new ones were selected. If this
         // is a problem, we need to re-work this a little.
-        ASSERT( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
+        OSL_ENSURE( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

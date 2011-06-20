@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,38 +34,21 @@
 
 
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <dbfld.hxx>
-#ifndef _FLDTDLG_HXX
 #include <fldtdlg.hxx>
-#endif
 #include <numrule.hxx>
 
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDDB_HXX
 #include <flddb.hxx>
-#endif
 #include <dbconfig.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 
 #define USER_DATA_VERSION_1     "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_DB ), rCoreSet ),
@@ -97,19 +81,14 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aAddDBPB.SetClickHdl(LINK(this, SwFldDBPage, AddDBHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-__EXPORT SwFldDBPage::~SwFldDBPage()
+SwFldDBPage::~SwFldDBPage()
 {
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: TabPage initialisieren
+    Description: initialise TabPage
  --------------------------------------------------------------------*/
-
-void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
+void SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
 
@@ -123,7 +102,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
 
     if (!IsFldEdit())
     {
-        // TypeListBox initialisieren
+        // initialise TypeListBox
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
         for(i = rRg.nStart; i < rRg.nEnd; ++i)
@@ -140,7 +119,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
         aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
     }
 
-    // alte Pos selektieren
+    // select old Pos
     if (GetTypeSel() != LISTBOX_ENTRY_NOTFOUND)
         aTypeLB.SelectEntryPos(GetTypeSel());
 
@@ -212,11 +191,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-sal_Bool __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
+sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
 {
     String sTableName, sColumnName;
     SwDBData aData;
@@ -231,7 +206,7 @@ sal_Bool __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
     if (!aData.sDataSource.getLength())
         aData = pSh->GetDBData();
 
-    if(aData.sDataSource.getLength())       // Ohne Datenbank kein neuer Feldbefehl
+    if(aData.sDataSource.getLength())       // without database no new field command
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
         String aVal(aValueED.GetText());
@@ -285,35 +260,23 @@ sal_Bool __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
     return sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-SfxTabPage* __EXPORT SwFldDBPage::Create(   Window* pParent,
+SfxTabPage* SwFldDBPage::Create(    Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDBPage( pParent, rAttrSet ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_uInt16 SwFldDBPage::GetGroup()
 {
     return GRP_DB;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -356,7 +319,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 aNumFormatLB.Show();
                 aFormatLB.Hide();
 
-                if (pBox)   // Typ wurde vom User geaendert
+                if (pBox)   // type was changed by user
                     aDBFormatRB.Check();
 
                 if (IsFldEdit())
@@ -373,7 +336,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
             case TYP_DBNUMSETFLD:
                 bSetNo = sal_True;
-                // kein break!
+                // no break!
             case TYP_DBNEXTSETFLD:
                 bCond = sal_True;
                 if (IsFldEdit())
@@ -422,7 +385,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             aValueED.SetText(aEmptyStr);
             if (bCond)
                 aConditionED.SetText( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "sal_True" )));
+                        RTL_CONSTASCII_STRINGPARAM( "TRUE" )));
             else
                 aConditionED.SetText(aEmptyStr);
         }
@@ -433,10 +396,6 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 {
     aNewFormatRB.Check();
@@ -444,10 +403,6 @@ IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 
     return 0;
 }
-
-/*---------------------------------------------------------------------
-    Beschreibung:
----------------------------------------------------------------------*/
 
 void SwFldDBPage::CheckInsert()
 {
@@ -477,10 +432,6 @@ void SwFldDBPage::CheckInsert()
 
     EnableInsert(bInsert);
 }
-
-/*---------------------------------------------------------------------
-    Beschreibung:
----------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
 {
@@ -523,9 +474,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     }
     return 0;
 }
-/*-- 27.05.2004 09:14:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
 {
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
@@ -537,18 +486,14 @@ IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Modify
+    Description: Modify
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldDBPage, ModifyHdl, Edit *, EMPTYARG )
 {
     CheckInsert();
     return 0;
 }
 
-/* -----------------12.01.99 11:21-------------------
- *
- * --------------------------------------------------*/
 void    SwFldDBPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
@@ -563,9 +508,7 @@ void    SwFldDBPage::FillUserData()
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
-/* -----------------12.12.2002 11:33-----------------
- *
- * --------------------------------------------------*/
+
 void SwFldDBPage::ActivateMailMergeAddress()
 {
     sal_uLong nData = TYP_DBFLD;
@@ -574,10 +517,10 @@ void SwFldDBPage::ActivateMailMergeAddress()
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
     aDatabaseTLB.Select(rData.sDataSource, rData.sCommand, aEmptyStr);
 }
-/*-- 07.10.2003 13:59:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFldDBPage::SetWrtShell(SwWrtShell& rSh)
 {
     aDatabaseTLB.SetWrtShell(rSh);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

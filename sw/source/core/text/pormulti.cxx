@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,7 @@
 using namespace ::com::sun::star;
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 
-/*-----------------10.10.00 15:23-------------------
+/*--------------------------------------------------
  *  class SwMultiPortion
  *
  * A SwMultiPortion is not a simple portion,
@@ -79,11 +80,10 @@ SwMultiPortion::~SwMultiPortion()
 
 void SwMultiPortion::Paint( const SwTxtPaintInfo & ) const
 {
-    ASSERT( sal_False,
-    "Don't try SwMultiPortion::Paint, try SwTxtPainter::PaintMultiPortion" );
+    OSL_FAIL( "Don't try SwMultiPortion::Paint, try SwTxtPainter::PaintMultiPortion" );
 }
 
-/*-----------------13.10.00 16:21-------------------
+/*--------------------------------------------------
  * Summarize the internal lines to calculate the (external) size.
  * The internal line has to calculate first.
  * --------------------------------------------------*/
@@ -153,7 +153,7 @@ void SwMultiPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-/*-----------------01.11.00 14:21-------------------
+/*--------------------------------------------------
  * SwMultiPortion::ActualizeTabulator()
  * sets the tabulator-flag, if there's any tabulator-portion inside.
  * --------------------------------------------------*/
@@ -178,7 +178,7 @@ void SwMultiPortion::ActualizeTabulator()
     }
 }
 
-/*-----------------16.02.01 12:07-------------------
+/*--------------------------------------------------
  * SwRotatedPortion::SwRotatedPortion(..)
  * --------------------------------------------------*/
 
@@ -264,7 +264,7 @@ xub_StrLen SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
     return nBlanks;
 }
 
-/*-----------------01.11.00 14:22-------------------
+/*--------------------------------------------------
  * SwDoubleLinePortion::SwDoubleLinePortion(..)
  * This constructor is for the continuation of a doubleline portion
  * in the next line.
@@ -293,7 +293,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( SwDoubleLinePortion& rDouble,
     }
 }
 
-/*-----------------01.11.00 14:22-------------------
+/*--------------------------------------------------
  * SwDoubleLinePortion::SwDoubleLinePortion(..)
  * This constructor uses the textattribut to get the right brackets.
  * The textattribut could be a 2-line-attribute or a character- or
@@ -358,7 +358,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
 }
 
 
-/*-----------------25.10.00 09:51-------------------
+/*--------------------------------------------------
  * SwMultiPortion::PaintBracket paints the wished bracket,
  * if the multiportion has surrounding brackets.
  * The X-position of the SwTxtPaintInfo will be modified:
@@ -398,7 +398,7 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
         rInf.X( rInf.X() + PreWidth() );
 }
 
-/*-----------------25.10.00 16:26-------------------
+/*--------------------------------------------------
  * SwDoubleLinePortion::SetBrackets creates the bracket-structur
  * and fills it, if not both characters are 0x00.
  * --------------------------------------------------*/
@@ -416,7 +416,7 @@ void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
     }
 }
 
-/*-----------------25.10.00 16:29-------------------
+/*--------------------------------------------------
  * SwDoubleLinePortion::FormatBrackets
  * calculates the size of the brackets => pBracket,
  * reduces the nMaxWidth-parameter ( minus bracket-width )
@@ -486,7 +486,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
     nMaxWidth += rInf.X();
 }
 
-/*-----------------26.10.00 10:36-------------------
+/*--------------------------------------------------
  * SwDoubleLinePortion::CalcBlanks
  * calculates the number of blanks in each line and
  * the difference of the width of the two lines.
@@ -530,7 +530,7 @@ long SwDoubleLinePortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo & ) c
     return HasTabulator() ? 0 : GetSpaceCnt() * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
-/*-----------------01.11.00 14:29-------------------
+/*--------------------------------------------------
  * SwDoubleLinePortion::ChangeSpaceAdd(..)
  * merges the spaces for text adjustment from the inner and outer part.
  * Inside the doubleline portion the wider line has no spaceadd-array, the
@@ -565,18 +565,17 @@ sal_Bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
             if( nMultiSpace < KSHRT_MAX * SPACING_PRECISION_FACTOR )
             {
 //                pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
-                // --> FME 2006-07-11 #i65711# SetLLSpaceAdd replaces the first value,
+                // #i65711# SetLLSpaceAdd replaces the first value,
                 // instead we want to insert a new first value:
                 std::vector<long>* pVec = pCurr->GetpLLSpaceAdd();
                 pVec->insert( pVec->begin(), nMultiSpace );
-                // <--
                 bRet = sal_True;
             }
         }
     }
     return bRet;
 }
-/*-----------------01.11.00 14:29-------------------
+/*--------------------------------------------------
  * SwDoubleLinePortion::ResetSpaceAdd(..)
  * cancels the manipulation from SwDoubleLinePortion::ChangeSpaceAdd(..)
  * --------------------------------------------------*/
@@ -593,7 +592,7 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
     delete pBracket;
 }
 
-/*-----------------13.11.00 14:50-------------------
+/*--------------------------------------------------
  * SwRubyPortion::SwRubyPortion(..)
  * constructs a ruby portion, i.e. an additional text is displayed
  * beside the main text, e.g. phonetic characters.
@@ -610,7 +609,7 @@ SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd ) :
     SetRuby();
 }
 
-/*-----------------13.11.00 14:50-------------------
+/*--------------------------------------------------
  * SwRubyPortion::SwRubyPortion(..)
  * constructs a ruby portion, i.e. an additional text is displayed
  * beside the main text, e.g. phonetic characters.
@@ -623,8 +622,8 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
      : SwMultiPortion( nEnd )
 {
     SetRuby();
-    ASSERT( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
-    ASSERT( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
+    OSL_ENSURE( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
+    OSL_ENSURE( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
     const SwFmtRuby& rRuby = rCreate.pAttr->GetRuby();
     nAdjustment = rRuby.GetAdjustment();
     nRubyOffset = nOffs;
@@ -677,7 +676,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         SetDirection( DIR_LEFT2RIGHT );
 }
 
-/*-----------------13.11.00 14:56-------------------
+/*--------------------------------------------------
  * SwRubyPortion::_Adjust(..)
  * In ruby portion there are different alignments for
  * the ruby text and the main text.
@@ -748,7 +747,7 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
             }
             break;
         }
-        default: ASSERT( sal_False, "New ruby adjustment" );
+        default: OSL_FAIL( "New ruby adjustment" );
     }
     if( nLeft || nRight )
     {
@@ -773,7 +772,7 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
     rInf.SetIdx( nOldIdx );
 }
 
-/*-----------------08.11.00 14:14-------------------
+/*--------------------------------------------------
  * CalcRubyOffset()
  * has to change the nRubyOffset, if there's a fieldportion
  * in the phonetic line.
@@ -807,7 +806,7 @@ void SwRubyPortion::CalcRubyOffset()
     }
 }
 
-/*-----------------13.10.00 16:22-------------------
+/*--------------------------------------------------
  * SwTxtSizeInfo::GetMultiCreator(..)
  * If we (e.g. the position rPos) are inside a two-line-attribute or
  * a ruby-attribute, the attribute will be returned in a SwMultiCreator-struct,
@@ -820,7 +819,7 @@ void SwRubyPortion::CalcRubyOffset()
  * with different brackets interrupts another 2-line-attribute.
  * --------------------------------------------------*/
 
-/*-----------------13.11.00 15:38-------------------
+/*--------------------------------------------------
  * lcl_Has2Lines(..)
  * is a little help function for GetMultiCreator(..)
  * It extracts the 2-line-format from a 2-line-attribute or a character style.
@@ -849,7 +848,7 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     return sal_False;
 }
 
-/*-----------------16.02.01 16:39-------------------
+/*--------------------------------------------------
  * lcl_HasRotation(..)
  * is a little help function for GetMultiCreator(..)
  * It extracts the charrotation from a charrotate-attribute or a character style.
@@ -887,7 +886,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     sal_uInt8 nCurrLevel;
     if ( pMulti )
     {
-        ASSERT( pMulti->IsBidi(), "Nested MultiPortion is not BidiPortion" )
+        OSL_ENSURE( pMulti->IsBidi(), "Nested MultiPortion is not BidiPortion" );
         // level associated with bidi-portion;
         nCurrLevel = ((SwBidiPortion*)pMulti)->GetLevel();
     }
@@ -1265,7 +1264,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     return NULL;
 }
 
-/*-----------------01.11.00 14:52-------------------
+/*--------------------------------------------------
  * SwSpaceManipulator
  * is a little helper class to manage the spaceadd-arrays of the text adjustment
  * during a PaintMultiPortion.
@@ -1355,7 +1354,7 @@ SwSpaceManipulator::~SwSpaceManipulator()
     rInfo.SetDirection( nOldDir );
 }
 
-/*-----------------13.10.00 16:24-------------------
+/*--------------------------------------------------
  * SwTxtPainter::PaintMultiPortion manages the paint for a SwMultiPortion.
  * External, for the calling function, it seems to be a normal Paint-function,
  * internal it is like a SwTxtFrm::Paint with multiple DrawTextLines
@@ -1366,13 +1365,11 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 {
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
-    sal_uInt16 nGridWidth = 0;
     sal_uInt16 nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;
 
     if ( bHasGrid )
     {
-        nGridWidth = pGrid->GetBaseHeight();
         nRubyHeight = pGrid->GetRubyHeight();
         bRubyTop = ! pGrid->GetRubyTextBelow();
     }
@@ -1397,8 +1394,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     {
         // these values are needed for the calculation of the x coordinate
         // and the layout mode
-        ASSERT( ! pEnvPor || pEnvPor->IsBidi(),
-                "Oh no, I expected a BidiPortion" )
+        OSL_ENSURE( ! pEnvPor || pEnvPor->IsBidi(),
+                "Oh no, I expected a BidiPortion" );
         nFrmDir = GetInfo().GetTxtFrm()->IsRightToLeft() ? 1 : 0;
         nEnvDir = pEnvPor ? ((SwBidiPortion*)pEnvPor)->GetLevel() % 2 : nFrmDir;
         nThisDir = ((SwBidiPortion&)rMulti).GetLevel() % 2;
@@ -1502,8 +1499,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     sal_Bool bRest = pLay->IsRest();
     sal_Bool bFirst = sal_True;
 
-    ASSERT( 0 == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
-            " Only BiDi portions are allowed to use the common underlining font" )
+    OSL_ENSURE( 0 == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
+            " Only BiDi portions are allowed to use the common underlining font" );
 
     do
     {
@@ -1595,7 +1592,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
         {
             // but we do allow nested bidi portions
-            ASSERT( rMulti.IsBidi(), "Only nesting of bidi portions is allowed" )
+            OSL_ENSURE( rMulti.IsBidi(), "Only nesting of bidi portions is allowed" );
             PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor, &rMulti );
         }
         else
@@ -1794,7 +1791,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         // We set nTmpX (which is used for portion calculating) to the
         // current Y value
         const SwPageFrm* pPage = pFrm->FindPageFrm();
-        ASSERT( pPage, "No page in frame!");
+        OSL_ENSURE( pPage, "No page in frame!");
         const SwLayoutFrm* pUpperFrm = pPage;
 
         if ( pFrm->IsInTab() )
@@ -1802,7 +1799,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             pUpperFrm = pFrm->GetUpper();
             while ( pUpperFrm && !pUpperFrm->IsCellFrm() )
                 pUpperFrm = pUpperFrm->GetUpper();
-            ASSERT( pUpperFrm, "pFrm is in table but does not have an upper cell frame" )
+            OSL_ENSURE( pUpperFrm, "pFrm is in table but does not have an upper cell frame" );
             const SwTableLine* pLine = ((SwRowFrm*)pUpperFrm->GetUpper())->GetTabLine();
             const SwFmtFrmSize& rFrmFmtSize = pLine->GetFrmFmt()->GetFrmSize();
             if ( ATT_VAR_SIZE == rFrmFmtSize.GetHeightSizeType() )
@@ -1873,16 +1870,10 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
-    sal_uInt16 nGridWidth = 0;
-    sal_uInt16 nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;
 
     if ( bHasGrid )
-    {
-        nGridWidth = pGrid->GetBaseHeight();
-        nRubyHeight = pGrid->GetRubyHeight();
         bRubyTop = ! pGrid->GetRubyTextBelow();
-    }
 
     do
     {
@@ -1899,7 +1890,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
         if( pFirstRest )
         {
-            ASSERT( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest expected");
+            OSL_ENSURE( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest expected");
             SwFldPortion *pFld =
                 ((SwFldPortion*)pFirstRest)->Clone(
                     ((SwFldPortion*)pFirstRest)->GetExp() );
@@ -1946,7 +1937,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 pNextFirst = aInf.GetRest();
                 if( pSecondRest )
                 {
-                    ASSERT( pSecondRest->InFldGrp(), "Fieldrest expected");
+                    OSL_ENSURE( pSecondRest->InFldGrp(), "Fieldrest expected");
                     SwFldPortion *pFld = ((SwFldPortion*)pSecondRest)->Clone(
                                     ((SwFldPortion*)pSecondRest)->GetExp() );
                     pFld->SetFollow( sal_True );
@@ -2084,7 +2075,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     // line break has to be performed!
     if( bRet )
     {
-        ASSERT( !pNextFirst || pNextFirst->InFldGrp(),
+        OSL_ENSURE( !pNextFirst || pNextFirst->InFldGrp(),
             "BuildMultiPortion: Surprising restportion, field expected" );
         SwMultiPortion *pTmp;
         if( rMulti.IsDouble() )
@@ -2092,7 +2083,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                                             nMultiLen + rInf.GetIdx() );
         else if( rMulti.IsRuby() )
         {
-            ASSERT( !pNextSecond || pNextSecond->InFldGrp(),
+            OSL_ENSURE( !pNextSecond || pNextSecond->InFldGrp(),
                 "BuildMultiPortion: Surprising restportion, field expected" );
 
             if ( rInf.GetIdx() == rInf.GetLineStart() )
@@ -2185,7 +2176,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     return bRet;
 }
 
-/*-----------------08.11.00 09:29-------------------
+/*--------------------------------------------------
  * SwTxtFormatter::MakeRestPortion(..)
  * When a fieldportion at the end of line breaks and needs a following
  * fieldportion in the next line, then the "restportion" of the formatinfo
@@ -2229,7 +2220,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         }
         else if( pPor->IsMultiPortion() )
         {
-            ASSERT( !pHelpMulti || pHelpMulti->IsBidi(),
+            OSL_ENSURE( !pHelpMulti || pHelpMulti->IsBidi(),
                     "Nested multiportions are forbidden." );
 
             pFld = NULL;
@@ -2289,11 +2280,14 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 
     if ( !pCreate )
     {
-        ASSERT( !pHelpMulti->GetLen(), "Multiportion without attribut?" );
+        OSL_ENSURE( !pHelpMulti->GetLen(), "Multiportion without attribut?" );
         if ( nMultiPos )
             --nMultiPos;
         pCreate = GetInfo().GetMultiCreator( --nMultiPos, 0 );
     }
+
+    if (!pCreate)
+        return pRest;
 
     if( pRest || nMultiPos > nPosition || ( pHelpMulti->IsRuby() &&
         ((SwRubyPortion*)pHelpMulti)->GetRubyOffset() < STRING_LEN ) )
@@ -2349,7 +2343,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 
 
 
-/*-----------------23.10.00 10:47-------------------
+/*--------------------------------------------------
  * SwTxtCursorSave notes the start and current line of a SwTxtCursor,
  * sets them to the values for GetCrsrOfst inside a multiportion
  * and restores them in the destructor.
@@ -2413,3 +2407,4 @@ SwTxtCursorSave::~SwTxtCursorSave()
     pTxtCrsr->SetPropFont( nOldProp );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 
 #include "swtypes.hxx"
 #include "txttypes.hxx"
@@ -41,7 +40,6 @@
 #include "porlay.hxx"
 #include "txtfrm.hxx"
 #include "ndtxt.hxx"
-#include "txttypes.hxx"
 #include <editeng/paravertalignitem.hxx>
 
 class Font;
@@ -76,7 +74,7 @@ class SwWrongList;
 #define DIR_RIGHT2LEFT 2
 #define DIR_TOP2BOTTOM 3
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #define OPTCALM( rInf )  (rInf).IsOptCalm()
 #define OPTLOW( rInf )   (rInf).IsOptLow()
 #define OPTDBG( rInf )   (rInf).IsOptDbg()
@@ -100,17 +98,12 @@ class SwLineInfo
     const SvxLineSpacingItem *pSpace;
     sal_uInt16 nVertAlign;
     KSHORT nDefTabStop;
-    // --> OD 2008-02-04 #newlistlevelattrs#
     bool bListTabStopIncluded;
     long nListTabStopPosition;
-    // <--
 
-    // --> OD 2008-01-17 #newlistlevelattrs#
     void CtorInitLineInfo( const SwAttrSet& rAttrSet,
                            const SwTxtNode& rTxtNode );
-    // <--
 
-    // --> OD 2008-01-17 #newlistlevelattrs#
     SwLineInfo();
     ~SwLineInfo();
 public:
@@ -134,7 +127,6 @@ public:
 
     sal_uInt16 NumberOfTabStops() const;
 
-    // --> OD 2008-02-04 #newlistlevelattrs#
     inline bool IsListTabStopIncluded() const
     {
         return bListTabStopIncluded;
@@ -143,8 +135,6 @@ public:
     {
         return nListTabStopPosition;
     }
-    // <--
-
 
 //  friend ostream &operator<<( ostream &rOS, const SwLineInfo &rInf );
     friend SvStream &operator<<( SvStream &rOS, const SwLineInfo &rInf );
@@ -162,7 +152,7 @@ class SwTxtInfo
     xub_StrLen nTxtStart;                 // TxtOfst bei Follows
 
 protected:
-    inline SwTxtInfo() { }
+    inline SwTxtInfo() : pPara(0) {}
 public:
     void CtorInitTxtInfo( SwTxtFrm *pFrm );
     SwTxtInfo( const SwTxtInfo &rInf );
@@ -226,7 +216,7 @@ protected:
     void CtorInitTxtSizeInfo( SwTxtFrm *pFrm, SwFont *pFnt = 0,
                    const xub_StrLen nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
-    SwTxtSizeInfo() {}
+    SwTxtSizeInfo() : pKanaComp(0), pVsh(0), pOut(0), pRef(0), pFnt(0), pUnderFnt(0), pFrm(0), pOpt(0), pTxt(0) {}
 public:
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf );
     SwTxtSizeInfo( const SwTxtSizeInfo &rInf, const XubString &rTxt,
@@ -381,7 +371,7 @@ public:
         { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool IsOptCalm() const;
     sal_Bool IsOptLow() const;
     sal_Bool IsOptDbg() const;
@@ -424,11 +414,11 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     void _DrawBackBrush( const SwLinePortion &rPor ) const;
 
 protected:
-#ifndef DBG_UTIL
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
-#else
+#if OSL_DEBUG_LEVEL > 1
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
                        pBrushItem = ((SvxBrushItem*)-1);}
+#else
+    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
 #endif
 public:
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf );
@@ -542,11 +532,10 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     xub_StrLen nHyphWrdLen;     // gefundene Wort-Laenge
     xub_StrLen nLineStart;      // aktueller Zeilenbeginn im rTxt
     xub_StrLen nUnderScorePos;  // enlarge repaint if underscore has been found
-    // --> FME 2004-11-25 #i34348# Changed type from sal_uInt16 to SwTwips
+    // #i34348# Changed type from sal_uInt16 to SwTwips
     SwTwips nLeft;          // linker Rand
     SwTwips nRight;           // rechter Rand
     SwTwips nFirst;           // EZE
-    // <--
     KSHORT nRealWidth;      // "echte" Zeilenbreite
     KSHORT nWidth;          // "virtuelle" Zeilenbreite
     KSHORT nLineHeight;     // endgueltige Hoehe nach CalcLine
@@ -813,13 +802,13 @@ public:
 
 inline KSHORT SwTxtSizeInfo::GetAscent() const
 {
-    ASSERT( GetOut(), "SwTxtSizeInfo::GetAscent() without pOut" )
+    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetAscent() without pOut" );
     return ((SwFont*)GetFont())->GetAscent( pVsh, *GetOut() );
 }
 
 inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
 {
-    ASSERT( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without pOut" )
+    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without pOut" );
     return ((SwFont*)GetFont())->GetHeight( pVsh, *GetOut() );
 }
 
@@ -903,3 +892,4 @@ inline sal_Bool SwTxtFormatInfo::IsSoftHyph( const xub_StrLen nPos ) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,17 +38,16 @@ struct SwPosition;
 class IntlWrapper;
 #define IVER_FMTANCHOR_LONGIDX ((sal_uInt16)1)
 
-//FlyAnchor, Anker des Freifliegenden Rahmen ----
-
+// FlyAnchors
 class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
 {
-    SwPosition *pCntntAnchor;   //0 Fuer Seitengebundene Rahmen.
-                                //Index fuer Absatzgebundene Rahmen.
-                                //Position fuer Zeichengebundene Rahmen
+    SwPosition *pCntntAnchor;   // 0 for page-bound frames.
+                                // Index for paragraph-bound frames.
+                                // Position for character-bound frames.
     RndStdIds  nAnchorId;
-    sal_uInt16     nPageNum;        //Seitennummer bei Seitengeb. Rahmen.
+    sal_uInt16     nPageNum;        // Page number for page-bound frames.
 
-    // OD 2004-05-05 #i28701# - getting anchor positions ordered
+    // #i28701# - getting anchor positions ordered
     sal_uInt32 mnOrder;
     static sal_uInt32 mnOrderCounter;
 
@@ -56,10 +56,9 @@ public:
     SwFmtAnchor( const SwFmtAnchor &rCpy );
     ~SwFmtAnchor();
 
-    //  Zuweisungsoperator
     SwFmtAnchor &operator=( const SwFmtAnchor& );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -68,13 +67,13 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     RndStdIds GetAnchorId() const { return nAnchorId; }
     sal_uInt16 GetPageNum() const { return nPageNum; }
     const SwPosition *GetCntntAnchor() const { return pCntntAnchor; }
-    // OD 2004-05-05 #i28701#
+    // #i28701#
     sal_uInt32 GetOrder() const;
 
     void SetType( RndStdIds nRndId ) { nAnchorId = nRndId; }
@@ -90,3 +89,4 @@ inline const SwFmtAnchor &SwAttrSet::GetAnchor(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

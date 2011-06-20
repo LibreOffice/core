@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,14 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
-
 
 #include "view.hxx"
 #include "wrtsh.hxx"
@@ -83,7 +81,7 @@ void SwView::ExecDlg(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 
@@ -96,3 +94,4 @@ void SwView::ExecDlg(SfxRequest &rReq)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

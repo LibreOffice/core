@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -75,7 +76,7 @@ class SwXFrame : public cppu::WeakImplHelper6
 
     // Descriptor-interface
     BaseFrameProperties_Impl*       pProps;
-    sal_Bool                        bIsDescriptor;
+    bool bIsDescriptor;
     String                          sName;
 
     SwPaM*                          m_pCopySource;
@@ -129,7 +130,7 @@ public:
     //XShapeDescriptor
     virtual rtl::OUString SAL_CALL getShapeType(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    //Basisimplementierung
+    //Base implementation
     //XComponent
     virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -151,7 +152,7 @@ public:
     }
     FlyCntType      GetFlyCntType()const {return eType;}
 
-    sal_Bool            IsDescriptor() const {return bIsDescriptor;}
+    bool IsDescriptor() const {return bIsDescriptor;}
     void            ResetDescriptor();
     //copy text from a given source PaM
     void            SetSelection(SwPaM& rCopySource);
@@ -280,9 +281,7 @@ public:
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };
-/*-----------------20.02.98 11:28-------------------
 
---------------------------------------------------*/
 class SwOLENode;
 typedef cppu::WeakImplHelper3
 <
@@ -346,8 +345,7 @@ class SwXOLEListener : public cppu::WeakImplHelper1
     public SwClient
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLEModel;
-//    SfxObjectShell* GetObjShell( const SwFmt& rFmt,
-//                                    SwOLENode** ppNd = 0 ) const;
+
     SwFmt*       GetFmt() const    {  return (SwFmt*)GetRegisteredIn(); }
 public:
     SwXOLEListener(SwFmt& rOLEFmt, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
@@ -368,3 +366,4 @@ protected:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

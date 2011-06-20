@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,14 +44,13 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    //ruft MakePrtArea
 
-    // --> OD 2007-11-26 #b6614158#
     // parameter <bObjsInNewUpper>, indicating that objects are existing in
     // remaining area of new upper
     sal_Bool _WouldFit( SwTwips nSpace,
                     SwLayoutFrm *pNewUpper,
                     sal_Bool bTstMove,
                     const bool bObjsInNewUpper );
-    // <--
+
     virtual void MakeAll();
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
@@ -83,6 +83,8 @@ public:
 
     inline const SwCntntFrm *GetFollow() const;
     inline       SwCntntFrm *GetFollow();
+    inline const SwCntntFrm *GetPrecede() const;
+    inline       SwCntntFrm *GetPrecede();
     SwTxtFrm* FindMaster() const;
 
         //Layoutabhaengiges Cursortravelling
@@ -146,5 +148,15 @@ inline SwCntntFrm *SwCntntFrm::GetFollow()
 {
     return (SwCntntFrm*)SwFlowFrm::GetFollow();
 }
+inline const SwCntntFrm *SwCntntFrm::GetPrecede() const
+{
+    return (const SwCntntFrm*)SwFlowFrm::GetPrecede();
+}
+inline SwCntntFrm *SwCntntFrm::GetPrecede()
+{
+    return (SwCntntFrm*)SwFlowFrm::GetPrecede();
+}
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

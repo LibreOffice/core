@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,12 +67,11 @@
 #include <svx/svdetc.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdpagv.hxx>
-#include <dcontact.hxx>
 #include <txtfrm.hxx>
-#include <frmfmt.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 #include <svx/svditer.hxx>
+
 #include <vector>
 #include <switerator.hxx>
 
@@ -85,11 +85,8 @@ SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
 |*
 |*  SwDoc::GroupSelection / SwDoc::UnGroupSelection
 |*
-|*  Ersterstellung      JP 21.08.95
-|*  Letzte Aenderung    JP 21.08.95
-|*
 |*************************************************************************/
-// OD 2004-04-01 #i26791# - local method to determine positioning and
+// local method to determine positioning and
 // alignment attributes for a drawing object, which is newly connected to
 // the layout. Used for a newly formed group object <SwDoc::GroupSelection(..)>
 // and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
@@ -97,35 +94,32 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                 const SdrObject& _rSdrObj )
 {
     const SwContact* pContact = GetUserCall( &_rSdrObj );
-    ASSERT( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
+    OSL_ENSURE( pContact, "<lcl_AdjustPositioningAttr(..)> - missing contact object." );
 
     // determine position of new group object relative to its anchor frame position
     SwTwips nHoriRelPos = 0;
     SwTwips nVertRelPos = 0;
     {
         const SwFrm* pAnchorFrm = pContact->GetAnchoredObj( &_rSdrObj )->GetAnchorFrm();
-        ASSERT( !pAnchorFrm ||
+        OSL_ENSURE( !pAnchorFrm ||
                 !pAnchorFrm->IsTxtFrm() ||
                 !static_cast<const SwTxtFrm*>(pAnchorFrm)->IsFollow(),
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
         bool bVert = false;
         bool bR2L = false;
-        // --> OD 2005-05-10 #i45952# - use anchor position of
-        // anchor frame, if it exist.
+        // #i45952# - use anchor position of anchor frame, if it exist.
         Point aAnchorPos;
         if ( pAnchorFrm )
         {
-            // --> OD 2005-05-10 #i45952#
+            // #i45952#
             aAnchorPos = pAnchorFrm->GetFrmAnchorPos( ::HasWrap( &_rSdrObj ) );
-            // <--
             bVert = pAnchorFrm->IsVertical();
             bR2L = pAnchorFrm->IsRightToLeft();
         }
         else
         {
-            // --> OD 2005-05-10 #i45952#
+            // #i45952#
             aAnchorPos = _rSdrObj.GetAnchorPos();
-            // <--
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
             const SvxFrameDirectionItem* pDirItem =
@@ -137,9 +131,7 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                     // vertical from left-to-right - Badaa: supported now!
                     bVert = true;
                     bR2L = true;
-                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                    //ASSERT( false, "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
-                    //End
+                    OSL_FAIL( "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
                 }
                 break;
                 case FRMDIR_VERT_TOP_RIGHT:
@@ -196,10 +188,9 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
 
     _pFrmFmt->SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
     _pFrmFmt->SetFmtAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
-    // --> OD 2005-03-11 #i44334#, #i44681# - positioning attributes already set
+    // #i44334#, #i44681# - positioning attributes already set
     _pFrmFmt->PosAttrSet();
-    // <--
-    // --> OD 2004-10-01 #i34750# - keep current object rectangle for  drawing
+    // #i34750# - keep current object rectangle for  drawing
     // objects. The object rectangle is used on events from the drawing layer
     // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
     {
@@ -213,13 +204,12 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                         ->SetLastObjRect( aObjRect.SVRect() );
         }
     }
-    // <--
 }
 
 SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 {
-    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
-    // the corresponding 'master' drawing objects.
+    // replace marked 'virtual' drawing objects by the corresponding 'master'
+    // drawing objects.
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
@@ -237,28 +227,26 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                                  ? 0
                                  : new SwUndoDrawGroup( (sal_uInt16)rMrkList.GetMarkCount() );
 
-        // --> OD 2005-08-16 #i53320#
+        // #i53320#
         bool bGroupMembersNotPositioned( false );
         {
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pMyContact->GetAnchoredObj( pObj ));
             bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
         }
-        // <--
         //ContactObjekte und Formate vernichten.
         for( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
-            // --> OD 2005-08-16 #i53320#
-#ifdef DBG_UTIL
+            // #i53320#
+#if OSL_DEBUG_LEVEL > 1
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
-            ASSERT( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
+            OSL_ENSURE( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
                     "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
 #endif
-            // <--
 
             pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
             //loescht sich selbst!
@@ -270,41 +258,37 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             else
                 DelFrmFmt( pFmt );
 
-            // --> OD 2005-05-10 #i45952# - re-introduce position
-            // normalization of group member objects, because its anchor position
-            // is cleared, when they are grouped.
+            // #i45952# - re-introduce position normalization of group member
+            // objects, because its anchor position is cleared, when they are
+            // grouped.
             Point aAnchorPos( pObj->GetAnchorPos() );
             pObj->NbcSetAnchorPos( Point( 0, 0 ) );
             pObj->NbcMove( Size( aAnchorPos.X(), aAnchorPos.Y() ) );
-            // <--
         }
 
         pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
                                 GetDfltFrmFmt() );
         pFmt->SetFmtAttr( aAnch );
-        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        // #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-        // <--
 
         rDrawView.GroupMarked();
-        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
+        OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
 
         SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
-        // --> OD 2004-11-22 #i35635#
+        // #i35635#
         pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
-        // <--
         pNewContact->ConnectToLayout();
-        // --> OD 2005-08-16 #i53320# - No adjustment of the positioning and
-        // alignment attributes, if group members aren't positioned yet.
+        // #i53320# - No adjustment of the positioning and alignment
+        // attributes, if group members aren't positioned yet.
         if ( !bGroupMembersNotPositioned )
         {
-            // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
+            // #i26791# - Adjust positioning and alignment attributes.
             lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
         }
-        // <--
 
         if( pUndo )
         {
@@ -320,7 +304,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         }
 
         rDrawView.GroupMarked();
-        ASSERT( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
+        OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
     }
 
     return pNewContact;
@@ -335,20 +319,16 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         GetIDocumentUndoRedo().ClearRedo();
     }
 
-    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
-    // the corresponding 'master' drawing objects.
+    // replace marked 'virtual' drawing objects by the corresponding 'master'
+    // drawing objects.
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    // --> OD 2006-11-01 #130889#
     std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >* pFmtsAndObjs( 0L );
     const sal_uInt32 nMarkCount( rMrkList.GetMarkCount() );
-    // <--
     if ( nMarkCount )
     {
-        // --> OD 2006-11-01 #130889#
         pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[nMarkCount];
-        // <--
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pMyObj->GetUpGroup() )
         {
@@ -376,24 +356,10 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
                                                             GetDfltFrmFmt() );
                         pFmt->SetFmtAttr( aAnch );
-                        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+                        // #i36010# - set layout direction of the position
                         pFmt->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-                        // <--
-                        // --> OD 2006-11-01 #130889#
-                        // creation of <SwDrawContact> instances for the group
-                        // members and its connection to the Writer layout is
-                        // done after intrinsic ungrouping.
-//                        SwDrawContact* pContact = new SwDrawContact( pFmt, pSubObj );
-//                        // --> OD 2004-11-22 #i35635#
-//                        pContact->MoveObjToVisibleLayer( pSubObj );
-//                        // <--
-//                        pContact->ConnectToLayout();
-//                        // OD 2004-04-07 #i26791# - Adjust positioning and
-//                        // alignment attributes.
-//                        lcl_AdjustPositioningAttr( pFmt, *pSubObj );
                         pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
-                        // <--
 
                         if( bUndo )
                             pUndo->AddObj( i2, pFmt );
@@ -403,7 +369,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         }
     }
     rDrawView.UnGroupMarked();
-    // --> OD 2006-11-01 #130889#
     // creation of <SwDrawContact> instances for the former group members and
     // its connection to the Writer layout.
     for ( sal_uInt32 i = 0; i < nMarkCount; ++i )
@@ -433,15 +398,11 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         }
     }
     delete [] pFmtsAndObjs;
-    // <--
 }
 
 /*************************************************************************
 |*
 |*  SwDoc::DeleteSelection()
-|*
-|*  Ersterstellung      MA 14. Nov. 95
-|*  Letzte Aenderung    MA 14. Nov. 95
 |*
 |*************************************************************************/
 
@@ -506,14 +467,13 @@ sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     if( pContact ) // natuerlich nicht bei gruppierten Objekten
                     {
                         SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
-                        // OD 18.06.2003 #108784# - before delete of selection
-                        // is performed, marked <SwDrawVirtObj>-objects have to
-                        // be replaced by its reference objects.
-                        // Thus, assert, if a <SwDrawVirt>-object is found in the mark list.
+                        // before delete of selection is performed, marked
+                        // <SwDrawVirtObj>-objects have to be replaced by its
+                        // reference objects.  Thus, assert, if a
+                        // <SwDrawVirt>-object is found in the mark list.
                         if ( pObj->ISA(SwDrawVirtObj) )
                         {
-                            ASSERT( false,
-                                    "<SwDrawVirtObj> is still marked for delete. application will crash!" );
+                            OSL_FAIL( "<SwDrawVirtObj> is still marked for delete. application will crash!" );
                         }
                         //loescht sich selbst!
                         pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
@@ -544,9 +504,6 @@ sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
 /*************************************************************************
 |*
 |*  SwDoc::DeleteSelection()
-|*
-|*  Ersterstellung      JP 11.01.96
-|*  Letzte Aenderung    JP 11.01.96
 |*
 |*************************************************************************/
 
@@ -582,7 +539,7 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
     else {
-        ASSERT( !this, "was ist das fuer ein Format?" );
+        OSL_ENSURE( !this, "was ist das fuer ein Format?" );
     }
 }
 
@@ -591,7 +548,6 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 // des Drawing Layers auftrat. In diesem Fall wird der Layer komplett
 // neu aufgebaut.
 
-// #75371#
 #include <svx/sxenditm.hxx>
 
 void SwDoc::InitDrawModel()
@@ -606,11 +562,9 @@ void SwDoc::InitDrawModel()
     //DrawPool und EditEnginePool anlegen, diese gehoeren uns und werden
     //dem Drawing nur mitgegeben. Im ReleaseDrawModel werden die Pools wieder
     //zerstoert.
-    // 17.2.99: for Bug 73110 - for loading the drawing items. This must
-    //                          be loaded without RefCounts!
+    // for loading the drawing items. This must be loaded without RefCounts!
     SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
-    // #75371# change DefaultItems for the SdrEdgeObj distance items
-    // to TWIPS.
+    // change DefaultItems for the SdrEdgeObj distance items to TWIPS.
     if(pSdrPool)
     {
         const long nDefEdgeDist = ((500 * 72) / 127); // 1/100th mm in twips
@@ -631,7 +585,7 @@ void SwDoc::InitDrawModel()
     else
         pSdrPool->FreezeIdRanges();
 
-    // SJ: #95129# set FontHeight pool defaults without changing static SdrEngineDefaults
+    // set FontHeight pool defaults without changing static SdrEngineDefaults
      GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
@@ -651,8 +605,7 @@ void SwDoc::InitDrawModel()
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
     nControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-    // OD 25.06.2003 #108784# - add invisible layers corresponding to the
-    // visible ones.
+    // add invisible layers corresponding to the visible ones.
     {
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
         nInvisibleHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
@@ -711,12 +664,7 @@ void SwDoc::InitDrawModel()
     }
 }
 
-/** method to notify drawing page view about the invisible layers
-
-    OD 26.06.2003 #108784#
-
-    @author OD
-*/
+/** method to notify drawing page view about the invisible layers */
 void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 {
     String sLayerNm;
@@ -732,10 +680,7 @@ void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 
 /** method to determine, if a layer ID belongs to the visible ones.
 
-    OD 25.06.2003 #108784#
     Note: If given layer ID is unknown, method asserts and returns <false>.
-
-    @author OD
 */
 bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
 {
@@ -755,7 +700,7 @@ bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
     }
     else
     {
-        ASSERT( false, "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
+        OSL_FAIL( "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
         bRetVal = false;
     }
 
@@ -764,11 +709,8 @@ bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
 
 /** method to determine, if the corresponding visible layer ID for a invisible one.
 
-    OD 25.06.2003 #108784#
     Note: If given layer ID is a visible one, method returns given layer ID.
     Note: If given layer ID is unknown, method returns given layer ID.
-
-    @author OD
 */
 SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId )
 {
@@ -790,12 +732,12 @@ SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisible
               _nInvisibleLayerId == GetHellId() ||
               _nInvisibleLayerId == GetControlsId() )
     {
-        ASSERT( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
+        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
         nVisibleLayerId = _nInvisibleLayerId;
     }
     else
     {
-        ASSERT( false, "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
+        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
         nVisibleLayerId = _nInvisibleLayerId;
     }
 
@@ -804,11 +746,8 @@ SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisible
 
 /** method to determine, if the corresponding invisible layer ID for a visible one.
 
-    OD 25.06.2003 #108784#
     Note: If given layer ID is a invisible one, method returns given layer ID.
     Note: If given layer ID is unknown, method returns given layer ID.
-
-    @author OD
 */
 SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId )
 {
@@ -830,12 +769,12 @@ SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLa
               _nVisibleLayerId == GetInvisibleHellId() ||
               _nVisibleLayerId == GetInvisibleControlsId() )
     {
-        ASSERT( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
+        OSL_FAIL( "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
         nInvisibleLayerId = _nVisibleLayerId;
     }
     else
     {
-        ASSERT( false, "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
+        OSL_FAIL( "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
         nInvisibleLayerId = _nVisibleLayerId;
     }
 
@@ -854,9 +793,9 @@ void SwDoc::ReleaseDrawModel()
         delete pDrawModel; pDrawModel = 0;
         SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
 
-        ASSERT( pSdrPool, "missing Pool" );
+        OSL_ENSURE( pSdrPool, "missing Pool" );
         SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
-        ASSERT( !pEEgPool->GetSecondaryPool(), "i don't accept additional pools");
+        OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "i don't accept additional pools");
         pSdrPool->Delete();                 //Erst die Items vernichten lassen,
                                             //dann erst die Verkettung loesen
         GetAttrPool().SetSecondaryPool( 0 );    //Der ist ein muss!
@@ -871,7 +810,7 @@ void SwDoc::ReleaseDrawModel()
 
 SdrModel* SwDoc::_MakeDrawModel()
 {
-    ASSERT( !pDrawModel, "_MakeDrawModel: Why?" );
+    OSL_ENSURE( !pDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
     if ( pCurrentView )
     {
@@ -989,7 +928,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
         else
         {
-            DBG_ERROR("unbekannter Feldbefehl");
+            OSL_FAIL("unbekannter Feldbefehl");
             pInfo->SetRepresentation( String( '?' ) );
         }
     }
@@ -1009,7 +948,7 @@ SdrLayerID SwDoc::GetInvisibleHellId() const { return nInvisibleHell; }
 SdrLayerID SwDoc::GetInvisibleControlsId() const { return nInvisibleControls; }
 SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
 
-// --> OD 2006-03-14 #i62875#
+// #i62875#
 namespace docfunc
 {
     bool ExistsDrawObjs( SwDoc& p_rDoc )
@@ -1064,8 +1003,7 @@ namespace docfunc
                         {
                             if ( !pAnchoredDrawObj )
                             {
-                                ASSERT( false,
-                                        "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
+                                OSL_FAIL( "<docfunc::AllDrawObjsOnPage() - missing anchored draw object" );
                                 bAllDrawObjsOnPage = false;
                                 break;
                             }
@@ -1099,5 +1037,5 @@ namespace docfunc
         return bAllDrawObjsOnPage;
     }
 }
-// <--
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

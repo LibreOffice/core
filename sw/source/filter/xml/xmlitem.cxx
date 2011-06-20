@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "xmlimpit.hxx"
 #include "xmlitem.hxx"
@@ -87,3 +87,4 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

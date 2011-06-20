@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@ protected:
 
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFmt)
 };
@@ -67,7 +68,7 @@ protected:
     {}
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFmt)
 };
@@ -86,14 +87,16 @@ protected:
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
     {}
 
-    // zum Erkennen von Veraenderungen (haupts. TableBoxAttribute)
+   // For recognition of changes (especially TableBoxAttribute).
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFmt)
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

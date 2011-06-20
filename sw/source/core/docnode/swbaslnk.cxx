@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,12 +38,9 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/lnkbase.hxx>
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/boxitem.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>       // fuer die EventIds
-#endif
 #include <sfx2/linkmgr.hxx>
 #include <svtools/soerr.hxx>
 #include <fmtfsize.hxx>
@@ -74,10 +72,10 @@ SV_IMPL_REF( SwServerObject )
 
 void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
-    //JP 4.7.2001: call fist all not SwNoTxtFrames, then the SwNoTxtFrames.
+    //call fist all not SwNoTxtFrames, then the SwNoTxtFrames.
     //              The reason is, that in the SwNoTxtFrames the Graphic
     //              after a Paint will be swapped out! So all other "behind"
-    //              them havent't a loaded Graphic. - #86501#
+    //              them havent't a loaded Graphic.
     rGrfNd.LockModify();
 
     SwClientIter aIter( rGrfNd );   // TODO
@@ -96,20 +94,20 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 }
 
 
-void SwBaseLink::DataChanged( const String& rMimeType,
-                            const uno::Any & rValue )
+::sfx2::SvBaseLink::UpdateResult SwBaseLink::DataChanged(
+    const String& rMimeType, const uno::Any & rValue )
 {
     if( !pCntntNode )
     {
-        ASSERT(!this, "DataChanged ohne ContentNode" );
-        return ;
+        OSL_ENSURE(!this, "DataChanged ohne ContentNode" );
+        return ERROR_GENERAL;
     }
 
     SwDoc* pDoc = pCntntNode->GetDoc();
     if( pDoc->IsInDtor() || ChkNoDataFlag() || bIgnoreDataChanged )
     {
         bIgnoreDataChanged = sal_False;
-        return ;
+        return SUCCESS;
     }
 
     sal_uLong nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
@@ -137,7 +135,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
                 pDoc->CallEvent( nEvent, aCallEvent );
             }
         }
-        return;         // das wars!
+        return SUCCESS;         // das wars!
     }
 
     sal_Bool bUpdate = sal_False;
@@ -195,8 +193,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             //      zugreifen zu muessen (sonst erfolgt ein SwapIn!).
             if( bGraphicArrived )
             {
-                // Bug #34735#: immer mit der korrekten Grafik-Size
-                //              arbeiten
+                // immer mit der korrekten Grafik-Size arbeiten
                 if( aGrfSz.Height() && aGrfSz.Width() &&
                     aSz.Height() && aSz.Width() &&
                     aGrfSz != aSz )
@@ -300,6 +297,8 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         if( pSh && !bLockView )
             pSh->LockView( sal_False );
     }
+
+    return SUCCESS;
 }
 
 sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
@@ -417,7 +416,7 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
 
         if( bWaitForData && !GetObj() )
         {
-            ASSERT( !this, "das SvxFileObject wurde in einem GetData geloescht!" );
+            OSL_ENSURE( !this, "das SvxFileObject wurde in einem GetData geloescht!" );
             bRes = sal_False;
         }
         else if( 0 != ( bRes = aValue.hasValue() ) )
@@ -474,7 +473,7 @@ const SwNode* SwBaseLink::GetAnchor() const
         }
     }
 
-    ASSERT( !this, "GetAnchor nicht ueberlagert" );
+    OSL_ENSURE( !this, "GetAnchor nicht ueberlagert" );
     return 0;
 }
 
@@ -501,3 +500,5 @@ sal_Bool SwBaseLink::IsInRange( sal_uLong, sal_uLong, xub_StrLen, xub_StrLen ) c
 SwBaseLink::~SwBaseLink()
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@ class SwWrtShell;
 
 SW_DLLPUBLIC void ItemSetToTableParam( const SfxItemSet& rSet, SwWrtShell &rSh );
 
-extern const sal_uInt16 __FAR_DATA aUITableAttrRange[];
+extern const sal_uInt16 aUITableAttrRange[];
 SW_DLLPUBLIC const sal_uInt16* SwuiGetUITableAttrRange();
 
 class SwTableShell: public SwBaseShell
@@ -56,3 +57,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

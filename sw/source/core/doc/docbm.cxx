@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
 #include <editsh.hxx>
-#include <errhdl.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <functional>
@@ -57,7 +57,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <swserv.hxx>
 #include <swundo.hxx>
-#include <tools/pstm.hxx>
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
 #include <stdio.h>
@@ -292,8 +291,7 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
         return NAVIGATOR_REMINDER;
     else
     {
-        OSL_ENSURE(false,
-            "IDocumentMarkAccess::GetType(..)"
+        OSL_FAIL("IDocumentMarkAccess::GetType(..)"
             " - unknown MarkType. This needs to be fixed!");
         return UNO_BOOKMARK;
     }
@@ -351,28 +349,28 @@ namespace sw { namespace mark
         switch(eType)
         {
             case IDocumentMarkAccess::TEXT_FIELDMARK:
-                pMark = shared_ptr<IMark>(new TextFieldmark(rPaM));
+                pMark = boost::shared_ptr<IMark>(new TextFieldmark(rPaM));
                 break;
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-                pMark = shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
+                pMark = boost::shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
                 break;
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
-                pMark = shared_ptr<IMark>(new NavigatorReminder(rPaM));
+                pMark = boost::shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
             case IDocumentMarkAccess::BOOKMARK:
-                pMark = shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
                 break;
             case IDocumentMarkAccess::DDE_BOOKMARK:
-                pMark = shared_ptr<IMark>(new DdeBookmark(rPaM));
+                pMark = boost::shared_ptr<IMark>(new DdeBookmark(rPaM));
                 break;
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                pMark = shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
                 break;
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                pMark = shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
                 break;
             case IDocumentMarkAccess::UNO_BOOKMARK:
-                pMark = shared_ptr<IMark>(new UnoMark(rPaM));
+                pMark = boost::shared_ptr<IMark>(new UnoMark(rPaM));
                 break;
         }
         OSL_ENSURE(pMark.get(),
@@ -394,12 +392,10 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-            // if(dynamic_cast<IBookmark*>)
                 lcl_InsertMarkSorted(m_vBookmarks, pMark);
                 break;
             case IDocumentMarkAccess::TEXT_FIELDMARK:
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-            // if(dynamic_cast<IFieldmark*>
                 lcl_InsertMarkSorted(m_vFieldmarks, pMark);
                 break;
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
@@ -418,6 +414,7 @@ namespace sw { namespace mark
         OSL_TRACE("Fieldmarks");
         lcl_DebugMarks(m_vFieldmarks);
 #endif
+
         return pMark.get();
     }
 
@@ -609,7 +606,7 @@ namespace sw { namespace mark
             {
                 // completely in range
 
-                // --> OD 2009-08-07 #i92125#
+                // #i92125#
                 bool bKeepCrossRefBkmk( false );
                 {
                     if ( rStt == rEnd &&
@@ -627,7 +624,6 @@ namespace sw { namespace mark
                         pSaveBkmk->push_back(SaveBookmark(true, true, *pMark, rStt, pSttIdx));
                     vMarksToDelete.push_back(ppMark);
                 }
-                // <--
             }
             else if(isPosInRange ^ isOtherPosInRange)
             {
@@ -644,7 +640,7 @@ namespace sw { namespace mark
                         rEnd,
                         isPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos());
 
-                // --> OD 2009-08-06 #i92125#
+                // #i92125#
                 // no move of position for cross-reference bookmarks,
                 // if move occurs inside a certain node
                 if ( ( IDocumentMarkAccess::GetType(*pMark) !=
@@ -661,17 +657,16 @@ namespace sw { namespace mark
                     // illegal selection? collapse the mark and restore sorting later
                     isSortingNeeded |= lcl_FixCorrectedMark(isPosInRange, isOtherPosInRange, pMark);
                 }
-                // <--
             }
         }
 
         // we just remembered the iterators to delete, so we do not need to search
-        // for the shared_ptr<> (the entry in m_vMarks) again
+        // for the boost::shared_ptr<> (the entry in m_vMarks) again
         // reverse iteration, since erasing an entry invalidates iterators
         // behind it (the iterators in vMarksToDelete are sorted)
         for(vector<const_iterator_t>::reverse_iterator pppMark = vMarksToDelete.rbegin();
             pppMark != vMarksToDelete.rend();
-            pppMark++)
+            ++pppMark)
         {
             deleteMark(*pppMark);
         }
@@ -703,7 +698,6 @@ namespace sw { namespace mark
             }
             case IDocumentMarkAccess::TEXT_FIELDMARK:
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-            // if(dynamic_cast<IFieldmark*>
             {
                 IDocumentMarkAccess::iterator_t ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
                 OSL_ENSURE(ppFieldmark != m_vFieldmarks.end(),
@@ -721,7 +715,24 @@ namespace sw { namespace mark
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(ppMark->get());
         if(pDdeBookmark)
             pDdeBookmark->DeregisterFromDoc(m_pDoc);
-        m_vMarks.erase(m_vMarks.begin() + (ppMark - m_vMarks.begin())); // clumsy const-cast
+        //Effective STL Item 27, get a non-const iterator aI at the same
+        //position as const iterator ppMark was
+        iterator_t aI = m_vMarks.begin();
+        std::advance(aI, std::distance<const_iterator_t>(aI, ppMark));
+
+        //fdo#37974
+        //a) a mark destructor may callback into this method.
+        //b) vector::erase first calls the destructor of the object, then
+        //removes it from the vector.
+        //So if the only reference to the object is the one
+        //in the vector then we may reenter this method when the mark
+        //is destructed but before it is removed, i.e. findMark still
+        //finds the object whose destructor is being run. Take a temp
+        //extra reference on the shared_ptr, remove the entry from the
+        //vector, and on xHoldPastErase release findMark won't find
+        //it anymore.
+        pMark_t xHoldPastErase = *aI;
+        m_vMarks.erase(aI);
     }
 
     void MarkManager::deleteMark(const IMark* const pMark)
@@ -746,7 +757,7 @@ namespace sw { namespace mark
         iterator_t pMarkHigh = m_vMarks.end();
         iterator_t pMarkFound = find_if(
             pMarkLow, pMarkHigh,
-            bind(equal_to<const IMark*>(), bind(&shared_ptr<IMark>::get, _1), pMark));
+            bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark));
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
@@ -755,7 +766,7 @@ namespace sw { namespace mark
     {
         m_vFieldmarks.clear();
         m_vBookmarks.clear();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         for(iterator_t pBkmk = m_vMarks.begin();
             pBkmk != m_vMarks.end();
             ++pBkmk)
@@ -810,6 +821,7 @@ namespace sw { namespace mark
     IFieldmark* MarkManager::getFieldmarkBefore(const SwPosition& rPos) const
         { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos)); }
 
+
     ::rtl::OUString MarkManager::getUniqueMarkName(const ::rtl::OUString& rName) const
     {
         OSL_ENSURE(rName.getLength(),
@@ -835,10 +847,6 @@ namespace sw { namespace mark
 
 }} // namespace ::sw::mark
 
-
-// old implementation
-
-//SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 
 #define PCURCRSR (_pCurrCrsr)
 #define FOREACHPAM_START(pSttCrsr) \
@@ -1496,10 +1504,10 @@ void _RestoreCntntIdx(SwDoc* pDoc,
             case 0x0800:
             case 0x0801:
                 {
-                    sal_uInt16 nCnt = 0;
                     SwCrsrShell* pShell = pDoc->GetEditShell();
                     if( pShell )
                     {
+                        sal_uInt16 nCnt = 0;
                         FOREACHSHELL_START( pShell )
                             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                             if( _pStkCrsr )
@@ -1656,10 +1664,10 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
             case 0x0800:
             case 0x0801:
                 {
-                    sal_uInt16 nCnt = 0;
                     SwCrsrShell* pShell = pDoc->GetEditShell();
                     if( pShell )
                     {
+                        sal_uInt16 nCnt = 0;
                         FOREACHSHELL_START( pShell )
                             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                             if( _pStkCrsr )
@@ -1744,3 +1752,5 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

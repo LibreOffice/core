@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#include <errhdl.hxx>
 #include <dpage.hxx>
 #include <dobjfac.hxx>
 #include <dflyobj.hxx>
@@ -47,7 +47,7 @@ IMPL_LINK( SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
     if ( pObjFactory->nInventor == SWGInventor )
     {
         //Kein switch, derzeit gibt es nur einen.
-        ASSERT( pObjFactory->nIdentifier == SwFlyDrawObjIdentifier,
+        OSL_ENSURE( pObjFactory->nIdentifier == SwFlyDrawObjIdentifier,
                                         "Falscher Inventor oder identifier." );
         pObjFactory->pNewObj = new SwFlyDrawObj();
     }
@@ -55,3 +55,4 @@ IMPL_LINK( SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

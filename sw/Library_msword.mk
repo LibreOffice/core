@@ -30,14 +30,15 @@ $(eval $(call gb_Library_Library,msword))
 $(eval $(call gb_Library_set_componentfile,msword,sw/util/msword))
 
 $(eval $(call gb_Library_set_include,msword,\
-    -I$(SRCDIR)/sw/source/core/inc \
-    -I$(SRCDIR)/sw/source/ui/inc \
-    -I$(SRCDIR)/sw/source/filter/inc \
-    -I$(SRCDIR)/sw/inc/pch \
-    -I$(SRCDIR)/sw/inc \
+    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
+    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
+    -I$(realpath $(SRCDIR)/sw/inc/pch) \
+    -I$(realpath $(SRCDIR)/sw/inc) \
     -I$(WORKDIR)/inc/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
+	$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_CFLAGS)) \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/sw \
 ))
@@ -52,12 +53,13 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     i18nutil \
     msfilter \
     sal \
+    sax \
+    sb \
+    oox \
     sfx \
     sot \
-    stl \
     svl \
     svt \
-    svx \
     svx \
     svxcore \
     sw \
@@ -77,6 +79,9 @@ $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/rtf/rtfnum \
     sw/source/filter/rtf/rtftbl \
     sw/source/filter/rtf/swparrtf \
+    sw/source/filter/ww8/docxattributeoutput \
+    sw/source/filter/ww8/docxexport \
+    sw/source/filter/ww8/docxexportfilter \
     sw/source/filter/ww8/rtfattributeoutput \
     sw/source/filter/ww8/rtfexport \
     sw/source/filter/ww8/rtfexportfilter \
@@ -108,6 +113,14 @@ $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/ww8/ww8par5 \
     sw/source/filter/ww8/ww8par6 \
     sw/source/filter/ww8/ww8scan \
+    sw/source/filter/ww8/ww8toolbar \
 ))
+
+# TODO: This should be really fixed in writerfilter so the header is
+# delivered before compilation starts.
+$(call gb_CxxObject_get_target,sw/source/filter/ww8/wrtw8nds) \
+$(call gb_CxxObject_get_target,sw/source/filter/ww8/wrtww8gr) \
+$(call gb_CxxObject_get_target,sw/source/filter/ww8/ww8atr) \
+	: $(OUTDIR)/inc/writerfilter/doctok/sprmids.hxx
 
 # vim: set noet sw=4 ts=4:

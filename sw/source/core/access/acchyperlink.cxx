@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <swurl.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <ndtxt.hxx>
 #include <txtinet.hxx>
@@ -52,7 +53,7 @@ SwAccessibleHyperlink::SwAccessibleHyperlink( sal_uInt16 nHPos,
 const SwTxtAttr *SwAccessibleHyperlink::GetTxtAttr() const
 {
     const SwTxtAttr *pTxtAttr = 0;
-    if( xPara.isValid() && xPara->GetMap() )
+    if( xPara.is() && xPara->GetMap() )
     {
         const SwTxtNode *pTxtNd = xPara->GetTxtNode();
         const SwpHints *pHints = pTxtNd->GetpSwpHints();
@@ -78,7 +79,7 @@ sal_Int32 SAL_CALL SwAccessibleHyperlink::getAccessibleActionCount()
 sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Bool bRet = sal_False;
 
@@ -93,7 +94,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::doAccessibleAction( sal_Int32 nIndex )
             {
                 LoadURL( rINetFmt.GetValue(), pVSh, URLLOAD_NOFILTER,
                          &rINetFmt.GetTargetFrame() );
-                ASSERT( pTxtAttr == rINetFmt.GetTxtINetFmt(),
+                OSL_ENSURE( pTxtAttr == rINetFmt.GetTxtINetFmt(),
                          "lost my txt attr" );
                 const SwTxtINetFmt* pTxtAttr2 = rINetFmt.GetTxtINetFmt();
                 if( pTxtAttr2 )
@@ -178,13 +179,14 @@ sal_Int32 SAL_CALL SwAccessibleHyperlink::getEndIndex()
 sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    return xPara.isValid();
+    SolarMutexGuard aGuard;
+    return xPara.is();
 }
 
 void SwAccessibleHyperlink::Invalidate()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     xPara = 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

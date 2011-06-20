@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,28 +70,28 @@ bool SwDoc::isXForms() const
 
 Reference<XInterface> lcl_createInstance( const sal_Char* pServiceName )
 {
-    DBG_ASSERT( pServiceName != NULL, "no service name" );
+    OSL_ENSURE( pServiceName != NULL, "no service name" );
     return utl::getProcessServiceFactory()->createInstance(
         OUString::createFromAscii( pServiceName  ) );
 }
 
 void SwDoc::initXForms( bool bCreateDefaultModel )
 {
-    DBG_ASSERT( ! isXForms(), "please initialize only once" );
+    OSL_ENSURE( ! isXForms(), "please initialize only once" );
 
     try
     {
         // create XForms components
         xXForms.set( lcl_createInstance( "com.sun.star.xforms.XForms" ),
                     UNO_QUERY );
-        DBG_ASSERT( xXForms.is(), "can't create XForms container" );
+        OSL_ENSURE( xXForms.is(), "can't create XForms container" );
 
         // change our module identifier, to be able to have a dedicated UI
         Reference< XModule > xModule;
         SwDocShell* pShell( GetDocShell() );
         if ( pShell )
             xModule = xModule.query( pShell->GetModel() );
-        DBG_ASSERT( xModule.is(), "SwDoc::initXForms: no XModule at the document!" );
+        OSL_ENSURE( xModule.is(), "SwDoc::initXForms: no XModule at the document!" );
         if ( xModule.is() )
             xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xforms.XMLFormDocument" ) ) );
 
@@ -101,7 +102,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
             Reference<XModel> xModel(
                 lcl_createInstance( "com.sun.star.xforms.Model" ),
                 UNO_QUERY );
-            DBG_ASSERT( xModel.is(), "no model?" );
+            OSL_ENSURE( xModel.is(), "no model?" );
             if( xModel.is() )
             {
                 xModel->setID( sName );
@@ -111,13 +112,15 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
                 xModel->initialize();
                 xXForms->insertByName( sName, makeAny( xModel ) );
             }
-            DBG_ASSERT( xXForms->hasElements(), "can't create XForms model" );
+            OSL_ENSURE( xXForms->hasElements(), "can't create XForms model" );
         }
 
-        DBG_ASSERT( isXForms(), "initialization failed" );
+        OSL_ENSURE( isXForms(), "initialization failed" );
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,10 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/timer.hxx>
 #include <svtools/colorcfg.hxx>
 #include "edit.hxx"
 #include "node.hxx"
-#include "accessibility.hxx"
 
 class Menu;
 class DataChangedEvent;
@@ -45,14 +46,33 @@ class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
 class SmPrintUIOptions;
+class SmGraphicAccessible;
 
 /**************************************************************************/
 
 class SmGraphicWindow : public ScrollableWindow
 {
-    Point           aFormulaDrawPos;
-    Rectangle       aCursorRect;
+    Point     aFormulaDrawPos;
 
+    // old style editing pieces
+    Rectangle aCursorRect;
+    bool      bIsCursorVisible;
+    bool      bIsLineVisible;
+    AutoTimer aCaretBlinkTimer;
+public:
+    bool IsCursorVisible() const { return bIsCursorVisible; }
+    void ShowCursor(bool bShow);
+    bool IsLineVisible() const { return bIsLineVisible; }
+    void ShowLine(bool bShow);
+    const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
+protected:
+    void        SetIsCursorVisible(bool bVis) { bIsCursorVisible = bVis; }
+    using   Window::SetCursor;
+    void        SetCursor(const SmNode *pNode);
+    void        SetCursor(const Rectangle &rRect);
+    bool        IsInlineEditEnabled() const;
+
+private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >  xAccessible;
     SmGraphicAccessible *                                       pAccessible;
@@ -60,14 +80,9 @@ class SmGraphicWindow : public ScrollableWindow
     SmViewShell    *pViewShell;
     sal_uInt16          nZoom;
     short           nModifyCount;
-    sal_Bool            bIsCursorVisible;
 
 protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
-    void        SetIsCursorVisible(sal_Bool bVis) { bIsCursorVisible = bVis; }
-    using   Window::SetCursor;
-    void        SetCursor(const SmNode *pNode);
-    void        SetCursor(const Rectangle &rRect);
 
     virtual void DataChanged( const DataChangedEvent& );
     virtual void Paint(const Rectangle&);
@@ -76,6 +91,12 @@ protected:
     virtual void StateChanged( StateChangedType eChanged );
     DECL_LINK(MenuSelectHdl, Menu *);
 
+private:
+    void RepaintViewShellDoc();
+    DECL_LINK(CaretBlinkTimerHdl, AutoTimer *);
+    void CaretBlinkInit();
+    void CaretBlinkStart();
+    void CaretBlinkStop();
 public:
     SmGraphicWindow(SmViewShell* pShell);
     ~SmGraphicWindow();
@@ -97,10 +118,6 @@ public:
     void ZoomToFitInWindow();
     using   ScrollableWindow::SetTotalSize;
     void SetTotalSize();
-
-    sal_Bool IsCursorVisible() const { return bIsCursorVisible; }
-    void ShowCursor(sal_Bool bShow);
-    const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
@@ -148,7 +165,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
 {
     SmEditWindow        aEdit;
     SmEditController    aController;
-    sal_Bool                bExiting;
+    bool                bExiting;
 
     Timer               aInitialFocusTimer;
 
@@ -216,6 +233,8 @@ class SmViewShell: public SfxViewShell
     // for handling the PasteClipboardState
     friend class SmClipboardChangeListener;
 
+    SmViewShell_Impl*   pImpl;
+
     SmGraphicWindow     aGraphic;
     SmGraphicController aGraphicController;
     String              StatusText;
@@ -223,12 +242,16 @@ class SmViewShell: public SfxViewShell
     ::com::sun::star::uno:: Reference <
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
     SmClipboardChangeListener*  pClipEvtLstnr;
-    SmViewShell_Impl*   pImpl;
-    sal_Bool                bPasteState;
+    bool                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
+    /** Used to determine whether insertions using SID_INSERTSYMBOL and SID_INSERTCOMMAND
+     * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
+     * visual editor was last to have focus.
+     */
+    bool bInsertIntoEditWindow;
 protected:
 
     Size GetTextLineSize(OutputDevice& rDevice,
@@ -249,8 +272,8 @@ protected:
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
                               sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
-    sal_Bool        Insert( SfxMedium& rMedium );
-    sal_Bool        InsertFrom(SfxMedium &rMedium);
+    bool        Insert( SfxMedium& rMedium );
+    bool        InsertFrom(SfxMedium &rMedium);
 
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
@@ -292,7 +315,19 @@ public:
 
     void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
             Rectangle aOutRect, Point aZeroPoint );
+
+    /** Set bInsertIntoEditWindow so we know where to insert
+     *
+     * This method is called whenever SmGraphicWindow or SmEditWindow gets focus,
+     * so that when text is inserted from catalog or elsewhere we know whether to
+     * insert for the visual editor, or the text editor.
+     */
+    void SetInsertIntoEditWindow(bool bEditWindowHadFocusLast = true){
+        bInsertIntoEditWindow = bEditWindowHadFocusLast;
+    }
+    bool IsInlineEditEnabled() const;
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

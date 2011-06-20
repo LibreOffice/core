@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,14 +54,13 @@
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"
 
-#ifndef _FMTLSPLT_HXX
 #include "fmtlsplt.hxx"
-#endif
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmltypes.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -131,9 +131,6 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
                     if( 0 == (pEntry->nMemberId&MID_SW_FLAG_SPECIAL_ITEM_IMPORT) )
                     {
-//                      bPut = pNewItem->importXML( rValue,
-//                                          pEntry->nMemberId & MID_SW_FLAG_MASK,
-//                                          rUnitConverter );
                         bPut = PutXMLValue( *pNewItem, rValue,
                                             static_cast<sal_uInt16>( pEntry->nMemberId & MID_SW_FLAG_MASK ),
                                             rUnitConverter );
@@ -153,7 +150,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 }
                 else
                 {
-                    DBG_ERROR( "Could not get a needed item for xml import!" );
+                    OSL_FAIL( "Could not get a needed item for xml import!" );
                 }
             }
             else if( 0 != (pEntry->nMemberId & MID_SW_FLAG_NO_ITEM_IMPORT) )
@@ -172,7 +169,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                 {
                     SfxPoolItem *pNew = pItem->Clone();
                     pUnknownItem = PTR_CAST( SvXMLAttrContainerItem, pNew );
-                    DBG_ASSERT( pUnknownItem,
+                    OSL_ENSURE( pUnknownItem,
                                 "SvXMLAttrContainerItem expected" );
                     if( !pUnknownItem )
                         delete pNew;
@@ -212,7 +209,7 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
                                             const SvXMLUnitConverter& /*rUnitConverter*/,
                                             const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
-    DBG_ERROR( "unsuported special item in xml import" );
+    OSL_FAIL( "unsuported special item in xml import" );
     return sal_False;
 }
 
@@ -224,7 +221,7 @@ sal_Bool SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*
                                            const SvXMLUnitConverter& /*rUnitConverter*/,
                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ )
 {
-    DBG_ERROR( "unsuported no item in xml import" );
+    OSL_FAIL( "unsuported no item in xml import" );
     return sal_False;
 }
 
@@ -250,7 +247,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_LR_SPACE:
         {
             SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
-            DBG_ASSERT( pLRSpace != NULL, "Wrong Which-ID!" );
+            OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
 
             switch( nMemberId )
             {
@@ -295,7 +292,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                 case MID_FIRST_AUTO:
                 {
-                    sal_Bool bAutoFirst;
+                    bool bAutoFirst;
                     bOk = rUnitConverter.convertBool( bAutoFirst, rValue );
                     if( bOk )
                         pLRSpace->SetAutoFirst( bAutoFirst );
@@ -303,7 +300,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 break;
 
                 default:
-                    DBG_ERROR( "unknown member id!");
+                    OSL_FAIL( "unknown member id!");
             }
         }
         break;
@@ -311,7 +308,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_UL_SPACE:
         {
             SvxULSpaceItem* pULSpace = PTR_CAST(SvxULSpaceItem, &rItem);
-            DBG_ASSERT( pULSpace != NULL, "Wrong Which-ID!" );
+            OSL_ENSURE( pULSpace != NULL, "Wrong Which-ID!" );
 
             sal_Int32 nProp = 100;
             sal_Int32 nAbs = 0;
@@ -330,7 +327,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     pULSpace->SetLower( (sal_uInt16)nAbs, (sal_uInt16)nProp );
                     break;
                 default:
-                    DBG_ERROR("unknown MemberId");
+                    OSL_FAIL("unknown MemberId");
             }
         }
         break;
@@ -338,7 +335,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_SHADOW:
         {
             SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
-            DBG_ASSERT( pShadow != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pShadow != NULL, "Wrong Which-ID" );
 
             sal_Bool bColorFound = sal_False;
             sal_Bool bOffsetFound = sal_False;
@@ -417,7 +414,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_BOX:
         {
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
-            DBG_ASSERT( pBox != NULL, "Wrong WHich-ID" );
+            OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
 
             /** copy SvxBorderLines */
             SvxBorderLine* pTop    = pBox->GetTop() == NULL ?
@@ -516,25 +513,19 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nInWidth, aToken,
-                                                        DEF_LINE_WIDTH_0,
-                                                        DEF_LINE_WIDTH_4 ) )
+                    if( !rUnitConverter.convertMeasure( nInWidth, aToken ) )
                         return sal_False;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nDistance, aToken,
-                                                        DEF_LINE_WIDTH_0,
-                                                        DEF_LINE_WIDTH_4 ) )
+                    if( !rUnitConverter.convertMeasure( nDistance, aToken ) )
                         return sal_False;
 
                     if( !aTokenEnum.getNextToken( aToken ) )
                         return sal_False;
 
-                    if( !rUnitConverter.convertMeasure( nOutWidth, aToken,
-                                                        DEF_LINE_WIDTH_0,
-                                                        DEF_LINE_WIDTH_4 ) )
+                    if( !rUnitConverter.convertMeasure( nOutWidth, aToken ) )
                         return sal_False;
 
                     // #i61946: accept line style even it's not part of our "normal" set of line styles
@@ -588,7 +579,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_BREAK:
         {
             SvxFmtBreakItem* pFmtBreak = PTR_CAST(SvxFmtBreakItem, &rItem);
-            DBG_ASSERT( pFmtBreak != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFmtBreak != NULL, "Wrong Which-ID" );
 
             sal_uInt16 eEnum;
 
@@ -623,7 +614,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_KEEP:
         {
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
-            DBG_ASSERT( pFmtKeep != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFmtKeep != NULL, "Wrong Which-ID" );
 
             if( IsXMLToken( rValue, XML_ALWAYS ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
@@ -643,7 +634,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_BACKGROUND:
         {
             SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
-            DBG_ASSERT( pBrush != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
             Color aTempColor;
             switch( nMemberId )
@@ -785,7 +776,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_PAGEDESC:
         {
             SwFmtPageDesc* pPageDesc = PTR_CAST(SwFmtPageDesc, &rItem);
-            DBG_ASSERT( pPageDesc != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
@@ -801,7 +792,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_ROW_SPLIT:
         {
             SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-            DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
 
             if( IsXMLToken( rValue, XML_AUTO ) ||
                  IsXMLToken( rValue, XML_TRUE ) )
@@ -821,7 +812,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_HORI_ORIENT:
         {
             SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
-            DBG_ASSERT( pHoriOrient != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
             bOk = rUnitConverter.convertEnum( nValue, rValue,
@@ -834,7 +825,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_VERT_ORIENT:
         {
             SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
-            DBG_ASSERT( pVertOrient != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
             bOk = rUnitConverter.convertEnum( nValue, rValue,
@@ -853,7 +844,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_FRM_SIZE:
         {
             SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
-            DBG_ASSERT( pFrmSize != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             sal_Bool bSetHeight = sal_False;
             sal_Bool bSetWidth = sal_False;
@@ -955,7 +946,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         case RES_COLLAPSING_BORDERS:
         {
             SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
-            DBG_ASSERT( pBorders != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pBorders != NULL, "Wrong Which-ID" );
 
             if( IsXMLToken( rValue, XML_COLLAPSING ) )
             {
@@ -973,7 +964,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
         break;
 
         default:
-            DBG_ERROR("Item not implemented!");
+            OSL_FAIL("Item not implemented!");
         break;
    }
 
@@ -981,3 +972,4 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

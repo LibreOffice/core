@@ -50,3 +50,5 @@
 #define CB_SNAPTOCHARS      23
 #define FT_CHARWIDTH        24
 #define MF_CHARWIDTH        25
+#define FT_LINERANGE       26
+#define FT_CHARRANGE       27

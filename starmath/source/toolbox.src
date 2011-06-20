@@ -1489,12 +1489,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         MaskColor = IMAGE_STDBTN_COLOR ;
         UNBINOPS_IDLIST
     };
-    ImageList RID_ILH_UNBINOPS
-    {
-        Prefix = "unh";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        UNBINOPS_IDLIST
-    };
 
 #define RELATIONS_IDLIST         \
     IdList =                \
@@ -1527,12 +1521,6 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         Prefix = "bi";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        RELATIONS_IDLIST
-    };
-    ImageList RID_ILH_RELATIONS
-    {
-        Prefix = "bih";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         RELATIONS_IDLIST
     };
 
@@ -1568,12 +1556,6 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         Prefix = "op";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        SETOPERATIONS_IDLIST
-    };
-    ImageList RID_ILH_SETOPERATIONS
-    {
-        Prefix = "oph";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         SETOPERATIONS_IDLIST
     };
 
@@ -1614,12 +1596,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         MaskColor = IMAGE_STDBTN_COLOR ;
         FUNCTIONS_IDLIST
     };
-    ImageList RID_ILH_FUNCTIONS
-    {
-        Prefix = "fuh";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        FUNCTIONS_IDLIST
-    };
 
 #define OPERATORS_IDLIST         \
     IdList =                \
@@ -1644,12 +1620,6 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         Prefix = "fo";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        OPERATORS_IDLIST
-    };
-    ImageList RID_ILH_OPERATORS
-    {
-        Prefix = "foh";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         OPERATORS_IDLIST
     };
 
@@ -1688,12 +1658,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         MaskColor = IMAGE_STDBTN_COLOR ;
         ATTRIBUTES_IDLIST
     };
-    ImageList RID_ILH_ATTRIBUTES
-    {
-        Prefix = "ath";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        ATTRIBUTES_IDLIST
-    };
 
 #define BRACKETS_IDLIST             \
     IdList =                    \
@@ -1726,12 +1690,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         MaskColor = IMAGE_STDBTN_COLOR ;
         BRACKETS_IDLIST
     };
-    ImageList RID_ILH_BRACKETS
-    {
-        Prefix = "alh";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        BRACKETS_IDLIST
-    };
 
 #define FORMAT_IDLIST         \
     IdList =                \
@@ -1758,12 +1716,6 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         Prefix = "co";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        FORMAT_IDLIST
-    };
-    ImageList RID_ILH_FORMAT
-    {
-        Prefix = "coh";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         FORMAT_IDLIST
     };
 
@@ -1798,12 +1750,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         MaskColor = IMAGE_STDBTN_COLOR ;
         MISC_IDLIST
     };
-    ImageList RID_ILH_MISC
-    {
-        Prefix = "mih";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
-        MISC_IDLIST
-    };
 
 #define CATALOG_IDLIST                  \
     IdList =                        \
@@ -1824,12 +1770,6 @@ FloatingWindow RID_TOOLBOXWINDOW
     {
         Prefix = "im";
         MaskColor = IMAGE_STDBTN_COLOR ;
-        CATALOG_IDLIST
-    };
-    ImageList RID_ILH_CATALOG
-    {
-        Prefix = "imh";
-        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         CATALOG_IDLIST
     };
 

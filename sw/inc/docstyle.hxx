@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ class SwFrmFmt;
 class SwNumRule;
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Lokale Hilfsklasse
+    Local helper class.
  --------------------------------------------------------------------*/
 class SwPoolFmtList : public SvStringsDtor
 {
@@ -58,7 +59,7 @@ public:
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   temp. StyleSheet
+    Temporary StyleSheet.
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 {
@@ -77,10 +78,10 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     sal_Bool                bPhysical;
 
 
-    // leere Huelse zum richtigen StyleSheet (Core) machen
+    // Make empty shell a real StyleSheet (Core).
     SW_DLLPRIVATE void              Create();
 
-    // den StyleSheet mit Daten fuellen
+    // Fill StyleSheet with data.
     enum FillStyleType {
         FillOnlyName,
         FillAllInfo,
@@ -109,30 +110,25 @@ public:
     sal_Bool                    IsPhysical() const              { return bPhysical; }
     void                    SetPhysical(sal_Bool bPhys);
 
-    // --> OD 2008-02-11 #newlistlevelattrs#
     // add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value sal_False,
     // which indicates that the indent attributes at a paragraph style should
     // be reset in case that a list style is applied to the paragraph style and
     // no indent attributes are applied.
     void                    SetItemSet( const SfxItemSet& rSet,
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
-    // <--
 
     virtual SfxItemSet&     GetItemSet();
-    // --> OD 2008-02-12 #newlistlevelattrs#
     // new method for paragraph styles to merge indent attributes of applied list
     // style into the given item set, if the list style indent attributes are applicable.
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
-    // <--
     virtual const String&   GetParent() const;
     virtual const String&   GetFollow() const;
 
     virtual sal_uLong GetHelpId( String& rFile );
     virtual void SetHelpId( const String& r, sal_uLong nId );
 
-    // Vorbelegen der member ohne physikalischen Zugriff
-    // wird vom StyleSheetPool benutzt
-    //
+    // Preset the members without physical access.
+    // Used by StyleSheetPool.
     void                    PresetName(const String& rName)  { aName   = rName; }
     void                    PresetNameAndFamily(const String& rName);
     void                    PresetParent(const String& rName){ aParent = rName; }
@@ -159,7 +155,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Iterator fuer den Pool
+   Iterator for Pool.
  --------------------------------------------------------------------*/
 
 class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
@@ -189,15 +185,12 @@ public:
     virtual void Notify( SfxBroadcaster&, const SfxHint& );
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Pool fuer
- --------------------------------------------------------------------*/
 
 class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              rDoc;
-    sal_Bool                bOrganizer : 1;     // sal_True: fuer den Organizer
+    sal_Bool                bOrganizer : 1;     // Organizer
 
 
     virtual SfxStyleSheetBase* Create( const String&, SfxStyleFamily, sal_uInt16 nMask);
@@ -236,10 +229,12 @@ public:
 protected:
     virtual ~SwDocStyleSheetPool();
 
-    //Fuer die daemlicheren Compiler
+    //For not-so-clever compilers.
 private:
     SwDocStyleSheetPool( const SwDocStyleSheetPool& );
 };
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

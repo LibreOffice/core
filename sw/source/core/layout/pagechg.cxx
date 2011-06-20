@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,6 @@
 #include "frmtool.hxx"
 #include "fldbas.hxx"
 #include "hints.hxx"
-#include "errhdl.hxx"
 #include "swtable.hxx"
 
 #include "ftnidx.hxx"
@@ -85,9 +85,6 @@ using namespace ::com::sun::star;
 |*
 |*  SwBodyFrm::SwBodyFrm()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 01. Aug. 93
-|*
 |*************************************************************************/
 SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwLayoutFrm( pFmt, pSib )
@@ -98,9 +95,6 @@ SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
 /*************************************************************************
 |*
 |*  SwBodyFrm::Format()
-|*
-|*  Ersterstellung      MA 30. May. 94
-|*  Letzte Aenderung    MA 20. Jan. 99
 |*
 |*************************************************************************/
 void SwBodyFrm::Format( const SwBorderAttrs * )
@@ -189,12 +183,25 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
     bValidSize = bValidPrtArea = sal_True;
 }
 
+void SwBodyFrm::Paint( const SwRect& rRect, const SwPrintData* ) const
+{
+#if OSL_DEBUG_LAYOUT > 1
+    // Paint a red border around the SwBodyFrm in debug mode
+    ViewShell *pSh = GetShell();
+    OutputDevice* pOut =  pSh->GetOut();
+    pOut->Push();
+    pOut->SetLineColor(Color(255, 0, 0));
+    pOut->SetFillColor(COL_TRANSPARENT);
+    SwRect aRect = Frm();
+    pOut->DrawRect(aRect.SVRect());
+    pOut->Pop();
+#endif
+    SwLayoutFrm::Paint(rRect);
+}
+
 /*************************************************************************
 |*
 |*  SwPageFrm::SwPageFrm(), ~SwPageFrm()
-|*
-|*  Ersterstellung      MA 20. Oct. 92
-|*  Letzte Aenderung    MA 08. Dec. 97
 |*
 |*************************************************************************/
 SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwFrm* pSib, SwPageDesc *pPgDsc ) :
@@ -289,7 +296,7 @@ SwPageFrm::~SwPageFrm()
     //Damit der Zugriff auf zerstoerte Seiten verhindert werden kann.
     if ( !IsEmptyPage() ) //#59184# sollte fuer Leerseiten unnoetig sein.
     {
-        SwDoc *pDoc = GetFmt()->GetDoc();
+        SwDoc *pDoc = GetFmt() ? GetFmt()->GetDoc() : NULL;
         if( pDoc && !pDoc->IsInDtor() )
         {
             ViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -303,7 +310,7 @@ SwPageFrm::~SwPageFrm()
                 // including border and shadow area.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aRetoucheRect;
-                SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, bRightSidebar );
+                SwPageFrm::GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect, IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->AddPaintRect( aRetoucheRect );
             }
         }
@@ -386,8 +393,6 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
 |*
 |*  Beschreibung        Erzeugt die Spezifischen Flys zur Seite und formatiert
 |*      generischen Cntnt
-|*  Ersterstellung      MA 20. Oct. 92
-|*  Letzte Aenderung    MA 09. Nov. 95
 |*
 |*************************************************************************/
 void MA_FASTCALL lcl_FormatLay( SwLayoutFrm *pLay )
@@ -435,7 +440,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
             pSdrObj = 0;
             if ( bSdrObj  && 0 == (pSdrObj = pFmt->FindSdrObject()) )
             {
-                ASSERT( sal_False, "DrawObject not found." );
+                OSL_FAIL( "DrawObject not found." );
                 pFmt->GetDoc()->DelFrmFmt( pFmt );
                 --i;
                 continue;
@@ -492,7 +497,7 @@ void SwPageFrm::PreparePage( sal_Bool bFtn )
 {
     SetFtnPage( bFtn );
 
-    // --> OD 2008-01-30 #i82258#
+    // #i82258#
     // Due to made change on OOo 2.0 code line, method <::lcl_FormatLay(..)> has
     // the side effect, that the content of page header and footer are formatted.
     // For this formatting it is needed that the anchored objects are registered
@@ -504,7 +509,6 @@ void SwPageFrm::PreparePage( sal_Bool bFtn )
     {
                 ::lcl_FormatLay( this );
     }
-    // <--
 
     //Flys und DrawObjekte die noch am Dokument bereitstehen.
     //Fussnotenseiten tragen keine Seitengebundenen Flys!
@@ -540,9 +544,6 @@ void SwPageFrm::PreparePage( sal_Bool bFtn )
 /*************************************************************************
 |*
 |*  SwPageFrm::Modify()
-|*
-|*  Ersterstellung      MA 20. Oct. 92
-|*  Letzte Aenderung    MA 03. Mar. 96
 |*
 |*************************************************************************/
 void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
@@ -606,17 +607,17 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             //Abgesehen von den Grossenverhaeltnissen sind noch andere
             //Dinge betroffen.
             //1. Spaltigkeit.
-            ASSERT( pOld && pNew, "FMT_CHG Missing Format." );
+            OSL_ENSURE( pOld && pNew, "FMT_CHG Missing Format." );
             const SwFmt* pOldFmt = ((SwFmtChg*)pOld)->pChangedFmt;
             const SwFmt* pNewFmt = ((SwFmtChg*)pNew)->pChangedFmt;
-            ASSERT( pOldFmt && pNewFmt, "FMT_CHG Missing Format." );
+            OSL_ENSURE( pOldFmt && pNewFmt, "FMT_CHG Missing Format." );
 
             const SwFmtCol &rOldCol = pOldFmt->GetCol();
             const SwFmtCol &rNewCol = pNewFmt->GetCol();
             if( rOldCol != rNewCol )
             {
                 SwLayoutFrm *pB = FindBodyCont();
-                ASSERT( pB, "Seite ohne Body." );
+                OSL_ENSURE( pB, "Seite ohne Body." );
                 pB->ChgColumns( rOldCol, rNewCol );
                 rInvFlags |= 0x20;
             }
@@ -672,7 +673,8 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 // page frame for determine 'old' rectangle - it's used for invalidating.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT);
                 SwRect aOldRectWithBorderAndShadow;
-                SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow, bRightSidebar );
+                SwPageFrm::GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow,
+                    IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
                 pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
             }
             rInvFlags |= 0x03;
@@ -684,7 +686,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_COL:
         {
             SwLayoutFrm *pB = FindBodyCont();
-            ASSERT( pB, "Seite ohne Body." );
+            OSL_ENSURE( pB, "Seite ohne Body." );
             pB->ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
             rInvFlags |= 0x22;
         }
@@ -737,8 +739,6 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 |*                SwPageFrm::GetInfo()
 |*
 |*    Beschreibung      erfragt Informationen
-|*    Ersterstellung    JP 31.03.94
-|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
     // erfrage vom Modify Informationen
@@ -755,9 +755,6 @@ sal_Bool SwPageFrm::GetInfo( SfxPoolItem & rInfo ) const
 /*************************************************************************
 |*
 |*  SwPageFrm::SetPageDesc()
-|*
-|*  Ersterstellung      MA 02. Nov. 94
-|*  Letzte Aenderung    MA 02. Nov. 94
 |*
 |*************************************************************************/
 void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
@@ -782,8 +779,6 @@ void  SwPageFrm::SetPageDesc( SwPageDesc *pNew, SwFrmFmt *pFmt )
 |*          Dokument oder Standard (der 0-te) wenn der erste Absatz keinen
 |*          wuenscht.
 |*     (6.  Im HTML-Mode ist der Pagedesc immer die HTML-Seitenvorlage.)
-|*  Ersterstellung      MA 15. Feb. 93
-|*  Letzte Aenderung    MA 17. Jun. 99
 |*
 |*************************************************************************/
 SwPageDesc *SwPageFrm::FindPageDesc()
@@ -851,7 +846,7 @@ SwPageDesc *SwPageFrm::FindPageDesc()
                               ->GetPageDesc( 0 ));
 
 
-    ASSERT( pRet, "Kein Descriptor gefunden." );
+    OSL_ENSURE( pRet, "Kein Descriptor gefunden." );
     return pRet;
 }
 
@@ -868,7 +863,8 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
             if( pRoot == pSh->GetLayout() )
             {
                 pSh->SizeChgNotify();
-                pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
+                if ( pSh->Imp() )
+                    pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
             }
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pRoot->GetCurrShell() );
@@ -885,9 +881,6 @@ inline void SetLastPage( SwPageFrm *pPage )
 /*************************************************************************
 |*
 |*  SwPageFrm::Cut()
-|*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 22. Jun. 95
 |*
 |*************************************************************************/
 void SwPageFrm::Cut()
@@ -908,7 +901,7 @@ void SwPageFrm::Cut()
             for ( int i = 0; GetSortedObjs() &&
                              (sal_uInt16)i < GetSortedObjs()->Count(); ++i )
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
 
                 if ( pAnchoredObj->ISA(SwFlyAtCntFrm) )
@@ -924,7 +917,6 @@ void SwPageFrm::Cut()
                         pFly->_InvalidatePos();
                     }
                 }
-                // <--
             }
         }
         //Window aufraeumen
@@ -960,17 +952,14 @@ void SwPageFrm::Cut()
 |*
 |*  SwPageFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 07. Dec. 94
-|*
 |*************************************************************************/
 void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 {
-    ASSERT( pParent->IsRootFrm(), "Parent ist keine Root." );
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent->IsRootFrm(), "Parent ist keine Root." );
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     //In den Baum einhaengen.
@@ -1012,9 +1001,6 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 |*
 |*  SwPageFrm::PrepareRegisterChg()
 |*
-|*  Ersterstellung      AMA 22. Jul. 96
-|*  Letzte Aenderung    AMA 22. Jul. 96
-|*
 |*************************************************************************/
 void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
 {
@@ -1023,7 +1009,7 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
     {
         for( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
         {
-            // --> OD 2004-06-29 #i28701#
+            // #i28701#
             SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
             if ( pAnchoredObj->ISA(SwFlyInCntFrm) )
             {
@@ -1035,7 +1021,6 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
                     pCnt = pCnt->GetNextCntntFrm();
                 }
             }
-            // <--
         }
     }
 }
@@ -1054,7 +1039,7 @@ void SwPageFrm::PrepareRegisterChg()
     {
         for( sal_uInt16 i = 0; i < GetSortedObjs()->Count(); ++i )
         {
-            // --> OD 2004-06-29 #i28701#
+            // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
@@ -1079,13 +1064,10 @@ void SwPageFrm::PrepareRegisterChg()
 |*      aufgespuehrt werden, so wird versucht die Situation moeglichst
 |*      einfache zu bereinigen.
 |*
-|*  Ersterstellung      MA 10. Feb. 93
-|*  Letzte Aenderung    MA 18. Apr. 96
-|*
 |*************************************************************************/
 void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
 {
-    ASSERT( pStart, "Keine Startpage." );
+    OSL_ENSURE( pStart, "Keine Startpage." );
 
     ViewShell *pSh   = pStart->getRootFrm()->GetCurrShell();
     SwViewImp *pImp  = pSh ? pSh->Imp() : 0;
@@ -1212,10 +1194,10 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
                 if ( pPage->GetFmt() != pFmtWish )
                     pPage->SetFrmFmt( pFmtWish );
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( sal_False, "CheckPageDescs, missing solution" );
+                OSL_FAIL( "CheckPageDescs, missing solution" );
             }
 #endif
         }
@@ -1255,7 +1237,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         pDoc->UpdatePageFlds( &aMsgHnt );
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Ein paar Pruefungen muessen schon erlaubt sein.
 
     //1. Keine zwei EmptyPages hintereinander.
@@ -1268,7 +1250,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         {
             if ( bEmpty )
             {
-                ASSERT( sal_False, "Doppelte Leerseiten." );
+                OSL_FAIL( "Doppelte Leerseiten." );
                 break;  //Einmal reicht.
             }
             bEmpty = sal_True;
@@ -1280,7 +1262,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
 //moeglich: Ein paar Seiten, auf der ersten 'erste Seite' anwenden,
 //rechte als folge der ersten, linke als folge der rechten, rechte als
 //folge der linken.
-//      ASSERT( pPg->GetPageDesc() == pPg->FindPageDesc(),
+//   OSL_ENSURE( pPg->GetPageDesc() == pPg->FindPageDesc(),
 //              "Seite mit falschem Descriptor." );
 
         pPg = (SwPageFrm*)pPg->GetNext();
@@ -1291,10 +1273,6 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
 /*************************************************************************
 |*
 |*  SwFrm::InsertPage()
-|*
-|*  Beschreibung
-|*  Ersterstellung      MA 10. Feb. 93
-|*  Letzte Aenderung    MA 27. Jul. 93
 |*
 |*************************************************************************/
 SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
@@ -1325,7 +1303,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
     if ( !pDesc )
         pDesc = pPrevPage->GetPageDesc()->GetFollow();
 
-    ASSERT( pDesc, "Missing PageDesc" );
+    OSL_ENSURE( pDesc, "Missing PageDesc" );
     if( !(bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
         bWishedOdd = !bWishedOdd;
 
@@ -1356,7 +1334,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
             bCheckPages = sal_True;
     }
     pFmt = bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
-    ASSERT( pFmt, "Descriptor without format." );
+    OSL_ENSURE( pFmt, "Descriptor without format." );
     SwPageFrm *pPage = new SwPageFrm( pFmt, pRoot, pDesc );
     pPage->Paste( pRoot, pSibling );
     pPage->PreparePage( bFtn );
@@ -1429,9 +1407,6 @@ sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 |*
 |*  SwRootFrm::GrowFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
-|*
 |*************************************************************************/
 
 SwTwips SwRootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
@@ -1444,14 +1419,11 @@ SwTwips SwRootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 |*
 |*  SwRootFrm::ShrinkFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
-|*
 |*************************************************************************/
 SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 {
-    ASSERT( nDist >= 0, "nDist < 0." );
-    ASSERT( nDist <= Frm().Height(), "nDist > als aktuelle Groesse." );
+    OSL_ENSURE( nDist >= 0, "nDist < 0." );
+    OSL_ENSURE( nDist <= Frm().Height(), "nDist > als aktuelle Groesse." );
 
     if ( !bTst )
         Frm().SSize().Height() -= nDist;
@@ -1472,9 +1444,6 @@ SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
 |*          Es muss zweimal angesetzt werden um leeren Seiten aufzuspueren:
 |*              - einmal fuer die Endnotenseiten.
 |*              - und einmal fuer die Seiten des Bodytextes.
-|*
-|*  Ersterstellung      MA 20. May. 92
-|*  Letzte Aenderung    MA 10. Jan. 95
 |*
 |*************************************************************************/
 void SwRootFrm::RemoveSuperfluous()
@@ -1502,7 +1471,7 @@ void SwRootFrm::RemoveSuperfluous()
             SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for ( sal_uInt16 i = 0; bOnlySuperfluosObjs && i < rObjs.Count(); ++i )
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 // OD 2004-01-19 #110582# - do not consider hidden objects
                 if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId(
@@ -1511,7 +1480,6 @@ void SwRootFrm::RemoveSuperfluous()
                 {
                     bOnlySuperfluosObjs = false;
                 }
-                // <--
             }
             bExistEssentialObjs = !bOnlySuperfluosObjs;
         }
@@ -1523,21 +1491,20 @@ void SwRootFrm::RemoveSuperfluous()
              pPage->FindFtnCont() ||
              ( 0 != ( pBody = pPage->FindBodyCont() ) &&
                 ( pBody->ContainsCntnt() ||
-                    // --> FME 2005-05-18 #i47580#
+                    // #i47580#
                     // Do not delete page if there's an empty tabframe
                     // left. I think it might be correct to use ContainsAny()
                     // instead of ContainsCntnt() to cover the empty-table-case,
                     // but I'm not fully sure, since ContainsAny() also returns
                     // SectionFrames. Therefore I prefer to do it the safe way:
                   ( pBody->Lower() && pBody->Lower()->IsTabFrm() ) ) ) )
-                    // <--
         {
             if ( pPage->IsFtnPage() )
             {
                 while ( pPage->IsFtnPage() )
                 {
                     pPage = (SwPageFrm*)pPage->GetPrev();
-                    ASSERT( pPage, "Nur noch Endnotenseiten uebrig." );
+                    OSL_ENSURE( pPage, "Nur noch Endnotenseiten uebrig." );
                 }
                 continue;
             }
@@ -1573,9 +1540,6 @@ void SwRootFrm::RemoveSuperfluous()
 |*  Beschreibung        Stellt sicher, dass genuegend Seiten vorhanden
 |*      sind, damit alle Seitengebundenen Rahmen und DrawObject
 |*      untergebracht sind.
-|*
-|*  Ersterstellung      MA 27. Jul. 93
-|*  Letzte Aenderung    MA 24. Apr. 97
 |*
 |*************************************************************************/
 void SwRootFrm::AssertFlyPages()
@@ -1660,9 +1624,6 @@ void SwRootFrm::AssertFlyPages()
 |*      auf allen Seiten die Seitengebunden Objecte auf der richtigen
 |*      Seite (Seitennummer stehen).
 |*
-|*  Ersterstellung      MA 02. Nov. 94
-|*  Letzte Aenderung    MA 10. Aug. 95
-|*
 |*************************************************************************/
 void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 {
@@ -1675,7 +1636,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                   pPage->GetSortedObjs() && sal_uInt16(i) < pPage->GetSortedObjs()->Count();
                   ++i)
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwFrmFmt& rFmt = (*pPage->GetSortedObjs())[i]->GetFrmFmt();
                 const SwFmtAnchor &rAnch = rFmt.GetAnchor();
                 const sal_uInt16 nPg = rAnch.GetPageNum();
@@ -1690,14 +1651,14 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                     {
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
-#ifndef DBG_UTIL
-                        rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
-#else
+#if OSL_DEBUG_LEVEL > 1
                         const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();
                         rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
-                        ASSERT( !pPage->GetSortedObjs() ||
+                        OSL_ENSURE( !pPage->GetSortedObjs() ||
                                 nCnt != pPage->GetSortedObjs()->Count(),
                                 "Object couldn't be reattached!" );
+#else
+                        rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
 #endif
                         --i;
                     }
@@ -1712,9 +1673,6 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 |*
 |*  SwRootFrm::ChgSize()
 |*
-|*  Ersterstellung      MA 24. Jul. 92
-|*  Letzte Aenderung    MA 13. Aug. 93
-|*
 |*************************************************************************/
 Size SwRootFrm::ChgSize( const Size& aNewSize )
 {
@@ -1727,9 +1685,6 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
 /*************************************************************************
 |*
 |*  SwRootFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 17. Nov. 92
-|*  Letzte Aenderung    MA 19. Apr. 93
 |*
 |*************************************************************************/
 void SwRootFrm::MakeAll()
@@ -1752,9 +1707,6 @@ void SwRootFrm::MakeAll()
 |*
 |*  SwRootFrm::ImplInvalidateBrowseWidth()
 |*
-|*  Ersterstellung      MA 08. Jun. 96
-|*  Letzte Aenderung    MA 08. Jun. 96
-|*
 |*************************************************************************/
 void SwRootFrm::ImplInvalidateBrowseWidth()
 {
@@ -1771,14 +1723,11 @@ void SwRootFrm::ImplInvalidateBrowseWidth()
 |*
 |*  SwRootFrm::ImplCalcBrowseWidth()
 |*
-|*  Ersterstellung      MA 07. Jun. 96
-|*  Letzte Aenderung    MA 13. Jun. 96
-|*
 |*************************************************************************/
 void SwRootFrm::ImplCalcBrowseWidth()
 {
-    ASSERT( GetCurrShell() && GetCurrShell()->GetViewOptions()->getBrowseMode(),
-            "CalcBrowseWidth and not in BrowseView" )
+    OSL_ENSURE( GetCurrShell() && GetCurrShell()->GetViewOptions()->getBrowseMode(),
+            "CalcBrowseWidth and not in BrowseView" );
 
     //Die (minimale) Breite wird von Rahmen, Tabellen und Zeichenobjekten
     //bestimmt. Die Breite wird nicht anhand ihrer aktuellen Groessen bestimmt,
@@ -1842,7 +1791,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
         {
             for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
             {
-                // --> OD 2004-06-29 #i28701#
+                // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
                 const sal_Bool bFly = pAnchoredObj->ISA(SwFlyFrm);
@@ -1861,7 +1810,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                         break;
                     case FLY_AT_PARA:
                         {
-                            // --> FME 2004-09-13 #i33170#
+                            // #i33170#
                             // Reactivated old code because
                             // nWidth = pAnchoredObj->GetObjRect().Right()
                             // gives wrong results for objects that are still
@@ -1890,7 +1839,6 @@ void SwRootFrm::ImplCalcBrowseWidth()
                                 //aktuelle Groesse bestimmt werden.
                                 nWidth = pAnchoredObj->GetObjRect().Right() -
                                          pAnchoredObj->GetDrawObj()->GetAnchorPos().X();
-                            // <--
                         }
                         break;
                     default:    /* do nothing */;
@@ -1905,9 +1853,6 @@ void SwRootFrm::ImplCalcBrowseWidth()
 /*************************************************************************
 |*
 |*  SwRootFrm::StartAllAction()
-|*
-|*  Ersterstellung      MA 08. Mar. 98
-|*  Letzte Aenderung    MA 08. Mar. 98
 |*
 |*************************************************************************/
 
@@ -1954,12 +1899,12 @@ void SwRootFrm::UnoRemoveAllActions()
     if ( pSh )
         do
         {
-            // --> OD 2008-05-16 #i84729#
+            // #i84729#
             // No end action, if <ViewShell> instance is currently in its end action.
             // Recursives calls to <::EndAction()> are not allowed.
             if ( !pSh->IsInEndAction() )
             {
-                DBG_ASSERT(!pSh->GetRestoreActions(), "Restore action count is already set!");
+                OSL_ENSURE(!pSh->GetRestoreActions(), "Restore action count is already set!");
                 sal_Bool bCrsr = pSh->ISA( SwCrsrShell );
                 sal_Bool bFE = pSh->ISA( SwFEShell );
                 sal_uInt16 nRestore = 0;
@@ -1978,7 +1923,6 @@ void SwRootFrm::UnoRemoveAllActions()
                 }
                 pSh->SetRestoreActions(nRestore);
             }
-            // <--
             pSh->LockView(sal_True);
             pSh = (ViewShell*)pSh->GetNext();
 
@@ -2068,7 +2012,6 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
                     }
                 }
             }
-            // <--
         }
         else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
         {
@@ -2084,10 +2027,9 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
         }
-        // --> OD 2009-08-20 #i92511#
+        // #i92511#
         // cache for object rectangle inclusive spaces has to be invalidated.
         pAnchoredObj->InvalidateObjRectWithSpaces();
-        // <--
     }
 }
 
@@ -2127,7 +2069,7 @@ void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 // PAGES01: Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
-    // --> OD 2008-07-07 #i91432#
+    // #i91432#
     // No calculation of page positions, if only an empty page is present.
     // This situation occurs when <SwRootFrm> instance is in construction
     // and the document contains only left pages.
@@ -2136,7 +2078,6 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
     {
         return;
     }
-    // <--
 
     if ( !pVisArea )
     {
@@ -2146,7 +2087,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
     }
     else
     {
-        ASSERT( pViewOpt, "CheckViewLayout required ViewOptions" )
+        OSL_ENSURE( pViewOpt, "CheckViewLayout required ViewOptions" );
 
         const sal_uInt16 nColumns =  pViewOpt->GetViewLayoutColumns();
         const bool   bBookMode = pViewOpt->IsViewLayoutBookMode();
@@ -2300,11 +2241,9 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
             // first page in book mode is always special:
             if ( bFirstRow && mbBookMode )
             {
-                // --> OD 2008-04-08 #i88036#
-//                nCurrentRowWidth += pStartOfRow->Frm().Width() + nSidebarWidth;
+                // #i88036#
                 nCurrentRowWidth +=
                     pStartOfRow->GetFormatPage().Frm().Width() + nSidebarWidth;
-                // <--
             }
 
             // center page if possible
@@ -2320,10 +2259,8 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
             if ( bFirstRow && mbBookMode )
             {
-                // --> OD 2008-04-08 #i88036#
-//                nX += pStartOfRow->Frm().Width() + nSidebarWidth;
+                // #i88036#
                 nX += pStartOfRow->GetFormatPage().Frm().Width() + nSidebarWidth;
-                // <--
             }
 
             SwPageFrm* pEndOfRow = pPageFrm;
@@ -2464,25 +2401,14 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 bool SwRootFrm::IsLeftToRightViewLayout() const
 {
     // Layout direction determined by layout direction of the first page.
-    // --> OD 2008-04-08 #i88036#
+    // #i88036#
     // Only ask a non-empty page frame for its layout direction
 //    const SwPageFrm* pPage = dynamic_cast<const SwPageFrm*>(Lower());
 //    return !pPage->IsRightToLeft() && !pPage->IsVertical();
     const SwPageFrm& rPage =
                     dynamic_cast<const SwPageFrm*>(Lower())->GetFormatPage();
     return !rPage.IsRightToLeft() && !rPage.IsVertical();
-    // <--
 }
-
-/*const SwRect SwRootFrm::GetExtendedPageArea( sal_uInt16 nPageNumber ) const
-{
-    SwRect aRet;
-    ASSERT( nPageNumber < maPageRects.size(), "No extended page area available" )
-    if ( nPageNumber < maPageRects.size() )
-        aRet = maPageRects[ nPageNumber ];
-    return aRet;
-}*/
-
 
 const SwPageFrm& SwPageFrm::GetFormatPage() const
 {
@@ -2490,7 +2416,7 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
     if ( IsEmptyPage() )
     {
         pRet = static_cast<const SwPageFrm*>( OnRightPage() ? GetNext() : GetPrev() );
-        // --> OD 2008-04-08 #i88035#
+        // #i88035#
         // Typically a right empty page frame has a next non-empty page frame and
         // a left empty page frame has a previous non-empty page frame.
         // But under certain cirsumstances this assumption is not true -
@@ -2508,10 +2434,10 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
                 pRet = static_cast<const SwPageFrm*>( GetNext() );
             }
         }
-        ASSERT( pRet,
+        OSL_ENSURE( pRet,
                 "<SwPageFrm::GetFormatPage()> - inconsistent layout: empty page without previous and next page frame --> crash." );
-        // <--
     }
     return *pRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

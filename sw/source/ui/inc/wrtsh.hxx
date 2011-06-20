@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <sortopt.hxx>
 #include <swurl.hxx>
 #include <IMark.hxx>
+#include "navmgr.hxx"
 
 class Window;
 class OutputDevice;
@@ -68,17 +70,17 @@ namespace com { namespace sun { namespace star { namespace util {
 typedef sal_Int32 SelectionType;
 namespace nsSelectionType
 {
-    const SelectionType SEL_TXT             = CNT_TXT;  // Text, niemals auch Rahmen    0x0001
-    const SelectionType SEL_GRF             = CNT_GRF;  // Grafik                       0x0002
-    const SelectionType SEL_OLE             = CNT_OLE;  // OLE                          0x0010
-    const SelectionType SEL_FRM             = 0x000020; // Rahmen, keine Inhaltsform
-    const SelectionType SEL_NUM             = 0x000040; // NumListe
-    const SelectionType SEL_TBL             = 0x000080; // Cursor steht in Tabelle
-    const SelectionType SEL_TBL_CELLS       = 0x000100; // Tabellenzellen sind selektiert
-    const SelectionType SEL_DRW             = 0x000200; // Zeichenobjekte (Rechteck, Kreis...)
-    const SelectionType SEL_DRW_TXT         = 0x000400; // Draw-Textobjekte im Editmode
-    const SelectionType SEL_BEZ             = 0x000800; // Bezierobjekte editieren
-    const SelectionType SEL_DRW_FORM        = 0x001000; // Zeichenobjekte: DB-Forms
+    const SelectionType SEL_TXT             = CNT_TXT;  // text, never frames too   0x0001
+    const SelectionType SEL_GRF             = CNT_GRF;  // graphic          0x0002
+    const SelectionType SEL_OLE             = CNT_OLE;  // OLE              0x0010
+    const SelectionType SEL_FRM             = 0x000020; // frame, no content type
+    const SelectionType SEL_NUM             = 0x000040; // NumList
+    const SelectionType SEL_TBL             = 0x000080; // cursor is in table
+    const SelectionType SEL_TBL_CELLS       = 0x000100; // table cells are selected
+    const SelectionType SEL_DRW             = 0x000200; // drawing objects (rectangle, circle...)
+    const SelectionType SEL_DRW_TXT         = 0x000400; // draw-textobjects in edit mode
+    const SelectionType SEL_BEZ             = 0x000800; // edit ornament objects
+    const SelectionType SEL_DRW_FORM        = 0x001000; // drawing objects: DB-Forms
     const SelectionType SEL_FOC_FRM_CTRL    = 0x002000; // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by it's clients.
     const SelectionType SEL_MEDIA           = 0x004000; // Media object
     const SelectionType SEL_EXTRUDED_CUSTOMSHAPE = 0x008000;    // extruded custom shape
@@ -113,11 +115,10 @@ public:
     SELECTFUNC  fnEndDrag;
     SELECTFUNC  fnKillSel;
 
-    // Alle Selektionen aufheben
+    // reset all selections
     long ResetSelect( const Point *, sal_Bool );
 
-    //setzt den Cursorstack nach dem Bewegen mit PageUp/-Down
-    //zurueck, falls ein Stack aufgebaut ist
+    // resets the cursorstack after movement with PageUp/-Down if a stack is built up
     inline void ResetCursorStack();
     SelectionType   GetSelectionType() const;
 
@@ -129,7 +130,7 @@ public:
     void    EndSelect();
     sal_Bool    IsInSelect() const { return bInSelect; }
     void    SetInSelect(sal_Bool bSel = sal_True) { bInSelect = bSel; }
-        // Liegt eine Text- oder Rahmenselektion vor?
+        // is there a text- or frameselection?
     sal_Bool    HasSelection() const { return SwCrsrShell::HasSelection() ||
                                         IsMultiSelection() || IsSelFrmMode() || IsObjSelected(); }
     sal_Bool Pop( sal_Bool bOldCrsr = sal_True );
@@ -160,40 +161,38 @@ public:
     void    EnterSelFrmMode(const Point *pStartDrag = 0);
     void    LeaveSelFrmMode();
     sal_Bool    IsSelFrmMode() const { return bLayoutMode; }
-        // Selektion von Rahmen aufheben
+        // reset selection of frames
     void    UnSelectFrm();
 
     void    Invalidate();
 
-    // Tabellenzellen selektieren fuer Bearbeiten von Formeln in der Ribbonbar
+    // select table cells for editing of formulas in the ribbonbar
     inline void SelTblCells( const Link &rLink, sal_Bool bMark = sal_True );
     inline void EndSelTblCells();
 
-    //Wortweisen oder zeilenweisen Selektionsmodus verlassen. Wird
-    //in der Regel in MB-Up gerufen.
+    // leave per word or per line selection mode. Is usually called in MB-Up.
     sal_Bool    IsExtSel() const { return bSelWrd || bSelLn; }
 
-    // erfrage, ob der akt. fnDrag - Pointer auf BeginDrag gesetzt ist
-    // Wird fuer MouseMove gebraucht, um die Bugs 55592/55931 zu umgehen.
+    // query whether the active fnDrag pointer is set to BeginDrag
+    // is needed for MouseMove to work around bugs 55592/55931
     inline sal_Bool Is_FnDragEQBeginDrag() const;
 
-    //Basisabfragen
+    // base requests
     sal_Bool    IsInWrd()           { return IsInWord(); }
     sal_Bool    IsSttWrd()          { return IsStartWord(); }
     sal_Bool    IsEndWrd();
     sal_Bool    IsSttOfPara() const { return IsSttPara(); }
     sal_Bool    IsEndOfPara() const { return IsEndPara(); }
 
-    //Word bzw. Satz selektieren.
+    // select word / sentense
     sal_Bool    SelNearestWrd();
     sal_Bool    SelWrd      (const Point * = 0, sal_Bool bProp=sal_False );
-    // --> FME 2004-07-30 #i32329# Enhanced selection
+    // #i32329# Enhanced selection
     void    SelSentence (const Point * = 0, sal_Bool bProp=sal_False );
     void    SelPara     (const Point * = 0, sal_Bool bProp=sal_False );
-    // <--
     long    SelAll();
 
-    //Basiscursortravelling
+    // basecursortravelling
 typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool SimpleMove( FNSimpleMove, sal_Bool bSelect );
 
@@ -231,16 +230,15 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool BwdSentence( sal_Bool bSelect = sal_False )
                 { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
-    // --> FME 2004-07-30 #i20126# Enhanced table selection
+    // #i20126# Enhanced table selection
     sal_Bool SelectTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
-    // <--
     sal_Bool SelectTableRow();
     sal_Bool SelectTableCol();
     sal_Bool SelectTableCell();
 
     sal_Bool SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr = 0 );
 
-    // Spaltenweise Spruenge
+    // per column jumps
     sal_Bool StartOfColumn      ( sal_Bool bSelect = sal_False );
     sal_Bool EndOfColumn        ( sal_Bool bSelect = sal_False );
     sal_Bool StartOfNextColumn  ( sal_Bool bSelect = sal_False );
@@ -248,18 +246,18 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool StartOfPrevColumn  ( sal_Bool bSelect = sal_False );
     sal_Bool EndOfPrevColumn    ( sal_Bool bSelect = sal_False );
 
-    // setze den Cursor auf die Seite "nPage" an den Anfang
-    // zusaetzlich zu der gleichnamigen Implementierung in crsrsh.hxx
-    // werden hier alle bestehenden Selektionen vor dem Setzen des
-    // Cursors aufgehoben
+    // set the cursor to page "nPage" at the beginning
+    // additionally to a identically named implementation in crsrsh.hxx
+    // here all existing selections are being reset before setting the
+    // cursor
     sal_Bool    GotoPage( sal_uInt16 nPage, sal_Bool bRecord );
 
-    //setzen des Cursors; merken der alten Position fuer Zurueckblaettern.
+    // setting the cursor; remember the old position for turning back
     DECL_LINK( ExecFlyMac, void * );
 
     sal_Bool    PageCrsr(SwTwips lOffset, sal_Bool bSelect);
 
-    // Felder Update
+    // update fields
     void    UpdateInputFlds( SwInputFieldList* pLst = 0, sal_Bool bOnlyInSel = sal_False );
 
     void    NoEdit(sal_Bool bHideCrsr = sal_True);
@@ -272,14 +270,13 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     // change current data base and notify
     void ChgDBData(const SwDBData& SwDBData);
 
-    // Loeschen
+    // delete
     long    DelToEndOfLine();
     long    DelToStartOfLine();
     long    DelLine();
     long    DelLeft();
 
-    // loescht auch Rahmen bzw. setzt den Cursor in den Rahmen,
-    // wenn bDelFrm == sal_False ist
+    // also deletes the frame or sets the cursor in the frame when bDelFrm == sal_False
     long    DelRight();
     long    DelToEndOfPara();
     long    DelToStartOfPara();
@@ -288,10 +285,10 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     long    DelNxtWord();
     long    DelPrvWord();
 
-    // Prueft, ob eine Wortselektion vorliegt.
-    // Gemaess den Regeln fuer intelligentes Cut / Paste
-    // werden umgebende Spaces rausgeschnitten.
-    // Liefert Art der Wortselektion zurueck (siehe enum)
+    // checks whether a word selection exists.
+    // According to the rules for intelligent Cut / Paste
+    // surrounding spaces are cut out.
+    // returns type of word selection (see enum)
     enum word {
             NO_WORD = 0,
             WORD_SPACE_BEFORE = 1,
@@ -300,10 +297,10 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
         };
     int     IntelligentCut(int nSelectionType, sal_Bool bCut = sal_True);
 
-    // Editieren
+    // edit
     void    Insert(SwField &);
     void    Insert(const String &);
-    // Graphic
+    // graphic
     void    Insert( const String &rPath, const String &rFilter,
                     const Graphic &, SwFlyFrmAttrMgr * = 0,
                     sal_Bool bRule = sal_False );
@@ -316,11 +313,11 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void    SplitNode( sal_Bool bAutoFormat = sal_False, sal_Bool bCheckTableStart = sal_True );
     sal_Bool    CanInsert();
 
-    // Verzeichnisse
+    // indexes
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
     sal_Bool    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
 
-    // Numerierung und Bullets
+    // numbering and bullets
     /**
        Turns on numbering or bullets.
 
@@ -333,28 +330,29 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void    BulletOn();
 
     //OLE
-    void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 fuer Clipboard
+    void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 for clipboard
                           const svt::EmbeddedObjectRef&,
-                          SvGlobalName *pName = 0,      // != 0 entspr. Object erzeugen.
+                          SvGlobalName *pName = 0,      // != 0 create object accordingly
                           sal_Bool bActivate = sal_True,
-                          sal_uInt16 nSlotId = 0);       // SlotId fuer Dialog
+                          sal_uInt16 nSlotId = 0);       // SlotId for dialog
 
     sal_Bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
-    void    LaunchOLEObj( long nVerb = 0 );             // Server starten
+    void    LaunchOLEObj( long nVerb = 0 );             // start server
     sal_Bool    IsOLEObj() const { return GetCntType() == CNT_OLE;}
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
-                                  const SwRect *pFlyFrmRect = 0 );
+                                  const SwRect *pFlyFrmRect = 0,
+                                  const bool bNoTxtFrmPrtAreaChanged = false );
     virtual void ConnectObj( svt::EmbeddedObjectRef&  xIPObj, const SwRect &rPrt,
                              const SwRect &rFrm );
 
-    // Vorlagen und Formate
+    // styles and formats
 
-    // enum gibt an, was geschehen soll, wenn das Style nicht gefunden wurde
-    enum GetStyle { GETSTYLE_NOCREATE,          // keins anlegen
-                    GETSTYLE_CREATESOME,        // falls auf PoolId mapt anlegen
-                    GETSTYLE_CREATEANY };       // ggfs Standard returnen
+    // enum tells when should happen when the style was not found
+    enum GetStyle { GETSTYLE_NOCREATE,          // create none
+                    GETSTYLE_CREATESOME,        // if on PoolId create mapt
+                    GETSTYLE_CREATEANY };       // return standard if applicable
 
     SwTxtFmtColl*   GetParaStyle(const String &rCollName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
@@ -366,7 +364,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     String  GetCurPageStyle( const sal_Bool bCalcFrm = sal_True ) const;
 
-    // Aktuelle Vorlage anhand der geltenden Attribute aendern
+    // change current style using the attributes in effect
     void    QuickUpdateStyle();
 
     enum DoType { UNDO, REDO, REPEAT };
@@ -376,7 +374,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     String  GetRepeatString() const;
     sal_uInt16  GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
 
-    //Suchen oder Ersetzen
+    // search and replace
     sal_uLong SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
                          sal_Bool bSearchInNotes,
                          SwDocPositions eStart, SwDocPositions eEnde,
@@ -397,23 +395,23 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
 
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar = ' ' );
 
-    // Aktion vor Cursorbewegung
-    // Hebt gfs. Selektionen auf, triggert Timer und GCAttr()
+    // action ahead of cursor movement
+    // resets selection if applicable, triggers timer and GCAttr()
     void    MoveCrsr( sal_Bool bWithSelect = sal_False );
 
-    // Eingabefelder updaten
+    // update input fields
     sal_Bool    StartInputFldDlg(SwField*, sal_Bool bNextButton, Window* pParentWin = 0, ByteString* pWindowState = 0);
     // update DropDown fields
     sal_Bool    StartDropDownFldDlg(SwField*, sal_Bool bNextButton, ByteString* pWindowState = 0);
 
-    //"Handler" fuer Anederungen an der DrawView - fuer Controls.
+    //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( );
 
-    // springe zum Bookmark und setze die "Selections-Flags" wieder richtig
+    // jump to bookmark and set the "selctions-flags" correctly again
     sal_Bool GotoMark( const ::sw::mark::IMark* const pMark );
     sal_Bool GotoMark( const ::sw::mark::IMark* const pMark, sal_Bool bSelect, sal_Bool bStart );
     sal_Bool GotoMark( const ::rtl::OUString& rName );
-    sal_Bool GoNextBookmark(); // sal_True, wenn's noch eine gab
+    sal_Bool GoNextBookmark(); // sal_True when there still was one
     sal_Bool GoPrevBookmark();
 
     bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark);
@@ -424,46 +422,44 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     // on graphics
     sal_Bool SelectNextPrevHyperlink( sal_Bool bNext = sal_True );
 
-    // Zugehoerige SwView ermitteln
+    // determine corresponding SwView
     const SwView&       GetView() const { return rView; }
     SwView&             GetView() { return rView; }
 
-    //Weil es sonst keiner macht, gibt es hier eine ExecMacro()
+    // Because nobody else is doing it, here is a ExecMacro()
     void ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
-    // rufe ins dunkle Basic/JavaScript
+    // call into the dark Basic/JavaScript
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                         sal_Bool bCheckPtr = sal_False, SbxArray* pArgs = 0,
                         const Link* pCallBack = 0 );
 
-    // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
-    // Fuehre die vor definierten Aktionen aus.
+    // a click at the given field. the cursor is on it.
+    // execute the predefined actions.
     void ClickToField( const SwField& rFld );
     void ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter = URLLOAD_NOFILTER );
     sal_Bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter = URLLOAD_NOFILTER );
     inline sal_Bool IsInClickToEdit() const ;
 
-    // fall ein URL-Button selektiert ist, dessen URL returnen, ansonsten
-    // einen LeerString
+    // if a URL-Button is selected, return its URL; otherwise an empty string
     sal_Bool GetURLFromButton( String& rURL, String& rDescr ) const;
 
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
                          const sal_uInt16 nAction );
 
-    // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
+    // Core creates a selection, SttSelect has to be called
     virtual void NewCoreSelection();
 
     virtual void ApplyViewOptions( const SwViewOption &rOpt );
 
-    // autom. Update von Vorlagen
+    // automatic update of styles
     void AutoUpdateFrame(SwFrmFmt* pFmt, const SfxItemSet& rStyleSet);
     void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet);
 
-    // Link fuers einfuegen von Bereichen uebers Drag&Drop/Clipboard
+    // link for inserting ranges via Drag&Drop/Clipboard
     DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData* );
 
 
-    //ctoren, der erstere ist eine Art kontrollierter copy ctor fuer weitere
-    //Sichten auf ein Dokument
+    // ctor, the first one is a kind of a controlled copy ctor for more views of a document
     SwWrtShell( SwWrtShell&, Window *pWin, SwView &rShell);
     SwWrtShell( SwDoc& rDoc, Window *pWin, SwView &rShell,
                 const SwViewOption *pViewOpt = 0);
@@ -472,6 +468,21 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     sal_Bool TryRemoveIndent(); // #i23725#
 
     String GetSelDescr() const;
+
+    SwNavigationMgr& GetNavigationMgr();
+    void addCurrentPosition();
+    sal_Bool GotoFly( const String& rName, FlyCntType eType = FLYCNTTYPE_ALL,
+         sal_Bool bSelFrame = sal_True );
+    sal_Bool GotoINetAttr( const SwTxtINetFmt& rAttr );
+    void GotoOutline( sal_uInt16 nIdx );
+    sal_Bool GotoOutline( const String& rName );
+    sal_Bool GotoRegion( const String& rName );
+    sal_Bool GotoRefMark( const String& rRefMark, sal_uInt16 nSubType = 0,
+        sal_uInt16 nSeqNo = 0 );
+    sal_Bool GotoNextTOXBase( const String* pName = 0);
+    sal_Bool GotoTable( const String& rName );
+    sal_Bool GotoFld( const SwFmtFld& rFld );
+    const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
 
 private:
 
@@ -498,7 +509,7 @@ private:
              {}
     } *pModeStack;
 
-    // Cursor bei PageUp / -Down mitnehmen
+    // carry cursor along when PageUp / -Down
     enum PageMove
     {
         MV_NO,
@@ -529,6 +540,7 @@ private:
     } *pCrsrStack;
 
     SwView  &rView;
+    SwNavigationMgr aNavigationMgr;
 
     Point   aDest;
     sal_Bool    bDestOnStack;
@@ -536,21 +548,20 @@ private:
     SW_DLLPRIVATE sal_Bool  PushCrsr(SwTwips lOffset, sal_Bool bSelect);
     SW_DLLPRIVATE sal_Bool  PopCrsr(sal_Bool bUpdate, sal_Bool bSelect = sal_False);
 
-    // ENDE Cursor bei PageUp / -Down mitnehmen
+    // take END cursor along when PageUp / -Down
     SW_DLLPRIVATE sal_Bool _SttWrd();
     SW_DLLPRIVATE sal_Bool _EndWrd();
     SW_DLLPRIVATE sal_Bool _NxtWrd();
     SW_DLLPRIVATE sal_Bool _PrvWrd();
-    // --> OD 2008-08-06 #i92468#
+    // #i92468#
     SW_DLLPRIVATE sal_Bool _NxtWrdForDelete();
     SW_DLLPRIVATE sal_Bool _PrvWrdForDelete();
-    // <--
     SW_DLLPRIVATE sal_Bool _FwdSentence();
     SW_DLLPRIVATE sal_Bool _BwdSentence();
     sal_Bool _FwdPara();
     SW_DLLPRIVATE sal_Bool _BwdPara();
 
-        //  Selektionen
+        // selections
     sal_Bool    bIns            :1;
     sal_Bool    bInSelect       :1;
     sal_Bool    bExtMode        :1;
@@ -562,7 +573,7 @@ private:
     sal_Bool    bSelWrd         :1;
     sal_Bool    bSelLn          :1;
     sal_Bool    bIsInClickToEdit:1;
-    sal_Bool    bClearMark      :1;     // Selektion fuer ChartAutoPilot nicht loeschen
+    sal_Bool    bClearMark      :1;     // don't delete selection for ChartAutoPilot
     sal_Bool    mbRetainSelection :1; // Do not remove selections
 
     Point   aStart;
@@ -570,7 +581,7 @@ private:
 
     SELECTFUNC  fnLeaveSelect;
 
-    //setzt den Cursorstack nach dem Bewegen mit PageUp/-Down zurueck.
+    // resets the cursor stack after movement by PageUp/-Down
     SW_DLLPRIVATE void  _ResetCursorStack();
 
     SW_DLLPRIVATE void  SttDragDrop(Timer *);
@@ -588,13 +599,12 @@ private:
     SW_DLLPRIVATE long  ExtSelWrd(const Point *, sal_Bool bProp=sal_False );
     SW_DLLPRIVATE long  ExtSelLn(const Point *, sal_Bool bProp=sal_False );
 
-    //Verschieben von Text aus Drag and Drop; Point ist
-    //Destination fuer alle Selektionen.
+    // move text from Drag and Drop; Point is destination for all selections.
     SW_DLLPRIVATE long  MoveText(const Point *, sal_Bool bProp=sal_False );
 
     SW_DLLPRIVATE long  BeginFrmDrag(const Point *, sal_Bool bProp=sal_False );
 
-    //nach SSize/Move eines Frames Update; Point ist Destination.
+    // after SSize/Move of a frame update; Point is destination.
     SW_DLLPRIVATE long  UpdateLayoutFrm(const Point *, sal_Bool bProp=sal_False );
 
     SW_DLLPRIVATE long  SttLeaveSelect(const Point *, sal_Bool bProp=sal_False );
@@ -650,3 +660,5 @@ inline sal_Bool SwWrtShell::Is_FnDragEQBeginDrag() const
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

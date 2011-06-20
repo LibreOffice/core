@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,25 +29,15 @@
 #define SW_TAUTOFMT_HXX
 #include <sfx2/basedlgs.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>
-#endif
 
-#ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
 
 class SwTableAutoFmt;
 class AutoFmtPreview;
@@ -116,3 +107,4 @@ public:
 
 #endif // SW_AUTOFMT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

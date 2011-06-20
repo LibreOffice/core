@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <doc.hxx>
 #include "writerhelper.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -75,7 +75,6 @@ struct OLE_MFP
 
 using namespace ::com::sun::star;
 
-// SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
 SV_IMPL_OP_PTRARR_SORT(WW8OleMaps, WW8OleMap_Ptr)
 
 static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
@@ -99,7 +98,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
     pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     pS->Seek( STREAM_SEEK_TO_END );
 
-    ASSERT( pS->Tell() >=  76, "+OLE-PIC-Stream is shorter than 76 Byte" );
+    OSL_ENSURE( pS->Tell() >=  76, "+OLE-PIC-Stream is shorter than 76 Byte" );
 
     sal_Int32 nOrgWidth,
           nOrgHeight,
@@ -124,7 +123,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
     rY = nOrgHeight - nCropTop  - nCropBottom;
     if (10 > nScaleX || 65536 < nScaleX || 10 > nScaleY || 65536 < nScaleY)
     {
-        ASSERT( !pS, "+OLE-Scalinginformation in PIC-Stream wrong" );
+        OSL_ENSURE( !pS, "+OLE-Scalinginformation in PIC-Stream wrong" );
         return false;
     }
     else
@@ -155,23 +154,23 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 
     if( pMfp->mm == 94 || pMfp->mm == 99 )
     {
-        ASSERT( !pSt, "+OLE: Falscher Metafile-Typ" );
+        OSL_ENSURE( !pSt, "+OLE: Falscher Metafile-Typ" );
         return false;
     }
     if( pMfp->mm != 8 )
     {
-        ASSERT( !pSt, "+OLE: Falscher Metafile-Typ ( nicht Anisotropic )" );
+        OSL_ENSURE( !pSt, "+OLE: Falscher Metafile-Typ ( nicht Anisotropic )" );
     }
     if( !pMfp->xExt || !pMfp->yExt )
     {
-        ASSERT( !pSt, "+OLE: Groesse von 0 ???" );
+        OSL_ENSURE( !pSt, "+OLE: Groesse von 0 ???" );
         return false;
     }
     bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL ) ? true : false;   // WMF lesen
                     // *pSt >> aWMF  geht nicht ohne placable Header
-    if (!bOk || pSt->GetError() || rWMF.GetActionCount() == 0)
+    if (!bOk || pSt->GetError() || rWMF.GetActionSize() == 0)
     {
-        ASSERT( !pSt, "+OLE: Konnte Metafile nicht lesen" );
+        OSL_ENSURE( !pSt, "+OLE: Konnte Metafile nicht lesen" );
         return false;
     }
 
@@ -204,13 +203,6 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 
     pStp->Seek( STREAM_SEEK_TO_BEGIN );
 
-#ifdef DEBUGDUMP
-    SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".pct"));
-    pDbg->Seek(0x200); //Prepend extra 0x200 of zeros to make this a valid PICT
-    sw::hack::DumpStream(*pStp, *pDbg);
-    delete pDbg;
-#endif
-
     // Mac-Pict steht im 03PICT-StorageStream allerdings ohne die ersten 512
     // Bytes, die bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
     return SwWW8ImplReader::GetPictGrafFromStream(rGraph, *pStp);
@@ -220,7 +212,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     const SfxItemSet &rFlySet, const SfxItemSet &rGrfSet)
 {
     SfxObjectShell *pPersist = rDoc.GetPersist();
-    ASSERT(pPersist, "No persist, cannot insert objects correctly");
+    OSL_ENSURE(pPersist, "No persist, cannot insert objects correctly");
     if (!pPersist)
         return 0;
 
@@ -253,7 +245,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     ::rtl::OUString sNewName;
     bool bSuccess = aOLEObj.TransferToDoc(sNewName);
 
-    ASSERT(bSuccess, "Insert OLE failed");
+    OSL_ENSURE(bSuccess, "Insert OLE failed");
     if (bSuccess)
     {
         const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet : &rFlySet;
@@ -357,7 +349,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     const Graphic* pGrf, const SfxItemSet* pFlySet, const Rectangle& aVisArea )
 {
     SdrObject* pRet = 0;
-    ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
+    OSL_ENSURE( pStg, "ohne storage geht hier fast gar nichts!" );
 
     ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
@@ -415,11 +407,11 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     {
         //Can't put them in headers/footers :-(
         uno::Reference< drawing::XShape > xRef;
-        ASSERT(pFormImpl, "Impossible");
+        OSL_ENSURE(pFormImpl, "Impossible");
         if (pFormImpl && pFormImpl->ReadOCXStream(xSrc1, &xRef, false))
         {
             pRet = GetSdrObjectFromXShape(xRef);
-            ASSERT(pRet, "Impossible");
+            OSL_ENSURE(pRet, "Impossible");
             if (pRet)
                 pRet->SetLogicRect(aRect);
             return pRet;
@@ -508,7 +500,6 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     else
     {
         /*
-         #101578#
          It is possible to have a number of date stamps for the created time
          of the change, (possibly a word bug) so we must use the "get a full
          list" varient of HasCharSprm and take the last one as the true one.
@@ -578,4 +569,4 @@ void SwWW8ImplReader::Read_CPropRMark(sal_uInt16 , const sal_uInt8* pData, short
     Read_CRevisionMark( nsRedlineType_t::REDLINE_FORMAT, pData, nLen );
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

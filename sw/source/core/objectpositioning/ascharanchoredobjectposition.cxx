@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <frame.hxx>
 #include <txtfrm.hxx>
 #include <flyfrms.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
@@ -85,7 +84,7 @@ SwAsCharAnchoredObjectPosition::~SwAsCharAnchoredObjectPosition()
 */
 const SwTxtFrm& SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() const
 {
-    ASSERT( GetAnchorFrm().ISA(SwTxtFrm),
+    OSL_ENSURE( GetAnchorFrm().ISA(SwTxtFrm),
             "SwAsCharAnchoredObjectPosition::GetAnchorTxtFrm() - wrong anchor frame type" );
 
     return static_cast<const SwTxtFrm&>(GetAnchorFrm());
@@ -289,13 +288,12 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         if ( rAnchorFrm.IsVertical() )
             rAnchorFrm.SwitchHorizontalToVertical( aAnchorPos );
 
-        // --> OD 2005-03-09 #i44347# - keep last object rectangle at anchored object
-        ASSERT ( GetAnchoredObj().ISA(SwAnchoredDrawObject),
+        // #i44347# - keep last object rectangle at anchored object
+       OSL_ENSURE( GetAnchoredObj().ISA(SwAnchoredDrawObject),
                  "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong type of anchored object." );
         SwAnchoredDrawObject& rAnchoredDrawObj =
                         static_cast<SwAnchoredDrawObject&>( GetAnchoredObj() );
         rAnchoredDrawObj.SetLastObjRect( rAnchoredDrawObj.GetObjRect().SVRect() );
-        // <--
     }
     else
     {
@@ -318,7 +316,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             aRelAttr = Point( 0, nRelPos );
 
         // OD 2004-03-23 #i26791#
-        ASSERT( GetAnchoredObj().ISA(SwFlyInCntFrm),
+        OSL_ENSURE( GetAnchoredObj().ISA(SwFlyInCntFrm),
                 "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong anchored object." );
         const SwFlyInCntFrm& rFlyInCntFrm =
                 static_cast<const SwFlyInCntFrm&>(GetAnchoredObj());
@@ -339,7 +337,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 aObjBoundRect.Height( aObjBoundRect.Height() + rULSpace.GetLower() );
             }
         }
-        ASSERT( (rFlyInCntFrm.Frm().*fnRect->fnGetHeight)(),
+        OSL_ENSURE( (rFlyInCntFrm.Frm().*fnRect->fnGetHeight)(),
             "SwAnchoredObjectPosition::CalcPosition(..) - fly frame has an invalid height" );
     }
 
@@ -456,3 +454,4 @@ sal_uInt8 SwAsCharAnchoredObjectPosition::GetLineAlignment() const
     return mnLineAlignment;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,25 +29,15 @@
 #define _OPTPAGE_HXX
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
 #include <svx/fntctrl.hxx>
 #include <fontcfg.hxx>
@@ -55,10 +46,6 @@ class SfxPrinter;
 class SwStdFontConfig;
 class SwWrtShell;
 class FontList;
-
-/*-----------------31.08.96 10.09-------------------
-
---------------------------------------------------*/
 
 class SwContentOptPage : public SfxTabPage
 {
@@ -107,11 +94,9 @@ public:
 
 };
 
-/*-------- OS 27.01.95 -----------------------------------
- TabPage Druckereinstellungen Zusaetze
+/*--------------------------------------------------------
+ TabPage printer settings additions
 --------------------------------------------------------- */
-
-
 class SwAddPrinterTabPage : public SfxTabPage
 {
     FixedLine       aFL1;
@@ -172,10 +157,6 @@ public:
 
 };
 
-/*-----------------03.09.96 11.50-------------------
-
---------------------------------------------------*/
-
 class SwStdFontTabPage : public SfxTabPage
 {
     FixedLine       aStdChrFL  ;
@@ -218,7 +199,7 @@ class SwStdFontTabPage : public SfxTabPage
     SwStdFontConfig*    pFontConfig;
     SwWrtShell*         pWrtShell;
     LanguageType        eLanguage;
-    // waren nur defaults vorhanden? wurden sie mit den Boxen ueberschrieben
+    // only defaults were there? they were signed with the boxes
     sal_Bool    bListDefault    :1;
     sal_Bool    bSetListDefault :1;
     sal_Bool    bLabelDefault   :1;
@@ -259,10 +240,6 @@ public:
     void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
-
-/*-----------------18.01.97 12.10-------------------
-
---------------------------------------------------*/
 
 class SwTableOptionsTabPage : public SfxTabPage
 {
@@ -322,8 +299,9 @@ public:
     virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
-/*-----------------31.10.97 17:55-------------------
- TabPage fuer ShadowCrsr
+
+/*--------------------------------------------------
+ TabPage for ShadowCrsr
 --------------------------------------------------*/
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
@@ -374,9 +352,8 @@ public:
 };
 
 /*-----------------------------------------------------------------------
-    Beschreibung: Markierungsvorschau
+    Description: mark preview
  -----------------------------------------------------------------------*/
-
 class SwMarkPreview : public Window
 {
     Color           m_aBgCol;           // background
@@ -412,9 +389,8 @@ public:
 };
 
 /*-----------------------------------------------------------------------
-    Beschreibung: Redlining-Optionen
+    Description: redlining options
  -----------------------------------------------------------------------*/
-
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
     FixedLine           aInsertFL;
@@ -468,11 +444,11 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-/*--------OS 11.01.95 -----------------------------------
- TabPage Testeinstellungen fuer SW
+/*-------------------------------------------------------
+ TabPage test settings for SW
 --------------------------------------------------------- */
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 class SwTestTabPage : public SfxTabPage
 {
@@ -506,4 +482,6 @@ private:
 
 };
 #endif //PRODUCT
+
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

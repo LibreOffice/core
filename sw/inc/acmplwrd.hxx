@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ class SwAutoCompleteWord
 
     SwAutoCompleteWord_Impl* pImpl;
     sal_uInt16 nMaxCount, nMinWrdLen;
-    sal_Bool bLockWordLst;
+    bool bLockWordLst;
 
     void DocumentDying(const SwDoc& rDoc);
 public:
@@ -57,8 +58,8 @@ public:
 
     const String& operator[]( sal_uInt16 n ) const { return *aWordLst[ n ]; }
 
-    sal_Bool IsLockWordLstLocked() const        { return bLockWordLst; }
-    void SetLockWordLstLocked( sal_Bool bFlag ) { bLockWordLst = bFlag; }
+    bool IsLockWordLstLocked() const           { return bLockWordLst; }
+    void SetLockWordLstLocked( bool bFlag ) { bLockWordLst = bFlag; }
 
     void SetMaxCount( sal_uInt16 n );
 
@@ -71,3 +72,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

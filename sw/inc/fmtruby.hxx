@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,12 +38,12 @@ class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
 {
     friend class SwTxtRuby;
 
-    String sRubyTxt;                    // the ruby txt
-    String sCharFmtName;                // name of the charformat
-    SwTxtRuby* pTxtAttr;                // the TextAttribut
-    sal_uInt16 nCharFmtId;                  // PoolId of the charformat
-    sal_uInt16 nPosition;                   // Position of the Ruby-Character
-    sal_uInt16 nAdjustment;                 // specific adjustment of the Ruby-Ch.
+    String sRubyTxt;                    // The ruby txt.
+    String sCharFmtName;                // Name of the charformat.
+    SwTxtRuby* pTxtAttr;                // The TextAttribute.
+    sal_uInt16 nCharFmtId;                  // PoolId of the charformat.
+    sal_uInt16 nPosition;                   // Position of the Ruby-character.
+    sal_uInt16 nAdjustment;                 // Specific adjustment of the Ruby-ch.
 
 public:
     SwFmtRuby( const String& rRubyTxt );
@@ -51,7 +52,7 @@ public:
 
     SwFmtRuby& operator=( const SwFmtRuby& rAttr );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -61,9 +62,9 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 );
 
 
@@ -89,3 +90,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

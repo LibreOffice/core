@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,9 +52,6 @@ class SwPaM;
 class SwUnoCrsr;
 class SwFrmFmt;
 
-/* -----------------29.04.98 07:35-------------------
- *
- * --------------------------------------------------*/
 class SwUnoInternalPaM
     : public SwPaM
 {
@@ -274,10 +272,6 @@ public:
 
 };
 
-/* -----------------15.05.98 08:29-------------------
- *
- * --------------------------------------------------*/
-
 typedef ::cppu::WeakImplHelper3
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -336,3 +330,4 @@ public:
 
 #endif // SW_UNOTEXTRANGE_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

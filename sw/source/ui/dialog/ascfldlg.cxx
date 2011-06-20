@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,14 +50,9 @@
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 
-#ifndef _DIALOG_HRC
 #include <dialog.hrc>
-#endif
-#ifndef _ASCFLDLG_HRC
 #include <ascfldlg.hrc>
-#endif
 
 #include "vcl/metric.hxx"
 
@@ -64,8 +60,8 @@
 using namespace ::com::sun::star;
 
 const sal_Unicode cDialogExtraDataClose = '}';
-const char __FAR_DATA sDialogImpExtraData[] = "EncImpDlg:{";
-const char __FAR_DATA sDialogExpExtraData[] = "EncExpDlg:{";
+const char sDialogImpExtraData[] = "EncImpDlg:{";
+const char sDialogExpExtraData[] = "EncExpDlg:{";
 const sal_uInt16 nDialogExtraDataLen = 11;      // 12345678901
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
@@ -125,8 +121,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 aBuffer[ nBytesRead + 2 ] = '0';
         }
 
-        sal_Bool bCR = sal_False, bLF = sal_False, bNoNormalChar = sal_False,
-            bNullChar = sal_False;
+        sal_Bool bCR = sal_False, bLF = sal_False, bNullChar = sal_False;
         for( sal_uInt16 nCnt = 0; nCnt < nBytesRead; ++nCnt )
             switch( aBuffer[ nCnt ] )
             {
@@ -136,9 +131,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 case 0xC:
                 case 0x1A:
                 case 0x9:   break;
-                default:
-                    if( 0x20 > aBuffer[ nCnt ] )
-                        bNoNormalChar = sal_True;
+                default:    break;
             }
 
         if( !bNullChar )
@@ -148,21 +141,15 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 if( bLF )
                 {
                     aOpt.SetParaFlags( LINEEND_CRLF );
-// have to check if of CharSet is type of ANSI
-//                  aOpt.SetCharSet( CHARSET_ANSI );
                 }
                 else
                 {
                     aOpt.SetParaFlags( LINEEND_CR );
-// have to check if CharSet is type of MAC
-//                  aOpt.SetCharSet( CHARSET_MAC );
                 }
             }
             else if( bLF )
             {
                 aOpt.SetParaFlags( LINEEND_LF );
-// have to check if of CharSet is type of ANSI
-//              aOpt.SetCharSet( CHARSET_ANSI );
             }
         }
 
@@ -228,7 +215,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 delete pPrt;
         }
 
-        // initialisiere Sprache
+        // initialise language
         {
             if( !aOpt.GetLanguage() )
             {
@@ -291,7 +278,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         SetSizePixel( aSize );
     }
 
-    // initialisiere Zeichensatz
+    // initialise character set
     aCharSetLB.FillFromTextEncodingTable( pStream != NULL );
     aCharSetLB.SelectTextEncoding( aOpt.GetCharSet()  );
 
@@ -329,7 +316,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetLanguage( sal_uInt16( nLng ) );
     rOptions.SetParaFlags( GetCRLF() );
 
-    // JP: Task #71802# save the user settings
+    // save the user settings
     String sData;
     rOptions.WriteUserData( sData );
     if( sData.Len() )
@@ -460,3 +447,4 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

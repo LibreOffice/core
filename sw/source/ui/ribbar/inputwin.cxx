@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -99,10 +100,9 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     InsertWindow( ED_FORMULA, &aEdit);
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
-    sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, bHC ));
-    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL, bHC  ));
-    SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY, bHC  ));
+    SetItemImage( FN_FORMULA_CALC,   pManager->GetImage(FN_FORMULA_CALC   ));
+    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL ));
+    SetItemImage( FN_FORMULA_APPLY,  pManager->GetImage(FN_FORMULA_APPLY  ));
 
     SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | TIB_DROPDOWNONLY );
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
@@ -133,7 +133,7 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
 
 //==================================================================
 
-__EXPORT SwInputWindow::~SwInputWindow()
+SwInputWindow::~SwInputWindow()
 {
     SfxImageManager::GetImageManager( SW_MOD() )->ReleaseToolBox(this);
 
@@ -179,11 +179,9 @@ void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
         //      update item images
         SwModule *pMod  = SW_MOD();
         SfxImageManager *pImgMgr = SfxImageManager::GetImageManager( pMod );
-        sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-        //
-        SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC,   bHC ));
-        SetItemImage( FN_FORMULA_CANCEL, pImgMgr->GetImage(FN_FORMULA_CANCEL, bHC ));
-        SetItemImage( FN_FORMULA_APPLY,  pImgMgr->GetImage(FN_FORMULA_APPLY,  bHC ));
+        SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC   ));
+        SetItemImage( FN_FORMULA_CANCEL, pImgMgr->GetImage(FN_FORMULA_CANCEL ));
+        SetItemImage( FN_FORMULA_APPLY,  pImgMgr->GetImage(FN_FORMULA_APPLY  ));
     }
 
     ToolBox::DataChanged( rDCEvt );
@@ -191,7 +189,7 @@ void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 //==================================================================
 
-void __EXPORT SwInputWindow::Resize()
+void SwInputWindow::Resize()
 {
     ToolBox::Resize();
 
@@ -215,7 +213,7 @@ void SwInputWindow::ShowWin()
         pView->GetHLineal().SetActive( sal_False );
         pView->GetVLineal().SetActive( sal_False );
 
-        DBG_ASSERT(pWrtShell, "Keine WrtShell!");
+        OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in Tabelle
         bIsTable = pWrtShell->IsCrsrInTbl() ? sal_True : sal_False;
 
@@ -236,11 +234,11 @@ void SwInputWindow::ShowWin()
             aPos.SetText(SW_RESSTR(STR_TBL_FORMULA));
 
         // Aktuelles Feld bearbeiten
-        ASSERT(pMgr == 0, FieldManager nicht geloescht.);
+        OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
         pMgr = new SwFldMgr;
 
-        // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
-        //              also setzen
+        // Formel soll immer mit einem "=" beginnen, hier
+        // also setzen
         String sEdit( '=' );
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
@@ -315,7 +313,7 @@ void SwInputWindow::ShowWin()
 
 IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu )
 {
-static const char * __READONLY_DATA aStrArr[] = {
+static const char * const aStrArr[] = {
     sCalc_Phd,
     sCalc_Sqrt,
     sCalc_Or,
@@ -374,7 +372,7 @@ IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
 //==================================================================
 
 
-void __EXPORT SwInputWindow::Click( )
+void SwInputWindow::Click( )
 {
     sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
@@ -402,8 +400,8 @@ void  SwInputWindow::ApplyFormula()
     CleanupUglyHackWithUndo();
     pWrtShell->Pop( sal_False );
 
-    // JP 13.01.97: Formel soll immer mit einem "=" beginnen, hier
-    //              also wieder entfernen
+    // Formel soll immer mit einem "=" beginnen, hier
+    // also wieder entfernen
     String sEdit( aEdit.GetText() );
     sEdit.EraseLeadingChars().EraseTrailingChars();
     if( sEdit.Len() && '=' == sEdit.GetChar( 0 ) )
@@ -537,7 +535,7 @@ void SwInputWindow::DelBoxCntnt()
 
 //==================================================================
 
-void __EXPORT InputEdit::KeyInput(const KeyEvent& rEvent)
+void InputEdit::KeyInput(const KeyEvent& rEvent)
 {
     const KeyCode aCode = rEvent.GetKeyCode();
     if(aCode == KEY_RETURN || aCode == KEY_F2 )
@@ -550,7 +548,7 @@ void __EXPORT InputEdit::KeyInput(const KeyEvent& rEvent)
 
 //==================================================================
 
-void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
+void InputEdit::UpdateRange(const String& rBoxes,
                                     const String& rName )
 {
     if( !rBoxes.Len() )
@@ -583,7 +581,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
         aStr += cClose;
         SetText(aStr);
         sal_uInt16 nPos = aStr.Search( cClose );
-        ASSERT(nPos < aStr.Len(), Delimiter nicht gefunden.);
+        OSL_ENSURE(nPos < aStr.Len(), "delimiter not found");
         ++nPos;
         SetSelection( Selection( nPos, nPos ));
     }
@@ -609,8 +607,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
             nEndPos = nStartPos;
             while( nEndPos < nLen )
             {
-                if( cClose == (cCh = aActText.GetChar( nEndPos )) /*||
-                    cCh == cCloseBracket*/ )
+                if( cClose == (cCh = aActText.GetChar( nEndPos )))
                 {
                     bFound = sal_True;
                     break;
@@ -642,14 +639,12 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
         {
             SetText( aActText );
             SetSelection( Selection( nPos, nPos ) );
-//          GetModifyHdl().Call( this );
         }
     }
     GrabFocus();
 
 }
 //==================================================================
-
 
 SwInputChild::SwInputChild(Window* _pParent,
                                 sal_uInt16 nId,
@@ -664,16 +659,17 @@ SwInputChild::SwInputChild(Window* _pParent,
 }
 
 
-__EXPORT SwInputChild::~SwInputChild()
+SwInputChild::~SwInputChild()
 {
     if(pDispatch)
         pDispatch->Lock(sal_False);
 }
 
 
-SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
+SfxChildWinInfo SwInputChild::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
     return aInfo;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

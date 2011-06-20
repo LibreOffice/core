@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,7 +64,6 @@ class ThreadManager : public IThreadListenerOwner
         // --> IThreadListenerOwner
         virtual boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
         virtual void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );
-        // <--
 
         /** initialization
 
@@ -170,3 +170,5 @@ class ThreadManager : public IThreadListenerOwner
         bool StartThread( const tThreadData& aThreadData );
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

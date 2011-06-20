@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,9 +71,9 @@ public:
              bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
              bPrintProspectRTL,
              bPrintSingleJobs, bPaperFromSetup,
-             // --> FME 2005-12-13 #b6354161# Print empty pages
+             // Print empty pages
              bPrintEmptyPages,
-             // <--
+
              // #i56195# no field update while printing mail merge documents
              bUpdateFieldsInPrinting,
              bModified;
@@ -206,7 +207,7 @@ public:
     bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.bPrintBlackFont ); }
     sal_Int16 GetPrintPostItsType() const       { return static_cast< sal_Int16 >(getIntValue( "PrintAnnotationMode", m_rDefaultPrintData.nPrintPostIts )); }
     bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.bPaperFromSetup ); }
-    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ /*getBoolValue( "PrintReversed",        m_rDefaultPrintData.bPrintReverse );*/ }
+    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ }
 
     bool IsPrintLeftPages() const;
     bool IsPrintRightPages() const;
@@ -262,7 +263,7 @@ public:
     ~SwRenderData();
 
 
-    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0 && m_pPostItShell != 0; }
+    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
@@ -321,7 +322,6 @@ public:
 ////////////////////////////////////////////////////////////
 
 // last remnants of swprtopt.hxx:
-
 #define POSTITS_NONE    0
 #define POSTITS_ONLY    1
 #define POSTITS_ENDDOC  2
@@ -334,3 +334,5 @@ void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb);
 } // namespace sw
 
 #endif  // SW_PRINTDATA_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

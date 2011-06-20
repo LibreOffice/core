@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -120,9 +121,7 @@ void ConstFormControl::Activate(const sal_uInt16 nSlotId)
 
     m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
 }
-/* -----------------------------19.04.2002 12:42------------------------------
 
- ---------------------------------------------------------------------------*/
 void ConstFormControl::CreateDefaultObject()
 {
     Point aStartPos(GetDefaultCenterPos());
@@ -142,3 +141,4 @@ void ConstFormControl::CreateDefaultObject()
     m_pSh->EndCreate(SDRCREATE_FORCEEND);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

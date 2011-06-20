@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,7 +36,7 @@
 class SwCrsrShell;
 class SwShellCrsr;
 
-// --------  Ab hier Klassen / Methoden fuer den nicht Text-Cursor ------
+// From here classes/methods for non-text cursor.
 
 class SwVisCrsr
 #ifdef SW_CRSR_TIMER
@@ -76,9 +77,8 @@ public:
 };
 
 
-// ------ Ab hier Klassen / Methoden fuer die Selectionen -------
+// From here classes/methods for selections.
 
-// #i75172# predefines
 namespace sdr { namespace overlay { class OverlayObject; }}
 
 class SwSelPaintRects : public SwRects
@@ -89,16 +89,14 @@ class SwSelPaintRects : public SwRects
     static long nPixPtX, nPixPtY;
     static MapMode *pMapMode;
 
-    // die Shell
     const SwCrsrShell* pCShell;
 
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects() = 0;
 
-    // #i75172#
     sdr::overlay::OverlayObject*    mpCursorOverlay;
 
-    // #i75172# access to mpCursorOverlay for swapContent
+    // access to mpCursorOverlay for swapContent
     sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
     void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { mpCursorOverlay = pNew; }
 
@@ -106,7 +104,7 @@ public:
     SwSelPaintRects( const SwCrsrShell& rCSh );
     virtual ~SwSelPaintRects();
 
-    // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
+    // in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
     // make a complete swap access to mpCursorOverlay is needed there
     void swapContent(SwSelPaintRects& rSwap);
 
@@ -124,11 +122,11 @@ public:
 
 class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
 {
-    // Dokument-Positionen der Start/End-Charakter einer SSelection
+    // Document positions of start/end characters of a SSelection.
     Point aMkPt, aPtPt;
-    const SwPosition* pPt;      // fuer Zuordung vom GetPoint() zum aPtPt
+    const SwPosition* pPt;      // For assignment of GetPoint() to aPtPt.
 
-    virtual void FillRects();   // fuer Table- und normalen Crsr
+    virtual void FillRects();   // For Table- und normal cursors.
 
     using SwCursor::UpDown;
 
@@ -139,8 +137,8 @@ public:
     SwShellCrsr( SwShellCrsr& );
     virtual ~SwShellCrsr();
 
-    void Show();            // Update und zeige alle Selektionen an
-    void Hide();            // verstecke alle Selektionen
+    void Show();            // Update and display all selections.
+    void Hide();            // Hide all selections.
     void Invalidate( const SwRect& rRect );
 
     const Point& GetPtPos() const   { return( SwPaM::GetPoint() == pPt ? aPtPt : aMkPt ); }
@@ -161,12 +159,12 @@ public:
 
     sal_Bool UpDown( sal_Bool bUp, sal_uInt16 nCnt = 1 );
 
-    // sal_True: an die Position kann der Cursor gesetzt werden
+    // sal_True: Cursor can be set to this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
-#ifdef DBG_UTIL
-// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//              am sichtbaren Cursor
+#if OSL_DEBUG_LEVEL > 1
+
+    // For testing of UNO-Crsr behavior here the implementation at visible cursor.
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -182,10 +180,9 @@ public:
 
 class SwShellTableCrsr : public virtual SwShellCrsr, public virtual SwTableCursor
 {
-    // die Selection hat die gleiche Reihenfolge wie die
-    // TabellenBoxen. D.h., wird aus dem einen Array an einer Position
-    // etwas geloescht, dann muss es auch im anderen erfolgen!!
-
+    // The Selection has the same order as the table boxes, i.e.
+    // if something is deleted from the one array at a certain position
+    // it has to be deleted from the other one as well!!
 
 public:
     SwShellTableCrsr( const SwCrsrShell& rCrsrSh, const SwPosition& rPos );
@@ -194,9 +191,9 @@ public:
                     const SwPosition &rPtPos, const Point& rPtPt );
     virtual ~SwShellTableCrsr();
 
-    virtual void FillRects();   // fuer Table- und normalen Crsr
+    virtual void FillRects();   // For table and normal cursor.
 
-    // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
+    // Check if SPoint is within table SSelection.
     sal_Bool IsInside( const Point& rPt ) const;
 
     virtual void SetMark();
@@ -205,12 +202,12 @@ public:
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
-    // sal_True: an die Position kann der Cursor gesetzt werden
+    // sal_True: Cursor can be set to this position.
     virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
-#ifdef DBG_UTIL
-// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-//              am sichtbaren Cursor
+#if OSL_DEBUG_LEVEL > 1
+
+    // For testing of UNO-Crsr behavior here the implementation at visible cursor.
     virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -221,3 +218,5 @@ public:
 
 
 #endif  // _VISCRS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

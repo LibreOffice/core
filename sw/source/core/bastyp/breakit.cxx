@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,14 +32,10 @@
 #include "breakit.hxx"
 #include <unicode/uchar.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <unotools/localedatawrapper.hxx>
 
-#ifndef _SVX_LINGU_HXX
 #include <editeng/unolingu.hxx>
-#endif
 #include <editeng/scripttypeitem.hxx>
 #include "swtypes.hxx"
 
@@ -70,19 +67,7 @@ SwBreakIt::SwBreakIt(
       aLast( LANGUAGE_DONTKNOW ),
       aForbiddenLang( LANGUAGE_DONTKNOW)
 {
-    DBG_ASSERT( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
-    //if ( m_xMSF.is() )
-    //{
- //       xBreak = uno::Reference< i18n::XBreakIterator >(
-    //      m_xMSF->createInstance(
-    //          rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
- //           uno::UNO_QUERY);
-
- //       xCTLDetect = uno::Reference< i18n::XScriptTypeDetector >(
- //           m_xMSF->createInstance(
- //                rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) ),
- //           uno::UNO_QUERY);
- //   }
+    OSL_ENSURE( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
 }
 
 SwBreakIt::~SwBreakIt()
@@ -184,3 +169,4 @@ sal_uInt16 SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

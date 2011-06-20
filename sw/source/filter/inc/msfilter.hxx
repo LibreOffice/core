@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,8 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-/// @HTML
 
 #ifndef SW_MS_MSFILTER_HXX
 #define SW_MS_MSFILTER_HXX
@@ -33,11 +32,11 @@
 #include <set>
 #include <map>
 #include <vector>
-#   include <swtypes.hxx>       //SwTwips
-#   include <tools/string.hxx>  //String
-#   include "wwstyles.hxx"      //ww::sti
-#   include <rtl/textenc.h>     //rtl_TextEncoding
-#   include <tools/gen.hxx>     //Size
+#include <swtypes.hxx>       //SwTwips
+#include <tools/string.hxx>  //String
+#include "wwstyles.hxx"      //ww::sti
+#include <rtl/textenc.h>     //rtl_TextEncoding
+#include <tools/gen.hxx>     //Size
 #include <tools/datetime.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <redline.hxx>
@@ -120,7 +119,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        sal_uLong MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri);
+        sal_uLong MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri, sal_uInt16 nDocLang);
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 
@@ -525,4 +524,5 @@ namespace sw
 }
 
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

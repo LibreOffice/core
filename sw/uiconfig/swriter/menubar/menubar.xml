@@ -88,6 +88,7 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:CompareDocuments"/>
+      <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
       <menu:menuitem menu:id=".uno:EditGlossary"/>
       <menu:menuseparator/>
@@ -106,8 +107,8 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ViewMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:PrintLayout"/>
-      <menu:menuitem menu:id=".uno:BrowseView"/>
+      <menu:menuitem menu:id=".uno:PrintLayout" menu:style="radio"/>
+      <menu:menuitem menu:id=".uno:BrowseView" menu:style="radio"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
@@ -215,6 +216,7 @@
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:BulletsAndNumberingDialog"/>
       <menu:menuitem menu:id=".uno:PageDialog"/>
+      <menu:menuitem menu:id=".uno:TitlePageDialog"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:TransliterateMenu">
         <menu:menupopup>
@@ -403,7 +405,6 @@
       <menu:menuitem menu:id=".uno:FootnoteDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Gallery"/>
-      <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:BibliographyComponent"/>
       <menu:menuseparator/>
@@ -453,9 +454,9 @@
       <menu:menuitem menu:id=".uno:HelpIndex"/>
       <menu:menuitem menu:id=".uno:ExtendedHelp"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:HelpSupport"/>
-      <menu:menuitem menu:id=".uno:OnlineRegistrationDlg"/>
+      <menu:menuitem menu:id=".uno:ShowLicense"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:ShowCredits"/>
       <menu:menuitem menu:id=".uno:About"/>
     </menu:menupopup>
   </menu:menu>

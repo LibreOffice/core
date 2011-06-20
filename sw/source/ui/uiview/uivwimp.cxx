@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <cmdid.h>
 #include "globals.hrc"
 
@@ -38,7 +38,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
@@ -58,16 +58,12 @@
 
 #include <view.hrc>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
-/* -----------------02.06.98 15:31-------------------
- *
- * --------------------------------------------------*/
 SwView_Impl::SwView_Impl(SwView* pShell) :
         pxXTextView(new uno::Reference<view::XSelectionSupplier>),
         pView(pShell),
@@ -84,9 +80,6 @@ SwView_Impl::SwView_Impl(SwView* pShell) :
     xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
 }
 
-/*-----------------13.12.97 09:51-------------------
-
---------------------------------------------------*/
 SwView_Impl::~SwView_Impl()
 {
     Reference<XUnoTunnel> xDispTunnel(xDisProvInterceptor, UNO_QUERY);
@@ -114,31 +107,22 @@ SwView_Impl::~SwView_Impl()
     delete m_pRequest;
 }
 
-/*-----------------13.12.97 09:54-------------------
-
---------------------------------------------------*/
 void SwView_Impl::SetShellMode(ShellModes eSet)
 {
     eShellMode = eSet;
 }
-/*-----------------13.12.97 09:59-------------------
 
---------------------------------------------------*/
 view::XSelectionSupplier*   SwView_Impl::GetUNOObject()
 {
     return pxXTextView->get();
 }
-/* -----------------02.06.98 15:29-------------------
- *
- * --------------------------------------------------*/
+
 SwXTextView*    SwView_Impl::GetUNOObject_Impl()
 {
         view::XSelectionSupplier* pTextView = pxXTextView->get();
         return ((SwXTextView*)pTextView);
 }
-/* -----------------------------29.05.00 09:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 {
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -172,8 +156,6 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             else
             {
                 rReq.Ignore();
-// KA 04.07.2002
-//              InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
             }
         }
         break;
@@ -218,16 +200,12 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
     }
 }
 
-/* -----------------------------29.05.00 08:26--------------------------------
-
- ---------------------------------------------------------------------------*/
 SwScannerEventListener& SwView_Impl::GetScannerEventListener()
 {
     if(!xScanEvtLstnr.is())
         xScanEvtLstnr = pScanEvtLstnr = new SwScannerEventListener(*pView);
     return *pScanEvtLstnr;
 }
-
 
 void SwView_Impl::AddClipboardListener()
 {
@@ -237,9 +215,7 @@ void SwView_Impl::AddClipboardListener()
         pClipEvtLstnr->AddRemoveListener( sal_True );
     }
 }
-/* -----------------3/31/2003 11:42AM----------------
 
- --------------------------------------------------*/
 void SwView_Impl::Invalidate()
 {
     GetUNOObject_Impl()->Invalidate();
@@ -254,9 +230,7 @@ void SwView_Impl::Invalidate()
             pTransferable->Invalidate();
     }
 }
-/* -----------------3/31/2003 12:40PM----------------
 
- --------------------------------------------------*/
 void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
 {
     //prevent removing of the non-referenced SwTransferable
@@ -285,22 +259,18 @@ void SwView_Impl::InitRequest( const SfxRequest& rRequest )
     m_pRequest = new SfxRequest( rRequest );
 }
 
-// ------------------------- SwScannerEventListener ---------------------
-
 SwScannerEventListener::~SwScannerEventListener()
 {
 }
 
 void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
 #if defined WNT || defined UNX
+    SolarMutexGuard aGuard;
     if( pView )
         pView->ScannerEventHdl( rEventObject );
 #endif
 }
-
-// ------------------------- SwClipboardChangeListener ---------------------
 
 SwClipboardChangeListener::~SwClipboardChangeListener()
 {
@@ -315,7 +285,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
     throw ( RuntimeException )
 
 {
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    const SolarMutexGuard aGuard;
     if( pView )
     {
         {
@@ -343,3 +313,4 @@ void SwClipboardChangeListener::AddRemoveListener( sal_Bool bAdd )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

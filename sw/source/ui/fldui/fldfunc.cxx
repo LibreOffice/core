@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,26 +38,16 @@
 #include <basic/sbmod.hxx>
 #include <docsh.hxx>
 #include <swtypes.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <fldbas.hxx>
 #include <docufld.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#ifndef _FLDFUNC_HXX
 #include <fldfunc.hxx>
-#endif
 #include <flddropdown.hxx>
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
-#ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
-#endif
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -64,10 +55,6 @@
 using namespace ::com::sun::star;
 
 using rtl::OUString;
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_FUNC ), rCoreSet ),
@@ -111,25 +98,16 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aCond1ED.ShowBrackets(sal_False);
     aCond2ED.ShowBrackets(sal_False);
 
-//  SwWrtShell* pSh = (SwWrtShell*)ViewShell::GetCurrShell();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldFuncPage::~SwFldFuncPage()
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldFuncPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialisation
 
     aTypeLB.SetUpdateMode(sal_False);
     aTypeLB.Clear();
@@ -138,10 +116,10 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
 
     if (!IsFldEdit())
     {
-        // TypeListBox initialisieren
+        // initialise TypeListBox
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
-        // Typ-Listbox fuellen
+        // fill Typ-Listbox
         for(short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
@@ -162,7 +140,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
         }
     }
 
-    // alte Pos selektieren
+    // select old Pos
     RestorePos(&aTypeLB);
 
     aTypeLB.SetDoubleClickHdl       (LINK(this, SwFldFuncPage, InsertHdl));
@@ -213,16 +191,12 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
 {
-    // Alte ListBoxPos sichern
+    // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
 
-    // Aktuelle ListBoxPos
+    // current ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -235,10 +209,10 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
-        // Auswahl-Listbox fuellen
+        // fill Selection-Listbox
         UpdateSubType();
 
-        // Format-Listbox fuellen
+        // fill Format-Listbox
         aFormatLB.Clear();
 
         sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
@@ -262,7 +236,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
         sal_Bool bShowSelection = sal_False;
         sal_Bool bFormat = nSize != 0;
 
-        // fuer Conditional Text zwei Controls
+        // two controls for conditional text
         sal_Bool bDropDown = TYP_DROPDOWN == nTypeId;
         sal_Bool bCondTxtFld = TYP_CONDTXTFLD == nTypeId;
 
@@ -386,7 +360,6 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
             case TYP_INPUTFLD:
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
                 bValue = sal_True;
-                // bShowSelection = TRUE;
                 aNameED.SetAccessibleName(aNameFT.GetText());
                 aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
@@ -439,10 +412,6 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, EMPTYARG )
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
@@ -453,10 +422,6 @@ IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldFuncPage, InsertMacroHdl, ListBox *, EMPTYARG )
 {
     SelectHdl();
@@ -464,9 +429,7 @@ IMPL_LINK( SwFldFuncPage, InsertMacroHdl, ListBox *, EMPTYARG )
 
     return 0;
 }
-/* -----------------16.06.2003 16:24-----------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
 {
     aListItemsLB.SetUpdateMode(sal_False);
@@ -513,9 +476,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
     ListEnableHdl(0);
     return 0;
 }
-/* -----------------17.06.2003 08:36-----------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwFldFuncPage, ListEnableHdl, void*, EMPTYARG)
 {
     //enable "Add" button when text is in the Edit that's not already member of the box
@@ -531,15 +492,13 @@ IMPL_LINK( SwFldFuncPage, ListEnableHdl, void*, EMPTYARG)
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Typen in der SelectionBox erneuern
+     Description: renew types in SelectionBox
  --------------------------------------------------------------------*/
-
-
 void SwFldFuncPage::UpdateSubType()
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
-    // Auswahl-Listbox fuellen
+    // fill Selction-Listbox
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
@@ -580,9 +539,8 @@ void SwFldFuncPage::UpdateSubType()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: MacroBrowser aufrufen, Listbox mit Macros fuellen
+    Description: call MacroBrowser, fill Listbox with Macros
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
 {
     Window* pDefModalDlgParent = Application::GetDefDialogParent();
@@ -598,10 +556,6 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
 
     return 0;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
 {
@@ -666,20 +620,16 @@ sal_Bool SwFldFuncPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // Insert ggf enablen/disablen
+    ModifyHdl();    // enable/disable Insert if applicable
 
     return sal_False;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 String SwFldFuncPage::TurnMacroString(const String &rMacro)
 {
     if (rMacro.Len())
     {
-        // Inhalt von aName umdrehen
+        // reverse content of aName
         String sTmp, sBuf;
         sal_uInt16 nPos = 0;
 
@@ -700,28 +650,17 @@ String SwFldFuncPage::TurnMacroString(const String &rMacro)
     return rMacro;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* SwFldFuncPage::Create(  Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldFuncPage( pParent, rAttrSet ) );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwFldFuncPage::GetGroup()
 {
     return GRP_FKT;
 }
 
-/* -----------------12.01.99 10:09-------------------
- *
- * --------------------------------------------------*/
 void    SwFldFuncPage::FillUserData()
 {
     String sData( String::CreateFromAscii(
@@ -753,6 +692,4 @@ IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

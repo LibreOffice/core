@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,12 +35,7 @@
 
 
 /*************************************************************************
-|*
 |*    Ring::Ring()
-|*
-|*    Ersterstellung    VB  02.07.91
-|*    Letzte Aenderung  JP 10.10.97
-|*
 *************************************************************************/
 
 Ring::Ring( Ring *pObj )
@@ -56,12 +52,7 @@ Ring::Ring( Ring *pObj )
 }
 
 /*************************************************************************
-|*
 |*    Ring::~Ring()
-|*
-|*    Ersterstellung    VB  02.07.91
-|*    Letzte Aenderung  JP 10.10.97
-|*
 *************************************************************************/
 
 Ring::~Ring()
@@ -71,12 +62,7 @@ Ring::~Ring()
 }
 
 /*************************************************************************
-|*
 |*    Ring::MoveTo
-|*
-|*    Ersterstellung    VB 4.3.91
-|*    Letzte Aenderung  JP 10.10.97
-|*
 *************************************************************************/
 
 void Ring::MoveTo(Ring *pDestRing)
@@ -123,3 +109,4 @@ sal_uInt32 Ring::numberOf() const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

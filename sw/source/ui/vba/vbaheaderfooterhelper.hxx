@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,16 +37,18 @@
 class HeaderFooterHelper
 {
 public:
-    static sal_Bool isHeader( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-    static sal_Bool isFirstPageHeader( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-    static sal_Bool isEvenPagesHeader( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-    static sal_Bool isFooter( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-    static sal_Bool isFirstPageFooter( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-    static sal_Bool isEvenPagesFooter( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-#ifdef TOMORROW
-    static sal_Bool isPrimaryHeader( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-    static sal_Bool isPrimaryFooter( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XText >& xCurrentText ) throw (css::uno::RuntimeException);
-#endif
+    static sal_Bool isHeaderFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isHeaderFooter( const css::uno::Reference< css::text::XText >& xText ) throw (css::uno::RuntimeException);
+    static sal_Bool isHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isFirstPageHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isEvenPagesHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isFirstPageFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isEvenPagesFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isPrimaryHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static sal_Bool isPrimaryFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

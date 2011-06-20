@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,9 +29,7 @@
 #ifndef _WRONG_HXX
 #define _WRONG_HXX
 
-#ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGPROPERTIES_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
-#endif
 
 #include <vector>
 
@@ -70,8 +69,8 @@ class SwWrongList
     std::vector<SwWrongArea> maList;
     WrongListType            meType;
 
-    xub_StrLen nBeginInvalid;   // Start des ungueltigen Bereichs
-    xub_StrLen nEndInvalid;     // Ende des ungueltigen Bereichs
+    xub_StrLen nBeginInvalid;   // Start of the invalid range
+    xub_StrLen nEndInvalid;     // End of the invalid range
 
     void ShiftLeft( xub_StrLen &rPos, xub_StrLen nStart, xub_StrLen nEnd )
     { if( rPos > nStart ) rPos = rPos > nEnd ? rPos - nEnd + nStart : nStart; }
@@ -164,3 +163,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

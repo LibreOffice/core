@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,8 +79,8 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
     if (getImportFlags() & IMPORT_META)
     {
         uno::Reference<xml::sax::XDocumentHandler> const xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
             uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
                 GetDocumentProperties());
@@ -105,22 +106,9 @@ enum SvXMLTokenMapAttrs
     XML_TOK_META_STAT_PARA = 16,
     XML_TOK_META_STAT_WORD = 32,
     XML_TOK_META_STAT_CHAR = 64,
+    XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR = 128,
     XML_TOK_META_STAT_END=XML_TOK_UNKNOWN
 };
-
-/*
-static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
-{
-    { XML_NAMESPACE_META, XML_TABLE_COUNT,      XML_TOK_META_STAT_TABLE },
-    { XML_NAMESPACE_META, XML_IMAGE_COUNT,      XML_TOK_META_STAT_IMAGE },
-    { XML_NAMESPACE_META, XML_OBJECT_COUNT,     XML_TOK_META_STAT_OLE   },
-    { XML_NAMESPACE_META, XML_PARAGRAPH_COUNT,  XML_TOK_META_STAT_PARA  },
-    { XML_NAMESPACE_META, XML_PAGE_COUNT,       XML_TOK_META_STAT_PAGE  },
-    { XML_NAMESPACE_META, XML_WORD_COUNT,       XML_TOK_META_STAT_WORD  },
-    { XML_NAMESPACE_META, XML_CHARACTER_COUNT,  XML_TOK_META_STAT_CHAR  },
-    XML_TOKEN_MAP_END
-};
-*/
 
 struct statistic {
     SvXMLTokenMapAttrs token;
@@ -137,6 +125,7 @@ static const struct statistic s_stats [] = {
     { XML_TOK_META_STAT_PARA,  "ParagraphCount", 0, &SwDocStat::nPara },
     { XML_TOK_META_STAT_WORD,  "WordCount",      0, &SwDocStat::nWord },
     { XML_TOK_META_STAT_CHAR,  "CharacterCount", 0, &SwDocStat::nChar },
+    { XML_TOK_META_STAT_NON_WHITE_SPACE_CHAR,  "NonWhitespaceCharacterCount", 0, &SwDocStat::nCharExcludingSpaces },
     { XML_TOK_META_STAT_END,   0,                0, 0                 }
 };
 
@@ -168,13 +157,13 @@ void SwXMLImport::SetStatistics(
                     }
                     nTokens |= pStat->token;
                 } else {
-                    DBG_ERROR("SwXMLImport::SetStatistics: invalid entry");
+                    OSL_FAIL("SwXMLImport::SetStatistics: invalid entry");
                 }
             }
         }
     }
 
-    if( 127 == nTokens )
+    if( 255 == nTokens )
         aDocStat.bModified = sal_False;
     if( nTokens )
         pDoc->SetDocStat( aDocStat );
@@ -210,3 +199,4 @@ void SwXMLExport::_ExportMeta()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

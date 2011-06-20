@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ protected:
     long CalcRel( const SwFmtFrmSize &rSz, sal_Bool bWidth ) const;
 
 public:
-    // --> OD 2004-06-29 #i28701#
+    // --> #i28701#
     TYPEINFO();
 
     void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
@@ -113,7 +114,6 @@ public:
     inline SwCntntFrm *ContainsCntnt();
     const SwCellFrm *FirstCell() const;
     inline SwCellFrm *FirstCell();
-    // --> OD 2006-02-01 #130797#
     // Method <ContainsAny()> doesn't investigate content of footnotes by default.
     // But under certain circumstances this investigation is intended.
     // Thus, introduce new optional parameter <_bInvestigateFtnForSections>.
@@ -121,7 +121,6 @@ public:
     // investigated for sections.
     const SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false ) const;
     inline SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false );
-    // <--
     sal_Bool IsAnLower( const SwFrm * ) const;
 
     virtual const SwFrmFmt *GetFmt() const;
@@ -134,11 +133,10 @@ public:
     sal_Bool MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
                         SwFtnBossFrm *pNewBoss, const sal_Bool bFtnNums );
 
-    // --> OD 2004-07-01 #i28701# - change purpose of method and its name
-    // --> OD 2005-03-11 #i44016# - add parameter <_bUnlockPosOfObjs> to
+    // --> #i28701# - change purpose of method and its name
+    // --> #i44016# - add parameter <_bUnlockPosOfObjs> to
     // force an unlockposition call for the lower objects.
     void NotifyLowerObjs( const bool _bUnlockPosOfObjs = false );
-    // <--
 
     //Invalidiert diejenigen innenliegenden Frames, deren Breite und/oder
     //Hoehe Prozentual berechnet werden. Auch Rahmen, die an this oder an
@@ -156,7 +154,7 @@ public:
     /** method to check relative position of layout frame to
         a given layout frame.
 
-        OD 08.11.2002 - refactoring of pseudo-local method <lcl_Apres(..)> in
+        refactoring of pseudo-local method <lcl_Apres(..)> in
         <txtftn.cxx> for #104840#.
 
         @param _aCheckRefLayFrm
@@ -184,12 +182,10 @@ inline SwCellFrm* SwLayoutFrm::FirstCell()
     return (SwCellFrm*)(((const SwLayoutFrm*)this)->FirstCell());
 }
 
-// --> OD 2006-02-01 #130797#
 inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
 {
     return (SwFrm*)(((const SwLayoutFrm*)this)->ContainsAny( _bInvestigateFtnForSections ));
 }
-// <--
 
 // Diese SwFrm-inlines sind hier, damit frame.hxx nicht layfrm.hxx includen muss
 inline sal_Bool SwFrm::IsColBodyFrm() const
@@ -208,3 +204,5 @@ inline SwFrm* SwLayoutFrm::GetLastLower()
 }
 
 #endif  // SW_LAYFRM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,10 +42,6 @@ interface Text : BaseText
 
     import TextSelection;
 
-    /*-----------------24.01.97 08.13-------------------
-    Spezielle Feldbefehle
---------------------------------------------------*/
-
     FN_INSERT_FLD_TOPIC
     [
         ExecMethod = ExecField ;
@@ -53,23 +49,15 @@ interface Text : BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
         ReadOnlyDoc = FALSE ;
     ]
-    /*-----------------24.01.97 08.13-------------------
-    Ende Spezielle Feldbefehle
---------------------------------------------------*/
 
-    /*-----------------24.01.97 07.36-------------------
-    Verzeichnisse
---------------------------------------------------*/
-
-    /*
+/*
 enum TOXTypes
 {
-    TOX_INDEX,
-    TOX_USER,
-    TOX_CONTENT
+   TOX_INDEX,
+   TOX_USER,
+   TOX_CONTENT
 };
-
- */
+*/
 
     FN_INSERT_IDX_ENTRY_DLG // status(final|play)
     [
@@ -106,14 +94,6 @@ enum TOXTypes
     [
         ExecMethod = ExecIdx ;
     ]
-
-    /*-----------------24.01.97 08.01-------------------
-    Absatzeinstellungen
---------------------------------------------------*/
-
-    /*-----------------24.01.97 08.01-------------------
-    Ende Absatzeinstellungen
---------------------------------------------------*/
 
 }
 

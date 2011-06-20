@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include "docsh.hxx"
 #include "globdoc.hxx"
 #include "wdocsh.hxx"
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -64,8 +65,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
         const uno::Reference< lang::XMultiServiceFactory >&, const sal_uInt64 _nCreationFlags )
     throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    SwDLL::Init();
+    SolarMutexGuard aGuard;
+    SwGlobals::ensure();
     SfxObjectShell* pShell = new SwDocShell( _nCreationFlags );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
@@ -93,8 +94,8 @@ uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & )
         throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    SwDLL::Init();
+    SolarMutexGuard aGuard;
+    SwGlobals::ensure();
     SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
@@ -120,9 +121,10 @@ uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > &)
         throw( uno::Exception )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    SwDLL::Init();
+    SolarMutexGuard aGuard;
+    SwGlobals::ensure();
     SfxObjectShell* pShell = new SwGlobalDocShell( SFX_CREATE_MODE_STANDARD );
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,10 +58,8 @@
  *
  */
 
-#ifdef DBG_UTIL
-#ifndef _STRING_HXX //autogen
+#if OSL_DEBUG_LEVEL > 1
 #include <tools/string.hxx>
-#endif
 #endif
 
 #ifndef _SVSTDARR_HXX
@@ -91,7 +90,7 @@ class SwCache : public SwCacheObjArr
 
     void DeleteObj( SwCacheObj *pObj );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ByteString aName;
     long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
     long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
@@ -113,7 +112,7 @@ class SwCache : public SwCacheObjArr
 public:
 
     //nur sal_uInt8 hineinstecken!!!
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize,
             const ByteString &rNm );
     ~SwCache();
@@ -194,12 +193,12 @@ public:
 
     inline sal_Bool IsLocked() const { return 0 != nLock; }
 
-#ifndef DBG_UTIL
-    inline void Lock() { ++nLock; }
-    inline void Unlock() { --nLock; }
-#else
+#if OSL_DEBUG_LEVEL > 1
     void Lock();
     void Unlock();
+#else
+    inline void Lock() { ++nLock; }
+    inline void Unlock() { --nLock; }
 #endif
 
     SwCacheObj *Next() { return pNext; }
@@ -246,7 +245,7 @@ public:
 inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )
 {
     nCurMax = nCurMax + sal::static_int_cast< sal_uInt16 >(nAdd);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ++nIncreaseMax;
 #endif
 }
@@ -254,7 +253,7 @@ inline void SwCache::DecreaseMax( const sal_uInt16 nSub )
 {
     if ( nCurMax > nSub )
         nCurMax = nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ++nDecreaseMax;
 #endif
 }
@@ -300,3 +299,5 @@ inline SwCacheObj *SwCacheAccess::Get()
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

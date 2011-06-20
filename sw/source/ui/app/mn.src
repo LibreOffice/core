@@ -34,9 +34,7 @@
 #include "popup.hrc"
 
 /* --------------------- F O R M A T --------------------------------- */
-
 #define SEPARATOR       MenuItem { Separator = TRUE; }
-
 //define for ITEM_FORMAT_NUMBERING
 #define DEFINE_SLOTID_FOR_NUMBER_BULLETS FN_NUMBER_BULLETS
 #define MN_NUMBERING ITEM_FORMAT_NUMBERING
@@ -300,7 +298,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     {\
         Identifier = FN_FORMAT_RESET ; \
         HelpId = CMD_FN_FORMAT_RESET ; \
-        Text [ en-US ] = "~Default Formatting" ; \
+        Text [ en-US ] = "Clear ~Direct Formatting" ; \
     };
 
 #define _NUMBERING_RELATED_MENU \
@@ -372,7 +370,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
 };
 
 /*------------------------------------------------------------------------
- Beschreibung: Menu Window
+   Description: Menu Window
 ------------------------------------------------------------------------*/
 
 #define MN_FRM_CAPTION_ITEM \
@@ -412,9 +410,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
     {\
         Identifier = MN_CELL ; \
         Command = ".uno:CellMenu" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Ze~lle : Zelle */\
         Text [ en-US ] = "~Cell" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenzelle : Einstellungen f³r die Tabellenzelle */\
         SubMenu = Menu\
         {\
             ItemList = \
@@ -455,7 +451,6 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
                 {\
                     Identifier = FN_TABLE_SET_READ_ONLY_CELLS ; \
                     HelpId = CMD_FN_TABLE_SET_READ_ONLY_CELLS ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Schützen : ~Sch³tzen */\
                     Text [ en-US ] = "~Protect" ; \
                 };\
                 MenuItem\
@@ -474,9 +469,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         Identifier = MN_SUB_TBLROW ; \
         HelpID = HID_MN_SUB_TBLROW ; \
         Command = ".uno:RowMenu" ;  \
-        /* ### ACHTUNG: Neuer Text in Resource? Ze~ile : Zeile */\
         Text [ en-US ] = "~Row" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenzeile : Einstellungen f³r die Tabellenzeile */\
         SubMenu = Menu\
         {\
             ItemList = \
@@ -485,7 +478,6 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
                 {\
                     Identifier = FN_TABLE_SET_ROW_HEIGHT ; \
                     HelpId = CMD_FN_TABLE_SET_ROW_HEIGHT ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Höhe... : ~H÷he... */\
                     Text [ en-US ] = "~Height..." ; \
                 };\
                 MenuItem\
@@ -498,14 +490,12 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
                 {\
                     Identifier = FN_TABLE_OPTIMAL_HEIGHT ; \
                     HelpId = CMD_FN_TABLE_OPTIMAL_HEIGHT ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Optimale Höhe : ~Optimale H÷he */\
                     Text [ en-US ] = "~Optimal Height" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_BALANCE_ROWS ; \
                     HelpId = CMD_FN_TABLE_BALANCE_ROWS ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
@@ -513,22 +503,18 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
                 {\
                     Identifier = FN_TABLE_SELECT_ROW ; \
                     HelpId = CMD_FN_TABLE_SELECT_ROW ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
-                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_INSERT_ROW_DLG ; \
                     HelpId = CMD_FN_TABLE_INSERT_ROW_DLG ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_DELETE_ROW ; \
                     HelpId = CMD_FN_TABLE_DELETE_ROW ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -540,7 +526,6 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         HelpID = HID_MN_SUB_TBLCOL ; \
         Command = ".uno:ColumnMenu" ; \
         Text [ en-US ] = "Colu~mn" ; \
-        /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenspalte : Einstellungen f³r die Tabellenspalte */\
         SubMenu = Menu\
         {\
             ItemList = \
@@ -561,7 +546,6 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
                 {\
                     Identifier = FN_TABLE_BALANCE_CELLS ; \
                     HelpId = CMD_FN_TABLE_BALANCE_CELLS ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
@@ -569,22 +553,18 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
                 {\
                     Identifier = FN_TABLE_SELECT_COL ; \
                     HelpId = CMD_FN_TABLE_SELECT_COL ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
-                    /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_INSERT_COL_DLG ; \
                     HelpId = CMD_FN_TABLE_INSERT_COL_DLG ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_DELETE_COL ; \
                     HelpId = CMD_FN_TABLE_DELETE_COL ; \
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -617,7 +597,6 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         Text [ en-US ] = "Name..." ; \
     };
 
-// #i68101#
 #define MN_TITLE_DESCRIPTION_SHAPE\
     MenuItem\
     {\
@@ -845,12 +824,10 @@ Menu MN_TAB_POPUPMENU
             ITEM_FORMAT_PARA_DLG
         };
         ITEM_TRANSLITERATE_MENU
-         //     MN_BB
         SEPARATOR ;
         MN_TAB1
         MN_TAB2
         MN_FRM_CAPTION_ITEM
-         //     SEPARATOR;
         MenuItem
         {
             Identifier = FN_VIEW_TABLEGRID ;
@@ -1088,11 +1065,9 @@ Menu MN_DRAW_POPUPMENU
             ITEM_FORMAT_ATTR_TRANSFORM
         };
 
-        //-#i68101#----------------------
         SEPARATOR ;
         MN_TITLE_DESCRIPTION_SHAPE
         MN_NAME_SHAPE
-        //-#i68101#----------------------
 
         SEPARATOR ;
         MN_DRAW5
@@ -1118,11 +1093,9 @@ Menu MN_DRAWFORM_POPUPMENU
             ITEM_FORMAT_ATTR_TRANSFORM
         };
 
-        //-#i68101#----------------------
         SEPARATOR ;
         MN_TITLE_DESCRIPTION_SHAPE
         MN_NAME_SHAPE
-        //-#i68101#----------------------
 
         SEPARATOR ;
         MN_FORM
@@ -1167,9 +1140,6 @@ Menu MN_ANNOTATION_POPUPMENU
 {
     ItemList =
     {
-        //MN_RESET
-        //SEPARATOR ;
-        //MN_TEXT_ATTR
         MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_WEIGHT\
@@ -1187,13 +1157,8 @@ Menu MN_ANNOTATION_POPUPMENU
                     ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
                 };\
         SEPARATOR ;
-        //ITEM_TRANSLITERATE_MENU
-        //SEPARATOR ;
-        //MN_DRWTXT
-        //MN_FRM_CAPTION_ITEM
         SEPARATOR ;
         MN_ANNOTATIONS
-        //MN_REDCOMMENT
     };
 };
 
@@ -1298,10 +1263,8 @@ Menu MN_GRF_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITH_CONTOUR
-        // --> OD 2009-07-14 #i73249#
         SEPARATOR ;
         MN_TITLE_DESCRIPTION_SHAPE
-        // <--
         SEPARATOR ;
         MenuItem
         {
@@ -1316,6 +1279,14 @@ Menu MN_GRF_POPUPMENU
             Text [ en-US ] = "Save Graphics..." ;
         };
         MN_FRM_CAPTION_ITEM
+        SEPARATOR;
+        MenuItem
+        {
+            Identifier = FN_EXTERNAL_EDIT ;
+            HelpID = CMD_FN_EXTERNAL_EDIT ;
+            Text [ en-US ] = "Edit with External Tool...";
+        };
+        SEPARATOR;
         MenuItem
         {
             ITEM_EDIT_IMAP
@@ -1328,6 +1299,29 @@ String MN_OLE_POPUPMENU
     Text [ en-US ] = "Object" ;
 };
 
+#define MN_OLE_EXPORT \
+    MenuItem\
+    {\
+        Text [ en-US ] = "Export..." ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = FN_EXPORT_OLE_AS_PDF ;\
+                    HelpID = CMD_FN_EXPORT_OLE_AS_PDF ; \
+                    Text [ en-US ] = "Export as P~DF..." ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = FN_EXPORT_OLE_AS_GRAPHIC ;\
+                    HelpID = CMD_FN_EXPORT_OLE_AS_GRAPHIC ; \
+                    Text [ en-US ] = "Export as JPG..." ; \
+                };\
+            };\
+        };\
+    };
 
 Menu MN_OLE_POPUPMENU
 {
@@ -1335,10 +1329,8 @@ Menu MN_OLE_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITH_CONTOUR
-        // --> OD 2009-07-14 #i73249#
         SEPARATOR ;
         MN_TITLE_DESCRIPTION_SHAPE
-        // <--
         SEPARATOR ;
         MenuItem
         {
@@ -1346,6 +1338,9 @@ Menu MN_OLE_POPUPMENU
             HelpId = CMD_FN_FORMAT_FRAME_DLG ;
             Text [ en-US ] = "Object..." ;
         };
+        SEPARATOR ;
+        MN_OLE_EXPORT
+        SEPARATOR ;
         MN_FRM_CAPTION_ITEM
     };
 };
@@ -1363,10 +1358,8 @@ Menu MN_FRM_POPUPMENU
     {
         MN_ALIGN_FRAME
         MN_MOUSE_FRAME_WITHOUT_CONTOUR
-        // --> OD 2009-07-07 #i73249#
         SEPARATOR ;
         MN_TITLE_DESCRIPTION_SHAPE
-        // <--
         SEPARATOR ;
         MN_FRM
         MN_FRM_CAPTION_ITEM
@@ -1392,13 +1385,11 @@ Menu MN_PPREVIEW_POPUPMENU
         {
             Identifier = FN_PAGEDOWN ;
             HelpId = CMD_FN_PAGEDOWN ;
-            /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
             Text [ en-US ] = "Next Page" ;
         };
         MenuItem
         {
             ITEM_VIEW_ATTR_ZOOM
-            /* ### ACHTUNG: Neuer Text in Resource? Schließt die Seitenvorschau : Schlie˜t die Seitenvorschau */
         };
         SEPARATOR ;
         MenuItem
@@ -1431,11 +1422,9 @@ Menu MN_MEDIA_POPUPMENU
             ITEM_FORMAT_ATTR_TRANSFORM
         };
 
-        //-#i68101#----------------------
         SEPARATOR ;
         MN_TITLE_DESCRIPTION_SHAPE
         MN_NAME_SHAPE
-        //-#i68101#----------------------
 
         SEPARATOR ;
         MN_DRAW6

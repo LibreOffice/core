@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,8 +36,7 @@ SW_DLLPUBLIC void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth);
 class SW_DLLPUBLIC SwColMgr
 {
 public:
-        // lActWidth wird aus den Edits des Seitendialogs
-        // direkt uebergeben
+        // lActWidth is passed directly from the page dialogs edits
     SwColMgr(const SfxItemSet &rSet, sal_uInt16 nActWidth = USHRT_MAX);
     ~SwColMgr();
 
@@ -55,7 +55,8 @@ public:
     inline sal_Bool         HasLine() const;
     inline void         SetNoLine();
 
-    inline void         SetLineWidthAndColor(sal_uLong nWidth, const Color& rCol);
+    void                SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nWidth, const Color& rCol);
+    inline ::editeng::SvxBorderStyle    GetLineStyle() const;
     inline sal_uLong        GetLineWidth() const;
     inline const Color& GetLineColor() const;
 
@@ -80,29 +81,31 @@ private:
     sal_uInt16              nWidth;
 };
 
-// INLINE METHODE --------------------------------------------------------
-
+// INLINE METHOD --------------------------------------------------------
 inline  sal_uInt16 SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();
 }
-inline void         SwColMgr::SetLineWidthAndColor(sal_uLong nLWidth, const Color& rCol)
+
+inline ::editeng::SvxBorderStyle SwColMgr::GetLineStyle() const
 {
-    aFmtCol.SetLineWidth(nLWidth);
-    aFmtCol.SetLineColor(rCol);
+    return aFmtCol.GetLineStyle();
 }
 inline sal_uLong        SwColMgr::GetLineWidth() const
 {
     return aFmtCol.GetLineWidth();
 }
+
 inline const Color& SwColMgr::GetLineColor() const
 {
     return aFmtCol.GetLineColor();
 }
+
 inline  SwColLineAdj SwColMgr::GetAdjust() const
 {
     return aFmtCol.GetLineAdj();
 }
+
 inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
     aFmtCol.SetLineAdj(eAdj);
@@ -115,6 +118,7 @@ inline void SwColMgr::SetAutoWidth(sal_Bool bOn, sal_uInt16 nGutterWidth)
 {
     aFmtCol.SetOrtho(bOn, nGutterWidth, nWidth);
 }
+
 inline void SwColMgr::NoCols()
 {
     aFmtCol.GetColumns().DeleteAndDestroy(0, aFmtCol.GetColumns().Count());
@@ -123,9 +127,12 @@ inline sal_Bool SwColMgr::HasLine() const
 {
     return GetAdjust() != COLADJ_NONE;
 }
+
 inline void SwColMgr::SetNoLine()
 {
     SetAdjust(COLADJ_NONE);
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

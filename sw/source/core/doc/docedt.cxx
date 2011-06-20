@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,6 @@
 #include <UndoDelete.hxx>
 #include <breakit.hxx>
 #include <hhcwrp.hxx>
-#include <breakit.hxx>
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
@@ -86,7 +86,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
-//using namespace ::utl;
 #ifndef S2U
 #define S2U(rString) OUString::createFromAscii(rString)
 #endif
@@ -190,8 +189,6 @@ void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
     }
 }
 
-// -----------------------------------------------------------------
-
 void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsertPos )
 {
@@ -291,7 +288,6 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                     SwFmtAnchor aAnchor( *pAnchor );
                     aAnchor.SetAnchor( &aPos );
                     pFmt->SetFmtAttr( aAnchor );
-//                  ((SwFmtAnchor*)pAnchor)->SetAnchor( &aPos );
                 }
             }
             else if( ( rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
@@ -309,11 +305,8 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
     }
 }
 
-// -----------------------------------------------------------------
-
 // loesche und verschiebe alle "Fly's am Absatz", die in der SSelection
 // liegen. Steht am SPoint ein Fly, wird dieser auf den Mark verschoben.
-
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx )
 {
@@ -360,16 +353,13 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 
                 pDoc->DelLayoutFmt( pFmt );
 
-                // --> FME 2004-10-06 #117913# DelLayoutFmt can also
-                // trigger the deletion of objects.
+                // DelLayoutFmt can also trigger the deletion of objects.
                 if( i > rTbl.Count() )
                     i = rTbl.Count();
-                // <--
             }
         }
     }
 }
-
 
 bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                  const SwNodeIndex& rInsPos,
@@ -569,7 +559,6 @@ void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rA
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-
 void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
 {
     SwDoc* pDoc = rRg.aStart.GetNode().GetDoc();
@@ -605,7 +594,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
 
                 pTmpPos = pTmp->End();
@@ -629,7 +617,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
             {
                 // gesamt verschieben
                 _SaveRedline* pSave = new _SaveRedline( pTmp, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
             }
             else
@@ -642,7 +629,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
 
                 pTmpPos = pTmp->Start();
@@ -674,12 +660,10 @@ void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-// ------------------------------------------------------------------------
 // #i59534: Redo of insertion of multiple text nodes runs into trouble
 // because of unnecessary expanded redlines
 // From now on this class saves the redline positions of all redlines which ends exact at the
 // insert position (node _and_ content index)
-
 _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, xub_StrLen nCnt )
     : pSavArr( 0 ), pSavIdx( 0 ), nSavCntnt( nCnt )
 {
@@ -728,14 +712,11 @@ void _SaveRedlEndPosForRestore::_Restore()
     }
 }
 
-
-// ------------------------------------------------------------------------
-
 // Loeschen einer vollstaendigen Section des NodesArray.
 // Der uebergebene Node steht irgendwo in der gewuenschten Section
 void SwDoc::DeleteSection( SwNode *pNode )
 {
-    ASSERT( pNode, "Kein Node uebergeben." );
+    OSL_ENSURE( pNode, "Kein Node uebergeben." );
     SwStartNode* pSttNd = pNode->IsStartNode() ? (SwStartNode*)pNode
                                                : pNode->StartOfSectionNode();
     SwNodeIndex aSttIdx( *pSttNd ), aEndIdx( *pNode->EndOfSectionNode() );
@@ -754,7 +735,6 @@ void SwDoc::DeleteSection( SwNode *pNode )
     GetNodes().DelNodes( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() + 1 );
 }
 
-
 void SwDoc::SetModified(SwPaM &rPaM)
 {
     SwDataChanged aTmp( rPaM, 0 );
@@ -764,7 +744,6 @@ void SwDoc::SetModified(SwPaM &rPaM)
 /*************************************************************************
  *                SwDoc::Overwrite()
  ************************************************************************/
-
 bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
 {
     SwPosition& rPt = *(SwPosition*)rRg.GetPoint();
@@ -866,7 +845,6 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     SetModified();
     return sal_True;
 }
-
 
 bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 {
@@ -1025,7 +1003,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     else
         rPaM.DeleteMark();
 
-    ASSERT( *aSavePam.GetMark() == rPos ||
+    OSL_ENSURE( *aSavePam.GetMark() == rPos ||
             ( aSavePam.GetMark()->nNode.GetNode().GetCntntNode() == NULL ),
             "PaM wurde nicht verschoben, am Anfang/Ende keine ContentNodes?" );
     *aSavePam.GetMark() = rPos;
@@ -1067,7 +1045,6 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
             }
             bJoin = sal_False;
         }
-//      else if( !bCorrSavePam && !pSavePam->Move( fnMoveForward, fnGoCntnt ))
         else if ( !aSavePam.Move( fnMoveForward, fnGoCntnt ) )
         {
             aSavePam.GetPoint()->nNode++;
@@ -1086,11 +1063,9 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             if( pTNd->CanJoinNext())
             {
-                // --> OD 2009-08-20 #i100466#
                 // Always join next, because <pTNd> has to stay as it is.
                 // A join previous from its next would more or less delete <pTNd>
                 pTNd->JoinNext();
-                // <--
                 bRemove = false;
             }
         }
@@ -1279,8 +1254,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     return sal_True;
 }
 
-/* #107318# Convert list of ranges of whichIds to a corresponding list
-    of whichIds*/
+// Convert list of ranges of whichIds to a corresponding list of whichIds
 SvUShorts * lcl_RangesToUShorts(sal_uInt16 * pRanges)
 {
     SvUShorts * pResult = new SvUShorts();
@@ -1288,7 +1262,7 @@ SvUShorts * lcl_RangesToUShorts(sal_uInt16 * pRanges)
     int i = 0;
     while (pRanges[i] != 0)
     {
-        ASSERT(pRanges[i+1] != 0, "malformed ranges");
+        OSL_ENSURE(pRanges[i+1] != 0, "malformed ranges");
 
         for (sal_uInt16 j = pRanges[i]; j < pRanges[i+1]; j++)
             pResult->Insert(j, pResult->Count());
@@ -1340,7 +1314,7 @@ void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
                 if( bExchange )
                     rPam.Exchange();
                 rJoinPrev = rPam.GetPoint() == pStt;
-                ASSERT( !pStt->nContent.GetIndex() &&
+                OSL_ENSURE( !pStt->nContent.GetIndex() &&
                     pEndNd->GetTxt().Len() != pEnd->nContent.GetIndex()
                     ? rPam.GetPoint()->nNode < rPam.GetMark()->nNode
                     : rPam.GetPoint()->nNode > rPam.GetMark()->nNode,
@@ -1438,7 +1412,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 pDelNd->FmtToTxtAttr( pTxtNd );
             else
             {
-                /* #107318# This case was missed:
+                /* This case was missed:
 
                    <something></something>   <-- pTxtNd
                    <other>ccc</other>        <-- pDelNd
@@ -1464,8 +1438,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             }
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
-            // --> OD 2009-08-20 #i100466#
-            // adjust given <rPam>, if it does not belong to the cursors
+            // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
             {
                 rPam.GetBound( sal_True ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
@@ -1474,7 +1447,6 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             {
                 rPam.GetBound( sal_False ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
             }
-            // <--
             pTxtNd->JoinNext();
         }
     }
@@ -1501,7 +1473,7 @@ lcl_CalcBreaks( ::std::vector<xub_StrLen> & rBreaks, SwPaM const & rPam )
             SwTxtAttr const * const pAttr( pTxtNode->GetTxtAttrForCharAt(i) );
             if (pAttr && pAttr->GetEnd() && (*pAttr->GetEnd() > nEnd))
             {
-                ASSERT(pAttr->HasDummyChar(), "GetTxtAttrForCharAt broken?");
+                OSL_ENSURE(pAttr->HasDummyChar(), "GetTxtAttrForCharAt broken?");
                 rBreaks.push_back(i);
             }
         }
@@ -1554,10 +1526,9 @@ bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
     return bRet;
 }
 
-
 bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 {
-    ASSERT( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
+    OSL_ENSURE( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
 
     {
         SwUndoRedlineDelete* pUndo = 0;
@@ -1616,12 +1587,12 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
 {
     sal_Bool bJoinTxt, bJoinPrev;
     lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
-    // --> OD 2009-08-20 #i100466#
+    // #i100466#
     if ( bForceJoinNext )
     {
         bJoinPrev = sal_False;
     }
-    // <--
+
     {
         bool const bSuccess( DeleteRangeImpl( rPam ) );
         if (!bSuccess)
@@ -1835,8 +1806,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     return true;
 }
 
-// OD 2009-08-20 #i100466#
-// Add handling of new optional parameter <bForceJoinNext>
+// #i100466# Add handling of new optional parameter <bForceJoinNext>
 bool SwDoc::DeleteAndJoin( SwPaM & rPam,
                            const bool bForceJoinNext )
 {
@@ -1879,7 +1849,6 @@ void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult&
     if( rResult.aErrors.getLength() > j )
         rResult.aErrors.realloc( j );
 }
-
 
 uno::Any SwDoc::Spell( SwPaM& rPaM,
                     uno::Reference< XSpellChecker1 >  &xSpeller,
@@ -1997,12 +1966,11 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, pConversionMap );
 
                                 // get error position of cursor in XFlatParagraph
-                                sal_Int32 nGrammarErrorPosInText;
                                 linguistic2::ProofreadingResult aResult;
                                 sal_Int32 nGrammarErrors;
                                 do
                                 {
-                                    nGrammarErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
+                                    ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
                                     aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
@@ -2097,8 +2065,8 @@ SwHyphArgs::SwHyphArgs( const SwPaM *pPam, const Point &rCrsrPos,
     // Folgende Bedingungen muessen eingehalten werden:
     // 1) es gibt mindestens eine Selektion
     // 2) SPoint() == Start()
-    ASSERT( pPam->HasMark(), "SwDoc::Hyphenate: blowing in the wind");
-    ASSERT( *pPam->GetPoint() <= *pPam->GetMark(),
+    OSL_ENSURE( pPam->HasMark(), "SwDoc::Hyphenate: blowing in the wind");
+    OSL_ENSURE( *pPam->GetPoint() <= *pPam->GetMark(),
             "SwDoc::Hyphenate: New York, New York");
 
     const SwPosition *pPoint = pPam->GetPoint();
@@ -2133,7 +2101,7 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
         pPam->GetMark()->nNode = nNode;
         pPam->GetMark()->nContent.Assign( pNode->GetCntntNode(),
                                           nWordStart + nWordLen );
-        ASSERT( nNode == pNode->GetIndex(),
+        OSL_ENSURE( nNode == pNode->GetIndex(),
                 "SwHyphArgs::SetPam: Pam desaster" );
     }
 }
@@ -2181,7 +2149,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
                             SwPaM *pPam, const Point &rCrsrPos,
                              sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
-    ASSERT(this == pPam->GetDoc(), "SwDoc::Hyphenate: strangers in the night");
+    OSL_ENSURE(this == pPam->GetDoc(), "SwDoc::Hyphenate: strangers in the night");
 
     if( *pPam->GetPoint() > *pPam->GetMark() )
         pPam->Exchange();
@@ -2193,7 +2161,6 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
     aHyphArg.SetPam( pPam );
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
 }
-
 
 sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRplc )
 {
@@ -2242,7 +2209,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     {
         aPam.Move(fnMoveBackward);
     }
-    ASSERT((aPam.GetPoint()->nNode == aPam.GetMark()->nNode), "invalid pam?");
+   OSL_ENSURE((aPam.GetPoint()->nNode == aPam.GetMark()->nNode), "invalid pam?");
 
     lcl_CalcBreaks(Breaks, aPam);
 
@@ -2268,7 +2235,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     bool bRet( true );
     // iterate from end to start, to avoid invalidating the offsets!
     ::std::vector<xub_StrLen>::reverse_iterator iter( Breaks.rbegin() );
-    ASSERT(aPam.GetPoint() == aPam.End(), "wrong!");
+    OSL_ENSURE(aPam.GetPoint() == aPam.End(), "wrong!");
     SwPosition & rEnd( *aPam.End() );
     SwPosition & rStart( *aPam.Start() );
 
@@ -2290,7 +2257,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     }
 
     rStart = *rPam.Start(); // set to original start
-    ASSERT(rEnd.nContent > rStart.nContent, "replace part empty!");
+    OSL_ENSURE(rEnd.nContent > rStart.nContent, "replace part empty!");
     if (rEnd.nContent > rStart.nContent) // check if part is empty
     {
         bRet &= ReplaceRangeImpl(aPam, rStr, bRegExReplace);
@@ -2321,7 +2288,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
 
         SwPosition *pStt = (SwPosition*)aDelPam.Start(),
                    *pEnd = (SwPosition*)aDelPam.End();
-        ASSERT( pStt->nNode == pEnd->nNode ||
+        OSL_ENSURE( pStt->nNode == pEnd->nNode ||
                 ( pStt->nNode.GetIndex() + 1 == pEnd->nNode.GetIndex() &&
                     !pEnd->nContent.GetIndex() ),
                 "invalid range: Point and Mark on different nodes" );
@@ -2530,8 +2497,8 @@ SetRedlineMode( eOld );
     return true;
 }
 
-    // speicher die akt. Werte fuer die automatische Aufnahme von Ausnahmen
-    // in die Autokorrektur
+// speicher die akt. Werte fuer die automatische Aufnahme von Ausnahmen
+// in die Autokorrektur
 void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
 {
     if( pACEWord && pNew != pACEWord )
@@ -2565,11 +2532,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
     if( pTblNd && pNd->IsCntntNode() )
     {
         SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
-//JP 24.08.98: will man wirklich den PageDesc/Break vom
-//              nachfolgen Absatz ueberbuegeln?
-//      const SwAttrSet& rAttrSet = pTableFmt->GetAttrSet();
-//      if( SFX_ITEM_SET != rAttrSet.GetItemState( RES_PAGEDESC ) &&
-//          SFX_ITEM_SET != rAttrSet.GetItemState( RES_BREAK ))
+
         {
             const SfxPoolItem *pItem;
             const SfxItemSet* pSet = ((SwCntntNode*)pNd)->GetpSwAttrSet();
@@ -2636,7 +2599,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward, fnGoNode ))
             {
-                ASSERT( sal_False, "kein Node mehr vorhanden" );
+                OSL_FAIL( "kein Node mehr vorhanden" );
                 return sal_False;
             }
         }
@@ -2680,7 +2643,6 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
 
     return sal_True;
 }
-
 
 void SwDoc::TransliterateText(
     const SwPaM& rPaM,
@@ -2754,9 +2716,8 @@ void SwDoc::TransliterateText(
     SetModified();
 }
 
-
 #define MAX_REDLINE_COUNT   250
-// -----------------------------------------------------------------------------
+
 void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
 {
     const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
@@ -2776,7 +2737,6 @@ void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
         }
     }
 }
-// -----------------------------------------------------------------------------
 
 void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
 {
@@ -2842,3 +2802,5 @@ void SwDoc::RemoveLeadingWhiteSpace(const SwPosition & rPos )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

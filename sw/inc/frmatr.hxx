@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,16 +28,13 @@
 #ifndef _FRMATR_HXX
 #define _FRMATR_HXX
 
-#include <hintids.hxx>      //die Ids der Attribute, vor frmitems damit die
-#include <format.hxx>       //fuer Implementierung der inlines
+#include <hintids.hxx> // IDs of attributes before frmitems to make sure
+#include <format.hxx>  // they are available for implementation of the inlines.
 
-//------------------------ Inlines ---------------------------------
+// Inlines
 
 
-/******************************************************************************
- *  Implementierung der FrameAttribut Methoden vom SwAttrSet
- ******************************************************************************/
-
+// Implementation of FrameAttribute methods of SwAttrSet.
 inline const SvxPaperBinItem &SwAttrSet::GetPaperBin(sal_Bool bInP) const
     { return (const SvxPaperBinItem&)Get( RES_PAPER_BIN,bInP); }
 inline const SvxLRSpaceItem &SwAttrSet::GetLRSpace(sal_Bool bInP) const
@@ -65,10 +63,7 @@ inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(sal_Bool bInP) const
     { return (const SvxFrameDirectionItem&)Get( RES_FRAMEDIR,bInP); }
 
 
-/******************************************************************************
- *  Implementierung der FrameAttribut Methoden vom SwFmt
- ******************************************************************************/
-
+// Implementation of FrameAttribute methods of SwFmt.
 inline const SvxPaperBinItem &SwFmt::GetPaperBin(sal_Bool bInP) const
     { return aSet.GetPaperBin(bInP); }
 inline const SvxLRSpaceItem &SwFmt::GetLRSpace(sal_Bool bInP) const
@@ -97,3 +92,5 @@ inline const SvxFrameDirectionItem  &SwFmt::GetFrmDir(sal_Bool bInP) const
     { return aSet.GetFrmDir(bInP); }
 
 #endif //_FRMATR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

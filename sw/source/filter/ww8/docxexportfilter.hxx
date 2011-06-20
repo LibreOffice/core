@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
-#include <oox/vml/drawing.hxx>
+#include <oox/vml/vmldrawing.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -38,14 +39,14 @@
 class DocxExportFilter : public oox::core::XmlFilterBase
 {
 public:
-    DocxExportFilter( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rMSF );
+    DocxExportFilter( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
     // FIXME these should not even exist for the export-only filter!
     // For now, let's just do empty implementations of those.
     virtual bool        importDocument() { return false; }
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const { return NULL; }
     virtual sal_Int32   getSchemeClr( sal_Int32 ) const { return 0; }
-    virtual const ::oox::vml::DrawingPtr getDrawings() { return ::oox::vml::DrawingPtr(); }
+    virtual ::oox::vml::Drawing* getVmlDrawing() { return NULL; }
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter() { static ::oox::drawingml::chart::ChartConverter aConverter; return aConverter; }
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() { return ::oox::drawingml::table::TableStyleListPtr(); }
 
@@ -56,7 +57,13 @@ private:
 
     /// Implementatio of the filter abstract method.
     virtual ::rtl::OUString implGetImplementationName() const;
+
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const
+    {
+        return NULL; // FIXME: implement me !
+    }
 };
 
 #endif // _DOCXEXPORTFILTER_HXX_
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

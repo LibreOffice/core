@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -107,8 +108,6 @@ SwFmt::SwFmt( const SwFmt& rFmt )
 |*    SwFmt &SwFmt::operator=(const SwFmt& aFmt)
 |*
 |*    Beschreibung      Dokument 1.14
-|*    Ersterstellung    JP 22.11.90
-|*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
 
 
@@ -162,7 +161,7 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
 
 void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
 {
-    ASSERT(!IsDefault(), "SetName: Defaultformat" );
+    OSL_ENSURE(!IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )
     {
         SwStringMsgPoolItem aOld( RES_NAME_CHANGED, aFmtName );
@@ -239,8 +238,6 @@ void SwFmt::CopyAttrs( const SwFmt& rFmt, sal_Bool bReplace )
 |*    SwFmt::~SwFmt()
 |*
 |*    Beschreibung      Dokument 1.14
-|*    Ersterstellung    JP 22.11.90
-|*    Letzte Aenderung  JP 14.02.91
 *************************************************************************/
 
 
@@ -250,14 +247,14 @@ SwFmt::~SwFmt()
     /* alle Abhaengigen auf DerivedFrom umhaengen */
     if( GetDepends() )
     {
-        ASSERT(DerivedFrom(), "SwFmt::~SwFmt: Def Abhaengige!" );
+        OSL_ENSURE(DerivedFrom(), "SwFmt::~SwFmt: Def Abhaengige!" );
 
         bFmtInDTOR = sal_True;
 
         SwFmt *pParentFmt = DerivedFrom();
-        if (!pParentFmt)        // see #112405#
+        if (!pParentFmt)
         {
-            DBG_ERROR( "~SwFmt: parent format missing" );
+            OSL_FAIL( "~SwFmt: parent format missing" );
         }
         else
         {
@@ -278,8 +275,6 @@ SwFmt::~SwFmt()
 |*    void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 |*
 |*    Beschreibung      Dokument 1.14
-|*    Ersterstellung    JP 22.11.90
-|*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
 
 
@@ -369,9 +364,9 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
             {
 // wie finde ich heraus, ob nicht ich die Message versende ??
 // aber wer ruft das hier ????
-//ASSERT( sal_False, "Modify ohne Absender verschickt" );
+// OSL_ENSURE( FALSE, "Modify ohne Absender verschickt" );
 //JP 11.06.96: DropCaps koennen hierher kommen
-ASSERT( RES_PARATR_DROP == nWhich, "Modify ohne Absender verschickt" );
+                OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify ohne Absender verschickt" );
                 bWeiter = sal_False;
             }
 
@@ -411,7 +406,7 @@ sal_Bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     if ( (pDerFrom == DerivedFrom()) || (pDerFrom == this) )
         return sal_False;
 
-    ASSERT( Which()==pDerFrom->Which()
+    OSL_ENSURE( Which()==pDerFrom->Which()
             || ( Which()==RES_CONDTXTFMTCOLL && pDerFrom->Which()==RES_TXTFMTCOLL)
             || ( Which()==RES_TXTFMTCOLL && pDerFrom->Which()==RES_CONDTXTFMTCOLL)
             || ( Which()==RES_FLYFRMFMT && pDerFrom->Which()==RES_FRMFMT ),
@@ -453,12 +448,11 @@ sal_Bool SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rAttr ))) )
             aSet.SetModifyAtAttr( this );
-        // --> OD 2006-11-22 #i71574#
+        // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
-        // <--
     }
     else
     {
@@ -504,12 +498,11 @@ sal_Bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rSet ))) )
             aSet.SetModifyAtAttr( this );
-        // --> OD 2006-11-22 #i71574#
+        // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
-        // <--
     }
     else
     {
@@ -566,10 +559,9 @@ sal_Bool SwFmt::ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 
 
 
-// --> OD 2007-01-24 #i73790#
+// #i73790#
 // method renamed
 sal_uInt16 SwFmt::ResetAllFmtAttr()
-// <--
 {
     if( !aSet.Count() )
         return 0;
@@ -601,10 +593,6 @@ sal_uInt16 SwFmt::ResetAllFmtAttr()
 
 /*************************************************************************
 |*    void SwFmt::GetInfo( const SfxPoolItem& ) const
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 18.04.94
-|*    Letzte Aenderung  JP 05.08.94
 *************************************************************************/
 
 
@@ -646,9 +634,8 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     }
 }
 
-/** SwFmt::IsBackgroundTransparent - for feature #99657#
+/** SwFmt::IsBackgroundTransparent
 
-    OD 22.08.2002
     Virtual method to determine, if background of format is transparent.
     Default implementation returns false. Thus, subclasses have to overload
     method, if the specific subclass can have a transparent background.
@@ -662,14 +649,11 @@ sal_Bool SwFmt::IsBackgroundTransparent() const
     return sal_False;
 }
 
-/** SwFmt::IsShadowTransparent - for feature #99657#
+/** SwFmt::IsShadowTransparent
 
-    OD 22.08.2002
     Virtual method to determine, if shadow of format is transparent.
     Default implementation returns false. Thus, subclasses have to overload
     method, if the specific subclass can have a transparent shadow.
-
-    @author OD
 
     @return false, default implementation
 */
@@ -690,3 +674,4 @@ IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return GetDoc(); }
 IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return GetDoc(); }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

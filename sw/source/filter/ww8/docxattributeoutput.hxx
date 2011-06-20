@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,8 @@
 
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
+#include "IMark.hxx"
+#include "docxexport.hxx"
 
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
@@ -38,10 +41,10 @@
 #include <fldbas.hxx>
 
 #include <vector>
-
-class DocxExport;
+#include <boost/scoped_ptr.hpp>
 
 class SwGrfNode;
+class SdrObject;
 
 namespace docx { class FootnotesList; }
 namespace oox { namespace drawingml { class DrawingML; } }
@@ -49,10 +52,12 @@ namespace oox { namespace drawingml { class DrawingML; } }
 struct FieldInfos
 {
     const SwField*    pField;
+    const ::sw::mark::IFieldmark* pFieldmark;
     ww::eField  eType;
     bool        bOpen;
     bool        bClose;
     String     sCmd;
+    FieldInfos() : pField(NULL), pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
 };
 
 enum DocxColBreakStatus
@@ -62,6 +67,7 @@ enum DocxColBreakStatus
     COLBRK_WRITE
 };
 
+/// The class that has handlers for various resource types when exporting as DOCX.
 class DocxAttributeOutput : public AttributeOutputBase
 {
 public:
@@ -95,6 +101,10 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
+    virtual void FootnoteEndnoteRefTag();
+
+    virtual void SectFootnoteEndnotePr();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -102,7 +112,7 @@ public:
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby );
+    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
 
     /// Output ruby end.
     virtual void EndRuby();
@@ -137,29 +147,18 @@ public:
     virtual void ParagraphStyle( sal_uInt16 nStyle );
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo );
-
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner );
-
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
+    virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     virtual void TableRowEnd( sal_uInt32 nDepth = 1 );
 
     /// Start of the styles table.
@@ -173,7 +172,8 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId );
+            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
+            bool bAutoUpdate );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
@@ -234,7 +234,7 @@ public:
     void FontAlternateName( const String& rName ) const;
 
     /// Font charset.
-    void FontCharset( sal_uInt8 nCharSet ) const;
+    void FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEncoding ) const;
 
     /// Font family.
     void FontFamilyType( FontFamily eFamily ) const;
@@ -266,6 +266,7 @@ public:
         const String &rNumberingString );
 
     void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode );
+    void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds );
 
@@ -298,26 +299,21 @@ private:
 
     /// Output graphic fly frames.
     void FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize );
+    void WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize );
 
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void EndTableCell( );
-
     void EndTableRow( );
-
     void EndTable();
 
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
 
+    void WriteFFData( const FieldInfos& rInfos );
 protected:
 
     /// Output frames - the implementation.
@@ -537,13 +533,16 @@ private:
 
     ::sax_fastparser::FastAttributeList *m_pFontsAttrList, *m_pEastAsianLayoutAttrList;
     ::sax_fastparser::FastAttributeList *m_pCharLangAttrList;
-    ::sax_fastparser::FastAttributeList *m_pSpacingAttrList;
+    ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
+    ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
+    ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
+    int m_footnoteEndnoteRefTag;
 
-    const WW8_SepInfo *m_pSectionInfo;
+    boost::scoped_ptr< const WW8_SepInfo > m_pSectionInfo;
 
     /// Redline data to remember in the text run.
     const SwRedlineData *m_pRedlineData;
@@ -581,13 +580,25 @@ private:
     // beginning of the next paragraph
     DocxColBreakStatus m_nColBreakStatus;
 
+    const sw::Frame *m_pParentFrame;
+    // close of hyperlink needed
+    enum HyperLinkCloseState
+    {
+        Undetected = 0,
+        Detected,
+        EndInPrevRun,
+        EndInThisRun
+    };
+    HyperLinkCloseState m_nCloseHyperlinkStatus;
+
 public:
     DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
     virtual ~DocxAttributeOutput();
 
     /// Return the right export class.
-    virtual MSWordExportBase& GetExport();
+    virtual DocxExport& GetExport();
+    const DocxExport& GetExport() const { return const_cast< DocxAttributeOutput* >( this )->GetExport(); }
 
     /// For eg. the output of the styles, we need to switch the serializer to enother one.
     void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer ) { m_pSerializer = pSerializer; }
@@ -603,8 +614,11 @@ public:
 
     /// Output the content of the footnotes.xml resp. endnotes.xml
     void FootnotesEndnotes( bool bFootnotes );
+
+    /// writes the footnotePr/endnotePr (depending on tag) section
+    void WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr fs, int tag, const SwEndNoteInfo& info, int listtag );
 };
 
 #endif // _DOCXATTRIBUTEOUTPUT_HXX_
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -50,25 +51,18 @@
 #include <fmtclds.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
-#include <errhdl.hxx>       // fuer Create-Methoden
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <viewopt.hxx>
 #include <pgfnote.hxx>
-#ifndef _PGFGRID_HXX
 #include <pggrid.hxx>
-#endif
-#ifndef _TMPDLG_HXX
-#include <tmpdlg.hxx>       // der Dialog
-#endif
-#include <column.hxx>       // Spalten
-#include <drpcps.hxx>       // Initialen
-#include <frmpage.hxx>      // Rahmen
-#include <wrap.hxx>         // Rahmen
-#include <frmmgr.hxx>       // Rahmen
+#include <tmpdlg.hxx>       // the dialog
+#include <column.hxx>       // columns
+#include <drpcps.hxx>       // initials
+#include <frmpage.hxx>      // frames
+#include <wrap.hxx>         // frames
+#include <frmmgr.hxx>       // frames
 #include <ccoll.hxx>        // CondColl
 #include <swuiccoll.hxx>
 #include <docstyle.hxx>     //
@@ -77,19 +71,12 @@
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 #include <shellres.hxx>
+#include <swabstdlg.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FMTUI_HRC
 #include <fmtui.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svl/stritem.hxx>
@@ -104,7 +91,7 @@
 extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Description:    the dialog's carrier
  --------------------------------------------------------------------*/
 
 SwTemplateDlg::SwTemplateDlg(Window*            pParent,
@@ -126,31 +113,31 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
-    // TabPages zusammenfieseln
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
+    // tinker TabPages together
     switch( nRegion )
     {
-        // Zeichenvorlagen
+        // character styles
         case SFX_STYLE_FAMILY_CHAR:
         {
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) , "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) , "GetTabPageRangesFunc fail!");
             AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
 
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) , "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) , "GetTabPageRangesFunc fail!");
             AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
 
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) , "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) , "GetTabPageRangesFunc fail!");
             AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
 
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
             AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
 
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) , "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) , "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
 
             SvtCJKOptions aCJKOptions;
@@ -158,44 +145,44 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                 RemoveTabPage(TP_CHAR_TWOLN);
         }
         break;
-        // Absatzvorlagen
+        // paragraph styles
         case SFX_STYLE_FAMILY_PARA:
         {
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageRangesFunc fail!");
                 AddTabPage( TP_PARA_STD,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH) );
 
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), "GetTabPageRangesFunc fail!");
                 AddTabPage( TP_PARA_ALIGN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH),      pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH) );
 
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
                 AddTabPage( TP_PARA_EXT,    pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageRangesFunc fail!");
                 AddTabPage( TP_PARA_ASIAN,  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
 
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageRangesFunc fail!");
                 AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
 
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageRangesFunc fail!");
                 AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
 
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) , "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) , "GetTabPageRangesFunc fail!");
                 AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
 
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) , "GetTabPageRangesFunc fail!");
                 AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
 
 
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
             AddTabPage( TP_TABULATOR,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
 
@@ -203,11 +190,11 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                                     SwParagraphNumTabPage::GetRanges);
             AddTabPage(TP_DROPCAPS,     SwDropCapsPage::Create,
                                         SwDropCapsPage::GetRanges );
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
             AddTabPage( TP_CONDCOLL,    SwCondCollPage::Create,
@@ -219,8 +206,8 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON)
             {
-                SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-                if (!pHtmlOpt->IsPrintLayoutExtension())
+                SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+                if (!rHtmlOpt.IsPrintLayoutExtension())
                     RemoveTabPage(TP_PARA_EXT);
                 RemoveTabPage(TP_PARA_ASIAN);
                 RemoveTabPage(TP_TABULATOR);
@@ -243,7 +230,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             }
         }
         break;
-        // Rahmenvorlagen
+        // frame styles
         case SFX_STYLE_FAMILY_FRAME:
         {
             AddTabPage(TP_FRM_STD,      SwFrmPage::Create,
@@ -252,11 +239,11 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                                         SwFrmAddPage::GetRanges );
             AddTabPage(TP_FRM_WRAP,     SwWrapTabPage::Create,
                                         SwWrapTabPage::GetRanges );
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
 
             AddTabPage(TP_COLUMN,       SwColumnPage::Create,
@@ -264,22 +251,13 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
             AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
 
-            // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
-/*          SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
-                                            GetItemSet().Get(RES_FRM_SIZE));
-            if( !aSize.GetWidth() )
-            {
-                aSize.SetWidth( DFLT_WIDTH );
-                aSize.SetHeight( DFLT_HEIGHT );
-                rBase.GetItemSet().Put( aSize );
-            }*/
         break;
         }
-        // Seitenvorlagen
+        // page styles
         case SFX_STYLE_FAMILY_PAGE:
         {
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
             AddTabPage(TP_HEADER_PAGE,      String(SW_RES(STR_PAGE_HEADER)),
                                             SvxHeaderPage::Create,
@@ -290,17 +268,17 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             if(bColumn)
                 SetCurPageId(TP_COLUMN);
 
-            DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
-            DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), "GetTabPageCreatorFunc fail!");
+            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ), "GetTabPageRangesFunc fail!");
             AddTabPage(TP_PAGE_STD,         String(SW_RES(STR_PAGE_STD)),
                                             pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ),
                                             pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ),
                                             sal_False,
-                                            1 ); // nach der Verwalten-Page
+                                            1 ); // after the manage-page
             if(!pActShell || 0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
             {
-                DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-                DBG_ASSERT(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
+                OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
                 AddTabPage(TP_BORDER,           String(SW_RES(STR_PAGE_BORDER)),
                                 pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
                 AddTabPage(TP_COLUMN,           String(SW_RES(STR_PAGE_COLUMN)),
@@ -320,7 +298,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
         }
         break;
-        // Numerierungsvorlagen
+        // numbering styles
         case SFX_STYLE_FAMILY_PSEUDO:
         {
             AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
@@ -330,34 +308,31 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
             AddTabPage( RID_SVXPAGE_NUM_POSITION );
 
-
-/*          const SfxPoolItem* pItem;
-            if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState(
-                FN_PARAM_ACT_NUMBER, sal_False, &pItem ))
-            {
-//              pActNum = (ActNumberFormat*)((const SwPtrItem*)pItem)->GetValue();
-            }
-*/
         }
         break;
 
         default:
-            ASSERT(!this, "Falsche Familie");
+            OSL_ENSURE(!this, "wrong family");
 
     }
+    EnableApplyButton( true );
+    SetApplyHandler( LINK(this, SwTemplateDlg, ApplyHdl ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwTemplateDlg::~SwTemplateDlg()
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+IMPL_LINK( SwTemplateDlg, ApplyHdl, void*, pVoid )
+{
+    (void)pVoid; //unused
+    if ( OK_Impl() )
+    {
+        Ok();
+        EndDialog( RET_APPLY_TEMPLATE );
+    }
+    return 0;
+}
 
 short SwTemplateDlg::Ok()
 {
@@ -380,14 +355,10 @@ short SwTemplateDlg::Ok()
     }
     else
         //JP 09.01.98 Bug #46446#:
-        // das ist der Ok - Handler also muss auf OK defaultet werden!
+        // that's the Ok-Handler, so OK has to be default!
         nRet = RET_OK;
     return nRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 {
@@ -397,13 +368,9 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
     return pInSet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    //Namen der Vorlagen und Metric setzen
+    // set style's and metric's names
     String sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
@@ -413,7 +380,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         case TP_CHAR_STD:
             {
-                ASSERT(::GetActiveView(), "keine View aktiv");
+                OSL_ENSURE(::GetActiveView(), "no active view");
 
                 SvxFontListItem aFontListItem( *( (SvxFontListItem*)::GetActiveView()->
                     GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
@@ -538,10 +505,10 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         case TP_PAGE_STD:
             if(0 == (nHtmlMode & HTMLMODE_ON ))
             {
-                List aList;
-                String* pNew = new String;
-                SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, *pNew );
-                aList.Insert( pNew, (sal_uLong)0 );
+                std::vector<String> aList;
+                String aNew;
+                SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
+                aList.push_back( aNew );
                 if( pWrtShell )
                 {
                     SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
@@ -550,15 +517,12 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
                     SfxStyleSheetBase *pFirstStyle = pStyleSheetPool->First();
                     while(pFirstStyle)
                     {
-                        aList.Insert( new String(pFirstStyle->GetName()),
-                                        aList.Count());
+                        aList.push_back( pFirstStyle->GetName() );
                         pFirstStyle = pStyleSheetPool->Next();
                     }
                 }
                 aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));
                 rPage.PageCreated(aSet);
-                for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
-                    delete (String*)aList.Remove(i);
             }
             break;
 
@@ -584,25 +548,21 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            // Zeichenvorlagen sammeln
+            // collect character styles
             ListBox rCharFmtLB(this);
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
-            List aList;
-            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
-            {
 
-                 aList.Insert( new XubString(rCharFmtLB.GetEntry(j)), LIST_APPEND );
-            }
+            std::vector<String> aList;
+            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
+                 aList.push_back( rCharFmtLB.GetEntry(j) );
+
             aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
             rPage.PageCreated(aSet);
-            for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
-                    delete (XubString*)aList.Remove(i);
-            aList.Clear();
         }
         break;
         case RID_SVXPAGE_NUM_POSITION:
@@ -645,3 +605,4 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

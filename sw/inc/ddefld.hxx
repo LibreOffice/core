@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,7 +35,7 @@
 class SwDoc;
 
 /*--------------------------------------------------------------------
-    Beschreibung: FieldType fuer DDE
+    FieldType for DDE
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
@@ -63,8 +64,8 @@ public:
     virtual SwFieldType* Copy() const;
     virtual const String& GetName() const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
     String GetCmd() const;
     void SetCmd( const String& rStr );
@@ -92,7 +93,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: DDE-Feld
+    DDE-field
  --------------------------------------------------------------------*/
 
 class SwDDEField : public SwField
@@ -105,14 +106,16 @@ public:
     SwDDEField(SwDDEFieldType*);
     ~SwDDEField();
 
-    // ueber Typen Parameter ermitteln
-    // Name kann nicht geaendert werden
+    // Get parameter via types.
+    // Name cannot be changed.
     virtual const String& GetPar1() const;
 
-    // Commando
+    // Command
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
 };
 
 
 #endif // SW_DDEFLD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

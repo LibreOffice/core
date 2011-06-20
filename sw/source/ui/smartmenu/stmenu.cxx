@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,8 @@
 
 #include <SwSmartTagMgr.hxx>
 
-#ifndef _STMENU_HRC
 #include <stmenu.hrc>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <breakit.hxx>
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
@@ -57,8 +54,6 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
     mpSwView ( pSwView ),
     mxTextRange( xTextRange )
 {
-    //CreateAutoMnemonics();
-
     Reference <frame::XController> xController = mpSwView->GetController();
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() ) );
 
@@ -184,3 +179,5 @@ sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 
     return nId;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

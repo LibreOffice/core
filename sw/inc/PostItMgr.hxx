@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,6 @@
 #include <editeng/outlobj.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
-#include <tools/debug.hxx>
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
@@ -111,13 +111,13 @@ class SwNoteProps: public utl::ConfigItem
         bool bIsShowAnchor;
     public:
         SwNoteProps()
-            : ConfigItem(::rtl::OUString::createFromAscii("Office.Writer/Notes"))
+            : ConfigItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Writer/Notes")))
             , bIsShowAnchor(false)
         {
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames = GetPropertyNames();
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues = GetProperties(rNames);
                 const ::com::sun::star::uno::Any* pValues = aValues.getConstArray();
-               DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+               OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
                 if (aValues.getLength())
                 pValues[0]>>=bIsShowAnchor;
         }
@@ -126,23 +126,17 @@ class SwNoteProps: public utl::ConfigItem
         {
             return bIsShowAnchor;
         }
-            ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetPropertyNames()
-            {
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetPropertyNames()
+        {
             static ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames;
-                 if(!aNames.getLength())
-                 {
-                         static const char* aPropNames[] =
-                         {
-                            "ShowAnkor"
-                           };
-                         const int nCount = sizeof(aPropNames)/sizeof(const char*);
-                         aNames.realloc(nCount);
-                        ::rtl::OUString* pNames = aNames.getArray();
-                     for(int i = 0; i < nCount; i++)
-                            pNames[i] = ::rtl::OUString::createFromAscii(aPropNames[i]);
-                 }
-                 return aNames;
+            if(!aNames.getLength())
+            {
+                aNames.realloc(1);
+                ::rtl::OUString* pNames = aNames.getArray();
+                pNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowAnkor"));
             }
+            return aNames;
+        }
 
     virtual void Commit();
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
@@ -174,7 +168,6 @@ class SwPostItMgr: public SfxListener
         typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
 
         void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
-        //void          AddRedlineComments(bool bCheckExistance, bool bFocus);
         void            RemoveSidebarWin();
         void            PreparePageContainer();
         void            Scroll(const long lScroll,const unsigned long aPage );
@@ -234,9 +227,6 @@ class SwPostItMgr: public SfxListener
             void Delete(String aAuthor);
             void Delete();
 
-#if 0
-            void Hide( SwPostItField* pPostItField );
-#endif
             void Hide( const String& rAuthor );
             void Hide();
             void Show();
@@ -305,3 +295,4 @@ class SwPostItMgr: public SfxListener
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

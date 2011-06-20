@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,10 @@
 
 #include "possiz.hxx"       // SwPosSize
 
+#if OSL_DEBUG_LEVEL > 1
+#include <libxml/xmlwriter.h>
+#endif
+
 class XubString;
 class SwTxtSizeInfo;
 class SwTxtPaintInfo;
@@ -39,7 +44,7 @@ class SwPortionHandler;
 // Das CLASSIO-Makro implementiert die 'freischwebende' Funktion.
 // Auf diese Weise erhaelt man beide Vorteile: virtuelle Ausgabeoperatoren
 // und allgemeine Verwendbarkeit.
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #define OUTPUT_OPERATOR  virtual SvStream &operator<<( SvStream & aOs ) const;
 #else
 #define OUTPUT_OPERATOR
@@ -174,7 +179,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
     void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     virtual sal_Bool Check( SvStream &rOs, SwTxtSizeInfo &rInfo ); //$ ostream
 #endif
 
@@ -237,15 +242,10 @@ inline void SwLinePortion::Truncate()
 
 
 //$ ostream
-#ifdef DBGTXT
-#define CLASSIO( class ) \
-    inline SvStream &operator<<( SvStream &rOs, const class &rClass ) {\
-            return rClass.operator<<( rOs );\
-    }
-#else
 #define CLASSIO( class )
-#endif
 
 CLASSIO( SwLinePortion )
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

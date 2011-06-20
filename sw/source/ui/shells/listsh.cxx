@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,9 +46,7 @@
 #include <tools/shl.hxx>
 #include <svl/srchitem.hxx>
 
-// --> FME 2005-01-04 #i35572#
 #include <numrule.hxx>
-// <--
 #include <fmtornt.hxx>
 #include "wrtsh.hxx"
 #include "swmodule.hxx"
@@ -75,7 +74,7 @@ SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
 
 TYPEINIT1(SwListShell,SwBaseShell)
 
-// --> FME 2005-01-04 #i35572# Functionality of Numbering/Bullet toolbar
+// #i35572# Functionality of Numbering/Bullet toolbar
 // for outline numbered paragraphs should match the functions for outlines
 // available in the navigator. Therefore the code in the following
 // function is quite similar the the code in SwContentTree::ExecCommand.
@@ -144,7 +143,6 @@ void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
         rSh.Pop( sal_False );
     }
 }
-// <--
 
 void SwListShell::Execute(SfxRequest &rReq)
 {
@@ -152,11 +150,10 @@ void SwListShell::Execute(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     SwWrtShell& rSh = GetShell();
 
-    // --> FME 2005-01-04 #i35572#
+    // #i35572#
     const SwNumRule* pCurRule = rSh.GetCurNumRule();
-    ASSERT( pCurRule, "SwListShell::Execute without NumRule" )
+    OSL_ENSURE( pCurRule, "SwListShell::Execute without NumRule" );
     bool bOutline = pCurRule && pCurRule->IsOutlineRule();
-    // <--
 
     switch (nSlot)
     {
@@ -242,7 +239,7 @@ void SwListShell::Execute(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
@@ -293,3 +290,4 @@ SwListShell::SwListShell(SwView &_rView) :
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

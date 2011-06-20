@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "layouter.hxx"
 #include "doc.hxx"
 #include "sectfrm.hxx"
@@ -39,12 +38,10 @@
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
 
-// --> OD 2004-06-23 #i28701#
+// #i28701#
 #include <movedfwdfrmsbyobjpos.hxx>
-// <--
-// --> OD 2004-10-22 #i35911#
+// #i35911#
 #include <objstmpconsiderwrapinfl.hxx>
-// <--
 
 #define LOOP_DETECT 250
 
@@ -72,14 +69,14 @@ public:
     ~SwEndnoter() { delete pEndArr; }
     void CollectEndnotes( SwSectionFrm* pSct );
     void CollectEndnote( SwFtnFrm* pFtn );
-    const SwSectionFrm* GetSect() { return pSect; }
+    const SwSectionFrm* GetSect() const { return pSect; }
     void InsertEndnotes();
     sal_Bool HasEndnotes() const { return pEndArr && pEndArr->Count(); }
 };
 
 void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
 {
-    ASSERT( pSct, "CollectEndnotes: Which section?" );
+    OSL_ENSURE( pSct, "CollectEndnotes: Which section?" );
     if( !pSect )
         pSect = pSct;
     else if( pSct != pSect )
@@ -109,7 +106,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
                 } while ( pCnt );
             }
             else
-            {   ASSERT( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
+            { OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
                         "Endnote without content?" );
                 pNxt->Cut();
                 delete pNxt;
@@ -146,7 +143,7 @@ void SwEndnoter::InsertEndnotes()
         pSect = NULL;
         return;
     }
-    ASSERT( pSect->Lower() && pSect->Lower()->IsFtnBossFrm(),
+    OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFtnBossFrm(),
             "InsertEndnotes: Where's my column?" );
     SwFrm* pRef = pSect->FindLastCntnt( FINDMODE_MYLAST );
     SwFtnBossFrm *pBoss = pRef ? pRef->FindFtnBossFrm()
@@ -159,7 +156,7 @@ void SwEndnoter::InsertEndnotes()
 
 SwLooping::SwLooping( SwPageFrm* pPage )
 {
-    ASSERT( pPage, "Where's my page?" );
+    OSL_ENSURE( pPage, "Where's my page?" );
     nMinPage = pPage->GetPhyPageNum();
     nMaxPage = nMinPage;
     nCount = 0;
@@ -198,19 +195,15 @@ void SwLooping::Control( SwPageFrm* pPage )
     }
     else if( ++nCount > LOOP_DETECT )
     {
-#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
         static sal_Bool bNoLouie = sal_False;
         if( bNoLouie )
             return;
-#endif
-#endif
 
         // FME 2007-08-30 #i81146# new loop control
-#if OSL_DEBUG_LEVEL > 1
-        ASSERT( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
-        ASSERT( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
-        ASSERT( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
+        OSL_ENSURE( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
+        OSL_ENSURE( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
+        OSL_ENSURE( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
 #endif
 
         Drastic( pPage->Lower() );
@@ -228,20 +221,15 @@ void SwLooping::Control( SwPageFrm* pPage )
 |*
 |*  SwLayouter::SwLayouter()
 |*
-|*  Ersterstellung      AMA 02. Nov. 99
-|*  Letzte Aenderung    AMA 02. Nov. 99
-|*
 |*************************************************************************/
 
 SwLayouter::SwLayouter()
         : pEndnoter( NULL ),
           pLooping( NULL ),
-          // --> OD 2004-06-23 #i28701#
+          // #i28701#
           mpMovedFwdFrms( 0L ),
-          // <--
-          // --> OD 2004-10-22 #i35911#
+          // #i35911#
           mpObjsTmpConsiderWrapInfl( 0L )
-          // <--
 {
 }
 
@@ -249,14 +237,12 @@ SwLayouter::~SwLayouter()
 {
     delete pEndnoter;
     delete pLooping;
-    // --> OD 2004-06-23 #i28701#
+    // #i28701#
     delete mpMovedFwdFrms;
     mpMovedFwdFrms = 0L;
-    // <--
-    // --> OD 2004-10-22 #i35911#
+    // #i35911#
     delete mpObjsTmpConsiderWrapInfl;
     mpObjsTmpConsiderWrapInfl = 0L;
-    // <--
 }
 
 void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
@@ -285,7 +271,7 @@ void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
 
 void SwLayouter::LoopControl( SwPageFrm* pPage, sal_uInt8 )
 {
-    ASSERT( pLooping, "Looping: Lost control" );
+    OSL_ENSURE( pLooping, "Looping: Lost control" );
     pLooping->Control( pPage );
 }
 
@@ -294,7 +280,7 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
     if ( pLooping && pLooping->IsLoopingLouieLight() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( false, "Looping Louie (Light): Fixating fractious frame" )
+        OSL_FAIL( "Looping Louie (Light): Fixating fractious frame" );
 #endif
         SwLayouter::InsertMovedFwdFrm( rDoc, rFrm, rFrm.FindPageFrm()->GetPhyPageNum() );
     }
@@ -316,7 +302,7 @@ void SwLayouter::EndLoopControl()
 
 void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
 {
-    ASSERT( pDoc, "No doc, no fun" );
+    OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->GetLayouter() )
         pDoc->SetLayouter( new SwLayouter() );
     pDoc->GetLayouter()->_CollectEndnotes( pSect );
@@ -340,14 +326,14 @@ sal_Bool SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFt
 
 sal_Bool SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 {
-    ASSERT( pDoc, "No doc, no fun" );
+    OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->GetLayouter() )
         pDoc->SetLayouter( new SwLayouter() );
     return !pDoc->GetLayouter()->pLooping &&
             pDoc->GetLayouter()->StartLooping( pPage );
 }
 
-// --> OD 2004-06-23 #i28701#
+// #i28701#
 // -----------------------------------------------------------------------------
 // methods to manage text frames, which are moved forward by the positioning
 // of its anchored objects
@@ -380,7 +366,7 @@ void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
                                                  _nToPageNum );
 }
 
-// --> OD 2005-01-12 #i40155#
+// #i40155#
 void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                     const SwTxtFrm& _rTxtFrm )
 {
@@ -390,7 +376,6 @@ void SwLayouter::RemoveMovedFwdFrm( const SwDoc& _rDoc,
         _rDoc.GetLayouter()->mpMovedFwdFrms->Remove( _rTxtFrm );
     }
 }
-// <--
 
 bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                       const SwTxtFrm& _rTxtFrm,
@@ -412,8 +397,7 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                 FrmMovedFwdByObjPos( _rTxtFrm, _ornToPageNum );
     }
 }
-// <--
-// --> OD 2004-10-05 #i26945#
+// #i26945#
 bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                             const SwRowFrm& _rRowFrm )
 {
@@ -431,9 +415,8 @@ bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                         mpMovedFwdFrms->DoesRowContainMovedFwdFrm( _rRowFrm );
     }
 }
-// <--
 
-// --> OD 2004-10-22 #i35911#
+// #i35911#
 void SwLayouter::ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() &&
@@ -459,8 +442,7 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
 
     _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
-// <--
-// --> OD 2005-01-12 #i40155#
+// #i40155#
 void SwLayouter::ClearFrmsNotToWrap( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() )
@@ -508,7 +490,6 @@ bool SwLayouter::FrmNotToWrap( const IDocumentLayoutAccess& _rDLA,
         return bFrmNotToWrap;
     }
 }
-// <--
 
 void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
 {
@@ -522,7 +503,7 @@ void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
     }
 }
 
-// --> OD 2006-05-10 #i65250#
+// #i65250#
 bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
                                     const SwFlowFrm& p_rFlowFrm,
                                     const SwLayoutFrm& p_rNewUpperFrm )
@@ -568,4 +549,5 @@ void SwLayouter::ClearMoveBwdLayoutInfo( const SwDoc& _rDoc )
     if ( _rDoc.GetLayouter() )
         const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.clear();
 }
-// <--
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

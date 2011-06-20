@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,9 +58,6 @@ class SwTable;
 class SwXText;
 
 
-/*-----------------07.04.98 08:15-------------------
-
---------------------------------------------------*/
 typedef ::cppu::ImplInheritanceHelper10
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
@@ -316,9 +314,6 @@ public:
 };
 
 
-/*-----------------07.04.98 08:10-------------------
-
---------------------------------------------------*/
 class SwXParagraphEnumeration
     : public SwSimpleEnumeration_Base
 {
@@ -363,3 +358,4 @@ public:
 
 #endif // SW_UNOPARAGRAPH_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

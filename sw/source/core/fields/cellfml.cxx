@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,7 +61,7 @@ const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
 long lcl_GetLongBoxNum( String& rStr );
 const SwTableBox* lcl_RelToBox( const SwTable&, const SwTableBox*, const String& );
 String lcl_BoxNmToRel( const SwTable&, const SwTableNode&,
-                        const String& , const String& , sal_Bool );
+                        const String& , const String& , bool );
 
 
 /*************************************************************************
@@ -70,9 +71,6 @@ String lcl_BoxNmToRel( const SwTable&, const SwTableNode&,
 |*      TextNode. Beginnt dieser mit einer Zahl/Formel, so berechne diese;
 |*      oder mit einem Feld, dann hole den Wert.
 |*      Alle anderen Bedingungen returnen einen Fehler (oder 0 ?)
-|*
-|*  Ersterstellung      JP 30. Jun. 93
-|*  Letzte Aenderung    JP 30. Jun. 93
 |*
 |*************************************************************************/
 
@@ -311,7 +309,7 @@ SwTableFormula::SwTableFormula( const String& rFormel )
     : sFormel( rFormel )
 {
     eNmType = EXTRNL_NAME;
-    bValidValue = sal_False;
+    bValidValue = false;
 }
 
 SwTableFormula::~SwTableFormula()
@@ -388,7 +386,7 @@ void SwTableFormula::RelNmsToBoxNms( const SwTable& rTbl, String& rNewStr,
 {
     // relativen Namen zu Box-Namen (externe Darstellung)
     SwNode* pNd = (SwNode*)pPara;
-    ASSERT( pNd, "Feld steht in keinem TextNode" );
+    OSL_ENSURE( pNd, "Feld steht in keinem TextNode" );
     const SwTableBox *pRelBox, *pBox = (SwTableBox *)rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
@@ -418,7 +416,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
 {
     // relativen Namen zu Box-Pointern (interne Darstellung)
     SwNode* pNd = (SwNode*)pPara;
-    ASSERT( pNd, "Feld steht in keinem Node" );
+    OSL_ENSURE( pNd, "Feld steht in keinem Node" );
     const SwTableBox *pRelBox, *pBox = (SwTableBox*)rTbl.GetTblBox(
                     pNd->FindTableBoxStartNode()->GetIndex() );
 
@@ -449,7 +447,7 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, String& rNewStr,
 {
     // Box-Namen (externe Darstellung) zu relativen Namen
     SwNode* pNd = (SwNode*)pPara;
-    ASSERT( pNd, "Feld steht in keinem Node" );
+    OSL_ENSURE( pNd, "Feld steht in keinem Node" );
     const SwTableNode* pTblNd = pNd->FindTableNode();
 
     String sRefBoxNm;
@@ -457,7 +455,7 @@ void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, String& rNewStr,
     {
         const SwTableBox *pBox = rTbl.GetTblBox(
                 pNd->FindTableBoxStartNode()->GetIndex() );
-        ASSERT( pBox, "Feld steht in keiner Tabelle" );
+        OSL_ENSURE( pBox, "Feld steht in keiner Tabelle" );
         sRefBoxNm = pBox->GetName();
     }
 
@@ -672,7 +670,7 @@ String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
                         if( pFnd )
                             pTbl = pFnd;
                         // ??
-                        ASSERT( pFnd, "Tabelle nicht gefunden, was nun?" );
+                        OSL_ENSURE( pFnd, "Tabelle nicht gefunden, was nun?" );
                     }
                 }
             }
@@ -724,7 +722,7 @@ const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
 {
     SwNodeIndex aIdx( *rBox.GetSttNd() );
     SwCntntNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
-    ASSERT( pCNd, "Box hat keinen TextNode" );
+    OSL_ENSURE( pCNd, "Box hat keinen TextNode" );
     Point aPt;      // den im Layout 1. Frame returnen - Tab.Kopfzeile !!
     return pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, NULL, sal_False );
 }
@@ -834,7 +832,7 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
 
 String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
                             const String& rRefBoxNm, const String& rGetStr,
-                            sal_Bool bExtrnlNm )
+                            bool bExtrnlNm )
 {
     String sCpy( rRefBoxNm );
     String sTmp( rGetStr );
@@ -981,7 +979,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
 void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& ,
                     String& rFirstBox, String* pLastBox, void* pPara ) const
 {
-    sal_Bool* pBValid = (sal_Bool*)pPara;
+    bool* pBValid = (bool*)pPara;
     if( *pBValid )      // einmal falsch, immer falsch
     {
         SwTableBox* pSttBox = 0, *pEndBox = 0;
@@ -1022,13 +1020,13 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& ,
         if( ( pLastBox &&
               ( !pEndBox || !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ) ) ) ||
             ( !pSttBox || !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ) ) )
-                *pBValid = sal_False;
+                *pBValid = false;
     }
 }
 
-sal_Bool SwTableFormula::HasValidBoxes() const
+bool SwTableFormula::HasValidBoxes() const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && 0 != ( pNd = pNd->FindTableNode() ) )
         ScanString( &SwTableFormula::_HasValidBoxes,
@@ -1136,7 +1134,7 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     if( TBL_SPLITTBL == rTblUpd.eFlags )
     {
         // wo liegen die Boxen, in der "alten" oder in der neuen Tabelle?
-        sal_Bool bInNewTbl = sal_False;
+        bool bInNewTbl = false;
         if( pLastBox )
         {
             // das ist die "erste" Box in der Selektion. Die bestimmt ob die
@@ -1214,3 +1212,4 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

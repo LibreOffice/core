@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "vbatable.hxx"
 #include "vbarange.hxx"
 #include <com/sun/star/frame/XModel.hpp>
@@ -9,11 +10,13 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include "vbaborders.hxx"
 #include "vbapalette.hxx"
+#include "vbarows.hxx"
+#include "vbacolumns.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const  uno::Reference< css::text::XTextTable >& xTextTable) throw ( uno::RuntimeException ) : SwVbaTable_BASE( rParent, rContext ), mxTextDocument( rDocument )
+SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& rDocument, const  uno::Reference< text::XTextTable >& xTextTable) throw ( uno::RuntimeException ) : SwVbaTable_BASE( rParent, rContext ), mxTextDocument( rDocument )
 {
     mxTextTable.set( xTextTable, uno::UNO_QUERY_THROW );
 }
@@ -75,6 +78,26 @@ SwVbaTable::Borders( const uno::Any& index ) throw (uno::RuntimeException)
     return uno::makeAny( xCol );
 }
 
+uno::Any SAL_CALL
+SwVbaTable::Rows( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< table::XTableRows > xTableRows( mxTextTable->getRows(), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xCol( new SwVbaRows( this, mxContext, mxTextTable, xTableRows ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
+}
+
+uno::Any SAL_CALL
+SwVbaTable::Columns( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< table::XTableColumns > xTableColumns( mxTextTable->getColumns(), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xCol( new SwVbaColumns( this, mxContext, mxTextTable, xTableColumns ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
+}
+
 // XHelperInterface
 rtl::OUString&
 SwVbaTable::getServiceImplName()
@@ -95,3 +118,4 @@ SwVbaTable::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

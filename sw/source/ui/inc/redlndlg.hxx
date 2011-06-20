@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 #include <redline.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -45,17 +44,17 @@ class SwChildWinWrapper;
 
 struct SwRedlineDataChild
 {
-    const SwRedlineData*        pChild;     // Verweis auf originale gestackte Daten
-    const SwRedlineDataChild*   pNext;      // Verweis auf gestackte Daten
-    SvLBoxEntry*                pTLBChild;  // zugehoeriger TreeListBox-Eintrag
+    const SwRedlineData*        pChild;     // link to original stacked data
+    const SwRedlineDataChild*   pNext;      // link to stacked data
+    SvLBoxEntry*                pTLBChild;  // corresponding TreeListBox entry
 };
 
 struct SwRedlineDataParent
 {
     const SwRedlineData*        pData;      // RedlineDataPtr
-    const SwRedlineDataChild*   pNext;      // Verweis auf gestackte Daten
-    SvLBoxEntry*                pTLBParent; // zugehoeriger TreeListBox-Eintrag
-    String                      sComment;   // Redline-Kommentar
+    const SwRedlineDataChild*   pNext;      // link to stacked data
+    SvLBoxEntry*                pTLBParent; // corresponding TreeListBox entry
+    String                      sComment;   // redline comment
 
     inline sal_Bool operator==( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }
@@ -145,10 +144,6 @@ public:
     virtual void    Resize();
 };
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 {
     SwRedlineAcceptDlg*     pImplDlg;
@@ -164,11 +159,6 @@ public:
     virtual void    FillInfo(SfxChildWinInfo&) const;
     void            Initialize (SfxChildWinInfo* pInfo);
 };
-
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 class SwRedlineAcceptChild : public SwChildWinWrapper
 {
@@ -187,3 +177,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

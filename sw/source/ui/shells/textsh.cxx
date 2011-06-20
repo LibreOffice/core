@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -127,12 +128,6 @@ using ::rtl::OUString;
 #include <frmui.hrc>
 #include <unomid.h>
 
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_TEXT_POPUPMENU));
@@ -144,18 +139,14 @@ SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
     SFX_CHILDWINDOW_REGISTRATION(SID_RUBY_DIALOG);
 }
 
-
-
 TYPEINIT1(SwTextShell,SwBaseShell)
-
-
 
 void SwTextShell::ExecInsert(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
 
-    ASSERT( !rSh.IsObjSelected() && !rSh.IsFrmSelected(),
-            "Falsche Shell auf dem Dispatcher" );
+    OSL_ENSURE( !rSh.IsObjSelected() && !rSh.IsFrmSelected(),
+            "wrong shell on dispatcher" );
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
@@ -181,9 +172,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             sal_Unicode cIns = FN_INSERT_HARD_SPACE == nSlot ? CHAR_HARDBLANK
                                                              : CHAR_HARDHYPHEN;
 
-            SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
-            SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
-            if( pACorr && pACfg->IsAutoFmtByInput() &&
+            SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+            SvxAutoCorrect* pACorr = rACfg.GetAutoCorrect();
+            if( pACorr && rACfg.IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                 AddNonBrkSpace | ChgOrdinalNumber |
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
@@ -261,7 +252,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                                 uno::makeAny( ::rtl::OUString( pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                     }
                 }
@@ -312,17 +303,17 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     try
                     {
                         if ( sClassLocation.Len() )
-                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                                 uno::makeAny(
                                     ::rtl::OUString(
                                         URIHelper::SmartRel2Abs(
                                             INetURLObject(), sClassLocation,
                                             URIHelper::GetMaybeFileHdl()) ) ) );
                         uno::Sequence< beans::PropertyValue > aSeq;
-                        if ( aCommandList.Count() )
+                        if ( aCommandList.size() )
                         {
                             aCommandList.FillSequence( aSeq );
-                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aSeq ) );
+                            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aSeq ) );
                         }
                     }
                     catch ( uno::Exception& )
@@ -336,7 +327,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            DBG_ASSERT( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
+            OSL_ENSURE( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
             rSh.InsertObject( xObj, pName, sal_True, nSlot);
             rReq.Done();
         }
@@ -372,31 +363,27 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         aMargin = pMarginItem->GetSize();
 
                     if ( pURLItem )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
                     if ( pNameItem )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
 
                     if ( eScroll == ScrollingAuto )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
                             uno::makeAny( sal_True ) );
                     else
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                             uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                    //if ( aFrmDescr.IsFrameBorderSet() )
                     if ( pBorderItem )
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                             uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
-                    /*else
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
-                            makeAny( sal_True ) );*/
 
                     if ( pMarginItem )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                             uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
                             uno::makeAny( sal_Int32( aMargin.Height() ) ) );
                     }
                 }
@@ -433,9 +420,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     SwFrmFmt* pTblFmt = GetShell().GetTableFmt();
                     String aCurrentTblName = pTblFmt->GetName();
-        //             String aText( String::CreateFromAscii("<.>") );   // was used for UI
-        //             aText.Insert( rWrtShell.GetBoxNms(), 2);
-        //             aText.Insert( aCurrentTblName, 1 );
                     aRangeString = aCurrentTblName;
                     aRangeString += OUString::valueOf( sal_Unicode('.') );
                     aRangeString += GetShell().GetBoxNms();
@@ -529,8 +513,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         sal_Bool bSingleCol = sal_False;
         if( 0!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
         {
-            SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-            sal_uInt16 nExport = pHtmlOpt->GetExportMode();
+            SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+            sal_uInt16 nExport = rHtmlOpt.GetExportMode();
             if( HTML_CFG_MSIE == nExport ||
                 HTML_CFG_HTML32 == nExport ||
                 HTML_CFG_MSIE_40 == nExport ||
@@ -576,7 +560,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            static sal_uInt16 __READONLY_DATA aFrmAttrRange[] =
+            static sal_uInt16 aFrmAttrRange[] =
             {
                 RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
                 SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
@@ -612,10 +596,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                     GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, sal_True);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
             {
                 //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
@@ -678,10 +662,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         else
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( DLG_INSERT_RULER,
                                                         pParent );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             // MessageBox fuer fehlende Grafiken
             if(!pDlg->HasImages())
                 InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
@@ -733,16 +717,16 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_FORMAT_COLUMN :
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         VclAbstractDialog* pColDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN);
-        DBG_ASSERT(pColDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pColDlg, "Dialogdiet fail!");
         pColDlg->Execute();
         delete pColDlg;
     }
     break;
 
     default:
-        ASSERT( !this, "falscher Dispatcher" );
+        OSL_ENSURE(!this, "wrong  dispatcher");
         return;
     }
 }
@@ -754,7 +738,6 @@ bool lcl_IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
     rWrtSh.SwapPam();
     return bRet;
 }
-
 
 void SwTextShell::StateInsert( SfxItemSet &rSet )
 {
@@ -768,11 +751,10 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
     rSh.Push();
     const sal_Bool bCrsrInHidden = rSh.SelectHiddenRange();
-    // --> OD 2009-08-05 #i103839#, #b6855246#
+    // #i103839#
     // Do not call method <SwCrsrShell::Pop(..)> with 1st parameter = <sal_False>
     // in order to avoid that the view jumps to the visible cursor.
     rSh.Pop();
-    // <--
 
     while ( nWhich )
     {
@@ -817,8 +799,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
                 else if(SID_INSERT_FLOATINGFRAME == nWhich && nHtmlMode&HTMLMODE_ON)
                 {
-                    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-                    sal_uInt16 nExport = pHtmlOpt->GetExportMode();
+                    SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+                    sal_uInt16 nExport = rHtmlOpt.GetExportMode();
                     if(HTML_CFG_MSIE_40 != nExport && HTML_CFG_WRITER != nExport )
                         rSet.DisableItem(nWhich);
                 }
@@ -893,7 +875,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 }
             break;
             case FN_INSERT_HRULER :
-                if((rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel()) || bCrsrInHidden )
+                if ( (rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel()) || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             break;
             case FN_FORMAT_COLUMN :
@@ -922,10 +904,6 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void  SwTextShell::ExecDelete(SfxRequest &rReq)
 {
@@ -966,7 +944,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
             rSh.DelLine();
             break;
         default:
-            ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     rReq.Done();
@@ -975,56 +953,53 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
 void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 {
     using namespace ::com::sun::star::i18n;
+    sal_uInt32 nMode = 0;
+
+    switch( rReq.GetSlot() )
     {
-        sal_uInt32 nMode = 0;
+    case SID_TRANSLITERATE_SENTENCE_CASE:
+        nMode = TransliterationModulesExtra::SENTENCE_CASE;
+        break;
+    case SID_TRANSLITERATE_TITLE_CASE:
+        nMode = TransliterationModulesExtra::TITLE_CASE;
+        break;
+    case SID_TRANSLITERATE_TOGGLE_CASE:
+        nMode = TransliterationModulesExtra::TOGGLE_CASE;
+        break;
+    case SID_TRANSLITERATE_UPPER:
+        nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+        break;
+    case SID_TRANSLITERATE_LOWER:
+        nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+        break;
 
-        switch( rReq.GetSlot() )
-        {
-        case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
-            break;
-        case SID_TRANSLITERATE_TITLE_CASE:
-            nMode = TransliterationModulesExtra::TITLE_CASE;
-            break;
-        case SID_TRANSLITERATE_TOGGLE_CASE:
-            nMode = TransliterationModulesExtra::TOGGLE_CASE;
-            break;
-        case SID_TRANSLITERATE_UPPER:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-            break;
-        case SID_TRANSLITERATE_LOWER:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-            break;
+    case SID_TRANSLITERATE_HALFWIDTH:
+        nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+        break;
+    case SID_TRANSLITERATE_FULLWIDTH:
+        nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+        break;
 
-        case SID_TRANSLITERATE_HALFWIDTH:
-            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
-            break;
-        case SID_TRANSLITERATE_FULLWIDTH:
-            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
-            break;
+    case SID_TRANSLITERATE_HIRAGANA:
+        nMode = TransliterationModules_KATAKANA_HIRAGANA;
+        break;
+    case SID_TRANSLITERATE_KATAGANA:
+        nMode = TransliterationModules_HIRAGANA_KATAKANA;
+        break;
 
-        case SID_TRANSLITERATE_HIRAGANA:
-            nMode = TransliterationModules_KATAKANA_HIRAGANA;
-            break;
-        case SID_TRANSLITERATE_KATAGANA:
-            nMode = TransliterationModules_HIRAGANA_KATAKANA;
-            break;
-
-        default:
-            ASSERT(!this, "falscher Dispatcher");
-        }
-
-        if( nMode )
-            GetShell().TransliterateText( nMode );
+    default:
+        OSL_ENSURE(!this, "wrong dispatcher");
     }
+
+    if( nMode )
+        GetShell().TransliterateText( nMode );
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
+void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
+{
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+        GetShell().TransliterateText( m_aRotateCase.getNextMode() );
+}
 
 SwTextShell::SwTextShell(SwView &_rView) :
     SwBaseShell(_rView), pPostItFldMgr( 0 )
@@ -1033,17 +1008,9 @@ SwTextShell::SwTextShell(SwView &_rView) :
     SetHelpId(SW_TEXTSHELL);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwTextShell::~SwTextShell()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwTextShell::InsertSymbol( SfxRequest& rReq )
 {
@@ -1126,7 +1093,6 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         delete pDlg;
     }
 
-    sal_Bool bFontChanged = sal_False;
     if( aChars.Len() )
     {
         rSh.StartAllAction();
@@ -1159,7 +1125,6 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         // #108876# a font attribute has to be set always due to a guessed script type
         if( aNewFont.GetName().Len() )
         {
-            bFontChanged = sal_True;
             SvxFontItem aNewFontItem( aFont );
             aNewFontItem.SetFamilyName( aNewFont.GetName());
             aNewFontItem.SetFamily(  aNewFont.GetFamily());
@@ -1195,13 +1160,12 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
             rSh.ClearMark();
 
-            // --> FME 2007-07-09 #i75891#
+            // #i75891#
             // SETATTR_DONTEXPAND does not work if there are already hard attributes.
             // Therefore we have to restore the font attributes.
             rSh.SetMark();
             rSh.SetAttr( aRestoreSet );
             rSh.ClearMark();
-            // <--
 
             rSh.UpdateAttr();
             aFont = aNewFontItem;
@@ -1219,4 +1183,4 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     }
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

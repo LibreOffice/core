@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <set>
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
+#include "rtfexport.hxx"
 
 #include <vcl/vclenum.hxx>
 
@@ -40,13 +42,13 @@
 
 #include <vector>
 
-class RtfExport;
 
 class SwGrfNode;
 class SwOLENode;
 class SdrObject;
 class SwFlyFrmFmt;
 
+/// The class that has handlers for various resource types when exporting as RTF
 class RtfAttributeOutput : public AttributeOutputBase
 {
 public:
@@ -91,7 +93,7 @@ public:
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby );
+    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
 
     /// Output ruby end.
     virtual void EndRuby();
@@ -115,31 +117,18 @@ public:
     virtual void ParagraphStyle( sal_uInt16 nStyle );
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo );
-
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner );
-
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     virtual void TableRowEnd( sal_uInt32 nDepth );
 
     /// Start of the styles table.
@@ -153,7 +142,8 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId );
+            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId,
+            bool bAutoUpdate );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
@@ -430,28 +420,20 @@ protected:
 private:
 
     /// Output graphic fly frames.
-    void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode, const Size& rSize );
+    void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode );
     void FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize );
     void FlyFrameOLEData( SwOLENode& rOLENode );
 
     /*
      * Table methods.
      */
-
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
-
     void EndTableCell( );
-
     void EndTableRow( );
-
     void EndTable();
 
     /// End cell, row, and even the entire table if necessary.
@@ -587,4 +569,4 @@ public:
 
 #endif // _RTFATTRIBUTEOUTPUT_HXX_
 
-/* vi:set shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

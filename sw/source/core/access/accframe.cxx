@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,6 @@
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
 #include <sectfrm.hxx>
-#include <pagefrm.hxx>
 #include <section.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
@@ -254,7 +254,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
                 aRet = GetChildAtPixel( rVisArea, *(rLower.GetSwFrm()), rPixPos,
                                         bInPagePreview, rAccMap );
             }
-            aRIter++;
+            ++aRIter;
         }
     }
     else
@@ -360,7 +360,7 @@ sal_Bool SwAccessibleFrame::IsEditable( ViewShell *pVSh ) const
     if( !pFrm )
         return sal_False;
 
-    ASSERT( pVSh, "no view shell" );
+    OSL_ENSURE( pVSh, "no view shell" );
     if( pVSh && (pVSh->GetViewOptions()->IsReadonly() ||
                  pVSh->IsPreView()) )
         return sal_False;
@@ -377,7 +377,7 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
     if( !aFrm.GetSwFrm() )
         return sal_False;
 
-    ASSERT( pVSh, "no view shell" );
+    OSL_ENSURE( pVSh, "no view shell" );
     if( !pVSh )
         return sal_False;
 
@@ -396,10 +396,8 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
              rBack.GetGraphicPos() != GPOS_NONE )
             return sal_True;
 
-        /// OD 20.08.2002 #99657#
-        ///     If a fly frame has a transparent background color, we have
-        ///     to consider the background.
-        ///     But a background color "no fill"/"auto fill" has *not* to be considered.
+        // If a fly frame has a transparent background color, we have to consider the background.
+        // But a background color "no fill"/"auto fill" has *not* to be considered.
         if( pFrm->IsFlyFrm() &&
             (rBack.GetColor().GetTransparency() != 0) &&
             (rBack.GetColor() != COL_TRANSPARENT)
@@ -495,3 +493,4 @@ sal_Bool SwAccessibleFrame::IsShowing( const SwAccessibleMap& rAccMap,
     return IsShowing( rFrmOrObj.GetBox( rAccMap ) );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,14 +31,10 @@
 #include "swdllapi.h"
 #include <fldbas.hxx>
 #include <toxe.hxx>
-
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
+#include <vector>
 
 class SwAuthDataArr;
-/* -----------------21.09.99 13:32-------------------
 
- --------------------------------------------------*/
 class SwAuthEntry
 {
     String      aAuthFields[AUTH_FIELD_END];
@@ -55,9 +52,7 @@ public:
     void            RemoveRef()             { --nRefCount; }
     sal_uInt16          GetRefCount()           { return nRefCount; }
 };
-/* -----------------20.10.99 16:49-------------------
 
- --------------------------------------------------*/
 struct SwTOXSortKey
 {
     ToxAuthorityField   eField;
@@ -67,9 +62,6 @@ struct SwTOXSortKey
         bSortAscending(sal_True){}
 };
 
-/* -----------------14.09.99 16:15-------------------
-
- --------------------------------------------------*/
 class SwAuthorityField;
 class SortKeyArr;
 
@@ -77,7 +69,7 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
     SwDoc*          m_pDoc;
     SwAuthDataArr*  m_pDataArr;
-    SvLongs*        m_pSequArr;
+    std::vector<long> m_SequArr;
     SortKeyArr*     m_pSortKeyArr;
     sal_Unicode     m_cPrefix;
     sal_Unicode     m_cSuffix;
@@ -99,8 +91,8 @@ public:
 
     virtual SwFieldType* Copy()    const;
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
     inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*          GetDoc(){ return m_pDoc; }
@@ -109,7 +101,7 @@ public:
     sal_Bool                AddField(long nHandle);
     void                DelSequenceArray()
                         {
-                            m_pSequArr->Remove(0, m_pSequArr->Count());
+                            m_SequArr.clear();
                         }
 
     const SwAuthEntry*  GetEntryByHandle(long nHandle) const;
@@ -161,9 +153,7 @@ public:
     void            SetSortAlgorithm(const String& rSet) {m_sSortAlgorithm = rSet;}
 
 };
-/* -----------------14.09.99 16:15-------------------
 
- --------------------------------------------------*/
 class SwAuthorityField : public SwField
 {
     long            m_nHandle;
@@ -182,8 +172,8 @@ public:
     virtual void        SetPar1(const String& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
     long                GetHandle() const       { return m_nHandle; }
 
@@ -193,15 +183,16 @@ public:
 // --- inlines -----------------------------------------------------------
 inline const String&    SwAuthEntry::GetAuthorField(ToxAuthorityField ePos)const
 {
-    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index");
+    OSL_ENSURE(AUTH_FIELD_END > ePos, "wrong index");
     return aAuthFields[ePos];
 }
 inline void SwAuthEntry::SetAuthorField(ToxAuthorityField ePos, const String& rField)
 {
-    DBG_ASSERT(AUTH_FIELD_END > ePos, "wrong index");
+    OSL_ENSURE(AUTH_FIELD_END > ePos, "wrong index");
     if(AUTH_FIELD_END > ePos)
         aAuthFields[ePos] = rField;
 }
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

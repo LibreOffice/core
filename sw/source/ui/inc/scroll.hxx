@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,18 +27,16 @@
  ************************************************************************/
 #ifndef _SCROLL_HXX
 #define _SCROLL_HXX
-#ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
 
 class SwScrollbar: public ScrollBar
 {
     Size    aDocSz;
-    sal_Bool    bHori       :1;     // Horizontal = sal_True, sonst Vertikal
-    sal_Bool    bAuto       :1;     // fuer Scrollingmode
+    sal_Bool    bHori       :1;     // horizontal = salTrue, otherwise vertical
+    sal_Bool    bAuto       :1;     // for scrolling mode
     sal_Bool    bThumbEnabled:1;
-    sal_Bool    bVisible    :1;     // Show/Hide sollen nur noch dieses Flag setzen
-    sal_Bool    bSizeSet    :1;     // wurde die Groesse bereits gesetzt?
+    sal_Bool    bVisible    :1;     // show/hide should only set this flag
+    sal_Bool    bSizeSet    :1;     // was the size already set?
 
     void    AutoShow();
 
@@ -52,11 +51,11 @@ public:
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
     sal_Bool    IsVisible(sal_Bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
 
-        // Aenderung der Dokumentgroesse
+        // changing of document size
     void    DocSzChgd(const Size &rNewSize);
-        // Aenderung des sichtbaren Bereiches
+        // changing of visible region
     void    ViewPortChgd(const Rectangle &rRectangle);
-        // was fuer einer ist es denn ??
+        // what is it??
     sal_Bool    IsHoriScroll() const { return bHori; }
 
     void    SetAuto(sal_Bool bSet);
@@ -69,3 +68,5 @@ public:
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

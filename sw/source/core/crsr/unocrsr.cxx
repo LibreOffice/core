@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,7 +60,7 @@ SwUnoCrsr::~SwUnoCrsr()
         if( USHRT_MAX != nDelPos )
             rTbl.Remove( nDelPos );
         else {
-            ASSERT( !this, "UNO Cursor nicht mehr im Array" );
+            OSL_ENSURE( !this, "UNO Cursor nicht mehr im Array" );
         }
     }
 
@@ -218,14 +219,6 @@ SwUnoTableCrsr::~SwUnoTableCrsr()
         delete aTblSel.GetNext();           // und loeschen
 }
 
-
-/*
-SwCursor* SwUnoTableCrsr::Create( SwPaM* pRing ) const
-{
-    return SwUnoCrsr::Create( pRing );
-}
-*/
-
 sal_Bool SwUnoTableCrsr::IsSelOvr( int eFlags )
 {
     sal_Bool bRet = SwUnoCrsr::IsSelOvr( eFlags );
@@ -270,3 +263,4 @@ void SwUnoTableCrsr::MakeBoxSels()
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

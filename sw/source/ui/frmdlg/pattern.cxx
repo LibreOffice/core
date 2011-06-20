@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,7 @@ SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet) :
 {
     SetText(SW_RESSTR(STR_FRMUI_PATTERN));
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
     if ( fnCreatePage )
     {
@@ -73,3 +74,4 @@ SwBackgroundDlg::~SwBackgroundDlg()
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
 
 #include "swtypes.hxx"
 #include "swrect.hxx"
@@ -65,7 +64,6 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
     SetRange( Range( 0, bHori ? rSize.Width() : rSize.Height()) );
     const sal_uLong nVisSize = GetVisibleSize();
     SetLineSize( SCROLL_LINE_SIZE );
-//    SetLineSize( nVisSize * 10 / 100 );
     SetPageSize( nVisSize * 77 / 100 );
 }
 
@@ -97,9 +95,6 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
         AutoShow();
 }
 
-/*-----------------10/21/97 02:48pm-----------------
-
---------------------------------------------------*/
 void SwScrollbar::ExtendedShow( sal_Bool bSet )
 {
     bVisible = bSet;
@@ -107,9 +102,6 @@ void SwScrollbar::ExtendedShow( sal_Bool bSet )
         ScrollBar::Show(bSet);
 }
 
-/*-----------------10/21/97 03:23pm-----------------
-
---------------------------------------------------*/
 void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
     ScrollBar::SetPosSizePixel(rNewPos, rNewSize);
@@ -119,10 +111,6 @@ void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 
 }
 
-
-/*-----------------14.04.98 11:38-------------------
-
---------------------------------------------------*/
 void SwScrollbar::SetAuto(sal_Bool bSet)
 {
     if(bAuto != bSet)
@@ -136,14 +124,11 @@ void SwScrollbar::SetAuto(sal_Bool bSet)
             AutoShow(); // oder automatisch verstecken
     }
 }
-/*-----------------14.04.98 11:43-------------------
 
---------------------------------------------------*/
 void SwScrollbar::AutoShow()
 {
     long nVis = GetVisibleSize();
     long nLen = GetRange().Len();
-    {
         if( nVis >= nLen - 1)
         {
             if(ScrollBar::IsVisible())
@@ -156,5 +141,6 @@ void SwScrollbar::AutoShow()
         {
             ScrollBar::Show(sal_True);
         }
-    }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

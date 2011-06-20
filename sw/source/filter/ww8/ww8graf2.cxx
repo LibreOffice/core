@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 
 #include <iterator>
 #include <hintids.hxx>
@@ -68,7 +67,7 @@ wwZOrderer::wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
     mpShapeOrders(pShapeOrders)
 {
     mnNoInitialObjects = mpDrawPg->GetObjCount();
-    ASSERT(mpDrawPg,"Missing draw page impossible!");
+    OSL_ENSURE(mpDrawPg,"Missing draw page impossible!");
 }
 
 void wwZOrderer::InsideEscher(sal_uLong nSpId)
@@ -81,13 +80,12 @@ void wwZOrderer::OutsideEscher()
     maIndexes.pop();
 }
 
-// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
+// consider new parameter <_bInHeaderFooter>
 void wwZOrderer::InsertEscherObject( SdrObject* pObject,
                                      sal_uLong nSpId,
                                      const bool _bInHeaderFooter )
 {
     sal_uLong nInsertPos = GetEscherObjectPos( nSpId, _bInHeaderFooter );
-// <--
     InsertObject(pObject, nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
@@ -121,12 +119,12 @@ sal_uInt16 wwZOrderer::GetEscherObjectIdx(sal_uLong nSpId)
     return nFound;
 }
 
-// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
+// consider new parameter <_bInHeaderFooter>
 sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
                                       const bool _bInHeaderFooter )
 {
     /*
-    #97824# EscherObjects have their own ordering which needs to be matched to
+    EscherObjects have their own ordering which needs to be matched to
     the actual ordering that should be used when inserting them into the
     document.
     */
@@ -138,8 +136,8 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
     sal_uLong nRet=0;
     myeiter aIter = maEscherLayer.begin();
     myeiter aEnd = maEscherLayer.end();
-    // --> OD 2004-12-13 #117915# - skip objects in page header|footer, if
-    // current object isn't in page header|footer
+    // skip objects in page header|footer,
+    // if current object isn't in page header|footer
     if ( !_bInHeaderFooter )
     {
         while ( aIter != aEnd )
@@ -152,16 +150,14 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
             ++aIter;
         }
     }
-    // <--
     while (aIter != aEnd)
     {
-        // --> OD 2004-12-13 #117915# - insert object in page header|footer
+        // insert object in page header|footer
         // before objects in page body
         if ( _bInHeaderFooter && !aIter->mbInHeaderFooter )
         {
             break;
         }
-        // <--
         if ( aIter->mnEscherShapeOrder > nFound )
             break;
         nRet += aIter->mnNoInlines+1;
@@ -170,7 +166,6 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
     maEscherLayer.insert(aIter, EscherShape( nFound, _bInHeaderFooter ) );
     return nRet;
 }
-// <--
 
 // InsertObj() fuegt das Objekt in die Sw-Page ein und merkt sich die Z-Pos in
 // einem VarArr
@@ -208,7 +203,7 @@ void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
             ++aIter;
         }
 
-        ASSERT(aEnd != maEscherLayer.end(), "Something very wrong here");
+        OSL_ENSURE(aEnd != maEscherLayer.end(), "Something very wrong here");
         if (aEnd != maEscherLayer.end())
         {
             aEnd->mnNoInlines++;
@@ -257,7 +252,7 @@ extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
-    return 0 == GraphicFilter::GetGraphicFilter()->ImportGraphic(rGraphic, aEmptyStr, rSrc,
+    return 0 == GraphicFilter::GetGraphicFilter().ImportGraphic(rGraphic, aEmptyStr, rSrc,
         GRFILTER_FORMAT_DONTKNOW);
 }
 
@@ -287,31 +282,11 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
     pSt->Seek( nPosFc );
     bool bOk = ReadWindowMetafile( *pSt, aWMF, NULL ) ? true : false;
 
-    if (!bOk || pSt->GetError() || !aWMF.GetActionCount())
+    if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
         return false;
 
     if (pWwFib->envr != 1) // !MAC als Creator
     {
-
-/* SJ: #i40742#, we will use the prefsize from the mtf directly.
-The scaling has been done in former days, because the wmf filter was sometimes not
-able to calculate the proper prefsize (especially if the wmf fileheader was missing)
-
-
-        aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
-        // MetaFile auf neue Groesse skalieren und
-        // neue Groesse am MetaFile setzen
-        if (rPic.MFP.xExt && rPic.MFP.yExt)
-        {
-            Size aOldSiz(aWMF.GetPrefSize());
-            Size aNewSiz(rPic.MFP.xExt, rPic.MFP.yExt );
-            Fraction aFracX(aNewSiz.Width(), aOldSiz.Width());
-            Fraction aFracY(aNewSiz.Height(), aOldSiz.Height());
-
-            aWMF.Scale(aFracX, aFracY);
-            aWMF.SetPrefSize(aNewSiz);
-        }
-*/
         rpGraphic = new Graphic( aWMF );
         return true;
     }
@@ -377,7 +352,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
     }
     else
     {
-        ASSERT( !this, "Impossible!");
+        OSL_ENSURE( !this, "Impossible!");
     }
 }
 
@@ -537,11 +512,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth, aPD.nHeight );
 
-            //JP 17.1.2002: the correct anchor is set in Read_F_IncludePicture
-            //              and the current PaM point's behind the position if
-            //              it is anchored in content; because this anchor add
-            //              a character into the textnode.
-            //              IussueZilla task 2806
+            // the correct anchor is set in Read_F_IncludePicture and the current PaM point's
+            // behind the position if it is anchored in content; because this anchor add
+            // a character into the textnode. IussueZilla task 2806
             if (FLY_AS_CHAR ==
                 pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
             {
@@ -632,8 +605,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                         pRecord->nDyTextBottom  );
 
                     MatchSdrItemsIntoFlySet( pObject, aAttrSet,
-                        pRecord->eLineStyle, pRecord->eShapeType,
-                        aInnerDist );
+                        pRecord->eLineStyle, pRecord->eLineDashing,
+                        pRecord->eShapeType, aInnerDist );
 
                     //Groesse aus der WinWord PIC-Struktur als
                     //Grafik-Groesse nehmen
@@ -785,21 +758,6 @@ void WW8PicShadowToReal( WW8_PIC_SHADOW * pPicS, WW8_PIC * pPic )
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 {
-    //long nSpId;       //Shape Identifier. Used in conjunction with the office art data (found via fcDggInfo in the FIB) to find the actual data for this shape.
-    //long nXaLeft; //left of rectangle enclosing shape relative to the origin of the shape
-    //long nYaTop;      //top of rectangle enclosing shape relative to the origin of the shape
-    //long nXaRight;    //right of rectangle enclosing shape relative to the origin of the shape
-    //long nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
-    //sal_uInt16 bHdr:1;
-    //sal_uInt16 nbx:2;
-    //sal_uInt16 nby:2;
-    //sal_uInt16 nwr:4;
-    //sal_uInt16 nwrk:4;
-    //sal_uInt16 bRcaSimple:1;
-    //sal_uInt16 bAnchorLock:1;
-    //long nTxbx; //count of textboxes in shape (undo doc only)
-
-
     pFSPA->nSpId        = SVBT32ToUInt32( pFSPAS->nSpId );
     pFSPA->nXaLeft      = SVBT32ToUInt32( pFSPAS->nXaLeft );
     pFSPA->nYaTop       = SVBT32ToUInt32( pFSPAS->nYaTop );
@@ -820,4 +778,4 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 }
 #endif // defined __WW8_NEEDS_COPY
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

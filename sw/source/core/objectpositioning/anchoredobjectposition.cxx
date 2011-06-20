@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,16 +37,13 @@
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <frmtool.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <fmtornt.hxx>
-// --> OD 2006-03-15 #i62875#
+// #i62875#
 #include <fmtfollowtextflow.hxx>
-// <--
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <ndtxt.hxx>
@@ -63,10 +61,9 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
       mpAnchoredObj( 0 ),
       mpAnchorFrm( 0 ),
       mpContact( 0 ),
-      // --> OD 2006-03-15 #i62875#
+      // #i62875#
       mbFollowTextFlow( false ),
       mbDoNotCaptureAnchoredObj( false )
-      // <--
 {
 #if OSL_DEBUG_LEVEL > 1
     // assert, if object isn't of excepted type
@@ -76,7 +73,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
             ( !mrDrawObj.ISA(SdrVirtObj) &&    // 'master' drawing object
               !mrDrawObj.ISA(SwFlyDrawObj) );  // - indirectly checked
     (void) bObjOfExceptedType;
-    ASSERT( bObjOfExceptedType,
+    OSL_ENSURE( bObjOfExceptedType,
             "SwAnchoredObjectPosition(..) - object of unexcepted type!" );
 #endif
 
@@ -85,7 +82,6 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
 
 /** determine information about object
 
-    OD 30.07.2003 #110978#
     members <mbIsObjFly>, <mpFrmOfObj>, <mpAnchorFrm>, <mpContact>,
     <mbFollowTextFlow> and <mbDoNotCaptureAnchoredObj> are set
 
@@ -101,36 +97,35 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
     // determine contact object
     {
         mpContact = static_cast<SwContact*>(GetUserCall( &mrDrawObj ));
-        ASSERT( mpContact,
+        OSL_ENSURE( mpContact,
                 "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing SwContact-object." );
     }
 
     // determine anchored object, the object belongs to
     {
-        // OD 2004-03-30 #i26791#
+        // #i26791#
         mpAnchoredObj = mpContact->GetAnchoredObj( &mrDrawObj );
-        ASSERT( mpAnchoredObj,
+        OSL_ENSURE( mpAnchoredObj,
                 "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing anchored object." );
     }
 
     // determine frame, the object is anchored at
     {
-        // OD 2004-03-23 #i26791#
+        // #i26791#
         mpAnchorFrm = mpAnchoredObj->AnchorFrm();
-        ASSERT( mpAnchorFrm,
+        OSL_ENSURE( mpAnchorFrm,
                 "SwAnchoredObjectPosition::_GetInfoAboutObj() - missing anchor frame." );
     }
 
     // determine format the object belongs to
     {
-        // --> OD 2004-07-01 #i28701#
+        // #i28701#
         mpFrmFmt = &mpAnchoredObj->GetFrmFmt();
-        ASSERT( mpFrmFmt,
+        OSL_ENSURE( mpFrmFmt,
                 "<SwAnchoredObjectPosition::_GetInfoAboutObj() - missing frame format." );
     }
 
-    // --> OD 2006-03-15 #i62875#
-    // determine attribute value of <Follow-Text-Flow>
+    // #i62875# - determine attribute value of <Follow-Text-Flow>
     {
         mbFollowTextFlow = mpFrmFmt->GetFollowTextFlow().GetValue();
     }
@@ -144,7 +139,6 @@ void SwAnchoredObjectPosition::_GetInfoAboutObj()
         mbDoNotCaptureAnchoredObj = !mbIsObjFly && !mbFollowTextFlow &&
                                     mpFrmFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE);
     }
-    // <--
 }
 
 SwAnchoredObjectPosition::~SwAnchoredObjectPosition()
@@ -165,7 +159,7 @@ const SwRect* SwAnchoredObjectPosition::ToCharRect() const
     return NULL;
 }
 
-// OD 12.11.2003 #i22341#
+// #i22341#
 SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
 {
     return 0L;
@@ -174,7 +168,7 @@ SwTwips SwAnchoredObjectPosition::ToCharTopOfLine() const
 /** helper method to determine top of a frame for the vertical
     object positioning
 
-    OD 2004-03-11 #i11860#
+    #i11860#
 
     @author OD
 */
@@ -212,9 +206,9 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
     SwTwips nHeight = 0;
     SwTwips nOffset = 0;
     SWRECTFN( (&_rVertOrientFrm) )
-    // OD 2004-03-11 #i11860# - top of <_rVertOrientFrm> for object positioning
+    // #i11860# - top of <_rVertOrientFrm> for object positioning
     const SwTwips nVertOrientTop = _GetTopForObjPos( _rVertOrientFrm, fnRect, bVert );
-    // OD 2004-03-11 #i11860# - upper space amount of <_rVertOrientFrm> considered
+    // #i11860# - upper space amount of <_rVertOrientFrm> considered
     // for previous frame
     const SwTwips nVertOrientUpperSpaceForPrevFrmAndPageGrid =
             _rVertOrientFrm.IsTxtFrm()
@@ -225,7 +219,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
     {
         case text::RelOrientation::FRAME:
         {
-            // OD 2004-03-11 #i11860# - consider upper space of previous frame
+            // #i11860# - consider upper space of previous frame
             nHeight = (_rVertOrientFrm.Frm().*fnRect->fnGetHeight)() -
                       nVertOrientUpperSpaceForPrevFrmAndPageGrid;
             nOffset = 0;
@@ -234,7 +228,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
         case text::RelOrientation::PRINT_AREA:
         {
             nHeight = (_rVertOrientFrm.Prt().*fnRect->fnGetHeight)();
-            // OD 2004-03-11 #i11860# - consider upper space of previous frame
+            // #i11860# - consider upper space of previous frame
             nOffset = (_rVertOrientFrm.*fnRect->fnGetTopMargin)() -
                       nVertOrientUpperSpaceForPrevFrmAndPageGrid;
             // if aligned to page in horizontal layout, consider header and
@@ -296,7 +290,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
         }
         break;
-        // OD 12.11.2003 #i22341# - vertical alignment at top of line
+        // #i22341# - vertical alignment at top of line
         case text::RelOrientation::TEXT_LINE:
         {
             if ( IsAnchoredToChar() )
@@ -306,8 +300,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
             else
             {
-                ASSERT( false,
-                        "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
+                OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
             }
         }
         break;
@@ -321,20 +314,14 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
             else
             {
-                ASSERT( false,
-                        "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
+                OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
             }
         }
         break;
         // no break here, because text::RelOrientation::CHAR is invalid, if !mbAnchorToChar
         default:
-        //case text::RelOrientation::PAGE_LEFT:     not valid for vertical alignment
-        //case text::RelOrientation::PAGE_RIGHT:    not valid for vertical alignment
-        //case text::RelOrientation::FRAME_LEFT:    not valid for vertical alignment
-        //case text::RelOrientation::FRAME_RIGHT:   not valid for vertical alignment
         {
-            ASSERT( false,
-                    "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
+            OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
         }
     }
 
@@ -342,7 +329,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
     _orAlignAreaOffset = nOffset;
 }
 
-// --> OD 2004-06-17 #i26791# - add output parameter <_roVertOffsetToFrmAnchorPos>
+// #i26791# - add output parameter <_roVertOffsetToFrmAnchorPos>
 SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
                                     const SwFrm& _rVertOrientFrm,
                                     const SwFrm& _rPageAlignLayFrm,
@@ -401,12 +388,11 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         default:
         {
-            ASSERT( false,
-                    "<SwAnchoredObjectPosition::_GetVertRelPos(..) - invalid vertical positioning" );
+            OSL_FAIL( "<SwAnchoredObjectPosition::_GetVertRelPos(..) - invalid vertical positioning" );
         }
     }
 
-    // --> OD 2004-06-17 #i26791#
+    // #i26791#
     _roVertOffsetToFrmAnchorPos = nAlignAreaOffset;
 
     return nRelPosY;
@@ -415,10 +401,10 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
 /** adjust calculated vertical in order to keep object inside
     'page' alignment layout frame.
 
-    OD 2004-07-01 #i28701# - parameter <nTopOfAnch> and <bVert> added
-    OD 2004-07-22 #i31805# - add parameter <bCheckBottom>
-    OD 2004-10-08 #i26945# - add parameter <bFollowTextFlow>
-    OD 2006-03-15 #i62875# - method now private and renamed.
+    #i28701# - parameter <_nTopOfAnch> and <_bVert> added
+    #i31805# - add parameter <_bCheckBottom>
+    #i26945# - add parameter <_bFollowTextFlow>
+    #i62875# - method now private and renamed.
     OD 2009-09-01 #mongolianlayout# - add parameter <bVertL2R>
 
     @author OD
@@ -437,7 +423,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
 
     // determine the area of 'page' alignment frame, to which the vertical
     // position is restricted.
-    // --> OD 2004-07-06 #i28701# - Extend restricted area for the vertical
+    // #i28701# - Extend restricted area for the vertical
     // position to area of the page frame, if wrapping style influence is
     // considered on object positioning. Needed to avoid layout loops in the
     // object positioning algorithm considering the wrapping style influence
@@ -445,7 +431,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
     // to its environment (e.g. page header/footer).
     SwRect aPgAlignArea;
     {
-        // --> OD 2004-10-08 #i26945# - no extension of restricted area, if
+        // #i26945# - no extension of restricted area, if
         // object's attribute follow text flow is set and its inside a table
         if ( GetFrmFmt().getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              ( !bFollowTextFlow ||
@@ -461,9 +447,8 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
 
     if ( bVert )
     {
-        // --> OD 2009-09-01 #mongolianlayout#
+        // #i31805# - consider value of <_bCheckBottom>
         if ( !bVertL2R )
-        // <--
         {
             if ( bCheckBottom &&
                  nTopOfAnch - nAdjustedRelPosY - aObjSize.Width() <
@@ -473,12 +458,12 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
                                    nTopOfAnch -
                                    aObjSize.Width();
             }
+        // #i32964# - correction
             if ( nTopOfAnch - nAdjustedRelPosY > aPgAlignArea.Right() )
             {
                 nAdjustedRelPosY = nTopOfAnch - aPgAlignArea.Right();
             }
         }
-        // --> OD 2009-09-01 #mongolianlayout#
         else
         {
             if ( bCheckBottom &&
@@ -494,10 +479,10 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
                 nAdjustedRelPosY = aPgAlignArea.Left() - nTopOfAnch;
             }
         }
-        // <--
     }
     else
     {
+        // #i31805# - consider value of <bCheckBottom>
         if ( bCheckBottom &&
              nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >
                 aPgAlignArea.Top() + aPgAlignArea.Height() )
@@ -518,7 +503,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnc
 /** adjust calculated horizontal in order to keep object inside
     'page' alignment layout frame.
 
-    OD 2006-03-15 #i62875# - method now private and renamed.
+    #i62875# - method now private and renamed.
 
     @author OD
 */
@@ -647,10 +632,8 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
         case text::RelOrientation::FRAME_RIGHT:
         {
             // align at right border of anchor frame
-            // OD 19.08.2003 #110978# - unify and simplify
+            // Unify and simplify
             nWidth = (_rHoriOrientFrm.*fnRect->fnGetRightMargin)();
-            //nOffset = (_rHoriOrientFrm.Frm().*fnRect->fnGetWidth)() -
-            //          nWidth;
             nOffset = (_rHoriOrientFrm.Prt().*fnRect->fnGetRight)();
         }
         break;
@@ -707,7 +690,6 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             break;
         }
         default:
-        // case text::RelOrientation::FRAME:
         {
             nWidth = (_rHoriOrientFrm.Frm().*fnRect->fnGetWidth)();
             nOffset = _rHoriOrientFrm.IsTxtFrm() ?
@@ -834,7 +816,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
         }
         else if ( bToggle || ( !_rHoriOrient.IsPosToggle() && bR2L ) )
         {
-            // OD 04.08.2003 #110978# - correction: consider <nOffset> also for
+            // Correction: consider <nOffset> also for
             // toggling from left to right.
             nRelPosX += nWidth - nObjWidth - _rHoriOrient.GetPos();
         }
@@ -861,40 +843,6 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
         nRelPosX += (*fnRect->fnXDiff)( nLeftOrient, nLeftAnchor );
     }
 
-    // OD 2004-05-21 #i28701# - deactivate follow code
-//    // adjust relative horizontal position, if object is manual horizontal
-//    // positioned (not 'page' aligned) and orients not at the anchor frame,
-//    // but it overlaps anchor frame.
-//    if ( _rHoriOrient.GetHoriOrient() == text::HoriOrientation::NONE && !bAlignedRelToPage &&
-//         &rAnchorFrm != &_rHoriOrientFrm )
-//    {
-//        // E.g.: consider a columned page/section with an horizontal
-//        //       negative positioned object.
-//        // OD 2004-03-23 #i26791#
-//        const SwRect& rObjRect = GetAnchoredObj().GetObjRect();
-//        if( bVert )
-//        {
-//            if( _rHoriOrientFrm.Frm().Top() > rAnchorFrm.Frm().Bottom() &&
-//                rObjRect.Right() > rAnchorFrm.Frm().Left() )
-//            {
-//                const SwTwips nProposedPosX = nRelPosX + rAnchorFrm.Frm().Top();
-//                if ( nProposedPosX < rAnchorFrm.Frm().Bottom() )
-//                    nRelPosX = rAnchorFrm.Frm().Height() + 1;
-//            }
-//        }
-//        else
-//        {
-//            if( _rHoriOrientFrm.Frm().Left() > rAnchorFrm.Frm().Right() &&
-//                rObjRect.Top() < rAnchorFrm.Frm().Bottom() )
-//            {
-//                // OD 04.08.2003 #110978# - correction: use <nRelPosX>
-//                // instead of <aRelPos.X()>
-//                const SwTwips nProposedPosX = nRelPosX + rAnchorFrm.Frm().Left();
-//                if ( nProposedPosX < rAnchorFrm.Frm().Right() )
-//                    nRelPosX = rAnchorFrm.Frm().Width() + 1;
-//            }
-//        }
-//    }
     // adjust calculated relative horizontal position, in order to
     // keep object inside 'page' alignment layout frame
     const SwFrm& rEnvironmentLayFrm =
@@ -917,7 +865,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
                                                   bEvenPage );
     }
 
-    // --> OD 2004-06-17 #i26791#
+    // #i26791#
     _roHoriOffsetToFrmAnchorPos = nOffset;
 
     return nRelPosX;
@@ -943,17 +891,16 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                                             const bool _bEvenPage
                                           ) const
 {
-    // OD 2004-03-23 #i26791#
+    // #i26791#
     if ( !GetAnchorFrm().ISA(SwTxtFrm) ||
          !GetAnchoredObj().ISA(SwFlyAtCntFrm) )
     {
-        ASSERT( false,
-                "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
+        OSL_FAIL( "<SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(..) - usage for wrong anchor type" );
         return _nProposedRelPosX;
     }
 
     const SwTxtFrm& rAnchorTxtFrm = static_cast<const SwTxtFrm&>(GetAnchorFrm());
-    // OD 2004-03-23 #i26791#
+    // #i26791#
     const SwFlyAtCntFrm& rFlyAtCntFrm =
                         static_cast<const SwFlyAtCntFrm&>(GetAnchoredObj());
     const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
@@ -1133,11 +1080,11 @@ bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
 
     // draw aside order for left horizontal position
     //! one array entry for each value in text::RelOrientation
-    static sal_uInt16 __READONLY_DATA aLeft[ 10 ] =
+    static sal_uInt16 const aLeft[ 10 ] =
         { 5, 6, 0, 1, 8, 4, 7, 2, 3, 9 };
     // draw aside order for right horizontal position
     //! one array entry for each value in text::RelOrientation
-    static sal_uInt16 __READONLY_DATA aRight[ 10 ] =
+    static sal_uInt16 const aRight[ 10 ] =
         { 5, 6, 0, 8, 1, 7, 4, 2, 3, 9 };
 
     // decide depending on given order, which frame has to draw aside another frame
@@ -1148,3 +1095,5 @@ bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
 
     return bRetVal;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

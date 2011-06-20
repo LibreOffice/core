@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,19 +39,11 @@
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
 
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
-#ifndef _INITUI_HRC
 #include <initui.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <authfld.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <unotools/syslocale.hxx>
 
 #include <unomid.h>
@@ -160,9 +153,8 @@ ShellResource::ShellResource()
 
     aGetRefFld_Up( SW_RES( STR_GETREFFLD_UP ) ),
     aGetRefFld_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
-    // --> OD 2007-09-13 #i81002#
+    // #i81002#
     aGetRefFld_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
-    // <--
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
@@ -205,11 +197,24 @@ ShellResource::~ShellResource()
         delete pAutoFmtNameLst, pAutoFmtNameLst = 0;
 }
 
-String ShellResource::GetPageDescName( sal_uInt16 nNo, sal_Bool bIsFirst, sal_Bool bFollow )
+String ShellResource::GetPageDescName( sal_uInt16 nNo, PageNameMode eMode )
 {
-    String sRet( bIsFirst ? sPageDescFirstName
-                          : bFollow ? sPageDescFollowName
-                                      : sPageDescName );
+    String sRet;
+
+    switch (eMode)
+    {
+        case NORMAL_PAGE:
+            sRet = sPageDescName;
+            break;
+            break;
+        case FIRST_PAGE:
+            sRet = sPageDescFirstName;
+            break;
+        case FOLLOW_PAGE:
+            sRet = sPageDescFollowName;
+            break;
+    }
+
     sRet.SearchAndReplaceAscii( "$(ARG1)", String::CreateFromInt32( nNo ));
     return sRet;
 }
@@ -271,9 +276,7 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
     }
     FreeResource();
 }
-/* -----------------16.09.99 12:28-------------------
 
- --------------------------------------------------*/
 const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
 {
     if(!pAuthFieldNameList)
@@ -287,9 +290,7 @@ const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
     }
     return *pAuthFieldNameList->GetObject( static_cast< sal_uInt16 >(eType) );
 }
-/* -----------------16.09.99 12:29-------------------
 
- --------------------------------------------------*/
 const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 {
     if(!pAuthFieldTypeList)
@@ -305,3 +306,4 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

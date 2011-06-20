@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,16 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// include ---------------------------------------------------------------
-
-
 #include "prcntfld.hxx"
-
-// STATIC DATA -----------------------------------------------------------
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 PercentField::PercentField( Window* pWin, const ResId& rResId ) :
         MetricField ( pWin, rResId ),
@@ -56,10 +48,6 @@ PercentField::PercentField( Window* pWin, const ResId& rResId ) :
     SetCustomUnitText('%');
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void PercentField::SetRefValue(sal_Int64 nValue)
 {
     sal_Int64 nRealValue = GetRealValue(eOldUnit);
@@ -69,10 +57,6 @@ void PercentField::SetRefValue(sal_Int64 nValue)
     if (!bLockAutoCalculation && (GetUnit() == FUNIT_CUSTOM))
         SetPrcntValue(nRealValue, eOldUnit);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void PercentField::ShowPercent(sal_Bool bPercent)
 {
@@ -98,7 +82,7 @@ void PercentField::ShowPercent(sal_Bool bPercent)
         SetDecimalDigits( 0 );
 
         nAktWidth = ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
-        // Um 0.5 Prozent aufrunden
+        // round to 0.5 percent
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
         MetricField::SetMin(Max(static_cast< sal_Int64 >(1), nPercent));
@@ -115,7 +99,6 @@ void PercentField::ShowPercent(sal_Bool bPercent)
         }
         else
             MetricFormatter::SetValue(nLastPercent);
-//      SetValue(100, FUNIT_CUSTOM);
     }
     else
     {
@@ -141,16 +124,11 @@ void PercentField::ShowPercent(sal_Bool bPercent)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void PercentField::SetValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
    MetricFormatter::SetValue(nNewValue, eInUnit);
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+
 void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (GetUnit() != FUNIT_CUSTOM || eInUnit == FUNIT_CUSTOM)
@@ -173,10 +151,6 @@ void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
         MetricFormatter::SetValue(nPercent);
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void PercentField::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
@@ -202,10 +176,6 @@ void PercentField::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void PercentField::SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (GetUnit() == FUNIT_CUSTOM)
@@ -214,18 +184,10 @@ void PercentField::SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit)
         MetricField::SetBaseValue(nNewValue, eInUnit);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Int64 PercentField::GetValue( FieldUnit eOutUnit )
 {
     return Convert(MetricField::GetValue(), GetUnit(), eOutUnit);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void PercentField::SetMin(sal_Int64 nNewMin, FieldUnit eInUnit)
 {
@@ -242,10 +204,6 @@ void PercentField::SetMin(sal_Int64 nNewMin, FieldUnit eInUnit)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
 {
     if (GetUnit() != FUNIT_CUSTOM)
@@ -254,13 +212,8 @@ void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
     {
         if (eInUnit == FUNIT_NONE)
             eInUnit = eOldUnit;
-//      SetRefValue(Convert(nNewMax, eInUnit, FUNIT_TWIP));
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Int64 PercentField::NormalizePercent(sal_Int64 nValue)
 {
@@ -271,10 +224,6 @@ sal_Int64 PercentField::NormalizePercent(sal_Int64 nValue)
 
     return nValue;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Int64 PercentField::DenormalizePercent(sal_Int64 nValue)
 {
@@ -289,10 +238,6 @@ sal_Int64 PercentField::DenormalizePercent(sal_Int64 nValue)
     return nValue;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool PercentField::IsValueModified()
 {
     if (GetUnit() == FUNIT_CUSTOM)
@@ -300,10 +245,6 @@ sal_Bool PercentField::IsValueModified()
     else
         return MetricField::IsValueModified();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Int64 PercentField::ImpPower10( sal_uInt16 n )
 {
@@ -316,10 +257,6 @@ sal_Int64 PercentField::ImpPower10( sal_uInt16 n )
     return nValue;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Int64 PercentField::GetRealValue(FieldUnit eOutUnit)
 {
     if (GetUnit() != FUNIT_CUSTOM)
@@ -327,10 +264,6 @@ sal_Int64 PercentField::GetRealValue(FieldUnit eOutUnit)
     else
         return Convert(GetValue(), GetUnit(), eOutUnit);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
 {
@@ -360,7 +293,7 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
             nAktWidth = nValue;
         else
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
-        // Um 0.5 Prozent runden
+        // Round to 0.5 percent
         return ((nAktWidth * 1000) / nRefValue + 5) / 10;
     }
 
@@ -368,3 +301,4 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
@@ -69,7 +68,7 @@
 #include <glossary.hxx>
 #include <gloshdl.hxx>
 #include <glosbib.hxx>
-#include <initui.hxx>                   // fuer ::GetGlossaries()
+#include <initui.hxx>                   // for ::GetGlossaries()
 #include <glosdoc.hxx>
 #include <macassgn.hxx>
 #include <swevent.hxx>
@@ -79,15 +78,9 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <swerror.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _GLOSSARY_HRC
 #include <glossary.hrc>
-#endif
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
@@ -129,9 +122,6 @@ String lcl_GetValidShortCut( const String& rName )
     return aBuf;
 }
 
-/* -----------------------------08.02.00 10:28--------------------------------
-
- ---------------------------------------------------------------------------*/
 struct GroupUserData
 {
     String      sGroupName;
@@ -144,7 +134,7 @@ struct GroupUserData
 };
 
 /*------------------------------------------------------------------------
- Beschreibung:  Dialog fuer neuen Bausteinnamen
+ Description:   dialog for new block name
 ------------------------------------------------------------------------*/
 class SwNewGlosNameDlg : public ModalDialog
 {
@@ -202,9 +192,8 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  aktuell eingestellte Gruppe erfragen / setzen
+ Description:   query / set currently set group
 ------------------------------------------------------------------------*/
-
 String SwGlossaryDlg::GetCurrGroup()
 {
     if( ::GetCurrGlosGroup() && ::GetCurrGlosGroup()->Len() )
@@ -212,16 +201,12 @@ String SwGlossaryDlg::GetCurrGroup()
     return SwGlossaries::GetDefName();
 }
 
-
-
 void SwGlossaryDlg::SetActGroup(const String &rGrp)
 {
     if( !::GetCurrGlosGroup() )
         ::SetCurrGlosGroup( new String );
     *(::GetCurrGlosGroup()) = rGrp;
 }
-
-
 
 SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
                             SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell) :
@@ -264,7 +249,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 {
     SvtLinguConfig aLocalLinguConfig;
 
-    // Static-Pointer initialisieren
+    // initialise static-pointer
     if( !::GetCurrGlosGroup() )
         ::SetCurrGlosGroup(new String);//(SwGlossaries::GetDefName());
 
@@ -286,9 +271,9 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aNameED.SetMaxTextLen(LONG_LENGTH);
     FreeResource();
 
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
 
-    aShowExampleCB.Check( pCfg->IsAutoTextPreview());
+    aShowExampleCB.Check( rCfg.IsAutoTextPreview());
     ShowPreviewHdl(&aShowExampleCB);
 
     bIsDocReadOnly = pSh->GetView().GetDocShell()->IsReadOnly() ||
@@ -299,33 +284,28 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.SetHelpId(HID_MD_GLOS_CATEGORY);
     aCategoryBox.SetStyle(aCategoryBox.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
-    aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
+    aCategoryBox.SetHighlightRange();   // select over full width
     aCategoryBox.SetNodeDefaultImages( );
     aCategoryBox.SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
     aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
 
     Init();
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwGlossaryDlg::~SwGlossaryDlg()
 {
-    SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-    pCfg->SetAutoTextPreview(aShowExampleCB.IsChecked()) ;
+    SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+    rCfg.SetAutoTextPreview(aShowExampleCB.IsChecked()) ;
 
     aCategoryBox.Clear();
     aEditBtn.SetPopupMenu(0);
     delete pMenu;
     delete pExampleFrame;
 }
+
 /*------------------------------------------------------------------------
- Beschreibung:  Auswahl neue Gruppe
+ Description:   select new group
 ------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
 {
     SvLBoxEntry* pEntry = pBox->FirstSelected();
@@ -338,7 +318,7 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     (*pGlosGroup) += GLOS_DELIM;
     (*pGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
     pGlossaryHdl->SetCurGroup(*pGlosGroup);
-    // Aktuellen Textbaustein setzen
+    // set current text block
     bReadOnly = pGlossaryHdl->IsReadOnly();
     EnableShortName( !bReadOnly );
     aEditBtn.Enable(!bReadOnly);
@@ -354,13 +334,13 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     }
     else
         ShowAutoText(aEmptyStr, aEmptyStr);
-    //Controls aktualisieren
+    // update controls
     NameModify(&aShortNameEdit);
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
         String sTemp(*::GetCurrGlosGroup());
-        // der nullte Pfad wird nicht aufgezeichnet!
+        // the zeroth path is not being recorded!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
             sTemp = sTemp.GetToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
@@ -368,10 +348,6 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     }
     return 0;
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwGlossaryDlg::Apply()
 {
@@ -381,7 +357,7 @@ void SwGlossaryDlg::Apply()
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
         String sTemp(*::GetCurrGlosGroup());
-        // der nullte Pfad wird nicht aufgezeichnet!
+        // the zeroth path is not being recorded!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
             sTemp = sTemp.GetToken(0, GLOS_DELIM);
         aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, sTemp));
@@ -389,22 +365,20 @@ void SwGlossaryDlg::Apply()
         aReq.Done();
     }
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
+
 /* inline */ void SwGlossaryDlg::EnableShortName(sal_Bool bOn)
 {
     aShortNameLbl.Enable(bOn);
     aShortNameEdit.Enable(bOn);
 }
 
-/* -----------------26.11.98 16:15-------------------
- * existiert der Titel in der ausgewaehlten Gruppe?
+/* --------------------------------------------------
+ * does the title exist in the selected group?
  * --------------------------------------------------*/
 SvLBoxEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
                 const String& rShort)
 {
-    //evtl. vorhandenen Eintrag in der TreeListBox suchen
+    // look for possible entry in TreeListBox
     SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
     if(pEntry)
     {
@@ -424,11 +398,6 @@ SvLBoxEntry* SwGlossaryDlg::DoesBlockExist(const String& rBlock,
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
 {
     String aName(aNameED.GetText());
@@ -446,8 +415,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     sal_Bool bNotFound = !DoesBlockExist(aName, sShortSearch);
     if(bNameED)
     {
-            // ist der Text durch einen Klick in die Listbox in das
-            // Edit gekommem?
+            // did the text get in to the Listbbox in the Edit with a click?
         if(bNotFound)
         {
             aShortNameEdit.SetText( lcl_GetValidShortCut( aName ) );
@@ -472,10 +440,6 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     }
     return 0;
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 
 IMPL_LINK_INLINE_START( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
 {
@@ -485,10 +449,6 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, EMPTYARG )
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 
 IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
 {
@@ -513,10 +473,6 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
     pMn->EnableItem( FN_GL_IMPORT, bEnable );
     return 1;
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
 
 IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 {
@@ -533,7 +489,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         break;
         case FN_GL_DEFINE_TEXT:
             bNoAttr = sal_True;
-            // Kein break!!!
+            // no break!!!
         case FN_GL_DEFINE:
         {
             const String aStr(aNameED.GetText());
@@ -555,13 +511,13 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 pChild->SetUserData(new String(aShortName));
                 aNameED.SetText(aStr);
                 aShortNameEdit.SetText(aShortName);
-                NameModify(&aNameED);       // fuer Schalten der Buttons
+                NameModify(&aNameED);       // for toggling the buttons
 
                 if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
                 {
                     SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
                     String sTemp(*::GetCurrGlosGroup());
-                    // der nullte Pfad wird nicht aufgezeichnet!
+                    // the zeroth path is not being recorded!
                     if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
                         sTemp = sTemp.GetToken(0, GLOS_DELIM);
                     aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
@@ -612,7 +568,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 if(aTitle.Len() && pGlossaryHdl->DelGlossary(aShortName))
                 {
                     SvLBoxEntry* pChild = DoesBlockExist(aTitle, aShortName);
-                    DBG_ASSERT(pChild, "Eintrag nicht gefunden!");
+                    OSL_ENSURE(pChild, "entry not found!");
                     SvLBoxEntry* pParent = aCategoryBox.GetParent(pChild);
                     aCategoryBox.Select(pParent);
 
@@ -638,7 +594,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
 
             aSet.Put( aItem );
-            aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_TEXTBAUST ) );
+            aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
 
             const SfxPoolItem* pItem;
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -669,7 +625,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
             SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );
-            SfxFilterMatcherIter aIter( &aMatcher );
+            SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
             while ( pFilter )
             {
@@ -700,11 +656,10 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     }
     return 1;
 }
+
 /*--------------------------------------------------------------------
-     Beschreibung:  Dialog Verwaltung Bereiche
+     Description:   dialog manage regions
  --------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
 {
     SwGlossaries* pGloss = ::GetGlossaries();
@@ -780,19 +735,20 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Initialisierung; aus Ctor und nach Bearbeiten Bereiche
+ Description:   initialisation; from Ctor and after editing regions
 ------------------------------------------------------------------------*/
-
-
 void SwGlossaryDlg::Init()
 {
     aCategoryBox.SetUpdateMode( sal_False );
     aCategoryBox.Clear();
-    // Textbausteinbereiche anzeigen
+    // display text block regions
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvLBoxEntry* pSelEntry = 0;
     const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM));
     const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32());
+    // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
+    const String sMyAutoTextEnglish(RTL_CONSTASCII_USTRINGPARAM("My AutoText"));
+    const String sMyAutoTextTranslated(SW_RESSTR(STR_MY_AUTOTEXT));
     for(sal_uInt16 nId = 0; nId < nCnt; ++nId )
     {
         String sTitle;
@@ -801,6 +757,8 @@ void SwGlossaryDlg::Init()
             continue;
         if(!sTitle.Len())
             sTitle = sGroupName.GetToken( 0, GLOS_DELIM );
+        if(sTitle == sMyAutoTextEnglish)
+            sTitle = sMyAutoTextTranslated;
         SvLBoxEntry* pEntry = aCategoryBox.InsertEntry( sTitle );
         sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.GetToken( 1, GLOS_DELIM ).ToInt32());
 
@@ -813,7 +771,7 @@ void SwGlossaryDlg::Init()
         if(sSelStr == pData->sGroupName && nSelPath == nPath)
             pSelEntry = pEntry;
 
-        //Eintraege fuer die Gruppen auffuellen
+        // fill entries for the groups
         {
             pGlossaryHdl->SetCurGroup(sGroupName, sal_False, sal_True);
             const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
@@ -826,7 +784,7 @@ void SwGlossaryDlg::Init()
             }
         }
     }
-        // Aktuelle Gruppe setzen und Textbausteine anzeigen
+        // set current group and display text blocks
     if(!pSelEntry)
     {
         //find a non-readonly group
@@ -864,22 +822,18 @@ void SwGlossaryDlg::Init()
     aCategoryBox.SetUpdateMode( sal_True );
     aCategoryBox.Update();
 
-    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
-    aFileRelCB.Check( pCfg->IsSaveRelFile() );
+    const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+    aFileRelCB.Check( rCfg.IsSaveRelFile() );
     aFileRelCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
-    aNetRelCB.Check( pCfg->IsSaveRelNet() );
+    aNetRelCB.Check( rCfg.IsSaveRelNet() );
     aNetRelCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
-    aInsertTipCB.Check( pCfg->IsAutoTextTip() );
+    aInsertTipCB.Check( rCfg.IsAutoTextTip() );
     aInsertTipCB.SetClickHdl(LINK(this, SwGlossaryDlg, CheckBoxHdl));
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 
 IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 {
-//EndDialog darf nicht im MenuHdl aufgerufen werden
+// EndDialog must not be called in MenuHdl
     if(aEditBtn.GetCurItemId() == FN_GL_EDIT )
     {
         SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
@@ -893,9 +847,8 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 IMPL_LINK_INLINE_END( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
 
 /*------------------------------------------------------------------------
- Beschreibung:  KeyInput fuer ShortName - Edits ohne Spaces
+ Description:   KeyInput for ShortName - Edits without Spaces
 ------------------------------------------------------------------------*/
-
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 {
     String aName(aNewName.GetText());
@@ -910,9 +863,6 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
     aOk.Enable(bEnable);
     return 0;
 }
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK( SwNewGlosNameDlg, Rename, Button *, EMPTYARG )
 {
@@ -930,25 +880,21 @@ IMPL_LINK( SwNewGlosNameDlg, Rename, Button *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
 {
-    SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
     sal_Bool bCheck = pBox->IsChecked();
     if( pBox == &aInsertTipCB )
-        pCfg->SetAutoTextTip(bCheck);
+        rCfg.SetAutoTextTip(bCheck);
     else if(pBox == &aFileRelCB)
-        pCfg->SetSaveRelFile(bCheck);
+        rCfg.SetSaveRelFile(bCheck);
     else
-        pCfg->SetSaveRelNet(bCheck);
+        rCfg.SetSaveRelNet(bCheck);
     return 0;
 }
 
-/* -----------------26.11.98 15:18-------------------
- * TreeListBox fuer Gruppen und Bausteine
+/* --------------------------------------------------
+ * TreeListBox for groups and blocks
  * --------------------------------------------------*/
 SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId) :
     SvTreeListBox(pParent, rResId),
@@ -958,9 +904,7 @@ SwGlTreeListBox::SwGlTreeListBox(Window* pParent, const ResId& rResId) :
     FreeResource();
     SetDragDropMode( SV_DRAGDROP_CTRL_MOVE|SV_DRAGDROP_CTRL_COPY );
 }
-/* -----------------30.11.98 10:49-------------------
- *
- * --------------------------------------------------*/
+
 void SwGlTreeListBox::Clear()
 {
     SvLBoxEntry* pEntry = First();
@@ -975,14 +919,11 @@ void SwGlTreeListBox::Clear()
     SvTreeListBox::Clear();
 }
 
-/*-----------------10.06.97 14.52-------------------
-
---------------------------------------------------*/
 void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
     SvLBoxEntry* pEntry = GetEntry( aPos );
-    // Hilfe gibt es nur fuer die Gruppennamen
+    // there's only help for groups' names
     if(pEntry)
     {
         SvLBoxTab* pTab;
@@ -1029,9 +970,7 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         }
     }
 }
-/* -----------------26.11.98 14:42-------------------
- *
- * --------------------------------------------------*/
+
 DragDropMode SwGlTreeListBox::NotifyStartDrag(
                     TransferDataContainer& /*rContainer*/,
                     SvLBoxEntry* pEntry )
@@ -1060,21 +999,17 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
     }
     return eRet;
 }
-/* -----------------27.11.98 09:35-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
-    // TODO: Readonly - Ueberpruefung fehlt noch!
+    // TODO: Readonly - check still missing!
     SvLBoxEntry* pSrcParent = GetParent(pEntry) ? GetParent(pEntry) : pEntry;
     SvLBoxEntry* pDestParent =
         GetParent(pDragEntry ) ? GetParent(pDragEntry ) : pDragEntry ;
     return pDestParent != pSrcParent;
 
 }
-/* -----------------26.11.98 14:42-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& /*rpNewParent*/,
@@ -1082,12 +1017,12 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
                                 )
 {
     pDragEntry = 0;
-    if(!pTarget) //An den Anfang verschieben
+    if(!pTarget) // move to the beginning
     {
         pTarget = GetEntry(0);
     }
-    // 1. wird in verschiedene Gruppen verschoben?
-    // 2. darf in beiden Gruppen geschrieben werden?
+    // 1. move to different groups?
+    // 2. allowed to write in both groups?
     SvLBoxEntry* pSrcParent = GetParent(pEntry);
     SvLBoxEntry* pDestParent =
         GetParent(pTarget) ? GetParent(pTarget) : pTarget;
@@ -1118,11 +1053,9 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
             GetModel()->Remove(pEntry);
         }
     }
-    return sal_False; //sonst wird der Eintrag automatisch vorgenommen
+    return sal_False; // otherwise the entry is being set automatically
 }
-/* -----------------26.11.98 14:42-------------------
- *
- * --------------------------------------------------*/
+
 sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& /*rpNewParent*/,
@@ -1130,9 +1063,9 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
                                 )
 {
     pDragEntry = 0;
-    // 1. wird in verschiedene Gruppen verschoben?
-    // 2. darf in beiden Gruppen geschrieben werden?
-    if(!pTarget) //An den Anfang verschieben
+    // 1. move in different groups?
+    // 2. allowed to write to both groups?
+    if(!pTarget) // move to the beginning
     {
         pTarget = GetEntry(0);
     }
@@ -1167,13 +1100,9 @@ sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
             pChild->SetUserData(new String(sShortName));
         }
     }
-    return sal_False; //sonst wird der Eintrag automatisch vorgenommen
+    return sal_False; // otherwise the entry is being set automatically
 }
 
-
-/*-----------------10.06.97 15.18-------------------
-
---------------------------------------------------*/
 String SwGlossaryDlg::GetCurrGrpName() const
 {
     SvLBoxEntry* pEntry = aCategoryBox.FirstSelected();
@@ -1190,16 +1119,13 @@ String SwGlossaryDlg::GetCurrGrpName() const
     return sRet;
 }
 
-/*-----------------11.06.97 08.17-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
         AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );
         pDlg->SetPath(sGlosPath);
@@ -1217,9 +1143,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     }
     return 0;
 }
-/* -----------------28.07.99 13:48-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
 {
     sal_Bool bCreated = sal_False;
@@ -1243,9 +1167,7 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
 
     return 0;
 };
-/* -----------------18.11.99 17:09-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl,  void *, EMPTYARG )
 {
     sal_Bool bShow = aShowExampleCB.IsChecked();
@@ -1255,9 +1177,6 @@ IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl,  void *, EMPTYARG )
     return 0;
 }
 
-/* -----------------28.07.99 16:28-------------------
-
- --------------------------------------------------*/
 void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
 {
     if(aExampleWIN.IsVisible())
@@ -1267,9 +1186,7 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
         pExampleFrame->ClearDocument( sal_True );
     }
 }
-/* -----------------------------21.12.00 11:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwGlossaryDlg::ResumeShowAutoText()
 {
     String sGroup, sShortName;
@@ -1307,4 +1224,4 @@ void    SwGlossaryDlg::ResumeShowAutoText()
     ResetResumeData();
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

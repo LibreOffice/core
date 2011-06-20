@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,7 +41,6 @@
 #include <prcntfld.hxx>
 #include <globals.hrc>
 
-
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
 struct FrmMap;
@@ -48,12 +48,11 @@ struct FrmMap;
 struct SwPosition;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Rahmendialog
+     Description:   frame dialog
  --------------------------------------------------------------------*/
-
 class SwFrmPage: public SfxTabPage
 {
-    // Size
+    // size
     FixedLine       aSizeFL;
     FixedText       aWidthFT;
     FixedText       aWidthAutoFT;
@@ -68,7 +67,7 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aFixedRatioCB;
     PushButton      aRealSizeBT;
 
-    // Anker
+    // anchor
     FixedLine       aTypeSepFL;
     FixedLine       aTypeFL;
     RadioButton     aAnchorAtPageRB;
@@ -77,7 +76,7 @@ class SwFrmPage: public SfxTabPage
     RadioButton     aAnchorAsCharRB;
     RadioButton     aAnchorAtFrameRB;
 
-    // Position
+    // position
     FixedLine       aPositionFL;
     FixedText       aHorizontalFT;
     ListBox         aHorizontalDLB;
@@ -95,7 +94,7 @@ class SwFrmPage: public SfxTabPage
     // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
     CheckBox        aFollowTextFlowCB;
 
-    // Example
+    // example
     SvxSwFrameExample   aExampleWN;
 
     //'string provider'
@@ -111,7 +110,6 @@ class SwFrmPage: public SfxTabPage
     sal_Bool            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
     // --> OD 2009-08-31 #mongolianlayou#
     sal_Bool            bIsVerticalL2R;
-    // <--
     sal_Bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
     sal_Bool            bHtmlMode;
     sal_uInt16          nHtmlMode;
@@ -126,7 +124,7 @@ class SwFrmPage: public SfxTabPage
     // to character anchored objects.
     const SwPosition* mpToCharCntntPos;
 
-    // Die alten Ausrichtungen
+    // old alignment
     short        nOldH;
     short    nOldHRel;
     short        nOldV;
@@ -158,7 +156,7 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK( AutoWidthClickHdl, void* );
     DECL_LINK( AutoHeightClickHdl, void* );
 
-    // Beispiel aktualisieren
+    // update example
     void            UpdateExample();
     DECL_LINK( ModifyHdl, Edit * );
 
@@ -207,7 +205,7 @@ public:
 
 class SwGrfExtPage: public SfxTabPage
 {
-    // Spiegeln
+    // mirror
     FixedLine       aMirrorFL;
     CheckBox        aMirrorVertBox;
     CheckBox        aMirrorHorzBox;
@@ -228,7 +226,7 @@ class SwGrfExtPage: public SfxTabPage
 
     sal_Bool            bHtmlMode;
 
-    // Handler fuer Spiegeln
+    // handler for mirroring
     DECL_LINK( MirrorHdl, CheckBox * );
     DECL_LINK( BrowseHdl, Button * );
 
@@ -248,10 +246,9 @@ public:
     virtual int  DeactivatePage(SfxItemSet *pSet);
 };
 
-
 class SwFrmURLPage : public SfxTabPage
 {
-    //Hyperlink
+    // hyperlink
     FixedLine       aHyperLinkFL;
     FixedText       aURLFT;
     Edit            aURLED;
@@ -261,7 +258,7 @@ class SwFrmURLPage : public SfxTabPage
     FixedText       aFrameFT;
     ComboBox        aFrameCB;
 
-    //Image map
+    // image map
     FixedLine       aImageFL;
     CheckBox        aServerCB;
     CheckBox        aClientCB;
@@ -282,10 +279,6 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 };
-
-/*-----------------13.11.96 12.59-------------------
-
---------------------------------------------------*/
 
 class SwFrmAddPage : public SfxTabPage
 {
@@ -340,3 +333,5 @@ public:
 };
 
 #endif // _FRMPAGE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

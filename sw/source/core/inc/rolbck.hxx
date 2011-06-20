@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,10 +31,11 @@
 #include <tools/solar.h>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
 #include <svl/itemset.hxx>
+
+#include <set>
 
 //Nur die History anziehen, um das docnew.cxx gegen die CLOOK's zu behaupten.
 
@@ -69,12 +71,9 @@ class SwCharFmt;
 #include <tox.hxx>
 
 #include <SwNumberTreeTypes.hxx>
-// --> OD 2007-10-17 #i81002#
 #include <IDocumentMarkAccess.hxx>
-// <--
 
 #include <memory>
-
 
 enum HISTORY_HINT {
     HSTRY_SETFMTHNT,
@@ -92,7 +91,7 @@ enum HISTORY_HINT {
     HSTRY_RESETATTRSET,
     HSTRY_CHGFLYANCHOR,
     HSTRY_CHGFLYCHAIN,
-    HSTRY_CHGCHARFMT, // #i27615#
+    HSTRY_CHGCHARFMT,
     HSTRY_END
 };
 
@@ -127,9 +126,7 @@ class SwHistoryResetFmt : public SwHistoryHint
     const sal_uInt16 m_nWhich;
 
 public:
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     SwHistoryResetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNodeIdx );
-    // <--
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
@@ -267,7 +264,6 @@ class SwHistoryBookmark : public SwHistoryHint
         bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
         const ::rtl::OUString& GetName() const;
 
-
     private:
         const ::rtl::OUString m_aName;
         ::rtl::OUString m_aShortName;
@@ -291,11 +287,10 @@ class SwHistorySetAttrSet : public SwHistoryHint
 
 public:
     SwHistorySetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
-                         const SvUShortsSort& rSetArr );
+                         const std::set<sal_uInt16> &rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
-
 
 class SwHistoryResetAttrSet : public SwHistoryHint
 {
@@ -338,7 +333,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 };
 
-// #i27615#
 class SwHistoryChangeCharFmt : public SwHistoryHint
 {
     const SfxItemSet m_OldSet;
@@ -349,7 +343,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
-
 
 #endif
 
@@ -376,17 +369,15 @@ public:
     // call all objects between nStart and TmpEnd; store nStart as TmpEnd
     bool TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool ToFirst = true );
 
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
               sal_uLong nNodeIdx );
-    // <--
     void Add( SwTxtAttr* pTxtHt, sal_uLong nNodeIdx, bool bNewAttr = true );
     void Add( SwFmtColl*, sal_uLong nNodeIdx, sal_uInt8 nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
     void Add( SwFrmFmt& rFmt );
     void Add( SwFlyFrmFmt&, sal_uInt16& rSetPos );
     void Add( const SwTxtFtn& );
-    void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt); // #i27615#
+    void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt);
 
     sal_uInt16 Count() const { return m_SwpHstry.Count(); }
     sal_uInt16 GetTmpEnd() const { return m_SwpHstry.Count() - m_nEndDiff; }
@@ -409,9 +400,7 @@ public:
     // used by Undo classes (Delete/Overwrite/Inserts)
     void CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx, xub_StrLen nStart,
                     xub_StrLen nEnd, bool bFields );
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     void CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx );
-    // <--
 };
 
 #ifndef ROLBCK_HISTORY_ONLY
@@ -419,7 +408,7 @@ public:
 class SwRegHistory : public SwClient
 {
 private:
-    SvUShortsSort m_WhichIdSet;
+    std::set<sal_uInt16> m_WhichIdSet;
     SwHistory * const m_pHistory;
     sal_uLong m_nNodeIndex;
 
@@ -429,13 +418,11 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     SwRegHistory( SwHistory* pHst );
-    // <--
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
 
-    /// @return true iff at least 1 item was inserted
+    /// @return true if at least 1 item was inserted
     bool InsertItems( const SfxItemSet& rSet,
         xub_StrLen const nStart, xub_StrLen const nEnd,
         SetAttrMode const nFlags );
@@ -448,6 +435,6 @@ public:
 
 #endif
 
-
 #endif // _ROLBCK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,9 +56,6 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes
 |*
 |*  SwColumnFrm::SwColumnFrm()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    AMA 30. Oct 98
-|*
 |*************************************************************************/
 SwColumnFrm::SwColumnFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
     SwFtnBossFrm( pFmt, pSib )
@@ -85,21 +83,18 @@ SwColumnFrm::~SwColumnFrm()
 |*
 |*  SwLayoutFrm::ChgColumns()
 |*
-|*  Ersterstellung      MA 11. Feb. 93
-|*  Letzte Aenderung    MA 12. Oct. 98
-|*
 |*************************************************************************/
 
 void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
 {
-    ASSERT( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
+    OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
             "Keine Spalten zu entfernen." );
 
     SwColumnFrm *pColumn = (SwColumnFrm*)pCont->Lower();
     ::lcl_RemoveFtns( pColumn, sal_True, sal_True );
     while ( pColumn->GetNext() )
     {
-        ASSERT( pColumn->GetNext()->IsColumnFrm(),
+        OSL_ENSURE( pColumn->GetNext()->IsColumnFrm(),
                 "Nachbar von ColFrm kein ColFrm." );
         pColumn = (SwColumnFrm*)pColumn->GetNext();
     }
@@ -198,7 +193,7 @@ static sal_Bool lcl_AddColumns( SwLayoutFrm *pCont, sal_uInt16 nCount )
     return bRet;
 }
 
-/*-----------------21.09.99 15:42-------------------
+/*--------------------------------------------------
  * ChgColumns() adds or removes columns from a layoutframe.
  * Normally, a layoutframe with a column attribut of 1 or 0 columns contains
  * no columnframe. However, a sectionframe with "footnotes at the end" needs
@@ -211,14 +206,13 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFtn )
         return;
-    // --> OD 2009-08-12 #i97379#
+    // #i97379#
     // If current lower is a no text frame, then columns are not allowed
     if ( Lower() && Lower()->IsNoTxtFrm() &&
          rNew.GetNumCols() > 1 )
     {
         return;
     }
-    // <--
 
     sal_uInt16 nNewNum, nOldNum = 1;
     if( Lower() && Lower()->IsColumnFrm() )
@@ -245,7 +239,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     if( nOldNum != nNewNum || bChgFtn )
     {
         SwDoc *pDoc = GetFmt()->GetDoc();
-        ASSERT( pDoc, "FrmFmt gibt kein Dokument her." );
+        OSL_ENSURE( pDoc, "FrmFmt gibt kein Dokument her." );
         // SaveCntnt wuerde auch den Inhalt der Fussnotencontainer aufsaugen
         // und im normalen Textfluss unterbringen.
         if( IsPageBodyFrm() )
@@ -311,7 +305,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     //unnuetzte Aktionen beim Einstellen zur Folge haben.
     if ( pSave )
     {
-        ASSERT( Lower() && Lower()->IsLayoutFrm() &&
+        OSL_ENSURE( Lower() && Lower()->IsLayoutFrm() &&
                 ((SwLayoutFrm*)Lower())->Lower() &&
                 ((SwLayoutFrm*)Lower())->Lower()->IsLayoutFrm(),
                 "Gesucht: Spaltenbody (Tod oder Lebend)." );   // ColumnFrms jetzt mit BodyFrm
@@ -322,9 +316,6 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 /*************************************************************************
 |*
 |*  SwLayoutFrm::AdjustColumns()
-|*
-|*  Ersterstellung      MA 19. Jan. 99
-|*  Letzte Aenderung    MA 19. Jan. 99
 |*
 |*************************************************************************/
 
@@ -368,12 +359,11 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
     const sal_Bool bR2L = IsRightToLeft();
     SwFrm *pCol = bR2L ? GetLastLower() : Lower();
 
-    // --> FME 2004-07-16 #i27399#
+    // #i27399#
     // bOrtho means we have to adjust the column frames manually. Otherwise
     // we may use the values returned by CalcColWidth:
     const sal_Bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
     long nGutter = 0;
-    // <--
 
     for ( sal_uInt16 i = 0; i < pAttr->GetNumCols(); ++i )
     {
@@ -483,3 +473,4 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

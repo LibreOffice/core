@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
 
@@ -81,17 +82,15 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServi
     return aRet;
 }
 
+namespace
+{
+    class theSwAccessibleEmbeddedObjectImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleEmbeddedObjectImplementationId > {};
+}
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleEmbeddedObjectImplementationId::get().getSeq();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

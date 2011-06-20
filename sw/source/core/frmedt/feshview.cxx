@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -129,11 +130,9 @@ extern sal_Bool bNoInterrupt;       // in swapp.cxx
     }
     else if( !pFlyFmt || RES_DRAWFRMFMT == pFlyFmt->Which() )
     {
-        // --> OD 2007-07-25 #136039#
-        // assure consistent cursor
+        // --> assure consistent cursor
         pSh->KillPams();
         pSh->ClearMark();
-        // <--
         pSh->SetCrsr( pSh->Imp()->GetDrawView()->GetAllMarkedRect().TopLeft(), sal_True);
     }
 }
@@ -208,7 +207,7 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
 
     if ( pObj )
     {
-        ASSERT( !bEnterGroup, "SW_ENTER_GROUP is not supported" );
+        OSL_ENSURE( !bEnterGroup, "SW_ENTER_GROUP is not supported" );
         pDView->MarkObj( pObj, Imp()->GetPageView() );
     }
     else
@@ -241,7 +240,7 @@ sal_Bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pOb
         if ( GetCntType() & CNT_GRF )
         {
             const SwFlyFrm *pTmp = GetFlyFromMarked( &rMrkList, this );
-            ASSERT( pTmp, "Graphic without Fly" );
+            OSL_ENSURE( pTmp, "Graphic without Fly" );
             if ( ((SwNoTxtFrm*)pTmp->Lower())->HasAnimation() )
                 ((SwNoTxtFrm*)pTmp->Lower())->StopAnimation( GetOut() );
         }
@@ -306,7 +305,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
     if( pOld )
     {
         SwFrm* pNew = pOld;
-        // --> OD 2004-07-16 #i28701#
+        // #i28701#
         SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
         SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
         SwFmtAnchor aAnch( rFmt.GetAnchor() );
@@ -335,7 +334,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
         switch ( nAnchorId ) {
             case FLY_AT_PAGE:
             {
-                ASSERT( pOld->IsPageFrm(), "Wrong anchor, page exspected." );
+                OSL_ENSURE( pOld->IsPageFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_UP == nDir )
                     pNew = pOld->GetPrev();
                 else if( SW_MOVE_DOWN == nDir )
@@ -349,7 +348,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
             }
             case FLY_AT_CHAR:
             {
-                ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
+                OSL_ENSURE( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_LEFT == nDir || SW_MOVE_RIGHT == nDir )
                 {
                     SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
@@ -383,7 +382,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
             } // no break!
             case FLY_AT_PARA:
             {
-                ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
+                OSL_ENSURE( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_UP == nDir )
                     pNew = pOld->FindPrev();
                 else if( SW_MOVE_DOWN == nDir )
@@ -409,9 +408,9 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
             }
             case FLY_AT_FLY:
             {
-                ASSERT( pOld->IsFlyFrm(), "Wrong anchor, fly frame exspected.");
+                OSL_ENSURE( pOld->IsFlyFrm(), "Wrong anchor, fly frame exspected.");
                 SwPageFrm* pPage = pOld->FindPageFrm();
-                ASSERT( pPage, "Where's my page?" );
+                OSL_ENSURE( pPage, "Where's my page?" );
                 SwFlyFrm* pNewFly = NULL;
                 if( pPage->GetSortedObjs() )
                 {
@@ -500,8 +499,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
         if( bRet )
         {
             StartAllAction();
-            // --> OD 2006-02-28 #125892#
-            // handle change of anchor node:
+            // --> handle change of anchor node:
             // if count of the anchor frame also change, the fly frames have to be
             // re-created. Thus, delete all fly frames except the <this> before the
             // anchor attribute is change and re-create them afterwards.
@@ -516,8 +514,7 @@ sal_Bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                 rFmt.GetDoc()->SetAttr( aAnch, rFmt );
                 delete pHandleAnchorNodeChg;
             }
-            // <--
-            // --> OD 2004-06-24 #i28701# - no call of method
+            // #i28701# - no call of method
             // <CheckCharRectAndTopOfLine()> for to-character anchored
             // Writer fly frame needed. This method call can cause a
             // format of the anchor frame, which is no longer intended.
@@ -565,7 +562,7 @@ sal_uInt16 SwFEShell::GetSelFrmType() const
                 eType = FRMTYPE_FLY_ATCNT;
             else
             {
-                ASSERT( pFly->IsFlyInCntFrm(), "Neuer Rahmentyp?" );
+                OSL_ENSURE( pFly->IsFlyInCntFrm(), "Neuer Rahmentyp?" );
                 eType = FRMTYPE_FLY_INCNT;
             }
         }
@@ -576,7 +573,7 @@ sal_uInt16 SwFEShell::GetSelFrmType() const
     return eType;
 }
 
-// #108784# does the draw selection contain a control?
+// does the draw selection contain a control?
 bool SwFEShell::IsSelContainsControl() const
 {
     bool bRet = false;
@@ -607,7 +604,6 @@ void SwFEShell::ScrollTo( const Point &rPt )
          (!Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ||
           Imp()->IsDragPossible( rPt )) )
     {
-        //SwSaveHdl aSave( Imp() );
         ScrollMDI( this, aRect, SCROLLVAL, SCROLLVAL );
     }
 }
@@ -637,7 +633,7 @@ long SwFEShell::BeginDrag( const Point* pPt, sal_Bool )
     {
         delete pChainFrom; delete pChainTo; pChainFrom = pChainTo = 0;
         SdrHdl* pHdl = pView->PickHandle( *pPt );
-        pView->BegDragObj( *pPt, 0 /*GetWin()*/, pHdl );
+        pView->BegDragObj( *pPt, 0, pHdl );
         ::FrameNotify( this, FLY_DRAG );
         return 1;
     }
@@ -651,7 +647,7 @@ long SwFEShell::BeginDrag( const Point* pPt, sal_Bool )
 
 long SwFEShell::Drag( const Point *pPt, sal_Bool )
 {
-    ASSERT( Imp()->HasDrawView(), "Drag without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "Drag without DrawView?" );
     if ( Imp()->GetDrawView()->IsDragObj() )
     {
         ScrollTo( *pPt );
@@ -671,7 +667,7 @@ long SwFEShell::Drag( const Point *pPt, sal_Bool )
 
 long SwFEShell::EndDrag( const Point *, sal_Bool )
 {
-    ASSERT( Imp()->HasDrawView(), "EndDrag without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "EndDrag without DrawView?" );
     SdrView *pView = Imp()->GetDrawView();
     if ( pView->IsDragObj() )
     {
@@ -721,7 +717,7 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
 
 void SwFEShell::BreakDrag()
 {
-    ASSERT( Imp()->HasDrawView(), "BreakDrag without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "BreakDrag without DrawView?" );
     if ( Imp()->GetDrawView()->IsDragObj() )
         Imp()->GetDrawView()->BrkDragObj();
     SetChainMarker();
@@ -748,11 +744,9 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
             if ( pCFrm )
             {
                 SwCntntNode *pCNode = pCFrm->GetNode();
-                // --> OD 2007-07-25 #126039#
-                // assure, that the cursor is consistent.
+                // --> assure, that the cursor is consistent.
                 KillPams();
                 ClearMark();
-                // <--
                 SwPaM       *pCrsr  = GetCrsr();
 
                 pCrsr->GetPoint()->nNode = *pCNode;
@@ -817,9 +811,8 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             if( !pAnch )
                 continue;
             pPage = pAnch->FindPageFrm();
-            // --> OD 2006-08-15 #i68520# - naming changed
+            // #i68520# - naming changed
             aRect = GetBoundRectOfAnchoredObj( pO );
-            // <--
         }
 
         sal_uInt32 nCount = pPage->GetSortedObjs() ? pPage->GetSortedObjs()->Count() : 0;
@@ -861,9 +854,9 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 
 void SwFEShell::SelectionToTop( sal_Bool bTop )
 {
-    ASSERT( Imp()->HasDrawView(), "SelectionToTop without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "SelectionToTop without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    ASSERT( rMrkList.GetMarkCount(), "Kein Object Selektiert." );
+    OSL_ENSURE( rMrkList.GetMarkCount(), "Kein Object Selektiert." );
 
     SwFlyFrm *pFly = ::GetFlyFromMarked( &rMrkList, this );
     if ( pFly && pFly->IsFlyInCntFrm() )
@@ -881,9 +874,9 @@ void SwFEShell::SelectionToTop( sal_Bool bTop )
 
 void SwFEShell::SelectionToBottom( sal_Bool bBottom )
 {
-    ASSERT( Imp()->HasDrawView(), "SelectionToBottom without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "SelectionToBottom without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-    ASSERT( rMrkList.GetMarkCount(), "Kein Object Selektiert." );
+    OSL_ENSURE( rMrkList.GetMarkCount(), "Kein Object Selektiert." );
 
     SwFlyFrm *pFly = ::GetFlyFromMarked( &rMrkList, this );
     if ( pFly && pFly->IsFlyInCntFrm() )
@@ -939,7 +932,6 @@ short SwFEShell::GetLayerId() const
 |*  Beschreibung        Objekt ueber/unter dem Dokument
 |*
 *************************************************************************/
-// OD 25.06.2003 #108784#
 // Note: only visible objects can be marked. Thus, objects with invisible
 //       layer IDs have not to be considered.
 //       If <SwFEShell> exists, layout exists!!
@@ -949,22 +941,20 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
-        // OD 25.06.2003 #108784# - correct type of <nControls>
+        // correct type of <nControls>
         for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( !pObj )
                 continue;
-            // OD 21.08.2003 #i18447# - no change of layer for controls
             // or group objects containing controls.
-            // --> OD 2010-09-14 #i113730#
+            // --> #i113730#
             // consider that a member of a drawing group has been selected.
             const SwContact* pContact = ::GetUserCall( pObj );
-            ASSERT( pContact && pContact->GetMaster(), "<SwFEShell::ChangeOpaque(..)> - missing contact or missing master object at contact!" );
+            OSL_ENSURE( pContact && pContact->GetMaster(), "<SwFEShell::ChangeOpaque(..)> - missing contact or missing master object at contact!" );
             const bool bControlObj = ( pContact && pContact->GetMaster() )
                                      ? ::CheckControlLayer( pContact->GetMaster() )
                                      : ::CheckControlLayer( pObj );
-            // <--
             if ( !bControlObj && pObj->GetLayer() != nLayerId )
             {
                 pObj->SetLayer( nLayerId );
@@ -1036,7 +1026,7 @@ void SwFEShell::EndTextEdit()
     //keinen Text mehr enthaelt und keine Attribute traegt) wird das
     //Objekt gel�scht. Alle anderen markierten Objekte bleiben erhalten.
 
-    ASSERT( Imp()->HasDrawView() && Imp()->GetDrawView()->IsTextEdit(),
+    OSL_ENSURE( Imp()->HasDrawView() && Imp()->GetDrawView()->IsTextEdit(),
             "EndTextEdit an no Object" );
 
     StartAllAction();
@@ -1112,11 +1102,6 @@ int SwFEShell::IsInsideSelectedObj( const Point &rPt )
 bool SwFEShell::IsObjSelectable( const Point& rPt )
 {
     SET_CURR_SHELL(this);
-#ifdef OLD
-    if( Imp()->HasDrawView() )
-        return Imp()->GetDrawView()->PickSomething( rPt, MINMOVE );
-    return 0;
-#else
     SwDrawView *pDView = Imp()->GetDrawView();
     bool bRet = false;
     if( pDView )
@@ -1130,10 +1115,8 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
         pDView->SetHitTolerancePixel( nOld );
     }
     return bRet;
-#endif
 }
 
-// #107513#
 // Test if there is a object at that position and if it should be selected.
 sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 {
@@ -1154,7 +1137,7 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
         if ( bRet && pObj )
         {
             const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
-            // --> OD 2009-12-30 #i89920#
+            // #i89920#
             // Do not select object in background which is overlapping this text
             // at the given position.
             bool bObjInBackground( false );
@@ -1210,7 +1193,6 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     }
                 }
             }
-            // <--
 
             if ( bRet )
             {
@@ -1240,7 +1222,7 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 |*      TopLeft aus, andernfalls von der Mitte des aktuellen CharRects.
 |*
 *************************************************************************/
-/* ------------------------------------
+/* --------------------------------------------------
  * Beinhaltet das Objekt ein Control oder Gruppen,
  * die nur aus Controls bestehen
  * --------------------------------------------------*/
@@ -1345,7 +1327,7 @@ const SdrObject* SwFEShell::GetBestObject( sal_Bool bNext, sal_uInt16 /*GOTOOBJ_
         }
 
 
-        ASSERT( pList, "No object list to iterate" )
+        OSL_ENSURE( pList, "No object list to iterate" );
 
         SdrObjListIter aObjIter( *pList, bFlat ? IM_FLAT : IM_DEEPNOGROUPS );
         while ( aObjIter.IsMore() )
@@ -1539,7 +1521,7 @@ sal_Bool SwFEShell::BeginCreate( sal_uInt16 /*SdrObjKind ?*/  eSdrObjectKind, sa
 
 void SwFEShell::MoveCreate( const Point &rPos )
 {
-    ASSERT( Imp()->HasDrawView(), "MoveCreate without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "MoveCreate without DrawView?" );
     if ( GetPageNumber( rPos ) )
     {
         ScrollTo( rPos );
@@ -1559,7 +1541,7 @@ sal_Bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
     // Damit das Undo-Object aus der DrawEngine nicht bei uns
     // gespeichert wird, (wir erzeugen ein eigenes Undo-Object!) hier kurz
     // das Undo abschalten
-    ASSERT( Imp()->HasDrawView(), "EndCreate without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "EndCreate without DrawView?" );
     if( !Imp()->GetDrawView()->IsGroupEntered() )
     {
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
@@ -1585,7 +1567,7 @@ sal_Bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
 
 sal_Bool SwFEShell::ImpEndCreate()
 {
-    ASSERT( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1,
+    OSL_ENSURE( Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1,
             "Neues Object nicht selektiert." );
 
     SdrObject& rSdrObj = *Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
@@ -1668,7 +1650,7 @@ sal_Bool SwFEShell::ImpEndCreate()
 
     if( !bCharBound )
     {
-        // OD 16.05.2003 #108784# - allow native drawing objects in header/footer.
+        // allow native drawing objects in header/footer.
         // Thus, set <bBodyOnly> to <false> for these objects using value
         // of <nIdent> - value <0xFFFF> indicates control objects, which aren't
         // allowed in header/footer.
@@ -1764,7 +1746,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             SwTxtFrm* pTmp = (SwTxtFrm*)pAnch;
             do {
                 pTmp = pTmp->FindMaster();
-                ASSERT( pTmp, "Where's my Master?" );
+                OSL_ENSURE( pTmp, "Where's my Master?" );
                 // OD 2004-03-30 #i26791# - correction: add frame area height
                 // of master frames.
                 nYOffset += pTmp->IsVertical() ?
@@ -1793,9 +1775,8 @@ sal_Bool SwFEShell::ImpEndCreate()
         //Erzeugtes Object wegwerfen, so kann der Fly am elegentesten
         //ueber vorhandene SS erzeugt werden.
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
-        // --> OD 2005-08-08 #i52858# - method name changed
+        // #i52858# - method name changed
         SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
-        // <--
         if( !pPg )
         {
             SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess()->GetDrawModel();
@@ -1857,7 +1838,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             SwTxtFrm* pTmp = (SwTxtFrm*)pAnch;
             do {
                 pTmp = pTmp->FindMaster();
-                ASSERT( pTmp, "Where's my Master?" );
+                OSL_ENSURE( pTmp, "Where's my Master?" );
                 nYOffset += pTmp->IsVertical() ?
                             pTmp->Prt().Width() : pTmp->Prt().Height();
             } while ( pTmp->IsFollow() );
@@ -1865,21 +1846,18 @@ sal_Bool SwFEShell::ImpEndCreate()
         SwFmtVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );
         aSet.Put( aVert );
         SwDrawFrmFmt* pFmt = (SwDrawFrmFmt*)getIDocumentLayoutAccess()->MakeLayoutFmt( RND_DRAW_OBJECT, &aSet );
-        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        // #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-        // <--
-        // --> OD 2005-03-11 #i44344#, #i44681# - positioning attributes already set
+        // #i44344#, #i44681# - positioning attributes already set
         pFmt->PosAttrSet();
-        // <--
 
         SwDrawContact *pContact = new SwDrawContact( pFmt, &rSdrObj );
-        // --> OD 2004-11-22 #i35635#
+        // #i35635#
         pContact->MoveObjToVisibleLayer( &rSdrObj );
-        // <--
         if( bCharBound )
         {
-            ASSERT( aAnch.GetAnchorId() == FLY_AS_CHAR, "wrong AnchorType" );
+            OSL_ENSURE( aAnch.GetAnchorId() == FLY_AS_CHAR, "wrong AnchorType" );
             SwTxtNode *pNd = aAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
             SwFmtFlyCnt aFmt( pFmt );
             pNd->InsertItem(aFmt,
@@ -1893,14 +1871,14 @@ sal_Bool SwFEShell::ImpEndCreate()
             SwTxtFrm* pTmp = (SwTxtFrm*)pAnch;
             do {
                 pTmp = pTmp->FindMaster();
-                ASSERT( pTmp, "Where's my Master?" );
+                OSL_ENSURE( pTmp, "Where's my Master?" );
             } while( pTmp->IsFollow() );
             pAnch = pTmp;
         }
 
         pContact->ConnectToLayout();
 
-        // OD 25.06.2003 #108784# - mark object at frame the object is inserted at.
+        // mark object at frame the object is inserted at.
         {
             SdrObject* pMarkObj = pContact->GetDrawObjectByAnchorFrm( *pAnch );
             if ( pMarkObj )
@@ -1933,7 +1911,7 @@ sal_Bool SwFEShell::ImpEndCreate()
 
 void SwFEShell::BreakCreate()
 {
-    ASSERT( Imp()->HasDrawView(), "BreakCreate without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "BreakCreate without DrawView?" );
     Imp()->GetDrawView()->BrkCreateObj();
     ::FrameNotify( this, FLY_DRAG_END );
 }
@@ -1981,13 +1959,12 @@ sal_Bool SwFEShell::BeginMark( const Point &rPos )
 
 void SwFEShell::MoveMark( const Point &rPos )
 {
-    ASSERT( Imp()->HasDrawView(), "MoveMark without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "MoveMark without DrawView?" );
 
     if ( GetPageNumber( rPos ) )
     {
         ScrollTo( rPos );
         SwDrawView* pDView = Imp()->GetDrawView();
-//      Imp()->GetDrawView()->MovMarkObj( rPos );
 
         if (pDView->IsInsObjPoint())
             pDView->MovInsObjPoint( rPos );
@@ -2007,7 +1984,7 @@ void SwFEShell::MoveMark( const Point &rPos )
 sal_Bool SwFEShell::EndMark()
 {
     sal_Bool bRet = sal_False;
-    ASSERT( Imp()->HasDrawView(), "EndMark without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "EndMark without DrawView?" );
 
     if (Imp()->GetDrawView()->IsMarkObj())
     {
@@ -2030,7 +2007,6 @@ sal_Bool SwFEShell::EndMark()
                     {
                         if ( !bShowHdl )
                         {
-                            //HMHpDView->HideMarkHdl();
                             bShowHdl = sal_True;
                         }
                         rMrkList.DeleteMark( i );
@@ -2042,7 +2018,6 @@ sal_Bool SwFEShell::EndMark()
             {
                 pDView->MarkListHasChanged();
                 pDView->AdjustMarkHdl();
-                //HMHpDView->ShowMarkHdl();
             }
 
             if ( rMrkList.GetMarkCount() )
@@ -2071,7 +2046,7 @@ sal_Bool SwFEShell::EndMark()
 
 void SwFEShell::BreakMark()
 {
-    ASSERT( Imp()->HasDrawView(), "BreakMark without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "BreakMark without DrawView?" );
     Imp()->GetDrawView()->BrkMarkObj();
 }
 
@@ -2119,7 +2094,7 @@ short SwFEShell::GetAnchorId() const
 
 void SwFEShell::ChgAnchor( int eAnchorId, sal_Bool bSameOnly, sal_Bool bPosCorr )
 {
-    ASSERT( Imp()->HasDrawView(), "ChgAnchor without DrawView?" );
+    OSL_ENSURE( Imp()->HasDrawView(), "ChgAnchor without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if( rMrkList.GetMarkCount() &&
         !rMrkList.GetMark( 0 )->GetMarkedSdrObj()->GetUpGroup() )
@@ -2143,7 +2118,7 @@ void SwFEShell::ChgAnchor( int eAnchorId, sal_Bool bSameOnly, sal_Bool bPosCorr 
 
 void SwFEShell::DelSelectedObj()
 {
-    ASSERT( Imp()->HasDrawView(), "DelSelectedObj(), no DrawView available" );
+    OSL_ENSURE( Imp()->HasDrawView(), "DelSelectedObj(), no DrawView available" );
     if ( Imp()->HasDrawView() )
     {
         StartAllAction();
@@ -2178,7 +2153,7 @@ Size SwFEShell::GetObjSize() const
 Point SwFEShell::GetAnchorObjDiff() const
 {
     const SdrView *pView = Imp()->GetDrawView();
-    ASSERT( pView, "GetAnchorObjDiff without DrawView?" );
+    OSL_ENSURE( pView, "GetAnchorObjDiff without DrawView?" );
 
     Rectangle aRect;
     if ( Imp()->GetDrawView()->IsAction() )
@@ -2206,7 +2181,7 @@ Point SwFEShell::GetAnchorObjDiff() const
 
 Point SwFEShell::GetObjAbsPos() const
 {
-    ASSERT( Imp()->GetDrawView(), "GetObjAbsPos() without DrawView?" );
+    OSL_ENSURE( Imp()->GetDrawView(), "GetObjAbsPos() without DrawView?" );
     return Imp()->GetDrawView()->GetDragStat().GetActionRect().TopLeft();
 }
 
@@ -2226,12 +2201,11 @@ sal_Bool SwFEShell::IsGroupSelected()
         for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
+            // consider 'virtual' drawing objects.
             // Thus, use corresponding method instead of checking type.
             if ( pObj->IsGroupObject() &&
-                 // --> FME 2004-12-08 #i38505# No ungroup allowed for 3d objects
+                 // --> #i38505# No ungroup allowed for 3d objects
                  !pObj->Is3DObj() &&
-                 // <--
                  FLY_AS_CHAR != ((SwDrawContact*)GetUserCall(pObj))->
                                       GetFmt()->GetAnchor().GetAnchorId() )
             {
@@ -2242,8 +2216,8 @@ sal_Bool SwFEShell::IsGroupSelected()
     return sal_False;
 }
 
-// OD 27.06.2003 #108784# - change return type.
-// OD 27.06.2003 #108784# - adjustments for drawing objects in header/footer:
+// Change return type.
+// Adjustments for drawing objects in header/footer:
 //      allow group, only if all selected objects are in the same header/footer
 //      or not in header/footer.
 bool SwFEShell::IsGroupAllowed() const
@@ -2268,8 +2242,7 @@ bool SwFEShell::IsGroupAllowed() const
                 SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
                 if ( !pFrmFmt )
                 {
-                    ASSERT( false,
-                            "<SwFEShell::IsGroupAllowed()> - missing frame format" );
+                    OSL_FAIL( "<SwFEShell::IsGroupAllowed()> - missing frame format" );
                     bIsGroupAllowed = false;
                 }
                 else if ( FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
@@ -2278,7 +2251,7 @@ bool SwFEShell::IsGroupAllowed() const
                 }
             }
 
-            // OD 27.06.2003 #108784# - check, if all selected objects are in the
+            // check, if all selected objects are in the
             // same header/footer or not in header/footer.
             if ( bIsGroupAllowed )
             {
@@ -2389,7 +2362,7 @@ void SwFEShell::MirrorSelection( sal_Bool bHorizontal )
 sal_Bool SwFEShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bSelFrm )
 {
     sal_Bool bRet = sal_False;
-static sal_uInt8 __READONLY_DATA aChkArr[ 4 ] = {
+    static sal_uInt8 const aChkArr[ 4 ] = {
              /* FLYCNTTYPE_ALL */   0,
              /* FLYCNTTYPE_FRM */   ND_TEXTNODE,
              /* FLYCNTTYPE_GRF */   ND_GRFNODE,
@@ -2412,8 +2385,6 @@ static sal_uInt8 __READONLY_DATA aChkArr[ 4 ] = {
             }
             else
             {
-                // --> OD 2004-06-11 #i28701# - no format here
-//                pFrm->GetAnchorFrm()->Calc();
                 SwCntntFrm *pCFrm = pFrm->ContainsCntnt();
                 if ( pCFrm )
                 {
@@ -2534,8 +2505,8 @@ sal_Bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-        // --> OD 2007-07-24 #143008# - make code robust
-        ASSERT( pContact, "<SwFEShell::GetObjAttr(..)> - missing <pContact> - please inform OD." );
+        // --> make code robust
+        OSL_ENSURE( pContact, "<SwFEShell::GetObjAttr(..)> - missing <pContact> - please inform OD." );
         if ( pContact )
         {
             if ( i )
@@ -2543,7 +2514,6 @@ sal_Bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
             else
                 rSet.Put( pContact->GetFmt()->GetAttrSet() );
         }
-        // <--
     }
     return sal_True;
 }
@@ -2553,7 +2523,7 @@ sal_Bool SwFEShell::SetObjAttr( const SfxItemSet& rSet )
     SET_CURR_SHELL( this );
 
     if ( !rSet.Count() )
-    {   ASSERT( !this, "SetObjAttr, empty set." );
+    { OSL_ENSURE( !this, "SetObjAttr, empty set." );
         return sal_False;
     }
 
@@ -2584,8 +2554,9 @@ sal_Bool SwFEShell::IsAlignPossible() const
         {
             SdrObject *pO = Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pO);
+            OSL_ENSURE( pC, "No SwDrawContact!");
             //only as character bound drawings can be aligned
-            bRet = (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR);
+            bRet = pC ? (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR) : sal_False;
         }
         if ( bRet )
             return Imp()->GetDrawView()->IsAlignPossible();
@@ -2617,7 +2588,7 @@ void SwFEShell::CheckUnboundObjects()
             }
             if ( !pPage )
                 pPage = pLast;
-            ASSERT( pPage, "Page not found." );
+            OSL_ENSURE( pPage, "Page not found." );
 
             //Fremde Identifier sollen in den Default laufen.
             //Ueberschneidungen sind moeglich!!
@@ -2656,9 +2627,8 @@ void SwFEShell::CheckUnboundObjects()
             SwDrawContact *pContact = new SwDrawContact(
                                             (SwDrawFrmFmt*)pFmt, pObj );
 
-            // --> OD 2004-11-22 #i35635#
+            // #i35635#
             pContact->MoveObjToVisibleLayer( pObj );
-            // <--
             pContact->ConnectToLayout();
 
             EndAllAction();
@@ -2822,13 +2792,17 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
         while( pSect );
     }
     SwIterator<SwSectionFrm,SwFmt> aIter( rFmt );
-    for ( SwSectionFrm* pSct = aIter.First(); pFrm; pFrm = aIter.Next() )
-            if( !pSct->IsFollow() )
-                return pSct->Frm().Width();
+    for ( SwSectionFrm* pSct = aIter.First(); pSct; pSct = aIter.Next() )
+    {
+        if( !pSct->IsFollow() )
+        {
+            return pSct->Frm().Width();
+        }
+    }
     return 0;
 }
 
-void SwFEShell::CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect,
+ void SwFEShell::CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect,
                 sal_uInt16 nSlotId)
 {
     SdrView* pDrawView = GetDrawView();
@@ -3011,8 +2985,6 @@ void SwFEShell::CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, 
 }
 
 /** SwFEShell::GetShapeBackgrd
-
-    OD 02.09.2002 for #102450#:
     method determines background color of the page the selected drawing
     object is on and returns this color.
     If no color is found, because no drawing object is selected or ...,
@@ -3028,29 +3000,29 @@ const Color SwFEShell::GetShapeBackgrd() const
     Color aRetColor;
 
     // check, if a draw view exists
-    ASSERT( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackgrd - no draw view!");
+    OSL_ENSURE( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackgrd - no draw view!");
     if( Imp()->GetDrawView() )
     {
         // determine list of selected objects
         const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
         // check, if exactly one object is selected.
-        ASSERT( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
+        OSL_ENSURE( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
         if ( pMrkList->GetMarkCount() == 1)
         {
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             // check, if selected object is a shape (drawing object)
-            ASSERT( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            OSL_ENSURE( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
             if ( !pSdrObj->ISA(SwVirtFlyDrawObj) )
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =
                         static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrm( pSdrObj );
-                ASSERT( pAnchorFrm, "inconsistent modell - no anchor at shape!");
+                OSL_ENSURE( pAnchorFrm, "inconsistent modell - no anchor at shape!");
                 if ( pAnchorFrm )
                 {
                     const SwPageFrm* pPageFrm = pAnchorFrm->FindPageFrm();
-                    ASSERT( pPageFrm, "inconsistent modell - no page!");
+                    OSL_ENSURE( pPageFrm, "inconsistent modell - no page!");
                     if ( pPageFrm )
                     {
                         aRetColor = pPageFrm->GetDrawBackgrdColor();
@@ -3064,8 +3036,6 @@ const Color SwFEShell::GetShapeBackgrd() const
 }
 
 /** Is default horizontal text direction for selected drawing object right-to-left
-
-    OD 09.12.2002 #103045#
     Because drawing objects only painted for each page only, the default
     horizontal text direction of a drawing object is given by the corresponding
     page property.
@@ -3080,29 +3050,29 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
     bool bRet = false;
 
     // check, if a draw view exists
-    ASSERT( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackgrd - no draw view!");
+    OSL_ENSURE( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackgrd - no draw view!");
     if( Imp()->GetDrawView() )
     {
         // determine list of selected objects
         const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
         // check, if exactly one object is selected.
-        ASSERT( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
+        OSL_ENSURE( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
         if ( pMrkList->GetMarkCount() == 1)
         {
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
             // check, if selected object is a shape (drawing object)
-            ASSERT( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            OSL_ENSURE( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
             if ( !pSdrObj->ISA(SwVirtFlyDrawObj) )
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =
                         static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrm( pSdrObj );
-                ASSERT( pAnchorFrm, "inconsistent modell - no anchor at shape!");
+                OSL_ENSURE( pAnchorFrm, "inconsistent modell - no anchor at shape!");
                 if ( pAnchorFrm )
                 {
                     const SwPageFrm* pPageFrm = pAnchorFrm->FindPageFrm();
-                    ASSERT( pPageFrm, "inconsistent modell - no page!");
+                    OSL_ENSURE( pPageFrm, "inconsistent modell - no page!");
                     if ( pPageFrm )
                     {
                         bRet = pPageFrm->IsRightToLeft() ? true : false;
@@ -3130,3 +3100,4 @@ Point SwFEShell::GetRelativePagePosition(const Point& rDocPos)
     return aRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

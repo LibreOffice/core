@@ -138,9 +138,7 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT ( 319 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen : ~Einf³gen */
         Text [ en-US ] = "~Insert" ;
-        /* ### ACHTUNG: Neuer Text in Resource? Fügt den aktuellen Textblock ein und schließt das Dialogfeld : F³gt den aktuellen Textblock ein und schlie˜t das Dialogfeld */
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
@@ -148,7 +146,6 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT ( 319 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
     };
@@ -229,7 +226,6 @@ ModalDialog DLG_GLOSSARY
             {
                 Identifier = FN_GL_DELETE ;
                 HelpID = HID_MD_GLOS_DELETE ;
-                /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                 Text [ en-US ] = "~Delete" ;
             };
             MenuItem
@@ -267,14 +263,12 @@ ModalDialog DLG_GLOSSARY
 };
 InfoBox MSG_DOUBLE_SHORTNAME
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben! : K³rzel wird bereits verwendet. Bitte einen anderen Namen vergeben! */
     Message [ en-US ] = "Shortcut name already exists. Please choose another name." ;
 };
 QueryBox MSG_QUERY_DELETE
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der AutoText gelöscht werden? : Soll der AutoText gel÷scht werden? */
     Message [ en-US ] = "Delete AutoText?" ;
 };
 String STR_QUERY_DELETE_GROUP1
@@ -283,7 +277,6 @@ String STR_QUERY_DELETE_GROUP1
 };
 String STR_QUERY_DELETE_GROUP2
 {
-    /* ### ACHTUNG: Neuer Text in Resource?  gelöscht werden? :  gel÷scht werden? */
     Text [ en-US ] = "?" ;
 };
 String STR_GLOSSARY
@@ -393,92 +386,7 @@ InfoBox MSG_NO_GLOSSARIES
     Message [ en-US ] = "There is no AutoText in this file.";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_MY_AUTOTEXT
+{
+    Text[ en-US ] = "My AutoText";
+};

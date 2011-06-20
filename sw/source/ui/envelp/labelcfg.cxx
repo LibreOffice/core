@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,27 +38,21 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-/* -----------------------------15.01.01 11:17--------------------------------
+using ::rtl::OUString;
 
- ---------------------------------------------------------------------------*/
 SwLabelConfig::SwLabelConfig() :
     ConfigItem(C2U("Office.Labels/Manufacturer"))
 {
     aNodeNames = GetNodeNames(OUString());
 }
-/* -----------------------------06.09.00 16:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwLabelConfig::~SwLabelConfig()
 {
 }
-/* -----------------------------06.09.00 16:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwLabelConfig::Commit()
 {
     // the config item is not writable yet
@@ -65,9 +60,6 @@ void    SwLabelConfig::Commit()
 
 void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-/* -----------------------------15.01.01 11:42--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
 {
     Sequence<OUString> aProperties(2);
@@ -79,7 +71,7 @@ Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
     pProperties[ 1] += C2U("Measure");
     return aProperties;
 }
-//-----------------------------------------------------------------------------
+
 SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufacturer)
 {
     SwLabRec* pNewRec = new SwLabRec;
@@ -95,8 +87,8 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                 case 0: pValues[nProp] >>= sTmp; pNewRec->aType = sTmp; break;
                 case 1:
                 {
-//all values are contained as colon-separated 1/100 mm values except for the
-//continuous flag ('C'/'S')
+                    //all values are contained as colon-separated 1/100 mm values
+                    //except for the continuous flag ('C'/'S')
                     pValues[nProp] >>= sTmp;
                     String sMeasure(sTmp);
                     sal_uInt16 nTokenCount = sMeasure.GetTokenCount(';');
@@ -124,7 +116,7 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
     }
     return pNewRec;
 }
-//-----------------------------------------------------------------------------
+
 Sequence<PropertyValue> lcl_CreateProperties(
     Sequence<OUString>& rPropNames, const SwLabRec& rRec)
 {
@@ -158,7 +150,7 @@ Sequence<PropertyValue> lcl_CreateProperties(
     }
     return aRet;
 }
-//-----------------------------------------------------------------------------
+
 void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
 {
     OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
@@ -176,9 +168,7 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
         rLabArr.C40_INSERT( SwLabRec, pNewRec, rLabArr.Count() );
     }
 }
-/* -----------------------------23.01.01 11:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
 {
     const OUString* pNode = aNodeNames.getConstArray();
@@ -215,9 +205,7 @@ sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rt
     }
     return sal_False;
 }
-/* -----------------------------23.01.01 11:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
 {
     const OUString* pLabels = rLabels.getConstArray();
@@ -226,7 +214,7 @@ sal_Bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
             return sal_True;
     return sal_False;
 }
-//-----------------------------------------------------------------------------
+
 void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
         const rtl::OUString& rType, const SwLabRec& rRec)
 {
@@ -241,7 +229,7 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
     {
         if(!AddNode(OUString(), rManufacturer))
         {
-            DBG_ERROR("New configuration node could not be created");
+            OSL_FAIL("New configuration node could not be created");
             return ;
         }
         else
@@ -300,3 +288,4 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,19 +31,17 @@
 
 #include <new>
 
-
 #include <tools/gen.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/metric.hxx>
-#include <tools/debug.hxx>
 
 #include "format.hxx"
 
 
-sal_Bool SmGetGlyphBoundRect(const OutputDevice &rDev,
+bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect);
 
-sal_Bool SmIsMathAlpha(const XubString &rText);
+bool SmIsMathAlpha(const XubString &rText);
 
 
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)
@@ -105,7 +104,7 @@ class SmRect
             nLoAttrFence,
             nHiAttrFence;
     sal_uInt16  nBorderWidth;
-    sal_Bool    bHasBaseline,
+    bool    bHasBaseline,
             bHasAlignInfo;
 
 protected:
@@ -114,7 +113,7 @@ protected:
             void Init(const OutputDevice &rDev, const SmFormat *pFormat,
                       const XubString &rText, sal_uInt16 nBorderWidth);
 
-            void ClearBaseline()    { bHasBaseline = sal_False; };
+            void ClearBaseline()    { bHasBaseline = false; };
     inline  void CopyMBL(const SmRect& rRect);
             void CopyAlignInfo(const SmRect& rRect);
 
@@ -164,7 +163,7 @@ public:
             long GetItalicRight() const     { return GetRight() + GetItalicRightSpace(); }
             long GetItalicWidth() const     { return GetWidth() + GetItalicLeftSpace() + GetItalicRightSpace(); }
 
-            sal_Bool HasBaseline() const        { return bHasBaseline; }
+            bool HasBaseline() const        { return bHasBaseline; }
     inline  long GetBaseline() const;
             long GetBaselineOffset() const  { return GetBaseline() - GetTop(); }
 
@@ -187,12 +186,12 @@ public:
             void Move  (const Point &rPosition);
             void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
 
-            sal_Bool IsEmpty() const
+            bool IsEmpty() const
             {
                 return GetWidth() == 0  ||  GetHeight() == 0;
             }
 
-            sal_Bool HasAlignInfo() const { return bHasAlignInfo; }
+            bool HasAlignInfo() const { return bHasAlignInfo; }
 
             const Point AlignTo(const SmRect &rRect, RectPos ePos,
                                 RectHorAlign eHor, RectVerAlign eVer) const;
@@ -201,20 +200,16 @@ public:
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                               long nNewAlignM);
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                      sal_Bool bKeepVerAlignParams);
+                      bool bKeepVerAlignParams);
 
             long    OrientedDist(const Point &rPoint) const;
-            sal_Bool    IsInsideRect(const Point &rPoint) const;
-            sal_Bool    IsInsideItalicRect(const Point &rPoint) const;
+            bool    IsInsideRect(const Point &rPoint) const;
+            bool    IsInsideItalicRect(const Point &rPoint) const;
 
     inline  SmRect & operator = (const SmRect &rRect);
 
     inline  Rectangle   AsRectangle() const;
             SmRect      AsGlyphRect() const;
-
-#ifdef SM_RECT_DEBUG
-            void        Draw(OutputDevice &rDev, const Point &rPosition, int nFlags) const;
-#endif
 };
 
 
@@ -238,7 +233,7 @@ inline void SmRect::CopyMBL(const SmRect &rRect)
 
 inline long SmRect::GetBaseline() const
 {
-    DBG_ASSERT(HasBaseline(), "Sm: Baseline nicht vorhanden");
+    OSL_ENSURE(HasBaseline(), "Sm: Baseline nicht vorhanden");
     return nBaseline;
 }
 
@@ -255,6 +250,6 @@ inline Rectangle SmRect::AsRectangle() const
     return Rectangle(Point(GetItalicLeft(), GetTop()), GetItalicSize());
 }
 
-
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

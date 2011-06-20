@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,14 +50,12 @@
 #include <docsh.hxx>
 
 #include <vector>
-/* -----------------------------05.08.2002 12:43------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwAutoCompleteClient : public SwClient
 {
     SwAutoCompleteWord* pAutoCompleteWord;
     SwDoc*              pDoc;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static sal_uLong nSwAutoCompleteClientCount;
 #endif
 public:
@@ -67,15 +66,13 @@ public:
     SwAutoCompleteClient& operator=(const SwAutoCompleteClient& rClient);
 
     const SwDoc& GetDoc(){return *pDoc;}
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static sal_uLong GetElementCount() {return nSwAutoCompleteClientCount;}
 #endif
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
-/* -----------------------------05.08.2002 12:48------------------------------
 
- ---------------------------------------------------------------------------*/
 typedef std::vector<SwAutoCompleteClient> SwAutoCompleteClientVector;
 
 class SwAutoCompleteWord_Impl
@@ -89,14 +86,11 @@ public:
     void RemoveDocument(const SwDoc& rDoc);
 };
 
-/* -----------------------------05.08.2002 14:11------------------------------
-
- ---------------------------------------------------------------------------*/
 typedef const SwDoc* SwDocPtr;
 typedef std::vector<SwDocPtr> SwDocPtrVector;
 class SwAutoCompleteString : public String
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static sal_uLong nSwAutoCompleteStringCount;
 #endif
     SwDocPtrVector aSourceDocs;
@@ -107,51 +101,43 @@ class SwAutoCompleteString : public String
         void        AddDocument(const SwDoc& rDoc);
         //returns true if last document reference has been removed
         sal_Bool     RemoveDocument(const SwDoc& rDoc);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static sal_uLong GetElementCount() {return nSwAutoCompleteStringCount;}
 #endif
 };
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_uLong SwAutoCompleteClient::nSwAutoCompleteClientCount = 0;
     sal_uLong SwAutoCompleteString::nSwAutoCompleteStringCount = 0;
 #endif
-/* -----------------------------06.08.2002 08:57------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& rSwDoc) :
         pAutoCompleteWord(&rToTell),
         pDoc(&rSwDoc)
 {
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ++nSwAutoCompleteClientCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:07------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
     SwClient(),
     pAutoCompleteWord(rClient.pAutoCompleteWord),
     pDoc(rClient.pDoc)
 {
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ++nSwAutoCompleteClientCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:10------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::~SwAutoCompleteClient()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     --nSwAutoCompleteClientCount;
 #endif
 }
-/* -----------------06.03.2003 15:30-----------------
 
- --------------------------------------------------*/
 SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient& rClient)
 {
     pAutoCompleteWord = rClient.pAutoCompleteWord;
@@ -162,9 +148,7 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
         GetRegisteredInNonConst()->Remove(this);
     return *this;
 }
-/* -----------------------------05.08.2002 12:49------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
 {
     switch( pOld ? pOld->Which() : 0 )
@@ -178,26 +162,22 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
 
     }
 }
-/* -----------------------------05.08.2002 13:03------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteWord_Impl::AddDocument(SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); aIt++)
+    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
     {
         if(&aIt->GetDoc() == &rDoc)
             return;
     }
     aClientVector.push_back(SwAutoCompleteClient(rAutoCompleteWord, rDoc));
 }
-/* -----------------------------05.08.2002 14:33------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
 {
     SwAutoCompleteClientVector::iterator aIt;
-    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); aIt++)
+    for(aIt = aClientVector.begin(); aIt != aClientVector.end(); ++aIt)
     {
         if(&aIt->GetDoc() == &rDoc)
         {
@@ -206,32 +186,26 @@ void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
         }
     }
 }
-/* -----------------------------06.08.2002 08:54------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteString::SwAutoCompleteString(const String& rStr, xub_StrLen nPos, xub_StrLen nLen) :
             String( rStr, nPos, nLen )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ++nSwAutoCompleteStringCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:22------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteString::~SwAutoCompleteString()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     --nSwAutoCompleteStringCount;
 #endif
 }
-/* -----------------------------05.08.2002 14:17------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
-    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); aIt++)
+    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
     {
         if(*aIt == &rDoc)
             return;
@@ -239,13 +213,11 @@ void SwAutoCompleteString::AddDocument(const SwDoc& rDoc)
     SwDocPtr pNew = &rDoc;
     aSourceDocs.push_back(pNew);
 }
-/* -----------------------------05.08.2002 14:36------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 {
     SwDocPtrVector::iterator aIt;
-    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); aIt++)
+    for(aIt = aSourceDocs.begin(); aIt != aSourceDocs.end(); ++aIt)
     {
         if(*aIt == &rDoc)
         {
@@ -255,9 +227,7 @@ sal_Bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
     }
     return sal_False;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
     : aWordLst( 0, 255 ), aLRULst( 0, 255 ),
     pImpl(new SwAutoCompleteWord_Impl(*this)),
@@ -276,10 +246,10 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
         delete pCurrent;
     }
     delete pImpl;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
     sal_uLong nClients = SwAutoCompleteClient::GetElementCount();
-    DBG_ASSERT(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
+    OSL_ENSURE(!nStrings && !nClients, "AutoComplete: clients or string count mismatch");
 #endif
 }
 
@@ -341,7 +311,7 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
             pCurrent->AddDocument(rDoc);
 
             nInsPos = aLRULst.GetPos( (void*)pNew );
-            ASSERT( USHRT_MAX != nInsPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nInsPos, "String nicht gefunden" );
             if( nInsPos )
             {
                 void** ppData = (void**)aLRULst.GetData();
@@ -362,7 +332,7 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
         while( nNewMax < aWordLst.Count() && nLRUIndex < aLRULst.Count())
         {
             sal_uInt16 nPos = aWordLst.GetPos( (String*)aLRULst[ nLRUIndex++ ] );
-            ASSERT( USHRT_MAX != nPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
             void * pDel = aWordLst[nPos];
             aWordLst.Remove(nPos);
             delete (SwAutoCompleteString*)pDel;
@@ -388,7 +358,7 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
                 aWordLst.Remove(nPos);
 
                 sal_uInt16 nDelPos = aLRULst.GetPos( pDel );
-                ASSERT( USHRT_MAX != nDelPos, "String nicht gefunden" );
+                OSL_ENSURE( USHRT_MAX != nDelPos, "String nicht gefunden" );
                 aLRULst.Remove( nDelPos );
                 --nPos;
                 delete (SwAutoCompleteString*)pDel;
@@ -426,7 +396,7 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
             aWordLst.Remove(nMyPos);
 
             sal_uInt16 nPos = aLRULst.GetPos( pDel );
-            ASSERT( USHRT_MAX != nPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
             aLRULst.Remove( nPos );
             delete (SwAutoCompleteString*)pDel;
             if( nMyPos >= --nMyLen )
@@ -441,7 +411,7 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
         {
             void* pDel = aWordLst[ nNewPos ];
             sal_uInt16 nPos = aLRULst.GetPos( pDel );
-            ASSERT( USHRT_MAX != nPos, "String nicht gefunden" );
+            OSL_ENSURE( USHRT_MAX != nPos, "String nicht gefunden" );
             aLRULst.Remove( nPos );
             delete (SwAutoCompleteString*)pDel;
         }
@@ -449,14 +419,12 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
         aWordLst.Remove( nMyPos, nMyLen - nMyPos );
     }
 }
-/* -----------------------------05.08.2002 12:54------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
 {
     pImpl->RemoveDocument(rDoc);
 
-    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const sal_Bool bDelete = !pACorr->GetSwFlags().bAutoCmpltKeepList;
     for(sal_uInt16 nPos = aWordLst.Count(); nPos; nPos--)
     {
@@ -465,10 +433,11 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
         {
             aWordLst.Remove( nPos - 1 );
             sal_uInt16 nLRUPos = aLRULst.GetPos( (void*)pCurrent );
-            DBG_ASSERT(nLRUPos < USHRT_MAX, "word not found in LRU list" );
+            OSL_ENSURE(nLRUPos < USHRT_MAX, "word not found in LRU list" );
             aLRULst.Remove( nLRUPos );
             delete pCurrent;
         }
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

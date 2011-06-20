@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 
 #include <dbconfig.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <swdbdata.hxx>
@@ -42,7 +43,7 @@ using rtl::OUString;
 using namespace com::sun::star::uno;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Ctor
+     Description: Ctor
  --------------------------------------------------------------------*/
 
 const Sequence<OUString>& SwDBConfig::GetPropertyNames()
@@ -67,9 +68,7 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------06.09.00 16:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDBConfig::SwDBConfig() :
     ConfigItem(C2U("Office.DataAccess"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -77,17 +76,13 @@ SwDBConfig::SwDBConfig() :
     pBibImpl(0)
 {
 };
-/* -----------------------------06.09.00 16:50--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDBConfig::~SwDBConfig()
 {
     delete pAdrImpl;
     delete pBibImpl;
 }
-/* -----------------------------20.02.01 12:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDBConfig::Load()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
@@ -101,7 +96,7 @@ void SwDBConfig::Load()
     }
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == rNames.getLength())
     {
         for(int nProp = 0; nProp < rNames.getLength(); nProp++)
@@ -118,18 +113,14 @@ void SwDBConfig::Load()
         }
     }
 }
-/* -----------------------------20.02.01 12:36--------------------------------
 
- ---------------------------------------------------------------------------*/
 const SwDBData& SwDBConfig::GetAddressSource()
 {
     if(!pAdrImpl)
         Load();
     return *pAdrImpl;
 }
-/* -----------------29.11.2002 11:43-----------------
- *
- * --------------------------------------------------*/
+
 const SwDBData& SwDBConfig::GetBibliographySource()
 {
     if(!pBibImpl)
@@ -141,3 +132,4 @@ void SwDBConfig::Commit() {}
 void SwDBConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

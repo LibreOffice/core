@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,7 @@
 #include "section.hxx"
 #include "node2lay.hxx"
 
-/* -----------------25.02.99 10:31-------------------
+/* --------------------------------------------------
  * Die SwNode2LayImpl-Klasse erledigt die eigentliche Arbeit,
  * die SwNode2Layout-Klasse ist nur die der Oefffentlichkeit bekannte Schnittstelle
  * --------------------------------------------------*/
@@ -68,7 +69,7 @@ public:
                     const sal_Bool bCalcFrm = sal_True ) const;
 };
 
-/* -----------------25.02.99 10:38-------------------
+/* --------------------------------------------------
  * Hauptaufgabe des Ctor: Das richtige SwModify zu ermitteln,
  * ueber das iteriert wird.
  * Uebergibt man bSearch == sal_True, so wird der naechste Cntnt- oder TableNode
@@ -178,7 +179,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bS
             pMod = (SwModify*)pNd->GetCntntNode();
         else
         {
-            ASSERT( pNd->IsTableNode(), "For Tablenodes only" );
+            OSL_ENSURE( pNd->IsTableNode(), "For Tablenodes only" );
             pMod = pNd->GetTableNode()->GetTable().GetFrmFmt();
         }
         pIter = new SwIterator<SwFrm,SwModify>( *pMod );
@@ -190,7 +191,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bS
     }
 }
 
-/* -----------------25.02.99 10:41-------------------
+/* --------------------------------------------------
  * SwNode2LayImpl::NextFrm() liefert den naechsten "sinnvollen" Frame,
  * beim ersten Aufruf wird am eigentlichen Iterator ein First gerufen,
  * danach die Next-Methode. Das Ergebnis wird auf Brauchbarkeit untersucht,
@@ -216,7 +217,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
     while( pRet )
     {
         SwFlowFrm* pFlow = SwFlowFrm::CastFlowFrm( pRet );
-        ASSERT( pFlow, "Cntnt or Table expected?!" );
+        OSL_ENSURE( pFlow, "Cntnt or Table expected?!" );
         // Follows sind fluechtige Gestalten, deshalb werden sie ignoriert.
         // Auch wenn wir hinter dem Frame eingefuegt werden sollen, nehmen wir
         // zunaechst den Master, hangeln uns dann aber zum letzten Follow durch.
@@ -238,9 +239,9 @@ SwFrm* SwNode2LayImpl::NextFrm()
                 // und nicht ausserhalb liegt.
                 if( !pRet->IsInFtn() || pSct->IsInFtn() )
                 {
-                    ASSERT( pSct && pSct->GetSection(), "Where's my section?" );
+                    OSL_ENSURE( pSct && pSct->GetSection(), "Where's my section?" );
                     SwSectionNode* pNd = pSct->GetSection()->GetFmt()->GetSectionNode();
-                    ASSERT( pNd, "Lost SectionNode" );
+                    OSL_ENSURE( pNd, "Lost SectionNode" );
                     // Wenn der erhaltene Frame in einem Bereichsframe steht,
                     // dessen Bereich den Ausgangsnode nicht umfasst, so kehren
                     // wir mit dem SectionFrm zurueck, sonst mit dem Cntnt/TabFrm
@@ -299,12 +300,12 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
             SwFrm* pFrm = bMaster ? rpFrm->FindPrev() : rpFrm->FindNext();
             if( pFrm && pFrm->IsSctFrm() )
             {
-                // #137684#: pFrm could be a "dummy"-section
+                // pFrm could be a "dummy"-section
                 if( ((SwSectionFrm*)pFrm)->GetSection() &&
                     (&((SwSectionNode*)pNode)->GetSection() ==
                      ((SwSectionFrm*)pFrm)->GetSection()) )
                 {
-                    // OD 2004-06-02 #i22922# - consider columned sections
+                    // #i22922# - consider columned sections
                     // 'Go down' the section frame as long as the layout frame
                     // is found, which would contain content.
                     while ( pFrm->IsLayoutFrm() &&
@@ -314,11 +315,11 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                     {
                         pFrm = static_cast<SwLayoutFrm*>(pFrm)->Lower();
                     }
-                    ASSERT( pFrm->IsLayoutFrm(),
+                    OSL_ENSURE( pFrm->IsLayoutFrm(),
                             "<SwNode2LayImpl::UpperFrm(..)> - expected upper frame isn't a layout frame." );
                     rpFrm = bMaster ? NULL
                                     : static_cast<SwLayoutFrm*>(pFrm)->Lower();
-                    ASSERT( !rpFrm || rpFrm->IsFlowFrm(),
+                    OSL_ENSURE( !rpFrm || rpFrm->IsFlowFrm(),
                             "<SwNode2LayImpl::UpperFrm(..)> - expected sibling isn't a flow frame." );
                     return static_cast<SwLayoutFrm*>(pFrm);
                 }
@@ -347,7 +348,7 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
 
 void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd )
 {
-    ASSERT( pUpperFrms, "RestoreUpper without SaveUpper?" )
+    OSL_ENSURE( pUpperFrms, "RestoreUpper without SaveUpper?" );
     SwNode* pNd;
     SwDoc *pDoc = rNds.GetDoc();
     sal_Bool bFirst = sal_True;
@@ -383,7 +384,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
                 else
                     pNxt = pUp->Lower();
                 pNew = ((SwTableNode*)pNd)->MakeFrm( pUp );
-                ASSERT( pNew->IsTabFrm(), "Table exspected" );
+                OSL_ENSURE( pNew->IsTabFrm(), "Table exspected" );
                 pNew->Paste( pUp, pNxt );
                 ((SwTabFrm*)pNew)->RegistFlys();
                 (*pUpperFrms)[x-2] = pNew;
@@ -397,7 +398,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
                     ((SwSectionFrm*)pNxt)->UnlockJoin();
                 pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
-                ASSERT( pUp->GetUpper() || pUp->IsFlyFrm(), "Lost Upper" );
+                OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrm(), "Lost Upper" );
                 ::_InsertCnt( pUp, pDoc, pNd->GetIndex(), sal_False, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
                 (*pUpperFrms)[x-2] = pNxt;
@@ -414,7 +415,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         {
             SwSectionFrm* pSctFrm = pTmp->FindSctFrm();
             pSctFrm->ColUnlock();
-            // OD 26.08.2003 #i18103# - invalidate size of section in order to
+            // #i18103# - invalidate size of section in order to
             // assure, that the section is formatted, unless it was 'Collocked'
             // from its 'collection' until its 'restoration'.
             pSctFrm->_InvalidateSize();
@@ -443,7 +444,7 @@ SwNode2Layout::SwNode2Layout( const SwNode& rNd )
 
 void SwNode2Layout::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd )
 {
-    ASSERT( pImpl, "RestoreUpperFrms without SaveUpperFrms" );
+    OSL_ENSURE( pImpl, "RestoreUpperFrms without SaveUpperFrms" );
     pImpl->RestoreUpperFrms( rNds, nStt, nEnd );
 }
 
@@ -470,3 +471,4 @@ SwFrm* SwNode2Layout::GetFrm( const Point* pDocPos,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

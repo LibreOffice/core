@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -69,9 +70,11 @@ public:
           return pImpl; }
     void UnlockImpl() { --nLockCount; }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool CompareLayout( const SwDoc& rDoc ) const;
 #endif
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

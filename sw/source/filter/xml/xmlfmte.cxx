@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -59,16 +60,18 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 
+using rtl::OUString;
+
 void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 {
     // <style:style ...>
     CheckAttrList();
 
     // style:family="..."
-    DBG_ASSERT( RES_FRMFMT==rFmt.Which(), "frame format expected" );
+    OSL_ENSURE( RES_FRMFMT==rFmt.Which(), "frame format expected" );
     if( RES_FRMFMT != rFmt.Which() )
         return;
-    DBG_ASSERT( eFamily != XML_TOKEN_INVALID, "family must be specified" );
+    OSL_ENSURE( eFamily != XML_TOKEN_INVALID, "family must be specified" );
     // style:name="..."
     sal_Bool bEncoded = sal_False;
     AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(
@@ -80,15 +83,15 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // style:parent-style-name="..." (if its not the default only)
     const SwFmt* pParent = rFmt.DerivedFrom();
     // Parent-Namen nur uebernehmen, wenn kein Default
-    ASSERT( !pParent || pParent->IsDefault(), "unexpected parent" );
+    OSL_ENSURE( !pParent || pParent->IsDefault(), "unexpected parent" );
 
-    ASSERT( USHRT_MAX == rFmt.GetPoolFmtId(), "pool ids arent'supported" );
-    ASSERT( USHRT_MAX == rFmt.GetPoolHelpId(), "help ids arent'supported" );
-    ASSERT( USHRT_MAX == rFmt.GetPoolHelpId() ||
+    OSL_ENSURE( USHRT_MAX == rFmt.GetPoolFmtId(), "pool ids arent'supported" );
+    OSL_ENSURE( USHRT_MAX == rFmt.GetPoolHelpId(), "help ids arent'supported" );
+    OSL_ENSURE( USHRT_MAX == rFmt.GetPoolHelpId() ||
             UCHAR_MAX == rFmt.GetPoolHlpFileId(), "help file ids aren't supported" );
 #endif
 
@@ -115,7 +118,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 
     if( XML_TABLE_CELL == eFamily )
     {
-        DBG_ASSERT(RES_FRMFMT == rFmt.Which(), "only frame format");
+        OSL_ENSURE(RES_FRMFMT == rFmt.Which(), "only frame format");
 
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET ==
@@ -303,7 +306,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
         for( ::std::vector< XMLPropertyState >::const_iterator
                     aProperty = rProperties.begin();
              aProperty != rProperties.end();
-              aProperty++ )
+              ++aProperty )
         {
             if (aProperty->mnIndex != -1) // #i26762#
             {
@@ -314,8 +317,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         OUString sStyleName;
                         aProperty->maValue >>= sStyleName;
-                        // --> OD 2008-11-19 #i70748#
-                        // export also empty list styles
+                        // #i70748# - export also empty list styles
                         if( sStyleName.getLength() )
                         {
                             OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );
@@ -325,7 +327,6 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                               sListStyleName,
                               GetExport().EncodeStyleName( sStyleName ) );
-                        // <--
                     }
                     break;
                 case CTF_PAGEDESCNAME:
@@ -361,3 +362,5 @@ SvXMLAutoStylePoolP* SwXMLExport::CreateAutoStylePool()
 {
     return new SwXMLAutoStylePoolP( *this );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

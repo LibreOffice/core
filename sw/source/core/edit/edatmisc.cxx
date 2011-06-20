@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,7 +44,7 @@
  *************************************/
 
 
-void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
+void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -54,8 +55,8 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
     }
 
         FOREACHPAM_START(this)
-            // if ( PCURCRSR->HasMark() )
-                GetDoc()->ResetAttrs(*PCURCRSR, sal_True, pAttrs);
+
+                GetDoc()->ResetAttrs(*PCURCRSR, sal_True, attrs);
         FOREACHPAM_END()
 
     if( bUndoGroup )
@@ -70,10 +71,6 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 
 void SwEditShell::GCAttr()
 {
-//JP 04.02.97: wozu eine Action-Klammerung - ein Formatierung sollte nicht
-//              ausgeloest werden, so dass es hier ueberfluessig ist.
-//              Sonst Probleme im MouseBut.DownHdl - Bug 35562
-//  StartAllAction();
     FOREACHPAM_START(this)
         if ( !PCURCRSR->HasMark() )
         {
@@ -97,7 +94,6 @@ void SwEditShell::GCAttr()
                     aIdx <= rEnd );
         }
     FOREACHPAM_END()
-//  EndAllAction();
 }
 
 // Setze das Attribut als neues default Attribut im Dokument.
@@ -110,17 +106,6 @@ void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
     GetDoc()->SetDefault( rFmtHint );
     EndAllAction();
 }
-
-/*
-
-void SwEditShell::SetDefault( const SfxItemSet& rSet )
-{
-    // 7502: Action-Klammerung
-    StartAllAction();
-    GetDoc()->SetDefault( rSet );
-    EndAllAction();
-}
-*/
 
 // Erfrage das Default Attribut in diesem Dokument.
 
@@ -193,3 +178,4 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,16 @@
+# backup and temporary files
+*~
+.*.sw[op]
+.gitattributes
+
+# the build directories
+/*/unxlng??
+/*/unxlng??.pro
+/*/wntmsc???
+/*/wntmsc???.pro
+/*/unxmac??.pro
+/*/unxmac??
+/*/unxios?
+/*/unxios?.pro
+/*/unxand?
+/*/unxand?.pro

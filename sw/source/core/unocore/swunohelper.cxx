@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,9 +36,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HDL_
 #include <com/sun/star/ucb/NameClash.hdl>
-#endif
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -45,14 +44,12 @@
 #include <comphelper/types.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
-#include <tools/debug.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/content.hxx>
 #include <svl/svstdarr.hxx>
 #include <swunohelper.hxx>
 #include <swunodef.hxx>
-#include <errhdl.hxx>
 
 namespace SWUnoHelper {
 
@@ -66,7 +63,7 @@ sal_Int32 GetEnumAsInt32( const UNO_NMSPC::Any& rVal )
     catch( UNO_NMSPC::Exception & )
     {
         eVal = 0;
-        ASSERT( sal_False, "can't get EnumAsInt32" );
+        OSL_FAIL( "can't get EnumAsInt32" );
     }
     return eVal;
 }
@@ -81,14 +78,14 @@ sal_Bool UCB_DeleteFile( const String& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 STAR_REFERENCE( ucb::XCommandEnvironment )());
         aTempContent.executeCommand(
-                        rtl::OUString::createFromAscii( "delete" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                         UNO_NMSPC::makeAny( sal_Bool( sal_True ) ) );
         bRemoved = sal_True;
     }
     catch( UNO_NMSPC::Exception& )
     {
         bRemoved = sal_False;
-        ASSERT( sal_False, "Exeception from executeCommand( delete )" );
+        OSL_FAIL( "Exeception from executeCommand( delete )" );
     }
     return bRemoved;
 }
@@ -114,12 +111,12 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
         aInfo.MoveData = bCopyIsMove;
         aAny <<= aInfo;
         aTempContent.executeCommand(
-                            rtl::OUString::createFromAscii( "transfer" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
                             aAny );
     }
     catch( UNO_NMSPC::Exception& )
     {
-        ASSERT( sal_False, "Exeception from executeCommand( transfer )" );
+        OSL_FAIL( "Exeception from executeCommand( transfer )" );
         bCopyCompleted = sal_False;
     }
     return bCopyCompleted;
@@ -153,7 +150,7 @@ sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
     catch( UNO_NMSPC::Exception& )
     {
         bCaseSensitive = sal_False;
-        ASSERT( sal_False, "Exeception from compareContentIds()" );
+        OSL_FAIL( "Exeception from compareContentIds()" );
     }
     return bCaseSensitive;
 }
@@ -165,7 +162,7 @@ sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
     {
         ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
         UNO_NMSPC::Any aAny = aCnt.getPropertyValue(
-                            rtl::OUString::createFromAscii( "IsReadOnly" ));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly")));
         if(aAny.hasValue())
             bIsReadOnly = *(sal_Bool*)aAny.getValue();
     }
@@ -222,9 +219,9 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
         sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;
         UNO_NMSPC::Sequence < rtl::OUString > aProps( nSeqSize );
         rtl::OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = rtl::OUString::createFromAscii( "Title" );
+        pProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         if( pDateTimeList )
-            pProps[ 1 ] = rtl::OUString::createFromAscii( "DateModified" );
+            pProps[ 1 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified"));
 
         try
         {
@@ -232,7 +229,7 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
         }
         catch( UNO_NMSPC::Exception& )
         {
-            DBG_ERRORFILE( "create cursor failed!" );
+            OSL_FAIL( "create cursor failed!" );
         }
 
         if( xResultSet.is() )
@@ -276,16 +273,18 @@ sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
             }
             catch( UNO_NMSPC::Exception& )
             {
-                DBG_ERRORFILE( "Exception caught!" );
+                OSL_FAIL( "Exception caught!" );
             }
         }
     }
     catch( UNO_NMSPC::Exception& )
     {
-        DBG_ERRORFILE( "Exception caught!" );
+        OSL_FAIL( "Exception caught!" );
         bOk = sal_False;
     }
     return bOk;
 }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

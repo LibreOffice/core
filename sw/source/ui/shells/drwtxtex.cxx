@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@
 #include <editeng/adjitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/shdditem.hxx>
-#include <editeng/hyznitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -63,18 +63,13 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/languageoptions.hxx>
-#include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/langitem.hxx>
-#include <svtools/langtab.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/writingmodeitem.hxx>
@@ -86,26 +81,6 @@
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/hyznitem.hxx>
-#include <editeng/kernitem.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <editeng/orphitem.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/spltitem.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/svdview.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/widwitem.hxx>
-#include <editeng/writingmodeitem.hxx>
-#include <tools/shl.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 
 #include <cmdid.h>
 #include <doc.hxx>
@@ -132,13 +107,7 @@
 #include "misc.hrc"
 
 
-#include <langhelper.hxx>
-
 using namespace ::com::sun::star;
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
@@ -317,10 +286,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR,0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -338,10 +307,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), rView.GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -350,10 +319,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -363,7 +332,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             try
             {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), uno::UNO_QUERY);
                 if( xDialog.is() )
                 {
                     xDialog->execute();
@@ -388,7 +357,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -414,10 +383,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 aDlgAttr.Put(aEditAttr);
 
-                // Die Werte sind erst einmal uebernommen worden, um den Dialog anzuzeigen.
-                // Muss natuerlich noch geaendert werden
-                // aDlgAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
-
                 aDlgAttr.Put( SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE) );
                 aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
                 aDlgAttr.Put( SvxFmtSplitItem( sal_True, RES_PARATR_SPLIT ) );
@@ -425,10 +390,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {
@@ -555,7 +520,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         return;
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     if(nEEWhich && pNewAttrs)
@@ -574,10 +539,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         pOLV->GetEditView().SetSelection( aOldSelection );
     }
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDrawTextShell::GetState(SfxItemSet& rSet)
 {
@@ -801,9 +762,6 @@ ASK_ESCAPE:
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 {
     if (!IsTextEdit())  // Sonst Absturz!
@@ -868,9 +826,6 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 {
     if (!IsTextEdit())  // Sonst Absturz!
@@ -898,7 +853,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
             break;
 
         default:
-            DBG_ERROR("falscher Dispatcher");
+            OSL_FAIL("wrong dispatcher");
             return;
     }
 }
@@ -945,11 +900,10 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
             case SID_PASTE_SPECIAL:
                 rSet.DisableItem( SID_PASTE_SPECIAL );
                 break;
-            // --> OD 2008-06-20 #151110#
+            // #151110#
             case SID_CLIPBOARD_FORMAT_ITEMS:
                 rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
                 break;
-            // <--
         }
         nWhich = aIter.NextWhich();
     }
@@ -958,7 +912,6 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Hyperlink-Status
  --------------------------------------------------------------------*/
-
 void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
 {
     if (!IsTextEdit())  // Sonst Absturz!
@@ -1010,3 +963,4 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

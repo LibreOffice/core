@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -140,7 +141,6 @@ void SmPickList::Clear()
 
 
 /**************************************************************************/
-/**************************************************************************/
 
 void * SmFontPickList::CreateItem(const String& /*rString*/)
 {
@@ -157,7 +157,7 @@ void SmFontPickList::DestroyItem(void *pItem)
     delete (Font *)pItem;
 }
 
-sal_Bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
+bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
 {
     Font    *pFirstFont, *pSecondFont;
 
@@ -169,9 +169,9 @@ sal_Bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecond
             (pFirstFont->GetCharSet() == pSecondFont->GetCharSet()) &&
             (pFirstFont->GetWeight()  == pSecondFont->GetWeight())  &&
             (pFirstFont->GetItalic()  == pSecondFont->GetItalic()))
-            return (sal_True);
+            return (true);
 
-    return sal_False;
+    return false;
 }
 
 String SmFontPickList::GetStringItem(void *pItem)
@@ -189,7 +189,7 @@ String SmFontPickList::GetStringItem(void *pItem)
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTITALIC));
     }
-    if (IsBold( *pFont ))    // bold?
+    if (IsBold( *pFont ))
     {
         aString.AppendAscii( pDelim );
         aString += String(SmResId(RID_FONTBOLD));
@@ -227,8 +227,6 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 
 /**************************************************************************/
 
-
-/**************************************************************************/
 
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
@@ -293,8 +291,6 @@ void SmFontPickListBox::Update(const Font &rFont, const Font &rNewFont)
 {
     SmFontPickList::Update(rFont, rNewFont);
 
-    // ********************** hier fehlt noch was
-
     return;
 }
 
@@ -303,14 +299,12 @@ void SmFontPickListBox::Remove(const Font &rFont)
 {
     SmFontPickList::Remove(rFont);
 
-    // ********************** hier fehlt noch was
-
     return;
 }
 
 ////////////////////////////////////////
 
-sal_Bool IsItalic( const Font &rFont )
+bool IsItalic( const Font &rFont )
 {
     FontItalic eItalic = rFont.GetItalic();
     // the code below leaves only _NONE and _DONTKNOW as not italic
@@ -318,7 +312,7 @@ sal_Bool IsItalic( const Font &rFont )
 }
 
 
-sal_Bool IsBold( const Font &rFont )
+bool IsBold( const Font &rFont )
 {
     FontWeight eWeight = rFont.GetWeight();
     return eWeight != WEIGHT_DONTKNOW && eWeight > WEIGHT_NORMAL;
@@ -328,7 +322,7 @@ sal_Bool IsBold( const Font &rFont )
 void SmFace::Impl_Init()
 {
     SetSize( GetSize() );
-    SetTransparent( sal_True );
+    SetTransparent( true );
     SetAlign( ALIGN_BASELINE );
     SetColor( COL_AUTO );
 }
@@ -338,7 +332,7 @@ void SmFace::SetSize(const Size& rSize)
     Size  aSize (rSize);
 
     // check the requested size against minimum value
-    static int __READONLY_DATA  nMinVal = SmPtsTo100th_mm(2);
+    static int const    nMinVal = SmPtsTo100th_mm(2);
 
     if (aSize.Height() < nMinVal)
         aSize.Height() = nMinVal;
@@ -381,3 +375,4 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

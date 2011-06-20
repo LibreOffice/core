@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,11 +42,7 @@
 #include <editeng/brshitem.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/pgrditem.hxx>
-// --> OD 2008-01-17 #newlistlevelattrs#
-#ifndef _SVX_TSTPITEM_HXX
 #include <editeng/tstpitem.hxx>
-#endif
-// <--
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
@@ -61,9 +58,7 @@
 #include <viewopt.hxx>  // SwViewOptions
 #include <frmtool.hxx>  // DrawGraphic
 #include <IDocumentSettingAccess.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <paratr.hxx>   // SwFmtDrop
 #include <rootfrm.hxx>  // SwRootFrm
 #include <inftxt.hxx>   // SwTxtInfo
@@ -78,11 +73,14 @@
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <cstdio>
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
 
 #include <unomid.h>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -101,53 +99,39 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_CENTER 1
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 
-// --> OD 2006-06-27 #b6440955#
+//
 // variable moved to class <numfunc:GetDefBulletConfig>
-//extern const sal_Char __FAR_DATA sBulletFntName[];
+//extern const sal_Char sBulletFntName[];
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();
     extern bool IsDefBulletFontUserDefined();
 }
-// <--
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 // Test2: WYSIWYG++
 // Test4: WYSIWYG debug
 static sal_Bool bDbgLow = sal_False;
 #endif
 
-#ifdef DBG_UTIL
-
+#if OSL_DEBUG_LEVEL > 1
 sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
-
 sal_Bool SwTxtSizeInfo::IsOptLow() const { return bDbgLow; }
-
 sal_Bool SwTxtSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest1() const { return GetOpt().IsTest1(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest2() const { return GetOpt().IsTest2(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest3() const { return GetOpt().IsTest3(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest4() const { return GetOpt().IsTest4(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest5() const { return GetOpt().IsTest5(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest6() const { return GetOpt().IsTest6(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest7() const { return GetOpt().IsTest7(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest8() const { return GetOpt().IsTest8(); }
-
 #endif
 
 /*************************************************************************
  *                      SwLineInfo::SwLineInfo()
  *************************************************************************/
 
-// --> OD 2008-01-17 #newlistlevelattrs#
 SwLineInfo::SwLineInfo()
     : pRuler( 0 ),
       pSpace( 0 ),
@@ -164,10 +148,7 @@ SwLineInfo::~SwLineInfo()
 }
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
                                    const SwTxtNode& rTxtNode )
-// <--
 {
-    // --> OD 2008-01-17 #newlistlevelattrs#
-//    pRuler = &rAttrSet.GetTabStops();
     delete pRuler;
     pRuler = new SvxTabStopItem( rAttrSet.GetTabStops() );
     if ( rTxtNode.GetListTabStopPosition( nListTabStopPosition ) )
@@ -190,8 +171,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
             }
         }
     }
-    // <--
-    // --> OD 2008-02-15 #newlistlevelattrs#
+
     if ( !rTxtNode.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
     {
         // remove default tab stop at position 0
@@ -205,7 +185,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
             }
         }
     }
-    // <--
+
     pSpace = &rAttrSet.GetLineSpacing();
     nVertAlign = rAttrSet.GetParaVertAlign().GetValue();
     nDefTabStop = MSHRT_MAX;
@@ -221,7 +201,7 @@ void SwTxtInfo::CtorInitTxtInfo( SwTxtFrm *pFrm )
     nTxtStart = pFrm->GetOfst();
     if( !pPara )
     {
-        ASSERT( pPara, "+SwTxtInfo::CTOR: missing paragraph information" );
+        OSL_ENSURE( pPara, "+SwTxtInfo::CTOR: missing paragraph information" );
         pFrm->Format();
         pPara = pFrm->GetPara();
     }
@@ -233,7 +213,7 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
 { }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
  *                      ChkOutDev()
  *************************************************************************/
@@ -245,7 +225,7 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
 
     const OutputDevice* pOut = rInf.GetOut();
     const OutputDevice* pRef = rInf.GetRefDev();
-    ASSERT( pOut && pRef, "ChkOutDev: invalid output devices" )
+    OSL_ENSURE( pOut && pRef, "ChkOutDev: invalid output devices" );
 }
 #endif  // PRODUCT
 
@@ -286,7 +266,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkOutDev( *this );
 #endif
 }
@@ -323,7 +303,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef = pOut;
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkOutDev( *this );
 #endif
 
@@ -340,18 +320,6 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
         nDirection = DIR_LEFT2RIGHT;
     }
-
-/*    LanguageType eLang;
-    const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-    if ( SvtCTLOptions::NUMERALS_HINDI == rCTLOptions.GetCTLTextNumerals() )
-        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-    else if ( SvtCTLOptions::NUMERALS_ARABIC == rCTLOptions.GetCTLTextNumerals() )
-        eLang = LANGUAGE_ENGLISH;
-    else
-        eLang = (LanguageType)::GetAppLanguage();
-
-    pOut->SetDigitLanguage( eLang );
-    pRef->SetDigitLanguage( eLang );*/
 
     //
     // The Options
@@ -411,7 +379,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkOutDev( *this );
 #endif
     SetLen( GetMinLen( *this ) );
@@ -440,8 +408,8 @@ void SwTxtSizeInfo::NoteAnimation() const
     if( OnWin() )
         SwRootFrm::FlushVout();
 
-    ASSERT( pOut == pVsh->GetOut(),
-            "SwTxtSizeInfo::NoteAnimation() changed pOut" )
+    OSL_ENSURE( pOut == pVsh->GetOut(),
+            "SwTxtSizeInfo::NoteAnimation() changed pOut" );
 }
 
 /*************************************************************************
@@ -518,7 +486,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
-    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
+    OSL_ENSURE( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( pFrm );
@@ -542,7 +510,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     const SwScriptInfo& rScriptInfo =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
-    ASSERT( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" )
+    OSL_ENSURE( pRef == pOut, "GetTxtBreak is supposed to use the RefDev" );
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
                              *pTxt, GetIdx(), nMaxLen );
     aDrawInf.SetFrm( pFrm );
@@ -569,10 +537,10 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pGrammarCheckList = NULL;
     pSmartTags = NULL;  // SMARTTAGS
 
-#ifndef DBG_UTIL
-    pBrushItem = 0;
-#else
+#if OSL_DEBUG_LEVEL > 1
     pBrushItem = ((SvxBrushItem*)-1);
+#else
+    pBrushItem = 0;
 #endif
 }
 
@@ -709,7 +677,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     const sal_Bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
     const sal_Bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
-    ASSERT( GetParaPortion(), "No paragraph!");
+    OSL_ENSURE( GetParaPortion(), "No paragraph!");
     SwDrawTextInfo aDrawInf( pFrm->getRootFrm()->GetCurrShell(), *pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
 
@@ -722,12 +690,11 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     if ( nSpaceAdd )
     {
         xub_StrLen nCharCnt;
-        // --> FME 2005-04-04 #i41860# Thai justified alignemt needs some
+        // #i41860# Thai justified alignemt needs some
         // additional information:
         aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
                                     static_cast<const SwTxtPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
                                     0 );
-        // <--
     }
 
     aDrawInf.SetSpace( nSpaceAdd );
@@ -920,7 +887,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         nMaxWidth = rRect.Height();
         break;
     default:
-        ASSERT( sal_False, "Unknown direction set at font" )
+        OSL_FAIL( "Unknown direction set at font" );
         break;
     }
 
@@ -998,7 +965,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, sal_Bool bNoGraphic,
             pOut->DrawRect( rRect.SVRect() );
         else
         {
-            ASSERT( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
+            OSL_ENSURE( ((SvxBrushItem*)-1) != pBrushItem, "DrawRect: Uninitialized BrushItem!" );
             ::DrawGraphic( pBrushItem, pOut, aItemRect, rRect );
         }
     }
@@ -1177,7 +1144,7 @@ void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked)
  *************************************************************************/
 void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 {
-    ASSERT( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
+    OSL_ENSURE( OnWin(), "SwTxtPaintInfo::DrawBackground: printer polution ?" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );
@@ -1225,7 +1192,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
             if(pFieldmark) {
                 OSL_TRACE("Found Fieldmark");
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 rtl::OUString str = pFieldmark->ToString( );
                 fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 #endif
@@ -1246,7 +1213,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     }
     if( !pFnt->GetBackColor() ) return;
 
-    ASSERT( pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
+    OSL_ENSURE( pFnt->GetBackColor(), "DrawBackBrush: Lost Color" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );
@@ -1255,9 +1222,8 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
     {
         OutputDevice* pTmpOut = (OutputDevice*)GetOut();
 
-        // --> FME 2004-06-24 #i16816# tagged pdf support
+        // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
-        // <--
 
         pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
@@ -1304,7 +1270,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = sal_True; break;
             default:
             {
-                ASSERT( !this, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
+                OSL_ENSURE( !this, "SwTxtPaintInfo::DrawViewOpt: don't know how to draw this" );
                 break;
             }
         }
@@ -1319,7 +1285,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
 
 void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 {
-    ASSERT( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
+    OSL_ENSURE( pNoteURL, "NotifyURL: pNoteURL gone with the wind!" );
 
     SwRect aIntersect;
     CalcRect( rPor, 0, &aIntersect );
@@ -1367,7 +1333,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         pVal[1].Value <<= nMinTrailing;
     }
     else {
-        DBG_ERROR( "unxpected size of sequence" );
+        OSL_FAIL( "unxpected size of sequence" );
     }
 }
 
@@ -1377,7 +1343,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
 
 const PropertyValues & SwTxtFormatInfo::GetHyphValues() const
 {
-    DBG_ASSERT( 2 == aHyphVals.getLength(),
+    OSL_ENSURE( 2 == aHyphVals.getLength(),
             "hyphenation values not yet initialized" );
     return aHyphVals;
 }
@@ -1524,7 +1490,7 @@ void SwTxtFormatInfo::Init()
     SetPaintOfst(0);
 }
 
-/*-----------------16.10.00 11:39-------------------
+/*--------------------------------------------------
  * There are a few differences between a copy constructor
  * and the following constructor for multi-line formatting.
  * The root is the first line inside the multi-portion,
@@ -1628,18 +1594,11 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     //
     const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     const xub_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
-    // --> FME 2006-01-23 #i45951# German (Switzerland) uses ' as thousand separator:
+    // #i45951# German (Switzerland) uses ' as thousand separator
     const xub_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
-    // <--
 
     bool bNumFound = false;
     const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
-
-    // Removed for i7288. bSkip used to be passed from SwFldPortion::Format
-    // as IsFollow(). Therefore more than one special character was not
-    // handled correctly at the beginning of follow fields.
-//    if ( bSkip && i < nEnd )
-//       ++i;
 
     for( ; i < nEnd; ++i )
     {
@@ -1659,8 +1618,6 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
         case CH_BREAK:
         case CHAR_ZWSP :
         case CHAR_ZWNBSP :
-//        case CHAR_RLM :
-//        case CHAR_LRM :
             cHookChar = cPos;
             return i;
 
@@ -1674,7 +1631,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
             {
                 if( cTabDec == cPos )
                 {
-                    ASSERT( cPos, "Unexpected end of string" );
+                    OSL_ENSURE( cPos, "Unexpected end of string" );
                     if( cPos ) // robust
                     {
                         cHookChar = cPos;
@@ -1707,7 +1664,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
         }
     }
 
-    // --> FME 2006-01-13 #130210# Check if character *behind* the portion has
+    // #130210# Check if character *behind* the portion has
     // to become the hook:
     if ( i == nEnd && i < GetTxt().Len() && bNumFound )
     {
@@ -1977,3 +1934,4 @@ sal_Bool SwTxtFormatInfo::ChgHyph( const sal_Bool bNew )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

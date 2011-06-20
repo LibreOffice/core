@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svx/htmlmode.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -63,7 +62,6 @@ using ::com::sun::star::frame::XFrame;
 
 SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 {
-    // const SfxItemSet& rSet = rPg.GetItemSet();
     SfxEventNamesItem aItem(SID_EVENTCONFIG);
 
     sal_Bool bHtmlMode = sal_False;
@@ -72,17 +70,15 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 
     switch( eType )
     {
-    case MACASSGN_TEXTBAUST:            // Textbausteine
-        // rPg.SetGetRangeLink( &_GetRangeHdl );
+    case MACASSGN_AUTOTEXT:
         aItem.AddEvent( String( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), String(),
                             SW_EVENT_START_INS_GLOSSARY );
         aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(),
                             SW_EVENT_END_INS_GLOSSARY);
-        // damit der neue Handler aktiv wird!
-        // rPg.Reset( rSet );
+        // in order for the new handler to become active!
         break;
     case MACASSGN_ALLFRM:
-    case MACASSGN_GRAPHIC:          // Grafiken
+    case MACASSGN_GRAPHIC:          // graphics
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_ERROR) ), String(),
                                 SVX_EVENT_IMAGE_ERROR);
@@ -91,8 +87,8 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_LOAD) ), String(),
                                 SVX_EVENT_IMAGE_LOAD);
         }
-        // kein break;
-    case MACASSGN_FRMURL:           // Frm - URL-Attribute
+        // no break;
+    case MACASSGN_FRMURL:           // Frm - URL-Attributes
         {
             if( !bHtmlMode &&
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))
@@ -107,15 +103,15 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SW_EVENT_FRM_MOVE );
             }
         }
-        // kein break;
+        // no break;
     case MACASSGN_OLE:              // OLE
         {
             if( !bHtmlMode )
                 aItem.AddEvent( String( SW_RES(STR_EVENT_OBJECT_SELECT) ), String(),
                                 SW_EVENT_OBJECT_SELECT );
         }
-        // kein break;
-    case MACASSGN_INETFMT:          // INetFmt-Attribute
+        // no break;
+    case MACASSGN_INETFMT:          // INetFmt-Attributes
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), String(),
                                 SFX_EVENT_MOUSEOVER_OBJECT );
@@ -161,3 +157,5 @@ sal_Bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
     }
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

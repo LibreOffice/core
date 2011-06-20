@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,32 +30,24 @@
 
 #include <svx/stddlg.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include "tox.hxx"
-#include <tools/list.hxx>
 #include <toxmgr.hxx>
 #include <svx/checklbx.hxx>
 #include <tools/resary.hxx>
 #include <svtools/svtreebx.hxx>
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
+
 #define TOX_PAGE_SELECT 1
 #define TOX_PAGE_ENTRY  2
 #define TOX_PAGE_STYLES 3
@@ -88,3 +81,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

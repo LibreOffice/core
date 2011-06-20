@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,15 +37,14 @@
 
 class IntlWrapper;
 
-//Die Framesize ---------------------------------
+//Frame size.
 
 enum SwFrmSize
 {
-    ATT_VAR_SIZE,       //Frm ist in der Var-Richtung variabel
-    ATT_FIX_SIZE,       //Frm ist in der Var-Richtung unbeweglich
-    ATT_MIN_SIZE        //Der Wert in der Var-Richtung beschreibt eine
-                        //Minimalgroesse, die nicht unter- wohl aber
-                        //ueberschritten werden kann.
+    ATT_VAR_SIZE,       // Frame is variable in Var-direction.
+    ATT_FIX_SIZE,       // Frame cannot be moved in Var-direction.
+    ATT_MIN_SIZE        // Value in Var-direction gives minimum
+                        // (can be exceeded but not be less).
 };
 
 class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
@@ -52,27 +52,28 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     Size      aSize;
     SwFrmSize eFrmHeightType;
     SwFrmSize eFrmWidthType;
-    sal_uInt8     nWidthPercent;    //Fuer Tabellen kann die Breite in Prozent
-    sal_uInt8     nHeightPercent;   //angegeben sein.
-                                //Fuer Rahmen koennen Hoehe und/oder Breite
-                                //in Prozent angegeben sein. Wenn nur eine
-                                //der Angaben in Prozent angeben ist, kann
-                                //durch den ausgezeichneten Wert 0xFF in der
-                                //anderen Prozentangabe bestimmt werden, das
-                                //sich diese Richtung proportional zur anderen
-                                //verhaelt. Basis fuer die Umrechnung sind fuer
-                                //diesen Fall die Angaben in der Size.
-                                //Die Prozentwerte beziehen sich immer auf die
-                                //Umgebung in der das Objekt steht (PrtArea)
-                                //Auf die Bildschirmbreite abzueglich Raender
-                                //in der BrowseView wenn die Umgebung die Seite
-                                //ist.
+    sal_uInt8     nWidthPercent;
+    sal_uInt8     nHeightPercent;
+
+    // For tables: width can be given in percent.
+
+    // For frames: height and/or width may be given in percent.
+    // If only one of these percentage values is given, the value 0xFF
+    // used instead of the missing percentage value indicates this side
+    // being proportional to the given one.
+    // The calculation in this case is based upon the values in Size.
+    // Percentages are always related to the environment in which
+    // the object is placed (PrtArea) and to the screen width
+    // minus borders in BrowseView if the environment is the page.
+
+
+
 public:
     SwFmtFrmSize( SwFrmSize eSize = ATT_VAR_SIZE,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
     SwFmtFrmSize& operator=( const SwFmtFrmSize& rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -80,8 +81,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     SwFrmSize GetHeightSizeType() const { return eFrmHeightType; }
     void SetHeightSizeType( SwFrmSize eSize ) { eFrmHeightType = eSize; }
@@ -111,3 +112,4 @@ inline const SwFmtFrmSize &SwFmt::GetFrmSize(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

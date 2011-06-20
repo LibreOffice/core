@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 
 #include <svl/svarray.hxx>
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
 #include "swdllapi.h"
 
 class SwBoxEntry;
@@ -44,9 +41,8 @@ class Window;
 SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10, 10)
 
 /*--------------------------------------------------------------------
-     Beschreibung: SwBoxEntry
+     Description: SwBoxEntry
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
@@ -66,10 +62,10 @@ public:
 };
 
 /*--------------------------------------------------------------------
-     Beschreibung: fuer ComboBoxen
+     Description: for combo boxes
  --------------------------------------------------------------------*/
-
 typedef sal_uInt16 SwComboBoxStyle;
+
 namespace nsSwComboBoxStyle
 {
     const SwComboBoxStyle CBS_UPPER         = 0x01;
@@ -122,3 +118,5 @@ public:
 };
 
 #endif /* _SWLBOX_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

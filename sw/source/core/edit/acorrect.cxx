@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -192,10 +193,6 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
     {
         SwDoc* pDoc = rEditSh.GetDoc();
 
-//      if( !pDoc->IsAutoFmtRedline() &&
-//          pPam != &rCrsr )    // nur an akt. Position das Redline sichern
-//          pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
-
         if( pDoc->IsAutoFmtRedline() )
         {
             if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
@@ -310,7 +307,6 @@ const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
         (*pIdx)--;
         pTNd = pIdx->GetNode().GetTxtNode();
     }
-    //if( pTNd && NO_NUMBERING == pTNd->GetTxtColl()->GetOutlineLevel() )
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
         pStr = &pTNd->GetTxt();
 
@@ -330,7 +326,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
     // Absatz-Anfang oder ein Blank gefunden, suche nach dem Wort
     // Kuerzel im Auto
     SwTxtNode* pTxtNd = rCrsr.GetNode()->GetTxtNode();
-    ASSERT( pTxtNd, "wo ist denn der TextNode?" );
+    OSL_ENSURE( pTxtNd, "wo ist denn der TextNode?" );
 
     sal_Bool bRet = sal_False;
     if( nEndPos == rSttPos )
@@ -374,7 +370,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 
                 if( ppPara )
                 {
-                    ASSERT( !pIdx, "wer hat seinen Index nicht geloescht?" );
+                    OSL_ENSURE( !pIdx, "wer hat seinen Index nicht geloescht?" );
                     pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
                 }
 
@@ -460,7 +456,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         rPos.nContent.GetIndex() == nCntnt )
     {
         // die akt. Autokorrektur besorgen:
-        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
         // dann in die Liste aufnehmen:
         if( CptlSttWrd & nFlags )
@@ -546,3 +542,4 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

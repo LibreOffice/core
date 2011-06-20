@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 
 #include <dbui.hrc>
 #include <dbtablepreviewdialog.hrc>
@@ -55,9 +54,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::rtl;
 
-/*-- 08.04.2004 15:12:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
 #ifdef MSC
@@ -74,7 +70,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
     const beans::PropertyValue* pValues = rValues.getConstArray();
     for(sal_Int32 nValue = 0; nValue < rValues.getLength(); ++nValue        )
     {
-        if(pValues[nValue].Name.equalsAscii("Command"))
+        if(pValues[nValue].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Command")))
         {
             String sDescription = m_aDescriptionFI.GetText();
             OUString sTemp;
@@ -113,25 +109,9 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< b
             xD->dispatch(aURL, rValues);
             m_pBeamerWIN->Show();
         }
-/*        uno::Reference<???::XController> xController = m_xFrame->getController();
-        pImpl->xFController = uno::Reference<???::XFormController>(xController, uno::UNO_QUERY);
-        if(pImpl->xFController.is())
-        {
-            uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
-            pImpl->xSelSupp = uno::Reference<???::XSelectionSupplier>(xCtrl, uno::UNO_QUERY);
-            if(pImpl->xSelSupp.is())
-            {
-                pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
-                pImpl->xSelSupp->addSelectionChangeListener(  pImpl->xChgLstnr );
-            }
-        }
-*/    }
-
-
+    }
 }
-/*-- 08.04.2004 15:12:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
 {
     if(m_xFrame.is())
@@ -142,3 +122,5 @@ SwDBTablePreviewDialog::~SwDBTablePreviewDialog()
     else
         delete m_pBeamerWIN;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

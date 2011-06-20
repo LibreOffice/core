@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,12 +58,13 @@
 #include "sectfrm.hxx"
 #include "dbg_lay.hxx"
 
-// --> OD 2004-06-23 #i28701#
+// #i28701#
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
-// --> OD 2004-11-01 #i36347#
+// #i36347#
 #include <flyfrms.hxx>
-// <--
+
+#include <ndtxt.hxx>
 
 //------------------------------------------------------------------------
 //              Move-Methoden
@@ -73,8 +75,6 @@
 |*  SwCntntFrm::ShouldBwdMoved()
 |*
 |*  Beschreibung        Returnwert sagt, ob der Frm verschoben werden sollte.
-|*  Ersterstellung      MA 05. Dec. 96
-|*  Letzte Aenderung    MA 05. Dec. 96
 |*
 |*************************************************************************/
 
@@ -120,7 +120,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
                 SwSectionFrm *pSect = pNewUpper->FindSctFrm();
                 while( pSect && pSect->IsInFtn() )
                     pSect = pSect->GetUpper()->FindSctFrm();
-                ASSERT( pSect, "Escaping footnote" );
+                OSL_ENSURE( pSect, "Escaping footnote" );
                 if( pSect != pMySect )
                     return sal_False;
             }
@@ -204,7 +204,7 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
                     // _WouldFit kann auch gefragt werden, wenn _nur_ fremdverankerte Flys vorliegen,
                     // dabei ist sogar die Breite egal, da ein TestFormat in der neuen Umgebung
                     // vorgenommen wird.
-                    // --> OD 2007-11-26 #b6614158#
+                    //
                     const sal_uInt8 nBwdMoveNecessaryResult =
                                             BwdMoveNecessary( pNewPage, aRect);
                     const bool bObjsInNewUpper( nBwdMoveNecessaryResult == 2 ||
@@ -212,7 +212,6 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
 
                     return _WouldFit( nSpace, pNewUpper, nMoveAnyway == 2,
                                       bObjsInNewUpper );
-                    // <--
                 }
                 //Bei einem spaltigen Bereichsfrischling kann _WouldFit kein
                 //brauchbares Ergebnis liefern, also muessen wir wirklich
@@ -257,8 +256,6 @@ sal_Bool SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool 
 |*      Ein weiterer Vorteil ist, das eines schoenen Tages das _Prepare und
 |*      damit die Formatierung von Vorgaengern umgangen werden kann.
 |*      So kann evtl. mal 'schnell' an's Dokumentende gesprungen werden.
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 13. Dec. 93
 |*
 |*************************************************************************/
 //Zwei kleine Freundschaften werden hier zu einem Geheimbund.
@@ -277,9 +274,8 @@ bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
 {
     return !rFrm.GetUpper()->IsSctFrm() &&
            !rFrm.GetUpper()->IsFooterFrm() &&
-           // --> OD 2004-11-02 #i23129#, #i36347# - no format of upper Writer fly frame
+           // #i23129#, #i36347# - no format of upper Writer fly frame
            !rFrm.GetUpper()->IsFlyFrm() &&
-           // <--
            !( rFrm.GetUpper()->IsTabFrm() && rFrm.GetUpper()->GetUpper()->IsInTab() ) &&
            !( rFrm.IsTabFrm() && rFrm.GetUpper()->IsInTab() );
 }
@@ -291,7 +287,7 @@ void SwFrm::PrepareMake()
     {
         if ( lcl_IsCalcUpperAllowed( *this ) )
             GetUpper()->Calc();
-        ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
+        OSL_ENSURE( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
             return;
 
@@ -326,7 +322,7 @@ void SwFrm::PrepareMake()
             }
         }
 
-        // --> OD 2005-03-04 #i44049# - no format of previous frame, if current
+        // #i44049# - no format of previous frame, if current
         // frame is a table frame and its previous frame wants to keep with it.
         const bool bFormatPrev = !bTab ||
                                  !GetPrev() ||
@@ -336,7 +332,7 @@ void SwFrm::PrepareMake()
             SwFrm *pFrm = GetUpper()->Lower();
             while ( pFrm != this )
             {
-                ASSERT( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
+                OSL_ENSURE( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
                 if ( !pFrm )
                     return; //Oioioioi ...
 
@@ -376,14 +372,14 @@ void SwFrm::PrepareMake()
                         pFrm = pCnt;
                 }
             }
-            ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
+            OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
             if ( !GetUpper() )
                 return;
 
             if ( lcl_IsCalcUpperAllowed( *this ) )
                 GetUpper()->Calc();
 
-            ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
+            OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
         }
 
         if ( bTab && !bOldTabLock )
@@ -394,13 +390,12 @@ void SwFrm::PrepareMake()
 
 void SwFrm::OptPrepareMake()
 {
-    // --> OD 2004-11-02 #i23129#, #i36347# - no format of upper Writer fly frame
+    // #i23129#, #i36347# - no format of upper Writer fly frame
     if ( GetUpper() && !GetUpper()->IsFooterFrm() &&
          !GetUpper()->IsFlyFrm() )
-    // <--
     {
         GetUpper()->Calc();
-        ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
+        OSL_ENSURE( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
             return;
     }
@@ -423,7 +418,7 @@ void SwFrm::PrepareCrsr()
         GetUpper()->PrepareCrsr();
         GetUpper()->Calc();
 
-        ASSERT( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
+        OSL_ENSURE( GetUpper(), ":-( Layoutgeruest wackelig (Upper wech)." );
         if ( !GetUpper() )
             return;
 
@@ -450,7 +445,7 @@ void SwFrm::PrepareCrsr()
         SwFrm *pFrm = GetUpper()->Lower();
         while ( pFrm != this )
         {
-            ASSERT( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
+            OSL_ENSURE( pFrm, ":-( Layoutgeruest wackelig (this not found)." );
             if ( !pFrm )
                 return; //Oioioioi ...
 
@@ -480,13 +475,13 @@ void SwFrm::PrepareCrsr()
                     pFrm = pCnt;
             }
         }
-        ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
+        OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech II)." );
         if ( !GetUpper() )
             return;
 
         GetUpper()->Calc();
 
-        ASSERT( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
+        OSL_ENSURE( GetUpper(), "Layoutgeruest wackelig (Upper wech III)." );
 
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( (SwTabFrm*)this );
@@ -497,9 +492,6 @@ void SwFrm::PrepareCrsr()
 /*************************************************************************
 |*
 |*  SwFrm::MakePos()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 24. May. 93
 |*
 |*************************************************************************/
 
@@ -597,7 +589,7 @@ void SwFrm::MakePos()
             // NOTE: Footer frame is <ColLocked()> during its
             //     <FormatSize(..)>, which is called from <Format(..)>, which
             //     is called from <MakeAll()>, which is called from <Calc()>.
-            // --> OD 2005-11-17 #i56850#
+            // #i56850#
             // - no format of upper Writer fly frame, which is anchored
             //   at-paragraph or at-character.
             if ( !GetUpper()->IsTabFrm() &&
@@ -610,7 +602,6 @@ void SwFrm::MakePos()
             {
                 GetUpper()->Calc();
             }
-            // <--
             pPrv = lcl_Prev( this, sal_False );
             if ( !bUseUpper && pPrv )
             {
@@ -670,11 +661,8 @@ void SwFrm::MakePos()
 |*
 |*  SwPageFrm::MakeAll()
 |*
-|*  Ersterstellung      MA 23. Feb. 93
-|*  Letzte Aenderung    MA 20. Jul. 98
-|*
 |*************************************************************************/
-// --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
+// #i28701# - new type <SwSortedObjs>
 void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
 {
     //Und dann kann es natuerlich noch Absatzgebundene
@@ -682,7 +670,7 @@ void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
     long nMax = 0;
     for ( sal_uInt16 i = 0; i < pSortedObjs->Count(); ++i )
     {
-        // --> OD 2004-07-01 #i28701# - consider changed type of <SwSortedObjs>
+        // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
         SwAnchoredObject* pObj = (*pSortedObjs)[i];
         long nTmp = 0;
@@ -701,7 +689,6 @@ void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
         else
             nTmp = pObj->GetObjRect().Bottom();
         nMax = Max( nTmp, nMax );
-        // <--
     }
     ++nMax; //Unterkante vs. Hoehe!
     rBot = Max( rBot, nMax );
@@ -801,7 +788,7 @@ void SwPageFrm::MakeAll()
                             else
                             {
                                 // OD 30.10.2002 #97265# - assert invalid lower property
-                                ASSERT( !(pFrm->Frm().Height() < pFrm->Prt().Height()),
+                                OSL_ENSURE( !(pFrm->Frm().Height() < pFrm->Prt().Height()),
                                         "SwPageFrm::MakeAll(): Lower with frame height < printing height" );
                                 nTmp += pFrm->Frm().Height() - pFrm->Prt().Height();
                             }
@@ -820,18 +807,16 @@ void SwPageFrm::MakeAll()
                         if ( pSortedObjs )
                             lcl_CheckObjects( pSortedObjs, this, nBot );
                         nBot -= Frm().Top();
-                        // --> OD 2004-11-10 #i35143# - If second page frame
+                        // #i35143# - If second page frame
                         // exists, the first page doesn't have to fulfill the
                         // visible area.
                         if ( !GetPrev() && !GetNext() )
-                        // <--
                         {
                             nBot = Max( nBot, pSh->VisArea().Height() );
                         }
-                        // --> OD 2004-11-10 #i35143# - Assure, that the page
+                        // #i35143# - Assure, that the page
                         // doesn't exceed the defined browse height.
                         Frm().Height( Min( nBot, BROWSE_HEIGHT ) );
-                        // <--
                     }
                     Prt().Left ( pAttrs->CalcLeftLine() + aBorder.Width() );
                     Prt().Top  ( nTop );
@@ -855,12 +840,12 @@ void SwPageFrm::MakeAll()
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Der Upper (Root) muss mindestens so breit
     //sein, dass er die breiteste Seite aufnehmen kann.
     if ( GetUpper() )
     {
-        ASSERT( GetUpper()->Prt().Width() >= aFrm.Width(), "Rootsize" );
+        OSL_ENSURE( GetUpper()->Prt().Width() >= aFrm.Width(), "Rootsize" );
     }
 #endif
 }
@@ -868,9 +853,6 @@ void SwPageFrm::MakeAll()
 /*************************************************************************
 |*
 |*  SwLayoutFrm::MakeAll()
-|*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 28. Nov. 95
 |*
 |*************************************************************************/
 
@@ -958,10 +940,43 @@ void SwLayoutFrm::MakeAll()
 |*
 |*  SwCntntFrm::MakePrtArea()
 |*
-|*  Ersterstellung      MA 17. Nov. 92
-|*  Letzte Aenderung    MA 03. Mar. 96
-|*
 |*************************************************************************/
+bool SwTxtNode::IsCollapse() const
+{
+    if ( GetDoc()->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA ) &&  GetTxt().Len()==0 ) {
+        sal_uLong nIdx=GetIndex();
+        const SwEndNode *pNdBefore=GetNodes()[nIdx-1]->GetEndNode();
+        const SwEndNode *pNdAfter=GetNodes()[nIdx+1]->GetEndNode();
+
+        // The paragraph is collapsed only if the NdAfter is the end of a cell
+        bool bInTable = this->FindTableNode( ) != NULL;
+
+        SwSortedObjs* pObjs = this->getLayoutFrm( GetDoc()->GetCurrentLayout() )->GetDrawObjs( );
+        sal_uInt32 nObjs = ( pObjs != NULL ) ? pObjs->Count( ) : 0;
+
+        if ( pNdBefore!=NULL && pNdAfter!=NULL && nObjs == 0 && bInTable ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else
+        return false;
+}
+
+bool SwFrm::IsCollapse() const
+{
+    if (IsTxtFrm()) {
+        const SwTxtFrm *pTxtFrm=(SwTxtFrm*)this;
+        const SwTxtNode *pTxtNode=pTxtFrm->GetTxtNode();
+        if (pTxtNode && pTxtNode->IsCollapse()) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
 
 sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
@@ -1009,7 +1024,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
                 for (sal_uInt16 i = 0; GetDrawObjs() && i < GetDrawObjs()->Count();++i)
                 {
-                    // --> OD 2004-07-01 #i28701# - consider changed type of
+                    // #i28701# - consider changed type of
                     // <SwSortedObjs> entries
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrmFmt& rFmt = pObj->GetFrmFmt();
@@ -1026,7 +1041,6 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                                          bFly ? rFmt.GetFrmSize().GetWidth()
                                               : pObj->GetObjRect().Width() );
                     }
-                    // <--
                 }
 
                 const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
@@ -1063,8 +1077,11 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
             nUpper = CalcUpperSpace( &rAttrs, NULL );
 
-            // OD 2004-03-02 #106629# - use new method <CalcLowerSpace(..)>
             SwTwips nLower = CalcLowerSpace( &rAttrs );
+            if (IsCollapse()) {
+                nUpper=0;
+                nLower=0;
+            }
 //            // in balanced columned section frames we do not want the
 //            // common border
 //            sal_Bool bCommonBorder = sal_True;
@@ -1100,15 +1117,11 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 |*
 |*  SwCntntFrm::MakeAll()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 16. Dec. 96
-|*
 |*************************************************************************/
 
 #define STOP_FLY_FORMAT 10
-// --> OD 2006-09-25 #b6448963# - loop prevention
+// - loop prevention
 const int cnStopFormat = 15;
-// <--
 
 inline void ValidateSz( SwFrm *pFrm )
 {
@@ -1121,8 +1134,8 @@ inline void ValidateSz( SwFrm *pFrm )
 
 void SwCntntFrm::MakeAll()
 {
-    ASSERT( GetUpper(), "keinen Upper?" );
-    ASSERT( IsTxtFrm(), "MakeAll(), NoTxt" );
+    OSL_ENSURE( GetUpper(), "keinen Upper?" );
+    OSL_ENSURE( IsTxtFrm(), "MakeAll(), NoTxt" );
 
     if ( !IsFollow() && StackHack::IsLocked() )
         return;
@@ -1130,31 +1143,30 @@ void SwCntntFrm::MakeAll()
     if ( IsJoinLocked() )
         return;
 
-    ASSERT( !((SwTxtFrm*)this)->IsSwapped(), "Calculation of a swapped frame" );
+    OSL_ENSURE( !((SwTxtFrm*)this)->IsSwapped(), "Calculation of a swapped frame" );
 
     StackHack aHack;
 
     if ( ((SwTxtFrm*)this)->IsLocked() )
     {
-        ASSERT( sal_False, "Format fuer gelockten TxtFrm." );
+        OSL_FAIL( "Format fuer gelockten TxtFrm." );
         return;
     }
 
     LockJoin();
     long nFormatCount = 0;
-    // --> OD 2006-09-25 #b6448963# - loop prevention
+    // - loop prevention
     int nConsequetiveFormatsWithoutChange = 0;
-    // <--
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {
         static sal_Bool bWarn = sal_False;
         if( pDoc->InXMLExport() )
         {
-            ASSERT( bWarn, "Formatting during XML-export!" );
+            OSL_ENSURE( bWarn, "Formatting during XML-export!" );
             bWarn = sal_True;
         }
         else
@@ -1220,16 +1232,15 @@ void SwCntntFrm::MakeAll()
         }
     }
 
-    // --> OD 2008-08-12 #b6732519#
+    //
     if ( GetUpper()->IsSctFrm() &&
          HasFollow() &&
          GetFollow()->GetFrm() == GetNext() )
     {
         dynamic_cast<SwTxtFrm*>(this)->JoinFrm();
     }
-    // <--
 
-    // --> OD 2004-06-23 #i28701# - move master forward, if it has to move,
+    // #i28701# - move master forward, if it has to move,
     // because of its object positioning.
     if ( !static_cast<SwTxtFrm*>(this)->IsFollow() )
     {
@@ -1238,7 +1249,7 @@ void SwCntntFrm::MakeAll()
                                                     *(GetAttrSet()->GetDoc()),
                                                     *(static_cast<SwTxtFrm*>(this)),
                                                     nToPageNum );
-        // --> OD 2006-01-27 #i58182#
+        // #i58182#
         // Also move a paragraph forward, which is the first one inside a table cell.
         if ( bMoveFwdByObjPos &&
              FindPageFrm()->GetPhyPageNum() < nToPageNum &&
@@ -1251,9 +1262,7 @@ void SwCntntFrm::MakeAll()
             bMovedFwd = sal_True;
             MoveFwd( bMakePage, sal_False );
         }
-        // <--
     }
-    // <--
 
     //Wenn ein Follow neben seinem Master steht und nicht passt, kann er
     //gleich verschoben werden.
@@ -1296,10 +1305,9 @@ void SwCntntFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
-        // --> OD 2006-09-25 #b6448963# - loop prevention
+        // - loop prevention
         SwRect aOldFrm_StopFormat( Frm() );
         SwRect aOldPrt_StopFormat( Prt() );
-        // <--
         if ( sal_True == (bMoveable = IsMoveable()) )
         {
             SwFrm *pPre = GetIndPrev();
@@ -1314,7 +1322,7 @@ void SwCntntFrm::MakeAll()
                     //nach dem hin und her fliessen sparen.
                     GetUpper()->ResetCompletePaint();
                     //Der Vorgaenger wurde Invalidiert, das ist jetzt auch obsolete.
-                    ASSERT( pPre, "missing old Prev" );
+                    OSL_ENSURE( pPre, "missing old Prev" );
                     if( !pPre->IsSctFrm() )
                         ::ValidateSz( pPre );
                 }
@@ -1331,7 +1339,7 @@ void SwCntntFrm::MakeAll()
         //FixSize einstellen, die VarSize wird von Format() justiert.
         if ( !bValidSize )
         {
-            // --> OD 2006-01-03 #125452#
+            // #125452#
             // invalidate printing area flag, if the following conditions are hold:
             // - current frame width is 0.
             // - current printing area width is 0.
@@ -1352,27 +1360,25 @@ void SwCntntFrm::MakeAll()
             }
 
             (Frm().*fnRect->fnSetWidth)( nNewFrmWidth );
-            // <--
         }
         if ( !bValidPrtArea )
         {
             const long nOldW = (Prt().*fnRect->fnGetWidth)();
-            // --> OD 2004-09-28 #i34730# - keep current frame height
+            // #i34730# - keep current frame height
             const SwTwips nOldH = (Frm().*fnRect->fnGetHeight)();
-            // <--
             MakePrtArea( rAttrs );
             if ( nOldW != (Prt().*fnRect->fnGetWidth)() )
                 Prepare( PREP_FIXSIZE_CHG );
-            // --> OD 2004-09-28 #i34730# - check, if frame height has changed.
+            // #i34730# - check, if frame height has changed.
             // If yes, send a PREP_ADJUST_FRM and invalidate the size flag to
             // force a format. The format will check in its method
             // <SwTxtFrm::CalcPreps()>, if the already formatted lines still
             // fit and if not, performs necessary actions.
-            // --> OD 2005-01-10 #i40150# - no check, if frame is undersized.
+            // #i40150# - no check, if frame is undersized.
             if ( bValidSize && !IsUndersized() &&
                  nOldH != (Frm().*fnRect->fnGetHeight)() )
             {
-                // --> OD 2004-11-25 #115759# - no PREP_ADJUST_FRM and size
+                // #115759# - no PREP_ADJUST_FRM and size
                 // invalidation, if height decreases only by the additional
                 // lower space as last content of a table cell and an existing
                 // follow containing one line exists.
@@ -1386,9 +1392,7 @@ void SwCntntFrm::MakeAll()
                     Prepare( PREP_ADJUST_FRM );
                     bValidSize = sal_False;
                 }
-                // <--
             }
-            // <--
         }
 
         //Damit die Witwen- und Waisen-Regelung eine Change bekommt muss der
@@ -1424,7 +1428,7 @@ void SwCntntFrm::MakeAll()
             ++nFormatCount;
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( sal_True );
-            // --> OD 2006-09-25 #b6448963# - loop prevention
+            // - loop prevention
             // No format any longer, if <cnStopFormat> consequetive formats
             // without change occur.
             if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
@@ -1434,32 +1438,10 @@ void SwCntntFrm::MakeAll()
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( false, "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
+                OSL_FAIL( "debug assertion: <SwCntntFrm::MakeAll()> - format of text frame suppressed by fix b6448963" );
             }
 #endif
-            // <--
         }
-
-        // FME 16.07.2003 #i16930# - removed this code because it did not work
-
-        // OD 04.04.2003 #108446# - react on the situation detected in the text
-        // formatting - see <SwTxtFrm::FormatAdjust(..)>:
-        // text frame has to move forward, because its text formatting stopped,
-        // created a follow and detected, that it contains no content.
-/*        if ( IsTxtFrm() && bValidPos && bValidSize && bValidPrtArea &&
-             (Frm().*fnRect->fnGetHeight)() == 0 &&
-             HasFollow()
-           )
-        {
-            SwFrm* pOldUpper = GetUpper();
-            MoveFwd( sal_True, sal_False );
-            if ( GetUpper() != pOldUpper )
-            {
-                bMovedFwd = sal_True;
-                SWREFRESHFN( this )
-                continue;
-            }
-        } */
 
         //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
         //ich zurueckfliessen kann (wenn ich mich ueberhaupt bewegen soll).
@@ -1542,7 +1524,7 @@ void SwCntntFrm::MakeAll()
         //dazu fuehren, dass seine Position obwohl unrichtig valide ist.
         if ( bValidPos )
         {
-            // --> OD 2006-01-23 #i59341#
+            // #i59341#
             // Workaround for inadequate layout algorithm:
             // suppress invalidation and calculation of position, if paragraph
             // has formatted itself at least STOP_FLY_FORMAT times and
@@ -1552,7 +1534,6 @@ void SwCntntFrm::MakeAll()
             if ( bFtn &&
                  nFormatCount <= STOP_FLY_FORMAT &&
                  !GetDrawObjs() )
-            // <--
             {
                 bValidPos = sal_False;
                 MakePos();
@@ -1561,7 +1542,7 @@ void SwCntntFrm::MakeAll()
             }
         }
 
-        // --> OD 2006-09-25 #b6448963# - loop prevention
+        // - loop prevention
         {
             if ( aOldFrm_StopFormat == Frm() &&
                  aOldPrt_StopFormat == Prt() )
@@ -1573,7 +1554,6 @@ void SwCntntFrm::MakeAll()
                 nConsequetiveFormatsWithoutChange = 0;
             }
         }
-        // <--
 
         //Wieder ein Wert ungueltig? - dann nochmal das ganze...
         if ( !bValidPos || !bValidSize || !bValidPrtArea )
@@ -1688,7 +1668,7 @@ void SwCntntFrm::MakeAll()
                     bFitPromise = sal_True;
                     continue;
                 }
-                /* -----------------19.02.99 12:58-------------------
+                /* --------------------------------------------------
                  * Frueher wurde in Rahmen und Bereichen niemals versucht,
                  * durch bMoveOrFit den TxtFrm unter Verzicht auf seine
                  * Attribute (Widows,Keep) doch noch passend zu bekommen.
@@ -1703,10 +1683,10 @@ void SwCntntFrm::MakeAll()
                       ( !bSct || !FindSctFrm()->IsColLocked() ) )
                     bMoveOrFit = sal_True;
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
             {
-                ASSERT( sal_False, "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );
+                OSL_FAIL( "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );
             }
 #endif
         }
@@ -1759,7 +1739,7 @@ void SwCntntFrm::MakeAll()
             }
 
 #if OSL_DEBUG_LEVEL > 1
-            ASSERT( false, "LoopControl in SwCntntFrm::MakeAll" )
+            OSL_FAIL( "LoopControl in SwCntntFrm::MakeAll" );
 #endif
         }
         if ( bMovedBwd && GetUpper() )
@@ -1777,13 +1757,11 @@ void SwCntntFrm::MakeAll()
     LOOPING_LOUIE_LIGHT( bMovedFwd && bMovedBwd && !IsInBalancedSection() &&
                             (
 
-                                // --> FME 2005-01-26 #118572#
+                                // #118572#
                                 ( bFtn && !FindFtnFrm()->GetRef()->IsInSct() ) ||
-                                // <--
 
-                                // --> FME 2005-01-27 #i33887#
+                                // #i33887#
                                 ( IsInSct() && bKeep )
-                                // <--
 
                                 // ... add your conditions here ...
 
@@ -1809,9 +1787,6 @@ void SwCntntFrm::MakeAll()
 /*************************************************************************
 |*
 |*  SwCntntFrm::_WouldFit()
-|*
-|*  Ersterstellung      MA 28. Feb. 95
-|*  Letzte Aenderung    AMA 15. Feb. 99
 |*
 |*************************************************************************/
 
@@ -1871,7 +1846,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
 
 sal_Bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
 {
-    ASSERT( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
+    OSL_ENSURE( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
     pFrm = pFrm->FindFtnBossFrm();
     pNxt = pNxt->FindFtnBossFrm();
     // Falls pFrm eine letzte Spalte ist, wird stattdessen die Seite genommen
@@ -1884,12 +1859,11 @@ sal_Bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
     return ( pFrm && pNxt && pFrm->GetNext() == pNxt );
 }
 
-// --> OD 2007-11-26 #b6614158#
+//
 sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                             SwLayoutFrm *pNewUpper,
                             sal_Bool bTstMove,
                             const bool bObjsInNewUpper )
-// <--
 {
     //Damit die Fussnote sich ihren Platz sorgsam waehlt, muss
     //sie in jedem Fall gemoved werden, wenn zwischen dem
@@ -1913,11 +1887,10 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
         pTmpPrev = pTmpPrev->GetNext();
     do
     {
-        // --> FME 2005-03-31 #b6236853# #i46181#
+        // #i46181#
         SwTwips nSecondCheck = 0;
         SwTwips nOldSpace = nSpace;
         sal_Bool bOldSplit = bSplit;
-        // <--
 
         if ( bTstMove || IsInFly() || ( IsInSct() &&
              ( pFrm->GetUpper()->IsColBodyFrm() || ( pFtnFrm &&
@@ -1986,7 +1959,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                     bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
                 }
 
-                // --> FME 2005-03-31 #b6236853# #i46181#
+                // #i46181#
                 nSecondCheck = ( 1 == nSecondCheck &&
                                  pFrm == this &&
                                  IsTxtFrm() &&
@@ -1994,7 +1967,6 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                                  !static_cast<const SwTxtFrm*>(this)->IsEmpty() ) ?
                                  nUpper :
                                  0;
-                // <--
 
                 nUpper += bCommonBorder ?
                           rAttrs.GetBottomLine( *(pFrm) ) :
@@ -2003,9 +1975,8 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
             }
             else
             {
-                // --> FME 2005-03-31 #b6236853# #i46181#
+                // #i46181#
                 nSecondCheck = 0;
-                // <--
 
                 if( pFrm->IsVertical() )
                     nUpper = pFrm->Frm().Width() - pFrm->Prt().Width();
@@ -2019,7 +1990,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
             {
                 bRet = sal_False;
 
-                // --> FME 2005-03-31 #b6236853# #i46181#
+                // #i46181#
                 if ( nSecondCheck > 0 )
                 {
                     // The following code is indented to solve a (rare) problem
@@ -2038,7 +2009,6 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                         bSplit = sal_True;
                     }
                 }
-                // <--
             }
         }
 
@@ -2066,7 +2036,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                 // doesn't makes sense. Thus, return sal_True.
                 if ( IsAnFollow( pFrm ) && !pFrm->IsValid() )
                 {
-                    ASSERT( false, "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
+                    OSL_FAIL( "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );
                     return sal_True;
                 }
             }
@@ -2076,7 +2046,7 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                   pNxt->FindFtnFrm()->GetAttr() == pFtnFrm->GetAttr() ) ) )
             {
                 // ProbeFormatierung vertraegt keine absatz- oder gar zeichengebundene Objekte
-                // --> OD 2007-11-26 #b6614158#
+                //
                 // current solution for the test formatting doesn't work, if
                 // objects are present in the remaining area of the new upper
                 if ( bTstMove &&
@@ -2084,7 +2054,6 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                 {
                     return sal_True;
                 }
-                // <--
 
                 if ( !pNxt->IsValid() )
                     MakeNxt( pFrm, pNxt );
@@ -2113,3 +2082,5 @@ sal_Bool SwCntntFrm::_WouldFit( SwTwips nSpace,
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

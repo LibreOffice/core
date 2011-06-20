@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,11 +28,7 @@
 #ifndef _TABCOL_HXX
 #define _TABCOL_HXX
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_LONGS
-#define _SVSTDARR_BOOLS
-#include <svl/svstdarr.hxx>
-#endif
+#include <tools/solar.h>
 
 #ifndef INCLUDED_VECTOR
 #include <vector>
@@ -44,31 +41,30 @@ struct SwTabColsEntry
     long    nPos;
     long    nMin;
     long    nMax;
-    sal_Bool    bHidden;    //Fuer jeden Eintrag ein Flag, Hidden oder nicht.
-                        //Wenn das Flag Hidden sal_True ist liegt der Spalten-
-                        //trenner nicht in der aktuellen Zeile; er muss
-                        //mit gepflegt werden, darf aber nicht angezeigt
-                        //werden.
+    sal_Bool    bHidden; // For each entry a flag, hidden or not.
+                         // If the flag bHidden is sal_True column separator
+                         // is not in current line. It must maintained
+                         // but it may not be displayed.
 };
 
 typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
 class SW_DLLPUBLIC SwTabCols
 {
-    long nLeftMin,      //Linker aeusserer Rand (Bezugspunkt) in
-                        //Dokumentkordinaten.
-                        //Alle anderen Werte relativ zu diesem Punkt!
-            nLeft,      //Linker Rand der Tabelle.
-           nRight,      //Rechter Rand der Tabelle.
-           nRightMax;   //Maximaler rechter Rand der Tabelle.
+    long nLeftMin,      // Leftmost border (reference point) for
+                        // document coordinates.
+                        // All other values are relative to this point!
+            nLeft,      // Left border of table.
+           nRight,      // Right border of table.
+           nRightMax;   // Maximum right border of table.
 
-    bool bLastRowAllowedToChange;       // if the last row of the table frame
+    bool bLastRowAllowedToChange;       // If the last row of the table frame
                                         // is split across pages, it may not
-                                        // change its size
+                                        // change its size.
 
     SwTabColsEntries aData;
 
-    //fuer den CopyCTor
+    //For the CopyCTor.
     const SwTabColsEntries& GetData() const { return aData; }
 
 public:
@@ -105,3 +101,5 @@ public:
 };
 
 #endif  //_TABCOL_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

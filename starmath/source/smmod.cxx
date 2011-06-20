@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include <vcl/wrkwin.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
@@ -49,12 +48,11 @@
 #include "smmod.hxx"
 #include "symbol.hxx"
 #include "config.hxx"
-#ifndef _DIALOG_HXX
 #include "dialog.hxx"
-#endif
 #include "edit.hxx"
 #include "view.hxx"
 #include "starmath.hrc"
+#include "svx/modctrl.hxx"
 
 TYPEINIT1( SmModule, SfxModule );
 
@@ -242,6 +240,8 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
     pVirtualDev( 0 )
 {
     SetName( C2S("StarMath" ));
+
+    SvxModifyControl::RegisterControl(SID_DOC_MODIFIED, this);
 }
 
 
@@ -336,9 +336,6 @@ void SmModule::GetState(SfxItemSet &rSet)
         }
 }
 
-/* -----------------15.02.99 12:45-------------------
- *
- * --------------------------------------------------*/
 SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
 {
     SfxItemSet*  pRet = 0;
@@ -359,9 +356,6 @@ SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
     }
     return pRet;
 }
-/* -----------------15.02.99 12:45-------------------
- *
- * --------------------------------------------------*/
 void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 {
     if(nId == SID_SM_EDITOPTIONS)
@@ -369,9 +363,6 @@ void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         GetConfig()->ItemSetToConfig(rSet);
     }
 }
-/* -----------------15.02.99 12:45-------------------
- *
- * --------------------------------------------------*/
 SfxTabPage*  SmModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage*  pRet = 0;
@@ -380,3 +371,5 @@ SfxTabPage*  SmModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
     return pRet;
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

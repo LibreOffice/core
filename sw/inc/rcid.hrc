@@ -36,7 +36,7 @@
 // Bereiche fuer die UI-Verzeichnisse
 // ----------------------------------------------------------------
 
-#define RC_BASE                     RID_SW_START    // aus solar.hrc
+#define RC_BASE                     RID_SW_START    // From solar.hrc
 
 #define RC_APP                      RC_BASE
 #define RC_DIALOG                   (RC_BASE + 200)
@@ -79,6 +79,7 @@
 #define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
 #define RC_UNOCORE                  (RC_BASE + 4050)
 #define RC_ANNOTATION               (RC_BASE + 4150)
+#define RC_PAGEFRM                  (RC_BASE + 4250)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Bereiche ausspannen
@@ -99,6 +100,10 @@
 // Annotation
 #define RC_ANNOTATION_BEGIN             RC_ANNOTATION
 #define RC_ANNOTATION_END               (RC_ANNOTATION_BEGIN + 99)
+
+// Page frame
+#define RC_PAGEFRM_BEGIN            RC_PAGEFRM
+#define RC_PAGEFRM_END               (RC_PAGEFRM + 99)
 
 // SW/Web
 #define RC_WEB_BEGIN                RC_WEB
@@ -130,7 +135,7 @@
 
 // globale Ressourcen
 #define RC_GLOBALS_BEGIN            RC_GLOBALS
-#define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 119)
+#define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 120)
 
 // Format-Vorlagen
 #define RC_FMTUI_BEGIN              RC_FMTUI

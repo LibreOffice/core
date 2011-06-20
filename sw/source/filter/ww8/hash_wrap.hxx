@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,18 +26,14 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-//this is a shameless rip from sortedarray.hxx but changed to hash_set
+//this is a shameless rip from sortedarray.hxx but changed to boost::unordered_set
 
 #ifndef WW_HASH_WRAP_HXX
 #define WW_HASH_WRAP_HXX
 
-#include <hash_set>
-#include <tools/debug.hxx>
-#include <errhdl.hxx>       // ASSERT()
+#include <boost/unordered_set.hpp>
 
-//simple wrapper around hash_set to behave like sorted array
+//simple wrapper around boost::unordered_set to behave like sorted array
 namespace ww
 {
     /** simple template that manages a hash
@@ -45,10 +42,10 @@ namespace ww
         @author
         <a href="mailto:mikeleib@openoffice.org">Michael Leibowitz</a>
     */
-    template<class C, class HashFcn = std::hash<C> > class WrappedHash
+    template<class C, class HashFcn = boost::hash<C> > class WrappedHash
     {
     private:
-        std::hash_set<C, HashFcn> mHashSet;
+        boost::unordered_set<C, HashFcn> mHashSet;
 
         //No copying
         WrappedHash(const WrappedHash&);
@@ -57,7 +54,7 @@ namespace ww
         //Find an entry, return its address if found and 0 if not
         const C* search(C aSrch) const
         {
-            typename std::hash_set<C, HashFcn>::const_iterator it;
+            typename boost::unordered_set<C, HashFcn>::const_iterator it;
             it= mHashSet.find(aSrch);
             if (it != mHashSet.end())
                 return &(*it);
@@ -67,7 +64,7 @@ namespace ww
 
         WrappedHash(const C *pWwSprmTab, const size_t nNoElems)
         {
-            ASSERT(nNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
+            OSL_ENSURE(nNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
             const C *pIter = pWwSprmTab;
             const C *pEnd  = pWwSprmTab + nNoElems;
             while (pIter < pEnd)
@@ -86,12 +83,12 @@ namespace ww
                 {
                     if (!bBroken)
                     {
-                        sError = rtl::OUString::createFromAscii(
+                        sError = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                             "WW8: Duplicate in list, almost certainly don't "
                             "want that!\n"
                             "(You will not see this message again unless you "
                             "restart)\n"
-                            "Extra entries are...\n");
+                            "Extra entries are...\n"));
                         bBroken=true;
                     }
 
@@ -113,7 +110,7 @@ namespace ww
             }
             if (bBroken)
             {
-               DBG_ERROR(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
+               OSL_FAIL( rtl::OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
 #endif
         }
@@ -121,4 +118,4 @@ namespace ww
 }
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

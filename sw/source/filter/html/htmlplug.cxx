@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,7 +65,6 @@
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <sot/clsids.hxx>
 
@@ -78,7 +78,7 @@ using namespace com::sun::star;
 
 namespace {
 
-static char const sHTML_O_Hidden_False[] = "sal_False";
+static char const sHTML_O_Hidden_False[] = "FALSE";
 
 }
 
@@ -416,7 +416,7 @@ void SwHTMLParser::InsertEmbed()
                            INetURLObject(sBaseURL), aURL,
                            URIHelper::GetMaybeFileHdl()) );
 
-    // #109761# do not insert plugin if it has neither URL nor type
+    // do not insert plugin if it has neither URL nor type
     bool bHasType = aType.Len() != 0;
     if( !bHasURL && !bHasType )
         return;
@@ -431,18 +431,16 @@ void SwHTMLParser::InsertEmbed()
         if ( xSet.is() )
         {
             if( bHasURL )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                     uno::makeAny( ::rtl::OUString( aURL ) ) );
             if( bHasType )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")),
                     uno::makeAny( ::rtl::OUString( aType ) ) );
 
             uno::Sequence < beans::PropertyValue > aProps;
             aCmdLst.FillSequence( aProps );
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aProps ) );
+            xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")), uno::makeAny( aProps ) );
 
-            // TODO/LATER: EnableSetModified?!
-            //pPlugin->EnableSetModified( sal_True );
         }
     }
 
@@ -895,7 +893,6 @@ void SwHTMLParser::InsertFloatingFrame()
     ::rtl::OUString aObjName;
     uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aObjName );
 
-    //pFrame->EnableSetModified( sal_False );
     try
     {
         // TODO/MBA: testing
@@ -909,27 +906,23 @@ void SwHTMLParser::InsertFloatingFrame()
                 sal_Bool bHasBorder = aFrameDesc.HasFrameBorder();
                 Size aMargin = aFrameDesc.GetMargin();
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( aName ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL")), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName")), uno::makeAny( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll")),
                         uno::makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                         uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                //if ( aFrmDescr.IsFrameBorderSet() )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                         uno::makeAny( bHasBorder ) );
-                /*else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
-                        uno::makeAny( sal_True ) );*/
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth")),
                     uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight")),
                     uno::makeAny( sal_Int32( aMargin.Height() ) ) );
             }
         }
@@ -937,8 +930,6 @@ void SwHTMLParser::InsertFloatingFrame()
     catch ( uno::Exception& )
     {
     }
-
-    //pFrame->EnableSetModified( sal_True );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
@@ -978,89 +969,6 @@ void SwHTMLParser::InsertFloatingFrame()
 
 /*  */
 
-/*
-#define SWHTML_OPTTYPE_IGNORE 0
-#define SWHTML_OPTTYPE_TAG 1
-#define SWHTML_OPTTYPE_PARAM 2
-
-
-static sal_uInt16 GetOptionType( const String& rName, sal_Bool bApplet )
-{
-    sal_uInt16 nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
-
-    switch( rName.GetChar(0) )
-    {
-    case 'A':
-    case 'a':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_align ) ||
-            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_alt ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        else if( bApplet &&
-                 (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
-                 rName.EqualsIgnoreCaseAscii( sHTML_O_Archives )) )
-            nType = SWHTML_OPTTYPE_TAG;
-        break;
-    case 'C':
-    case 'c':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_class ) ||
-            (bApplet && (rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_code ) ||
-                         rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_codebase ))) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'H':
-    case 'h':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_height ) ||
-            rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_hspace ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden )) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'I':
-    case 'i':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_id ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'M':
-    case 'm':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_mayscript ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'N':
-    case 'n':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_name ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'O':
-    case 'o':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Object ) )
-            nType = SWHTML_OPTTYPE_TAG;
-        break;
-    case 'S':
-    case 's':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_style ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_src )) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'T':
-    case 't':
-        if( !bApplet && rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_type ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'V':
-    case 'v':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_vspace ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    case 'W':
-    case 'w':
-        if( rName.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_O_width ) )
-            nType = SWHTML_OPTTYPE_IGNORE;
-        break;
-    }
-
-    return nType;
-}
-*/
-
 sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 {
     SwOLEObj& rObj = ((SwOLENode*)rNode.GetOLENode())->GetOLEObj();
@@ -1096,7 +1004,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
 
-    ASSERT( pOLENd, "OLE-Node erwartet" );
+    OSL_ENSURE( pOLENd, "OLE-Node erwartet" );
     if( !pOLENd )
         return rWrt;
 
@@ -1111,7 +1019,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     if( !xSet.is() )
     {
-        DBG_ERROR("Unknown Object" );
+        OSL_FAIL("Unknown Object" );
         return rWrt;
     }
 
@@ -1135,7 +1043,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         ::rtl::OUString aStr;
         String aURL;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginURL" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")) );
         if( (aAny >>= aStr) && aStr.getLength() )
         {
             aURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(),
@@ -1151,7 +1059,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         ::rtl::OUString aType;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginMimeType")) );
         if( (aAny >>= aType) && aType.getLength() )
         {
             ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += "=\"";
@@ -1182,7 +1090,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         // CODEBASE
         ::rtl::OUString aCd;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase")) );
         if( (aAny >>= aCd) && aCd.getLength() )
         {
             String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
@@ -1197,7 +1105,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         // CODE
         ::rtl::OUString aClass;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode")) );
         aAny >>= aClass;
         ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_code) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
@@ -1206,7 +1114,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
         // NAME
         ::rtl::OUString aAppletName;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletName" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletName")) );
         aAny >>= aAppletName;
         if( aAppletName.getLength() )
         {
@@ -1217,7 +1125,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         sal_Bool bScript = sal_False;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletIsScript")) );
         aAny >>= bScript;
         if( bScript )
             (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_mayscript;
@@ -1258,13 +1166,13 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // und ein </APPLET> schreiben
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands")) );
         aAny >>= aProps;
 
         SvCommandList aCommands;
         aCommands.FillFromSequence( aProps );
         SvULongs aParams;
-        sal_uLong i = aCommands.Count();
+        size_t i = aCommands.size();
         while( i > 0 )
         {
             const SvCommand& rCommand = aCommands[ --i ];
@@ -1305,7 +1213,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         rHTMLWrt.DecIndentLevel(); // Inhalt von Applet einruecken
-        if( aCommands.Count() )
+        if( aCommands.size() )
             rHTMLWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_applet, sal_False );
     }
@@ -1315,12 +1223,12 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // fuer Plugins die Paramater als Optionen schreiben
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands" ) );
+        aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands")) );
         aAny >>= aProps;
 
         SvCommandList aCommands;
         aCommands.FillFromSequence( aProps );
-        for( sal_uLong i=0; i<aCommands.Count(); i++ )
+        for( size_t i = 0; i < aCommands.size(); i++ )
         {
             const SvCommand& rCommand = aCommands[ i ];
             const String& rName = rCommand.GetCommand();
@@ -1360,16 +1268,11 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
 
-    ASSERT( pOLENd, "OLE-Node erwartet" );
+    OSL_ENSURE( pOLENd, "OLE-Node erwartet" );
     if( !pOLENd )
         return rWrt;
 
-    // Inhalt des Nodes als Grafik speichern
-    //uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
-    //GDIMetaFile aPic;
-    //if( xObj.is() && xRef->GetGDIMetaFile( aPic ).GetActionCount() )
     {
-        //Graphic aGrf( aPic );
         Graphic aGrf( *pOLENd->GetGraphic() );
         String aGrfNm;
         const String* pTempFileName = rHTMLWrt.GetOrigFileName();
@@ -1399,3 +1302,4 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

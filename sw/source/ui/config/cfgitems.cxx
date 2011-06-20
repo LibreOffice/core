@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/svxenum.hxx>
 
 
@@ -46,13 +43,10 @@
 #include "cfgitems.hxx"
 #include "crstate.hxx"
 
-
-
 TYPEINIT1_AUTOFACTORY(SwDocDisplayItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwElemItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwAddPrinterItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwShadowCursorItem, SfxPoolItem)
-
 
 SwDocDisplayItem::SwDocDisplayItem( sal_uInt16 _nWhich ) :
         SfxPoolItem(_nWhich),
@@ -70,19 +64,14 @@ SwDocDisplayItem::SwDocDisplayItem( sal_uInt16 _nWhich ) :
 
 };
 
-/*------------OS 12.01.95 -------------------------------------------
-    Item fuer Einstellungsdialog, Seite Dokumentansicht
+/*-------------------------------------------------------------------
+    Item for the Settings dialog, page document view
 --------------------------------------------------------------------*/
-
 SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
             SfxPoolItem(rDocDisplayItem)
 {
     *this = rDocDisplayItem;
 };
-
-/*----------------------- -------------------------------------------
-
---------------------------------------------------------------------*/
 
 SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich ) :
             SfxPoolItem( _nWhich )
@@ -96,24 +85,16 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich
     bFldHiddenText      = rVOpt.IsShowHiddenField();
     bManualBreak        = rVOpt.IsLineBreak(sal_True);
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
-
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
 {
     return new SwDocDisplayItem( *this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwDocDisplayItem& rItem = (SwDocDisplayItem&)rAttr;
 
@@ -128,12 +109,6 @@ int SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bShowHiddenPara       == rItem.bShowHiddenPara );
 }
 
-
-/*-----------------31.08.96 14.14-------------------
-
---------------------------------------------------*/
-
-
 void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
 {
     bParagraphEnd       = rDocDisplayItem.bParagraphEnd         ;
@@ -147,9 +122,6 @@ void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
     bShowHiddenPara     = rDocDisplayItem.bShowHiddenPara       ;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 {
     rVOpt.SetParagraph  (bParagraphEnd      );
@@ -163,10 +135,6 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowHiddenPara(bShowHiddenPara );
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 SwElemItem::SwElemItem( sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich)
 {
@@ -186,18 +154,12 @@ SwElemItem::SwElemItem( sal_uInt16 _nWhich ) :
     bFieldName          =
     bNotes              = sal_False;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwElemItem::SwElemItem( const SwElemItem& rElemItem ):
             SfxPoolItem(rElemItem)
 {
     *this = rElemItem;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich) :
             SfxPoolItem( _nWhich )
@@ -220,22 +182,14 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt, sal_uInt16 _nWhich) :
 
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
 {
     return new SwElemItem( *this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwElemItem& rItem = (SwElemItem&)rAttr;
 
@@ -256,11 +210,6 @@ int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bNotes                == rItem.bNotes             );
 }
 
-/*-----------------31.08.96 14.13-------------------
-
---------------------------------------------------*/
-
-
 void  SwElemItem::operator=( const SwElemItem& rElemItem)
 {
     bHorzScrollbar  = rElemItem.  bHorzScrollbar    ;
@@ -279,10 +228,6 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
     bFieldName          = rElemItem.bFieldName            ;
     bNotes              = rElemItem.bNotes                ;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 {
@@ -304,11 +249,9 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetPostIts    (bNotes             );
 }
 
-
 /*--------------------------------------------------------------------
-    Beschreibung: CopyCTOR
+    Description: CopyCTOR
  --------------------------------------------------------------------*/
-
 SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
             SfxPoolItem(rAddPrinterItem),
             SwPrintData( rAddPrinterItem )
@@ -316,47 +259,39 @@ SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: CTOR fuer leeres Item
+    Description: CTOR for empty Item
  --------------------------------------------------------------------*/
-
 SwAddPrinterItem::SwAddPrinterItem( sal_uInt16 _nWhich):
                 SfxPoolItem(_nWhich)
 {
 }
-/*--------------------------------------------------------------------
-    Beschreibung: CTOR aus SwPrintOptions
- --------------------------------------------------------------------*/
 
+/*--------------------------------------------------------------------
+    Description: CTOR from SwPrintOptions
+ --------------------------------------------------------------------*/
 SwAddPrinterItem::SwAddPrinterItem( sal_uInt16 _nWhich, const SwPrintData& rPrtData ) :
     SfxPoolItem(_nWhich)
 {
     SwPrintData::operator=(rPrtData);
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SfxPoolItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
 {
     return new SwAddPrinterItem( *this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwAddPrinterItem& rItem = (SwAddPrinterItem&)rAttr;
 
     return  SwPrintData::operator==(rItem);
 }
-/*-----------------03.11.97 10:00-------------------
- Item fuer Einstellungsdialog, ShadowCursorSeite
---------------------------------------------------*/
 
+/*--------------------------------------------------
+ Item for Settings dialog, ShadowCursorPage
+--------------------------------------------------*/
 SwShadowCursorItem::SwShadowCursorItem( sal_uInt16 _nWhich )
     : SfxPoolItem( _nWhich ),
     eMode( FILL_TAB )
@@ -404,11 +339,7 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
     rVOpt.SetShdwCrsrFillMode( eMode );
 }
 
-#ifdef DBG_UTIL
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
+#if OSL_DEBUG_LEVEL > 1
 SwTestItem::SwTestItem( const SwTestItem& rTestItem ):
             SfxPoolItem(rTestItem)
 {
@@ -424,22 +355,14 @@ SwTestItem::SwTestItem( const SwTestItem& rTestItem ):
     bTest10=rTestItem.bTest10;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
 {
     return new SwTestItem( *this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
 
     const SwTestItem& rItem = (const SwTestItem&) rAttr;
 
@@ -458,3 +381,5 @@ int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 #endif
 
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

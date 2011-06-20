@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
 
 #include "txtpaint.hxx"
 #include "swrect.hxx"
@@ -119,14 +118,12 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
 #endif
         }
 #if OSL_DEBUG_LEVEL > 1
-#ifdef DBG_UTIL
         static sal_Bool bDbg = sal_False;
         if( bDbg )
         {
             DbgBackColor aDbg( pOut, bDbg, COL_RED );
             pOut->DrawRect( aRect );
         }
-#endif
 #endif
     }
     bChg = sal_True;
@@ -135,3 +132,4 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

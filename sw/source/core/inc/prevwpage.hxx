@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,6 @@
 class SwPageFrm;
 
 /** data structure for a preview page in the current preview layout
-
-    OD 12.12.2002 #103492# - struct <PrevwPage>
-
-    @author OD
 */
 struct PrevwPage
 {
@@ -61,3 +58,5 @@ inline PrevwPage::PrevwPage()
 {};
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

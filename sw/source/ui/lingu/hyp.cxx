@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,9 +37,7 @@
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include <vcl/msgbox.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <swwait.hxx>
@@ -57,7 +56,7 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Interaktive Trennung
+     Description: interactive separation
  --------------------------------------------------------------------*/
 
 SwHyphWrapper::SwHyphWrapper( SwView* pVw,
@@ -95,7 +94,7 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 
 sal_Bool SwHyphWrapper::SpellContinue()
 {
-    // Fuer autom. Trennung Aktionen erst am Ende sichtbar machen
+    // for automatic separation, make actions visible only at the end
     SwWait *pWait = 0;
     if( bAutomatic )
     {
@@ -108,7 +107,7 @@ sal_Bool SwHyphWrapper::SpellContinue()
                 PSH->HyphContinue( &nPageCount, &nPageStart );
         SetLast( xHyphWord );
 
-    // Fuer autom. Trennung Aktionen erst am Ende sichtbar machen
+    // for automatic separation, make actions visible only at the end
     if( bAutomatic )
     {
         PSH->EndAllAction();
@@ -174,3 +173,4 @@ SwHyphWrapper::~SwHyphWrapper()
         InfoBox( &pView->GetEditWin(), SW_RESSTR(STR_HYP_OK) ).Execute();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

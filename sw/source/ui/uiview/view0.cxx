@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
 
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
@@ -90,7 +89,6 @@
 #include "swslots.hxx"
 #include <PostItMgr.hxx>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -123,7 +121,6 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
     SFX_CHILDWINDOW_REGISTRATION(FN_INSERT_FIELD_DATA_ONLY);
         SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_SYNC_LABELS,           CHILDWIN_LABEL    );
         SFX_FEATURED_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_CHILDWINDOW, CHILDWIN_MAILMERGE);
-//    SFX_CHILDWINDOW_REGISTRATION(FN_MAILMERGE_SENDMAIL_CHILDWINDOW);
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS|
                                 SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
                                 SW_RES(RID_TOOLS_TOOLBOX) );
@@ -131,24 +128,16 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
 
 TYPEINIT1(SwView,SfxViewShell)
 
-/*-----------------13.12.97 11:06-------------------
-
---------------------------------------------------*/
 ShellModes  SwView::GetShellMode()
 {
     return pViewImpl->GetShellMode();
 }
 
-/*-----------------13.12.97 11:28-------------------
-
---------------------------------------------------*/
 view::XSelectionSupplier* SwView::GetUNOObject()
 {
     return pViewImpl->GetUNOObject();
 }
-/* -----------------------------06.05.2002 13:18------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
@@ -157,39 +146,29 @@ void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOpt
         pWrtShell->ShowCrsr();
 
 }
-/*-- 26.05.2004 09:14:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void   SwView::SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem,
                 sal_uInt16 nRestart, sal_Bool bIsSource)
 {
     pViewImpl->SetMailMergeConfigItem(pConfigItem, nRestart, bIsSource);
     UIFeatureChanged();
 }
-/*-- 26.05.2004 09:14:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeConfigItem*  SwView::GetMailMergeConfigItem()
 {
     return pViewImpl->GetMailMergeConfigItem();
 }
-/*-- 26.05.2004 09:14:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_uInt16 SwView::GetMailMergeRestartPage() const
 {
     return pViewImpl->GetMailMergeRestartPage();
 }
-/*-- 03.09.2004 11:56:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool SwView::IsMailMergeSourceView() const
 {
     return pViewImpl->IsMailMergeSourceView();
 }
-/*-- 12.04.2006 11:51:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
     return  rVOpt.IsHardBlank() &&
@@ -224,7 +203,7 @@ void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
 void SwView::RecheckBrowseMode()
 {
     // OS: numerische Reihenfolge beachten!
-    static sal_uInt16 __READONLY_DATA aInva[] =
+    static sal_uInt16 const aInva[] =
         {
             //SID_NEWWINDOW,/*5620*/
             SID_BROWSER_MODE, /*6313*/
@@ -570,7 +549,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(sal_False, Falsche Request-Methode);
+            OSL_FAIL("wrong request method");
             return;
     }
 
@@ -600,7 +579,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     pModule->ApplyUsrPref( *pOpt, this, bWebView ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
 
-    //mod #i6193# let postits know about new spellcheck setting
+    // #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
 
@@ -624,3 +603,5 @@ IMPL_LINK( SwView, HtmlOptionsHdl, void*, EMPTYARG )
     GetViewFrame()->GetBindings().Invalidate(SID_DRAW_TEXT_MARQUEE);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

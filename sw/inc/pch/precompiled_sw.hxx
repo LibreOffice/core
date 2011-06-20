@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -685,7 +686,6 @@
 #include "svtools/svtabbx.hxx"
 #include "svtools/svtreebx.hxx"
 #include "unotools/syslocale.hxx"
-#include "svtools/templdlg.hxx"
 #include "svtools/textview.hxx"
 #include "svtools/transfer.hxx"
 #include "svtools/txtattr.hxx"
@@ -751,14 +751,12 @@
 #include "svtools/htmlcfg.hxx"
 #include "svx/htmlmode.hxx"
 #include "svx/hyperdlg.hxx"
-#include "svx/hyprlink.hxx"
 #include "svx/imapdlg.hxx"
 #include "editeng/itemtype.hxx"
 #include "svx/langbox.hxx"
 #include "svx/layctrl.hxx"
 #include "svx/lboxctrl.hxx"
 #include "svx/linectrl.hxx"
-#include "sfx2/linkmgr.hxx"
 #include "filter/msfilter/mscodec.hxx"
 #include "filter/msfilter/msdffimp.hxx"
 #include "filter/msfilter/msfiltertracer.hxx"
@@ -846,18 +844,15 @@
 #include "tools/color.hxx"
 #include "tools/date.hxx"
 #include "tools/datetime.hxx"
-#include "tools/debug.hxx"
 #include "tools/errcode.hxx"
 #include "tools/errinf.hxx"
 #include "tools/fract.hxx"
 #include "tools/gen.hxx"
 #include "tools/globname.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/mempool.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
-#include "tools/pstm.hxx"
 #include "tools/rc.hxx"
 #include "tools/ref.hxx"
 #include "tools/resary.hxx"
@@ -952,8 +947,7 @@
 #include "tools/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
-#include "vos/mutex.hxx"
-#include "vos/ref.hxx"
+#include "rtl/ref.hxx"
 
 #include "xmloff/DocumentSettingsContext.hxx"
 #include "xmloff/ProgressBarHelper.hxx"
@@ -1000,3 +994,5 @@
 //---MARKER---
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

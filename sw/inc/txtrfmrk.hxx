@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 class SwTxtNode;
 
 // SWTXT_REFMARK *************************************
-// Attribut fuer Inhalts-/Positions-Referenzen im Text
+// Attribute for content-/position references in text.
 
 class SwTxtRefMark : public SwTxtAttrEnd
 {
@@ -53,9 +54,10 @@ public:
 
 inline const SwTxtNode& SwTxtRefMark::GetTxtNode() const
 {
-    ASSERT( m_pTxtNode, "SwTxtRefMark: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtRefMark: where is my TxtNode?" );
     return *m_pTxtNode;
 }
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

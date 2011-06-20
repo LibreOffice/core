@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@ one go*/
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>
@@ -67,6 +68,7 @@ one go*/
 #include <xmloff/xmlmetai.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <memory>
 
@@ -99,13 +101,13 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
         utl::getProcessServiceFactory());
-    DBG_ASSERT(xServiceFactory.is(), "XMLReader::Read: got no service manager");
+    OSL_ENSURE(xServiceFactory.is(), "XMLReader::Read: got no service manager");
     if ( !xServiceFactory.is() )
         return nError;
 
     //Make a model component from our SmModel
     uno::Reference< lang::XComponent > xModelComp( xModel, uno::UNO_QUERY );
-    DBG_ASSERT( xModelComp.is(), "XMLReader::Read: got no model" );
+    OSL_ENSURE( xModelComp.is(), "XMLReader::Read: got no model" );
 
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
@@ -120,19 +122,16 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
     if (pDocShell)
     {
-//        if (pDocShell->GetMedium())
-        {
-            DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
-                    "different SfxMedium found" );
+        OSL_ENSURE( pDocShell->GetMedium() == &rMedium,
+                "different SfxMedium found" );
 
-            SfxItemSet* pSet = rMedium.GetItemSet();
-            if (pSet)
-            {
-                const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
-                    pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
-                if (pItem)
-                    pItem->GetValue() >>= xStatusIndicator;
-            }
+        SfxItemSet* pSet = rMedium.GetItemSet();
+        if (pSet)
+        {
+            const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(
+                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+            if (pItem)
+                pItem->GetValue() >>= xStatusIndicator;
         }
 
         if ( SFX_CREATE_MODE_EMBEDDED == pDocShell->GetCreateMode() )
@@ -244,7 +243,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         nError = ReadThroughComponent( xInputStream, xModelComp,
-            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", sal_False );
+            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false );
     }
 
     if (xStatusIndicator.is())
@@ -263,10 +262,10 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     sal_Bool bEncrypted )
 {
     sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
-    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(NULL != pFilterName,"I need a service name for the component!");
 
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
@@ -275,9 +274,9 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     // get parser
     Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if ( !xParser.is() )
         return nError;
 
@@ -289,7 +288,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pFilterName), aArgs ),
         UNO_QUERY );
-    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( xFilter.is(), "Can't instantiate filter component." );
     if ( !xFilter.is() )
         return nError;
 
@@ -367,8 +366,8 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pFilterName )
 {
-    DBG_ASSERT(xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE(xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
@@ -438,20 +437,14 @@ SmXMLImport::SmXMLImport(
 {
 }
 
+namespace
+{
+    class theSmXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSmXMLImportUnoTunnelId> {};
+}
+
 const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if ( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSmXMLImportUnoTunnelId::get().getSeq();
 }
 
 OUString SAL_CALL SmXMLImport_getImplementationName() throw()
@@ -471,8 +464,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLImport(IMPORT_ALL);
     return (cppu::OWeakObject*)new SmXMLImport(rSMgr, IMPORT_ALL);
 }
 
@@ -495,8 +486,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLImport( IMPORT_META );
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_META );
 }
 
@@ -519,8 +508,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLImport( IMPORT_SETTINGS );
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 
@@ -596,8 +583,8 @@ void SmXMLImport::endDocument(void)
 
             // Convert symbol names
             SmParser &rParser = pDocShell->GetParser();
-            sal_Bool bVal = rParser.IsImportSymbolNames();
-            rParser.SetImportSymbolNames( sal_True );
+            bool bVal = rParser.IsImportSymbolNames();
+            rParser.SetImportSymbolNames( true );
             SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
             delete pTmpTree;
@@ -605,7 +592,7 @@ void SmXMLImport::endDocument(void)
 
             pDocShell->SetText( aText );
         }
-        DBG_ASSERT(pModel,"So there *was* a uno problem after all");
+        OSL_ENSURE(pModel,"So there *was* a uno problem after all");
 
         bSuccess = sal_True;
     }
@@ -926,62 +913,7 @@ public:
 void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
     xml::sax::XAttributeList > & xAttrList )
 {
-#if 1
     aStyleHelper.RetrieveAttrs(xAttrList);
-#else
-    sal_Int8 nOldIsBold=nIsBold;
-    sal_Int8 nOldIsItalic=nIsItalic;
-    double nOldFontSize=nFontSize;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    OUString sOldFontFamily = sFontFamily;
-    for (sal_Int16 i=0;i<nAttrCount;i++)
-    {
-        OUString sAttrName = xAttrList->getNameByIndex(i);
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName(sAttrName,&aLocalName);
-        OUString sValue = xAttrList->getValueByIndex(i);
-        const SvXMLTokenMap &rAttrTokenMap =
-            GetSmImport().GetPresLayoutAttrTokenMap();
-        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
-        {
-            case XML_TOK_FONTWEIGHT:
-                nIsBold = sValue.equals(GetXMLToken(XML_BOLD));
-                break;
-            case XML_TOK_FONTSTYLE:
-                nIsItalic = sValue.equals(GetXMLToken(XML_ITALIC));
-                break;
-            case XML_TOK_FONTSIZE:
-                SvXMLUnitConverter::convertDouble(nFontSize,sValue);
-                GetSmImport().GetMM100UnitConverter().
-                    setXMLMeasureUnit(MAP_POINT);
-                if (-1 == sValue.indexOf(GetXMLToken(XML_UNIT_PT)))
-                    if (-1 == sValue.indexOf('%'))
-                        nFontSize=0.0;
-                    else
-                    {
-                        GetSmImport().GetMM100UnitConverter().
-                            setXMLMeasureUnit(MAP_RELATIVE);
-                    }
-                break;
-            case XML_TOK_FONTFAMILY:
-                sFontFamily = sValue;
-                break;
-            case XML_TOK_COLOR:
-                sColor = sValue;
-                break;
-            default:
-                break;
-        }
-    }
-
-    if ((nOldIsBold!=nIsBold) || (nOldIsItalic!=nIsItalic) ||
-        (nOldFontSize!=nFontSize) || (sOldFontFamily!=sFontFamily)
-        || sColor.getLength())
-        bFontNodeNeeded=sal_True;
-    else
-        bFontNodeNeeded=sal_False;
-#endif
 }
 
 
@@ -995,96 +927,7 @@ void SmXMLStyleContext_Impl::EndElement()
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     if (rNodeStack.Count() - nElementCount > 1)
         SmXMLRowContext_Impl::EndElement();
-#if 1
     aStyleHelper.ApplyAttrs();
-#else
-    if (bFontNodeNeeded)
-    {
-        SmToken aToken;
-        aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
-        aToken.nLevel = 5;
-
-        if (nIsBold != -1)
-        {
-            if (nIsBold)
-                aToken.eType = TBOLD;
-            else
-                aToken.eType = TNBOLD;
-            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
-                (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (nIsItalic != -1)
-        {
-            if (nIsItalic)
-                aToken.eType = TITALIC;
-            else
-                aToken.eType = TNITALIC;
-            SmStructureNode *pFontNode = static_cast<SmStructureNode *>
-                (new SmFontNode(aToken));
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (nFontSize != 0.0)
-        {
-            aToken.eType = TSIZE;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
-
-            if (MAP_RELATIVE == GetSmImport().GetMM100UnitConverter().
-                getXMLMeasureUnit())
-            {
-                if (nFontSize < 100.00)
-                    pFontNode->SetSizeParameter(Fraction(100.00/nFontSize),
-                        FNTSIZ_DIVIDE);
-                else
-                    pFontNode->SetSizeParameter(Fraction(nFontSize/100.00),
-                        FNTSIZ_MULTIPLY);
-            }
-            else
-                pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
-
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (sFontFamily.getLength())
-        {
-            if (sFontFamily.equalsIgnoreCase(GetXMLToken(XML_FIXED)))
-                aToken.eType = TFIXED;
-            else if (sFontFamily.equalsIgnoreCase(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("sans"))))
-                aToken.eType = TSANS;
-            else if (sFontFamily.equalsIgnoreCase(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("serif"))))
-                aToken.eType = TSERIF;
-            else //Just give up, we need to extend our font mechanism to be
-                //more general
-                return;
-
-            aToken.aText = sFontFamily;
-            SmFontNode *pFontNode = new SmFontNode(aToken);
-            pFontNode->SetSubNodes(0,rNodeStack.Pop());
-            rNodeStack.Push(pFontNode);
-        }
-        if (sColor.getLength())
-        {
-            //Again we can only handle a small set of colours in
-            //StarMath for now.
-            const SvXMLTokenMap& rTokenMap =
-                GetSmImport().GetColorTokenMap();
-            aToken.eType = static_cast<SmTokenType>(rTokenMap.Get(
-                XML_NAMESPACE_MATH, sColor));
-            if (aToken.eType != -1)
-            {
-                SmFontNode *pFontNode = new SmFontNode(aToken);
-                pFontNode->SetSubNodes(0,rNodeStack.Pop());
-                rNodeStack.Push(pFontNode);
-            }
-        }
-
-    }
-#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -1614,7 +1457,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
 {
     /*The <msub> element requires exactly 2 arguments.*/
     const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
-    DBG_ASSERT( bNodeCheck, "Sub has not two arguments" );
+    OSL_ENSURE( bNodeCheck, "Sub has not two arguments" );
     if (!bNodeCheck)
         return;
 
@@ -1676,7 +1519,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
 {
     /*The <msub> element requires exactly 3 arguments.*/
     const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 3;
-    DBG_ASSERT( bNodeCheck, "SubSup has not three arguments" );
+    OSL_ENSURE( bNodeCheck, "SubSup has not three arguments" );
     if (!bNodeCheck)
         return;
 
@@ -1727,7 +1570,7 @@ void SmXMLUnderContext_Impl::StartElement(const uno::Reference<
 void SmXMLUnderContext_Impl::HandleAccent()
 {
     const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
-    DBG_ASSERT( bNodeCheck, "Sub has not two arguments" );
+    OSL_ENSURE( bNodeCheck, "Sub has not two arguments" );
     if (!bNodeCheck)
         return;
 
@@ -1766,12 +1609,6 @@ void SmXMLUnderContext_Impl::EndElement()
         GenericEndElement(TCSUB,CSUB);
     else
         HandleAccent();
-#if 0
-    //UnderBrace trick
-    SmStructureNode *pNode = rNodeStack.Pop();
-    if (pNode->GetSubNode(1)->GetToken().cMathChar == (0x0332|0xf000))
-    if (pNode->GetSubNode(0)->GetToken().cMathChar == (0x0332|0xf000))
-#endif
 }
 
 ////////////////////////////////////////////////////////////
@@ -1811,7 +1648,7 @@ void SmXMLOverContext_Impl::EndElement()
 void SmXMLOverContext_Impl::HandleAccent()
 {
     const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
-    DBG_ASSERT( bNodeCheck, "Sub has not two arguments" );
+    OSL_ENSURE (bNodeCheck, "Sub has not two arguments");
     if (!bNodeCheck)
         return;
 
@@ -1853,13 +1690,13 @@ public:
 
 class SmXMLMultiScriptsContext_Impl : public SmXMLSubSupContext_Impl
 {
-    sal_Bool bHasPrescripts;
+    bool bHasPrescripts;
 
 public:
     SmXMLMultiScriptsContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName) :
         SmXMLSubSupContext_Impl(rImport,nPrefix,rLName),
-        bHasPrescripts(sal_False) {}
+        bHasPrescripts(false) {}
 
     void EndElement();
     void MiddleElement();
@@ -1998,7 +1835,7 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
     if ( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_META) )
     {
-        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+        OSL_FAIL("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
     }
     else if ( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_SETTINGS) )
@@ -2065,7 +1902,7 @@ SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
 
 ////////////////////////////////////////////////////////////
 
-static __FAR_DATA SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
+static SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_SEMANTICS, XML_TOK_SEMANTICS },
     { XML_NAMESPACE_MATH,   XML_MATH,      XML_TOK_MATH   },
@@ -2090,7 +1927,7 @@ static __FAR_DATA SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
+static SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_FONTWEIGHT,      XML_TOK_FONTWEIGHT    },
     { XML_NAMESPACE_MATH,   XML_FONTSTYLE,       XML_TOK_FONTSTYLE     },
@@ -2100,27 +1937,27 @@ static __FAR_DATA SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aFencedAttrTokenMap[] =
+static SvXMLTokenMapEntry aFencedAttrTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_OPEN,       XML_TOK_OPEN },
     { XML_NAMESPACE_MATH,   XML_CLOSE,      XML_TOK_CLOSE },
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aOperatorAttrTokenMap[] =
+static SvXMLTokenMapEntry aOperatorAttrTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_STRETCHY,      XML_TOK_STRETCHY },
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aAnnotationAttrTokenMap[] =
+static SvXMLTokenMapEntry aAnnotationAttrTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_ENCODING,      XML_TOK_ENCODING },
     XML_TOKEN_MAP_END
 };
 
 
-static __FAR_DATA SvXMLTokenMapEntry aPresElemTokenMap[] =
+static SvXMLTokenMapEntry aPresElemTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_ANNOTATION,    XML_TOK_ANNOTATION },
     { XML_NAMESPACE_MATH,   XML_MI,    XML_TOK_MI },
@@ -2133,21 +1970,21 @@ static __FAR_DATA SvXMLTokenMapEntry aPresElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aPresScriptEmptyElemTokenMap[] =
+static SvXMLTokenMapEntry aPresScriptEmptyElemTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_MPRESCRIPTS,   XML_TOK_MPRESCRIPTS },
     { XML_NAMESPACE_MATH,   XML_NONE,  XML_TOK_NONE },
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aPresTableElemTokenMap[] =
+static SvXMLTokenMapEntry aPresTableElemTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_MTR,       XML_TOK_MTR },
     { XML_NAMESPACE_MATH,   XML_MTD,       XML_TOK_MTD },
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aColorTokenMap[] =
+static SvXMLTokenMapEntry aColorTokenMap[] =
 {
     { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK},
     { XML_NAMESPACE_MATH,   XML_WHITE,        TWHITE},
@@ -2238,8 +2075,6 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
     SvXMLImportContext* pContext = 0L;
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().GetPresLayoutElemTokenMap();
-
-    //sal_uInt32 nTest = rTokenMap.Get(nPrefix, rLocalName);
 
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
@@ -2364,7 +2199,7 @@ void SmXMLFracContext_Impl::EndElement()
 {
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
     const bool bNodeCheck = rNodeStack.Count() - nElementCount == 2;
-    DBG_ASSERT( bNodeCheck, "Fraction (mfrac) tag is missing component" );
+    OSL_ENSURE( bNodeCheck, "Fraction (mfrac) tag is missing component" );
     if (!bNodeCheck)
         return;
 
@@ -2385,7 +2220,7 @@ void SmXMLRootContext_Impl::EndElement()
 {
     /*The <mroot> element requires exactly 2 arguments.*/
     const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
-    DBG_ASSERT( bNodeCheck, "Root tag is missing component" );
+    OSL_ENSURE( bNodeCheck, "Root tag is missing component");
     if (!bNodeCheck)
         return;
 
@@ -2622,10 +2457,12 @@ SvXMLImportContext *SmXMLMultiScriptsContext_Impl::CreateChildContext(
 
 void SmXMLMultiScriptsContext_Impl::MiddleElement()
 {
-    bHasPrescripts=sal_True;
+    bHasPrescripts=true;
+
+    OSL_ENSURE( GetSmImport().GetNodeStack().Count() - nElementCount > 0,
+                "Sub has no arguments");
 
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    DBG_ASSERT( rNodeStack.Count() - nElementCount > 0, "Sub has no arguments" );
     if (rNodeStack.Count()-nElementCount > 1)
     {
         SmToken aToken;
@@ -2655,7 +2492,6 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
             /*On each loop the base and its sub sup pair becomes the
              base for the next loop to which the next sub sup pair is
              attached, i.e. wheels within wheels*/
-            //if (nCount == 0)
             aSubNodes[0] = aReverseStack.Pop();
 
             SmNode *pScriptNode = aReverseStack.Pop();
@@ -2809,7 +2645,6 @@ void SmXMLMultiScriptsContext_Impl::EndElement()
             /*On each loop the base and its sub sup pair becomes the
              base for the next loop to which the next sub sup pair is
              attached, i.e. wheels within wheels*/
-            //if (nCount == 0)
             aSubNodes[0] = aReverseStack.Pop();
 
             SmNode *pScriptNode = aReverseStack.Pop();
@@ -2851,8 +2686,8 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
         {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                     uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
@@ -3120,7 +2955,6 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
     const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp = 0;
-    //sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
@@ -3186,8 +3020,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                     }
                     catch( Exception& e)
                     {
-                        (void) e;
-                        DBG_ERROR( "SmXMLImport::SetConfigurationSettings: Exception!" );
+                        OSL_FAIL( "SmXMLImport::SetConfigurationSettings: Exception!" );
                     }
                 }
 
@@ -3201,3 +3034,4 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
 ////////////////////////////////////////////////////////////
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

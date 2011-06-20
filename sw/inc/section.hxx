@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,6 +36,7 @@
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
 #include <svl/svarray.hxx>
+#include <svl/smplhint.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/Metadatable.hxx>
 
@@ -45,7 +47,7 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextSection; }
 } } }
 
-// Forward Deklaration
+
 class SwSectionFmt;
 class SwDoc;
 class SwSection;
@@ -64,19 +66,13 @@ enum SectionType { CONTENT_SECTION,
                     TOX_CONTENT_SECTION,
                     DDE_LINK_SECTION    = OBJECT_CLIENT_DDE,
                     FILE_LINK_SECTION   = OBJECT_CLIENT_FILE
-/*
-// verbleiben noch:
-    OBJECT_CLIENT_SO            = 0x80,
-    OBJECT_CLIENT_OLE           = 0x82,
-    OBJECT_CLIENT_OLE_CACHE     = 0x83,
-*/
                     };
 
 enum LinkCreateType
 {
-    CREATE_NONE,            // nichts weiter tun
-    CREATE_CONNECT,         // Link gleich connecten
-    CREATE_UPDATE           // Link connecten und updaten
+    CREATE_NONE,            // Do nothing.
+    CREATE_CONNECT,         // Connect created link.
+    CREATE_UPDATE           // Connect created link and update it.
 };
 
 class SW_DLLPUBLIC SwSectionData
@@ -87,22 +83,22 @@ private:
     String m_sSectionName;
     String m_sCondition;
     String m_sLinkFileName;
-    String m_sLinkFilePassword; // JP 27.02.2001: must be changed to Sequence
+    String m_sLinkFilePassword; // Must be changed to Sequence.
     ::com::sun::star::uno::Sequence <sal_Int8> m_Password;
 
-    /// it seems this flag caches the current final "hidden" state
+    /// It seems this flag caches the current final "hidden" state.
     bool m_bHiddenFlag          : 1;
-    /// flags that correspond to attributes in the format:
+    /// Flags that correspond to attributes in the format:
     /// may have different value than format attribute:
     /// format attr has value for this section, while flag is
     /// effectively ORed with parent sections!
     bool m_bProtectFlag         : 1;
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // Edit in readonly sections.
     bool m_bEditInReadonlyFlag  : 1;
-    // <--
-    bool m_bHidden              : 1; // all paragraphs hidden?
-    bool m_bCondHiddenFlag      : 1; // Hiddenflag for condition
-    bool m_bConnectFlag         : 1; // connected to server?
+
+    bool m_bHidden              : 1; // All paragraphs hidden?
+    bool m_bCondHiddenFlag      : 1; // Hiddenflag for condition.
+    bool m_bConnectFlag         : 1; // Connected to server?
 
 public:
 
@@ -126,11 +122,9 @@ public:
     bool IsProtectFlag() const { return m_bProtectFlag; }
     SW_DLLPRIVATE void
         SetProtectFlag(bool const bFlag) { m_bProtectFlag = bFlag; }
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool IsEditInReadonlyFlag() const { return m_bEditInReadonlyFlag; }
     void SetEditInReadonlyFlag(bool const bFlag)
         { m_bEditInReadonlyFlag = bFlag; }
-    // <--
 
     void SetCondHidden(bool const bFlag = true) { m_bCondHiddenFlag = bFlag; };
     bool IsCondHidden() const { return m_bCondHiddenFlag; }
@@ -162,15 +156,15 @@ public:
 class SW_DLLPUBLIC SwSection
     : public SwClient
 {
-    // damit beim Anlegen/Loeschen von Frames das Flag richtig gepflegt wird!
+    // In order to correctly maintain the flag when creating/deleting frames.
     friend class SwSectionNode;
-    // the "read CTOR" of SwSectionFrm have to change the Hiddenflag
+    // The "read CTOR" of SwSectionFrm have to change the Hiddenflag.
     friend class SwSectionFrm;
 
 private:
     SwSectionData m_Data;
 
-    SwServerObjectRef m_RefObj; // set if DataServer
+    SwServerObjectRef m_RefObj; // Set if DataServer.
     ::sfx2::SvBaseLinkRef m_RefLink;
 
     SW_DLLPRIVATE void ImplSetHiddenFlag(
@@ -198,28 +192,24 @@ public:
     SwSectionFmt* GetFmt()          { return (SwSectionFmt*)GetRegisteredIn(); }
     SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)GetRegisteredIn(); }
 
-    // setze die Hidden/Protected -> gesamten Baum updaten !
-    // (Attribute/Flags werden gesetzt/erfragt)
+    // Set hidden/protected -> update the whole tree!
+    // (Attributes/flags are set/get.)
     bool IsHidden()  const { return m_Data.IsHidden(); }
     void SetHidden (bool const bFlag = true);
     bool IsProtect() const;
     void SetProtect(bool const bFlag = true);
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool IsEditInReadonly() const;
     void SetEditInReadonly(bool const bFlag = true);
-    // <--
 
-    // erfrage die internen Flags (Zustand inklusive Parents nicht, was
-    // aktuell an der Section gesetzt ist!!)
+    // Get internal flags (state including parents, not what is
+    // currently set at section!).
     bool IsHiddenFlag()  const { return m_Data.IsHiddenFlag(); }
     bool IsProtectFlag() const { return m_Data.IsProtectFlag(); }
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool IsEditInReadonlyFlag() const { return m_Data.IsEditInReadonlyFlag(); }
-    // <--
 
     void SetCondHidden(bool const bFlag = true);
     bool IsCondHidden() const { return m_Data.IsCondHidden(); }
-    // erfrage (auch ueber die Parents), ob diese Section versteckt sein soll.
+    // Query (also for parents) if this section is to be hidden.
     sal_Bool CalcHiddenFlag() const;
 
 
@@ -230,25 +220,25 @@ public:
 
     const String& GetLinkFileName() const;
     void SetLinkFileName(String const& rNew, String const*const pPassWd = 0);
-    // password of linked file (only valid during runtime!)
+    // Password of linked file (only valid during runtime!)
     String const& GetLinkFilePassword() const
         { return m_Data.GetLinkFilePassword(); }
     void SetLinkFilePassword(String const& rS)
         { m_Data.SetLinkFilePassword(rS); }
 
-    // get / set password of this section
+    // Get / set password of this section
     ::com::sun::star::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Data.GetPassword(); }
     void SetPassword(::com::sun::star::uno::Sequence <sal_Int8> const& rNew)
                                             { m_Data.SetPassword(rNew); }
 
-    // Daten Server-Methoden
+    // Data server methods.
     void SetRefObject( SwServerObject* pObj );
     const SwServerObject* GetObject() const {  return & m_RefObj; }
           SwServerObject* GetObject()       {  return & m_RefObj; }
     bool IsServer() const                   {  return m_RefObj.Is(); }
 
-    // Methoden fuer gelinkte Bereiche
+    // Methods for linked ranges.
     sal_uInt16 GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
     void SetUpdateType(sal_uInt16 const nType )
         { m_RefLink->SetUpdateMode(nType); }
@@ -266,20 +256,40 @@ public:
 
     bool IsLinkType() const { return m_Data.IsLinkType(); }
 
-    // Flags fuer UI - Verbindung geklappt?
+    // Flags for UI. Did connection work?
     bool IsConnectFlag() const      { return m_Data.IsConnectFlag(); }
     void SetConnectFlag(bool const bFlag = true)
                                     { m_Data.SetConnectFlag(bFlag); }
 
-    // return the TOX base class if the section is a TOX section
+    // Return the TOX base class if the section is a TOX section
     const SwTOXBase* GetTOXBase() const;
 
-    // --> OD 2007-02-14 #b6521322#
     void BreakLink();
-    // <--
 
 };
 
+/** Hint used to notify the deletion of SwSectionFrm objects with or without
+    keeping the content of the frame  #i117863#.
+ */
+class SwSectionFrmMoveAndDeleteHint : public SfxSimpleHint
+{
+    public:
+        SwSectionFrmMoveAndDeleteHint( const sal_Bool bSaveCntnt )
+            : SfxSimpleHint( SFX_HINT_DYING )
+            , mbSaveCntnt( bSaveCntnt )
+        {}
+
+        ~SwSectionFrmMoveAndDeleteHint()
+        {}
+
+        sal_Bool IsSaveCntnt() const
+        {
+            return mbSaveCntnt;
+        }
+
+    private:
+        const sal_Bool mbSaveCntnt;
+};
 
 enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
 
@@ -289,45 +299,45 @@ class SW_DLLPUBLIC SwSectionFmt
 {
     friend class SwDoc;
 
-    /** why does this exist in addition to the m_wXObject in SwFrmFmt?
+    /** Why does this exist in addition to the m_wXObject in SwFrmFmt?
         in case of an index, both a SwXDocumentIndex and a SwXTextSection
         register at this SwSectionFmt, so we need to have two refs.
      */
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextSection> m_wXTextSection;
 
-    SW_DLLPRIVATE void UpdateParent();      // Parent wurde veraendert
+    SW_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
 protected:
     SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();     // Already contained in base class client.
     ~SwSectionFmt();
 
-    //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
+    // Deletes all Frms in aDepend (Frms are recognized via PTR_CAST).
     virtual void DelFrms();
 
-    //Erzeugt die Ansichten
+    // Creates views.
     virtual void MakeFrms();
 
-        // erfrage vom Format Informationen
+    // Get information from Format.
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
     SwSection* GetSection() const;
     inline SwSectionFmt* GetParent() const;
     inline SwSection* GetParentSection() const;
 
-    // alle Sections, die von dieser abgeleitet sind
-    //  - sortiert nach : Name oder Position oder unsortiert
-    //  - alle oder nur die, die sich im normalten Nodes-Array befinden
+    //  All sections that are derived from this one:
+    //  - sorted according to name or position or unsorted
+    //  - all of them or only those that are in the normal Nodes-array.
     sal_uInt16 GetChildSections( SwSections& rArr,
                             SectionSort eSort = SORTSECT_NOT,
                             sal_Bool bAllSections = sal_True ) const;
 
-    // erfrage, ob sich die Section im Nodes-Array oder UndoNodes-Array
-    // befindet.
+
+    // Query whether section is in Nodes-array or in UndoNodes-array.
     sal_Bool IsInNodesArr() const;
 
           SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
@@ -335,7 +345,7 @@ public:
         { return const_cast<SwSectionFmt *>(this)
                 ->GetSectionNode(bEvenIfInUndo); }
 
-    // ist die Section eine gueltige fuers GlobalDocument?
+    // Is section a valid one for global document?
     const SwSection* GetGlobalDocSection() const;
 
     SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
@@ -387,3 +397,5 @@ inline SwSection* SwSectionFmt::GetParentSection() const
 
 
 #endif /* _SECTION_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

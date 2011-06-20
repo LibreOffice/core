@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,60 +38,33 @@
 #include <sfx2/app.hxx>
 #include <svx/optgenrl.hxx>
 #include <docufld.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <dbfld.hxx>
 #include <wrtsh.hxx>
-#ifndef _FLDDB_HXX
 #include <flddb.hxx>
-#endif
-#ifndef _FLDDINF_HXX
 #include <flddinf.hxx>
-#endif
-#ifndef _FLDVAR_HXX
 #include <fldvar.hxx>
-#endif
-#ifndef _FLDDOK_HXX
 #include <flddok.hxx>
-#endif
-#ifndef _FLDFUNC_HXX
 #include <fldfunc.hxx>
-#endif
-#ifndef _FLDREF_HXX
 #include <fldref.hxx>
-#endif
 #include <fldedt.hxx>
 #include <crsskip.hxx>
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _FLDUI_HRC
 #include <fldui.hrc>
-#endif
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
 namespace swui
 {
     SwAbstractDialogFactory * GetFactory();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
@@ -120,9 +94,9 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
 
     GetOKButton()->SetClickHdl(LINK(this, SwFldEditDlg, OKHdl));
 
-    // Buttons selbst positionieren, da sie sonst bei unterschiedlichen
-    // Fontgroessen im Wald stehen, und da PB im SingleTabDlg feste Pixelgroessen
-    // fuer seine Buttons und die Dialogbreite verwendet.
+    // position buttons ourselves because otherwise when font sizes are
+    // varying, they are in the woods, and because PB uses fixed pixel sizes
+    // for its buttons and dialog width in SingleTabDlg.
     aPrevBT.SetPosPixel(Point(GetOKButton()->GetPosPixel().X(), aPrevBT.GetPosPixel().Y()));
     sal_uInt16 nWidth = static_cast< sal_uInt16 >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
     Size aNewSize(LogicToPixel(Size(nWidth, GetOKButton()->GetOutputSize().Height())));
@@ -147,9 +121,8 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Controlls initialisieren
+    Description: initialise controls
  --------------------------------------------------------------------*/
-
 void SwFldEditDlg::Init()
 {
     SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
@@ -163,7 +136,7 @@ void SwFldEditDlg::Init()
         if(!pCurFld)
             return;
 
-        // Traveling nur bei mehr als einem Feld
+        // Traveling only when more than one field
         pSh->StartAction();
         pSh->CreateCrsr();
 
@@ -187,13 +160,9 @@ void SwFldEditDlg::Init()
                            !pSh->HasReadonlySel() );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 {
-    // TabPage erzeugen
+    // create TabPage
     SfxTabPage* pTabPage = 0;
     const char* pHelpId = 0;
 
@@ -223,14 +192,6 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
                 uno::Reference< beans::XPropertySet > xUDProps(
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
-//                uno::Reference< beans::XPropertySetInfo > xSetInfo
-//                    = xUDProps->getPropertySetInfo();
-//                const uno::Sequence< beans::Property > props
-//                    = xSetInfo->getProperties();
-//                uno::Sequence< ::rtl::OUString > names(props.getLength());
-//                for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-//                    names[i] = props[i].Name;
-//                }
                 pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
                 pTabPage = SwFldDokInfPage::Create(this, *pSet);
                 pHelpId = HID_EDIT_FLD_DOKINF;
@@ -261,19 +222,11 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
     return pTabPage;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldEditDlg::~SwFldEditDlg()
 {
     pSh->SetCareWin(NULL);
     pSh->EnterStdMode();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldEditDlg::EnableInsert(sal_Bool bEnable)
 {
@@ -282,19 +235,14 @@ void SwFldEditDlg::EnableInsert(sal_Bool bEnable)
     GetOKButton()->Enable( bEnable );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldEditDlg::InsertHdl()
 {
     GetOKButton()->Click();
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Aendern des Feldes anstossen
+     Description: kick off changing of the field
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
 {
     if (GetOKButton()->IsEnabled())
@@ -311,20 +259,15 @@ IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 short SwFldEditDlg::Execute()
 {
-    // Ohne TabPage kein Dialog
+    // without TabPage no dialog
     return GetTabPage() ? Dialog::Execute() : RET_CANCEL;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Traveling zwishen Feldern gleichen Typs
+    Description: Traveling between fields of the same type
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 {
     sal_Bool bNext = pButton == &aNextBT;
@@ -366,10 +309,6 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
 {
     SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
@@ -405,12 +344,12 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
     }
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
     SwAbstractDialogFactory* pFact = swui::GetFactory();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet,
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         RC_DLG_ADDR );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(RET_OK == pDlg->Execute())
     {
         pSh->UpdateFlds( *pCurFld );
@@ -419,4 +358,4 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

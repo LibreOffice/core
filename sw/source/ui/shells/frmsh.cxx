@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,6 +33,7 @@
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/imapobj.hxx>
+#include <svtools/miscopt.hxx>
 #include <svl/srchitem.hxx>
 #include <svtools/imap.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -47,10 +49,9 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/hlnkitem.hxx>
-// --> OD 2009-07-07 #i73249#
+// #i73249#
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
-// <--
 
 #include <doc.hxx>
 #include <fmturl.hxx>
@@ -84,15 +85,21 @@
 #include <shells.hrc>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 #include <svx/dialogs.hrc>
-// <--
 
+#include <sfx2/filedlghelper.hxx>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/uno/Any.h>
+
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Prototypen ------------------------------------------------------------
-
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
 const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
 {
@@ -116,7 +123,9 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_FRAME_TOOLBOX));
 }
 
-
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDispatchHelper.hpp>
 
 void SwFrameShell::Execute(SfxRequest &rReq)
 {
@@ -129,6 +138,135 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
     switch ( nSlot )
     {
+        case FN_EXPORT_OLE_AS_GRAPHIC:
+        {
+            const int nSel = rSh.GetSelectionType();
+            if (nSel & nsSelectionType::SEL_OLE)
+            {
+                sfx2::FileDialogHelper aDlgHelper( ::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+                aDlgHelper.SetTitle(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Export as JPG" )));
+                String aExt(RTL_CONSTASCII_USTRINGPARAM("*.jpg"));
+                aDlgHelper.AddFilter( aExt, aExt );
+                aDlgHelper.SetCurrentFilter( aExt );
+                if( aDlgHelper.Execute() == ERRCODE_NONE )
+                {
+                    String aFile(aDlgHelper.GetPath());
+                    // copy the object
+                    uno::Reference< frame::XController > xController = rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController();
+                    uno::Reference< frame::XFrame > xFrame = xController->getFrame();
+                    uno::Reference< frame::XDispatchHelper > xDispatchHelper(::comphelper::getProcessServiceFactory()->createInstance(
+                                                                                                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DispatchHelper" )) ),
+                                uno::UNO_QUERY );
+                    uno::Reference< frame::XDispatchProvider > xDispatchProvider(xFrame,UNO_QUERY);
+                    xDispatchHelper->executeDispatch(xDispatchProvider, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Copy")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    // create new draw document
+                    ::beans::PropertyValues aPropertyValue(1);
+                    aPropertyValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ) );
+                    aPropertyValue[0].Value <<= sal_Bool(sal_False);
+
+                    uno::Reference< ::frame::XComponentLoader > xLoader(xFrame, UNO_QUERY);
+                    uno::Reference< ::lang::XComponent > xDrawComponent( xLoader->loadComponentFromURL(
+                                                                                                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/sdraw" ) ),
+                                                                                                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0,
+                                                                                                       aPropertyValue));
+
+                    // paste it into draw
+                    uno::Reference< frame::XModel > xDrawModel(xDrawComponent, UNO_QUERY);
+                    xController = xDrawModel->getCurrentController();
+                    xFrame = xController->getFrame();
+                    uno::Reference< frame::XDispatchProvider > xDrawDispatchProvider(xFrame,UNO_QUERY);
+
+                    xDispatchHelper->executeDispatch(xDrawDispatchProvider,
+                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Paste")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    xDispatchHelper->executeDispatch(xDrawDispatchProvider,
+                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:AlignUp")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    xDispatchHelper->executeDispatch(xDrawDispatchProvider,
+                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:AlignCenter")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    // export as jpeg
+                    xController = xFrame->getController();
+                    aPropertyValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                    aPropertyValue[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "draw_jpg_Export" ) );
+                    uno::Reference< frame::XStorable > xStorable(xController->getModel(), uno::UNO_QUERY );
+                    xStorable->storeToURL(aFile, aPropertyValue);
+
+                    // destroy draw document
+                    xDrawComponent->dispose();
+                }
+            }
+            rReq.Ignore();
+        }
+        break;
+        case FN_EXPORT_OLE_AS_PDF:
+        {
+            const int nSel = rSh.GetSelectionType();
+            if (nSel & nsSelectionType::SEL_OLE)
+            {
+                sfx2::FileDialogHelper aDlgHelper( ::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+                aDlgHelper.SetTitle(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Export as PDF" )));
+                String aExt(RTL_CONSTASCII_USTRINGPARAM("*.pdf"));
+                aDlgHelper.AddFilter( aExt, aExt );
+                aDlgHelper.SetCurrentFilter( aExt );
+                if( aDlgHelper.Execute() == ERRCODE_NONE )
+                {
+                    String aFile(aDlgHelper.GetPath());
+                    Reference< frame::XController > xController = rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController();
+                    ::beans::PropertyValues aPropertyValue(3);
+                    aPropertyValue[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                    aPropertyValue[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "writer_pdf_Export" ) );
+                    Sequence< ::beans::PropertyValue > aSequence(10);
+                    ::beans::PropertyValue aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[0] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Quality" ));
+                    aValue.Value <<= sal_Int32(90);
+                    aSequence[1] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[2] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ));
+                    aValue.Value <<= sal_Int32(300);
+                    aSequence[3] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[4] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[5] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ));
+                    aValue.Value <<= sal_Bool(sal_True);
+                    aSequence[6] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormsType" ));
+                    aValue.Value <<= sal_Int32(0);
+                    aSequence[7] = aValue;
+                    uno::Any aAny;
+                    Reference< view::XSelectionSupplier > xView( xController, UNO_QUERY );
+                    xView->getSelection() >>= aAny;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Selection" ));
+                    aValue.Value <<= aAny;
+                    aSequence[8] = aValue;
+                    aValue.Name = rtl::OUString();
+                    aValue.Value <<= sal_Int32(0);
+                    aSequence[9] = aValue;
+                    aPropertyValue[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
+                    aPropertyValue[1].Value <<= aSequence;
+                    aPropertyValue[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
+                    aPropertyValue[2].Value <<= sal_Bool(sal_True);
+                    Reference< frame::XStorable > xStorable(xController->getModel(), uno::UNO_QUERY );
+                    xStorable->storeToURL(aFile, aPropertyValue);
+                }
+            }
+            rReq.Ignore();
+        }
+        break;
         case FN_FRAME_TO_ANCHOR:
             if ( rSh.IsFrmSelected() )
             {
@@ -241,10 +379,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), GetView().GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -253,10 +391,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -266,7 +404,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             try
             {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), uno::UNO_QUERY);
                 if( xDialog.is() )
                 {
                     xDialog->execute();
@@ -291,7 +429,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -420,10 +558,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
                 if( nSel & nsSelectionType::SEL_OLE )
                 {
-                    // --> OD 2009-07-13 #i73249#
-//                    aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+                    // #i73249#
                     aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
-                    // <--
                 }
 
                 const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
@@ -460,7 +596,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
                 SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
@@ -470,7 +606,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                                                         DLG_FRM_STD,
                                                         sal_False,
                                                         nDefPage);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( pDlg->Execute() )
                 {
@@ -487,10 +623,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         }
                         if (SFX_ITEM_SET == pOutSet->GetItemState(FN_SET_FRM_ALT_NAME, sal_True, &pItem))
                         {
-                            // --> OD 2009-07-13 #i73249#
-//                            rSh.SetAlternateText(((const SfxStringItem*)pItem)->GetValue());
+                            // #i73249#
                             rSh.SetObjTitle(((const SfxStringItem*)pItem)->GetValue());
-                            // <--
                         }
                         // Vorlagen-AutoUpdate
                         SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
@@ -542,7 +676,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pPrevFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sPrevName);
-                                DBG_ASSERT(pPrevFmt, "No frame found!");
+                                OSL_ENSURE(pPrevFmt, "No frame found!");
                                 if(pPrevFmt)
                                 {
                                     rSh.Chain(*pPrevFmt, *pCurrFlyFmt);
@@ -576,7 +710,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                 //needs cast - no non-const method available
                                 SwFrmFmt* pNextFmt = (SwFrmFmt*)
                                     lcl_GetFrmFmtByName(rSh, sNextName);
-                                DBG_ASSERT(pNextFmt, "No frame found!");
+                                OSL_ENSURE(pNextFmt, "No frame found!");
                                 if(pNextFmt)
                                 {
                                     rSh.Chain(*(SwFrmFmt*)
@@ -605,7 +739,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, bMirror));
         }
         break;
-        // --> OD 2009-07-14 #i73249#
+        // #i73249#
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
             bUpdateMgr = sal_False;
@@ -637,9 +771,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        // <--
         default:
-            ASSERT( !this, "falscher Dispatcher" );
+            OSL_ENSURE( !this, "wrong dispatcher" );
             return;
     }
     // Vorlagen-AutoUpdate
@@ -655,11 +788,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     }
 
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwFrameShell::GetState(SfxItemSet& rSet)
 {
@@ -716,8 +844,9 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_HORZ_RIGHT:
                 case FN_FRAME_ALIGN_HORZ_LEFT:
                     if ( (eFrmType & FRMTYPE_FLY_INCNT) ||
-                            bProtect ||
-                            ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER)&& bHtmlMode) )
+                         bProtect ||
+                         ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER) &&
+                          bHtmlMode ))
                         rSet.DisableItem( nWhich );
                 break;
                 case FN_FRAME_ALIGN_VERT_ROW_TOP:
@@ -727,9 +856,19 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
                 case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
                     if ( !(eFrmType & FRMTYPE_FLY_INCNT) || bProtect
-                            || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
+                         || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
                         rSet.DisableItem( nWhich );
                 break;
+
+                case FN_EXPORT_OLE:
+                case FN_EXPORT_OLE_AS_PDF:
+                case FN_EXPORT_OLE_AS_GRAPHIC:
+                {
+                    SvtMiscOptions aMiscOptions;
+                    if ( !aMiscOptions.IsExperimentalMode() )
+                        rSet.DisableItem( nWhich );
+                    break;
+                }
 
                 case SID_OBJECT_ALIGN_UP     :
                 case SID_OBJECT_ALIGN_MIDDLE :
@@ -738,7 +877,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_TOP:
                 case FN_FRAME_ALIGN_VERT_CENTER:
                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                    if ( bProtect || (bHtmlMode && eFrmType & FRMTYPE_FLY_ATCNT) )
+                    if ( bProtect || (bHtmlMode && eFrmType & FRMTYPE_FLY_ATCNT))
                         rSet.DisableItem( nWhich );
                     else
                     {
@@ -873,7 +1012,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( nWhich );
                 }
                 break;
-                // --> OD 2009-07-07 #i73249#
+                // #i73249#
                 case FN_TITLE_DESCRIPTION_SHAPE:
                 {
                     SwWrtShell &rWrtSh = GetShell();
@@ -886,7 +1025,6 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                 }
                 break;
-                // <--
                 default:
                     /* do nothing */;
                     break;
@@ -899,8 +1037,6 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 /*--------------------------------------------------------------------
     Beschreibung:   Ctor fuer FrameShell
  --------------------------------------------------------------------*/
-
-
 SwFrameShell::SwFrameShell(SwView &_rView) :
     SwBaseShell( _rView )
 {
@@ -918,12 +1054,6 @@ SwFrameShell::~SwFrameShell()
        it. */
     SwTransferable::ClearSelection( GetShell(), (ViewShell *) this );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 {
@@ -972,9 +1102,8 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 
                     if(aBorderLine.GetOutWidth() == 0)
                     {
-                        aBorderLine.SetInWidth(0);
-                        aBorderLine.SetOutWidth(DEF_LINE_WIDTH_0);
-                        aBorderLine.SetDistance(0);
+                        aBorderLine.SetStyle( ::editeng::SOLID );
+                        aBorderLine.SetWidth( DEF_LINE_WIDTH_0 );
                     }
                     //Distance nur setzen, wenn der Request vom Controller kommt
 
@@ -1100,23 +1229,14 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 
 }
 
-
-
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
-    if(pBorderLine->GetInWidth() > rBorderLine.GetInWidth())
-        rBorderLine.SetInWidth(pBorderLine->GetInWidth());
+    if(pBorderLine->GetWidth() > rBorderLine.GetWidth())
+        rBorderLine.SetWidth(pBorderLine->GetWidth());
 
-    if(pBorderLine->GetOutWidth() > rBorderLine.GetOutWidth())
-        rBorderLine.SetOutWidth(pBorderLine->GetOutWidth());
-
-    if(pBorderLine->GetDistance() > rBorderLine.GetDistance())
-        rBorderLine.SetDistance(pBorderLine->GetDistance());
-
+    rBorderLine.SetStyle(pBorderLine->GetStyle());
     rBorderLine.SetColor(pBorderLine->GetColor());
 }
-
-
 
 void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 {
@@ -1153,3 +1273,4 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
         rSet.DisableItem(FN_INSERT_FRAME);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

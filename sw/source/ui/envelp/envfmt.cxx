@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,58 +33,99 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
-
-
 #include <hintids.hxx>
 
-#include <tools/pstm.hxx>
-
-#define _SVSTDARR_LONGSSORT
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
 #include <editeng/paperinf.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/lrspitem.hxx>
 #include <editeng/brshitem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <frmatr.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <drpcps.hxx>
 #include <envfmt.hxx>
 #include <fmtcol.hxx>
-#ifndef _PARDLG_HXX
 #include "swuipardlg.hxx"
-#endif
 #include <pattern.hxx>
 #include <poolfmt.hxx>
 #include <uiborder.hxx>
 #include <uitool.hxx>
 
-#ifndef _ENVFMT_HRC
 #include <envfmt.hrc>
-#endif
+
+#include <vector>
+#include <algorithm>
 
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
+
+namespace {
+    /// Converts a ranges array to a list containing one entry for each
+    /// element covered by the ranges.
+    /// @param aRanges An array containing zero or more range specifications and
+    ///                terminated by one or more zero entries. A range
+    ///                specification is two consecutive entries that specify
+    ///                the start and end points of the range.
+    /// @returns A vector containing one element for each item covered by the
+    ///          ranges. This is not gauranteed to be sorted and may contain
+    ///          duplicates if the original ranges contained overlaps.
+    static std::vector<sal_uInt16> lcl_convertRangesToList(const sal_uInt16 aRanges[]) {
+        std::vector<sal_uInt16> aVec;
+        int i = 0;
+        while (aRanges[i])
+        {
+            for (sal_uInt16 n = aRanges[i]; n <= aRanges[i+1]; ++n)
+            {
+                aVec.push_back(n);
+            }
+            i += 2;
+        }
+        return aVec;
+    }
+
+    /// Converts a list of elements to a ranges array.
+    /// @param rElements Vector of the initial elements, this need not be sorted,
+    ///                  and may contain duplicate items. The vector is sorted
+    ///                  on exit from this function but may still contain duplicates.
+    /// @returns An array containing zero or more range specifications and
+    ///          terminated by one or more zero entries. A range specification
+    ///          is two consecutive entries that specify the start and end
+    ///          points of the range. This list will be sorted and will not
+    ///          contain any overlapping ranges.
+    static sal_uInt16* lcl_convertListToRanges(std::vector<sal_uInt16> &rElements) {
+        std::sort(rElements.begin(), rElements.end());
+        std::vector<sal_uInt16> aRanges;
+        size_t i;
+        for (i = 0; i < rElements.size(); ++i)
+        {
+            //Push the start of the this range.
+            aRanges.push_back(rElements[i]);
+            //Seek to the end of this range.
+            while (i + 1 < rElements.size() && rElements[i+1] - rElements[i] <= 1)
+            {
+                ++i;
+            }
+            //Push the end of this range (may be the same as the start).
+            aRanges.push_back( rElements[i] );
+        }
+
+        // Convert the vector to an array with terminating zero
+        sal_uInt16 *pNewRanges = new sal_uInt16[aRanges.size() + 1];
+        for (i = 0; i < aRanges.size(); ++i)
+        {
+            pNewRanges[i] = aRanges[i];
+        }
+        pNewRanges[i] = 0;
+        return pNewRanges;
+    }
+
+}
 
 namespace swui
 {
@@ -93,9 +135,6 @@ namespace swui
 static PopupMenu *pMenu;
 static long lUserW = 5669; // 10 cm
 static long lUserH = 5669; // 10 cm
-
-// --------------------------------------------------------------------------
-
 
 SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
@@ -130,7 +169,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     FreeResource();
     SetExchangeSupport();
 
-    // Metriken
+    // Metrics
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric(aAddrLeftField,   aMetric);
     SetMetric(aAddrTopField,    aMetric);
@@ -139,12 +178,12 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     SetMetric(aSizeWidthField,  aMetric);
     SetMetric(aSizeHeightField, aMetric);
 
-    // Menues einhaengen
+    // Hook in Menues
     ::pMenu = new PopupMenu(SW_RES(MNU_EDIT));
     aAddrEditButton.SetPopupMenu(::pMenu);
     aSendEditButton.SetPopupMenu(::pMenu);
 
-    // Handler installieren
+    // Install handlers
     Link aLk = LINK(this, SwEnvFmtPage, ModifyHdl);
     aAddrLeftField  .SetUpHdl( aLk );
     aAddrTopField   .SetUpHdl( aLk );
@@ -202,18 +241,12 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
 }
 
-// --------------------------------------------------------------------------
-
-
-__EXPORT SwEnvFmtPage::~SwEnvFmtPage()
+SwEnvFmtPage::~SwEnvFmtPage()
 {
     aAddrEditButton.SetPopupMenu(0);
     aSendEditButton.SetPopupMenu(0);
     delete ::pMenu;
 }
-
-// --------------------------------------------------------------------------
-
 
 IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 {
@@ -231,7 +264,7 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
             if (aIDs[i] == (sal_uInt16)ePaper)
                 aSizeFormatBox.SelectEntryPos(i);
 
-        // Benutzergroesse merken
+        // remember user size
         if (aIDs[aSizeFormatBox.GetSelectEntryPos()] == (sal_uInt16)PAPER_USER)
         {
             lUserW = lWidth ;
@@ -250,20 +283,17 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 
-// --------------------------------------------------------------------------
-
-
 IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 {
     SwWrtShell* pSh = GetParent()->pSh;
-    ASSERT(pSh, "Shell fehlt");
+    OSL_ENSURE(pSh, "Shell missing");
 
-    // Collection-Ptr ermitteln
+    // determine collection-ptr
     sal_Bool bSender = pButton != &aAddrEditButton;
 
     SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool( static_cast< sal_uInt16 >(
         bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS));
-    ASSERT(pColl, "Text-Collection fehlt");
+    OSL_ENSURE(pColl, "Text collection missing");
 
     switch (pButton->GetCurItemId())
     {
@@ -271,11 +301,11 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         {
             SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
-            // Damit die Hintergrundfarbe nicht uebergebuegelt wird:
+            // In order for the background color not to get ironed over:
             SfxAllItemSet aTmpSet(*pCollSet);
 
-            // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
-            // ein RES_BACKGROUND verwandelt und wieder zurueck ...
+            // The CHRATR_BACKGROUND attribute gets transformed into a
+            // RES_BACKGROUND for the dialog and back again ...
             const SfxPoolItem *pTmpBrush;
 
             if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_CHRATR_BACKGROUND,
@@ -289,10 +319,10 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 aTmpSet.ClearItem( RES_BACKGROUND );
 
             SwAbstractDialogFactory* pFact = swui::GetFactory();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet, DLG_CHAR ,&pColl->GetName() );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
                 SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
@@ -315,10 +345,10 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         {
             SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
-            // Damit die Tabulatoren nicht uebergebuegelt werden:
+            // In order for the tabulators not to get ironed over:
             SfxAllItemSet aTmpSet(*pCollSet);
 
-            // Tabulatoren, DefaultTabs ins ItemSet Stecken
+            // Insert tabs, default tabs into ItemSet
             const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                 pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
@@ -326,27 +356,28 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
             aTmpSet.Put( aDefDistItem );
 
-            // Aktueller Tab
+            // Current tab
             SfxUInt16Item aTabPos( SID_ATTR_TABSTOP_POS, 0 );
             aTmpSet.Put( aTabPos );
 
-            // linker Rand als Offset
+            // left border as offset
             const long nOff = ((SvxLRSpaceItem&)aTmpSet.Get( RES_LR_SPACE )).
                                                                 GetTxtLeft();
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aTmpSet.Put( aOff );
 
-            // BoxInfo setzen
+            // set BoxInfo
             ::PrepareBoxInfo( aTmpSet, *pSh );
 
             SwParaDlg *pDlg = new SwParaDlg(GetParent(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &pColl->GetName());
 
             if ( pDlg->Execute() == RET_OK )
             {
-                // Defaults evtl umsetzen
+                // maybe relocate defaults
                 const SfxPoolItem* pItem = 0;
                 SfxItemSet* pOutputSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 sal_uInt16 nNewDist;
+
                 if( SFX_ITEM_SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
                     sal_False, &pItem ) &&
                     nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
@@ -358,7 +389,6 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 }
                 if( pOutputSet->Count() )
                 {
-                    //pColl->SetAttr( *pOutputSet );
                     pCollSet->Put(*pOutputSet);
                 }
             }
@@ -370,7 +400,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 }
 
 /*------------------------------------------------------------------------
-  Beschreibung: Ein temporaeres Itemset, das bei Abbruch verworfen wird
+  Description: A temporary Itemset that gets discarded at abort
 ------------------------------------------------------------------------*/
 
 SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
@@ -379,10 +409,10 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
 
     if (!pAddrSet)
     {
-        // Range ermitteln (Ranges beider Itemsets mergen)
+        // determine range (merge both Itemsets' ranges)
         const sal_uInt16 *pRanges = pColl->GetAttrSet().GetRanges();
 
-        static sal_uInt16 __READONLY_DATA aRanges[] =
+        static sal_uInt16 const aRanges[] =
         {
             RES_PARATR_BEGIN, RES_PARATR_ADJUST,
             RES_PARATR_TABSTOP, RES_PARATR_END-1,
@@ -395,67 +425,20 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
             0, 0
         };
 
-        // BruteForce-Merge, weil MergeRange in SvTools buggy ist:
-        sal_uInt16 i = 0;
-        SvLongsSort aMergedRanges( 0, 10 );
-
-        while (pRanges[i])
-        {
-            for (sal_uInt16 nPos = pRanges[i]; nPos <= pRanges[i+1]; nPos++)
-                aMergedRanges.Insert(nPos);
-            i += 2;
-        }
-
-        i = 0;
-
-        while (aRanges[i])
-        {
-            for (sal_uInt16 nPos = aRanges[i]; nPos <= aRanges[i+1]; nPos++)
-                aMergedRanges.Insert(nPos);
-            i += 2;
-        }
-
-        // Ranges kompaktieren
-        SvLongs aCompactedRanges( 0, 10 );
-
-        aCompactedRanges.Insert(aMergedRanges[0], aCompactedRanges.Count());
-
-        for (i = 0; i < aMergedRanges.Count(); i++)
-        {
-            while (i + 1 < aMergedRanges.Count() &&
-                aMergedRanges[i+1] - aMergedRanges[i] == 1)
-            {
-                i++;
-            }
-            long nEnd = aMergedRanges[i];
-            aCompactedRanges.Insert(nEnd, aCompactedRanges.Count());
-
-            if (i + 1 < aMergedRanges.Count())
-            {
-                long nStart = aMergedRanges[i+1];
-                aCompactedRanges.Insert(nStart, aCompactedRanges.Count());
-            }
-        }
-
-        // Neue Ranges erzeugen
-        sal_uInt16 *pNewRanges = new sal_uInt16[aCompactedRanges.Count() + 1];
-        for (i = 0; i < aCompactedRanges.Count(); i++)
-            pNewRanges[i] = (sal_uInt16)aCompactedRanges[i];
-
-        pNewRanges[i] = 0;
+        // BruteForce merge because MergeRange in SvTools is buggy:
+        std::vector<sal_uInt16> pVec = ::lcl_convertRangesToList(pRanges);
+        std::vector<sal_uInt16> aVec = ::lcl_convertRangesToList(aRanges);
+        pVec.insert(pVec.end(), aVec.begin(), aVec.end());
+        sal_uInt16 *pNewRanges = ::lcl_convertListToRanges(pVec);
 
         pAddrSet = new SfxItemSet(GetParent()->pSh->GetView().GetCurShell()->GetPool(),
                                 pNewRanges);
-
         pAddrSet->Put(pColl->GetAttrSet());
         delete[] pNewRanges;
     }
 
     return pAddrSet;
 }
-
-// --------------------------------------------------------------------------
-
 
 IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
 {
@@ -499,9 +482,6 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
 void SwEnvFmtPage::SetMinMax()
 {
     long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
@@ -510,7 +490,7 @@ void SwEnvFmtPage::SetMinMax()
     long lWidth  = Max(lWVal, lHVal),
          lHeight = Min(lWVal, lHVal);
 
-    // Min und Max
+    // Min and Max
     aAddrLeftField.SetMin((long) 100 * (GetFldVal(aSendLeftField) + 566), FUNIT_TWIP);
     aAddrLeftField.SetMax((long) 100 * (lWidth  - 2 * 566), FUNIT_TWIP);
     aAddrTopField .SetMin((long) 100 * (GetFldVal(aSendTopField ) + 2 * 566), FUNIT_TWIP);
@@ -520,7 +500,7 @@ void SwEnvFmtPage::SetMinMax()
     aSendTopField .SetMin((long) 100 * (566), FUNIT_TWIP);
     aSendTopField .SetMax((long) 100 * (GetFldVal(aAddrTopField ) - 2 * 566), FUNIT_TWIP);
 
-    // First und Last
+    // First and last
     aAddrLeftField.SetFirst(aAddrLeftField.GetMin());
     aAddrLeftField.SetLast (aAddrLeftField.GetMax());
     aAddrTopField .SetFirst(aAddrTopField .GetMin());
@@ -530,7 +510,7 @@ void SwEnvFmtPage::SetMinMax()
     aSendTopField .SetFirst(aSendTopField .GetMin());
     aSendTopField .SetLast (aSendTopField .GetMax());
 
-    // Fields neu formatieren
+    // Reformat fields
     aAddrLeftField  .Reformat();
     aAddrTopField   .Reformat();
     aSendLeftField  .Reformat();
@@ -539,36 +519,24 @@ void SwEnvFmtPage::SetMinMax()
     aSizeHeightField.Reformat();
 }
 
-// --------------------------------------------------------------------------
-
-
-SfxTabPage* __EXPORT SwEnvFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwEnvFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwEnvFmtPage(pParent, rSet);
 }
 
-// ----------------------------------------------------------------------------
-
-
-void __EXPORT SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
+void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     aSet.Put(GetParent()->aEnvItem);
     Reset(aSet);
 }
 
-// ----------------------------------------------------------------------------
-
-
-int __EXPORT SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
+int SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
-
-// --------------------------------------------------------------------------
-
 
 void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
 {
@@ -594,20 +562,14 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     }
 }
 
-// --------------------------------------------------------------------------
-
-
-sal_Bool __EXPORT SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
+sal_Bool SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
     rSet.Put(GetParent()->aEnvItem);
     return sal_True;
 }
 
-// --------------------------------------------------------------------------
-
-
-void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
+void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 {
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
 
@@ -618,7 +580,7 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
         if (aIDs[i] == (sal_uInt16)ePaper)
             aSizeFormatBox.SelectEntryPos(i);
 
-    // Die MetricFields
+    // Metric fields
     SetFldVal(aAddrLeftField, rItem.lAddrFromLeft);
     SetFldVal(aAddrTopField , rItem.lAddrFromTop );
     SetFldVal(aSendLeftField, rItem.lSendFromLeft);
@@ -633,3 +595,4 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

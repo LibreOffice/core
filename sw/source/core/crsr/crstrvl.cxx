@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -74,7 +75,7 @@
 #include <wrong.hxx>
 #include <switerator.hxx>
 #include <vcl/window.hxx>
-#include <docufld.hxx> // OD 2008-06-19 #i90516#
+#include <docufld.hxx>
 
 using namespace ::com::sun::star;
 
@@ -315,9 +316,6 @@ sal_Bool SwCrsrShell::GotoNextTOXBase( const String* pName )
             0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ) &&
              pCurCrsr->GetPoint()->nNode < pSectNd->GetIndex() &&
             ( !pFnd || pFnd->GetIndex() > pSectNd->GetIndex() ) &&
-// JP 10.12.96: solange wir nur 3 Typen kennen und UI-seitig keine anderen
-//              einstellbar sind, muss ueber den Titel gesucht werden!
-//          ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
             ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
             )
         {
@@ -365,9 +363,6 @@ sal_Bool SwCrsrShell::GotoPrevTOXBase( const String* pName )
             0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ) &&
             pCurCrsr->GetPoint()->nNode > pSectNd->EndOfSectionIndex() &&
             ( !pFnd || pFnd->GetIndex() < pSectNd->GetIndex() ) &&
-// JP 10.12.96: solange wir nur 3 Typen kennen und UI-seitig keine anderen
-//              einstellbar sind, muss ueber den Titel gesucht werden!
-//          ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTypeName() ) &&
             ( !pName || *pName == ((SwTOXBaseSection*)pSect)->GetTOXName() )
             )
         {
@@ -705,7 +700,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
         const SwPosition& rPos = *pCrsr->GetPoint();
 
         SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
-        ASSERT( pTNd, "Wo ist mein CntntNode?" );
+        OSL_ENSURE( pTNd, "Wo ist mein CntntNode?" );
 
         SwTxtFld * pTxtFld = static_cast<SwTxtFld *>(
             pTNd->GetTxtAttrForCharAt(rPos.nContent.GetIndex(),
@@ -900,7 +895,6 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
-        //if( ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() <= nLevel )//#outline level,zhaojianwei
         if( ((SwTxtNode*)pNd)->GetAttrOutlineLevel()-1 <= nLevel )//<-end,zhaojianwei
             return nPos;
 
@@ -922,7 +916,7 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 
     if( nSttPos > nEndPos )         // sollte jemand das vertauscht haben?
     {
-        ASSERT( !this, "Start- > Ende-Position im Array" );
+        OSL_ENSURE( !this, "Start- > Ende-Position im Array" );
         sal_uInt16 nTmp = nSttPos;
         nSttPos = nEndPos;
         nEndPos = nTmp;
@@ -933,12 +927,10 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 
     if( bWithChilds )
     {
-        //sal_uInt8 nLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
         const int nLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end.zhaojianwei
         for( ++nEndPos; nEndPos < rOutlNds.Count(); ++nEndPos )
         {
             pEndNd = rOutlNds[ nEndPos ];
-            //sal_uInt8 nNxtLevel = pEndNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
             const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nNxtLevel <= nLevel )
                 break;          // EndPos steht jetzt auf dem naechsten
@@ -1043,13 +1035,12 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 bRet = sal_True;
             }
         }
-        // --> FME 2005-05-13 #i43742# New function: SW_CONTENT_CHECK
+        // #i43742# New function
         else if ( SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos &&
                   bCrsrFoundExact )
         {
             bRet = sal_True;
         }
-        // <--
         // #i23726#
         else if( pTxtNd &&
                  SwContentAtPos::SW_NUMLABEL & rCntntAtPos.eCntntAtPos)
@@ -1101,14 +1092,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         }
                         if( bRet )
                         {
-//                          rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
-//                                      *pTxtAttr->GetStart(),
-//                                      *pTxtAttr->GetEnd() - *pTxtAttr->GetStart(),
-//                                      sal_False );
-
-//                          rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_SMARTTAG;
-//                          rCntntAtPos.pFndTxtAttr = pTxtAttr;
 
                             if( pFldRect && 0 != ( pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt ) ) )
                                 pFrm->GetCharRect( *pFldRect, aPos, &aTmpState );
@@ -1357,7 +1341,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
             if( !bRet && (
                 SwContentAtPos::SW_TABLEBOXFML & rCntntAtPos.eCntntAtPos
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 || SwContentAtPos::SW_TABLEBOXVALUE & rCntntAtPos.eCntntAtPos
 #endif
                 ))
@@ -1369,7 +1353,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( pSttNd && 0 != ( pTblNd = pTxtNd->FindTableNode()) &&
                     0 != ( pBox = pTblNd->GetTable().GetTblBox(
                                     pSttNd->GetIndex() )) &&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     ( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
                         RES_BOXATR_FORMULA, sal_False, &pItem ) ||
                       SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
@@ -1403,7 +1387,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         // erzeuge aus der internen (fuer CORE)
                         // die externe (fuer UI) Formel
                         rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXFML;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                         if( RES_BOXATR_VALUE == pItem->Which() )
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXVALUE;
                         else
@@ -1437,7 +1421,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 }
             }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if( !bRet && SwContentAtPos::SW_CURR_ATTRS & rCntntAtPos.eCntntAtPos )
             {
                 xub_StrLen n = aPos.nContent.GetIndex();
@@ -1535,7 +1519,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
     return bRet;
 }
 
-// --> OD 2008-06-19 #i90516#
+// #i90516#
 const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
 {
     const SwPostItField* pPostItFld = 0;
@@ -1558,7 +1542,6 @@ const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
 
     return pPostItFld;
 }
-// <--
 
 // befindet sich der Node in einem geschuetzten Bereich?
 sal_Bool SwContentAtPos::IsInProtectSect() const
@@ -1780,9 +1763,6 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 {
                     *pCurCrsr->GetPoint() = aPos;
                     GetDoc()->SetTxtFmtColl( *pCurCrsr, pNextFmt, false );
-                    //JP 04.11.97: erstmal keine Folgevorlage der
-                    //              Folgevorlage beachten
-                    // pNextFmt = pNextFmt->GetNextTxtFmtColl();
                 }
                 if( n < aFPos.nColumnCnt )
                 {
@@ -1816,7 +1796,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     GetDoc()->InsertItemSet( *pCurCrsr, aSet, 0 );
                 }
                 else {
-                    ASSERT( !this, "wo ist mein CntntNode?" );
+                    OSL_ENSURE( !this, "wo ist mein CntntNode?" );
                 }
                 break;
 
@@ -2210,3 +2190,4 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

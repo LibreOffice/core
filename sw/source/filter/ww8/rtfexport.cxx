@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 #include "rtfexport.hxx"
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
+#include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -83,6 +85,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <unotools/configmgr.hxx>
 
+using ::editeng::SvxBorderLine;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
@@ -96,7 +99,7 @@ using sw::mark::IMark;
 #if defined(UNX)
 const sal_Char RtfExport::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA RtfExport::sNewLine[] = "\015\012";
+const sal_Char RtfExport::sNewLine[] = "\015\012";
 #endif
 
 // the default text encoding for the export, if it doesn't fit unicode will
@@ -116,11 +119,6 @@ MSWordSections& RtfExport::Sections() const
 RtfSdrExport& RtfExport::SdrExporter() const
 {
     return *m_pSdrExport;
-}
-
-bool RtfExport::HackIsWW8OrHigher() const
-{
-    return true;
 }
 
 bool RtfExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich )
@@ -493,7 +491,7 @@ void RtfExport::WritePageDescTable()
 
 void RtfExport::ExportDocument_Impl()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     // MSWordExportBase::WriteText and others write debug messages to std::clog
     // which is not interesting while debugging RtfExport
     std::ostringstream aOss;
@@ -552,8 +550,7 @@ void RtfExport::ExportDocument_Impl()
     // size and empty margins of the page
     if( pDoc->GetPageDescCnt() )
     {
-        //JP 06.04.99: Bug 64361 - Seeking the first SwFmtPageDesc. If
-        //              no set, the default is valid
+        // Seeking the first SwFmtPageDesc. If no set, the default is valid
         const SwFmtPageDesc* pSttPgDsc = 0;
         {
             const SwNode& rSttNd = *pDoc->GetNodes()[
@@ -654,7 +651,6 @@ void RtfExport::ExportDocument_Impl()
         {
             case FTNNUM_PAGE:       pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG; break;
             case FTNNUM_DOC:        pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;   break;
-            // case FTNNUM_CHAPTER:
             default:                pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;   break;
         }
         Strm() << pOut;
@@ -668,7 +664,6 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC;  break;
             case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC;  break;
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;  break;
-            // case SVX_NUM_ARABIC:
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
         }
         Strm() << pOut;
@@ -689,7 +684,6 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC; break;
             case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC; break;
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI; break;
-            // case SVX_NUM_ARABIC:
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;  break;
         }
         Strm() << pOut;
@@ -704,7 +698,7 @@ void RtfExport::ExportDocument_Impl()
 
     Strm() << '}';
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     std::clog.rdbuf(pOldBuf);
 #endif
 }
@@ -764,6 +758,17 @@ void RtfExport::OutputOLENode( const SwOLENode& )
     /* noop, see RtfAttributeOutput::FlyFrameOLE */
 }
 
+void RtfExport::OutputLinkedOLE( const rtl::OUString& )
+{
+    OSL_TRACE("%s", OSL_THIS_FUNC);
+}
+
+void RtfExport::OutputTextNode( const SwTxtNode& rNode )
+{
+    if ( !m_bOutOutlineOnly || rNode.IsOutline( ) )
+        MSWordExportBase::OutputTextNode( rNode );
+}
+
 void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -772,13 +777,14 @@ void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* 
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 }
 
-RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter )
+RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter, bool bOutOutlineOnly )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
       m_pWriter( pWriter ),
       m_pAttrOutput( NULL ),
       m_pSections( NULL ),
       m_pSdrExport( NULL ),
+      m_bOutOutlineOnly( bOutOutlineOnly ),
       eDefaultEncoding(
               rtl_getTextEncodingFromWindowsCharset(
                   sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
@@ -854,7 +860,7 @@ OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEn
 {
     OStringBuffer aBuf;
     const sal_Char* pStr = 0;
-    // 0x0b instead of \n, etc because of the replacements in SwAttrIter::GetSnippet()
+    // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
     switch (c)
     {
         case 0x0b:
@@ -961,21 +967,24 @@ void RtfExport::OutDateTime(const sal_Char* pStr, const util::DateTime& rDT )
 
 sal_uInt16 RtfExport::GetColor( const Color& rColor ) const
 {
-    for (RtfColorTbl::const_iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); it++ )
+    for (RtfColorTbl::const_iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); ++it )
         if ((*it).second == rColor) {
             OSL_TRACE("%s returning %d (%d,%d,%d)", OSL_THIS_FUNC, (*it).first, rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
             return (*it).first;
         }
-    OSL_ENSURE( sal_False, "No such Color in m_aColTbl!" );
+    OSL_FAIL( "No such Color in m_aColTbl!" );
     return 0;
 }
 
 void RtfExport::InsColor( const Color& rCol )
 {
     sal_uInt16 n;
-    for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); it++ )
+    bool bContainsAuto = false;
+    for (RtfColorTbl::iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); ++it )
         if ((*it).second == rCol)
             return; // Already in the table
+        else if ((*it).second == COL_AUTO)
+            bContainsAuto = true;
     if (rCol.GetColor() == COL_AUTO)
         n = 0;
     else
@@ -984,6 +993,10 @@ void RtfExport::InsColor( const Color& rCol )
         // Fix for the case when first a !COL_AUTO gets inserted as #0, then
         // gets overwritten by COL_AUTO
         if (!n)
+            n++;
+
+        // Fix the case where the table doesn't contain the COL_AUTO at #0
+        else if (!bContainsAuto)
             n++;
     }
     m_aColTbl.insert(std::pair<sal_uInt16,Color>( n, rCol ));
@@ -1068,7 +1081,7 @@ void RtfExport::OutColorTable()
             {
                 InsColor( pBkgrd->GetColor() );
             }
-        }
+    }
     }
 
     // shadow color
@@ -1089,7 +1102,7 @@ void RtfExport::OutColorTable()
             {
                 InsColor( pShadow->GetColor() );
             }
-        }
+    }
     }
 
     // frame border color
@@ -1103,7 +1116,7 @@ void RtfExport::OutColorTable()
         {
             if( 0 != (pBox = (const SvxBoxItem*)rPool.GetItem2( RES_BOX, n ) ))
                 InsColorLine( *pBox );
-        }
+    }
     }
 
     for (size_t n = 0; n < m_aColTbl.size(); ++n)
@@ -1206,7 +1219,6 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, sal_Bool bWriteRes
     AttrOutput().SectionPageNumbering(pAktPageDesc->GetNumType().GetNumberingType(), 0);
 
     pAktPageDesc = pSave;
-    //bOutPageDesc = bOldOut;
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
@@ -1250,12 +1262,15 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
+/// Glue class to call RtfExport as an internal filter, needed by copy&paste support.
 class SwRTFWriter : public Writer
 {
-    bool        m_bOutOutlineOnly;
+    private:
+        bool m_bOutOutlineOnly;
+
     public:
-               SwRTFWriter( const String& rFilterName, const String& rBaseURL );
-               virtual ~SwRTFWriter();
+        SwRTFWriter( const String& rFilterName, const String& rBaseURL );
+        virtual ~SwRTFWriter();
                virtual sal_uLong WriteStream();
 };
 
@@ -1273,8 +1288,7 @@ SwRTFWriter::~SwRTFWriter()
 sal_uLong SwRTFWriter::WriteStream()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
-    RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this );
-    aExport.mbOutOutlineOnly =  m_bOutOutlineOnly;
+    RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this, m_bOutOutlineOnly );
     aExport.ExportDocument( true );
     return 0;
 }
@@ -1285,4 +1299,4 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName,
     xRet = new SwRTFWriter( rFltName, rBaseURL );
 }
 
-/* vi:set shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

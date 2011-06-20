@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 #ifndef _SW_DLGFACT_HXX
 #define _SW_DLGFACT_HXX
 
-// include ---------------------------------------------------------------
 #include "swabstdlg.hxx"
 
 class SwSaveLabelDlg;
@@ -181,9 +181,9 @@ class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog //ad
 //add for DropDownFieldDialog end
 
 
-class AbstarctSwLabDlg_Impl  : public AbstarctSwLabDlg
+class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
 {
-    DECL_ABSTDLG_BASE(AbstarctSwLabDlg_Impl,SwLabDlg)
+    DECL_ABSTDLG_BASE(AbstractSwLabDlg_Impl,SwLabDlg)
     virtual void                SetCurPageId( sal_uInt16 nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
@@ -197,9 +197,9 @@ class AbstarctSwLabDlg_Impl  : public AbstarctSwLabDlg
 //add for SwLabDlg end
 
 //add for SwSelGlossaryDlg begin
-class AbstarctSwSelGlossaryDlg_Impl : public AbstarctSwSelGlossaryDlg
+class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 {
-    DECL_ABSTDLG_BASE(AbstarctSwSelGlossaryDlg_Impl,SwSelGlossaryDlg)
+    DECL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl,SwSelGlossaryDlg)
     virtual void InsertGlos(const String &rRegion, const String &rGlosName);    // inline
     virtual sal_uInt16 GetSelectedIdx() const;  // inline
     virtual void SelectEntryPos(sal_uInt16 nIdx);   // inline
@@ -458,7 +458,7 @@ public:
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog ( Window *pParent, SwWrtShell &rSh, //add for DropDownFieldDialog
                                 SwField* pField,int nResId, sal_Bool bNextButton = sal_False );
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert,int nResId ); //add for SwEnvDlg
-    virtual AbstarctSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+    virtual AbstractSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
                                                      SwNewDBMgr* pNewDBMgr, sal_Bool bLabel,int nResId  );
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod (); //add for SwLabDlg
@@ -471,7 +471,7 @@ public:
                                                     sal_Bool bDraw = sal_False,
                                                     sal_uInt16 nDefPage = 0);
 
-    virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ); //add for SwSelGlossaryDlg
+    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ); //add for SwSelGlossaryDlg
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ); //add for  SwTableHeightDlg SwSortDlg
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ); //add for  SwSplitTblDlg
 
@@ -518,6 +518,7 @@ public:
                                                 SwField* pField, sal_Bool bNextButton = sal_False ); //add for SwFldInputDlg
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( int nResId,
                                                 Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False); //add for SwInsFootNoteDlg
+   virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent );
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, sal_Bool bCol = sal_False ); //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
@@ -586,3 +587,5 @@ struct SwDialogsResMgr
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,18 +31,16 @@
 #include <SwXMLBlockImport.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#ifndef _SW_XMLBLOCKLIST_CONTEXT_HXX
 #include <SwXMLBlockListContext.hxx>
-#endif
 #include <SwXMLTextBlocks.hxx>
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using ::rtl::OUString;
 
-sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
-sal_Char __READONLY_DATA sXML_np__office[] = "_ooffice";
-sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
+sal_Char const sXML_np__block_list[] = "_block-list";
+sal_Char const sXML_np__office[] = "_ooffice";
+sal_Char const sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLBlockListImport::SwXMLBlockListImport(
@@ -116,3 +115,5 @@ void SAL_CALL SwXMLTextBlockImport::endDocument(void)
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

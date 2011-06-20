@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,17 +39,14 @@
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
-// --> OD 2004-11-03 #114798#
 #include <fmtfollowtextflow.hxx>
-// <--
 #include <layact.hxx>
 
 using namespace ::com::sun::star;
 
 // =============================================================================
 
-// --> OD 2004-12-03 #115759# - little helper class to forbid follow formatting
-// for the given text frame
+// little helper class to forbid follow formatting for the given text frame
 class SwForbidFollowFormat
 {
 private:
@@ -71,7 +69,6 @@ public:
         }
     }
 };
-// <--
 
 // =============================================================================
 // implementation of class <SwObjectFormatterTxtFrm>
@@ -102,7 +99,7 @@ SwObjectFormatterTxtFrm* SwObjectFormatterTxtFrm::CreateObjFormatter(
     if ( _rAnchorTxtFrm.IsFollow() )
     {
         pMasterOfAnchorFrm = _rAnchorTxtFrm.FindMaster();
-        while ( pMasterOfAnchorFrm->IsFollow() )
+        while ( pMasterOfAnchorFrm && pMasterOfAnchorFrm->IsFollow() )
         {
             pMasterOfAnchorFrm = pMasterOfAnchorFrm->FindMaster();
         }
@@ -126,7 +123,7 @@ SwFrm& SwObjectFormatterTxtFrm::GetAnchorFrm()
     return mrAnchorTxtFrm;
 }
 
-// --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+// #i40147# - add parameter <_bCheckForMovedFwd>.
 bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                            const bool _bCheckForMovedFwd )
 {
@@ -138,13 +135,12 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         return true;
     }
 
-    // --> OD 2005-07-13 #124218# - consider, if the layout action has to be
+    // consider, if the layout action has to be
     // restarted due to a delete of a page frame.
     if ( GetLayAction() && GetLayAction()->IsAgain() )
     {
         return false;
     }
-    // <--
 
     bool bSuccess( true );
 
@@ -153,17 +149,17 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         _rAnchoredObj.SetRestartLayoutProcess( false );
 
         _FormatObj( _rAnchoredObj );
-        // --> OD 2005-07-13 #124218# - consider, if the layout action has to be
+        // consider, if the layout action has to be
         // restarted due to a delete of a page frame.
         if ( GetLayAction() && GetLayAction()->IsAgain() )
         {
             return false;
         }
-        // <--
 
         // check, if layout process has to be restarted.
         // if yes, perform needed invalidations.
-        // --> OD 2004-11-03 #114798# - no restart of layout process,
+
+        // no restart of layout process,
         // if anchored object is anchored inside a Writer fly frame,
         // its position is already locked, and it follows the text flow.
         const bool bRestart =
@@ -172,7 +168,6 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                    _rAnchoredObj.GetAnchorFrm()->IsInFly() &&
                    _rAnchoredObj.GetFrmFmt().GetFollowTextFlow().GetValue() );
         if ( bRestart )
-        // <--
         {
             bSuccess = false;
             _InvalidatePrevObjs( _rAnchoredObj );
@@ -181,38 +176,36 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 
         // format anchor text frame, if wrapping style influence of the object
         // has to be considered and it's <NONE_SUCCESSIVE_POSITIONED>
-        // --> OD 2004-08-25 #i3317# - consider also anchored objects, whose
+        // #i3317# - consider also anchored objects, whose
         // wrapping style influence is temporarly considered.
-        // --> OD 2005-01-10 #i40147# - consider also anchored objects, for
+        // #i40147# - consider also anchored objects, for
         // whose the check of a moved forward anchor frame is requested.
-        // --> OD 2006-07-24 #b6449874# - revise decision made for i3317:
+        // revise decision made for i3317:
         // anchored objects, whose wrapping style influence is temporarly considered,
         // have to be considered in method <SwObjectFormatterTxtFrm::DoFormatObjs()>
         if ( bSuccess &&
              _rAnchoredObj.ConsiderObjWrapInfluenceOnObjPos() &&
              ( _bCheckForMovedFwd ||
                _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
-                    // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                    // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                     GetWrapInfluenceOnObjPos( true ) ==
-                        // --> OD 2004-10-18 #i35017# - constant name has changed
+                        // #i35017# - constant name has changed
                         text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ) )
-        // <--
         {
-            // --> OD 2004-10-11 #i26945# - check conditions for move forward of
+            // #i26945# - check conditions for move forward of
             // anchor text frame
             // determine, if anchor text frame has previous frame
             const bool bDoesAnchorHadPrev = ( mrAnchorTxtFrm.GetIndPrev() != 0 );
 
-            // --> OD 2005-01-11 #i40141# - use new method - it also formats the
+            // #i40141# - use new method - it also formats the
             // section the anchor frame is in.
             _FormatAnchorFrmForCheckMoveFwd();
-            // <--
 
-            // --> OD 2004-10-22 #i35911#
+            // #i35911#
             if ( _rAnchoredObj.HasClearedEnvironment() )
             {
                 _rAnchoredObj.SetClearedEnvironment( true );
-                // --> OD 2005-03-08 #i44049# - consider, that anchor frame
+                // #i44049# - consider, that anchor frame
                 // could already been marked to move forward.
                 SwPageFrm* pAnchorPageFrm( mrAnchorTxtFrm.FindPageFrm() );
                 if ( pAnchorPageFrm != _rAnchoredObj.GetPageFrm() )
@@ -239,33 +232,29 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     }
                     else
                     {
-                        ASSERT( false,
-                                "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
+                        OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
                     }
                 }
-                // <--
             }
             else if ( !mrAnchorTxtFrm.IsFollow() && bDoesAnchorHadPrev )
-            // <--
             {
                 // index of anchored object in collection of page numbers and
                 // anchor types
                 sal_uInt32 nIdx( CountOfCollected() );
-                ASSERT( nIdx > 0,
+                OSL_ENSURE( nIdx > 0,
                         "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchored object not collected!?" );
                 --nIdx;
 
                 sal_uInt32 nToPageNum( 0L );
-                // --> OD 2005-03-30 #i43913#
+                // #i43913#
                 bool bDummy( false );
-                // --> OD 2006-01-27 #i58182# - consider new method signature
+                // #i58182# - consider new method signature
                 if ( SwObjectFormatterTxtFrm::CheckMovedFwdCondition( *GetCollectedObj( nIdx ),
                                               GetPgNumOfCollected( nIdx ),
                                               IsCollectedAnchoredAtMaster( nIdx ),
                                               nToPageNum, bDummy ) )
-                // <--
                 {
-                    // --> OD 2005-06-01 #i49987# - consider, that anchor frame
+                    // #i49987# - consider, that anchor frame
                     // could already been marked to move forward.
                     bool bInsert( true );
                     sal_uInt32 nMovedFwdToPageNum( 0L );
@@ -299,14 +288,11 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                     }
                     else
                     {
-                        ASSERT( false,
-                                "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
+                        OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObj(..)> - anchor frame not marked to move forward" );
                     }
-                    // <--
                 }
             }
-            // <--
-            // --> OD 2005-01-12 #i40155# - mark anchor frame not to wrap around
+            // i40155# - mark anchor frame not to wrap around
             // objects under the condition, that its follow contains all its text.
             else if ( !mrAnchorTxtFrm.IsFollow() &&
                       mrAnchorTxtFrm.GetFollow() &&
@@ -319,7 +305,6 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                 *(mrAnchorTxtFrm.FindPageFrm()->GetFmt()->GetDoc()),
                                 mrAnchorTxtFrm );
             }
-            // <--
         }
     }
 
@@ -340,8 +325,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         else
         {
             // the anchor text frame has to be valid, thus assert.
-            ASSERT( false,
-                    "<SwObjectFormatterTxtFrm::DoFormatObjs()> called for invalidate anchor text frame." );
+            OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObjs()> called for invalidate anchor text frame." );
         }
 
         return false;
@@ -356,7 +340,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         // are registered at the 'master' anchor text frame.
         // Thus, format the other floating screen objects through the 'master'
         // anchor text frame
-        ASSERT( mpMasterAnchorTxtFrm,
+        OSL_ENSURE( mpMasterAnchorTxtFrm,
                 "SwObjectFormatterTxtFrm::DoFormatObjs() - missing 'master' anchor text frame" );
         bSuccess = _FormatObjsAtFrm( mpMasterAnchorTxtFrm );
 
@@ -372,14 +356,12 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         bSuccess = _FormatObjsAtFrm();
     }
 
-    // --> OD 2006-07-24 #b449874#
     // consider anchored objects, whose wrapping style influence are temporarly
     // considered.
     if ( bSuccess &&
          ( ConsiderWrapOnObjPos() ||
            ( !mrAnchorTxtFrm.IsFollow() &&
              _AtLeastOneObjIsTmpConsiderWrapInfluence() ) ) )
-    // <--
     {
         const bool bDoesAnchorHadPrev = ( mrAnchorTxtFrm.GetIndPrev() != 0 );
 
@@ -388,36 +370,32 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         //       previous frames of the anchor frame. The format of the previous
         //       frames is needed to get a correct result of format of the
         //       anchor frame for the following check for moved forward anchors
-        // --> OD 2005-01-11 #i40141# - use new method - it also formats the
+        // #i40141# - use new method - it also formats the
         // section the anchor frame is in.
         _FormatAnchorFrmForCheckMoveFwd();
-        // <--
 
         sal_uInt32 nToPageNum( 0L );
-        // --> OD 2005-03-30 #i43913#
+        // #i43913#
         bool bInFollow( false );
-        // <--
         SwAnchoredObject* pObj = 0L;
         if ( !mrAnchorTxtFrm.IsFollow() )
         {
             pObj = _GetFirstObjWithMovedFwdAnchor(
-                    // --> OD 2004-10-18 #i35017# - constant name has changed
+                    // #i35017# - constant name has changed
                     text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
-                    // <--
                     nToPageNum, bInFollow );
         }
-        // --> OD 2004-10-25 #i35911#
+        // #i35911#
         if ( pObj && pObj->HasClearedEnvironment() )
         {
             pObj->SetClearedEnvironment( true );
-            // --> OD 2005-03-08 #i44049# - consider, that anchor frame
+            // #i44049# - consider, that anchor frame
             // could already been marked to move forward.
             SwPageFrm* pAnchorPageFrm( mrAnchorTxtFrm.FindPageFrm() );
-            // --> OD 2005-03-30 #i43913# - consider, that anchor frame
+            // #i43913# - consider, that anchor frame
             // is a follow or is in a follow row, which will move forward.
             if ( pAnchorPageFrm != pObj->GetPageFrm() ||
                  bInFollow )
-            // <--
             {
                 bool bInsert( true );
                 sal_uInt32 nTmpToPageNum( 0L );
@@ -441,17 +419,15 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                 }
                 else
                 {
-                    ASSERT( false,
-                            "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
+                    OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
                 }
             }
         }
         else if ( pObj && bDoesAnchorHadPrev )
-        // <--
         {
             // Object found, whose anchor is moved forward
 
-            // --> OD 2005-06-01 #i49987# - consider, that anchor frame
+            // #i49987# - consider, that anchor frame
             // could already been marked to move forward.
             bool bInsert( true );
             sal_uInt32 nMovedFwdToPageNum( 0L );
@@ -484,13 +460,10 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
             }
             else
             {
-                ASSERT( false,
-                        "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
+                OSL_FAIL( "<SwObjectFormatterTxtFrm::DoFormatObjs(..)> - anchor frame not marked to move forward" );
             }
-            // <--
         }
-        // <--
-        // --> OD 2005-01-12 #i40155# - mark anchor frame not to wrap around
+        // #i40155# - mark anchor frame not to wrap around
         // objects under the condition, that its follow contains all its text.
         else if ( !mrAnchorTxtFrm.IsFollow() &&
                   mrAnchorTxtFrm.GetFollow() &&
@@ -503,7 +476,6 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                             *(mrAnchorTxtFrm.FindPageFrm()->GetFmt()->GetDoc()),
                             mrAnchorTxtFrm );
         }
-        // <--
     }
 
     return bSuccess;
@@ -515,12 +487,10 @@ void SwObjectFormatterTxtFrm::_InvalidatePrevObjs( SwAnchoredObject& _rAnchoredO
     // positioning is <NONE_CONCURRENT_POSIITIONED>.
     // Note: list of objects at anchor frame is sorted by this property.
     if ( _rAnchoredObj.GetFrmFmt().GetWrapInfluenceOnObjPos().
-                // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                 GetWrapInfluenceOnObjPos( true ) ==
-                // <--
-                            // --> OD 2004-10-18 #i35017# - constant name has changed
+                            // #i35017# - constant name has changed
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
-                            // <--
     {
         const SwSortedObjs* pObjs = GetAnchorFrm().GetDrawObjs();
         if ( pObjs )
@@ -531,12 +501,10 @@ void SwObjectFormatterTxtFrm::_InvalidatePrevObjs( SwAnchoredObject& _rAnchoredO
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 if ( pAnchoredObj->GetFrmFmt().GetWrapInfluenceOnObjPos().
-                        // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                        // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                         GetWrapInfluenceOnObjPos( true ) ==
-                        // <--
-                            // --> OD 2004-10-18 #i35017# - constant name has changed
+                            // #i35017# - constant name has changed
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT )
-                            // <--
                 {
                     pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
                 }
@@ -571,11 +539,10 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
                                     sal_uInt32& _noToPageNum,
                                     bool& _boInFollow )
 {
-    // --> OD 2004-10-18 #i35017# - constant names have changed
-    ASSERT( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
+    // #i35017# - constant names have changed
+    OSL_ENSURE( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
             _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT,
             "<SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(..)> - invalid value for parameter <_nWrapInfluenceOnPosition>" );
-    // <--
 
     SwAnchoredObject* pRetAnchoredObj = 0L;
 
@@ -585,13 +552,12 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
         SwAnchoredObject* pAnchoredObj = GetCollectedObj(i);
         if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() &&
              pAnchoredObj->GetFrmFmt().GetWrapInfluenceOnObjPos().
-                    // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+                    // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
                     GetWrapInfluenceOnObjPos( true ) == _nWrapInfluenceOnPosition )
-                    // <--
         {
-            // --> OD 2004-10-11 #i26945# - use new method <_CheckMovedFwdCondition(..)>
-            // --> OD 2005-03-30 #i43913#
-            // --> OD 2006-01-27 #i58182# - consider new method signature
+            // #i26945# - use new method <_CheckMovedFwdCondition(..)>
+            // #i43913#
+            // #i58182# - consider new method signature
             if ( SwObjectFormatterTxtFrm::CheckMovedFwdCondition( *GetCollectedObj( i ),
                                           GetPgNumOfCollected( i ),
                                           IsCollectedAnchoredAtMaster( i ),
@@ -600,14 +566,13 @@ SwAnchoredObject* SwObjectFormatterTxtFrm::_GetFirstObjWithMovedFwdAnchor(
                 pRetAnchoredObj = pAnchoredObj;
                 break;
             }
-            // <--
         }
     }
 
     return pRetAnchoredObj;
 }
 
-// --> OD 2006-01-27 #i58182#
+// #i58182#
 // - replace private method by corresponding static public method
 bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
                                             SwAnchoredObject& _rAnchoredObj,
@@ -625,7 +590,6 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
         if ( nPageNum > _nFromPageNum )
         {
             _noToPageNum = nPageNum;
-            // --> OD 2006-06-28 #b6443897#
             // Handling of special case:
             // If anchor frame is move forward into a follow flow row,
             // <_noToPageNum> is set to <_nFromPageNum + 1>, because it is
@@ -641,12 +605,10 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
                     _noToPageNum = _nFromPageNum + 1;
                 }
             }
-            // <--
             bAnchorIsMovedForward = true;
         }
     }
-    // <--
-    // --> OD 2004-11-05 #i26945# - check, if an at-paragraph|at-character
+    // #i26945# - check, if an at-paragraph|at-character
     // anchored object is now anchored at a follow text frame, which will be
     // on the next page. Also check, if an at-character anchored object
     // is now anchored at a text frame,  which is in a follow flow row,
@@ -657,7 +619,7 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
          (_rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_PARA)))
     {
         SwFrm* pAnchorFrm = _rAnchoredObj.GetAnchorFrmContainingAnchPos();
-        ASSERT( pAnchorFrm->IsTxtFrm(),
+        OSL_ENSURE( pAnchorFrm->IsTxtFrm(),
                 "<SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..) - wrong type of anchor frame>" );
         SwTxtFrm* pAnchorTxtFrm = static_cast<SwTxtFrm*>(pAnchorFrm);
         bool bCheck( false );
@@ -687,33 +649,29 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
             {
                 _noToPageNum = _nFromPageNum + 1;
                 bAnchorIsMovedForward = true;
-                // --> OD 2005-03-30 #i43913#
+                // #i43913#
                 _boInFollow = true;
-                // <--
             }
         }
     }
-    // <--
 
     return bAnchorIsMovedForward;
 }
-// <--
 
-// --> OD 2005-01-12 #i40140# - helper method to format layout frames used by
+// #i40140# - helper method to format layout frames used by
 // method <SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()>
-// --> OD 2005-03-04 #i44049# - format till a certain lower frame, if provided.
+// #i44049# - format till a certain lower frame, if provided.
 void lcl_FormatCntntOfLayoutFrm( SwLayoutFrm* pLayFrm,
                                  SwFrm* pLastLowerFrm = 0L )
 {
     SwFrm* pLowerFrm = pLayFrm->GetLower();
     while ( pLowerFrm )
     {
-        // --> OD 2005-03-04 #i44049#
+        // #i44049#
         if ( pLastLowerFrm && pLowerFrm == pLastLowerFrm )
         {
             break;
         }
-        // <--
         if ( pLowerFrm->IsLayoutFrm() )
             lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pLowerFrm),
                                         pLastLowerFrm );
@@ -723,20 +681,18 @@ void lcl_FormatCntntOfLayoutFrm( SwLayoutFrm* pLayFrm,
         pLowerFrm = pLowerFrm->GetNext();
     }
 }
-// <--
+
 /** method to format given anchor text frame and its previous frames
 
-    OD 2005-11-17 #i56300#
+    #i56300#
     Usage: Needed to check, if the anchor text frame is moved forward
     due to the positioning and wrapping of its anchored objects, and
     to format the frames, which have become invalid due to the anchored
     object formatting in the iterative object positioning algorithm
-
-    @author OD
 */
 void SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtFrm )
 {
-    // --> OD 2005-04-13 #i47014# - no format of section and previous columns
+    // #i47014# - no format of section and previous columns
     // for follow text frames.
     if ( !_rAnchorTxtFrm.IsFollow() )
     {
@@ -756,15 +712,13 @@ void SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtF
             }
             if ( pSectFrm && pSectFrm->IsSctFrm() )
             {
-                // --> OD 2005-03-04 #i44049#
+                // #i44049#
                 _rAnchorTxtFrm.LockJoin();
-                // <--
                 SwFrm* pFrm = pSectFrm->GetUpper()->GetLower();
-                // --> OD 2005-05-23 #i49605# - section frame could move forward
+                // #i49605# - section frame could move forward
                 // by the format of its previous frame.
                 // Thus, check for valid <pFrm>.
                 while ( pFrm && pFrm != pSectFrm )
-                // <--
                 {
                     if ( pFrm->IsLayoutFrm() )
                         lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
@@ -775,21 +729,19 @@ void SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtF
                 }
                 lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pSectFrm),
                                             &_rAnchorTxtFrm );
-                // --> OD 2005-03-04 #i44049#
+                // #i44049#
                 _rAnchorTxtFrm.UnlockJoin();
-                // <--
             }
         }
 
-        // --> OD 2005-01-12 #i40140# - if anchor frame is inside a column,
+        // #i40140# - if anchor frame is inside a column,
         // format the content of the previous columns.
         // Note: It's a very simple format without formatting objects.
         SwFrm* pColFrmOfAnchor = _rAnchorTxtFrm.FindColFrm();
         if ( pColFrmOfAnchor )
         {
-            // --> OD 2005-03-04 #i44049#
+            // #i44049#
             _rAnchorTxtFrm.LockJoin();
-            // <--
             SwFrm* pColFrm = pColFrmOfAnchor->GetUpper()->GetLower();
             while ( pColFrm != pColFrmOfAnchor )
             {
@@ -806,16 +758,13 @@ void SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtF
 
                 pColFrm = pColFrm->GetNext();
             }
-            // --> OD 2005-03-04 #i44049#
+            // #i44049#
             _rAnchorTxtFrm.UnlockJoin();
-            // <--
         }
-        // <--
     }
-    // <--
 
     // format anchor frame - format of its follow not needed
-    // --> OD 2005-04-08 #i43255# - forbid follow format, only if anchor text
+    // #i43255# - forbid follow format, only if anchor text
     // frame is in table
     if ( _rAnchorTxtFrm.IsInTab() )
     {
@@ -830,9 +779,7 @@ void SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtF
 
 /** method to format the anchor frame for checking of the move forward condition
 
-    OD 2005-01-11 #i40141#
-
-    @author OD
+    #i40141#
 */
 void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
 {
@@ -841,10 +788,6 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
 
 /** method to determine if at least one anchored object has state
     <temporarly consider wrapping style influence> set.
-
-    OD 2006-07-24 #b6449874#
-
-    @author OD
 */
 bool SwObjectFormatterTxtFrm::_AtLeastOneObjIsTmpConsiderWrapInfluence()
 {
@@ -868,3 +811,4 @@ bool SwObjectFormatterTxtFrm::_AtLeastOneObjIsTmpConsiderWrapInfluence()
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

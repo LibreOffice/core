@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,9 +40,7 @@
 #include <tools/string.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 
@@ -54,7 +53,7 @@ class SfxItemSet;
 class SwApplet_Impl
 {
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xApplet;
-    SvCommandList     aCommandList; // und die szugehorige Command-List
+    SvCommandList     aCommandList;
     SfxItemSet        aItemSet;
     String            sAlt;
 
@@ -77,3 +76,5 @@ public:
     void          SetAltText( const String& rAlt ) {sAlt = rAlt;}
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

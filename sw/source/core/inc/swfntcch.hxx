@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,7 @@ class SwFontCache : public SwCache
 public:
 
     inline SwFontCache() : SwCache(50,50
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , "Globaler AttributSet/Font-Cache pSwFontCache"
 #endif
     ) {}
@@ -97,3 +98,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

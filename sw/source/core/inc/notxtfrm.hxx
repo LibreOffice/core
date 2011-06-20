@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ class SwNoTxtFrm: public SwCntntFrm
 {
     friend void _FrmFinit();
 
-    short    nWeight;                   // "Wichtigkeit" der Grafik
+    short    nWeight;                   // importance of the graphic
 
     const Size& GetSize() const;
 
@@ -47,7 +48,6 @@ class SwNoTxtFrm: public SwCntntFrm
 
     void Format ( const SwBorderAttrs *pAttrs = 0 );
     void PaintCntnt  ( OutputDevice*, const SwRect&, const SwRect& ) const;
-    /// OD 25.09.2002 #99739# - delete unused 3rd parameter
     void PaintPicture( OutputDevice*, const SwRect& ) const;
 protected:
     virtual void MakeAll();
@@ -71,9 +71,10 @@ public:
     void StopAnimation( OutputDevice* = 0 ) const;
     sal_Bool HasAnimation()  const;
 
-    // Routinen fuer den Grafik-Cache
+    // Routine for the graphics cache
     sal_uInt16 GetWeight() { return nWeight; }
 };
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

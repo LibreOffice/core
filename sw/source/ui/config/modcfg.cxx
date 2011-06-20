@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,18 +35,14 @@
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/mailenum.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/svxenum.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <tools/globname.hxx>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <fldupde.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <caption.hxx>
@@ -64,9 +61,7 @@ using namespace com::sun::star::uno;
 #define GLOB_NAME_CHART     4
 
 SV_IMPL_PTRARR_SORT(InsCapOptArr, InsCaptionOptPtr)
-/* -----------------03.11.98 13:46-------------------
- *
- * --------------------------------------------------*/
+
 InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalName *pOleId) const
 {
     for (sal_uInt16 i = 0; i < Count(); i++ )
@@ -82,16 +77,12 @@ InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalNa
     return 0;
 }
 
-/* -----------------03.11.98 15:05-------------------
- *
- * --------------------------------------------------*/
-
 const InsCaptionOpt* SwModuleOptions::GetCapOption(
     sal_Bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId)
 {
     if(bHTML)
     {
-        DBG_ERROR("no caption option in sw/web!");
+        OSL_FAIL("no caption option in sw/web!");
         return 0;
     }
     else
@@ -108,17 +99,13 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
     }
 }
 
-/* -----------------03.11.98 15:05-------------------
- *
- * --------------------------------------------------*/
-
 sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt)
 {
     sal_Bool bRet = sal_False;
 
     if(bHTML)
     {
-        DBG_ERROR("no caption option in sw/web!");
+        OSL_FAIL("no caption option in sw/web!");
     }
     else if (pOpt)
     {
@@ -152,9 +139,7 @@ sal_Bool SwModuleOptions::SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt
 
     return bRet;
 }
-/*-----------------13.01.97 12.44-------------------
 
---------------------------------------------------*/
 SwModuleOptions::SwModuleOptions() :
     aInsertConfig(sal_False),
     aWebInsertConfig(sal_True),
@@ -163,9 +148,7 @@ SwModuleOptions::SwModuleOptions() :
     bHideFieldTips(sal_False)
 {
 }
-/* -----------------------------19.01.01 12:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFromUI)
 {
     String sReturn;
@@ -205,7 +188,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
                                 nVal -= 'a' - 10;
                             else
                             {
-                                DBG_ERROR( "ungueltiger Hex-Wert" );
+                                OSL_FAIL("wrong hex value" );
                                 bValidData = sal_False;
                                 break;
                             }
@@ -218,7 +201,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
                         break;
                     }
 
-                    default:    // Unbekannt, daher nur Backslash einfuegen
+                    default:    // Unknown, so insert backslash
                         sReturn += '\\';
                         i--;
                         break;
@@ -253,9 +236,7 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, sal_Bool bFro
     }
     return sReturn;
 }
-/* -----------------------------10.10.00 16:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -280,9 +261,7 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
     }
     return aNames;
 }
-/*-- 10.10.00 16:22:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwRevisionConfig::SwRevisionConfig() :
     ConfigItem(C2U("Office.Writer/Revision"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
@@ -299,15 +278,11 @@ SwRevisionConfig::SwRevisionConfig() :
 
     Load();
 }
-/*-- 10.10.00 16:22:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwRevisionConfig::~SwRevisionConfig()
 {
 }
-/*-- 10.10.00 16:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
 {
     sal_Int32 nRet = 0;
@@ -332,7 +307,7 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     }
     return nRet;
 }
-//-----------------------------------------------------------------------------
+
 void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwRevisionConfig::Commit()
@@ -359,9 +334,7 @@ void SwRevisionConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 10.10.00 16:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelete = sal_False)
 {
     rAttr.nItemId = rAttr.nAttr = 0;
@@ -393,7 +366,7 @@ void SwRevisionConfig::Load()
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -417,9 +390,7 @@ void SwRevisionConfig::Load()
         }
     }
 }
-/* -----------------------------10.10.00 16:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 enum InsertConfigProp
 {
     INS_PROP_TABLE_HEADER = 0,
@@ -628,15 +599,13 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
         OUString* pWebNames = aWebNames.getArray();
         int i;
         for(i = 0; i < nCount; i++)
-            pNames[i] = C2U(aPropNames[i]);
+            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
         for(i = 0; i < nWebCount; i++)
-            pWebNames[i] = C2U(aPropNames[i]);
+            pWebNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
     }
     return bIsWeb ? aWebNames : aNames;
 }
-/*-- 10.10.00 16:22:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/Insert") : C2U("Office.Writer/Insert"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -657,17 +626,13 @@ SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
 
     Load();
 }
-/*-- 10.10.00 16:22:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwInsertConfig::~SwInsertConfig()
 {
     delete pCapOptions;
     delete pOLEMiscOpt;
 }
-/*-- 10.10.00 16:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
 {
     switch(nOffset)
@@ -689,7 +654,7 @@ void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_
         case 9: pValues[nProp] <<= rOpt.CopyAttributes(); break; //ApplyAttributes
     }
 }
-//-----------------------------------------------------------------------------
+
 void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwInsertConfig::Commit()
@@ -867,9 +832,7 @@ void SwInsertConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 10.10.00 16:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
 {
     switch(nOffset)
@@ -936,13 +899,13 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         break;
     }
 }
-//-----------------------------------------------------------------------------
+
 void SwInsertConfig::Load()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         InsCaptionOpt* pWriterTableOpt = 0;
@@ -1167,9 +1130,7 @@ void SwInsertConfig::Load()
         aInsTblOpts.mnInsMode = nInsTblFlags;
     }
 }
-/* -----------------------------10.10.00 16:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 {
     const int nCount = 8;
@@ -1190,24 +1151,18 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
     return aNames;
 }
-/*-- 10.10.00 16:22:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTableConfig::SwTableConfig(sal_Bool bWeb) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/Table") : C2U("Office.Writer/Table"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
     Load();
 }
-/*-- 10.10.00 16:22:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwTableConfig::~SwTableConfig()
 {
 }
-/*-- 10.10.00 16:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwTableConfig::Commit()
@@ -1233,15 +1188,13 @@ void SwTableConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 10.10.00 16:22:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTableConfig::Load()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -1264,9 +1217,7 @@ void SwTableConfig::Load()
         }
     }
 }
-/*-- 18.01.01 17:02:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMiscConfig::SwMiscConfig() :
     ConfigItem(C2U("Office.Writer"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
@@ -1281,15 +1232,11 @@ SwMiscConfig::SwMiscConfig() :
 {
     Load();
 }
-/*-- 18.01.01 17:02:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMiscConfig::~SwMiscConfig()
 {
 }
-/*-- 18.01.01 17:02:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -1314,13 +1261,11 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = C2U(aPropNames[i]);
+            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
     }
     return aNames;
 }
-/*-- 18.01.01 17:02:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 void SwMiscConfig::Commit()
@@ -1353,15 +1298,13 @@ void SwMiscConfig::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 18.01.01 17:02:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMiscConfig::Load()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         OUString sTmp;
@@ -1390,3 +1333,5 @@ void SwMiscConfig::Load()
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

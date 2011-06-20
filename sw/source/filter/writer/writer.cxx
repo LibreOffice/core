@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,6 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <shellio.hxx>
-#include <pam.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <IMark.hxx>
@@ -73,7 +73,8 @@ struct Writer_Impl
 
 Writer_Impl::Writer_Impl()
     : m_pStream(0)
-    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
+    , pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 )
+    , pBkmkArr( 0 ), pBkmkNodePos( 0 )
 {
 }
 
@@ -93,7 +94,7 @@ Writer_Impl::~Writer_Impl()
 
 void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 {
-    ASSERT( pFontRemoveLst, "wo ist die FontListe?" );
+    OSL_ENSURE( pFontRemoveLst, "wo ist die FontListe?" );
     for( sal_uInt16 i = pFontRemoveLst->Count(); i; )
     {
         SvxFontItem* pItem = (SvxFontItem*)(*pFontRemoveLst)[ --i ];
@@ -232,7 +233,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
     if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
     {
-        ASSERT( false, "An StartPos kein ContentNode mehr" );
+        OSL_FAIL( "An StartPos kein ContentNode mehr" );
     }
 
     SwPaM* pNew = new SwPaM( aStt );
@@ -241,7 +242,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
         0 == (pCNode = pNds->GoPrevious( &aStt )) )
     {
-        ASSERT( false, "An StartPos kein ContentNode mehr" );
+        OSL_FAIL( "An StartPos kein ContentNode mehr" );
     }
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
@@ -253,7 +254,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
 // Stream-spezifisches
 SvStream& Writer::Strm()
 {
-    ASSERT( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
+    OSL_ENSURE( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
     return *m_pImpl->m_pStream;
 }
 
@@ -345,13 +346,13 @@ sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
 
 sal_uLong Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
 {
-    ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
+    OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
 sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
 {
-    ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
+    OSL_ENSURE( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
@@ -363,9 +364,6 @@ sal_Bool Writer::CopyLocalFileToINet( String& rFileNm )
     sal_Bool bRet = sal_False;
     INetURLObject aFileUrl( rFileNm ), aTargetUrl( *pOrigFileName );
 
-// JP 01.11.00: what is the correct question for the portal??
-//  if( aFileUrl.GetProtocol() == aFileUrl.GetProtocol() )
-//      return bRet;
 // this is our old without the Mail-Export
     if( ! ( INET_PROT_FILE == aFileUrl.GetProtocol() &&
             INET_PROT_FILE != aTargetUrl.GetProtocol() &&
@@ -427,11 +425,8 @@ void Writer::PutNumFmtFontsInAttrPool()
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     const SwNumRule* pRule;
     const SwNumFmt* pFmt;
-    // --> OD 2006-06-27 #b644095#
-//    const Font *pFont, *pDefFont = &SwNumRule::GetDefBulletFont();
     const Font* pFont;
     const Font* pDefFont = &numfunc::GetDefBulletFont();
-    // <--
     sal_Bool bCheck = sal_False;
 
     for( sal_uInt16 nGet = rListTbl.Count(); nGet; )
@@ -537,7 +532,7 @@ void Writer::CreateBookmarkTbl()
 sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     xub_StrLen nEnd, SvPtrarr& rArr)
 {
-    ASSERT( !rArr.Count(), "es sind noch Eintraege vorhanden" );
+    OSL_ENSURE( !rArr.Count(), "es sind noch Eintraege vorhanden" );
 
     sal_uLong nNd = rNd.GetIndex();
     SvPtrarr* pArr = (m_pImpl->pBkmkNodePos) ?
@@ -581,7 +576,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
 
 sal_uLong StgWriter::WriteStream()
 {
-    ASSERT( !this, "Schreiben in Streams auf einem Storage?" );
+    OSL_ENSURE( !this, "Schreiben in Streams auf einem Storage?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
@@ -626,3 +621,4 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage 
     return nRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -77,7 +76,7 @@
 #include <swwait.hxx>
 #include <shells.hrc>
 #include <popup.hrc>
-
+#include <extedit.hxx>
 #define SwGrfShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
@@ -115,6 +114,19 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case FN_EXTERNAL_EDIT:
+        {
+            /* When the graphic is selected to be opened via some external tool
+             * for advanced editing
+             */
+            GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
+            if(0 != pGraphicObject)
+            {
+                EditWithExternalTool(pGraphicObject, &rSh);
+            }
+        }
+        break;
+
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         {
@@ -153,10 +165,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
             if ( nSlot == FN_FORMAT_GRAFIC_DLG )
             {
-                // --> OD 2009-07-13 #i73249#
-//                aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+                // #i73249#
                 aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
-                // <--
             }
 
             pRect = &rSh.GetAnyCurRect(RECT_PAGE_PRT);
@@ -202,14 +212,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                // --> OD 2005-02-09 #119353# - robust
+                // #119353# - robust
                 const GraphicObject* pGrfObj = rSh.GetGraphicObj();
                 if ( pGrfObj )
                 {
                     aSet.Put( SvxBrushItem( *pGrfObj, GPOS_LT,
                                             SID_ATTR_GRAF_GRAPHIC ) );
                 }
-                // <--
             }
             aSet.Put( SfxBoolItem( FN_PARAM_GRF_CONNECT, sGrfNm.Len() > 0 ) );
 
@@ -228,12 +237,12 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_GRF,
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, sal_False, DLG_FRM_GRF);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if( pDlg->Execute() )
             {
                 rSh.StartAllAction();
@@ -329,11 +338,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if ( SFX_ITEM_SET == pSet->GetItemState(
                                         FN_SET_FRM_ALT_NAME, sal_True, &pItem ))
                 {
-                    // --> OD 2009-07-13 #i73249#
-//                    rSh.SetAlternateText(
-//                                ((const SfxStringItem*)pItem)->GetValue() );
+                    // #i73249#
                     rSh.SetObjTitle( ((const SfxStringItem*)pItem)->GetValue() );
-                    // <--
                 }
 
                 SfxItemSet aGrfSet( rSh.GetAttrPool(), RES_GRFATR_BEGIN,
@@ -360,7 +366,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
 }
@@ -489,7 +495,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_GRFFILTER_SOLARIZE:
             if( GRAPHIC_BITMAP == nGrfType )
             {
-                // --> OD 2005-02-09 #119353# - robust
+                // #119353# - robust
                 const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
                 if ( pFilterObj )
                 {
@@ -499,12 +505,11 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                         GetShell().ReRead( aEmptyStr, aEmptyStr,
                                            &aFilterObj.GetGraphic() );
                 }
-                // <--
             }
             break;
 
         default:
-            ASSERT(!this, falscher Dispatcher);
+            OSL_ENSURE(!this, "wrong dispatcher");
         }
         if( aGrfSet.Count() )
             GetShell().SetAttr( aGrfSet );
@@ -522,10 +527,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 //    const GraphicObject* pGrfObj = ( bIsGrfCntnt ? rSh.GetGraphicObj() : NULL );
 //    sal_Bool bIsRenderGraphicGrfCntnt = ( pGrfObj && pGrfObj->IsRenderGraphic() );
 
-    // --> OD 2006-11-03 #i59688#
-//    sal_Bool bSwappedOut = rSh.IsGrfSwapOut( sal_True );
-//    sal_Bool bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
-    // <--
 
     SetGetStateSet( &rSet );
 
@@ -543,6 +544,13 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 bDisable = sal_True;
             break;
         case FN_SAVE_GRAPHIC:
+            if( rSh.GetGraphicType() == GRAPHIC_NONE )
+                bDisable = sal_True;
+        break;
+        /*
+         * If the Graphic is None type it should be externally editable
+         */
+        case FN_EXTERNAL_EDIT:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
         break;
@@ -615,7 +623,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( !bParentCntProt )
             {
-                // --> OD 2005-02-09 #119353# - robust
+                // #119353# - robust
                 const GraphicObject* pGrafObj = rSh.GetGraphicObj();
                 if ( pGrafObj )
                 {
@@ -655,16 +663,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             {
                 if( bParentCntProt || !bIsGrfCntnt )
                     bDisable = sal_True;
-                // --> OD 2006-11-03 #i59688#
-                // load graphic only if type is unknown
-//                else if( bSwappedOut )
-//                {
-//                    rSet.DisableItem( nWhich );
-//                    if( AddGrfUpdateSlot( nWhich ))
-//                        rSh.GetGraphic(sal_False);  // start the loading
-//                }
-//                else
-//                    bDisable = !bBitmapType;
+                // #i59688# load graphic only if type is unknown
                 else
                 {
                     const sal_uInt16 eGraphicType( rSh.GetGraphicType() );
@@ -681,7 +680,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                         bDisable = eGraphicType != GRAPHIC_BITMAP;
                     }
                 }
-                // <--
             }
             break;
 
@@ -704,3 +702,5 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
     SetName(String::CreateFromAscii("Graphic"));
     SetHelpId(SW_GRFSHELL);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

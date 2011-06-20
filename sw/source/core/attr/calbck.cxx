@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,7 +86,7 @@ void SwClient::SwClientNotify( const SwModify&, const SfxHint& )
 //*************************************************************************
 SwClient::~SwClient()
 {
-    DBG_ASSERT( !pRegisteredIn || pRegisteredIn->GetDepends(),"SwModify still known, but Client already disconnected!" );
+    OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(),"SwModify still known, but Client already disconnected!" );
     if( pRegisteredIn && pRegisteredIn->GetDepends() )
         // still connected
         pRegisteredIn->Remove( this );
@@ -122,7 +123,7 @@ SwModify::SwModify( SwModify *pToRegisterIn )
 /*************************************************************************/
 SwModify::~SwModify()
 {
-    ASSERT( !IsModifyLocked(), "Modify destroyed but locked." );
+    OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 
     if ( IsInCache() )
         SwFrm::GetCache().Delete( this );
@@ -188,7 +189,7 @@ void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *p
         switch( pOldValue->Which() )
         {
         case RES_OBJECTDYING:
-         case RES_REMOVE_UNO_OBJECT:
+        case RES_REMOVE_UNO_OBJECT:
             bLockClientList = ((SwPtrMsgPoolItem *)pOldValue)->pObject != this;
             break;
 
@@ -229,15 +230,15 @@ sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 /*************************************************************************/
 void SwModify::Add(SwClient *pDepend)
 {
-    ASSERT( !bLockClientList, "Client inserted while in Modify" );
+    OSL_ENSURE( !bLockClientList, "Client inserted while in Modify" );
 
     if(pDepend->pRegisteredIn != this )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
-            ASSERT( &pTmp->GetModify() != pRoot, "Client added to active ClientIter" );
+            OSL_ENSURE( &pTmp->GetModify() != pRoot, "Client added to active ClientIter" );
             pTmp = pTmp->pNxtIter;
         }
 #endif
@@ -274,7 +275,7 @@ SwClient* SwModify::Remove(SwClient * pDepend)
     if ( bInDocDTOR )
         return 0;
 
-    ASSERT( !bLockClientList || pDepend->mbIsAllowedToBeRemovedInModifyCall, "SwClient shall be removed in Modify call!" );
+    OSL_ENSURE( !bLockClientList || pDepend->mbIsAllowedToBeRemovedInModifyCall, "SwClient shall be removed in Modify call!" );
 
     if( pDepend->pRegisteredIn == this )
     {
@@ -305,7 +306,7 @@ SwClient* SwModify::Remove(SwClient * pDepend)
     }
     else
     {
-        ASSERT( false, "SwModify::Remove(): pDepend nicht gefunden" );
+        OSL_FAIL( "SwModify::Remove(): pDepend nicht gefunden" );
     }
 
     // disconnect client from me
@@ -447,7 +448,7 @@ SwClientIter::~SwClientIter()
             while( pTmp->pNxtIter != this )
                 if( 0 == ( pTmp = pTmp->pNxtIter ) )
                 {
-                    ASSERT( this, "wo ist mein Pointer" );
+                    OSL_ENSURE( this, "wo ist mein Pointer" );
                     return ;
                 }
             pTmp->pNxtIter = pNxtIter;
@@ -562,3 +563,5 @@ SwClient* SwClientIter::Previous()
     return pAct;
 }
 
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

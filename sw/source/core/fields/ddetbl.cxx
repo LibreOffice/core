@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -77,7 +78,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
     }
 }
 
-__EXPORT SwDDETable::~SwDDETable()
+SwDDETable::~SwDDETable()
 {
     SwDDEFieldType* pFldTyp = (SwDDEFieldType*)aDepend.GetRegisteredIn();
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
@@ -111,12 +112,12 @@ void SwDDETable::SwClientNotify( const SwModify&, const SfxHint& rHint )
 
 void SwDDETable::ChangeContent()
 {
-    ASSERT( GetFrmFmt(), "Kein FrameFormat" );
+    OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( !aLines.Count() )
         return;
-    ASSERT( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         return;
 
@@ -133,10 +134,10 @@ void SwDDETable::ChangeContent()
         for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().Count(); ++i )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
-            ASSERT( pBox->GetSttIdx(), "keine InhaltsBox" );
+            OSL_ENSURE( pBox->GetSttIdx(), "keine InhaltsBox" );
             SwNodeIndex aNdIdx( *pBox->GetSttNd(), 1 );
             SwTxtNode* pTxtNode = aNdIdx.GetNode().GetTxtNode();
-            ASSERT( pTxtNode, "Kein Node" );
+            OSL_ENSURE( pTxtNode, "Kein Node" );
             SwIndex aCntIdx( pTxtNode, 0 );
             pTxtNode->EraseText( aCntIdx );
             pTxtNode->InsertText( aLine.GetToken( i, '\t' ), aCntIdx );
@@ -162,19 +163,19 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
 sal_Bool SwDDETable::NoDDETable()
 {
     // suche den TabellenNode
-    ASSERT( GetFrmFmt(), "Kein FrameFormat" );
+    OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( !aLines.Count() )
         return sal_False;
-    ASSERT( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
     if( !pNd->GetNodes().IsDocNodes() )
         return sal_False;
 
     SwTableNode* pTblNd = pNd->FindTableNode();
-    ASSERT( pTblNd, "wo steht denn die Tabelle ?");
+    OSL_ENSURE( pTblNd, "wo steht denn die Tabelle ?");
 
     SwTable* pNewTbl = new SwTable( *this );
 
@@ -195,3 +196,4 @@ sal_Bool SwDDETable::NoDDETable()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

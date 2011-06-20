@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@ public:
     SwFmtNoBalancedColumns( sal_Bool bFlag = sal_False )
         : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 };
 
@@ -52,3 +53,4 @@ inline const SwFmtNoBalancedColumns &SwFmt::GetBalancedColumns(sal_Bool bInP) co
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

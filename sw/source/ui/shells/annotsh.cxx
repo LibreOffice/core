@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -115,9 +116,7 @@
 #include <editeng/editview.hxx>
 
 #include <svl/languageoptions.hxx>
-#include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>
-#include <svl/slstitm.hxx>
 
 #include <docsh.hxx>
 #include <svl/undo.hxx>
@@ -167,7 +166,7 @@ SwAnnotationShell::~SwAnnotationShell()
     if ( !pPostItMgr ||
          !pPostItMgr->HasActiveSidebarWin() )
     {
-        DBG_ASSERT(pPostItMgr,"PostItMgr::Layout(): We are looping forever");
+        OSL_ENSURE(pPostItMgr,"PostItMgr::Layout(): We are looping forever");
         return 0;
     }
     return &pPostItMgr->GetActiveSidebarWin()->GetOutlinerView()->GetOutliner()->GetUndoManager();
@@ -372,10 +371,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( rView.GetWindow(), rView.GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -384,10 +383,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         rView.GetWindow(), &aTmp, rView.GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -397,7 +396,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         {
             try
             {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), uno::UNO_QUERY);
                 if( xDialog.is() )
                 {
                     xDialog->execute();
@@ -423,7 +422,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( rView.GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -448,12 +447,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
-                //CHINA001 SwCharDlg* pDlg = new SwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, DLG_CHAR,0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -496,13 +494,12 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
-                //CHINA001 SwParaDlg* pDlg = new SwParaDlg(GetView().GetWindow(), GetView(), aDlgAttr, DLG_STD, 0, sal_True);
 
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {
@@ -903,7 +900,6 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
                             aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
-                        //if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
                             aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
                         rSet.Put( aFormats );
                     }
@@ -1024,15 +1020,6 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
             break;
         }
         case FN_HIDE_NOTE:
-            /*
-            if ( Mgr()->GetActiveSidebarWin() == this )
-            {
-                Mgr()->SetActivePostIt(0);
-                // put the cursor back into the document
-                SwitchToFieldPos();
-            }
-            Mgr()->Hide(mpFld);
-            */
             break;
         case FN_HIDE_ALL_NOTES:
             pPostItMgr->Hide();
@@ -1164,7 +1151,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
                                     , xContext), UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -1174,7 +1161,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );
@@ -1305,53 +1292,70 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
 void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
 {
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
-    if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
+    if (!pPostItMgr || !pPostItMgr->HasActiveSidebarWin())
         return;
 
     OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
+    if (!pOLV)
+        return;
+
     using namespace ::com::sun::star::i18n;
+
+    sal_uInt32 nMode = 0;
+
+    switch( rReq.GetSlot() )
     {
-        sal_uInt32 nMode = 0;
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+            nMode = TransliterationModulesExtra::SENTENCE_CASE;
+            break;
+        case SID_TRANSLITERATE_TITLE_CASE:
+            nMode = TransliterationModulesExtra::TITLE_CASE;
+            break;
+        case SID_TRANSLITERATE_TOGGLE_CASE:
+            nMode = TransliterationModulesExtra::TOGGLE_CASE;
+            break;
+        case SID_TRANSLITERATE_UPPER:
+            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+            break;
+        case SID_TRANSLITERATE_LOWER:
+            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+            break;
+        case SID_TRANSLITERATE_HALFWIDTH:
+            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+            break;
+        case SID_TRANSLITERATE_FULLWIDTH:
+            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+            break;
+        case SID_TRANSLITERATE_HIRAGANA:
+            nMode = TransliterationModules_KATAKANA_HIRAGANA;
+            break;
+        case SID_TRANSLITERATE_KATAGANA:
+            nMode = TransliterationModules_HIRAGANA_KATAKANA;
+            break;
 
-        switch( rReq.GetSlot() )
-        {
-            case SID_TRANSLITERATE_SENTENCE_CASE:
-                nMode = TransliterationModulesExtra::SENTENCE_CASE;
-                break;
-            case SID_TRANSLITERATE_TITLE_CASE:
-                nMode = TransliterationModulesExtra::TITLE_CASE;
-                break;
-            case SID_TRANSLITERATE_TOGGLE_CASE:
-                nMode = TransliterationModulesExtra::TOGGLE_CASE;
-                break;
-            case SID_TRANSLITERATE_UPPER:
-                nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-                break;
-            case SID_TRANSLITERATE_LOWER:
-                nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-                break;
-            case SID_TRANSLITERATE_HALFWIDTH:
-                nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
-                break;
-            case SID_TRANSLITERATE_FULLWIDTH:
-                nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
-                break;
-            case SID_TRANSLITERATE_HIRAGANA:
-                nMode = TransliterationModules_KATAKANA_HIRAGANA;
-                break;
-            case SID_TRANSLITERATE_KATAGANA:
-                nMode = TransliterationModules_HIRAGANA_KATAKANA;
-                break;
+        default:
+            OSL_ENSURE(!this, "wrong dispatcher");
+    }
 
-            default:
-                ASSERT(!this, "falscher Dispatcher");
-        }
+    if( nMode )
+        pOLV->TransliterateText( nMode );
+}
 
-        if( nMode )
-        {
-            pOLV->TransliterateText( nMode );
-        }
+void SwAnnotationShell::ExecRotateTransliteration( SfxRequest & rReq )
+{
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+    {
+        SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
+        if (!pPostItMgr || !pPostItMgr->HasActiveSidebarWin())
+            return;
+
+        OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText(m_aRotateCase.getNextMode());
     }
 }
 
@@ -1680,3 +1684,5 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         rReq.Done();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

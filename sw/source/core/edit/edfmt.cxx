@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@
 #include <fchrfmt.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
-#include "ndtxt.hxx"    // Fuer GetXXXFmt
+#include "ndtxt.hxx"    // for GetXXXFmt
 #include "hints.hxx"
 
 /*************************************
@@ -78,9 +79,8 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
 {
     if ( bReset )
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
+        // #i73790# - method renamed
         pCharFmt->ResetAllFmtAttr();
-        // <--
     }
 
     SwPaM* pPam = GetCrsr();
@@ -92,7 +92,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
         {
             const SwPosition* pPtPos = pPam->GetPoint();
             const SwPosition* pMkPos = pPam->GetMark();
-            if( pPtPos->nNode == pMkPos->nNode )        // im selben Node ?
+            if( pPtPos->nNode == pMkPos->nNode )        // in the same node?
             {
                 nStt = pPtPos->nContent.GetIndex();
                 if( nStt < pMkPos->nContent.GetIndex() )
@@ -154,7 +154,7 @@ SwCharFmt* SwEditShell::MakeCharFmt( const String& rName,
 }
 
 //----------------------------------
-// inlines im Product
+// inlines in product
 
 
 SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( sal_uInt16 nId )
@@ -163,7 +163,7 @@ SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( sal_uInt16 nId )
 }
 
 
-    // return das geforderte automatische  Format - Basis-Klasse !
+    // return the demanded automatic format - base-class !
 SwFmt* SwEditShell::GetFmtFromPool( sal_uInt16 nId )
 {
     return GetDoc()->GetFmtFromPool( nId );
@@ -195,3 +195,5 @@ SwTxtFmtColl* SwEditShell::FindTxtFmtCollByName( const String& rName ) const
 {
     return pDoc->FindTxtFmtCollByName( rName );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

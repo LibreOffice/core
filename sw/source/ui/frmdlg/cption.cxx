@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,9 +34,7 @@
 
 
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <cption.hxx>
 #include <fldmgr.hxx>
@@ -61,12 +60,8 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
-#ifndef _CPTION_HRC
 #include <cption.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 using namespace ::com::sun::star;
 
@@ -116,6 +111,8 @@ public:
     void    SetCharacterStyle(const String& rStyle);
     String  GetCharacterStyle() const;
 };
+
+String SwCaptionDialog::our_aSepTextSave = String::CreateFromAscii(": "); // Caption separator text
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
 
@@ -287,6 +284,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     FreeResource();
 
     CheckButtonWidth();
+    aSepEdit.SetText(our_aSepTextSave);
     aTextEdit.GrabFocus();
     DrawSample();
 }
@@ -313,6 +311,7 @@ void SwCaptionDialog::Apply()
     aOpt.CopyAttributes() = bCopyAttributes;
     aOpt.SetCharacterStyle( sCharacterStyle );
     rView.InsertCaption( &aOpt );
+    our_aSepTextSave = aSepEdit.GetText();
 }
 
 IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
@@ -345,8 +344,6 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
-
-
 
 IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
 {
@@ -384,7 +381,7 @@ void SwCaptionDialog::DrawSample()
     String aStr;
     String sCaption = aTextEdit.GetText();
 
-    // Nummer
+    // number
     String sFldTypeName = aCategoryBox.GetText();
     sal_Bool bNone = sFldTypeName == sNone;
     if( !bNone )
@@ -393,7 +390,7 @@ void SwCaptionDialog::DrawSample()
                                         aFormatBox.GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
-            // Kategorie
+            // category
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
@@ -426,7 +423,6 @@ void SwCaptionDialog::DrawSample()
             case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += 'a'; break;
             case SVX_NUM_ROMAN_UPPER:           aStr += 'I'; break;
             case SVX_NUM_ROMAN_LOWER:           aStr += 'i'; break;
-            //case ARABIC:
             default:                    aStr += '1'; break;
             }
             //#i61007# order of captions
@@ -438,7 +434,7 @@ void SwCaptionDialog::DrawSample()
 
         }
         if( sCaption.Len() > 0 )
-    {
+        {
             aStr += aSepEdit.GetText();
         }
     }
@@ -466,7 +462,7 @@ void SwCaptionDialog::CheckButtonWidth()
             &aOKButton, &aCancelButton, &aHelpButton, &aAutoCaptionButton, &aOptionButton
         };
         Button** pCurrent = pBtns;
-        for ( sal_uInt32 i = 0; i < sizeof( pBtns ) / sizeof( pBtns[ 0 ] ); ++i, ++pCurrent )
+        for ( sal_uInt32 i = 0; i < SAL_N_ELEMENTS(pBtns); ++i, ++pCurrent )
         {
             aNewSize = (*pCurrent)->GetSizePixel();
             aNewSize.Width() += nDelta;
@@ -483,8 +479,6 @@ SwCaptionDialog::~SwCaptionDialog()
 {
     delete pMgr;
 }
-/*  */
-
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
                                             const String& rSeqFldType )
@@ -553,7 +547,7 @@ void SwSequenceOptionDialog::Apply()
     }
     else if( aFldTypeName.Len() && nLvl < MAXLEVEL )
     {
-        // dann muessen wir das mal einfuegen
+        // then we have to insert that
         SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
         aFldType.SetDelimiter( cDelim );
         aFldType.SetOutlineLvl( nLvl );
@@ -566,9 +560,6 @@ void SwSequenceOptionDialog::Apply()
         rSh.UpdateExpFlds();
 }
 
-/*-- 24.08.2004 16:13:53---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 String  SwSequenceOptionDialog::GetCharacterStyle() const
 {
     String sRet;
@@ -577,9 +568,6 @@ String  SwSequenceOptionDialog::GetCharacterStyle() const
     return sRet;
 }
 
-/*-- 24.08.2004 16:14:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void    SwSequenceOptionDialog::SetCharacterStyle(const String& rStyle)
 {
     aLbCharStyle.SelectEntryPos(0);
@@ -613,7 +601,8 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
         nHandled = ComboBox::PreNotify( rNEvt );
     return nHandled;
 }
-/*-- 01.11.2007 10:45:51---------------------------------------------------
+
+/*-------------------------------------------------------------------------
     //#i61007# order of captions
   -----------------------------------------------------------------------*/
 void lcl_MoveH( Window& rWin, sal_Int32 nMove )
@@ -622,6 +611,7 @@ void lcl_MoveH( Window& rWin, sal_Int32 nMove )
     aPos.Y() += nMove;
     rWin.SetPosPixel(aPos);
 }
+
 void SwCaptionDialog::ApplyCaptionOrder()
 {
     //have the settings changed?
@@ -650,3 +640,5 @@ void SwCaptionDialog::ApplyCaptionOrder()
         SetSizePixel( aDlgSize );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

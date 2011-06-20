@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,15 +30,8 @@
 #include "precompiled_sw.hxx"
 
 
-
-
-
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdview.hxx>
@@ -54,11 +48,6 @@
 #include "drawsh.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -104,15 +93,15 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             sal_Bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+            OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             pView);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
-            if(pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+            if(pColorItem->GetColorTable() == &XColorTable::GetStdColorTable())
                 pDlg->DontDeleteColorTable();
             if (pDlg->Execute() == RET_OK)
             {
@@ -123,7 +112,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                     pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), sal_False);
                 pSh->EndAction();
 
-                static sal_uInt16 __READONLY_DATA aInval[] =
+                static sal_uInt16 aInval[] =
                 {
                     SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, 0
                 };
@@ -146,13 +135,13 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
+            OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
             SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
                     &aNewAttr,
                 pDoc,
                 pObj,
                 bHasMarked);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();
@@ -162,7 +151,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                     pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), sal_False);
                 pSh->EndAction();
 
-                static sal_uInt16 __READONLY_DATA aInval[] =
+                static sal_uInt16 aInval[] =
                 {
                     SID_ATTR_LINE_STYLE, SID_ATTR_LINE_WIDTH,
                     SID_ATTR_LINE_COLOR, 0
@@ -185,11 +174,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         if (bChanged)
             pDoc->SetChanged(sal_True);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
 {
@@ -235,11 +219,6 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             pView->GetModel()->SetChanged(sal_True);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 {
     SdrView* pSdrView = GetShell().GetDrawView();
@@ -255,5 +234,4 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
         rSet.Put(pSdrView->GetDefaultAttr());
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

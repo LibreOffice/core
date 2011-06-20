@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,7 +50,6 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
-#include <errhdl.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 #include <fltini.hxx>
@@ -59,7 +59,6 @@
 #include <swtable.hxx>
 #include <fmtcntnt.hxx>
 #include <editeng/boxitem.hxx>
-#include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <numrule.hxx>
 #include <ndtxt.hxx>
@@ -78,8 +77,7 @@ using rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-SwRead ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
-                ReadHTML = 0, ReadXML = 0;
+SwRead ReadAscii = 0, ReadHTML = 0, ReadXML = 0;
 
 Reader* GetRTFReader();
 Reader* GetWW8Reader();
@@ -97,7 +95,7 @@ SwReaderWriterEntry aReaderWriter[] =
     SwReaderWriterEntry( 0,               0,                sal_True  ),
     SwReaderWriterEntry( &::GetWW8Reader, 0,                sal_True  ),
     SwReaderWriterEntry( 0,               &::GetXMLWriter,  sal_True  ),
-    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_True  ),
+    SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_False ),
     SwReaderWriterEntry( 0,               &::GetASCWriter,  sal_True  )
 };
 
@@ -121,11 +119,6 @@ void SwReaderWriterEntry::GetWriter( const String& rNm, const String& rBaseURL, 
         xWrt = WriterRef(0);
 }
 
-/*SwRead SwGetReaderSw3() // SW_DLLPUBLIC
-{
-        return ReadSw3;
-}
-*/
 SwRead SwGetReaderXML() // SW_DLLPUBLIC
 {
         return ReadXML;
@@ -147,27 +140,20 @@ void _InitFilter()
     _SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
     _SetFltPtr( READER_WRITER_WW1, new WW1Reader );
     _SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
-
-#ifdef NEW_WW97_EXPORT
-    aReaderWriter[ READER_WRITER_WW1 ].fnGetWriter =  &::GetWW8Writer;
-    aReaderWriter[ READER_WRITER_WW5 ].fnGetWriter = &::GetWW8Writer;
-#endif
-
     _SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
     _SetFltPtr( READER_WRITER_TEXT, ReadAscii );
 }
 
 void _FinitFilter()
 {
-        // die Reader vernichten
-        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
-        {
-                SwReaderWriterEntry& rEntry = aReaderWriter[n];
-                if( rEntry.bDelReader && rEntry.pReader )
-                        delete rEntry.pReader, rEntry.pReader = NULL;
-        }
+    // die Reader vernichten
+    for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+    {
+        SwReaderWriterEntry& rEntry = aReaderWriter[n];
+        if( rEntry.bDelReader && rEntry.pReader )
+            delete rEntry.pReader, rEntry.pReader = NULL;
+    }
 }
-
 
 /*  */
 
@@ -205,120 +191,6 @@ SwRead GetReader( const String& rFltName )
 
 } // namespace SwReaderWriter
 
-/*  */
-
-/////////////// die Storage Reader/Writer ////////////////////////////////
-
-/*void GetSw3Writer( const String&, const String& rBaseURL, WriterRef& xRet )
-{
-    DBG_ERROR( "Shouldn't happen!");
-        xRet = new Sw3Writer;
-}
-*/
-
-sal_uLong StgReader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuffSize )
-{
-        sal_uLong nRet = ERR_SWG_READ_ERROR;
-        ASSERT( pStg, "wo ist mein Storage?" );
-        const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
-        if( pFltr )
-        {
-        rRef = pStg->OpenSotStream( SwIoSystem::GetSubStorageName( *pFltr ),
-                                                                        STREAM_READ | STREAM_SHARE_DENYALL );
-
-                if( rRef.Is() )
-                {
-                        if( SVSTREAM_OK == rRef->GetError() )
-                        {
-                                sal_uInt16 nOld = rRef->GetBufferSize();
-                                rRef->SetBufferSize( rBuffSize );
-                                rBuffSize = nOld;
-                                nRet = 0;
-                        }
-                        else
-                                nRet = rRef->GetError();
-                }
-        }
-        return nRet;
-}
-
-/*  */
-/*
-sal_uLong Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
-{
-        sal_uLong nRet;
-        if( pStg && pIO )
-        {
-                // sal_True: Vorlagen ueberschreiben
-                pIO->SetReadOptions( aOpt,sal_True );
-                if( !bInsertMode )
-                {
-                        // Im Laden-Modus darf der PaM-Content-Teil nicht
-                        // in den Textbereich zeigen (Nodes koennen geloescht werden)
-                        rPam.GetBound( sal_True ).nContent.Assign( 0, 0 );
-                        rPam.GetBound( sal_False ).nContent.Assign( 0, 0 );
-                }
-                nRet = pIO->Load( pStg, bInsertMode ? &rPam : 0 );
-                aOpt.ResetAllFmtsOnly();
-                pIO->SetReadOptions( aOpt, sal_True );
-        }
-        else
-        {
-                ASSERT( !this, "Sw3-Read ohne Storage und/oder IO-System" );
-                nRet = ERR_SWG_READ_ERROR;
-        }
-        return nRet;
-}
-
-        // read the sections of the document, which is equal to the medium.
-        // returns the count of it
-sal_uInt16 Sw3Reader::GetSectionList( SfxMedium& rMedium,
-                                                                        SvStrings& rStrings ) const
-{
-        SvStorageRef aStg( rMedium.GetStorage() );
-        const SfxFilter* pFlt = rMedium.GetFilter();
-        ASSERT( pFlt && pFlt->GetVersion(),
-                                                                "Kein Filter oder Filter ohne FF-Version" );
-        if( pFlt && pFlt->GetVersion() )
-                aStg->SetVersion( (long)pFlt->GetVersion() );
-
-        if( pIO )
-                pIO->GetSectionList( &aStg, rStrings );
-        return rStrings.Count();
-    return 0;
-}
-*/
-
-/*sal_uLong Sw3Writer::WriteStorage()
-{
-    sal_uLong nRet;
-        if( pIO )
-        {
-                // der gleiche Storage -> Save, sonst SaveAs aufrufen
-                if( !bSaveAs )
-                        nRet = pIO->Save( pOrigPam, bWriteAll );
-                else
-                        nRet = pIO->SaveAs( pStg, pOrigPam, bWriteAll );
-
-                pIO = 0;                // nach dem Schreiben ist der Pointer ungueltig !!
-        }
-        else
-        {
-                ASSERT( !this, "Sw3-Writer ohne IO-System" )
-                nRet = ERR_SWG_WRITE_ERROR;
-    }
-    return nRet;
-}
-
-sal_uLong Sw3Writer::WriteMedium( SfxMedium& )
-{
-    DBG_ERROR( "Shouldn't be used currently!");
-        return WriteStorage();
-}
-
-sal_Bool Sw3Writer::IsSw3Writer() const { return sal_True; }
-*/
-
 void Writer::SetPasswd( const String& ) {}
 
 
@@ -326,7 +198,6 @@ void Writer::SetVersion( const String&, long ) {}
 
 
 sal_Bool Writer::IsStgWriter() const { return sal_False; }
-//sal_Bool Writer::IsSw3Writer() const { return sal_False; }
 
 sal_Bool StgWriter::IsStgWriter() const { return sal_True; }
 
@@ -336,8 +207,7 @@ sal_Bool StgWriter::IsStgWriter() const { return sal_True; }
 
 sal_Bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
 {
-        sal_Bool bRes = sal_False;
-    return bRes;
+    return sal_False;
 }
 
 
@@ -490,18 +360,6 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
                         // Rule noch gueltig und am Doc vorhanden?
                         if( USHRT_MAX != rDoc.GetNumRuleTbl().GetPos( pRule ))
                         {
-                // --> OD 2008-02-19 #refactorlists#
-//                SwNumRuleInfo aUpd( pRule->GetName() );
-//                aUpd.MakeList( rDoc );
-
-//                // bei allen nmumerierten Absaetzen vom linken Rand
-//                // den absoluten Wert des NumFormates abziehen
-//                for( sal_uLong nUpdPos = 0; nUpdPos < aUpd.GetList().Count();
-//                    ++nUpdPos )
-//                {
-//                    SwTxtNode* pNd = aUpd.GetList().GetObject( nUpdPos );
-//                    SetNumLSpace( *pNd, *pRule );
-//                }
                 SwNumRule::tTxtNodeList aTxtNodeList;
                 pRule->GetTxtNodeList( aTxtNodeList );
                 for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
@@ -510,7 +368,6 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
                     SwTxtNode* pNd = *aIter;
                     SetNumLSpace( *pNd, *pRule );
                 }
-                // <--
                         }
                 }
         }
@@ -550,16 +407,14 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
 void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 {
         sal_Bool bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
-    // --> OD 2005-11-18 #128056#
     // correction of refactoring done by cws swnumtree:
     // - assure a correct level for retrieving numbering format.
-//    sal_uInt8 nLvl = rNd.GetLevel();
     sal_uInt8 nLvl = 0;
     if ( rNd.GetActualListLevel() >= 0 && rNd.GetActualListLevel() < MAXLEVEL )
     {
         nLvl = static_cast< sal_uInt8 >(rNd.GetActualListLevel());
     }
-    // <--
+
         const SwNumFmt& rFmt = rRule.Get( nLvl );
         const SvxLRSpaceItem& rLR = rNd.GetSwAttrSet().GetLRSpace();
 
@@ -575,11 +430,9 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
                 if( 0 < rLR.GetTxtFirstLineOfst() )
                         nParaLeft += rLR.GetTxtFirstLineOfst();
                 else if( nParaLeft >= nLeft )
-                        // #82963#/#82962#: set correct paragraph indent
+            // set correct paragraph indent
                         nParaLeft -= nLeft;
                 else
-                        //#83154#, Don't think any of the older #80856# bugfix code is
-                        //relevent anymore.
                         nParaLeft = rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst();
                 aLR.SetTxtLeft( nParaLeft );
         }
@@ -691,7 +544,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                 sal_uInt16 nLine = BOX_LINE_LEFT;
                                 for( int i = 0; i < 2; ++i )
                                 {
-                                        const SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
+                                        const editeng::SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
                                         if( pLn )
                                         {
                                                 sal_uInt16 nWidthTmp = pLn->GetOutWidth() + pLn->GetInWidth();
@@ -856,7 +709,7 @@ rtl_TextEncoding CharSetFromName(const String& rChrSetStr)
         }
     }
 
-    ASSERT(nRet != pStart->eCode, "TXT: That was an unknown language!");
+    OSL_ENSURE(nRet != pStart->eCode, "TXT: That was an unknown language!");
 
         return nRet;
 }
@@ -879,7 +732,7 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
         }
     }
 
-    ASSERT(pRet != pStart->pName, "TXT: That was an unknown language!");
+    OSL_ENSURE(pRet != pStart->pName, "TXT: That was an unknown language!");
 
     return String::CreateFromAscii(pRet);
 }
@@ -966,11 +819,11 @@ extern "C" { static void SAL_CALL thisModule() {} }
 static oslGenericFunction GetMswordLibSymbol( const char *pSymbol )
 {
     static ::osl::Module aModule;
-        static sal_Bool bLoaded = sal_False;
+    static sal_Bool bLoaded = sal_False;
     static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
-        if (!bLoaded)
-                bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule );
-        if (bLoaded)
+    if (!bLoaded)
+        bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+    if (bLoaded)
         return aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
     return NULL;
 }
@@ -1034,4 +887,4 @@ sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
         return ERRCODE_NONE;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

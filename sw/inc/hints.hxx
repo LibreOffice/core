@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _HINTS_HXX
 #define _HINTS_HXX
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <swatrset.hxx>
 
 class SwFmt;
@@ -43,21 +42,21 @@ class SwFrm;
 class SwTxtNode;
 class SwHistory;
 
-// Basis-Klasse fuer alle Message-Hints:
-//  "Overhead" vom SfxPoolItem wird hier behandelt
+// Base class for all Message-Hints:
+// "Overhead" of SfxPoolItem is handled here
 class SwMsgPoolItem : public SfxPoolItem
 {
 public:
     SwMsgPoolItem( sal_uInt16 nWhich );
 
-    // "Overhead" vom SfxPoolItem
+    // "Overhead" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 };
 
 
 // ---------------------------------------
-// SwPtrMsgPoolItem (altes SwObjectDying!)
+// SwPtrMsgPoolItem (old SwObjectDying!)
 // ---------------------------------------
 
 class SwPtrMsgPoolItem : public SwMsgPoolItem
@@ -73,9 +72,8 @@ public:
 
 
 /*
- * SwFmtChg wird verschickt, wenn ein Format gegen ein anderes
- * Format ausgewechselt worden ist. Es werden immer 2. Hints verschickt,
- * das alte und neue Format.
+ * SwFmtChg is sent when a format has changed to another format. 2 Hints are always sent
+ * the old and the new format
  */
 class SwFmtChg: public SwMsgPoolItem
 {
@@ -121,21 +119,18 @@ public:
 };
 
 
-// SwRefMarkFldUpdate wird verschickt, wenn sich die ReferenzMarkierungen
-// Updaten sollen. Um Seiten-/KapitelNummer feststellen zu koennen, muss
-// der akt. Frame befragt werden. Dafuer wird das akt. OutputDevice benoetigt.
+// SwRefMarkFldUpdate is sent when the referencemarks should be updated.
+// To determine Page- / chapternumbers the current frame has to be asked.
+//  For this we need the current outputdevice
 class SwRefMarkFldUpdate : public SwMsgPoolItem
 {
 public:
-    const OutputDevice* pOut;       // Pointer auf das aktuelle Output-Device
+    const OutputDevice* pOut; // pointer to the current output device
     SwRefMarkFldUpdate( const OutputDevice* );
 };
 
-// SwDocPosUpdate wird verschickt, um zu signalisieren, dass nur die
-// Frames ab oder bis zu einer bestimmten dokument-globalen Position
-// geupdated werden brauchen. Zur Zeit wird dies nur beim Updaten
-// von Seitennummernfeldern benoetigt.
-
+// SwDocPosUpdate is sent to signal that only the frames from or to a specified document-global position
+// have to be updated. At the moment this is only needed when updating pagenumber fields.
 class SwDocPosUpdate : public SwMsgPoolItem
 {
 public:
@@ -143,8 +138,7 @@ public:
     SwDocPosUpdate( const long nDocPos );
 };
 
-// SwTableFmlUpdate wird verschickt, wenn sich die Tabelle neu berechnen soll
-// JP 16.02.99: oder wenn die Tabelle selbst gemergt oder gesplittet wird
+// SwTableFmlUpdate is sent when the table has to be newly calculated or when a table itself is merged or splitted
 enum TableFmlUpdtFlags { TBL_CALC = 0,
                          TBL_BOXNAME,
                          TBL_BOXPTR,
@@ -155,13 +149,13 @@ enum TableFmlUpdtFlags { TBL_CALC = 0,
 class SwTableFmlUpdate : public SwMsgPoolItem
 {
 public:
-    const SwTable* pTbl;        // Pointer auf die zu aktuelle Tabelle
+    const SwTable* pTbl;         // Pointer to the current table
     union {
-        const SwTable* pDelTbl;     // Merge: Ptr auf die zu loeschende Tabelle
-        const String* pNewTblNm;    // Split: der Name der neuen Tabelle
+        const SwTable* pDelTbl;  // Merge: Pointer to the table to be removed
+        const String* pNewTblNm; // Split: the name of the new table
     } DATA;
     SwHistory* pHistory;
-    sal_uInt16 nSplitLine;          // Split: ab dieser BaseLine wird gespl.
+    sal_uInt16 nSplitLine;           // Split: from this BaseLine on will be splitted
     TableFmlUpdtFlags eFlags;
     sal_Bool bModified : 1;
     sal_Bool bBehindSplitLine : 1;
@@ -180,33 +174,32 @@ public:
 };
 
 /*
- * SwAttrSetChg wird verschicht, wenn sich in dem SwAttrSet rTheChgdSet
- * etwas veraendert hat. Es werden immer 2. Hints
- * verschickt, die alten und neuen Items in dem rTheChgdSet.
+ * SwAttrSetChg is sent when something has changed in the SwAttrSet rTheChgdSet.
+ * 2 Hints are always sent, the old and the new items in the rTheChgdSet.
  */
 class SwAttrSetChg: public SwMsgPoolItem
 {
     sal_Bool bDelSet;
-    SwAttrSet* pChgSet;             // was sich veraendert hat
-    const SwAttrSet* pTheChgdSet;   // wird nur zum Vergleichen gebraucht !!
+    SwAttrSet* pChgSet;           // what has changed
+    const SwAttrSet* pTheChgdSet; // is only used to compare
 public:
     SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet );
     SwAttrSetChg( const SwAttrSetChg& );
     ~SwAttrSetChg();
 
-    // was sich veraendert hat
-    const SwAttrSet* GetChgSet() const  { return pChgSet; }
-          SwAttrSet* GetChgSet()        { return pChgSet; }
+    // What has changed
+    const SwAttrSet* GetChgSet() const     { return pChgSet; }
+          SwAttrSet* GetChgSet()           { return pChgSet; }
 
-    // wo es sich geaendert hat
-    const SwAttrSet* GetTheChgdSet() const  { return pTheChgdSet; }
+    // Where it has changed
+    const SwAttrSet* GetTheChgdSet() const { return pTheChgdSet; }
 
     sal_uInt16 Count() const { return pChgSet->Count(); }
     void ClearItem( sal_uInt16 nWhichL = 0 )
-#ifndef DBG_UTIL
-    { pChgSet->ClearItem( nWhichL ); }
-#else
+#if OSL_DEBUG_LEVEL > 1
         ;
+#else
+    { pChgSet->ClearItem( nWhichL ); }
 #endif
 };
 
@@ -221,11 +214,9 @@ class SwVirtPageNumInfo: public SwMsgPoolItem
 {
     const SwPageFrm *pPage;
     const SwPageFrm *pOrigPage;
-    const SwFrm     *pFrm;      //An einem Absatz/Tabelle koennen mehrere
-                                //Attribute sitzen. Der Frame muss dann
-                                //muss dann letztlich bei bestimmen
-                                //welches Attribut gilt und um welche physikalische
-                                //Seite es sich handelt.
+    const SwFrm     *pFrm;
+    // Multiple attributes can be attached to a single paragraph / table
+    // The frame, in the end, has to decide which attribute takes effect and which physical page it involves
 public:
     SwVirtPageNumInfo( const SwPageFrm *pPg );
 
@@ -233,31 +224,8 @@ public:
     const SwPageFrm *GetOrigPage()      { return pOrigPage;}
     const SwFrm *GetFrm()               { return pFrm; }
     void  SetInfo( const SwPageFrm *pPg,
-                   const SwFrm *pF  )   { pFrm = pF, pPage = pPg; }
+                   const SwFrm *pF )    { pFrm = pF, pPage = pPg; }
 };
-
-
-// --> OD 2008-02-19 #refactorlists#
-//DECLARE_TABLE( SwTxtNodeTable, SwTxtNode* )
-
-//class SwNumRuleInfo : public SwMsgPoolItem
-//{
-//    SwTxtNodeTable aList;
-//    const String& rName;
-//public:
-//  SwNumRuleInfo( const String& rRuleName );
-
-//  const String& GetName() const { return rName; }
-//  void AddNode( SwTxtNode& rNd );
-
-//  // erzeuge die Liste aller Nodes der NumRule in dem angegebenem Doc
-//  // Der Code steht im docnum.cxx
-//    // #111955#
-//  void MakeList( SwDoc& rDoc, sal_Bool bOutline = sal_False );
-
-//    const SwTxtNodeTable& GetTxtNodeList() const { return aList; }
-//};
-// <--
 
 class SwFindNearestNode : public SwMsgPoolItem
 {
@@ -266,7 +234,7 @@ public:
     SwFindNearestNode( const SwNode& rNd );
     void CheckNode( const SwNode& rNd );
 
-    const SwNode* GetFoundNode() const      { return pFnd; }
+    const SwNode* GetFoundNode() const { return pFnd; }
 };
 
 class SwStringMsgPoolItem : public SwMsgPoolItem
@@ -280,5 +248,6 @@ public:
         : SwMsgPoolItem( nId ), sStr( rStr )
     {}
 };
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

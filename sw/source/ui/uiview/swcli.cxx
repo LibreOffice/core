@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-
 #include <wrtsh.hxx>
 #include <doc.hxx>
 #include <swtypes.hxx>
@@ -137,13 +137,13 @@ void SwOleClient::ViewChanged()
     catch( uno::Exception& )
     {
         // this is an error
-        OSL_ENSURE( sal_False, "Something goes wrong on requesting object size!\n" );
+        OSL_FAIL( "Something goes wrong on requesting object size!\n" );
     }
 
     Size aVisSize( aSz.Width, aSz.Height );
 
-    // Bug 24833: solange keine vernuenftige Size vom Object kommt,
-    //              kann nichts skaliert werden
+    // solange keine vernuenftige Size vom Object kommt,
+    // kann nichts skaliert werden
     if( !aVisSize.Width() || !aVisSize.Height() )
         return;
 
@@ -171,7 +171,6 @@ void SwOleClient::MakeVisible()
     rSh.MakeObjVisible( GetObject() );
 }
 
-// --> #i972#
 void SwOleClient::FormatChanged()
 {
     const uno::Reference < embed::XEmbeddedObject >& xObj( GetObject() );
@@ -183,5 +182,5 @@ void SwOleClient::FormatChanged()
             rWrtSh.AlignFormulaToBaseline( xObj );
     }
 }
-// <--
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

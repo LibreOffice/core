@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include "hintids.hxx"
 #include <svl/aeitem.hxx>
@@ -73,19 +73,17 @@
 #include "dselect.hxx"
 #include "edtwin.hxx"
 
-// #108784#
 #include <dcontact.hxx>
 
-// #108784#
 #include <svx/svdpagv.hxx>
 #include <svx/extrusionbar.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
+
 /*--------------------------------------------------------------------
     Beschreibung:   Drawing-Ids ausfuehren
  --------------------------------------------------------------------*/
-
 void SwView::ExecDraw(SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -145,7 +143,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if ( pFormView )
         {
             SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
-            DBG_ASSERT( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
+            OSL_ENSURE( pDescriptorItem, "SwView::ExecDraw(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
             if( pDescriptorItem )
             {
                 ::svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
@@ -346,7 +344,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             break;
     }
 
-    static sal_uInt16 __READONLY_DATA aInval[] =
+    static sal_uInt16 const aInval[] =
     {
         // Slot-Ids muessen beim Aufruf von Invalidate sortiert sein!
         SID_ATTRIBUTES_AREA,
@@ -410,16 +408,13 @@ void SwView::ExecDraw(SfxRequest& rReq)
 /*--------------------------------------------------------------------
     Beschreibung:   Drawing beenden
  --------------------------------------------------------------------*/
-
-
-
 void SwView::ExitDraw()
 {
     NoRotate();
 
     if(pShell)
     {
-        //#126062 # the shell may be invalid at close/reload/SwitchToViewShell
+        // the shell may be invalid at close/reload/SwitchToViewShell
         SfxDispatcher* pDispatch = GetViewFrame()->GetDispatcher();
         sal_uInt16 nIdx = 0;
         SfxShell* pTest = 0;
@@ -464,9 +459,6 @@ void SwView::ExitDraw()
 /*--------------------------------------------------------------------
     Beschreibung:   Rotate-Mode abschalten
  --------------------------------------------------------------------*/
-
-
-
 void SwView::NoRotate()
 {
     if (IsDrawRotate())
@@ -482,14 +474,13 @@ void SwView::NoRotate()
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-
 sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
     SdrObject* pObj;
     SdrPageView* pPV;
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    ASSERT( pSdrView, "EnterDrawTextMode without DrawView?" );
+    OSL_ENSURE( pSdrView, "EnterDrawTextMode without DrawView?" );
 
     sal_Bool bReturn = sal_False;
 
@@ -500,9 +491,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
         !pSdrView->PickHandle( aDocPos ) && IsTextTool() &&
         pSdrView->PickObj( aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
 
-        // #108784#
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
-        //pObj->ISA( SdrTextObj ) &&
         ( pObj->ISA( SdrTextObj ) ||
           ( pObj->ISA(SwDrawVirtObj) &&
             ((SwDrawVirtObj*)pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
@@ -558,24 +547,18 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         if( bIsNewObj )
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == nDrawSfxId ||
                                     SID_DRAW_CAPTION_VERTICAL == nDrawSfxId );
-        // #i7672#
-        // No longer necessary, see text below
-        // Color aBackground(pSh->GetShapeBackgrd());
-        // pOutliner->SetBackgroundColor(aBackground);
 
-        // OD 09.12.2002 #103045# - set default horizontal text direction at outliner
+        // set default horizontal text direction at outliner
         EEHorizontalTextDirection aDefHoriTextDir =
             pSh->IsShapeDefaultHoriTextDirR2L() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
         pOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
     }
 
-    // #108784#
     // To allow editing the referenced object from a SwDrawVirtObj here
     // the original needs to be fetched evenually. This ATM activates the
     // text edit mode for the original object.
     SdrObject* pToBeActivated = pObj;
 
-    // #108784#
     // Always the original object is edited. To allow the TextEdit to happen
     // where the VirtObj is positioned, on demand a occurring offset is set at
     // the TextEdit object. That offset is used for creating and managing the
@@ -621,15 +604,12 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 /******************************************************************************
  *  Beschreibung: Ist ein DrawTextObjekt selektiert?
  ******************************************************************************/
-
-
-
 sal_Bool SwView::IsTextTool() const
 {
     sal_uInt16 nId;
     sal_uInt32 nInvent;
     SdrView *pSdrView = GetWrtShell().GetDrawView();
-    ASSERT( pSdrView, "IsTextTool without DrawView?" );
+    OSL_ENSURE( pSdrView, "IsTextTool without DrawView?" );
 
     if (pSdrView->IsCreateMode())
         pSdrView->SetCreateMode(sal_False);
@@ -638,31 +618,15 @@ sal_Bool SwView::IsTextTool() const
     return (nInvent==SdrInventor);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SdrView* SwView::GetDrawView() const
 {
     return GetWrtShell().GetDrawView();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 sal_Bool SwView::IsBezierEditMode()
 {
     return (!IsDrawSelMode() && GetWrtShell().GetDrawView()->HasMarkablePoints());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwView::IsFormMode() const
 {
@@ -674,12 +638,6 @@ sal_Bool SwView::IsFormMode() const
     return AreOnlyFormsSelected();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
 {
     if (pDrawActual)
@@ -687,19 +645,11 @@ void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
     pDrawActual = pFuncPtr;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwView::SetSelDrawSlot()
 {
     nDrawSfxId = SID_OBJECT_SELECT;
     sDrawCustom.Erase();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwView::AreOnlyFormsSelected() const
 {
@@ -733,10 +683,6 @@ sal_Bool SwView::AreOnlyFormsSelected() const
     return bForm;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
 {
     sal_Bool bRet = sal_False;
@@ -755,10 +701,6 @@ sal_Bool SwView::HasDrwObj(SdrObject *pSdrObj) const
 
     return bRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
 {
@@ -779,7 +721,6 @@ sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
     return bRet;
 }
 
-
 //#i87414# mod
 IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
@@ -788,9 +729,6 @@ IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 sal_Bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
 {
     sal_Bool bRet = sal_False;
@@ -807,12 +745,6 @@ sal_Bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 sal_Bool SwView::IsDrawTextHyphenate()
 {
     SdrView *pSdrView = pWrtShell->GetDrawView();
@@ -828,12 +760,6 @@ sal_Bool SwView::IsDrawTextHyphenate()
     return bHyphenate;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 void SwView::HyphenateDrawText()
 {
     SdrView *pSdrView = pWrtShell->GetDrawView();
@@ -845,5 +771,4 @@ void SwView::HyphenateDrawText()
     GetViewFrame()->GetBindings().Invalidate(FN_HYPHENATE_OPT_DLG);
 }
 
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

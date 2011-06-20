@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,9 +58,6 @@ class SwView;
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > * XSelectionChangeListenerPtr;
 SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4, 4 )
 
-/******************************************************************************
- *
- ******************************************************************************/
 class SwXTextView :
     public ::com::sun::star::view::XSelectionSupplier,
     public ::com::sun::star::lang::XServiceInfo,
@@ -158,10 +156,6 @@ public:
     // temporary document used for PDF export of selections/multi-selections
     SfxObjectShellLock      BuildTmpSelectionDoc();
 };
-
-/* -----------------17.09.98 12:52-------------------
- *
- * --------------------------------------------------*/
 
 typedef cppu::WeakImplHelper8<
                             ::com::sun::star::text::XTextViewCursor,
@@ -269,6 +263,7 @@ public:
     virtual const SwDoc*        GetDoc() const;
     virtual SwDoc*              GetDoc();
 };
+
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

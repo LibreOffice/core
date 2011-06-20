@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,25 +31,15 @@
 
 
 #include <svx/stddlg.hxx>
-
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
-
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#include <vcl/fixed.hxx>
-
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 class SwTOXMgr;
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Markierung fuer Verzeichniseintrag einfuegen
+     Description:   insert mark for index entry
  --------------------------------------------------------------------*/
 
 class SwMultiTOXMarkDlg : public SvxStandardDialog
@@ -75,3 +66,4 @@ public:
 
 #endif // _MULTMRK_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

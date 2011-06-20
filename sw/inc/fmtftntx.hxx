@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,7 @@ enum SwFtnEndPosEnum
     FTNEND_ATPGORDOCEND,                // at page or document end
     FTNEND_ATTXTEND,                    // at end of the current text end
     FTNEND_ATTXTEND_OWNNUMSEQ,          // -""- and with own number sequence
-    FTNEND_ATTXTEND_OWNNUMANDFMT,       // -""- and with onw numberformat
+    FTNEND_ATTXTEND_OWNNUMANDFMT,       // -""- and with own numberformat
     FTNEND_ATTXTEND_END
 };
 
@@ -65,16 +66,9 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-// will be used at time??
-//  void                    FillVariable( SbxVariable &rVar,
-//                                        SfxMapUnit eCoreMetric,
-//                                        SfxMapUnit eUserMetric ) const;
-//  virtual SfxArgumentError SetVariable( const SbxVariable &rVal,
-//                                        SfxMapUnit eCoreMetric,
-//                                        SfxMapUnit eUserMetric );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -135,3 +129,4 @@ inline const SwFmtEndAtTxtEnd &SwFmt::GetEndAtTxtEnd(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

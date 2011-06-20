@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #ifndef VBAPALETTE_HXX
 #define VBAPALETTE_HXX
 #include <vbahelper/vbahelper.hxx>
@@ -13,3 +14,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

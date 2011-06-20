@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,12 +36,8 @@
 
 #include <swtypes.hxx>
 #include <mergetbl.hxx>
-#ifndef _MERGETBL_HRC
 #include <mergetbl.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 
 
 SwMergeTblDlg::SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev )
@@ -64,3 +61,4 @@ void SwMergeTblDlg::Apply()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

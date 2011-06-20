@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,9 +73,8 @@ public:
     void TakeNextOffset( const SwFldPortion* pFld );
     void CheckScript( const SwTxtSizeInfo &rInf );
     inline sal_Bool HasFont() const { return 0 != pFnt; }
-    // --> OD 2008-06-05 #i89179# - made public
+    // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
-    // <--
 
     inline const XubString &GetExp() const { return aExpand; }
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
@@ -147,19 +147,15 @@ class SwNumberPortion : public SwFldPortion
 protected:
     KSHORT  nFixWidth;      // vgl. Glues
     KSHORT  nMinDist;       // minimaler Abstand zum Text
-    // --> OD 2008-01-23 #newlistlevelattrs#
     bool    mbLabelAlignmentPosAndSpaceModeActive;
-    // <--
 
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwNumberPortion( const XubString &rExpand,
                      SwFont *pFnt,
                      const sal_Bool bLeft,
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -178,7 +174,6 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwBulletPortion( const xub_Unicode cCh,
                      const XubString& rBulletFollowedBy,
                      SwFont *pFnt,
@@ -186,7 +181,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     OUTPUT_OPERATOR
 };
 
@@ -202,7 +196,6 @@ class SwGrfNumPortion : public SwNumberPortion
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
-    // --> OD 2008-01-23 #newlistlevelattrs#
     SwGrfNumPortion( SwFrm *pFrm,
                      const XubString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
@@ -212,7 +205,6 @@ public:
                      const sal_Bool bCenter,
                      const KSHORT nMinDst,
                      const bool bLabelAlignmentPosAndSpaceModeActive );
-    // <--
     ~SwGrfNumPortion();
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
@@ -272,3 +264,5 @@ CLASSIO( SwCombinedPortion )
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

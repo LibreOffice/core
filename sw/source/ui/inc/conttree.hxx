@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,8 @@
 
 #include <svtools/svtreebx.hxx>
 #include "swcont.hxx"
+
+#include <map>
 
 class SwWrtShell;
 class SwContentType;
@@ -70,9 +73,11 @@ class SwContentTree : public SvTreeListBox
     String              sPostItHide;
     String              sPostItDelete;
 
-    SwWrtShell*         pHiddenShell;   // gedropptes Doc
-    SwWrtShell*         pActiveShell;   // die aktive oder eine konst. offene View
+    SwWrtShell*         pHiddenShell;   // dropped Doc
+    SwWrtShell*         pActiveShell;   // the active or a const. open view
     SwNavigationConfig* pConfig;
+
+    std::map< void*, sal_Bool > mOutLineNodeMap;
 
     sal_Int32           nActiveBlock;
     sal_uInt16              nHiddenBlock;
@@ -103,7 +108,6 @@ class SwContentTree : public SvTreeListBox
     using SvListView::Select;
 
 protected:
-//  virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
     virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -191,7 +195,6 @@ public:
     SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
 
     DECL_LINK( ContentDoubleClickHdl, SwContentTree * );
-//  DECL_LINK( PopupHdl, Menu* );
     DECL_LINK( TimerUpdate, Timer * );
 
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
@@ -204,7 +207,7 @@ public:
 
 
 //----------------------------------------------------------------------------
-// TreeListBox fuer Globaldokumente
+// TreeListBox for global documents
 //----------------------------------------------------------------------------
 
 class SwLBoxString : public SvLBoxString
@@ -232,9 +235,9 @@ private:
     ImageList           aEntryImages;
 
     SwWrtShell*             pActiveShell;   //
-    SvLBoxEntry*            pEmphasisEntry; // Drag'n Drop-Emphasis
-    SvLBoxEntry*            pDDSource;      // Quelle beim DnD
-    SwGlblDocContents*      pSwGlblDocContents; // Array mit sortierten Inhalten
+    SvLBoxEntry*            pEmphasisEntry; // Drag'n Drop emphasis
+    SvLBoxEntry*            pDDSource;      // source for Drag'n Drop
+    SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
 
     Window*                 pDefParentWin;
     SwGlblDocContent*       pDocContent;
@@ -332,3 +335,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

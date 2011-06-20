@@ -25,13 +25,14 @@
 * for a copy of the LGPLv3 License.
 *
 **********************************************************************-->
-
-<component loader="com.sun.star.loader.SharedLibrary"
-    xmlns="http://openoffice.org/2010/uno-components">
+<component xmlns="http://openoffice.org/2010/uno-components" loader="com.sun.star.loader.SharedLibrary">
   <implementation name="com.sun.star.comp.Writer.RtfExport">
     <service name="com.sun.star.comp.Writer.RtfExport"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.RtfImport">
     <service name="com.sun.star.comp.Writer.RtfImport"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.DocxExport">
+    <service name="com.sun.star.comp.Writer.DocxExport"/>
   </implementation>
 </component>

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,12 @@
 #ifndef _ACTCTRL_HXX
 #define _ACTCTRL_HXX
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include "swdllapi.h"
 
 /*--------------------------------------------------------------------
-    Beschreibung:   numerische Eingabe
+    Description:    numerical input
  --------------------------------------------------------------------*/
-
 class SW_DLLPUBLIC NumEditAction: public NumericField
 {
     Link aActionLink;
@@ -52,8 +50,8 @@ public:
 };
 
 
-/* -----------------21.04.98 08:11-------------------
- * Edit, dass keine Spaces akzeptiert
+/* --------------------------------------------------
+ * Edit that doesn't accept spaces
  * --------------------------------------------------*/
 class SW_DLLPUBLIC NoSpaceEdit : public Edit
 {
@@ -69,8 +67,8 @@ public:
     const String&   GetForbiddenChars(){return sForbiddenChars;}
 };
 
-/* -----------------21.04.98 08:33-------------------
- * Kein Space und kein Punkt
+/* --------------------------------------------------
+ * No space and no full stop
  * --------------------------------------------------*/
 class TableNameEdit : public NoSpaceEdit
 {
@@ -79,7 +77,8 @@ public:
                             NoSpaceEdit(pWin, rResId)
                                 {SetForbiddenChars(String::CreateFromAscii(" .<>"));}
 };
-/* -----------------25.06.2003 15:55-----------------
+
+/* --------------------------------------------------
     call a link when KEY_RETURN is pressed
  --------------------------------------------------*/
 class SW_DLLPUBLIC ReturnActionEdit : public Edit
@@ -96,3 +95,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

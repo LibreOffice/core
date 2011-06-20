@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
 #include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/htmltokn.h>
 
@@ -54,7 +53,7 @@
 #define LOOP_CHECK_RESTART \
     nOldInPos = STRING_MAXLEN;
 #define LOOP_CHECK_CHECK( where ) \
-    DBG_ASSERT( nOldInPos!=nInPos || cNextCh==(sal_Unicode)EOF, where );    \
+    OSL_ENSURE( nOldInPos!=nInPos || cNextCh==(sal_Unicode)EOF, where );    \
     if( nOldInPos==nInPos && cNextCh!=(sal_Unicode)EOF )                    \
         break;                                                              \
     else                                                                    \
@@ -69,10 +68,8 @@
 #endif
 
 
-
 const sal_Int32 MAX_LEN = 1024;
 
-/*  */
 
 void CSS1Parser::InitRead( const String& rIn )
 {
@@ -111,8 +108,6 @@ sal_Unicode CSS1Parser::GetNextChar()
 
     return c;
 }
-
-/*  */
 
 // Diese Funktion realisiert den in
 //
@@ -173,7 +168,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
                              ('a' <= cNextCh && cNextCh <= 'z') ||
                              ('0' <= cNextCh && cNextCh <= '9') ||
-                             '-'==cNextCh && !IsEOF() );
+                             ('-'==cNextCh && !IsEOF()) );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -271,7 +266,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
                              ('a' <= cNextCh && cNextCh <= 'z') ||
                              ('0' <= cNextCh && cNextCh <= '9') ||
-                             '-' == cNextCh && !IsEOF() );
+                             ('-' == cNextCh && !IsEOF()) );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -423,7 +418,7 @@ CSS1Token CSS1Parser::GetNextToken()
 
                         // Ist es eine Einheit?
                         const sal_Char *pCmp1 = 0, *pCmp2 = 0, *pCmp3 = 0;
-                        double nScale1 = 1., nScale2 = 1., nScale3 = 1.;
+                        double nScale1 = 1., nScale2 = 1.;
                         CSS1Token nToken1 = CSS1_LENGTH,
                                   nToken2 = CSS1_LENGTH,
                                   nToken3 = CSS1_LENGTH;
@@ -466,7 +461,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         }
 
                         double nScale = 0.0;
-                        DBG_ASSERT( pCmp1, "Wo kommt das erste Zeichen her?" );
+                        OSL_ENSURE( pCmp1, "Wo kommt das erste Zeichen her?" );
                         if( aIdent.EqualsIgnoreCaseAscii(pCmp1) )
                         {
                             nScale = nScale1;
@@ -481,7 +476,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         else if( pCmp3 &&
                                  aIdent.EqualsIgnoreCaseAscii(pCmp3) )
                         {
-                            nScale = nScale3;
+                            nScale =  1.; // nScale3
                             nRet = nToken3;
                         }
                         else
@@ -523,8 +518,6 @@ CSS1Token CSS1Parser::GetNextToken()
         case '.': // DOT_W_WS | DOT_WO_WS
             nRet = bPrevWhiteSpace ? CSS1_DOT_W_WS : CSS1_DOT_WO_WS;
             break;
-
-        // case '/': siehe oben
 
         case '+': // '+'
             nRet = CSS1_PLUS;
@@ -689,9 +682,6 @@ CSS1Token CSS1Parser::GetNextToken()
 
     return nRet;
 }
-
-
-/*  */
 
 
 // Dies folegenden Funktionen realisieren den in
@@ -975,7 +965,7 @@ CSS1Selector *CSS1Parser::ParseSelector()
         // falls ein Selektor angelegt wurd, ihn speichern
         if( pNew )
         {
-            DBG_ASSERT( (pRoot!=0) == (pLast!=0),
+            OSL_ENSURE( (pRoot!=0) == (pLast!=0),
                     "Root-Selektor, aber kein Last" );
             if( pLast )
                 pLast->SetNext( pNew );
@@ -1122,7 +1112,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( String& rProperty )
         // falls ein Expression angelegt wurde, diesen speichern
         if( pNew )
         {
-            DBG_ASSERT( (pRoot!=0) == (pLast!=0),
+            OSL_ENSURE( (pRoot!=0) == (pLast!=0),
                     "Root-Selektor, aber kein Last" );
             if( pLast )
                 pLast->SetNext( pNew );
@@ -1153,9 +1143,11 @@ CSS1Expression *CSS1Parser::ParseDeclaration( String& rProperty )
     return pRoot;
 }
 
-/*  */
 
 CSS1Parser::CSS1Parser()
+    : nValue(0)
+    , eState(CSS1_PAR_ACCEPTED)
+    , nToken(CSS1_NULL)
 {
 }
 
@@ -1163,7 +1155,6 @@ CSS1Parser::~CSS1Parser()
 {
 }
 
-/*  */
 
 sal_Bool CSS1Parser::ParseStyleSheet( const String& rIn )
 {
@@ -1253,8 +1244,6 @@ sal_Bool CSS1Parser::DeclarationParsed( const String& /*rProperty*/,
 }
 
 
-/*  */
-
 CSS1Selector::~CSS1Selector()
 {
     delete pNext;
@@ -1269,9 +1258,9 @@ CSS1Expression::~CSS1Expression()
 
 sal_Bool CSS1Expression::GetURL( String& rURL  ) const
 {
-    DBG_ASSERT( CSS1_URL==eType, "CSS1-Ausruck ist keine Farbe URL" );
+    OSL_ENSURE( CSS1_URL==eType, "CSS1-Ausruck ist keine Farbe URL" );
 
-    DBG_ASSERT( aValue.CompareIgnoreCaseToAscii( sCSS1_url, 3 ) ==
+    OSL_ENSURE( aValue.CompareIgnoreCaseToAscii( sCSS1_url, 3 ) ==
                                         COMPARE_EQUAL &&
                 aValue.Len() > 5 &&
                 '(' == aValue.GetChar(3) &&
@@ -1293,12 +1282,12 @@ sal_Bool CSS1Expression::GetURL( String& rURL  ) const
 
 sal_Bool CSS1Expression::GetColor( Color &rColor ) const
 {
-    DBG_ASSERT( CSS1_IDENT==eType || CSS1_RGB==eType ||
+    OSL_ENSURE( CSS1_IDENT==eType || CSS1_RGB==eType ||
                 CSS1_HEXCOLOR==eType || CSS1_STRING==eType,
                 "CSS1-Ausruck kann keine Farbe sein" );
 
     sal_Bool bRet = sal_False;
-    sal_uLong nColor = ULONG_MAX;
+    sal_uInt32 nColor = SAL_MAX_UINT32;
 
     switch( eType )
     {
@@ -1306,7 +1295,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
         {
             sal_uInt8 aColors[3] = { 0, 0, 0 };
 
-            DBG_ASSERT( aValue.CompareIgnoreCaseToAscii( sCSS1_rgb, 3 )
+            OSL_ENSURE( aValue.CompareIgnoreCaseToAscii( sCSS1_rgb, 3 )
                                             == COMPARE_EQUAL &&
                         aValue.Len() > 5 &&
                         '(' == aValue.GetChar( 3 ) &&
@@ -1368,7 +1357,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
             String aTmp( aValue );
             aTmp.ToUpperAscii();
             nColor = GetHTMLColor( aTmp );
-            bRet = nColor != ULONG_MAX;
+            bRet = nColor != SAL_MAX_UINT32;
         }
         if( bRet || CSS1_STRING != eType || !aValue.Len() ||
             aValue.GetChar( 0 )!='#' )
@@ -1405,7 +1394,6 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
                         nColor += c;
                 }
             }
-            // bRet = i==6;
             bRet = sal_True;
         }
         break;
@@ -1414,7 +1402,7 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
     }
 
 
-    if( bRet && nColor!=ULONG_MAX )
+    if( bRet && nColor!=SAL_MAX_UINT32 )
     {
         rColor.SetRed( (sal_uInt8)((nColor & 0x00ff0000UL) >> 16) );
         rColor.SetGreen( (sal_uInt8)((nColor & 0x0000ff00UL) >> 8) );
@@ -1424,3 +1412,4 @@ sal_Bool CSS1Expression::GetColor( Color &rColor ) const
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

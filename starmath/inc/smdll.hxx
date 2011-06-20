@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,24 +28,11 @@
 #ifndef SMDLL_HXX
 #define SMDLL_HXX
 
-#include <tools/resid.hxx>
-#include <sfx2/sfxdefs.hxx>
-#include "smmod.hxx"
-
-class SmData;
-class SfxMedium;
-class SfxFilter;
-
-class SmDLL
+namespace SmGlobals
 {
-    static sal_Bool bInitialized;
-public:
-    static void Init();
-    static void Exit();
-
-    static sal_uLong DetectFilter( SfxMedium& rMedium, const SfxFilter **ppFilter,
-                               SfxFilterFlags nMust, SfxFilterFlags nDont );
-};
+    void ensure();
+}
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

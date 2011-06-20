@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,12 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef TYPES_HXX
 #define TYPES_HXX
 
 #include <sal/types.h>
-#include <tools/debug.hxx>
-
 #define FONTNAME_MATH   "OpenSymbol"
 
 /////////////////////////////////////////////////////////////////
@@ -196,9 +196,11 @@ enum MathSymbol
     MS_SETZ         = (sal_Unicode) 0x2124,
     MS_SETQ         = (sal_Unicode) 0x211A,
     MS_SETR         = (sal_Unicode) 0x211D,
-    MS_SETC         = (sal_Unicode) 0x2102
-};
+    MS_SETC         = (sal_Unicode) 0x2102,
 
+    MS_PERCENT      = (sal_Unicode) 0x0025
+};
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

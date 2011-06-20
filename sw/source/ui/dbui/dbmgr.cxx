@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <stdio.h>
 #include <unotxdoc.hxx>
@@ -120,7 +119,7 @@
 #include <sfx2/event.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/textenc.h>
 #include <ndindex.hxx>
 #include <pam.hxx>
@@ -129,7 +128,6 @@
 #include <osl/file.hxx>
 #include <swabstdlg.hxx>
 #include <fmthdft.hxx>
-#include <dbui.hrc>
 #include <envelp.hrc>
 #include <memory>
 #include <vector>
@@ -196,7 +194,7 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
     }
     return false;
 }
-// #122799# copy compatibility options
+// copy compatibility options
 void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTargetShell)
 {
     IDocumentSettingAccess* pIDsa = rSourceShell.getIDocumentSettingAccess();
@@ -213,9 +211,6 @@ void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTarget
     rTargetShell.SetUseFormerTextWrapping( pIDsa->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING));
 }
 }
-/* -----------------09.12.2002 12:35-----------------
- *
- * --------------------------------------------------*/
 
 class SwConnectionDisposedListener_Impl : public cppu::WeakImplHelper1
 < lang::XEventListener >
@@ -228,7 +223,7 @@ public:
     ~SwConnectionDisposedListener_Impl();
 
 };
-// -----------------------------------------------------------------------------
+
 struct SwNewDBMgr_Impl
 {
     SwDSParam*          pMergeData;
@@ -241,9 +236,7 @@ struct SwNewDBMgr_Impl
        ,xDisposeListener(new SwConnectionDisposedListener_Impl(rDBMgr))
         {}
 };
-/*-- 24.10.2003 15:54:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
 {
     uno::Reference<XMultiServiceFactory> xMgr = ::comphelper::getProcessServiceFactory();
@@ -274,9 +267,7 @@ void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSou
         }
     }
 }
-/* -----------------------------17.07.00 17:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 {
     sal_Bool bRet = sal_False;
@@ -288,7 +279,7 @@ sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
         }
         else
         {
-            DBG_ERROR("no absolute positioning available");
+            OSL_FAIL("no absolute positioning available");
         }
     }
     catch(Exception aExcept)
@@ -296,9 +287,7 @@ sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     }
     return bRet;
 }
-/* -----------------------------17.07.00 17:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     const String& rColumnName, long nLanguage, String& rResult, double* pNumber)
 {
@@ -332,14 +321,15 @@ sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     rResult = SwNewDBMgr::GetDBField( xColumnProps, aFormatData, pNumber);
     return sal_True;
 };
+
 /*--------------------------------------------------------------------
-    Beschreibung: Daten importieren
+    Description: import data
  --------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
     SetMergeType( rMergeDesc.nMergeType );
 
-    DBG_ASSERT(!bInMerge && !pImpl->pMergeData, "merge already activated!");
+    OSL_ENSURE(!bInMerge && !pImpl->pMergeData, "merge already activated!");
 
     SwDBData aData;
     aData.nCommandType = CommandType::TABLE;
@@ -369,7 +359,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         *pTemp = *pImpl->pMergeData;
     else
     {
-        //#94779# calls from the calculator may have added a connection with an invalid commandtype
+        // calls from the calculator may have added a connection with an invalid commandtype
         //"real" data base connections added here have to re-use the already available
         //DSData and set the correct CommandType
         SwDBData aTempData(aData);
@@ -417,7 +407,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     {
         pImpl->pMergeData->bEndOfDB = sal_True;
         pImpl->pMergeData->CheckEndOfDB();
-        DBG_ERROR("exception in MergeNew()");
+        OSL_FAIL("exception in MergeNew()");
     }
 
     uno::Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,aData.sDataSource);
@@ -429,7 +419,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 
     if (IsInitDBFields())
     {
-        // Bei Datenbankfeldern ohne DB-Name DB-Name von Dok einsetzen
+        // with database fields without DB-Name, use DB-Name from Doc
         SvStringsDtor aDBNames(1, 1);
         aDBNames.Insert( new String(), 0);
         SwDBData aInsertData = rMergeDesc.rSh.GetDBData();
@@ -446,7 +436,7 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     switch(rMergeDesc.nMergeType)
     {
         case DBMGR_MERGE:
-            bRet = Merge(&rMergeDesc.rSh);   // Mischen
+            bRet = Merge(&rMergeDesc.rSh);
             break;
 
         case DBMGR_MERGE_MAILMERGE: // printing merge from 'old' merge dialog or from UNO-component
@@ -458,8 +448,9 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
                     rMergeDesc);
             break;
 
-        default:        // Einfuegen der selektierten Eintraege
-                        // (war: InsertRecord)
+        default:
+            // insert selected entries
+            // (was: InsertRecord)
             ImportFromConnection(&rMergeDesc.rSh);
             break;
     }
@@ -469,10 +460,8 @@ sal_Bool SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Daten importieren
+    Description: import data
  --------------------------------------------------------------------*/
-
-
 sal_Bool SwNewDBMgr::Merge(SwWrtShell* pSh)
 {
     pSh->StartAllAction();
@@ -485,9 +474,6 @@ sal_Bool SwNewDBMgr::Merge(SwWrtShell* pSh)
     return sal_True;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
@@ -521,9 +507,6 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
         }
     }
 }
-/*-----------------24.02.97 10.30-------------------
-
---------------------------------------------------*/
 
 String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
 {
@@ -556,9 +539,6 @@ String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8
     return sReturn;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
@@ -597,7 +577,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 }
                 else
                 {
-                    // Spalte nicht gefunden -> Fehler anzeigen
+                    // column not found -> show error
                     String sInsert = '?';
                     sInsert += sColumn;
                     sInsert += '?';
@@ -624,12 +604,13 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                     sStr += '\t';
             }
             pSh->SwEditShell::Insert2(sStr);
-            pSh->SwFEShell::SplitNode();    // Zeilenvorschub
+            pSh->SwFEShell::SplitNode();    // line feed
         }
     }
 }
+
 /*--------------------------------------------------------------------
-    Beschreibung: Listbox mit Tabellenliste fuellen
+    Description: fill Listbox with tablelist
  --------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
 {
@@ -680,7 +661,7 @@ sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Listbox mit Spaltennamen einer Datenbank fuellen
+    Description: fill Listbox with column names of a database
  --------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
             const String& rDBName, const String& rTableName, sal_Bool bAppend)
@@ -714,9 +695,7 @@ sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     }
     return(sal_True);
 }
-/* -----------------------------08.06.01 15:11--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
         uno::Reference< XConnection> xConnection,
         const String& rTableName, sal_Bool bAppend)
@@ -739,9 +718,8 @@ sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: CTOR
+    Description: CTOR
  --------------------------------------------------------------------*/
-
 SwNewDBMgr::SwNewDBMgr() :
             nMergeType(DBMGR_INSERT),
             bInitDBFields(sal_False),
@@ -752,9 +730,7 @@ SwNewDBMgr::SwNewDBMgr() :
             pMergeEvtSrc(NULL)
 {
 }
-/* -----------------------------18.07.00 08:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNewDBMgr::~SwNewDBMgr()
 {
     for(sal_uInt16 nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
@@ -778,7 +754,7 @@ SwNewDBMgr::~SwNewDBMgr()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Serienbriefe als einzelne Dokumente speichern
+    Description:    save bulk letters as single documents
  --------------------------------------------------------------------*/
 String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, sal_uLong nDocNo )
 {
@@ -791,15 +767,14 @@ String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageD
         ++nDocNo;
     }while(true);
 }
+
 void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
 {
-    sal_uInt16 __FAR_DATA aRangeOfDefaults[] = {
+    sal_uInt16 aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
-        // --> OD 2008-02-25 #refactorlists##
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        // <--
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         0
     };
@@ -821,6 +796,7 @@ void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
     if( aNewDefaults.Count() )
         rTarget.SetDefault( aNewDefaults );
 }
+
 void lcl_CopyFollowPageDesc(
                             SwWrtShell& rTargetShell,
                             const SwPageDesc& rSourcePageDesc,
@@ -879,15 +855,15 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer));
         if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
         {
-            sBodyMimeType = ::rtl::OUString::createFromAscii("text/html; charset=");
+            sBodyMimeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/html; charset="));
             sBodyMimeType += ::rtl::OUString::createFromAscii(
                                 rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
-            SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-            eEncoding = pHtmlOptions->GetTextEncoding();
+            SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
+            eEncoding = rHtmlOptions.GetTextEncoding();
         }
         else
             sBodyMimeType =
-                ::rtl::OUString::createFromAscii("text/plain; charset=UTF-8; format=flowed");
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain; charset=UTF-8; format=flowed"));
     }
 
     uno::Reference< XPropertySet > xColumnProp;
@@ -976,7 +952,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
                 sStartingPageDesc = sModifiedStartingPageDesc = pSourceShell->GetPageDesc(
                                             pSourceShell->GetCurPageDesc()).GetName();
-                // #122799# copy compatibility options
+                // copy compatibility options
                 lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
                 // #72821# copy dynamic defaults
                 lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
@@ -995,10 +971,10 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 
-            // Progress, um KeyInputs zu unterbinden
+            // Progress, to prohibit KeyInputs
             SfxProgress aProgress(pSourrceDocSh, ::aEmptyStr, 1);
 
-            // Alle Dispatcher sperren
+            // lock all dispatchers
             SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst(pSourrceDocSh);
             while (pViewFrm)
             {
@@ -1063,7 +1039,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         sStat += String::CreateFromInt32( nDocNo );
                         aPrtMonDlg.aPrintInfo.SetText(sStat);
 
-                        // Rechenzeit fuer Save-Monitor:
+                        // computation time for Save-Monitor:
                         for (sal_uInt16 i = 0; i < 10; i++)
                             Application::Reschedule();
 
@@ -1088,7 +1064,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             pWorkDoc->UpdateFlds(NULL, false);
                             SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
-                            // alle versteckten Felder/Bereiche entfernen
                             pWorkDoc->RemoveInvisibleContent();
 
                             // launch MailMergeEvent if required
@@ -1102,7 +1077,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile )
                             {
-                                DBG_ASSERT( pTargetShell, "no target shell available!" );
+                                OSL_ENSURE( pTargetShell, "no target shell available!" );
                                 // copy created file into the target document
                                 rWorkShell.ConvertFieldsToText();
                                 rWorkShell.SetNumberingRestart();
@@ -1143,7 +1118,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
                                 else
                                     pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
-                                DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
+                                OSL_ENSURE(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
                                 //#i51359# add a second paragraph in case there's only one
                                 {
                                     SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -1200,13 +1175,12 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     String sMailAddress = GetDBField( xColumnProp, aDBFormat);
                                     if(!SwMailMergeHelper::CheckMailAddress( sMailAddress ))
                                     {
-                                        DBG_ERROR("invalid e-Mail address in database column");
+                                        OSL_FAIL("invalid e-Mail address in database column");
                                     }
                                     else
                                     {
-                                        SwMailMessage* pMessage = 0;
-                                        uno::Reference< mail::XMailMessage > xMessage =
-                                                                pMessage = new SwMailMessage;
+                                        SwMailMessage* pMessage = new SwMailMessage;
+                                        uno::Reference< mail::XMailMessage > xMessage = pMessage;
                                         if(rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo())
                                             pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
                                         pMessage->addRecipient( sMailAddress );
@@ -1229,7 +1203,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                                 //read in the temporary file and use it as mail body
                                                 SfxMedium aMedium( sFileURL, STREAM_READ, sal_True);
                                                 SvStream* pInStream = aMedium.GetInStream();
-                                                DBG_ASSERT(pInStream, "no output file created?");
+                                                OSL_ENSURE(pInStream, "no output file created?");
                                                 if(pInStream)
                                                 {
                                                     pInStream->SetStreamCharSet( eEncoding );
@@ -1288,7 +1262,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 if( rMergeDescriptor.nMergeType != DBMGR_MERGE_MAILMERGE )
                 {
-                    DBG_ASSERT( aTempFile.get(), "Temporary file not available" );
+                    OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
                     INetURLObject aTempFileURL(bAsSingleFile ? sSubject : aTempFile->GetURL());
                     SfxMedium* pDstMed = new SfxMedium(
                         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
@@ -1333,21 +1307,17 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
                     const sal_Int32 nOpts = aOptions.getLength();
                     aOptions.realloc( nOpts + 1 );
-                    aOptions[ nOpts ].Name = rtl::OUString::createFromAscii( "Wait" );
+                    aOptions[ nOpts ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                     aOptions[ nOpts ].Value <<= sal_True ;
-//                    aPrintArgs.Put(SfxBoolItem(FN_QRY_MERGE, sal_True) );
-//                    // #i52629# aynchronous printing should only be done in silent mode - otherwise
-//                    // the printer dialog does not come up
-//                    aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDescriptor.bPrintAsync ));
                     // move print options
                     const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
                     for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
                     {
-                        if( pPrintOptions[nOption].Name.equalsAscii( "CopyCount" )
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "FileName" ))
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "Collate" ))
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "Pages" ))
-                            ||( pPrintOptions[nOption].Name.equalsAscii( "Wait" )))
+                        if( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CopyCount"))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Collate" )))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Pages")))
+                            ||( pPrintOptions[nOption].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Wait"))))
                         {
                             aOptions.realloc( nOpts + 1 );
                             aOptions[ nOpts ].Name = pPrintOptions[nOption].Name;
@@ -1355,14 +1325,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         }
                     }
 
-//                    const SwModuleOptions * pModOpt = SW_MOD()->GetModuleConfig();
-//                    if (pModOpt->IsSinglePrintJob())
-//                    {
-//                    }
-//                    else
-//                    {
                         pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
-//                    }
                 }
                 xTargetDocShell->DoClose();
             }
@@ -1370,10 +1333,10 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             //remove the temporary files
             ::std::vector<String>::iterator aFileIter;
             for(aFileIter = aFilesToRemove.begin();
-                        aFileIter != aFilesToRemove.end(); aFileIter++)
+                        aFileIter != aFilesToRemove.end(); ++aFileIter)
                 SWUnoHelper::UCB_DeleteFile( *aFileIter );
 
-            // Alle Dispatcher freigeben
+            // unlock all dispatchers
             pViewFrm = SfxViewFrame::GetFirst(pSourrceDocSh);
             while (pViewFrm)
             {
@@ -1397,10 +1360,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     return bLoop;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
-  --------------------------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 {
     pButton->GetParent()->Hide();
@@ -1409,12 +1368,10 @@ IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 }
 IMPL_LINK_INLINE_END( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 
-
 /*--------------------------------------------------------------------
-    Beschreibung: Numberformat der Spalte ermitteln und ggfs. in
-                    den uebergebenen Formatter uebertragen
+    Description: determine the column's Numberformat and transfer
+                    to the forwarded Formatter, if applicable.
   --------------------------------------------------------------------*/
-
 sal_uLong SwNewDBMgr::GetColumnFmt( const String& rDBName,
                                 const String& rTableName,
                                 const String& rColNm,
@@ -1472,7 +1429,7 @@ sal_uLong SwNewDBMgr::GetColumnFmt( const String& rDBName,
             }
             catch(Exception&)
             {
-                DBG_ERROR("Exception in getColumns()");
+                OSL_FAIL("Exception in getColumns()");
             }
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
@@ -1494,16 +1451,14 @@ sal_uLong SwNewDBMgr::GetColumnFmt( const String& rDBName,
     }
     return nRet;
 }
-/* -----------------------------07.06.01 15:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                         uno::Reference< XConnection> xConnection,
                         uno::Reference< XPropertySet> xColumn,
                         SvNumberFormatter* pNFmtr,
                         long nLanguage )
 {
-    //JP 12.01.99: ggfs. das NumberFormat im Doc setzen
+    // set the NumberFormat in the doc if applicable
     sal_uLong nRet = 0;
 
     if(!xSource.is())
@@ -1564,14 +1519,14 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                     }
                     catch(const Exception&)
                     {
-                        DBG_ERROR("illegal number format key");
+                        OSL_FAIL("illegal number format key");
                     }
                 }
             }
         }
         catch( const Exception& )
         {
-            DBG_ERROR("no FormatKey property found");
+            OSL_FAIL("no FormatKey property found");
         }
         if(bUseDefault)
             nRet = SwNewDBMgr::GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
@@ -1579,9 +1534,6 @@ sal_uLong SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
     return nRet;
 }
 
-/* -----------------------------17.07.00 09:47--------------------------------
-
- ---------------------------------------------------------------------------*/
 sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
                           const String& rTableName,
                           const String& rColNm )
@@ -1627,9 +1579,6 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
     return nRet;
 }
 
-/* -----------------------------03.07.00 17:12--------------------------------
-
- ---------------------------------------------------------------------------*/
 uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSource,
                                                     uno::Reference<XDataSource>& rxSource)
 {
@@ -1650,9 +1599,7 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
 
     return xConnection;
 }
-/* -----------------------------03.07.00 17:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Reference<sdbc::XConnection> xConnection,
                                     const String& rTableOrQuery,
                                     sal_uInt8   eTableOrQuery)
@@ -1696,21 +1643,19 @@ uno::Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(uno::Refe
     }
     catch( const uno::Exception& )
     {
-        DBG_ERROR("Exception in SwDBMgr::GetColumnSupplier");
+        OSL_FAIL("Exception in SwDBMgr::GetColumnSupplier");
     }
 
     return xRet;
 }
-/* -----------------------------05.07.00 13:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
                         const SwDBFormatData& rDBFormatData,
                         double* pNumber)
 {
     uno::Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
     String sRet;
-    DBG_ASSERT(xColumn.is(), "SwNewDBMgr::::ImportDBField: illegal arguments");
+    OSL_ENSURE(xColumn.is(), "SwNewDBMgr::::ImportDBField: illegal arguments");
     if(!xColumn.is())
         return sRet;
 
@@ -1745,8 +1690,6 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
         case DataType::TIME:
         case DataType::TIMESTAMP:
         {
-//          ::Date aTempDate(rDBFormatData.aNullDate.Day,
-//              rDBFormatData.aNullDate.Month, rDBFormatData.aNullDate.Year);
 
             try
             {
@@ -1767,47 +1710,26 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             }
             catch(Exception& )
             {
-                DBG_ERROR("exception caught");
+                OSL_FAIL("exception caught");
             }
 
         }
         break;
-
-//      case DataType::BINARY:
-//      case DataType::VARBINARY:
-//      case DataType::LONGVARBINARY:
-//      case DataType::SQLNULL:
-//      case DataType::OTHER:
-//      case DataType::OBJECT:
-//      case DataType::DISTINCT:
-//      case DataType::STRUCT:
-//      case DataType::ARRAY:
-//      case DataType::BLOB:
-//      case DataType::CLOB:
-//      case DataType::REF:
-//      default:
     }
-//  if (pFormat)
-//  {
-//      SFX_ITEMSET_GET(*pCol, pFormatItem, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
-//      *pFormat = pFormatItem->GetValue();
-//  }
 
     return sRet;
 }
-/* -----------------------------06.07.00 14:28--------------------------------
-    releases the merge data source table or query after merge is completed
- ---------------------------------------------------------------------------*/
+
+// releases the merge data source table or query after merge is completed
 void    SwNewDBMgr::EndMerge()
 {
-    DBG_ASSERT(bInMerge, "merge is not active");
+    OSL_ENSURE(bInMerge, "merge is not active");
     bInMerge = sal_False;
     delete pImpl->pMergeData;
     pImpl->pMergeData = 0;
 }
-/* -----------------------------06.07.00 14:28--------------------------------
-    checks if a desired data source table or query is open
- ---------------------------------------------------------------------------*/
+
+// checks if a desired data source table or query is open
 sal_Bool    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
             const String& rTableOrQuery, sal_Bool bMergeOnly)
 {
@@ -1831,9 +1753,8 @@ sal_Bool    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
     }
     return sal_False;
 }
-/* -----------------------------17.07.00 16:44--------------------------------
-    read column data a a specified position
- ---------------------------------------------------------------------------*/
+
+// read column data at a specified position
 sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId,
                             long nLanguage,
@@ -1896,9 +1817,9 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTabl
     }
     return bRet;
 }
-/* -----------------------------06.07.00 16:47--------------------------------
-    reads the column data at the current position
- ---------------------------------------------------------------------------*/
+
+
+// reads the column data at the current position
 sal_Bool    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
                                 String &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
 {
@@ -1911,17 +1832,13 @@ sal_Bool    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, sal_uInt16 
     sal_Bool bRet = lcl_GetColumnCnt(pImpl->pMergeData, rColumnName, nLanguage, rResult, pNumber);
     return bRet;
 }
-/* -----------------------------07.07.00 14:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::ToNextMergeRecord()
 {
-    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
+    OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     return ToNextRecord(pImpl->pMergeData);
 }
-/* -----------------------------10.07.01 14:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::ToNextRecord(
     const String& rDataSource, const String& rCommand, sal_Int32 /*nCommandType*/)
 {
@@ -1940,9 +1857,7 @@ sal_Bool SwNewDBMgr::ToNextRecord(
     }
     return ToNextRecord(pFound);
 }
-/* -----------------------------10.07.01 14:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
 {
     sal_Bool bRet = sal_True;
@@ -1986,7 +1901,7 @@ sal_Bool SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
     return bRet;
 }
 
-/* -----------------------------13.07.00 17:23--------------------------------
+/* ------------------------------------------------------------------------
     synchronized labels contain a next record field at their end
     to assure that the next page can be created in mail merge
     the cursor position must be validated
@@ -1995,13 +1910,11 @@ sal_Bool SwNewDBMgr::ExistsNextRecord() const
 {
     return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;
 }
-/* -----------------------------13.07.00 10:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
 {
     sal_uInt32  nRet = 0;
-    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
+    OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is())
         return sal_False;
     try
@@ -2013,12 +1926,10 @@ sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
     }
     return nRet;
 }
-/* -----------------------------13.07.00 10:58--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
 {
-    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
+    OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is()|| nSet < 0)
         return sal_False;
     sal_Bool bRet = sal_False;
@@ -2033,9 +1944,6 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
     return bRet;
 }
 
-/* -----------------------------17.07.00 14:17--------------------------------
-
- ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
             sal_Int32 nCommandType, bool bCreate)
 {
@@ -2069,7 +1977,7 @@ sal_Bool SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTa
             }
             catch(Exception&)
             {
-                //#98373# DB driver may not be ODBC 3.0 compliant
+                // DB driver may not be ODBC 3.0 compliant
                 pFound->bScrollable = sal_True;
             }
             pFound->xStatement = pFound->xConnection->createStatement();
@@ -2096,9 +2004,7 @@ sal_Bool SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTa
     }
     return pFound->xResultSet.is();
 }
-/* -----------------------------14.08.2001 10:26------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rDataSource)
 {
     SwDSParam* pFound = SwNewDBMgr::FindDSConnection(rDataSource, sal_True);
@@ -2118,9 +2024,7 @@ uno::Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rData
     }
     return pFound->xConnection;
 }
-/* -----------------------------17.07.00 15:55--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
     const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType)
 {
@@ -2159,9 +2063,8 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
     return nRet;
 }
 
-/* -----------------------------17.07.00 14:18--------------------------------
-    close all data sources - after fields were updated
- ---------------------------------------------------------------------------*/
+
+// close all data sources - after fields were updated
 void    SwNewDBMgr::CloseAll(sal_Bool bIncludingMerge)
 {
     //the only thing done here is to reset the selection index
@@ -2184,9 +2087,7 @@ void    SwNewDBMgr::CloseAll(sal_Bool bIncludingMerge)
         }
     }
 }
-/* -----------------------------17.07.00 14:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
 {
     //prefer merge data if available
@@ -2207,7 +2108,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
             (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
             (bCreate && pParam->nCommandType == -1)))
             {
-                //#94779# calls from the calculator may add a connection with an invalid commandtype
+                // calls from the calculator may add a connection with an invalid commandtype
                 //later added "real" data base connections have to re-use the already available
                 //DSData and set the correct CommandType
                 if(bCreate && pParam->nCommandType == -1)
@@ -2235,9 +2136,6 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, sal_Bool bCreate)
     }
     return pFound;
 }
-/* -----------------------------14.08.2001 10:27------------------------------
-
- ---------------------------------------------------------------------------*/
 
 SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, sal_Bool bCreate)
 {
@@ -2275,16 +2173,11 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, sal_B
     return pFound;
 }
 
-/* -----------------------------17.07.00 14:34--------------------------------
-
- ---------------------------------------------------------------------------*/
 const SwDBData& SwNewDBMgr::GetAddressDBName()
 {
     return SW_MOD()->GetDBConfig()->GetAddressSource();
 }
-/* -----------------------------18.07.00 13:13--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
 {
     uno::Reference<XNameAccess> xDBContext;
@@ -2300,9 +2193,7 @@ Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
     }
     return Sequence<rtl::OUString>();
 }
-/*-- 26.05.2004 14:33:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String SwNewDBMgr::LoadAndRegisterDataSource()
 {
     sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
@@ -2493,9 +2384,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
     return sFind;
 
 }
-/* -----------------------------10.11.00 17:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties,
                         sal_Bool bWithDataSourceBrowser)
@@ -2521,7 +2410,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength())
     {
-        DBG_ERROR("PropertyValues missing or unset");
+        OSL_FAIL("PropertyValues missing or unset");
         return;
     }
 
@@ -2533,7 +2422,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         pFound = FindDSConnection(sDataSource, sal_True);
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     pImpl->pMergeDialog = pFact->CreateMailMergeDlg( DLG_MAILMERGE,
                                                         &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                                                         sDataSource,
@@ -2541,7 +2430,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                                                         nCmdType,
                                                         xConnection,
                                                         bWithDataSourceBrowser ? 0 : &aSelection);
-    DBG_ASSERT(pImpl->pMergeDialog, "Dialogdiet fail!");
+    OSL_ENSURE(pImpl->pMergeDialog, "Dialogdiet fail!");
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
         aDescriptor[daSelection] <<= pImpl->pMergeDialog->GetSelection();
@@ -2590,7 +2479,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 {
                     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                     SwView *pView = (SwView*) pFrame->GetViewShell();
-                    pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+                    pView->AttrChangedNotify( &pView->GetWrtShell() );// in order for SelectShell to be called
                     //set the current DBMgr
                     SwDoc* pWorkDoc = pView->GetWrtShell().GetDoc();
                     SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
@@ -2658,17 +2547,13 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     }
     DELETEZ(pImpl->pMergeDialog);
 }
-/* -----------------------------13.11.00 08:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwNewDBMgr::InsertText(SwWrtShell& rSh,
                         const Sequence< PropertyValue>& rProperties)
 {
     rtl::OUString sDataSource, sDataTableOrQuery;
     uno::Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
-    sal_Bool bHasSelectionProperty = sal_False;
-    sal_Int32 nSelectionPos = 0;
     sal_Int16 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
     uno::Reference< XConnection> xConnection;
@@ -2681,11 +2566,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
             pValues[nPos].Value >>= xResSet;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
-        {
-            bHasSelectionProperty = sal_True;
-            nSelectionPos = nPos;
             pValues[nPos].Value >>= aSelection;
-        }
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= nCmdType;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
@@ -2693,7 +2574,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     }
     if(!sDataSource.getLength() || !sDataTableOrQuery.getLength() || !xResSet.is())
     {
-        DBG_ERROR("PropertyValues missing or unset");
+        OSL_FAIL("PropertyValues missing or unset");
         return;
     }
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -2710,14 +2591,14 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     aDBData.nCommandType = nCmdType;
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwInsertDBColAutoPilot* pDlg = pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData,
                                                                                 DLG_AP_INSERT_DB_SEL );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute() )
     {
         rtl::OUString sDummy;
@@ -2729,15 +2610,13 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         }
         catch(Exception& )
         {
-            DBG_ERROR("exception caught");
+            OSL_FAIL("exception caught");
         }
     }
     delete pDlg;
 
 }
-/* -----------------------------30.08.2001 12:00------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDbtoolsClient* SwNewDBMgr::pDbtoolsClient = NULL;
 
 SwDbtoolsClient& SwNewDBMgr::GetDbtoolsClient()
@@ -2746,17 +2625,13 @@ SwDbtoolsClient& SwNewDBMgr::GetDbtoolsClient()
         pDbtoolsClient = new SwDbtoolsClient;
     return *pDbtoolsClient;
 }
-/* -----------------13.05.2003 15:34-----------------
 
- --------------------------------------------------*/
 void SwNewDBMgr::RemoveDbtoolsClient()
 {
     delete pDbtoolsClient;
     pDbtoolsClient = 0;
 }
-/* -----------------------------20.08.2002 12:00------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Reference< XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName)
 {
     uno::Reference<XDataSource> xSource;
@@ -2770,13 +2645,11 @@ uno::Reference<XDataSource> SwNewDBMgr::getDataSourceAsParent(const uno::Referen
     }
     catch(const Exception&)
     {
-        DBG_ERROR("exception in getDataSourceAsParent caught");
+        OSL_FAIL("exception in getDataSourceAsParent caught");
     }
     return xSource;
 }
-/* -----------------------------20.08.2002 12:00------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDataSourceName,
                                        const ::rtl::OUString& _sCommand,
                                        sal_Int32 _nCommandType,
@@ -2812,15 +2685,13 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
     }
     catch(const Exception&)
     {
-        DBG_ASSERT(0,"Caught exception while creating a new RowSet!");
+        OSL_FAIL("Caught exception while creating a new RowSet!");
     }
     return xResultSet;
 }
-/*-- 13.05.2004 16:14:15---------------------------------------------------
-    merge all data into one resulting document and return the number of
-    merged documents
-  -----------------------------------------------------------------------*/
 
+
+// merge all data into one resulting document and return the number of merged documents
 sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                             SwView& rSourceView )
 {
@@ -2854,7 +2725,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
     {
         pImpl->pMergeData->bEndOfDB = sal_True;
         pImpl->pMergeData->CheckEndOfDB();
-        DBG_ERROR("exception in MergeNew()");
+        OSL_FAIL("exception in MergeNew()");
     }
 
     //bCancel is set from the PrintMonitor
@@ -2893,7 +2764,6 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame().GetWindow();
         rTargetWindow.SetPosPixel(rSourceWindow.GetPosPixel());
 
-//        pTargetFrame->GetFrame().Appear();
         SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
         rMMConfig.SetTargetView(pTargetView);
         //initiate SelectShell() to create sub shells
@@ -2906,7 +2776,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                                         rMaster.GetFooter().IsActive();
 
 
-        // #122799# copy compatibility options
+        // copy compatibility options
         lcl_CopyCompatibilityOptions( rSourceShell, *pTargetShell);
         // #72821# copy dynamic defaults
         lcl_CopyDynamicDefaults( *rSourceShell.GetDoc(), *pTargetShell->GetDoc() );
@@ -2948,7 +2818,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             //create a ViewFrame
             SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
-            pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
+            pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
                 // merge the data
                 SwDoc* pWorkDoc = rWorkShell.GetDoc();
@@ -3020,7 +2890,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
             }
             sal_uInt16 nPageCountBefore = pTargetShell->GetPageCnt();
-            DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
+            OSL_ENSURE(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended");
             //#i51359# add a second paragraph in case there's only one
             {
                 SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -3073,35 +2943,31 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         }
         pTargetShell->EnterStdMode();
         pTargetShell->SttDoc();
-        //
+
     }
     catch( Exception& rEx)
     {
         (void)rEx;
-        DBG_ERROR("exception caught in SwNewDBMgr::MergeDocuments");
+        OSL_FAIL("exception caught in SwNewDBMgr::MergeDocuments");
     }
     DELETEZ(pImpl->pMergeData);
     bInMerge = sal_False;
     return nRet;
 }
-/* -----------------09.12.2002 12:38-----------------
- *
- * --------------------------------------------------*/
+
 SwConnectionDisposedListener_Impl::SwConnectionDisposedListener_Impl(SwNewDBMgr& rMgr) :
     rDBMgr(rMgr)
-{};
-/* -----------------09.12.2002 12:39-----------------
- *
- * --------------------------------------------------*/
+{
+};
+
 SwConnectionDisposedListener_Impl::~SwConnectionDisposedListener_Impl()
-{};
-/* -----------------09.12.2002 12:39-----------------
- *
- * --------------------------------------------------*/
+{
+};
+
 void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         throw (RuntimeException)
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    ::SolarMutexGuard aGuard;
     uno::Reference<XConnection> xSource(rSource.Source, UNO_QUERY);
     for(sal_uInt16 nPos = rDBMgr.aDataSourceParams.Count(); nPos; nPos--)
     {
@@ -3113,3 +2979,5 @@ void SwConnectionDisposedListener_Impl::disposing( const EventObject& rSource )
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

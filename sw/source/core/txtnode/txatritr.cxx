@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,9 +32,7 @@
 
 #include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <tools/string.hxx>
 #include <editeng/langitem.hxx>
 #include <txatritr.hxx>
@@ -244,3 +243,4 @@ void SwTxtAttrIterator::SearchNextChg()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

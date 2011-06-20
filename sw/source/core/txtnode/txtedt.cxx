@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,15 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-// So kann man die Linguistik-Statistik ( (Tmp-Path)\swlingu.stk ) aktivieren:
-//#define LINGU_STATISTIK
-#ifdef LINGU_STATISTIK
-    #include <stdio.h>          // in SwLinguStatistik::DTOR
-    #include <stdlib.h>         // getenv()
-    #include <time.h>           // clock()
-    #include <tools/stream.hxx>
-#endif
 
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
@@ -91,7 +83,6 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <vector>
-
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -334,7 +325,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 
     if ( !pSet1 )
     {
-        ASSERT( nWhichId, "lcl_HaveCommonAttributes not used correctly" )
+        OSL_ENSURE( nWhichId, "lcl_HaveCommonAttributes not used correctly" );
         if ( SFX_ITEM_SET == rSet2.GetItemState( nWhichId, sal_False ) )
         {
             pNewSet = rSet2.Clone( sal_True );
@@ -480,7 +471,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
             continue;
         }
 
-
         if( nStt <= nAttrStart )          // Faelle: 1,3,5
         {
             if( nEnd > nAttrStart
@@ -598,7 +588,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
                                 nsSetAttrMode::SETATTR_NOHINTADJUST );
                         }
 
-
                         // jetzt kein i+1, weil das eingefuegte Attribut
                         // ein anderes auf die Position geschoben hat !
                         continue;
@@ -623,8 +612,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
     }
 }
 
-
-
 /*************************************************************************
  *                SwTxtNode::GetCurWord()
  *
@@ -638,7 +625,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
 
 XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
-    ASSERT( nPos <= m_Text.Len(), "SwTxtNode::GetCurWord: invalid index." );
+    OSL_ENSURE( nPos <= m_Text.Len(), "SwTxtNode::GetCurWord: invalid index." );
 
     if (!m_Text.Len())
         return m_Text;
@@ -649,7 +636,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
     {
         sal_Int16 nWordType = WordType::DICTIONARY_WORD;
         lang::Locale aLocale( pBreakIt->GetLocale( GetLang( nPos ) ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         sal_Bool bBegin = rxBreak->isBeginWord( m_Text, nPos, aLocale, nWordType );
         sal_Bool bEnd   = rxBreak->isEndWord  ( m_Text, nPos, aLocale, nWordType );
         (void)bBegin;
@@ -679,7 +666,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageTy
                       sal_uInt16 nType, xub_StrLen nStart, xub_StrLen nEnde, sal_Bool bClp )
     : rNode( rNd ), rText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
-    ASSERT( rText.Len(), "SwScanner: EmptyString" );
+    OSL_ENSURE( rText.Len(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
@@ -736,7 +723,7 @@ sal_Bool SwScanner::NextWord()
         // get the word boundaries
         aBound = pBreakIt->GetBreakIter()->getWordBoundary( rText, nBegin,
                 pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
-        ASSERT( aBound.endPos >= aBound.startPos, "broken aBound result" );
+        OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
         //no word boundaries could be found
         if(aBound.endPos == aBound.startPos)
@@ -764,7 +751,7 @@ sal_Bool SwScanner::NextWord()
         // we have to differenciate between these cases:
         if ( aBound.startPos <= nBegin )
         {
-            ASSERT( aBound.endPos >= nBegin, "Unexpected aBound result" )
+        OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
 
             // restrict boundaries to script boundaries and nEndPos
             const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
@@ -817,7 +804,6 @@ sal_Bool SwScanner::NextWord()
 
     return sal_True;
 }
-
 
 sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
 {
@@ -946,7 +932,6 @@ sal_uInt16 SwTxtNode::Spell(SwSpellArgs* pArgs)
     return pArgs->xSpellAlt.is() ? 1 : 0;
 }
 
-
 void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     LanguageType nLang, sal_uInt16 nLangWhichId,
     const Font *pFont,  sal_uInt16 nFontWhichId )
@@ -962,7 +947,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     SfxItemSet aSet( pEditShell->GetAttrPool(), aRanges );
     aSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
 
-    DBG_ASSERT( pFont, "target font missing?" );
+    OSL_ENSURE( pFont, "target font missing?" );
     if (pFont)
     {
         SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( nFontWhichId );
@@ -981,7 +966,6 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     //                     <- over empty selection are removed.
 
 }
-
 
 sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 {
@@ -1087,7 +1071,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
     if (bFound && bInSelection)     // convertible text found within selection/range?
     {
         const XubString aTxtPortion = m_Text.Copy( nBegin, nLen );
-        DBG_ASSERT( m_Text.Len() > 0, "convertible text portion missing!" );
+        OSL_ENSURE( m_Text.Len() > 0, "convertible text portion missing!" );
         rArgs.aConvText     = m_Text.Copy( nBegin, nLen );
         rArgs.nConvTextLang = nLangFound;
 
@@ -1214,7 +1198,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             if( bSpell && rWord.Len() > 0 )
             {
                 // check for: bAlter => xHyphWord.is()
-                DBG_ASSERT(!bSpell || xSpell.is(), "NULL pointer");
+                OSL_ENSURE(!bSpell || xSpell.is(), "NULL pointer");
 
                 if( !xSpell->isValid( rWord, eActLang, Sequence< PropertyValue >() ) )
                 {
@@ -1413,7 +1397,6 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
     return aRet;
 }
 
-
 // Wird vom CollectAutoCmplWords gerufen
 void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
 {
@@ -1428,7 +1411,6 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     xub_StrLen nEnd = pNode->GetTxt().Len();
     xub_StrLen nLen;
     sal_Bool bACWDirty = sal_False, bAnyWrd = sal_False;
-
 
     if( nBegin < nEnd )
     {
@@ -1465,7 +1447,6 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
         pNode->SetAutoCompleteWordDirty( sal_False );
 }
 
-
 /*************************************************************************
  *                      SwTxtNode::Hyphenate
  *************************************************************************/
@@ -1494,9 +1475,9 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
         // moeglich, in denen kein Frame zum Node vorliegt.
-        // Also kein ASSERT!
+        // Also keinOSL_ENSURE
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
+        OSL_ENSURE( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
 #endif
         return sal_False;
     }
@@ -1520,80 +1501,6 @@ sal_Bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     }
     return sal_False;
 }
-
-#ifdef LINGU_STATISTIK
-
-// globale Variable
-SwLinguStatistik aSwLinguStat;
-
-
-void SwLinguStatistik::Flush()
-{
-    if ( !nWords )
-        return ;
-
-    static char *pLogName = 0;
-    const sal_Bool bFirstOpen = pLogName ? sal_False : sal_True;
-    if( bFirstOpen )
-    {
-        char *pPath = getenv( "TEMP" );
-        char *pName = "swlingu.stk";
-        if( !pPath )
-            pLogName = pName;
-        else
-        {
-            const int nLen = strlen(pPath);
-            // fuer dieses new wird es kein delete geben.
-            pLogName = new char[nLen + strlen(pName) + 3];
-            if(nLen && (pPath[nLen-1] == '\\') || (pPath[nLen-1] == '/'))
-                snprintf( pLogName, sizeof(pLogName), "%s%s", pPath, pName );
-            else
-                snprintf( pLogName, sizeof(pLogName), "%s/%s", pPath, pName );
-        }
-    }
-    SvFileStream aStream( String::CreateFromAscii(pLogName), (bFirstOpen
-                                        ? STREAM_WRITE | STREAM_TRUNC
-                                        : STREAM_WRITE ));
-
-    if( !aStream.GetError() )
-    {
-        if ( bFirstOpen )
-            aStream << "\nLinguistik-Statistik\n";
-        aStream << endl << ++nFlushCnt << ". Messung\n";
-        aStream << "Rechtschreibung\n";
-        aStream << "gepruefte Worte: \t" << nWords << endl;
-        aStream << "als fehlerhaft erkannt:\t" << nWrong << endl;
-        aStream << "Alternativvorschlaege:\t" << nAlter << endl;
-        if ( nWrong )
-            aStream << "Durchschnitt:\t\t" << nAlter*1.0 / nWrong << endl;
-        aStream << "Dauer (msec):\t\t" << nSpellTime << endl;
-        aStream << "\nThesaurus\n";
-        aStream << "Synonyme gesamt:\t" << nSynonym << endl;
-        if ( nSynonym )
-            aStream << "Synonym-Durchschnitt:\t" <<
-                            nSynonym*1.0 / ( nWords - nNoSynonym ) << endl;
-        aStream << "ohne Synonyme:\t\t" << nNoSynonym << endl;
-        aStream << "Bedeutungen gesamt:\t" << nSynonym << endl;
-        aStream << "keine Bedeutungen:\t"<< nNoSynonym << endl;
-        aStream << "Dauer (msec):\t\t" << nTheTime << endl;
-        aStream << "\nHyphenator\n";
-        aStream << "Trennstellen gesamt:\t" << nHyphens << endl;
-        if ( nHyphens )
-            aStream << "Hyphen-Durchschnitt:\t" <<
-                    nHyphens*1.0 / ( nWords - nNoHyph - nHyphErr ) << endl;
-        aStream << "keine Trennstellen:\t" << nNoHyph << endl;
-        aStream << "Trennung verweigert:\t" << nHyphErr << endl;
-        aStream << "Dauer (msec):\t\t" << nHyphTime << endl;
-        aStream << "---------------------------------------------\n";
-    }
-    nWords = nWrong = nAlter = nSynonym = nNoSynonym =
-    nHyphens = nNoHyph = nHyphErr = nSpellTime = nTheTime =
-    nHyphTime = 0;
-    //pThes = NULL;
-}
-
-#endif
-
 
 struct TransliterationChgData
 {
@@ -1667,7 +1574,7 @@ void SwTxtNode::TransliterateText(
                 nStt = (xub_StrLen)aCurWordBndry.startPos;
                 nEnd = (xub_StrLen)aCurWordBndry.endPos;
                 sal_Int32 nLen = nEnd - nStt;
-                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+                OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
                 String aText( GetTxt().Copy( nStt, nLen ) );
 #endif
@@ -1750,7 +1657,7 @@ void SwTxtNode::TransliterateText(
             while (nCurrentStart < nLastEnd)
             {
                 sal_Int32 nLen = nCurrentEnd - nCurrentStart;
-                DBG_ASSERT( nLen > 0, "invalid word length of 0" );
+                OSL_ENSURE( nLen > 0, "invalid word length of 0" );
 #if OSL_DEBUG_LEVEL > 1
                 String aText( GetTxt().Copy( nCurrentStart, nLen ) );
 #endif
@@ -1823,7 +1730,7 @@ void SwTxtNode::TransliterateText(
             delete pIter;
         }
 
-        if (aChanges.size() > 0)
+        if (!aChanges.empty())
         {
             // now apply the changes from end to start to leave the offsets of the
             // yet unchanged text parts remain the same.
@@ -1837,7 +1744,6 @@ void SwTxtNode::TransliterateText(
         }
     }
 }
-
 
 void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
                                 const XubString& rText,
@@ -1886,108 +1792,129 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 void SwTxtNode::CountWords( SwDocStat& rStat,
                             xub_StrLen nStt, xub_StrLen nEnd ) const
 {
+    sal_Bool isCountAll = ( (0 == nStt) && (GetTxt().Len() == nEnd) );
+
     ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
-    if( nStt < nEnd )
+    if( nStt >= nEnd )
+    {   // empty node or empty selection or bad call
+        return;
+    }
+    if ( IsHidden() )
+    {   // not counting hidden paras
+        return;
+    }
+    // Shortcut when counting whole paragraph and current count is clean
+    if ( isCountAll && !IsWordCountDirty() )
     {
-        if ( !IsHidden() )
+        // accumulate into DocStat record to return the values
+        rStat.nWord += GetParaNumberOfWords();
+        rStat.nChar += GetParaNumberOfChars();
+        rStat.nCharExcludingSpaces += GetParaNumberOfCharsExcludingSpaces();
+        return;
+    }
+
+    // make a copy of the text
+    String rTextCopy = m_Text.Copy( );
+
+    // mask out the redlined and hidden text with ' '
+    const xub_Unicode cChar(' ');
+    const sal_uInt16 nNumOfMaskedChars = lcl_MaskRedlinesAndHiddenText( *this, rTextCopy, nStt, nEnd, cChar, false );
+
+    // expand text into pConversionMap for scanner
+    rtl::OUString aExpandText;
+    const ModelToViewHelper::ConversionMap* pConversionMap = BuildConversionMap( aExpandText );
+
+    // map start and end points onto the ConversionMap
+    const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
+    const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
+
+    if ( aExpandText.getLength() <= 0 )
+    {
+        OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
+        return;
+    }
+
+    //do the count
+    // all counts exclude hidden paras and hidden+redlined within para
+    // definition of space/white chars in SwScanner (and BreakIter!)
+    // uses both lcl_IsSkippableWhiteSpace and BreakIter getWordBoundary in SwScanner
+    sal_uInt32 nTmpWords = 0;        // count of all contiguous blocks of non-white chars
+    sal_uInt32 nTmpChars = 0;        // count of all chars
+    sal_uInt32 nTmpCharsExcludingSpaces = 0;  // all non-white chars
+
+    ++rStat.nPara;      // count of non-empty paras
+
+    // count words in masked and expanded text:
+    if( pBreakIt->GetBreakIter().is() )
+    {
+        const String aScannerText( aExpandText );
+        // zero is NULL for pLanguage -----------v               last param = true for clipping
+        SwScanner aScanner( *this, aScannerText, 0, pConversionMap, i18n::WordType::WORD_COUNT,
+                            (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd, true );
+
+        // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
+        const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
+
+        while ( aScanner.NextWord() )
         {
-            ++rStat.nPara;
-            sal_uLong nTmpWords = 0;
-            sal_uLong nTmpChars = 0;
-
-            // Shortcut: Whole paragraph should be considered and cached values
-            // are valid:
-            if ( 0 == nStt && GetTxt().Len() == nEnd && !IsWordCountDirty() )
+            //  1 is len(CH_TXTATR_BREAKWORD) : match returns length of match
+            if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
             {
-                nTmpWords = GetParaNumberOfWords();
-                nTmpChars = GetParaNumberOfChars();
+                ++nTmpWords;
+                nTmpCharsExcludingSpaces += aScanner.GetLen();
             }
-            else
-            {
-                String aOldStr( m_Text );
-                String& rCastStr = const_cast<String&>(m_Text);
-
-                // fills the deleted redlines and hidden ranges with cChar:
-                const xub_Unicode cChar(' ');
-                const sal_uInt16 nNumOfMaskedChars =
-                        lcl_MaskRedlinesAndHiddenText( *this, rCastStr, nStt, nEnd, cChar, false );
-
-                // expand fields
-                rtl::OUString aExpandText;
-                const ModelToViewHelper::ConversionMap* pConversionMap =
-                        BuildConversionMap( aExpandText );
-
-                const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
-                const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
-
-                const bool bCount = aExpandText.getLength() > 0;
-
-                // count words in 'regular' text:
-                if( bCount && pBreakIt->GetBreakIter().is() )
-                {
-                    const String aScannerText( aExpandText );
-                    SwScanner aScanner( *this, aScannerText, 0, pConversionMap,
-                                        i18n::WordType::WORD_COUNT,
-                                        (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd );
-
-                    const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
-
-                    while ( aScanner.NextWord() )
-                    {
-                        if ( aScanner.GetLen() > 1 ||
-                             CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ) )
-                            ++nTmpWords;
-                    }
-                }
-
-                ASSERT( aExpandText.getLength() >= nNumOfMaskedChars,
-                        "More characters hidden that characters in string!" )
-                nTmpChars = nExpandEnd - nExpandBegin - nNumOfMaskedChars;
-
-                // count words in numbering string:
-                if ( nStt == 0 && bCount )
-                {
-                    // add numbering label
-                    const String aNumString = GetNumString();
-                    const xub_StrLen nNumStringLen = aNumString.Len();
-                    if ( nNumStringLen > 0 )
-                    {
-                        LanguageType aLanguage = GetLang( 0 );
-
-                        SwScanner aScanner( *this, aNumString, &aLanguage, 0,
-                                            i18n::WordType::WORD_COUNT,
-                                            0, nNumStringLen );
-
-                        while ( aScanner.NextWord() )
-                            ++nTmpWords;
-
-                        nTmpChars += nNumStringLen;
-                    }
-                    else if ( HasBullet() )
-                    {
-                        ++nTmpWords;
-                        ++nTmpChars;
-                    }
-                }
-
-                delete pConversionMap;
-
-                rCastStr = aOldStr;
-
-                // If the whole paragraph has been calculated, update cached
-                // values:
-                if ( 0 == nStt && GetTxt().Len() == nEnd )
-                {
-                    SetParaNumberOfWords( nTmpWords );
-                    SetParaNumberOfChars( nTmpChars );
-                    SetWordCountDirty( false );
-                }
-            }
-
-            rStat.nWord += nTmpWords;
-            rStat.nChar += nTmpChars;
         }
     }
+
+    nTmpChars = nExpandEnd - nExpandBegin - nNumOfMaskedChars;
+
+    // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
+    // nor for mid-word selection - set scanner bClip = true at creation
+
+    // count words in numbering string if started at beginning of para:
+    if ( nStt == 0 )
+    {
+        // count outline number label - ? no expansion into map
+        // always counts all of number-ish label
+        const String aNumString = GetNumString();
+        const xub_StrLen nNumStringLen = aNumString.Len();
+        if ( nNumStringLen > 0 )
+        {
+            LanguageType aLanguage = GetLang( 0 );
+
+            SwScanner aScanner( *this, aNumString, &aLanguage, 0,
+                                i18n::WordType::WORD_COUNT, 0, nNumStringLen, true );
+
+            while ( aScanner.NextWord() )
+            {
+                ++nTmpWords;
+                nTmpCharsExcludingSpaces += aScanner.GetLen();
+            }
+
+            nTmpChars += nNumStringLen;
+        }
+        else if ( HasBullet() )
+        {
+            ++nTmpWords;
+            ++nTmpChars;
+            ++nTmpCharsExcludingSpaces;
+        }
+    }
+
+    delete pConversionMap;
+
+    // If counting the whole para then update cached values and mark clean
+    if ( isCountAll )
+    {
+        SetParaNumberOfWords( nTmpWords );
+        SetParaNumberOfChars( nTmpChars );
+        SetParaNumberOfCharsExcludingSpaces( nTmpCharsExcludingSpaces );
+        SetWordCountDirty( false );
+    }
+    // accumulate into DocStat record to return the values
+    rStat.nWord += nTmpWords;
+    rStat.nChar += nTmpChars;
+    rStat.nCharExcludingSpaces += nTmpCharsExcludingSpaces;
 }
 
 //
@@ -1995,16 +1922,17 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 //
 struct SwParaIdleData_Impl
 {
-    SwWrongList* pWrong;            // for spell checking
+    SwWrongList* pWrong;                // for spell checking
     SwGrammarMarkUp* pGrammarCheck;     // for grammar checking /  proof reading
     SwWrongList* pSmartTags;
     sal_uLong nNumberOfWords;
     sal_uLong nNumberOfChars;
-    bool bWordCountDirty        : 1;
-    bool bWrongDirty            : 1;    // Ist das Wrong-Feld auf invalid?
-    bool bGrammarCheckDirty     : 1;
-    bool bSmartTagDirty         : 1;
-    bool bAutoComplDirty        : 1;    // die ACompl-Liste muss angepasst werden
+    sal_uLong nNumberOfCharsExcludingSpaces;
+    bool bWordCountDirty;
+    bool bWrongDirty;                   // Ist das Wrong-Feld auf invalid?
+    bool bGrammarCheckDirty;
+    bool bSmartTagDirty;
+    bool bAutoComplDirty;               // die ACompl-Liste muss angepasst werden
 
     SwParaIdleData_Impl() :
         pWrong              ( 0 ),
@@ -2012,6 +1940,7 @@ struct SwParaIdleData_Impl
         pSmartTags          ( 0 ),
         nNumberOfWords      ( 0 ),
         nNumberOfChars      ( 0 ),
+        nNumberOfCharsExcludingSpaces ( 0 ),
         bWordCountDirty     ( true ),
         bWrongDirty         ( true ),
         bGrammarCheckDirty  ( true ),
@@ -2052,13 +1981,11 @@ SwWrongList* SwTxtNode::GetWrong()
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
 }
 
-// --> OD 2008-05-27 #i71360#
+// #i71360#
 const SwWrongList* SwTxtNode::GetWrong() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->pWrong : 0;
 }
-// <--
-
 
 void SwTxtNode::SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete )
 {
@@ -2079,8 +2006,8 @@ SwGrammarMarkUp* SwTxtNode::GetGrammarCheck()
 
 void SwTxtNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 {
-    ASSERT( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
-            "Weird - we have a smart tag list without any recognizers?" )
+    OSL_ENSURE( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
+            "Weird - we have a smart tag list without any recognizers?" );
 
     if ( m_pParaIdleData_Impl )
     {
@@ -2126,6 +2053,20 @@ void SwTxtNode::SetWordCountDirty( bool bNew ) const
         m_pParaIdleData_Impl->bWordCountDirty = bNew;
     }
 }
+
+sal_uLong SwTxtNode::GetParaNumberOfCharsExcludingSpaces() const
+{
+    return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces : 0;
+}
+
+void SwTxtNode::SetParaNumberOfCharsExcludingSpaces( sal_uLong nNew ) const
+{
+    if ( m_pParaIdleData_Impl )
+    {
+        m_pParaIdleData_Impl->nNumberOfCharsExcludingSpaces = nNew;
+    }
+}
+
 bool SwTxtNode::IsWordCountDirty() const
 {
     return m_pParaIdleData_Impl ? m_pParaIdleData_Impl->bWordCountDirty : 0;
@@ -2177,3 +2118,5 @@ bool SwTxtNode::IsAutoCompleteWordDirty() const
 //
 // Paragraph statistics end
 //
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,9 @@
 #include <vcl/window.hxx>
 
 #include <wrtsh.hxx>
+#include <doc.hxx>
+#include <docary.hxx>
+#include <charfmt.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -255,7 +259,7 @@ namespace SwLangHelper
             sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLang );
 
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
-            DBG_ASSERT( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
+            OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
             //get ScriptType
             sal_uInt16 nLangWhichId = 0;
@@ -267,7 +271,7 @@ namespace SwLangHelper
                 case SCRIPTTYPE_COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
                 default:
                     bIsSingleScriptType = false;
-                    DBG_ERROR( "unexpected case" );
+                    OSL_FAIL("unexpected case" );
             }
             if (bIsSingleScriptType)
             {
@@ -298,7 +302,25 @@ namespace SwLangHelper
                          case EE_CHAR_LANGUAGE_CJK :  nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
                          case EE_CHAR_LANGUAGE_CTL :  nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
                     }
+                    //Set the default document language
                     rWrtSh.SetDefault( SvxLanguageItem( nLang, nLangWhichId ) );
+
+                    //Resolves: fdo#35282 Clear the language from all Text Styles, and
+                    //fallback to default document language
+                    const SwTxtFmtColls *pColls = rWrtSh.GetDoc()->GetTxtFmtColls();
+                    for(sal_uInt16 i = 0, nCount = pColls->Count(); i < nCount; ++i)
+                    {
+                        SwTxtFmtColl &rTxtColl = *pColls->GetObject( i );
+                        rTxtColl.ResetFmtAttr(nLangWhichId);
+                    }
+                    //Resolves: fdo#35282 Clear the language from all Character Styles,
+                    //and fallback to default document language
+                    const SwCharFmts *pCharFmts = rWrtSh.GetDoc()->GetCharFmts();
+                    for(sal_uInt16 i = 0, nCount = pCharFmts->Count(); i < nCount; ++i)
+                    {
+                        SwCharFmt &rCharFmt = *pCharFmts->GetObject( i );
+                        rCharFmt.ResetFmtAttr(nLangWhichId);
+                    }
 
                     // #i102191: hard set respective language attribute in text document
                     // (for all text in the document - which should be selected by now...)
@@ -338,7 +360,7 @@ namespace SwLangHelper
             // whole paragraph)
 
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
-            DBG_ASSERT( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
+            OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
             if (pEditEngine)
             {
                 for (sal_uInt16 i = 0; i < 3; ++i)
@@ -355,16 +377,16 @@ namespace SwLangHelper
         }
         else // change language for all text
         {
-            SvUShortsSort aAttribs;
+            std::set<sal_uInt16> aAttribs;
             for (sal_uInt16 i = 0; i < 3; ++i)
             {
                 rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ) );
-                aAttribs.Insert( aLangWhichId_Writer[i] );
+                aAttribs.insert( aLangWhichId_Writer[i] );
             }
 
             // set all language attributes to default
             // (for all text in the document - which should be selected by now...)
-            rWrtSh.ResetAttr( &aAttribs );
+            rWrtSh.ResetAttr( aAttribs );
         }
     }
 
@@ -392,11 +414,11 @@ namespace SwLangHelper
         }
         else
         {
-            SvUShortsSort aAttribs;
-            aAttribs.Insert( RES_CHRATR_LANGUAGE );
-            aAttribs.Insert( RES_CHRATR_CJK_LANGUAGE );
-            aAttribs.Insert( RES_CHRATR_CTL_LANGUAGE );
-            rWrtSh.ResetAttr( &aAttribs );
+            std::set<sal_uInt16> aAttribs;
+            aAttribs.insert( RES_CHRATR_LANGUAGE );
+            aAttribs.insert( RES_CHRATR_CJK_LANGUAGE );
+            aAttribs.insert( RES_CHRATR_CTL_LANGUAGE );
+            rWrtSh.ResetAttr( aAttribs );
         }
     }
 
@@ -436,7 +458,7 @@ namespace SwLangHelper
             // there is more than one language...
             nLang = LANGUAGE_DONTKNOW;
         }
-        DBG_ASSERT( nLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+        OSL_ENSURE( nLang != LANGUAGE_SYSTEM, "failed to get the language?" );
 
         return nLang;
     }
@@ -487,7 +509,7 @@ namespace SwLangHelper
                 }
             }
         }
-        DBG_ASSERT( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+        OSL_ENSURE( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
 
         return nCurrentLang;
     }
@@ -535,7 +557,7 @@ namespace SwLangHelper
                 }
             }
         }
-        DBG_ASSERT( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+        OSL_ENSURE( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
 
         return nCurrentLang;
     }
@@ -608,3 +630,4 @@ namespace SwLangHelper
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR_HXX
 #define _WW8PAR_HXX
@@ -148,6 +148,7 @@ SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 class WW8Reader : public StgReader
 {
     virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    sal_uLong OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuffSize );
 public:
     virtual int GetReaderType();
 
@@ -362,11 +363,13 @@ class FieldEntry
     private:
         ::rtl::OUString msBookmarkName;
         ::rtl::OUString msMarkType;
+        ::rtl::OUString msMarkCode;
         ::sw::mark::IFieldmark::parameter_map_t maParams;
 
     public:
         sw::hack::Position maStartPos;
         sal_uInt16 mnFieldId;
+        sal_uLong mnObjLocFc;
         FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
         FieldEntry(const FieldEntry &rOther) throw();
         FieldEntry &operator=(const FieldEntry &rOther) throw();
@@ -377,8 +380,10 @@ class FieldEntry
 
         ::rtl::OUString GetBookmarkName();
         ::rtl::OUString GetBookmarkType();
+        ::rtl::OUString GetBookmarkCode();
         void SetBookmarkName(::rtl::OUString bookmarkName);
         void SetBookmarkType(::rtl::OUString bookmarkType);
+        void SetBookmarkCode(::rtl::OUString bookmarkCode);
         ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
@@ -533,15 +538,6 @@ private:
     WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
-#if 0
-    //#i3029# we are no longer importing editboxes as uno textboxes, using
-    //input fields instead for superior layout.
-    virtual sal_Bool Import(const com::sun::star::uno::Reference <
-        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
-        com::sun::star::uno::Reference <
-        com::sun::star::form::XFormComponent> &rFComp,
-        com::sun::star::awt::Size &rSz);
-#endif
 };
 
 class SwMSConvertControls: public SvxMSConvertOCXControls
@@ -563,12 +559,12 @@ class SwMSDffManager : public SvxMSDffManager
 private:
     SwWW8ImplReader& rReader;
     SvStream *pFallbackStream;
-    List *pOldEscherBlipCache;
+    std::map<sal_uInt32,ByteString> aOldEscherBlipCache;
 
     virtual sal_Bool GetOLEStorageName( long nOLEId, String& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
     virtual sal_Bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const;
-    // --> OD 2004-12-14 #i32596# - new parameter <_nCalledByGroup>, which
+    // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( long nOLEId,
                                   const Graphic& rGrf,
@@ -576,7 +572,6 @@ private:
                                   const Rectangle& rVisArea,
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
-    // <--
 
     //No copying
     SwMSDffManager(const SwMSDffManager&);
@@ -706,9 +701,7 @@ public:
     sal_uInt32 GetPageLeft() const;
     sal_uInt32 GetPageRight() const;
     sal_uInt32 GetPageWidth() const;
-    // --> OD 2007-07-03 #148498#
     sal_uInt32 GetWWPageTopMargin() const;
-    // <--
     bool empty() const { return maSegments.empty(); }
     sal_uInt32 GetTextAreaWidth() const;
 };
@@ -946,12 +939,8 @@ private:
     WW8PLCFMan* pPlcxMan;
     std::map<short, String> aLinkStringMap;
 
-    // --> OD 2010-05-06 #i103711#
-    std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet;
-    // <--
-    // --> OD 2010-05-11 #i105414#
-    std::set<const SwNode*> maTxtNodesHavingLeftIndentSet;
-    // <--
+    std::set<const SwNode*> maTxtNodesHavingFirstLineOfstSet; // #i103711#
+    std::set<const SwNode*> maTxtNodesHavingLeftIndentSet; // #i105414#
 
     WW8RStyle* pStyles;     // Pointer auf die Style-Einleseklasse
     SwFmt* pAktColl;        // gerade zu erzeugende Collection
@@ -1128,7 +1117,8 @@ private:
         pReffingStck = 0;
     }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
-    bool AddTextToParagraph(const String& sAddString);
+    void emulateMSWordAddTextToParagraph(const rtl::OUString& rAddString);
+    void simpleAddTextToParagraph(const String& rAddString);
     bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
@@ -1154,17 +1144,15 @@ private:
     void ImportTox( int nFldId, String aStr );
 
     void EndSprm( sal_uInt16 nId );
-    // --> OD 2010-05-06 #i103711#
-    // --> OD 2010-05-11 #i105414#
+    // #i103711#
+    // #i105414#
     void NewAttr( const SfxPoolItem& rAttr,
                   const bool bFirstLineOfStSet = false,
                   const bool bLeftIndentSet = false );
-    // <--
 
     bool GetFontParams(sal_uInt16, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
     bool SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums, sal_uInt16 nWhich);
-    sal_uInt16 CorrectResIdForCharset(CharSet nCharSet, sal_uInt16 nWhich);
     void ResetCharSetVars();
     void ResetCJKCharSetVars();
 
@@ -1178,12 +1166,9 @@ private:
     //border which has been previously set to a value and for which becoming
     //empty is valid. Set bCheBtwn to work with paragraphs that have a special
     //between paragraphs border
-#if 0
-    // #i20672# we can't properly support between lines so best to ignore
+
+    // Note #i20672# we can't properly support between lines so best to ignore
     // them for now
-    bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        sal_uInt8 nSetBorders=0xFF, bool bChkBtwn = false) const;
-#endif
     bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
         sal_uInt8 nSetBorders=0xFF) const;
     void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;
@@ -1196,10 +1181,10 @@ private:
     void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const;
 
     sal_Int32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
-        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, sal_Int32 &rLineWidth,
+        MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, sal_Int32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
-        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist );
+        MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType, Rectangle &rInnerDist );
     void AdjustLRWrapForWordMargins(const SvxMSDffImportRec &rRecord,
         SvxLRSpaceItem &rLR);
     void AdjustULWrapForWordMargins(const SvxMSDffImportRec &rRecord,
@@ -1413,11 +1398,10 @@ private:
 
     void StoreMacroCmds();
 
-    // --> OD 2008-04-10 #i84783#
+    // #i84783#
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
-    // <--
-
+    bool ReadGlobalTemplateSettings( const rtl::OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
     SwWW8ImplReader& operator=(const SwWW8ImplReader&);
@@ -1449,6 +1433,8 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_SubSuperProp(     sal_uInt16, const sal_uInt8*, short nLen );
     void Read_Underline(        sal_uInt16, const sal_uInt8*, short nLen );
     void Read_TxtColor(         sal_uInt16, const sal_uInt8*, short nLen );
+    void openFont(sal_uInt16 nFCode, sal_uInt16 nId);
+    void closeFont(sal_uInt16 nId);
     void Read_FontCode(         sal_uInt16, const sal_uInt8*, short nLen );
     void Read_FontSize(         sal_uInt16, const sal_uInt8*, short nLen );
     void Read_CharSet(sal_uInt16 , const sal_uInt8* pData, short nLen);
@@ -1581,6 +1567,8 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_OCX(WW8FieldDesc*, String&);
     eF_ResT Read_F_Hyperlink(WW8FieldDesc*, String& rStr);
         eF_ResT Read_F_Shape(WW8FieldDesc* pF, String& rStr);
+    eF_ResT Read_F_HTMLControl( WW8FieldDesc* pF, String& rStr);
+
 
     void DeleteFormImpl();
 
@@ -1617,13 +1605,12 @@ public:     // eigentlich private, geht aber leider nur public
 bool CanUseRemoteLink(const String &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
-// --> OD 2010-05-06 #i103711#
-// --> OD 2010-05-11 #i105414#
+// #i103711#
+// #i105414#
 void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const SwNumFmt &rFmt,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );
-// <--
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
@@ -1636,4 +1623,4 @@ bool RTLDrawingsHack(long &rLeft, long nWidth,
     SwTwips nPageRight, SwTwips nPageSize);
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

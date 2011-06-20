@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,10 +41,8 @@ class ThreadManager;
 
 /** class to manage threads in Writer using a <ThreadManager> instance
 
-    OD 2007-04-13 #i73788#
+    #i73788#
     Conforms the singleton pattern
-
-    @author OD
 */
 class SwThreadManager
     : private ::boost::noncopyable
@@ -67,14 +66,10 @@ class SwThreadManager
 
             Suspending the starting of further threads is sensible during the
             destruction of a Writer document.
-
-            @author OD
         */
         void SuspendStartingOfThreads();
 
         /** continues the starting of threads after it has been suspended
-
-            @author OD
         */
         void ResumeStartingOfThreads();
 
@@ -87,3 +82,5 @@ class SwThreadManager
 
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

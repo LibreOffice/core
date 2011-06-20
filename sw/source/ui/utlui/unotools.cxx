@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@
 #include <unotools.hrc>
 #include <unotools.hxx>
 #include <unoprnms.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>
@@ -62,21 +63,14 @@
 
 #include <unomid.h>
 
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 const sal_Char cFrameControl[] = "com.sun.star.frame.FrameControl";
 const sal_Char cFactory[] = "private:factory/swriter";
-/************************************************************************
-
-************************************************************************/
 
 sal_Bool SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_True;
 
-/* -----------------27.07.99 15:26-------------------
-
- --------------------------------------------------*/
 SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
@@ -103,7 +97,6 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
 
     // the controller is asynchronously set
     aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
-//      aLoadedTimer.SetTimeout(500);
     aLoadedTimer.SetTimeout(200);
 
     rWin.Enable(sal_False);
@@ -112,9 +105,6 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     aTopWindow.Show();
 }
 
-/* -----------------------------08.12.99 13:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
 {
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
@@ -125,16 +115,12 @@ void SwOneExampleFrame::CreateErrorMessage(Window* pParent)
         SwOneExampleFrame::bShowServiceNotAvailableMessage = sal_False;
     }
 }
-/* -----------------27.07.99 15:26-------------------
 
- --------------------------------------------------*/
 SwOneExampleFrame::~SwOneExampleFrame()
 {
     DisposeControl();
 }
-/* -----------------------------21.12.00 10:16--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SwOneExampleFrame::CreateControl()
 {
     if(_xControl.is())
@@ -159,7 +145,6 @@ void    SwOneExampleFrame::CreateControl()
 
             uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
             uno::Any aURL;
-            //
             // create new doc
             String sTempURL = C2S(cFactory);
             if(sArgumentURL.Len())
@@ -189,10 +174,6 @@ void    SwOneExampleFrame::CreateControl()
     }
 }
 
-
-/* -----------------------------21.12.00 10:16--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    SwOneExampleFrame::DisposeControl()
 {
     _xCursor = 0;
@@ -202,9 +183,7 @@ void    SwOneExampleFrame::DisposeControl()
     _xModel = 0;
     _xController = 0;
 }
-/* -----------------27.07.99 15:26-------------------
 
- --------------------------------------------------*/
 IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 {
     if(!_xControl.is())
@@ -247,32 +226,32 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
         if( !bIsInitialized )
         {
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_BREAKS              )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_DRAWINGS             )), aTrueSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_FIELD_COMMANDS       )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_GRAPHICS             )), aTrueSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS    )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_TEXT          )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_RULER          )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PARA_BREAKS          )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_PROTECTED_SPACES     )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SOFT_HYPHENS         )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_SPACES               )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABLES               )), aTrueSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABSTOPS             )), aFalseSet);
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_RULER          )), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_BREAKS)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_DRAWINGS)), aTrueSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_FIELD_COMMANDS)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_GRAPHICS)), aTrueSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_HIDDEN_TEXT)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_RULER)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_PARA_BREAKS)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_PROTECTED_SPACES)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_SOFT_HYPHENS)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_SPACES)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABLES)), aTrueSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_TABSTOPS)), aFalseSet);
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_RULER)), aFalseSet);
 
             if(0 ==(nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
             {
                 uno::Any aZoom;
                 aZoom <<= (sal_Int16)view::DocumentZoomType::PAGE_WIDTH_EXACT;
-                xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+                xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
             }
             else
             {
                 uno::Any aZoom;
                 aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
-                xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+                xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
 
                 sal_Int16 nZoomValue = 50;
                 if(EX_SHOW_BUSINESS_CARDS == nStyleFlags)
@@ -280,10 +259,10 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
                     nZoomValue = 80;
                 }
                 aZoom <<= nZoomValue;
-                xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
+                xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
             }
             // set onlinelayout property behind setting the zoom
-            xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_ONLINE_LAYOUT)),
+            xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_ONLINE_LAYOUT)),
                     (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) ? aTrueSet : aFalseSet );
             bIsInitialized = sal_True;
         }
@@ -293,7 +272,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         _xCursor = xText->createTextCursor();
         uno::Reference< beans::XPropertySet >  xCrsrProp(_xCursor, uno::UNO_QUERY);
         uno::Any aPageStyle = xCrsrProp->getPropertyValue(
-                                            C2U(SW_PROP_NAME_STR(UNO_NAME_PAGE_STYLE_NAME)));
+                                            rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_PAGE_STYLE_NAME)));
         OUString sPageStyle;
         aPageStyle >>= sPageStyle;
 
@@ -309,27 +288,26 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             uno::Reference< style::XStyle >  xPStyle;
             aPStyle >>= xPStyle;
             uno::Reference< beans::XPropertySet >  xPProp(xPStyle, uno::UNO_QUERY);
-            uno::Any aSize = xPProp->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SIZE)));
+            uno::Any aSize = xPProp->getPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SIZE)));
             awt::Size aPSize;
             aSize >>= aPSize;
             //TODO: set page width to card width
             aPSize.Width = 10000;
             aSize.setValue(&aPSize, ::getCppuType((awt::Size*)0));
-            xPProp->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SIZE)), aSize);
+            xPProp->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SIZE)), aSize);
 
             uno::Any aZero; aZero <<= (sal_Int32)0;
-            xPProp->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN)), aZero);
-            xPProp->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_RIGHT_MARGIN)), aZero);
+            xPProp->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LEFT_MARGIN)), aZero);
+            xPProp->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RIGHT_MARGIN)), aZero);
         }
 
         // can only be done here - the SFX changes the ScrollBar values
-        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_SCROLL_BAR )), aFalseSet);
-        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_SCROLL_BAR )), aFalseSet);
+        xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_HORI_SCROLL_BAR )), aFalseSet);
+        xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SHOW_VERT_SCROLL_BAR )), aFalseSet);
 
         if( aInitializedLink.IsSet() )
         {
             rWindow.Enable(sal_False, sal_True);
-            //rWindow.Enable(sal_True, sal_False);
                aInitializedLink.Call(this);
         }
 
@@ -364,9 +342,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         pTimer->Start();
     return 0;
 }
-/* -----------------------------27.12.99 09:59--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwOneExampleFrame::ClearDocument( sal_Bool bStartUpdateTimer )
 {
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
@@ -398,9 +374,7 @@ void SwOneExampleFrame::ClearDocument( sal_Bool bStartUpdateTimer )
         }
     }
 }
-/* -----------------------------15.12.99 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 static const sal_Int16 nZoomValues[] =
 {
     20,
@@ -409,7 +383,7 @@ static const sal_Int16 nZoomValues[] =
     75,
     100
 };
-//---------------------------------------------------------------------------
+
 #define ITEM_UP     100
 #define ITEM_DOWN   200
 #define ITEM_ZOOM   300
@@ -432,7 +406,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
-        uno::Any aZoom = xViewProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)));
+        uno::Any aZoom = xViewProps->getPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)));
         sal_Int16 nZoom = 0;
         aZoom >>= nZoom;
 
@@ -451,9 +425,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
     aPop.Execute( &aTopWindow, rPt );
 
 }
-/* -----------------------------15.12.99 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
@@ -465,9 +437,9 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
 
         uno::Any aZoom;
         aZoom <<= nZoom;
-        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
+        xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
         aZoom <<= (sal_Int16)view::DocumentZoomType::BY_VALUE;
-        xViewProps->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+        xViewProps->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
     }
     else if(ITEM_UP == nId || ITEM_DOWN == nId)
     {
@@ -480,18 +452,14 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
     }
     return 0;
 };
-/* -----------------------------15.12.99 10:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFrmCtrlWindow::SwFrmCtrlWindow(Window* pParent, WinBits nBits,
                                 SwOneExampleFrame*  pFrame) :
     Window(pParent, nBits),
     pExampleFrame(pFrame)
 {
 }
-/* -----------------------------15.12.99 09:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
 {
     switch ( rCEvt.GetCommand() )
@@ -510,9 +478,7 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
         default:;
     }
 }
-/* -----------------------------15.12.99 12:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 MenuResource::MenuResource(const ResId& rResId) :
     Resource(rResId),
     aMenuArray(ResId(1,*rResId.GetResMgr()))
@@ -520,3 +486,4 @@ MenuResource::MenuResource(const ResId& rResId) :
     FreeResource();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

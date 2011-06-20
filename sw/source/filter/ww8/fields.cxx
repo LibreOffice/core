@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include "fields.hxx"
-#include <errhdl.hxx>   //ASSERT (use our own ww header later for asserts)
-
+#include <osl/diagnose.h>
+#include <sal/macros.h>
 #include <stddef.h>
 
 namespace ww
@@ -39,8 +39,7 @@ namespace ww
     const char *GetEnglishFieldName(eField eIndex) throw()
     {
         //0 Signifies the field names I can't find.
-        // --> OD 2005-06-08 #i43956#
-        // field <eFOOTREF> = 5 should be mapped to "REF"
+        // #i43956# - field <eFOOTREF> = 5 should be mapped to "REF"
         static const char *aFieldNames[] =
         {
             /* 0*/  0,
@@ -142,11 +141,11 @@ namespace ww
         };
 
         size_t nIndex = static_cast<size_t>(eIndex);
-        if (nIndex >= sizeof(aFieldNames) / sizeof(aFieldNames[0]))
+        if (nIndex >= SAL_N_ELEMENTS(aFieldNames))
             eIndex = eNONE;
-        ASSERT(eIndex != eNONE, "Unknown WinWord Field, let cmc know");
+        OSL_ENSURE(eIndex != eNONE, "Unknown WinWord Field, let cmc know");
         return aFieldNames[eIndex];
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

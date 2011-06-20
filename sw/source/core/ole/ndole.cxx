@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,9 +48,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <unotools/configitem.hxx>
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
@@ -58,9 +57,6 @@
 #include <section.hxx>
 #include <cntfrm.hxx>
 #include <frmatr.hxx>
-#ifndef _DOCSH_HXX
-#include <docsh.hxx>
-#endif
 #include <ndole.hxx>
 
 #include <comphelper/classids.hxx>
@@ -68,9 +64,7 @@
 #include <sot/formats.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 using rtl::OUString;
 using namespace utl;
@@ -175,8 +169,8 @@ public:
     virtual             ~SwEmbedObjectLink();
 
     virtual void        Closed();
-    virtual void        DataChanged( const String& rMimeType,
-                                const uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     sal_Bool            Connect() { return GetRealObject() != NULL; }
 };
@@ -198,8 +192,8 @@ SwEmbedObjectLink::~SwEmbedObjectLink()
 
 // -----------------------------------------------------------------------------
 
-void SwEmbedObjectLink::DataChanged( const String& ,
-                                const uno::Any & )
+::sfx2::SvBaseLink::UpdateResult SwEmbedObjectLink::DataChanged(
+    const String&, const uno::Any& )
 {
     if ( !pOleNode->UpdateLinkURL_Impl() )
     {
@@ -228,8 +222,7 @@ void SwEmbedObjectLink::DataChanged( const String& ,
     }
 
     pOleNode->GetNewReplacement();
-    // Initiate repainting
-    // pObj->SetChanged();
+    return SUCCESS;
 }
 
 // -----------------------------------------------------------------------------
@@ -285,15 +278,10 @@ Graphic* SwOLENode::GetGraphic()
     return pGraphic;
 }
 
-Graphic* SwOLENode::GetHCGraphic()
-{
-    return aOLEObj.xOLERef.GetHCGraphic();
-}
-
 SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 {
     // OLE-Objecte vervielfaeltigen ??
-    ASSERT( sal_False, "OleNode: can't split." );
+    OSL_FAIL( "OleNode: can't split." );
     return this;
 }
 
@@ -301,7 +289,7 @@ SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
 
 sal_Bool SwOLENode::RestorePersistentData()
 {
-    DBG_ASSERT( aOLEObj.GetOleRef().is(), "No object to restore!" );
+    OSL_ENSURE( aOLEObj.GetOleRef().is(), "No object to restore!" );
     if ( aOLEObj.xOLERef.is() )
     {
         // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
@@ -310,7 +298,7 @@ sal_Bool SwOLENode::RestorePersistentData()
         {
             // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
             // diesem Dokument?
-            ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
+            OSL_ENSURE( !this, "warum wird hier eine DocShell angelegt?" );
             p = new SwDocShell( GetDoc(), SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
@@ -319,13 +307,13 @@ sal_Bool SwOLENode::RestorePersistentData()
         if ( xChild.is() )
             xChild->setParent( p->GetModel() );
 
-        DBG_ASSERT( aOLEObj.aName.Len(), "No object name!" );
+        OSL_ENSURE( aOLEObj.aName.Len(), "No object name!" );
         ::rtl::OUString aObjName;
         if ( !p->GetEmbeddedObjectContainer().InsertEmbeddedObject( aOLEObj.xOLERef.GetObject(), aObjName ) )
         {
             if ( xChild.is() )
                 xChild->setParent( 0 );
-            DBG_ERROR( "InsertObject failed" );
+            OSL_FAIL( "InsertObject failed" );
         }
         else
         {
@@ -347,7 +335,7 @@ sal_Bool SwOLENode::SavePersistentData()
 
 #if OSL_DEBUG_LEVEL > 0
         SfxObjectShell* p = GetDoc()->GetPersist();
-        DBG_ASSERT( p, "No document!" );
+        OSL_ENSURE( p, "No document!" );
         if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
@@ -388,7 +376,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
                                     SwGrfFmtColl* pGrfColl,
                                     SwAttrSet* pAutoAttr )
 {
-    ASSERT( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, xObj, pGrfColl, pAutoAttr );
@@ -410,7 +398,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
     const String &rName, sal_Int64 nAspect, SwGrfFmtColl* pGrfColl, SwAttrSet* pAutoAttr )
 {
-    ASSERT( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl,"SwNodes::MakeOLENode: Formatpointer ist 0." );
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, rName, nAspect, pGrfColl, pAutoAttr );
@@ -516,9 +504,6 @@ sal_Bool SwOLENode::IsOLEObjectDeleted() const
         if( p )     // muss da sein
         {
             return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
-            //SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
-            //if( aRef.Is() )
-            //    bRet = aRef->IsDeleted();
         }
     }
     return bRet;
@@ -638,7 +623,7 @@ void SwOLENode::CheckFileLink_Impl()
     }
 }
 
-// --> OD 2009-03-05 #i99665#
+// #i99665#
 bool SwOLENode::IsChart() const
 {
     bool bIsChart( false );
@@ -653,7 +638,6 @@ bool SwOLENode::IsChart() const
 
     return bIsChart;
 }
-// <--
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     pOLENd( 0 ),
@@ -696,7 +680,7 @@ SwOLEObj::~SwOLEObj()
 
 #if OSL_DEBUG_LEVEL > 0
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
-        DBG_ASSERT( p, "No document!" );
+        OSL_ENSURE( p, "No document!" );
         if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
@@ -749,7 +733,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         {
             // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
             // diesem Dokument?
-            ASSERT( !this, "warum wird hier eine DocShell angelegt?" );
+            OSL_ENSURE( !this, "warum wird hier eine DocShell angelegt?" );
             p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
             p->DoInitNew( NULL );
         }
@@ -761,7 +745,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
             xChild->setParent( p->GetModel() );
         if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( xOLERef.GetObject(), aObjName ) )
         {
-            DBG_ERROR( "InsertObject failed" );
+            OSL_FAIL( "InsertObject failed" );
         if ( xChild.is() )
             xChild->setParent( 0 );
         }
@@ -784,10 +768,10 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
     if( !xOLERef.is() )
     {
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
-        ASSERT( p, "kein SvPersist vorhanden" );
+        OSL_ENSURE( p, "kein SvPersist vorhanden" );
 
         uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
-        ASSERT( !xOLERef.is(), "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" )
+        OSL_ENSURE( !xOLERef.is(), "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" );
 
         if ( !xObj.is() )
         {
@@ -840,9 +824,6 @@ svt::EmbeddedObjectRef& SwOLEObj::GetObject()
 sal_Bool SwOLEObj::UnloadObject()
 {
     sal_Bool bRet = sal_True;
-    //Nicht notwendig im Doc DTor (MM)
-    //ASSERT( pOLERef && pOLERef->Is() && 1 < (*pOLERef)->GetRefCount(),
-    //        "Falscher RefCount fuers Unload" );
     if ( pOLENd )
     {
         const SwDoc* pDoc = pOLENd->GetDoc();
@@ -880,7 +861,7 @@ sal_Bool SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, 
                         if ( xPers.is() )
                             xPers->storeOwn();
                         else {
-                            DBG_ERROR("Modified object without persistance in cache!");
+                            OSL_FAIL("Modified object without persistance in cache!");
                         }
                     }
 
@@ -921,7 +902,7 @@ String SwOLEObj::GetDescription()
 
 SwOLELRUCache::SwOLELRUCache()
     : SvPtrarr( 64, 16 ),
-    utl::ConfigItem( OUString::createFromAscii( "Office.Common/Cache" )),
+    utl::ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Cache"))),
     nLRU_InitSize( 20 ),
     bInUnload( sal_False )
 {
@@ -933,7 +914,7 @@ uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
 {
     Sequence< OUString > aNames( 1 );
     OUString* pNames = aNames.getArray();
-    pNames[0] = OUString::createFromAscii( "Writer/OLE_Objects" );
+    pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/OLE_Objects"));
     return aNames;
 }
 
@@ -951,13 +932,11 @@ void SwOLELRUCache::Load()
     Sequence< OUString > aNames( GetPropertyNames() );
     Sequence< Any > aValues = GetProperties( aNames );
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
+    OSL_ENSURE( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
     if( aValues.getLength() == aNames.getLength() && pValues->hasValue() )
     {
         sal_Int32 nVal = 0;
         *pValues >>= nVal;
-        //if( 20 > nVal )
-        //    nVal = 20;
 
         {
             if( nVal < nLRU_InitSize )
@@ -1015,3 +994,4 @@ void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
         DELETEZ( pOLELRU_Cache );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

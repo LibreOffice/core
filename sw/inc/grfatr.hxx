@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,14 +28,14 @@
 #ifndef _GRFATR_HXX
 #define _GRFATR_HXX
 
-#include <hintids.hxx>      // fuer die WhichIds @@@ must be included first @@@
+#include <hintids.hxx>      // For the WhichIds @@@ must be included first @@@
 #include <tools/gen.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
-#include <swatrset.hxx>     // fuer inlines
-#include <format.hxx>       // fuer inlines
+#include <swatrset.hxx>     // For inlines.
+#include <format.hxx>       // For inlines.
 
 /******************************************************************************
  *  class SwMirrorGrf
@@ -52,7 +53,7 @@ RES_MIRROR_GRAPH_END
 
 class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem
 {
-    sal_Bool bGrfToggle; // auf geraden Seiten Grafiken spiegeln
+    sal_Bool bGrfToggle; // Flip graphics on even pages.
 
 public:
     SwMirrorGrf( MirrorGraph eMiro = RES_MIRROR_GRAPH_DONT )
@@ -63,10 +64,10 @@ public:
         bGrfToggle( rMirrorGrf.IsGrfToggle() )
     {}
 
-    // pure virtual-Methoden von SfxPoolItem
+    // pure virtual methods of SfxPoolItem
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 
-    // pure virtual-Methiden von SfxEnumItem
+    // pure virtual methods of SfxEnumItem
     virtual sal_uInt16          GetValueCount() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -75,9 +76,9 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 );
 
     inline SwMirrorGrf& operator=( const SwMirrorGrf& rMirrorGrf )
@@ -104,7 +105,7 @@ public:
     SwCropGrf(  sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
 };
 
@@ -119,7 +120,7 @@ public:
         : SfxUInt16Item( RES_GRFATR_ROTATION, nVal ), aUnrotatedSize( rSz )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -127,9 +128,9 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 );
 
     void SetUnrotatedSize( const Size& rSz )        { aUnrotatedSize = rSz; }
@@ -143,7 +144,7 @@ public:
         : SfxInt16Item( RES_GRFATR_LUMINANCE, nVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -159,7 +160,7 @@ public:
         : SfxInt16Item( RES_GRFATR_CONTRAST, nVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -176,7 +177,7 @@ protected:
     {}
 
 public:
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -227,7 +228,7 @@ public:
             return *this;
         }
 
-    // pure virtual-Methiden von SfxEnumItem
+    // pure virtual methods from SfxEnumItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -236,9 +237,9 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 );
 
 
@@ -253,7 +254,7 @@ public:
         : SfxBoolItem( RES_GRFATR_INVERT, bVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -269,16 +270,16 @@ public:
         : SfxByteItem( RES_GRFATR_TRANSPARENCY, nVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 );
 };
 
@@ -289,10 +290,10 @@ public:
         : SfxEnumItem( RES_GRFATR_DRAWMODE, nMode )
     {}
 
-    // pure virtual-Methoden von SfxPoolItem
+    // pure virtual methods of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    // pure virtual-Methiden von SfxEnumItem
+    // pure virtual methods of SfxEnumItem
     virtual sal_uInt16          GetValueCount() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -300,16 +301,16 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal,
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal,
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal,
                                         sal_uInt8 nMemberId = 0 );
 };
 
 
 
 /******************************************************************************
- *  Implementierung der GrafikAttribut Methoden vom SwAttrSet
+ *  Implementation of graphics attributes methods of SwAttr
  ******************************************************************************/
 
 inline const SwMirrorGrf &SwAttrSet::GetMirrorGrf(sal_Bool bInP) const
@@ -338,7 +339,7 @@ inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(sal_Bool bInP) const
     { return (const SwDrawModeGrf&)Get( RES_GRFATR_DRAWMODE,bInP); }
 
 /******************************************************************************
- *  Implementierung der GrafikAttribut Methoden vom SwFmt
+ *  Implementation of graphics attributes methods of SwFmt
  ******************************************************************************/
 
 inline const SwMirrorGrf &SwFmt::GetMirrorGrf(sal_Bool bInP) const
@@ -368,3 +369,5 @@ inline const SwDrawModeGrf &SwFmt::GetDrawModeGrf(sal_Bool bInP) const
 
 
 #endif  // _GRFATR_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

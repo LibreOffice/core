@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,8 +69,8 @@ friend class InputEdit;
     String          aAktTableName, sOldFml;
     sal_Int32       m_nActionCount;
 
-    sal_Bool        bFirst : 1;  //Initialisierungen beim ersten Aufruf
-    sal_Bool        bActive : 1; //fuer Hide/Show beim Dokumentwechsel
+    sal_Bool        bFirst : 1;  // initialisations at first call
+    sal_Bool        bActive : 1; // for hide/show when switching documents
     sal_Bool        bIsTable : 1;
     sal_Bool        bDelSel : 1;
     bool            m_bDoesUndo : 1;
@@ -131,3 +132,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

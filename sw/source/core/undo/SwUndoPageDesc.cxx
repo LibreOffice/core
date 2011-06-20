@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,12 +41,12 @@
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <ndindex.hxx>
 #endif
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 // Pure debug help function to have a quick look at the header/footer attributes.
 void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
 {
@@ -53,12 +54,6 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
     sal_uLong nHeaderLeft = ULONG_MAX;
     sal_uLong nFooterMaster = ULONG_MAX;
     sal_uLong nFooterLeft = ULONG_MAX;
-    int nHeaderCount = 0;
-    int nLeftHeaderCount = 0;
-    int nFooterCount = 0;
-    int nLeftFooterCount = 0;
-    bool bSharedHeader = false;
-    bool bSharedFooter = false;
 
     SwFmtHeader& rHead = (SwFmtHeader&)rPageDesc.GetMaster().GetHeader();
     SwFmtFooter& rFoot = (SwFmtFooter&)rPageDesc.GetMaster().GetFooter();
@@ -69,18 +64,15 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pHeaderFmt = rHead.GetHeaderFmt();
         if( pHeaderFmt )
         {
-            nHeaderCount = pHeaderFmt->GetClientCount();
             const SwFmtCntnt* pCntnt = &pHeaderFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nHeaderMaster = pCntnt->GetCntntIdx()->GetIndex();
             else
                 nHeaderMaster = 0;
         }
-        bSharedHeader = rPageDesc.IsHeaderShared();
         SwFrmFmt* pLeftHeaderFmt = rLeftHead.GetHeaderFmt();
         if( pLeftHeaderFmt )
         {
-            nLeftHeaderCount = pLeftHeaderFmt->GetClientCount();
             const SwFmtCntnt* pLeftCntnt = &pLeftHeaderFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nHeaderLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
@@ -93,18 +85,15 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
         SwFrmFmt* pFooterFmt = rFoot.GetFooterFmt();
         if( pFooterFmt )
         {
-            nFooterCount = pFooterFmt->GetClientCount();
             const SwFmtCntnt* pCntnt = &pFooterFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nFooterMaster = pCntnt->GetCntntIdx()->GetIndex();
             else
                 nFooterMaster = 0;
         }
-        bSharedFooter = rPageDesc.IsFooterShared();
         SwFrmFmt* pLeftFooterFmt = rLeftFoot.GetFooterFmt();
         if( pLeftFooterFmt )
         {
-            nLeftFooterCount = pLeftFooterFmt->GetClientCount();
             const SwFmtCntnt* pLeftCntnt = &pLeftFooterFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nFooterLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
@@ -125,9 +114,9 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
               UNDO_CHANGE_PAGEDESC ),
       aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc), bExchange( false )
 {
-    ASSERT(0 != pDoc, "no document?");
+    OSL_ENSURE(0 != pDoc, "no document?");
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     DebugHeaderFooterContent( (SwPageDesc&)aOld );
     DebugHeaderFooterContent( (SwPageDesc&)aNew );
 #endif
@@ -190,7 +179,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         // After this exchange method the old page description will point to zero,
         // the new one will point to the node position of the original content nodes.
         ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         DebugHeaderFooterContent( (SwPageDesc&)aOld );
         DebugHeaderFooterContent( (SwPageDesc&)aNew );
 #endif
@@ -204,7 +193,7 @@ SwUndoPageDesc::~SwUndoPageDesc()
 
 void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest )
 {
-    ASSERT( bExchange, "You shouldn't do that." );
+    OSL_ENSURE( bExchange, "You shouldn't do that." );
     const SwFmtHeader& rDestHead = rDest.GetMaster().GetHeader();
     const SwFmtHeader& rSourceHead = rSource.GetMaster().GetHeader();
     if( rDestHead.IsActive() )
@@ -215,7 +204,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrmFmt* pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const SwFmtCntnt& rSourceCntnt = rSourceHead.GetHeaderFmt()->GetCntnt();
         (void)rSourceCntnt;
         const SwFmtCntnt& rDestCntnt = rDestHead.GetHeaderFmt()->GetCntnt();
@@ -239,7 +228,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             const SwFmtCntnt& rSourceCntnt1 = rSourceLeftHead.GetHeaderFmt()->GetCntnt();
             (void)rSourceCntnt1;
             const SwFmtCntnt& rDestCntnt1 = rDest.GetLeft().GetHeader().GetHeaderFmt()->GetCntnt();
@@ -266,7 +255,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         pNewFmt->SetFmtAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
         delete pNewItem;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         const SwFmtCntnt& rFooterSourceCntnt = rSourceFoot.GetFooterFmt()->GetCntnt();
         (void)rFooterSourceCntnt;
         const SwFmtCntnt& rFooterDestCntnt = rDestFoot.GetFooterFmt()->GetCntnt();
@@ -281,7 +270,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         if( !rDest.IsFooterShared() )
         {
             const SwFmtFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             const SwFmtCntnt& rFooterSourceCntnt2 = rSourceLeftFoot.GetFooterFmt()->GetCntnt();
             const SwFmtCntnt& rFooterDestCntnt2 =
                 rDest.GetLeft().GetFooter().GetFooterFmt()->GetCntnt();
@@ -335,7 +324,7 @@ SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
     : SwUndo(UNDO_CREATE_PAGEDESC), pDesc(pNew), aNew(*pNew, _pDoc),
       pDoc(_pDoc)
 {
-    ASSERT(0 != pDoc, "no document?");
+    OSL_ENSURE(0 != pDoc, "no document?");
 }
 
 SwUndoPageDescCreate::~SwUndoPageDescCreate()
@@ -389,7 +378,7 @@ SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
                                            SwDoc * _pDoc)
     : SwUndo(UNDO_DELETE_PAGEDESC), aOld(_aOld, _pDoc), pDoc(_pDoc)
 {
-    ASSERT(0 != pDoc, "no document?");
+    OSL_ENSURE(0 != pDoc, "no document?");
 }
 
 SwUndoPageDescDelete::~SwUndoPageDescDelete()
@@ -426,3 +415,5 @@ SwRewriter SwUndoPageDescDelete::GetRewriter() const
 
     return aResult;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

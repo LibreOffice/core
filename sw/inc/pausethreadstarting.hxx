@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 /** Helper class to pause starting of threads during existence of an instance
     of this class
 
-    OD 2007-03-16 #i73788#
+    #i73788#
 
     @author OD
 */
@@ -46,3 +47,5 @@ class SwPauseThreadStarting
         bool mbPausedThreadStarting;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

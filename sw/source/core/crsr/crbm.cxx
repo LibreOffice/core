@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -251,10 +252,12 @@ bool SwCrsrShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     // watch Crsr-Moves
     CrsrStateHelper aCrsrSt(*this);
     aCrsrSt.SetCrsrToMark(pMark);
-    //aCrsrSt.m_pCrsr->GetPoint()->nContent--;
-    //aCrsrSt.m_pCrsr->GetMark()->nContent++;
+    aCrsrSt.m_pCrsr->GetPoint()->nContent++;
+    aCrsrSt.m_pCrsr->GetMark()->nContent--;
     if(aCrsrSt.RollbackIfIllegal()) return false;
 
     UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return true;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,25 +33,17 @@
 #include <svx/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/svxenum.hxx>
 #include <editeng/svxacorr.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _REGION_HXX //autogen
 #include <vcl/region.hxx>
-#endif
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <vcl/window.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <viewopt.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <swrect.hxx>
 #include <crstate.hxx>
 #include <svtools/colorcfg.hxx>
@@ -59,7 +52,7 @@
 
 #include <editeng/acorrcfg.hxx>
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 sal_Bool   SwViewOption::bTest9 = sal_False;        //DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
@@ -79,9 +72,10 @@ Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aPageBreakColor(COL_BLUE);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
+Color SwViewOption::aShadowColor(COL_GRAY);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
-sal_uInt16 SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
+sal_uInt16 SwViewOption::nPixelTwips = 0;   // one pixel on the screen
 
 
 #define LINEBREAK_SIZE 12, 8
@@ -92,11 +86,7 @@ sal_uInt16 SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
 #define MIN_TABWIDTH        120
 #define MIN_TABHEIGHT       200
 
-static const char __FAR_DATA aPostItStr[] = "  ";
-
-/*************************************************************************
- *                    SwViewOption::IsEqualFlags()
- *************************************************************************/
+static const char aPostItStr[] = "  ";
 
 sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {
@@ -114,8 +104,8 @@ sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
-#ifdef DBG_UTIL
-            // korrespondieren zu den Angaben in ui/config/cfgvw.src
+#if OSL_DEBUG_LEVEL > 1
+            // correspond to the statements in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
             && bTest2 == rOpt.IsTest2()
             && bTest3 == rOpt.IsTest3()
@@ -128,10 +118,6 @@ sal_Bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 #endif
             ;
 }
-
-/*************************************************************************
- *                    SwViewOption::DrawRect()
- *************************************************************************/
 
 void SwViewOption::DrawRect( OutputDevice *pOut,
                              const SwRect &rRect, long nCol ) const
@@ -148,10 +134,6 @@ void SwViewOption::DrawRect( OutputDevice *pOut,
         DrawRectPrinter( pOut, rRect );
 }
 
-/*************************************************************************
- *                    SwViewOption::DrawRectPrinter()
- *************************************************************************/
-
 void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
                                     const SwRect &rRect ) const
 {
@@ -164,19 +146,11 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
     pOut->SetLineColor( aOldColor );
 }
 
-/*************************************************************************
- *                    SwViewOption::GetPostItsWidth()
- *************************************************************************/
-
 sal_uInt16 SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
 {
-    ASSERT( pOut, "no Outdev" );
+    OSL_ENSURE( pOut, "no Outdev" );
     return sal_uInt16(pOut->GetTextWidth( String::CreateFromAscii(aPostItStr )));
 }
-
-/*************************************************************************
- *                    SwViewOption::PaintPostIts()
- *************************************************************************/
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bool bIsScript ) const
 {
@@ -184,7 +158,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
     {
             Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
-        // Wir ziehen ueberall zwei Pixel ab, damit es schick aussieht
+        // to make it look nice, we subtract two pixels everywhere
         sal_uInt16 nPix = GetPixelTwips() * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
@@ -196,16 +170,8 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
     }
 }
 
-
-/*************************************************************************
-|*
-|*  ViewOption::ViewOption()
-|*
-|*  Letzte Aenderung    MA 04. Aug. 93
-|*
-|*************************************************************************/
-
 SwViewOption::SwViewOption() :
+    sSymbolFont( RTL_CONSTASCII_USTRINGPARAM( "symbol" ) ),
     aRetoucheColor( COL_TRANSPARENT ),
     mnViewLayoutColumns( 0 ),
     nPagePrevRow( 1 ),
@@ -220,13 +186,12 @@ SwViewOption::SwViewOption() :
     mbBookView(sal_False),
     mbViewLayoutBookMode(sal_False),
     bShowPlaceHolderFields( sal_True ),
-
     nZoom( 100 ),
     eZoom( SVX_ZOOM_PERCENT ),
     nTblDest(TBL_DEST_CELL)
 {
-    // Initialisierung ist jetzt etwas einfacher
-    // alle Bits auf 0
+    // Initialisation is a little simpler now
+    // all Bits to 0
     nCoreOptions =  VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
                     VIEWOPT_1_REF |
                     VIEWOPT_1_GRAPHIC |
@@ -246,8 +211,8 @@ SwViewOption::SwViewOption() :
 
     bIdle = true;
 
-#ifdef DBG_UTIL
-    // korrespondieren zu den Angaben in ui/config/cfgvw.src
+#if OSL_DEBUG_LEVEL > 1
+    // correspond to the statements in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = sal_False;
 #endif
@@ -257,9 +222,8 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
     bReadonly = sal_False;
     bSelectionInReadonly = sal_False;
-    // --> FME 2004-06-29 #114856# Formular view
+    // #114856# Formular view
     mbFormView       = rVOpt.mbFormView;
-    // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
@@ -283,7 +247,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;
@@ -299,9 +263,8 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 
 SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
-    // --> DVO FME 2004-06-29 #114856# Formular view
+    // #114856# Formular view
     mbFormView       = rVOpt.mbFormView   ;
-    // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
     mnViewLayoutColumns = rVOpt.mnViewLayoutColumns ;
@@ -325,7 +288,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;
@@ -344,14 +307,6 @@ SwViewOption::~SwViewOption()
 {
 }
 
-/*************************************************************************
-|*
-|*  ViewOption::Init()
-|*
-|*  Letzte Aenderung    MA 04. Aug. 93
-|*
-|*************************************************************************/
-
 void SwViewOption::Init( Window *pWin )
 {
     if( !nPixelTwips && pWin )
@@ -362,13 +317,9 @@ void SwViewOption::Init( Window *pWin )
 
 sal_Bool SwViewOption::IsAutoCompleteWords() const
 {
-    const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
-    return /*rFlags.bAutoCompleteWords &&*/ rFlags.bAutoCmpltCollectWords;
+    const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
+    return rFlags.bAutoCmpltCollectWords;
 }
-
-/*************************************************************************/
-/*                                                                       */
-/*************************************************************************/
 
 AuthorCharAttr::AuthorCharAttr() :
     nItemId (SID_ATTR_CHAR_UNDERLINE),
@@ -377,18 +328,14 @@ AuthorCharAttr::AuthorCharAttr() :
 {
 }
 
-/*-----------------07.01.97 13.50-------------------
-
---------------------------------------------------*/
-
 sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
 {
     sal_uInt16 nRet = 0;
     if(!pShell || PTR_CAST(SwWebDocShell, pShell))
     {
         nRet = HTMLMODE_ON;
-        SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
-        switch ( pHtmlOpt->GetExportMode() )
+        SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+        switch ( rHtmlOpt.GetExportMode() )
         {
             case HTML_CFG_MSIE_40:
                 nRet |= HTMLMODE_PARA_BORDER|HTMLMODE_SMALL_CAPS|
@@ -414,122 +361,92 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
     }
     return nRet;
 }
-/* -----------------------------24.04.2002 10:20------------------------------
 
- ---------------------------------------------------------------------------*/
 Color&   SwViewOption::GetDocColor()
 {
     return aDocColor;
 }
-/* -----------------------------23.04.2002 17:18------------------------------
 
- ---------------------------------------------------------------------------*/
 Color&   SwViewOption::GetDocBoundariesColor()
 {
     return aDocBoundColor;
 }
-/* -----------------------------23.04.2002 17:53------------------------------
 
- ---------------------------------------------------------------------------*/
 Color&   SwViewOption::GetObjectBoundariesColor()
 {
     return aObjectBoundColor;
 }
-/* -----------------------------24.04.2002 10:41------------------------------
 
- ---------------------------------------------------------------------------*/
 Color& SwViewOption::GetAppBackgroundColor()
 {
     return aAppBackgroundColor;
 }
-/*-- 24.04.2002 10:50:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetTableBoundariesColor()
 {
     return aTableBoundColor;
 }
-/*-- 24.04.2002 10:50:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetIndexShadingsColor()
 {
     return aIndexShadingsColor;
 }
-/*-- 24.04.2002 10:50:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetLinksColor()
 {
     return aLinksColor;
 }
-/*-- 24.04.2002 10:50:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetVisitedLinksColor()
 {
     return aVisitedLinksColor;
 }
-/*-- 24.04.2002 10:50:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetDirectCursorColor()
 {
     return aDirectCursorColor;
 }
-/*-- 24.04.2002 10:50:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetTextGridColor()
 {
     return aTextGridColor;
 }
-/*-- 24.04.2002 10:50:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetSpellColor()
 {
     return aSpellColor;
 }
-/*-- 24.04.2007 10:50:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetSmarttagColor()
 {
     return aSmarttagColor;
 }
-/*-- 06.12.2002 10:50:11---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetShadowColor()
+{
+    return aShadowColor;
+}
+
 Color&   SwViewOption::GetFontColor()
 {
     return aFontColor;
 }
-/*-- 24.04.2002 10:50:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetFieldShadingsColor()
 {
     return aFieldShadingsColor;
 }
-/*-- 24.04.2002 10:50:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetSectionBoundColor()
 {
     return aSectionBoundColor;
 }
-/* -----------------------------2002/07/31 14:00------------------------------
 
- ---------------------------------------------------------------------------*/
 Color& SwViewOption::GetPageBreakColor()
 {
     return aPageBreakColor;
 }
 
-/* -----------------------------23.04.2002 17:41------------------------------
-
- ---------------------------------------------------------------------------*/
 void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 {
     aDocColor.SetColor(rConfig.GetColorValue(svtools::DOCCOLOR).nColor);
@@ -567,6 +484,11 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_VISITED_LINKS;
 
+    aValue = rConfig.GetColorValue(svtools::SHADOWCOLOR);
+    aShadowColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_SHADOW;
+
     aDirectCursorColor.SetColor(rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor);
 
     aTextGridColor.SetColor(rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor);
@@ -592,9 +514,7 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }
-/* -----------------------------23.04.2002 17:48------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bSaveInConfig )
 {
     if(bSet)
@@ -620,6 +540,7 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bS
             { VIEWOPT_VISITED_LINKS      ,   svtools::LINKSVISITED },
             { VIEWOPT_FIELD_SHADINGS     ,   svtools::WRITERFIELDSHADINGS },
             { VIEWOPT_SECTION_BOUNDARIES ,   svtools::WRITERSECTIONBOUNDARIES },
+            { VIEWOPT_SHADOW             ,   svtools::SHADOWCOLOR },
             { 0                          ,   svtools::ColorConfigEntryCount }
         };
         sal_uInt16 nPos = 0;
@@ -635,11 +556,10 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bS
         }
     }
 }
-/* -----------------------------24.04.2002 10:42------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
 {
     return 0 != (nAppearanceFlags & nFlag);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

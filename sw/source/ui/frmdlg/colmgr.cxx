@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,13 +39,10 @@
 #include "colmgr.hxx"
 
 
-// PRIVATE METHODES ------------------------------------------------------
+// private methods
 /*------------------------------------------------------------------------
- Beschreibung:  Spaltenbreite auf aktuelle Breite einstellen
+ Description:   set column width to current width
 ------------------------------------------------------------------------*/
-
-
-
 void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 {
     const sal_uInt16 nCount = rCol.GetColumns().Count();
@@ -56,22 +54,16 @@ void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
     rCol.SetWishWidth(nWidth);
 }
 
-
-// PUBLIC METHODES -------------------------------------------------------
+// public methods
 /*------------------------------------------------------------------------
- Beschreibung:  Setzen Spaltenanzahl und Gutterwidth
+ Description:   set column quantity and Gutterwidth
 ------------------------------------------------------------------------*/
-
-
-
 void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16  nGutterWidth)
 {
     aFmtCol.Init(nCount, nGutterWidth, nWidth);
     aFmtCol.SetWishWidth(nWidth);
     aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
 }
-
-
 
 sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
 {
@@ -80,17 +72,12 @@ sal_uInt16 SwColMgr::GetGutterWidth( sal_uInt16 nPos ) const
         nRet = GetCount() > 1 ? aFmtCol.GetGutterWidth() : DEF_GUTTER_WIDTH;
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         const SwColumns& rCols = aFmtCol.GetColumns();
         nRet = rCols.GetObject(nPos)->GetRight() + rCols.GetObject(nPos + 1)->GetLeft();
     }
     return nRet;
 }
-
-/*-----------------22.10.96 14.28-------------------
-
---------------------------------------------------*/
-
 
 void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 {
@@ -98,7 +85,7 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
         aFmtCol.SetGutterWidth(nGutterWidth, nWidth);
     else
     {
-        DBG_ASSERT(nPos < GetCount() - 1, "Spalte ueberindiziert" );
+        OSL_ENSURE(nPos < GetCount() - 1, "Spalte ueberindiziert" );
         SwColumns& rCols = aFmtCol.GetColumns();
         sal_uInt16 nGutterWidth2 = nGutterWidth / 2;
         rCols.GetObject(nPos)->SetRight(nGutterWidth2);
@@ -107,50 +94,38 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Hoehe Trennlinie
+ Description:   height seperation line
 ------------------------------------------------------------------------*/
-
-
-
 short SwColMgr::GetLineHeightPercent() const
 {
     return (short)aFmtCol.GetLineHeight();
 }
 
-
-
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
-    ASSERT(nPercent <= 100, LineHeight darf nur bis 100 % gross  sein);
+    OSL_ENSURE(nPercent <= 100, "line height may only be 100 \%");
     aFmtCol.SetLineHeight((sal_uInt8)nPercent);
 }
+
 /*------------------------------------------------------------------------
- Beschreibung:  Spaltenbreite
+ Description:   column width
 ------------------------------------------------------------------------*/
-
-
-
 sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
 {
-    ASSERT(nIdx < GetCount(), Spaltenarray ueberindiziert.);
+    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     return aFmtCol.CalcPrtColWidth(nIdx, nWidth);
 }
 
-
-
 void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 {
-    ASSERT(nIdx < GetCount(), Spaltenarray ueberindiziert.);
+    OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
     aFmtCol.GetColumns()[nIdx]->SetWishWidth(nWd);
 
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Groesse neu setzen
+    Description:    newly set size
  --------------------------------------------------------------------*/
-
-
-
 void SwColMgr::SetActualWidth(sal_uInt16 nW)
 {
     nWidth = nW;
@@ -158,11 +133,8 @@ void SwColMgr::SetActualWidth(sal_uInt16 nW)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: ctor
+    Description: ctor
  --------------------------------------------------------------------*/
-
-
-
 SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
     aFmtCol((const SwFmtCol&)rSet.Get(RES_COL)),
     nWidth(nActWidth)
@@ -179,13 +151,15 @@ SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
     ::FitToActualSize(aFmtCol, nWidth);
 }
 
+SwColMgr::~SwColMgr()
+{
+}
 
+void SwColMgr::SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nLWidth, const Color& rCol)
+{
+    aFmtCol.SetLineStyle(eStyle);
+    aFmtCol.SetLineWidth(nLWidth);
+    aFmtCol.SetLineColor(rCol);
+}
 
-
-SwColMgr::~SwColMgr() {}
-
-
-
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

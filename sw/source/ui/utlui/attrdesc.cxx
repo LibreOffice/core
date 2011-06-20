@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,9 +61,7 @@
 #include <charfmt.hxx>
 #include <fmtcol.hxx>
 #include <tox.hxx>
-#ifndef _ATTRDESC_HRC
 #include <attrdesc.hrc>
-#endif
 #include <fmtftntx.hxx>
 #include <fmtfollowtextflow.hxx>
 
@@ -72,14 +71,14 @@ using namespace com::sun::star;
 
 TYPEINIT2(SwFmtCharFmt,SfxPoolItem,SwClient);
 
-// erfrage die Attribut-Beschreibung
+// query the attribute descriptions
 void SwAttrSet::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric,
         SfxMapUnit ePresMetric,
         String &rText ) const
 {
-static sal_Char __READONLY_DATA sKomma[] = ", ";
+static sal_Char const sKomma[] = ", ";
 
     rText.Erase();
     String aStr;
@@ -912,20 +911,12 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
                 switch( GetValue() )
                 {
                 case FTNEND_ATPGORDOCEND:
-//                  rText = SW_RESSTR( STR_LAYOUT_FTN );
                     break;
 
                 case FTNEND_ATTXTEND:
                     break;
 
                 case FTNEND_ATTXTEND_OWNNUMSEQ:
-                    {
-//  String      sPrefix;
-//  String      sSuffix;
-//  SvxNumberType   aFmt;
-//  sal_uInt16      nOffset;
-//                      rText +=
-                    }
                     break;
                 }
             }
@@ -1063,20 +1054,6 @@ SfxItemPresentation SwHeaderAndFooterEatSpacingItem::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-//    rText.Erase();
-//    switch ( ePres )
-//    {
-//        case SFX_ITEM_PRESENTATION_NONE:
-//            rText.Erase();
-//            break;
-//        case SFX_ITEM_PRESENTATION_NAMELESS:
-//        case SFX_ITEM_PRESENTATION_COMPLETE:
-//        {
-//            if ( GetValue() )
-//                rText = SW_RESSTR(STR_EDIT_IN_READONLY);
-//            return ePres;
-//        }
-//    }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1348,3 +1325,4 @@ SfxItemPresentation SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation eP
     return ePres;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

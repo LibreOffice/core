@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,7 +47,6 @@
 #include <shellio.hxx>
 #include <poolfmt.hxx>
 #include <SwXMLTextBlocks.hxx>
-#include <errhdl.hxx>
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
 #include <swerror.h>
@@ -101,7 +101,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         }
         catch( const uno::Exception& )
         {
-            DBG_ERROR("exception while creating AutoText storage");
+            OSL_FAIL("exception while creating AutoText storage");
         }
     }
     InitBlockMode ( refStg );
@@ -204,7 +204,7 @@ sal_uLong SwXMLTextBlocks::Delete( sal_uInt16 n )
 
 sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, const String& )
 {
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
+    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
     String aOldName (aNames[ nIdx ]->aPackageName);
@@ -255,7 +255,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     String sDestShortName( GetPackageName (nIndex) );
     sal_uInt16 nIdx = 0;
 
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
+    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return ERR_SWG_WRITE_ERROR;
 
@@ -277,10 +277,6 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
     {
         uno::Reference < embed::XStorage > rSourceRoot = xBlkRoot->openStorageElement( aGroup, embed::ElementModes::READ );
         uno::Reference < embed::XStorage > rDestRoot = ((SwXMLTextBlocks&)rDestImp).xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
-        //if(!rSourceRoot.Is())
-        //    nError = ERR_SWG_READ_ERROR;
-        //else
-        //{
         rSourceRoot->copyToStorage( rDestRoot );
     }
     catch ( uno::Exception& )
@@ -288,26 +284,9 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
         nError = ERR_SWG_WRITE_ERROR;
     }
 
-    /* I think this should work now that text only blocks are in sub-storages as well
-    else
-    {
-        SvStorageStreamRef rSourceStream = xBlkRoot->OpenStream( aGroup, STREAM_STGREAD );
-        SvStorageStreamRef rDestStream = ((SwXMLTextBlocks&)rDestImp).xBlkRoot-> OpenStream( sDestShortName, STREAM_STGWRITE );
-        if(!rDestStream.Is())
-            nError = ERR_SWG_WRITE_ERROR;
-        else
-        {
-            if(!rSourceStream->CopyTo(&rDestStream))
-                nError = ERR_SWG_WRITE_ERROR;
-            else
-                rDestStream->Commit();
-        }
-    }
-    */
     if(!nError)
     {
         rShort = sDestShortName;
-        //((SwXMLTextBlocks&)rDestImp).xBlkRoot->Commit();
         ((SwXMLTextBlocks&)rDestImp).AddName( rShort, rLong, bTextOnly );
         ((SwXMLTextBlocks&)rDestImp).MakeBlockList();
     }
@@ -319,17 +298,10 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, String& rShort,
 
 sal_uLong SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPackageName )
 {
-    DBG_ASSERT( xBlkRoot.is(), "No storage set" );
+    OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
     GetIndex ( rShort );
-    /*
-    if( xBlkRoot->IsContained( rPackageName ) )
-    {
-        xBlkRoot->Remove( rPackageName );
-        xBlkRoot->Commit();
-    }
-    */
     try
     {
         xRoot = xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
@@ -430,14 +402,6 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
     }
 
     //TODO/LATER: error handling
-    /*
-    sal_uLong nErr = xBlkRoot->GetError();
-    if( nErr == SVSTREAM_DISK_FULL )
-        nRes = ERR_W4W_WRITE_FULL;
-    else if( nErr != SVSTREAM_OK )
-        nRes = ERR_SWG_WRITE_ERROR;
-    nFlags |= nCommitFlags;
-    return nErr;*/
     return 0;
 }
 
@@ -473,7 +437,7 @@ sal_Bool SwXMLTextBlocks::PutMuchEntries( sal_Bool bOn )
     {
         if( bInPutMuchBlocks )
         {
-            ASSERT( !this, "verschachtelte Aufrufe sind nicht erlaubt" );
+            OSL_ENSURE( !this, "verschachtelte Aufrufe sind nicht erlaubt" );
         }
         else if( !IsFileChanged() )
         {
@@ -623,7 +587,6 @@ void SwXMLTextBlocks::MakeBlockText( const String& rText )
 {
     SwTxtNode* pTxtNode = pDoc->GetNodes()[ pDoc->GetNodes().GetEndOfContent().
                                         GetIndex() - 1 ]->GetTxtNode();
-    //JP 18.09.98: Bug 56706 - Standard sollte zumindest gesetzt sein!
     if( pTxtNode->GetTxtColl() == pDoc->GetDfltTxtFmtColl() )
         pTxtNode->ChgFmtColl( pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
@@ -639,3 +602,5 @@ void SwXMLTextBlocks::MakeBlockText( const String& rText )
         pTxtNode->InsertText( sTemp, aIdx );
     } while ( STRING_NOTFOUND != nPos );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

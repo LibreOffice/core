@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,7 +103,6 @@
 #include <web.hrc>
 #include "paratr.hxx"
 #include <crsskip.hxx>
-#include <docstat.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>
@@ -116,7 +116,6 @@
 #include <IDocumentStatistics.hxx>
 
 #include <sfx2/sfxdlg.hxx>
-#include <svl/languageoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -131,7 +130,6 @@
 #include <langhelper.hxx>
 
 using namespace ::com::sun::star;
-
 
 void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
 {
@@ -182,10 +180,10 @@ void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,c
     if ( bUseDialog && GetActiveView() )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         pDlg = pFact->CreateSwCharDlg( rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, DLG_CHAR );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if( FN_INSERT_HYPERLINK == nSlot )
             pDlg->SetCurPageId(TP_CHAR_URL);
     }
@@ -261,10 +259,6 @@ void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,c
 
     delete pDlg;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 short lcl_AskRedlineMode(Window *pWin)
 {
@@ -429,7 +423,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             String aStr;
             SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
-//            SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 , sal_False );
             SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
             if ( pNameItem )
                 aStr = pNameItem->GetValue();
@@ -444,7 +437,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
-                                    //pCharset ? (CharSet) pCharset->GetValue() : RTL_TEXTENCODING_DONTKNOW );
                 rWrtSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
                 rWrtSh.ResetSelect(0, sal_False);
                 rWrtSh.EndSelect();
@@ -457,10 +449,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         GetView().GetWindow(), rWrtSh, sal_False );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
             {
@@ -470,7 +462,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aReq.AppendItem( SfxStringItem( nId, pDlg->GetStr() ) );
                 if ( pDlg->GetFontName().Len() )
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, pDlg->GetFontName() ) );
-                //aReq.AppendItem( SfxStringItem( FN_PARAM_2, pDlg->GetCharSet() ) );
                 ExecuteSlot( aReq );
             }
 
@@ -481,10 +472,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), rWrtSh, DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -499,33 +490,31 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // #i78856, reset all attributes but not the language attributes
             // (for this build an array of all relevant attributes and
             // remove the languages from that)
-            SvUShortsSort aAttribs;
+            std::set<sal_uInt16> aAttribs;
 
-            sal_uInt16 __FAR_DATA aResetableSetRange[] = {
+            sal_uInt16 aResetableSetRange[] = {
                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                 RES_CHRATR_BEGIN, RES_CHRATR_LANGUAGE - 1,
                 RES_CHRATR_LANGUAGE + 1, RES_CHRATR_CJK_LANGUAGE - 1,
                 RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1,
                 RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END-1,
                 RES_PARATR_BEGIN, RES_PARATR_END-1,
-                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
-                RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
                 RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
                 RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                 0
             };
-            sal_uInt16 __FAR_DATA *pUShorts = aResetableSetRange;
+            sal_uInt16 *pUShorts = aResetableSetRange;
             while (*pUShorts)
             {
                 sal_uInt16 nL = pUShorts[1] - pUShorts[0] + 1;
                 sal_uInt16 nE = pUShorts[0];
                 for (sal_uInt16 i = 0; i < nL; ++i)
-                    aAttribs.Insert( nE++ );
+                    aAttribs.insert( aAttribs.end(), nE++ );
                 pUShorts += 2;
             }
 
-            rWrtSh.ResetAttr( &aAttribs );
+            rWrtSh.ResetAttr( aAttribs );
             rReq.Done();
             break;
         }
@@ -546,10 +535,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstractSwBreakDlg* pDlg = pFact->CreateSwBreakDlg( GetView().GetWindow(), rWrtSh, DLG_BREAK );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     nKind = pDlg->GetKind();
@@ -594,10 +583,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 VclAbstractDialog* pDlg = pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq, DLG_INSERT_BOOKMARK );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
                 delete pDlg;
             }
@@ -615,7 +604,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
-            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags());
+            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // das muss fuer die Nachbearbeitung immer sal_False sein
             aFlags.bAFmtByInput = sal_False;
             aFlags.bWithRedlining = sal_True;
@@ -627,10 +616,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 pVFrame->ToggleChildWindow(FN_REDLINE_ACCEPT);
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             AbstractSwModalRedlineAcceptDlg* pDlg = pFact->CreateSwModalRedlineAcceptDlg( &GetView().GetEditWin(), DLG_MOD_REDLINE_ACCEPT );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             switch (lcl_AskRedlineMode(&GetView().GetEditWin()))
             {
@@ -659,7 +648,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case FN_AUTOFORMAT_APPLY:
         {
-            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags());
+            SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
             // das muss fuer die Nachbearbeitung immer sal_False sein
             aFlags.bAFmtByInput = sal_False;
             rWrtSh.AutoFormat( &aFlags );
@@ -668,11 +657,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_AUTOFORMAT_AUTO:
         {
-            SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
-            sal_Bool bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !pACfg->IsAutoFmtByInput();
-            if( bSet != pACfg->IsAutoFmtByInput() )
+            SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+            sal_Bool bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !rACfg.IsAutoFmtByInput();
+            if( bSet != rACfg.IsAutoFmtByInput() )
             {
-                pACfg->SetAutoFmtByInput( bSet );
+                rACfg.SetAutoFmtByInput( bSet );
                 GetView().GetViewFrame()->GetBindings().Invalidate( nSlot );
                 if ( !pItem )
                     rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), bSet ) );
@@ -684,7 +673,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // erstmal auf Blank defaulten
             sal_Unicode cChar = ' ';
-            rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get()->GetAutoCorrect(), cChar );
+            rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get().GetAutoCorrect(), cChar );
             rReq.Done();
         }
         break;
@@ -692,10 +681,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SORTING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -705,10 +694,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, rWrtSh);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -820,9 +809,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SelWrd();
             }
             //now remove the attribute
-            SvUShortsSort aAttribs;
-            aAttribs.Insert( RES_TXTATR_INETFMT );
-            rWrtSh.ResetAttr( &aAttribs );
+            std::set<sal_uInt16> aAttribs;
+            aAttribs.insert( RES_TXTATR_INETFMT );
+            rWrtSh.ResetAttr( aAttribs );
             if(!bSel)
             {
                 rWrtSh.Pop(sal_False);
@@ -877,11 +866,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+
+            sal_Bool bApplyCharUnit = ::HasCharUnit(0 != PTR_CAST(SwWebView, &GetView()));
+            SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
+
             SfxItemSet aCoreSet( GetPool(),
                             RES_PARATR_BEGIN,           RES_PARATR_END - 1,
-                            // --> OD 2008-02-25 #refactorlists#
                             RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,
-                            // <--
                             RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
                             SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
                             SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_DEFAULTS,
@@ -894,10 +885,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,
                             FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,
                             0);
-            // --> OD 2008-01-16 #newlistlevelattrs#
             // get also the list level indent values merged as LR-SPACE item, if needed.
             rWrtSh.GetCurAttr( aCoreSet, true );
-            // <--
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 
@@ -935,12 +924,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart() );
                 aCoreSet.Put(aStart);
-                // --> OD 2008-02-29 #refactorlists#
-//                SfxUInt16Item aStartAt(FN_NUMBER_NEWSTART_AT,
-//                                                rWrtSh.IsNodeNumStart());
                 SfxUInt16Item aStartAt( FN_NUMBER_NEWSTART_AT,
                                         rWrtSh.GetNodeNumStart() );
-                // <--
                 aCoreSet.Put(aStartAt);
             }
             SfxAbstractTabDialog* pDlg = NULL;
@@ -948,10 +933,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( bUseDialog && GetActiveView() )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet,DLG_STD, DLG_PARA,NULL, sal_False, nDefPage );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
             }
             SfxItemSet* pSet = NULL;
             if ( !bUseDialog )
@@ -992,7 +977,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rReq.Done( *pSet );
                 ::SfxToSwPageDescAttr( rWrtSh, *pSet );
-                // --> OD 2006-12-06 #i56253#
+                // #i56253#
                 // enclose all undos.
                 // Thus, check conditions, if actions will be performed.
                 const bool bUndoNeeded( pSet->Count() ||
@@ -1002,18 +987,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 {
                     rWrtSh.StartUndo( UNDO_INSATTR );
                 }
-                // <--
                 if( pSet->Count() )
                 {
                     rWrtSh.StartAction();
-//                    rWrtSh.StartUndo( UNDO_START );
                     if ( SFX_ITEM_SET == pSet->GetItemState(FN_DROP_TEXT, sal_False, &pItem) )
                     {
                         if ( ((SfxStringItem*)pItem)->GetValue().Len() )
                             rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
                     }
                     rWrtSh.SetAttr( *pSet );
-//                    rWrtSh.EndUndo( UNDO_END );
                     rWrtSh.EndAction();
                     SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
                     if(pColl && pColl->IsAutoUpdateFmt())
@@ -1030,12 +1012,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //if it's set to something different than USHRT_MAX
 
                     sal_Bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                    // --> OD 2007-06-11 #b6560525#
+                    //
                     // Default value for restart value has to be USHRT_MAX
                     // in order to indicate that the restart value of the list
                     // style has to be used on restart.
                     sal_uInt16 nNumStart = USHRT_MAX;
-                    // <--
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
@@ -1049,12 +1030,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SetNodeNumStart(nNumStart);
                     rWrtSh.SetNumRuleStart(sal_False);
                 }
-                // --> OD 2006-12-06 #i56253#
+                // #i56253#
                 if ( bUndoNeeded )
                 {
                     rWrtSh.EndUndo( UNDO_INSATTR );
                 }
-                // <--
             }
 
             delete pDlg;
@@ -1062,22 +1042,19 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_NUM_CONTINUE:
         {
-            // --> OD 2008-03-18 #refactorlists#
             String sContinuedListId;
             const SwNumRule* pRule =
                 rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
-            // --> OD 2009-08-26 #i86492#
+            // #i86492#
             // Search also for bullet list
             if ( !pRule )
             {
                 pRule = rWrtSh.SearchNumRule( false, false, false, -1, sContinuedListId );
             }
-            // <--
             if ( pRule )
             {
                 rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
             }
-            // <--
         }
         break;
         case FN_SELECT_PARA:
@@ -1111,30 +1088,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwEditWin& rEditWin = GetView().GetEditWin();
                 rEditWin.SetTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
-                SvxColorItem aItem(aSet, RES_CHRATR_COLOR);
 
-                // besteht eine Selektion, wird sie gleich gefaerbt
-                if(!pApply && rWrtSh.HasSelection())
+                // If there is a selection, then set the color on it
+                // otherwise, it'll be the color for the next text to be typed
+                if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
                     rWrtSh.SetAttr(SvxColorItem (aSet, RES_CHRATR_COLOR));
                 }
-                else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
-                {
-                    GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_EXT);
-                }
 
                 rReq.Done();
-/*              OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
-                SwEditWin& rEdtWin = GetView().GetEditWin();
-
-                SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-                SvxColorItem aItem(aSet, RES_CHRATR_COLOR);
-
-                if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
-                {
-                    GetShell().SetAttr(aItem);
-                }
-*/
             }
         }
         break;
@@ -1165,15 +1127,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             rReq.Done();
 
-/*          OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
-            if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
-            {
-                Brush aBrush(pItem ? BRUSH_SOLID : BRUSH_NULL);
-                if(pItem)
-                    aBrush.SetColor( aSet );
-                GetShell().SetAttr( SvxBrushItem(aBrush, RES_CHRATR_BACKGROUND) );
-            }
-*/
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
@@ -1288,7 +1241,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         try
         {
-            uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+            uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), uno::UNO_QUERY);
             if( xDialog.is() )
             {
                 xDialog->execute();
@@ -1334,7 +1287,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        OSL_ENSURE(pFact, "Dialogdiet fail!");
         AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
         pDialog->SetValues(aCurr, aDocStat );
         pDialog->Execute();
@@ -1342,16 +1295,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
     break;
     default:
-        ASSERT(!this, falscher Dispatcher);
+        OSL_ENSURE(!this, "wrong dispatcher");
         return;
     }
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwTextShell::GetState( SfxItemSet &rSet )
 {
@@ -1477,7 +1424,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
         case FN_AUTOFORMAT_AUTO:
             {
-                rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get()->IsAutoFmtByInput() ));
+                rSet.Put( SfxBoolItem( nWhich, SvxAutoCorrCfg::Get().IsAutoFmtByInput() ));
             }
             break;
         case FN_GLOSSARY_DLG:
@@ -1592,7 +1539,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 GetViewFrame()->GetChildWindow( nWhich ) ));
                 break;
             case FN_EDIT_HYPERLINK:
-            case FN_REMOVE_HYPERLINK:
             case FN_COPY_HYPERLINK_LOCATION:
             {
                 SfxItemSet aSet(GetPool(),
@@ -1600,6 +1546,20 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, sal_True ) || rSh.HasReadonlySel())
+                {
+                    rSet.DisableItem(nWhich);
+                }
+            }
+            break;
+            case FN_REMOVE_HYPERLINK:
+            {
+                SfxItemSet aSet(GetPool(),
+                                RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT);
+                rSh.GetCurAttr(aSet);
+
+        // If a hyperlink is selected, either alone or along with other text...
+                if( ((SFX_ITEM_DONTCARE & aSet.GetItemState( RES_TXTATR_INETFMT, sal_True )) == 0) || rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -1683,15 +1643,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_NUM_CONTINUE:
             {
-                // --> OD 2009-08-26 #i86492#
-                // Allow continuation of previous list, even if at current cursor
-                // a list is active.
-//                if ( rSh.GetCurNumRule() )
-//                    rSet.DisableItem(nWhich);
-//                else
-                // <--
                 {
-                    // --> OD 2009-08-26 #i86492#
+                    // #i86492#
                     // Search also for bullet list
                     String aDummy;
                     const SwNumRule* pRule =
@@ -1700,7 +1653,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     {
                         pRule = rSh.SearchNumRule( false, false, false, -1, aDummy );
                     }
-                    // <--
                     if ( !pRule )
                         rSet.DisableItem(nWhich);
                 }
@@ -1722,14 +1674,16 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         nWhich = aIter.NextWhich();
     }
 }
-/* -----------------------------2002/07/05 10:31------------------------------
-    Switch on/off header of footer of a page style - if an empty name is
-    given all styles are changed
- ---------------------------------------------------------------------------*/
+
+/*
+ *  Switch on/off header of footer of a page style - if an empty name is
+ *  given all styles are changed
+ */
 void SwTextShell::ChangeHeaderOrFooter(
     const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
 {
     SwWrtShell& rSh = GetShell();
+    rSh.addCurrentPosition();
     rSh.StartAllAction();
     rSh.StartUndo( UNDO_HEADER_FOOTER ); // #i7983#
     sal_Bool bExecute = sal_True;
@@ -1742,9 +1696,9 @@ void SwTextShell::ChangeHeaderOrFooter(
         String sTmp(aDesc.GetName());
         if( !rStyleName.Len() || rStyleName == sTmp )
         {
-            if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
-                    ((bHeader && aDesc.GetMaster().GetHeader().IsActive()) ||
-                        (!bHeader && aDesc.GetMaster().GetFooter().IsActive())))
+            if( (bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
+                (bHeader && aDesc.GetMaster().GetHeader().IsActive())) ||
+                (!bHeader && aDesc.GetMaster().GetFooter().IsActive()))
             {
                 bShowWarning = sal_False;
                 //Actions have to be closed while the dialog is showing
@@ -1788,3 +1742,4 @@ void SwTextShell::ChangeHeaderOrFooter(
     rSh.EndAllAction();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,6 @@
 
 class SwRedline;
 
-/* -----------------------------19.12.00 11:35--------------------------------
-
- ---------------------------------------------------------------------------*/
-
 /**
  * SwXRedlineText provides an XText which may be used to write
  * directly into a redline node. It got implemented to enable XML
@@ -71,9 +68,7 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwXRedlinePortion : public SwXTextPortion
 {
     const SwRedline*    pRedline;
@@ -99,9 +94,7 @@ public:
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > CreateRedlineProperties( const SwRedline& rRedline, sal_Bool bIsStart ) throw();
 
 };
-/* -----------------------------11.01.01 16:52--------------------------------
 
- ---------------------------------------------------------------------------*/
 typedef
 cppu::WeakImplHelper1
 <
@@ -154,3 +147,5 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

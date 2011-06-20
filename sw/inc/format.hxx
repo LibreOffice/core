@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,8 @@
 
 #include <tools/solar.h>
 #include "swdllapi.h"
-#include <errhdl.hxx>       // fuer ASSERT
-#include <swatrset.hxx>     // fuer SfxItemPool/-Set, Attr forward decl.
-#include <calbck.hxx>       // fuer SwModify
+#include <swatrset.hxx>     // For SfxItemPool/-Set, Attr forward decl.
+#include <calbck.hxx>       // For SwModify.
 #include <hintids.hxx>
 
 class IDocumentSettingAccess;
@@ -48,18 +48,18 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     SwAttrSet aSet;
 
     sal_uInt16 nWhichId;
-    sal_uInt16 nFmtId;          // Format-ID fuer Lesen/Schreiben
-    sal_uInt16 nPoolFmtId;      // Id-fuer "automatich" erzeugte Formate
-                            // (ist keine harte Attributierung !!)
-    sal_uInt16 nPoolHelpId;     // HelpId fuer diese Pool-Vorlage
-    sal_uInt8 nPoolHlpFileId;   // FilePos ans Doc auf die Vorlagen-Hilfen
-    sal_Bool   bWritten : 1;    // sal_True: bereits geschrieben
-    sal_Bool   bAutoFmt : 1;    // sal_False: es handelt sich um eine Vorlage
-                            // ist dflt immer auf sal_True !
-    sal_Bool   bFmtInDTOR : 1;  // sal_True: das Format wird geloscht. Damit man in
-                            // der FmtChg-Message das erkennen kann!!!
-    sal_Bool   bAutoUpdateFmt : 1;  // sal_True: am Format werden die Attribute
-                            // eines kompletten Absatzes gesetzt (UI-seitig!)
+    sal_uInt16 nFmtId;            // Format-ID for reading / writing.
+    sal_uInt16 nPoolFmtId;        // Id for "automatically" created formats.
+                              // (is not hard attribution!!!)
+    sal_uInt16 nPoolHelpId;       // HelpId for this Pool-style.
+    sal_uInt8 nPoolHlpFileId;      // FilePos to Doc to these style helps.
+    sal_Bool   bWritten : 1;      // TRUE: already written.
+    sal_Bool   bAutoFmt : 1;      // FALSE: it is a template.
+                              // default is true!
+    sal_Bool   bFmtInDTOR : 1;    // TRUE: Format becomes deleted. In order to be able
+                              // to recognize this in FmtChg-message!!
+    sal_Bool   bAutoUpdateFmt : 1;// TRUE: Set attributes of a whole paragraph
+                              // at format (UI-side!).
 
 protected:
     SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
@@ -70,46 +70,40 @@ protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();     // Already in base class Client.
 
     virtual ~SwFmt();
     SwFmt &operator=(const SwFmt&);
 
-    // fuer die Abfrage der Writer-Funktionen
+    // for Querying of Writer-functions.
     sal_uInt16 Which() const { return nWhichId; }
 
-        // erfrage vom Format Informationen
+
+    // Query format information.
     virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
-    // kopiere Attribute; auch ueber Dokumentgrenzen hinweg
+    // Copy attributes even among documents.
     void CopyAttrs( const SwFmt&, sal_Bool bReplace=sal_True );
 
-    // loesche alle Attribute, die nicht in rFmt stehen
+    // Delete all attributes that are not in rFmt.
     void DelDiffs( const SfxItemSet& rSet );
     void DelDiffs( const SwFmt& rFmt ) { DelDiffs( rFmt.GetAttrSet() ); }
 
-    // Umhaengen des Formats (0 = Default)
+    // 0 is Default.
     sal_Bool SetDerivedFrom(SwFmt *pDerivedFrom = 0);
 
-    // Ist bInParents sal_False,
-    // wird nur in diesem Format nach dem Attribut gesucht.
+    // If bInParents is FALSE, search only in this format for attribute.
     inline const SfxPoolItem& GetFmtAttr( sal_uInt16 nWhich,
                                           sal_Bool bInParents = sal_True ) const;
     inline SfxItemState GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent = sal_True,
                                     const SfxPoolItem **ppItem = 0 ) const;
-    // --> OD 2008-03-03 #refactorlists#
-    // methods renamed and made virtual
     virtual sal_Bool SetFmtAttr( const SfxPoolItem& rAttr );
     virtual sal_Bool SetFmtAttr( const SfxItemSet& rSet );
     virtual sal_Bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
-    // <--
 
-    // --> OD 2007-01-24 #i73790#
-    // Method renamed and made virtual
-    // Nimmt alle Hints aus dem Delta-Array,
-    // liefert die Anzahl der geloeschten Hints
+    // Takes all hints from Delta-Array,
+    // returns count of deleted hints.
     virtual sal_uInt16 ResetAllFmtAttr();
-    // <--
 
     inline SwFmt* DerivedFrom() const { return (SwFmt*)GetRegisteredIn(); }
     inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
@@ -119,7 +113,7 @@ public:
     inline void SetName( const sal_Char* pNewName,
                          sal_Bool bBroadcast=sal_False);
 
-    // zur Abfrage des Attribute Arrays
+    // For querying the attribute array.
     inline const SwAttrSet& GetAttrSet() const { return aSet; }
 
     // Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
@@ -127,63 +121,59 @@ public:
     const SwDoc *GetDoc() const         { return aSet.GetDoc(); }
           SwDoc *GetDoc()               { return aSet.GetDoc(); }
 
-    /** Provides access to the document settings interface
-     */
+    /// Provides access to the document settings interface.
     const IDocumentSettingAccess* getIDocumentSettingAccess() const;
 
-    /** Provides access to the document draw model interface
-     */
+    /// Provides access to the document draw model interface.
     const IDocumentDrawModelAccess* getIDocumentDrawModelAccess() const;
           IDocumentDrawModelAccess* getIDocumentDrawModelAccess();
 
-    /** Provides access to the document layout interface
-     */
+    /// Provides access to the document layout interface.
     const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
           IDocumentLayoutAccess* getIDocumentLayoutAccess();
 
-     /** Provides access to the document idle timer interface
-     */
-    IDocumentTimerAccess* getIDocumentTimerAccess();
+     /// Provides access to the document idle timer interface.
+     IDocumentTimerAccess* getIDocumentTimerAccess();
 
-     /** Provides access to the document idle timer interface
-     */
+     /// Provides access to the document idle timer interface.
     IDocumentFieldsAccess* getIDocumentFieldsAccess();
 
-     /** gives access to the chart data-provider
-     */
+     /// Gives access to the chart data-provider.
     IDocumentChartDataProviderAccess* getIDocumentChartDataProviderAccess();
 
-    // erfragen und setzen der Poolvorlagen-Id's
+    // Get and set Pool style IDs.
     sal_uInt16 GetPoolFmtId() const { return nPoolFmtId; }
     void SetPoolFmtId( sal_uInt16 nId ) { nPoolFmtId = nId; }
 
-    // erfragen und setzen der Hilfe-Id's fuer die Document-Vorlagen
+    // Get and set Help-IDs for document templates.
     sal_uInt16 GetPoolHelpId() const { return nPoolHelpId; }
     void SetPoolHelpId( sal_uInt16 nId ) { nPoolHelpId = nId; }
     sal_uInt8 GetPoolHlpFileId() const { return nPoolHlpFileId; }
     void SetPoolHlpFileId( sal_uInt8 nId ) { nPoolHlpFileId = nId; }
-    // erfrage die Attribut-Beschreibung, returnt den reingereichten String
+
+    // Get attribute-description. Returns passed string.
     void GetPresentation( SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String &rText ) const
         { aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
-    // Das Format-ID fuer Lesen/Schreiben:
+
+    // Format-ID for reading/writing:
     void   ResetWritten()    { bWritten = sal_False; }
 
-    // Abfragen/Setzen vom AutoFmt-Flag
+    // Query / set AutoFmt-flag.
     sal_Bool IsAuto() const                 { return bAutoFmt; }
     void SetAuto( sal_Bool bNew = sal_False )   { bAutoFmt = bNew; }
 
-    // Abfragen/Setzen vom bAutoUpdateFmt-Flag
+    // Query / set bAutoUpdateFmt-flag.
     sal_Bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
     void SetAutoUpdateFmt( sal_Bool bNew = sal_True )   { bAutoUpdateFmt = bNew; }
 
     sal_Bool IsFmtInDTOR() const { return bFmtInDTOR; }
 
-    // GetMethoden: das Bool gibt an, ob nur im Set (sal_False) oder auch in
-    //              den Parents gesucht werden soll. Wird nichts gefunden,
-    //              wird das deflt. Attribut returnt.
-    // Charakter-Attribute  - impl. steht im charatr.hxx
-    // AMA 12.10.94: Umstellung von SwFmt... auf Svx...
+    // GetMethods: Bool indicates whether to search only in Set (FALSE)
+    // or also in Parents.
+    // If nothing is found the defaulted attribute is returned.
+
+    // Character-attributes - implemented in charatr.hxx
     inline const SvxPostureItem      &GetPosture( sal_Bool = sal_True ) const;
     inline const SvxWeightItem       &GetWeight( sal_Bool = sal_True ) const;
     inline const SvxShadowedItem     &GetShadowed( sal_Bool = sal_True ) const;
@@ -224,7 +214,7 @@ public:
     inline const SvxCharReliefItem     &GetCharRelief( sal_Bool = sal_True ) const;
     inline const SvxCharHiddenItem   &GetCharHidden( sal_Bool = sal_True ) const;
 
-    // Frame-Attribute  - impl. steht im frmatr.hxx,
+    // Frame-attributes - implemented in frmatr.hxx.
     inline const SwFmtFillOrder           &GetFillOrder( sal_Bool = sal_True ) const;
     inline const SwFmtFrmSize             &GetFrmSize( sal_Bool = sal_True ) const;
     inline const SwFmtHeader          &GetHeader( sal_Bool = sal_True ) const;
@@ -260,12 +250,12 @@ public:
     inline const SvxFrameDirectionItem    &GetFrmDir( sal_Bool = sal_True ) const;
     inline const SwTextGridItem         &GetTextGrid( sal_Bool = sal_True ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( sal_Bool = sal_True ) const;
-    // OD 18.09.2003 #i18732#
+    // #i18732#
     inline const SwFmtFollowTextFlow    &GetFollowTextFlow(sal_Bool = sal_True) const;
-    // OD 2004-05-05 #i28701#
+    // #i28701#
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(sal_Bool = sal_True) const;
 
-    // Grafik-Attribute - impl. steht im grfatr.hxx
+    // Graphics-attributes - implemented in grfatr.hxx
     inline const SwMirrorGrf          &GetMirrorGrf( sal_Bool = sal_True ) const;
     inline const SwCropGrf            &GetCropGrf( sal_Bool = sal_True ) const;
     inline const SwRotationGrf            &GetRotationGrf(sal_Bool = sal_True ) const;
@@ -279,7 +269,7 @@ public:
     inline const SwTransparencyGrf        &GetTransparencyGrf(sal_Bool = sal_True ) const;
     inline const SwDrawModeGrf            &GetDrawModeGrf(sal_Bool = sal_True ) const;
 
-    // Paragraph-Attribute  - impl. steht im paratr.hxx
+    // Paragraph-attributes - implemented in paratr.hxx.
     inline const SvxLineSpacingItem       &GetLineSpacing( sal_Bool = sal_True ) const;
     inline const SvxAdjustItem            &GetAdjust( sal_Bool = sal_True ) const;
     inline const SvxFmtSplitItem      &GetSplit( sal_Bool = sal_True ) const;
@@ -297,14 +287,13 @@ public:
     inline const SvxParaGridItem        &GetParaGrid(sal_Bool = sal_True) const;
     inline const SwParaConnectBorderItem &GetParaConnectBorder(sal_Bool = sal_True ) const;
 
-    // TabellenBox-Attribute    - impl. steht im cellatr.hxx
+    // TableBox attributes - implemented in cellatr.hxx.
     inline  const SwTblBoxNumFormat     &GetTblBoxNumFmt( sal_Bool = sal_True ) const;
     inline  const SwTblBoxFormula       &GetTblBoxFormula( sal_Bool = sal_True ) const;
     inline  const SwTblBoxValue         &GetTblBoxValue( sal_Bool = sal_True ) const;
 
-    /** SwFmt::IsBackgroundTransparent - for feature #99657#
+    /** SwFmt::IsBackgroundTransparent
 
-        OD 22.08.2002
         Virtual method to determine, if background of format is transparent.
         Default implementation returns false. Thus, subclasses have to overload
         method, if the specific subclass can have a transparent background.
@@ -315,9 +304,8 @@ public:
     */
     virtual sal_Bool IsBackgroundTransparent() const;
 
-    /** SwFmt::IsShadowTransparent - for feature #99657#
+    /** SwFmt::IsShadowTransparent
 
-        OD 22.08.2002
         Virtual method to determine, if shadow of format is transparent.
         Default implementation returns false. Thus, subclasses have to overload
         method, if the specific subclass can have a transparent shadow.
@@ -329,7 +317,7 @@ public:
     virtual sal_Bool IsShadowTransparent() const;
 };
 
-// --------------- inline Implementierungen ------------------------
+// --------------- inline Implementations ------------------------
 
 inline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
                                              sal_Bool bInParents ) const
@@ -353,3 +341,5 @@ inline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInPare
 #undef inline
 
 #endif // _FORMAT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

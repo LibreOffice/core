@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,15 +29,16 @@
 #ifndef _DOCXEXPORT_HXX_
 #define _DOCXEXPORT_HXX_
 
-#include "docxattributeoutput.hxx"
 #include "wrtww8.hxx"
 
 #include <sax/fshelper.hxx>
+#include <sax/fastattribs.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cstdio>
 #include <vector>
 
+class DocxAttributeOutput;
 class DocxExportFilter;
 class SwNode;
 class SwEndNode;
@@ -51,6 +53,18 @@ namespace oox {
     namespace drawingml { class DrawingML; }
     namespace vml { class VMLExport; }
 }
+
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+} } }
+
+/// Data to be written in the document settings part of the document
+struct DocxSettingsData
+{
+    DocxSettingsData();
+    bool hasData() const; /// returns true if there are any non-default settings (i.e. something to write)
+    bool evenAndOddHeaders;
+};
 
 /// The class that does all the actual DOCX export-related work.
 class DocxExport : public MSWordExportBase
@@ -79,16 +93,23 @@ class DocxExport : public MSWordExportBase
     /// Exporter of the VML shapes.
     oox::vml::VMLExport *m_pVMLExport;
 
+    DocxSettingsData settings;
+
 public:
+
+    DocxExportFilter& GetFilter() { return *m_pFilter; };
+    const DocxExportFilter& GetFilter() const { return *m_pFilter; };
+
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const;
 
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const;
 
-    /// Hack, unfortunately necessary at some places for now.
-    /// FIXME remove it when possible.
-    virtual bool HackIsWW8OrHigher() const { return true; }
+    /// Determines if the format is expected to support unicode.
+    virtual bool SupportsUnicode() const { return true; }
+
+    virtual bool ignoreAttributeForStyles( sal_uInt16 nWhich ) const;
 
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
@@ -108,7 +129,7 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt );
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 nBreakCode );
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
@@ -116,6 +137,7 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
 
     virtual void DoComboBox(const rtl::OUString &rName,
                     const rtl::OUString &rHelp,
@@ -126,6 +148,9 @@ public:
     virtual void DoFormText(const SwInputField * pFld);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
+
+    /// Returns the relationd id
+    rtl::OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
 
 protected:
     /// Format-dependant part of the actual export.
@@ -146,10 +171,11 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
 
+    virtual void OutputLinkedOLE( const rtl::OUString& );
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 
-    virtual void SectionBreaksAndFrames( const SwTxtNode& rNode ) {}
+    virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}
 
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
@@ -176,6 +202,12 @@ private:
     /// Write docProps/core.xml
     void WriteProperties();
 
+    /// Write word/settings.xml
+    void WriteSettings();
+
+    /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
+    sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
+
 public:
     /// FIXME this is temporary, remotely reminding the method of the same
     /// name in WW8Export.
@@ -191,6 +223,9 @@ public:
     /// Reference to the VMLExport instance for the main document.
     oox::vml::VMLExport& VMLExporter();
 
+    /// Data to be exported in the settings part of the document
+    DocxSettingsData& settingsData();
+
 private:
     /// No copying.
     DocxExport( const DocxExport& );
@@ -200,4 +235,5 @@ private:
 };
 
 #endif // _DOCXEXPORT_HXX_
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

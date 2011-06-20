@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,17 +30,13 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <colex.hxx>
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/ctrlbox.hxx>
+
 /*--------------------------------------------------------------------
     Description:   TabPage Format/(Styles/)Page/Text grid
  --------------------------------------------------------------------*/
-
 class SwTextGridPage: public SfxTabPage
 {
     FixedLine       aGridTypeFL;
@@ -54,12 +51,14 @@ class SwTextGridPage: public SfxTabPage
 
     FixedText       aLinesPerPageFT;
     NumericField    aLinesPerPageNF;
+    FixedText       aLinesRangeFT;
 
     FixedText       aTextSizeFT;
     MetricField     aTextSizeMF;
 
     FixedText       aCharsPerLineFT;
     NumericField    aCharsPerLineNF;
+    FixedText       aCharsRangeFT;
 
     FixedText       aCharWidthFT;
     MetricField     aCharWidthMF;
@@ -76,19 +75,22 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aColorFT;
     ColorListBox    aColorLB;
 
-    Window*         aControls[18];
+    Window*         aControls[20];
 
     sal_Int32       m_nRubyUserValue;
     sal_Bool        m_bRubyUserValue;
     Size            m_aPageSize;
     sal_Bool        m_bVertical;
     sal_Bool        m_bSquaredMode;
+    sal_Bool        m_bHRulerChanged;
+    sal_Bool        m_bVRulerChanged;
 
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
     ~SwTextGridPage();
 
     void UpdatePageSize(const SfxItemSet& rSet);
     void PutGridItem(SfxItemSet& rSet);
+    void SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue );
 
     DECL_LINK(GridTypeHdl, RadioButton*);
     DECL_LINK(CharorLineChangedHdl, SpinField*);
@@ -111,3 +113,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

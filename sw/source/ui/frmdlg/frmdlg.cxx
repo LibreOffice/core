@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,14 +35,11 @@
 
 #include <svx/dialogs.hrc>
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/htmlmode.hxx>
 #include <fmtfsize.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <frmdlg.hxx>
@@ -50,20 +48,15 @@
 #include <column.hxx>
 #include <macassgn.hxx>
 
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <svx/svxids.hrc>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Description:    the dialog's carrier
  --------------------------------------------------------------------*/
-
 SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,
@@ -84,7 +77,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     sal_uInt16 nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
     m_bHTMLMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
 
-    // BspFont fuer beide Bsp-TabPages
+    // example font for both example TabPages
     //
     if(pStr)
     {
@@ -108,7 +101,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
     AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
     AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
@@ -121,7 +114,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                 if(0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
                     RemoveTabPage(TP_BORDER);
                 RemoveTabPage(TP_COLUMN);
-            // kein break
+            // no break
         case DLG_FRM_OLE:
                 RemoveTabPage(TP_FRM_URL);
                 RemoveTabPage(TP_MACRO_ASSIGN);
@@ -142,16 +135,9 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
         SetCurPageId(nDefPage);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFrmDlg::~SwFrmDlg()
 {
 }
-
-
-
 
 void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -219,3 +205,4 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

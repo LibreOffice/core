@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _WW8GRAF_HXX
 #define _WW8GRAF_HXX
 
@@ -38,7 +37,7 @@ struct EscherShape
 {
     sal_uLong mnEscherShapeOrder;
     sal_uLong mnNoInlines;
-    // --> OD 2004-12-13 #117915# - new member <mbInHeaderFooter>
+    // new member <mbInHeaderFooter>
     bool mbInHeaderFooter;
     EscherShape( sal_uLong nEscherShapeOrder,
                  bool _bInHeaderFooter )
@@ -46,20 +45,18 @@ struct EscherShape
           mnNoInlines(0),
           mbInHeaderFooter( _bInHeaderFooter )
     {}
-    // <--
 };
 
 class wwZOrderer
 {
 private:
-    // --> OD 2004-12-13 #117915# - consider that objects in page header/footer
+    // consider that objects in page header/footer
     // are always behind objects in page body. Thus, assure, that in vector
     // <maEscherLayer> objects in page header|footer are inserted before
     // objects in page body - see method <GetEscherObjectPos(..)>.
     //No of objects in doc before starting (always 0 unless using file->insert
     //and probably 0 then as well
     std::vector<EscherShape> maEscherLayer;
-    // <--
     typedef std::vector<EscherShape>::iterator myeiter;
 
     std::vector<short> maDrawHeight;
@@ -76,11 +73,10 @@ private:
 
     sal_uInt16 GetEscherObjectIdx(sal_uLong nSpId);
     myeiter MapEscherIdxToIter(sal_uLong nIdx);
-    // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
+    // new parameter <_bInHeaderFooter>, indicating
     // that object is in header or footer
     sal_uLong GetEscherObjectPos( sal_uLong nSpId,
                               const bool _bInHeaderFooter );
-    // <--
     sal_uLong GetDrawingObjectPos(short nWwHeight);
     bool InsertObject(SdrObject *pObject, sal_uLong nPos);
 public:
@@ -92,12 +88,10 @@ public:
      instantiate the appropiate one at run time.
      */
     void InsertDrawingObject(SdrObject* pObj, short nWwHeight);
-    // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
-    // that object is in header or footer
+    // new parameter <_bInHeaderFooter>, indicating that object is in header or footer
     void InsertEscherObject( SdrObject* pObject,
                              sal_uLong nSpId,
                              const bool _bInHeaderFooter );
-    // <--
     void InsideEscher(sal_uLong nIndex);
     void OutsideEscher();
 };
@@ -105,4 +99,4 @@ public:
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW* pFSPAS, WW8_FSPA* pPic );
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

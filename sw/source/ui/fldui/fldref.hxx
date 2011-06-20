@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,23 +31,16 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <vcl/edit.hxx>
 
 #include "fldpage.hxx"
-// --> OD 2007-11-15 #i83479#
+// #i83479#
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 #include <FldRefTreeListBox.hxx>
 class SwTxtNode;
-// <--
-
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwFldRefPage : public SwFldPage
 {
@@ -54,9 +48,8 @@ class SwFldRefPage : public SwFldPage
     ListBox         aTypeLB;
     FixedText       aSelectionFT;
     ListBox         aSelectionLB;
-    // --> OD 2007-11-21 #i83479#
+    // #i83479#
     SwFldRefTreeListBox aSelectionToolTipLB;
-    // <--
     FixedText       aFormatFT;
     ListBox         aFormatLB;
     FixedText       aNameFT;
@@ -66,7 +59,7 @@ class SwFldRefPage : public SwFldPage
     const String    sBookmarkTxt;
     const String    sFootnoteTxt;
     const String    sEndnoteTxt;
-    // --> OD 2007-11-09 #i83479#
+    // #i83479#
     const String    sHeadingTxt;
     const String    sNumItemTxt;
 
@@ -78,7 +71,6 @@ class SwFldRefPage : public SwFldPage
     const SwTxtNode* mpSavedSelectedTxtNode;
     // fallback, if previously selected text node doesn't exist anymore
     sal_uInt16 mnSavedSelectedPos;
-    // <--
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
@@ -87,11 +79,10 @@ class SwFldRefPage : public SwFldPage
     void                UpdateSubType();
     sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
 
-    // --> OD 2007-12-05 #i83479#
+    // #i83479#
     void SaveSelectedTxtNode();
     const SwTxtNode* GetSavedSelectedTxtNode() const;
     sal_uInt16 GetSavedSelectedPos() const;
-    // <--
 
 protected:
     virtual sal_uInt16      GetGroup();
@@ -112,3 +103,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

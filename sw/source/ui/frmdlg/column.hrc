@@ -75,10 +75,14 @@
 #define PB_CANCEL               56
 #define PB_OK                   57
 #define CB_BALANCECOLS          58
-#define FL_PROPERTIES           59
 #define FT_TEXTDIRECTION        60
 #define LB_TEXTDIRECTION        61
-#define FL_VERT                 62
+
+#define FT_LINEWIDTH            63
+#define ED_LINEWIDTH            64
+#define FT_COLOR                65
+#define LB_COLOR                66
+
 #define LISTBOX_SELECTION       0
 #define LISTBOX_SECTION         1
 #define LISTBOX_SECTIONS        2

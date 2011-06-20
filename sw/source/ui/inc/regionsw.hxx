@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,6 @@
 #include <svx/paraprev.hxx>
 #include <editeng/lrspitem.hxx>
 
-
 class SwWrtShell;
 class EditRegionDlg;
 
@@ -62,9 +62,8 @@ namespace sfx2
 }
 
 /*************************************************************************
-    Dialog "Bereiche bearbeiten"
+    dialog "edit regions"
 *************************************************************************/
-
 class SectRepr;
 typedef SectRepr* SectReprPtr;
 SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0, 4 )
@@ -96,10 +95,9 @@ class SwEditRegionDlg : public SfxModalDialog
     FixedText       aConditionFT;
     ConditionEdit   aConditionED;
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
     TriStateBox     aEditInReadonlyCB;
-    // <--
 
     OKButton        aOK;
     CancelButton    aCancel;
@@ -107,7 +105,6 @@ class SwEditRegionDlg : public SfxModalDialog
     PushButton      aDismiss;
     HelpButton      aHelp;
     ImageList       aImageIL;
-    ImageList       aImageILH;
 
     SwWrtShell&             rSh;
     SectReprArr             aSectReprArr;
@@ -120,7 +117,7 @@ class SwEditRegionDlg : public SfxModalDialog
     sal_Bool            bWeb            :1;
 
 
-    Image  BuildBitmap(sal_Bool bProtect,sal_Bool bHidden,sal_Bool bHighContrast);
+    Image  BuildBitmap(sal_Bool bProtect,sal_Bool bHidden);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
     sal_uInt16  FindArrPos(const SwSectionFmt* pFmt);
@@ -135,9 +132,8 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( ChangeProtectHdl, TriStateBox * );
     DECL_LINK( ChangeHideHdl, TriStateBox * );
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     DECL_LINK( ChangeEditInReadonlyHdl, TriStateBox * );
-    // <--
     DECL_LINK( ChangeDismissHdl, CheckBox * );
     DECL_LINK( UseFileHdl, CheckBox* );
     DECL_LINK( FileSearchHdl, PushButton* );
@@ -156,13 +152,10 @@ public:
     void    SelectSection(const String& rSectionName);
 
 };
-/*************************************************************************
-    Dialog "Bereich einfuegen"
-*************************************************************************/
 
-/* -----------------21.05.99 11:05-------------------
- *
- * --------------------------------------------------*/
+/*************************************************************************
+    dialog "insert region"
+*************************************************************************/
 class SwInsertSectionTabPage : public SfxTabPage
 {
     FixedLine       aNameFL;
@@ -188,10 +181,9 @@ class SwInsertSectionTabPage : public SfxTabPage
     FixedText       aConditionFT;
     ConditionEdit   aConditionED;
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     FixedLine       aPropertiesFL;
     CheckBox        aEditInReadonlyCB;
-    // <--
 
     String          m_sFileName;
     String          m_sFilterName;
@@ -204,9 +196,8 @@ class SwInsertSectionTabPage : public SfxTabPage
     Window*                 m_pOldDefDlgParent;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // #114856# edit in readonly sections
     DECL_LINK( ChangeEditInReadonlyHdl, CheckBox * );
-    // <--
     DECL_LINK( ChangeProtectHdl, CheckBox * );
     DECL_LINK( ChangePasswdHdl, Button * );
     DECL_LINK( NameEditHdl, Edit * );
@@ -272,9 +263,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
-/* -----------------13.06.2003 09:51-----------------
 
- --------------------------------------------------*/
 class SwSectionIndentTabPage : public SfxTabPage
 {
     FixedLine           aIndentFL;
@@ -299,9 +288,6 @@ public:
     void    SetWrtShell(SwWrtShell& rSh);
 };
 
-/* -----------------21.05.99 13:07-------------------
- *
- * --------------------------------------------------*/
 class SwInsertSectionTabDialog : public SfxTabDialog
 {
     SwWrtShell&     rWrtSh;
@@ -318,9 +304,6 @@ public:
     SwSectionData * GetSectionData() { return m_pSectionData.get(); }
 };
 
-/* -----------------21.05.99 13:07-------------------
- *
- * --------------------------------------------------*/
 class SwSectionPropertyTabDialog : public SfxTabDialog
 {
     SwWrtShell& rWrtSh;
@@ -333,4 +316,4 @@ public:
 
 #endif
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

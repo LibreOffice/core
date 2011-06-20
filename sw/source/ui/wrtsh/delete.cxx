@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,14 +34,9 @@
 #include <crsskip.hxx>
 #include <swcrsr.hxx>
 #include <editeng/lrspitem.hxx> // #i23725#
-// --> OD 2006-07-10 #134369#
-#ifndef _VIEW_HXX
+// #134369#
 #include <view.hxx>
-#endif
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
-// <--
 
 inline void SwWrtShell::OpenMark()
 {
@@ -115,9 +111,7 @@ long SwWrtShell::DelLine()
     SwCrsrShell::LeftMargin();
     SetMark();
     SwCrsrShell::RightMargin();
-//Warum soll hier noch ein Zeichen in der naechsten Zeile geloescht werden?
-//  if(!IsEndOfPara())
-//      SwCrsrShell::Right();
+
     long nRet = Delete();
     Pop(sal_False);
     if( nRet )
@@ -208,12 +202,11 @@ long SwWrtShell::DelLeft()
 
     if( SwCrsrShell::IsSttPara())
     {
-        // --> FME 2007-02-15 #i4032# Don't actually call a 'delete' if we
+        // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         const SwStartNode * pSNdOld = pWasInTblNd ?
                                       GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
                                       0;
-        // <--
 
         /* If the cursor is at the beginning of a paragraph, try to step
            backwards. On failure we are done. */
@@ -230,11 +223,10 @@ long SwWrtShell::DelLeft()
                                      GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
                                      0;
 
-        // --> FME 2007-02-15 #i4032# Don't actually call a 'delete' if we
+        // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         if ( pSNdOld != pSNdNew )
             return 0;
-        // <--
 
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
@@ -334,13 +326,12 @@ long SwWrtShell::DelRight()
 
             if ( SwCrsrShell::IsEndPara() )
             {
-                // --> FME 2005-01-28 #i41424# Introduced a couple of
+                // #i41424# Introduced a couple of
                 // Push()-Pop() pairs here. The reason for this is that a
                 // Right()-Left() combination does not make sure, that
                 // the cursor will be in its initial state, because there
                 // may be a numbering in front of the next paragraph.
                 SwCrsrShell::Push();
-                // <--
 
                 if ( SwCrsrShell::Right(1, CRSR_SKIP_CHARS) )
                 {
@@ -390,11 +381,10 @@ long SwWrtShell::DelRight()
 
             LeaveSelFrmMode();
             UnSelectFrm();
-            // --> OD 2006-07-06 #134369#
-            ASSERT( !IsFrmSelected(),
-                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" )
-            // <--
-            // --> OD 2006-07-10 #134369#
+            // #134369#
+            OSL_ENSURE( !IsFrmSelected(),
+                    "<SwWrtShell::DelRight(..)> - <SwWrtShell::UnSelectFrm()> should unmark all objects" );
+            // #134369#
             // leave draw mode, if necessary.
             {
                 if (GetView().GetDrawFuncPtr())
@@ -407,12 +397,10 @@ long SwWrtShell::DelRight()
                     GetView().LeaveDrawCreate();
                 }
             }
-            // <--
         }
 
-        // --> OD 2006-07-07 #134369#
+        // #134369#
         // <IsFrmSelected()> can't be true - see above.
-        // <--
         {
             nSelection = GetSelectionType();
             if ( nsSelectionType::SEL_FRM & nSelection ||
@@ -510,9 +498,9 @@ long SwWrtShell::DelNxtWord()
     EnterStdMode();
     SetMark();
     if(IsEndWrd() && !IsSttWrd())
-        _NxtWrdForDelete(); // --> OD 2008-08-06 #i92468#
+        _NxtWrdForDelete(); // #i92468#
     if(IsSttWrd() || IsEndPara())
-        _NxtWrdForDelete(); // --> OD 2008-08-06 #i92468#
+        _NxtWrdForDelete(); // #i92468#
     else
         _EndWrd();
 
@@ -536,11 +524,11 @@ long SwWrtShell::DelPrvWord()
     EnterStdMode();
     SetMark();
     if ( !IsSttWrd() ||
-         !_PrvWrdForDelete() ) // --> OD 2008-08-06 #i92468#
+         !_PrvWrdForDelete() ) // #i92468#
     {
         if( IsEndWrd() )
         {
-            if ( _PrvWrdForDelete() ) // --> OD 2008-08-06 #i92468#
+            if ( _PrvWrdForDelete() ) // #i92468#
             {
                 // skip over all-1 spaces
                 short n = -1;
@@ -552,7 +540,7 @@ long SwWrtShell::DelPrvWord()
             }
         }
         else if( IsSttPara())
-            _PrvWrdForDelete(); // --> OD 2008-08-06 #i92468#
+            _PrvWrdForDelete(); // #i92468#
         else
             _SttWrd();
     }
@@ -568,3 +556,4 @@ long SwWrtShell::DelPrvWord()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

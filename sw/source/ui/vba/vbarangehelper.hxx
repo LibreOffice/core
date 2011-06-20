@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,6 +31,8 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 class SwVbaRangeHelper
 {
@@ -38,6 +41,9 @@ public:
     static void insertString( css::uno::Reference< css::text::XTextRange >& rTextRange, css::uno::Reference< css::text::XText >& rText, const rtl::OUString& rStr, sal_Bool _bAbsorb ) throw ( css::uno::RuntimeException );
     static css::uno::Reference< css::text::XTextCursor > initCursor( const css::uno::Reference< css::text::XTextRange >& rTextRange, const css::uno::Reference< css::text::XText >& rText ) throw ( css::uno::RuntimeException );
     static sal_Int32 getPosition( const css::uno::Reference< css::text::XText >& rText, const css::uno::Reference< css::text::XTextRange >& rTextRange ) throw ( css::uno::RuntimeException );
+    static css::uno::Reference< css::text::XTextContent > findBookmarkByPosition( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, const css::uno::Reference< css::text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException );
 
 };
 #endif /* SW_VBA_RANGEHELPER_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,15 +53,15 @@ SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
 {
 }
 
-int __EXPORT SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
+int SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return( pTxtAttr && ((SwFmtFlyCnt&)rAttr).pTxtAttr &&
             *pTxtAttr->GetStart() == *((SwFmtFlyCnt&)rAttr).pTxtAttr->GetStart() &&
             pFmt == ((SwFmtFlyCnt&)rAttr).GetFrmFmt() );
 }
 
-SfxPoolItem* __EXPORT SwFmtFlyCnt::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFmtFlyCnt::Clone( SfxItemPool* ) const
 {
     return new SwFmtFlyCnt( pFmt );
 }
@@ -110,7 +111,7 @@ SwTxtFlyCnt::SwTxtFlyCnt( SwFmtFlyCnt& rAttr, xub_StrLen nStartPos )
 void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
 {
     SwFrmFmt* pFmt = GetFlyCnt().GetFrmFmt();
-    ASSERT( pFmt, "von welchem Format soll ich eine Kopie erzeugen?" )
+    OSL_ENSURE( pFmt, "von welchem Format soll ich eine Kopie erzeugen?" );
     // Das FlyFrmFmt muss dupliziert werden.
     // In CopyLayoutFmt (siehe doclay.cxx) wird das FlyFrmFmt erzeugt
     // und der Inhalt dupliziert.
@@ -138,7 +139,7 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
         else
         {
             pPos->nContent.Assign( 0, 0 );
-            ASSERT( !this, "CopyFlyFmt: Was fuer ein Anker?" );
+            OSL_ENSURE( !this, "CopyFlyFmt: Was fuer ein Anker?" );
         }
     }
 
@@ -227,12 +228,12 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     SwFrmFmt* pFrmFmt = GetFlyCnt().GetFrmFmt();
     if( RES_DRAWFRMFMT == pFrmFmt->Which() )
     {
-        ASSERT(  !this, "SwTxtFlyCnt::_GetFlyFrm: DrawInCnt-Baustelle!" );
+        OSL_ENSURE(  !this, "SwTxtFlyCnt::_GetFlyFrm: DrawInCnt-Baustelle!" );
         return NULL;
     }
 
     SwIterator<SwFlyFrm,SwFmt> aIter( *GetFlyCnt().pFmt );
-    ASSERT( pCurrFrm->IsTxtFrm(), "SwTxtFlyCnt::_GetFlyFrm for TxtFrms only." );
+    OSL_ENSURE( pCurrFrm->IsTxtFrm(), "SwTxtFlyCnt::_GetFlyFrm for TxtFrms only." );
     SwFrm* pFrm = aIter.First();
     if ( pFrm )
     {
@@ -272,13 +273,13 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
 
     // 7922: Wir muessen dafuer sorgen, dass der Inhalt des FlyInCnt
     // nach seiner Konstruktion stramm durchformatiert wird.
-    // --> OD 2004-11-09 #i26945# - Use new object formatter to format Writer
+    // #i26945# - Use new object formatter to format Writer
     // fly frame and its content.
     SwObjectFormatter::FormatObj( *pFly, const_cast<SwFrm*>(pCurrFrm),
                                   pCurrFrm->FindPageFrm() );
-    // <--
 
     return pFly;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

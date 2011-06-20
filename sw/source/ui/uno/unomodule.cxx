@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,7 +38,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -57,7 +58,7 @@ uno::Sequence< rtl::OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() t
 uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SolarMutexGuard aGuard;
     return uno::Reference< uno::XInterface >( dynamic_cast< frame::XDispatch * >(new SwUnoModule( rSMgr )), uno::UNO_QUERY );
 }
 
@@ -69,8 +70,8 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     // asynchronous ...
     uno::Reference< uno::XInterface > xThis(static_cast< frame::XNotifyingDispatch* >(this));
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    SwDLL::Init();
+    SolarMutexGuard aGuard;
+    SwGlobals::ensure();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
 
     sal_Int16 aState = frame::DispatchResultState::DONTKNOW;
@@ -136,8 +137,8 @@ REFERENCE< XDISPATCH > SAL_CALL SwUnoModule::queryDispatch(
 {
     REFERENCE< XDISPATCH > xReturn;
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    SwDLL::Init();
+    SolarMutexGuard aGuard;
+    SwGlobals::ensure();
     const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
     if ( pSlot )
         xReturn = REFERENCE< XDISPATCH >(static_cast< XDISPATCH* >(this), uno::UNO_QUERY);
@@ -170,3 +171,4 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SwUnoModule::getSupportedServiceNames(
     return SwUnoModule_getSupportedServiceNames();
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

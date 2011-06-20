@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,17 +35,17 @@
 class SwDoc;
 class SwTxtFtn;
 
-// ATT_FTN **********************************************************
+// ATT_FTN
 
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;     //mein TextAttribut
-    String  aNumber;        //Benutzerdefinierte 'Nummer'
+    SwTxtFtn* pTxtAttr;     // My TextAttribute.
+    String  aNumber;        // User-defined 'Number'.
     sal_uInt16  nNumber;        //Automatische Nummerierung
-    bool    m_bEndNote;     // is it an End note?
+    bool    m_bEndNote;     // Is it an End note?
 
-    // geschuetzter CopyCtor
+    // Protected CopyCtor.
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
 
@@ -52,7 +53,7 @@ public:
     SwFmtFtn( bool bEndNote = false );
     virtual ~SwFmtFtn();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -72,10 +73,11 @@ public:
 
     void GetFtnText( String& rStr ) const;
 
-    // returnt den anzuzeigenden String der Fuss-/Endnote
+    // Returns string to be displayed of footnote / endnote.
     String GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
 };
 
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

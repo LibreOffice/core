@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,8 @@ public:
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual void CheckDirection( sal_Bool bVert );
 
-    // --> OD 2010-02-17 #i103961#
+    // #i103961#
     virtual void Cut();
-    // <--
 
     const SwTableBox *GetTabBox() const { return pTabBox; }
 
@@ -70,3 +70,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

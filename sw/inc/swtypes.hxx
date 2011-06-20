@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,18 +31,13 @@
 #include <SwGetPoolIdFromName.hxx>
 
 #ifndef INCLUDED_LIMITS_H
-#include <limits.h>     //fuer LONG_MAX
+#include <limits.h>     //For LONG_MAX.
 #define INCLUDED_LIMITS_H
 #endif
 
-#ifdef PM20
-#include <stdlib.h>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
 #include <i18npool/lang.h>
-// wenn das hier geaendert wird, dann auch im globals.hrc aendern!!!
-//#define SW_FILEFORMAT_40 SOFFICE_FILEFORMAT_40
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
@@ -73,102 +69,97 @@ typedef long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
 #define TWIPS_MAX       (LONG_MAX - 1)
 
-#define MM50   283  // 1/2 cm in TWIPS
-// --> OD 2004-06-18 #i19922# - constant for minimal page header/footer height of 1mm
+#define MM50   283  // 1/2 cm in TWIPS.
+
 const SwTwips cMinHdFtHeight = 56;
 
-#define MINFLY 23   //Minimalgroesse fuer FlyFrms
-#define MINLAY 23   //Minimalgroesse anderer Frms
+#define MINFLY 23   // Minimal size for FlyFrms.
+#define MINLAY 23   // Minimal size for other Frms.
 
-// Default-Spaltenabstand zweier Textspalten entspricht 0.3 cm
+// Default column distance of two text columns corresponds to 0.3 cm.
 #define DEF_GUTTER_WIDTH (MM50 / 5 * 3)
 
-//Minimale Distance (Abstand zum Text) fuer das BorderAttribut, damit
-//die aligned'en Linien nicht geplaettet werden.
-//28 Twips == 0,4mm
+// Minimal distance (distance to text) for border attribute
+// in order not to crock up aligned lines.
+// 28 Twips == 0,4mm
 #define MIN_BORDER_DIST 28
 
-    /* minimaler Dokmentrand */
+// Minimal document border.
 const SwTwips lMinBorder = 1134;
 
-//Die Wiesenbreite links neben und ueber dem Dokument.
-//Die halbe Wiesenbreite ist der Abstand zwischen den Seiten.
+// Margin left and above document.
+// Half of it is gap between the pages.
 #define DOCUMENTBORDER  568L
 #define GAPBETWEENPAGES 284L
 
-//initiale UndoActionCount
 #define UNDO_ACTION_COUNT 20
 
-// Konstante Strings
-SW_DLLPUBLIC extern UniString aEmptyStr;            // ""
-extern ByteString aEmptyByteStr;    // ""
-SW_DLLPUBLIC extern UniString aDotStr;          // '.'
+// Constant strings.
+SW_DLLPUBLIC extern UniString aEmptyStr;    // ""
+extern ByteString aEmptyByteStr;            // ""
+SW_DLLPUBLIC extern UniString aDotStr;      // '.'
 
-//Zum Einfuegen von Beschriftungen (wie bzw. wo soll eingefuegt werden).
-//Hier weil ein eigenes hxx nicht lohnt und es sonst nirgendwo so recht
-//hinpasst.
+// For inserting of captions (what and where to insert).
+// It's here because it is not big enough to justify its own hxx
+// and does not seem to fit somewhere else.
 enum SwLabelType
 {
-    LTYPE_TABLE,    //Beschriftung einer Tabelle
-    LTYPE_OBJECT,   //Beschriftung von Grafik oder OLE
-    LTYPE_FLY,      //Beschriftung eines (Text-)Rahmens
-    LTYPE_DRAW      //Beschriftung eines Zeichen-Objektes
+    LTYPE_TABLE,    // Caption for a table.
+    LTYPE_OBJECT,   // Caption for a graphic or OLE.
+    LTYPE_FLY,      // Caption for a text frame.
+    LTYPE_DRAW      // Caption for a draw object.
 };
 
 
 const sal_uInt8 OLD_MAXLEVEL = 5;
-const sal_uInt8 MAXLEVEL = 10;      //Ehemals numrule.hxx
-const sal_uInt8 NO_NUM      = 200;  //Ehemals numrule.hxx
-//const sal_uInt8 NO_NUMBERING = 201;  //Ehemals numrule.hxx    //#outline level,removed by zhaojianwei
-//const sal_uInt8 NO_INIT       = 202;  //Ehemals numrule.hxx
-
-// fuer Absaetze mit NO_NUM aber auf unterschiedlichen Leveln
-// DAMIT entfaellt das NO_NUM !!!!
-const sal_uInt8 NO_NUMLEVEL  = 0x20;    // wird mit den Levels verodert
+const sal_uInt8 MAXLEVEL = 10;      // Was: numrule.hxx.
+const sal_uInt8 NO_NUM      = 200;  // Was:  numrule.hxx.
 
 
-/*
- * Nette Funktionen als MACRO oder inline
- */
+// For paragraphs with NO_NUM but on different levels.
+// This makes the NO_NUM inapplicable.
+const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
 
-/* ein KiloByte sind 1024 Byte */
+
+// Some helper functions as macros or inlines.
+
+// One kilobyte is 1024 bytes:
 #define KB 1024
 
 #define SET_CURR_SHELL( shell ) CurrShell aCurr( shell )
 
-// pPathFinder wird von der UI initialisiert. Die Klasse liefert alle
-// benoetigten Pfade.
+// pPathFinder is initialized by the UI.
+// The class delivers all paths needed.
 extern SwPathFinder *pPathFinder;
 
-// Werte fuer die Einzuege an der Nummerierung und BulletListe
-// (fuer die weiteren Ebenen sind die Werte mit den Ebenen+1 zu
-//  multiplizieren; Ebenen 0..4 !!!)
+//  Values for indents at numbering and bullet lists.
+//  (For more levels the values have to be multiplied with the levels+1;
+//  levels 0 ..4!)
 
-// -> #i30312#
 const sal_uInt16 lBullIndent = 1440/4;
 const short lBullFirstLineOffset = -lBullIndent;
 const sal_uInt16 lNumIndent = 1440/4;
 const short lNumFirstLineOffset = -lNumIndent;
 const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
-// <- #i30312#
 
-// Anzahl der SystemField-Types vom SwDoc
+// Count of SystemField-types of SwDoc.
 #define INIT_FLDTYPES   32
-// Anzahl der vordefinierten Seq-Feldtypen. Es handelt sich dabei
-// immer um die letzen Felder vor INIT_FLDTYPES
+
+// Count of predefined Seq-field types. It is always the last
+// fields before INIT_FLDTYPES.
 #define INIT_SEQ_FLDTYPES   4
 
-//Die ehemaligen Rendevouz-Ids leben weiter:
-//Es gibt Ids fuer die Anker (SwFmtAnchor) und ein paar weitere die nur fuer
-//Schnittstellen Bedeutung haben (SwDoc).
+// The former Rendevouz-IDs live on:
+// There are IDs for the anchors (SwFmtAnchor) and some others
+// that are only of importance for interfaces (SwDoc).
 enum RndStdIds
 {
-    FLY_AT_PARA,        // anchored at paragraph
-    FLY_AS_CHAR,        // anchored as character
-    FLY_AT_PAGE,        // anchored at page
-    FLY_AT_FLY,         // anchored at frame
-    FLY_AT_CHAR,        // anchored at character
-                        //Der Rest wird nur fuer SS benutzt.
+    FLY_AT_PARA,        // Anchored at paragraph.
+    FLY_AS_CHAR,        // Anchored as character.
+    FLY_AT_PAGE,        // Anchored at page.
+    FLY_AT_FLY,         // Anchored at frame.
+    FLY_AT_CHAR,        // Anchored at character.
+
     RND_STD_HEADER,
     RND_STD_FOOTER,
     RND_STD_HEADERL,
@@ -176,11 +167,11 @@ enum RndStdIds
     RND_STD_FOOTERL,
     RND_STD_FOOTERR,
 
-    RND_DRAW_OBJECT     // ein Draw-Object !! nur fuer die SwDoc-Schnittstelle!
+    RND_DRAW_OBJECT     // A draw-Object! For the SwDoc-interface only!
 };
 
 
-extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
+extern ResMgr* pSwResMgr;           // Is in swapp0.cxx.
 #define SW_RES(i)       ResId(i,*pSwResMgr)
 #define SW_RESSTR(i)    UniString(ResId(i,*pSwResMgr))
 
@@ -193,22 +184,22 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
 ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 
-// reutns the twip size of this graphic
+// Returns the twip size of this graphic.
 SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 
 
-// Seperator fuer Sprunge im Dokument auf verschiedene Inhalttype
+// Separator for jumps to different content types in document.
 const sal_Unicode cMarkSeperator = '|';
-extern const sal_Char* __FAR_DATA pMarkToTable;             // Strings stehen
-extern const sal_Char* __FAR_DATA pMarkToFrame;             // im Init.cxx
-extern const sal_Char* __FAR_DATA pMarkToRegion;
-SW_DLLPUBLIC extern const sal_Char* __FAR_DATA pMarkToOutline;
-extern const sal_Char* __FAR_DATA pMarkToText;
-extern const sal_Char* __FAR_DATA pMarkToGraphic;
-extern const sal_Char* __FAR_DATA pMarkToOLE;
+extern const sal_Char* pMarkToTable;        // Strings are
+extern const sal_Char* pMarkToFrame;        // in Init.cxx.
+extern const sal_Char* pMarkToRegion;
+SW_DLLPUBLIC extern const sal_Char* pMarkToOutline;
+extern const sal_Char* pMarkToText;
+extern const sal_Char* pMarkToGraphic;
+extern const sal_Char* pMarkToOLE;
 
-#ifndef DB_DELIM                            // Ist in OFA definiert!!!
-#define DB_DELIM ((sal_Unicode)0xff)        // Datenbank <-> Tabellen-Trenner
+#ifndef DB_DELIM                            // This is defined in OFA!
+#define DB_DELIM ((sal_Unicode)0xff)        // Database <-> table separator.
 #endif
 
 
@@ -216,23 +207,23 @@ typedef sal_uInt16 SetAttrMode;
 
 namespace nsSetAttrMode
 {
-    const SetAttrMode SETATTR_DEFAULT        = 0x0000;  // default
-    const SetAttrMode SETATTR_DONTEXPAND     = 0x0001;  // TextAttribute nicht weiter expand.
-    const SetAttrMode SETATTR_DONTREPLACE    = 0x0002;  // kein anderes TextAttrib verdraengen
+    const SetAttrMode SETATTR_DEFAULT        = 0x0000;  // Default.
+    const SetAttrMode SETATTR_DONTEXPAND     = 0x0001;  // Don't expand text attribute any further.
+    const SetAttrMode SETATTR_DONTREPLACE    = 0x0002;  // Don't replace another text attribute.
 
-    const SetAttrMode SETATTR_NOTXTATRCHR    = 0x0004;  // bei Attr ohne Ende kein 0xFF einfuegen
-    const SetAttrMode SETATTR_NOHINTADJUST   = 0x0008;  // keine Zusammenfassung von Bereichen.
-    const SetAttrMode SETATTR_NOFORMATATTR   = 0x0010;  // nicht zum FormatAttribut umwandeln
-    const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020;  // nicht die NumRule veraendern
-    const SetAttrMode SETATTR_APICALL        = 0x0040;  // called from API (all UI related
-                                                        // functionality will be disabled)
-    /// force hint expand (only matters for hints with CH_TXTATR)
+    const SetAttrMode SETATTR_NOTXTATRCHR    = 0x0004;  // Don't insert 0xFF at attributes with no end.
+    const SetAttrMode SETATTR_NOHINTADJUST   = 0x0008;  // No merging of ranges.
+    const SetAttrMode SETATTR_NOFORMATATTR   = 0x0010;  // Do not change into format attribute.
+    const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020;  // Do not change NumRule.
+    const SetAttrMode SETATTR_APICALL        = 0x0040;  // Called from API (all UI related
+                                                        // functionality will be disabled).
+    /// Force hint expand (only matters for hints with CH_TXTATR).
     const SetAttrMode SETATTR_FORCEHINTEXPAND= 0x0080;
-    /// the inserted item is a copy -- intended for use in ndtxt.cxx
+    /// The inserted item is a copy -- intended for use in ndtxt.cxx.
     const SetAttrMode SETATTR_IS_COPY        = 0x0100;
 }
 
-//Umrechnung Twip<-> 1/100 mm fuer UNO
+// Conversion Twip <-> 1/100 mm for UNO
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
@@ -258,7 +249,7 @@ namespace nsSetAttrMode
 #define CHAR_ZWNBSP         ((sal_Unicode)0x2060)
 
 
-// returns the APP - CharClass instance - used for all ToUpper/ToLower/...
+// Returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
 SW_DLLPUBLIC LanguageType GetAppLanguage();
 
@@ -279,62 +270,52 @@ SW_DLLPUBLIC CollatorWrapper& GetAppCaseCollator();
 
 SW_DLLPUBLIC const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 
-// --> OD 2004-06-30 #i28701# - moved from <frame.hxx>
-//fuer Prepare() zur Benachrichtigung des Inhaltes durch das Layout auf
-//dem kurzen Dienstweg.
-//Der Inhalt sorgt dafuer, dass beim naechsten Aufruf von ::Format() das
-//minimal notwendige berechnet wird.
+// Official shortcut for Prepare() regarding notification of Content by the Layout.
+// Content provides for calculation of minimal requirements at the next call of ::Format().
 enum PrepareHint
 {
-    PREP_BEGIN,             //BEGIN
-    PREP_CLEAR = PREP_BEGIN,//Komplett neuformatieren.
-    PREP_WIDOWS_ORPHANS,    //Nur Witwen- und Waisen-Regelung pruefen und ggf.
-                            //Aufspalten.
-    PREP_FIXSIZE_CHG,       //Die FixSize hat sich veraendert.
-    PREP_FOLLOW_FOLLOWS,    //Follow ist jetzt moeglicherweise direkter
-                            //Nachbar.
-    PREP_ADJUST_FRM,        //Groesse per Grow/Shrink Ausrichten ohne zu
-                            //Formatieren.
-    PREP_FLY_CHGD,          //Ein FlyFrm hat sich (Groesse) veraendert.
-    PREP_FLY_ATTR_CHG,      //Ein FlyFrm hat seine Attribute veraendert
-                            //(z.B. Umlauf)
-    PREP_FLY_ARRIVE,        //Ein FlyFrm ueberlappt den Bereich jetzt neu.
-    PREP_FLY_LEAVE,         //Ein FlyFrm hat den Bereich verlassen.
-    PREP_FTN,               //Fussnoten-Invalidierung
-    PREP_POS_CHGD,          //Position des Frm hat sich verandert
-                            //(Zum Fly-Umbruch pruefen). Im void* des Prepare()
-                            //wird ein sal_Bool& uebergeben, dieser zeigt mit sal_True,
-                            //dass ein Format ausgefuehrt wurde.
-    PREP_UL_SPACE,          //UL-Space hat sich veraendert, TxtFrms muessen
-                            //den Zeilenabstand neu kalkulieren.
-    PREP_MUST_FIT,          //Frm passen machen (aufspalten) auch wenn die
-                            //Attribute es nicht erlauben (z.B. zusammenhalten).
-    PREP_WIDOWS,            // Ein Follow stellt fest, dass in ihm die Orphans-
-                            // regel zuschlaegt und verschickt an seinen
-                            // Vorgaenger (Master/Follow) ein PREP_WIDOWS
-    PREP_QUOVADIS,          // Wenn eine Fussnote _zwischen_ zwei Absaetzen
-                            // aufgespalten werden muss, dann muss der
-                            // letzte auf der Seite noch ein QUOVADIS bekommen
-                            // damit er den Text hineinformatiert.
-    PREP_BOSS_CHGD,         // Wenn ein Frm die Spalte/Seite wechselt, wird dieses
-                            // Zusatzprepare zum POS_CHGD im MoveFwd/Bwd
-                            // verschickt (Ftn-Nummern joinen etc.)
-                            // Die Richtung wird ueber pVoid mitgeteilt:
+    PREP_BEGIN,             // BEGIN.
+    PREP_CLEAR = PREP_BEGIN,// Reformat completely.
+    PREP_WIDOWS_ORPHANS,    // Only check for widows and orphans and split in case of need.
+    PREP_FIXSIZE_CHG,       // FixSize has changed.
+    PREP_FOLLOW_FOLLOWS,    // Follow is now possibly adjacent.
+    PREP_ADJUST_FRM,        // Adjust size via grow/shrink without formating.
+    PREP_FLY_CHGD,          // A FlyFrm has changed its size.
+    PREP_FLY_ATTR_CHG,      // A FlyFrm hat has changed its attributes
+                            // (e. g. wrap).
+    PREP_FLY_ARRIVE,        // A FlyFrm now overlaps range.
+    PREP_FLY_LEAVE,         // A FlyFrm has left range.
+    PREP_FTN,               // Invalidation of footnotes.
+    PREP_POS_CHGD,          // Position of Frm has changed.
+                            // (Check for Fly-break). In void* of Prepare()
+                            // a sal_Bool& is passed. If this is sal_True,
+                            // it indicateds that a format has been executed.
+    PREP_UL_SPACE,          // UL-Space has changed, TxtFrms have to
+                            // re-calculate line space.
+    PREP_MUST_FIT,          // Make frm fit (split) even if the attributes do
+                            // not allow that (e.g. "keep together").
+    PREP_WIDOWS,            // A follow realizes that the orphan rule will be applied
+                            // for it and sends a PREP_WIDOWS to its predecessor
+                            // (Master/Follow).
+    PREP_QUOVADIS,          // If a footnote has to be split between two paragraphs
+                            // the last on the page has to receive a QUOVADIS in or-
+                            // der to format the text into it.
+    PREP_BOSS_CHGD,         // If a Frm changes its column/page this additional
+                            // Prepare is sended to POS_CHGD in MoveFwd/Bwd
+                            // (join Ftn-numbers etc.)
+                            // Direction is communicated via pVoid:
                             //     MoveFwd: pVoid == 0
                             //     MoveBwd: pVoid == pOldPage
-    PREP_SWAP,              //Grafiken Swappen, fuer Grafiken im sichtbaren
-                            //Bereich.
-    PREP_REGISTER,          //Registerhaltige Frames invalidieren
-    PREP_FTN_GONE,          //Ein Follow verliert eine Fussnote, ggf. kann seine erste
-                            //Zeile hochrutschen
-    PREP_MOVEFTN,           //eine Fussnote wechselt die Seite, der Inhalt bekommt
-                            //zunaechst eine Hoehe von Null, damit nicht zuviel
-                            //Unruhe entsteht. Beim Formatieren prueft er, ob er
-                            //ueberhaupt passt und wechselt ggf. unbemerkt wieder
-                            //die Seite.
-    PREP_ERGOSUM,           //wg. Bewegung in FtnFrms QuoVadis/ErgoSum pruefen
-    PREP_END                //END
+    PREP_SWAP,              // Swap graphic; for graphics in visible area.
+    PREP_REGISTER,          // Invalidate frames with registers.
+    PREP_FTN_GONE,          // A Follow loses its footnote, possibly its first line can move up.
+    PREP_MOVEFTN,           // A footnote changes its page. Its contents receives at first a
+                            // height of zero in order to avoid too much noise. At formating
+                            // it checks whether it fits and if necessary changes its page again.
+    PREP_ERGOSUM,           // Needed because of movement in FtnFrms. Check QuoVadis/ErgoSum.
+    PREP_END                // END.
 };
-// <--
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

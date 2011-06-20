@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <editeng/acorrcfg.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
+#include "vbalistgalleries.hxx"
 
 using namespace ::ooo;
 using namespace ::ooo::vba;
@@ -57,7 +59,7 @@ using ::rtl::OUString;
 #define OWN_JOIN 1
 
 // #TODO is this defined somewhere else?
-#if ( defined UNX ) || ( defined OS2 ) //unix
+#if ( defined UNX )
 #define FILE_PATH_SEPERATOR "/"
 #else // windows
 #define FILE_PATH_SEPERATOR "\\"
@@ -153,14 +155,24 @@ SwVbaApplication::Dialogs( const uno::Any& index ) throw (uno::RuntimeException)
     return uno::makeAny( xCol );
 }
 
+uno::Any SAL_CALL
+SwVbaApplication::ListGalleries( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    uno::Reference< text::XTextDocument > xTextDoc( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xCol( new SwVbaListGalleries( this, mxContext, xTextDoc ) );
+    if ( index.hasValue() )
+        return xCol->Item( index, uno::Any() );
+    return uno::makeAny( xCol );
+}
+
 sal_Bool SAL_CALL SwVbaApplication::getDisplayAutoCompleteTips() throw (css::uno::RuntimeException)
 {
-    return SvxAutoCorrCfg::Get()->IsAutoTextTip();
+    return SvxAutoCorrCfg::Get().IsAutoTextTip();
 }
 
 void SAL_CALL SwVbaApplication::setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips ) throw (css::uno::RuntimeException)
 {
-    SvxAutoCorrCfg::Get()->SetAutoTextTip( _displayAutoCompleteTips );
+    SvxAutoCorrCfg::Get().SetAutoTextTip( _displayAutoCompleteTips );
 }
 
 sal_Int32 SAL_CALL SwVbaApplication::getEnableCancelKey() throw (css::uno::RuntimeException)
@@ -203,3 +215,5 @@ SwVbaApplication::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

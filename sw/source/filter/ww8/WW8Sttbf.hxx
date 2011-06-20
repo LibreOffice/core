@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -143,3 +143,5 @@ typedef ::std::vector<rtl::OUString> StringVector_t;
     {
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

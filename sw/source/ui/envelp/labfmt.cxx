@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -48,15 +49,13 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-// #define ------------------------------------------------------------------
+using ::rtl::OUString;
 
 #define ROUND(x) ((sal_uInt16) ((x) + .5))
 
-// --------------------------------------------------------------------------
 SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
 
     Window((Window*) pParent, rResID),
@@ -99,18 +98,17 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     lXHeight = GetTextHeight();
     lXWidth  = GetTextWidth('X');
 
-    // Skalierungsfaktor
+    // Scale factor
     float fx = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
 
     lOutWPix23 = (long)((float)lOutWPix * fx);
     lOutHPix23 = (long)((float)lOutHPix * fx);
 }
 
-// --------------------------------------------------------------------------
 SwLabPreview::~SwLabPreview()
 {
 }
-// --------------------------------------------------------------------------
+
 void SwLabPreview::Paint(const Rectangle &)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -130,7 +128,7 @@ void SwLabPreview::Paint(const Rectangle &)
     aPaintFont.SetTransparent(sal_False);
     SetFont(aPaintFont);
 
-    // Groesse des darzustellenden Bereichs
+    // size of region to be displayed
     long lDispW = ROUND(aItem.lLeft  + aItem.lHDist);
     long lDispH = ROUND(aItem.lUpper + aItem.lVDist);
     if (aItem.nCols == 1)
@@ -142,12 +140,12 @@ void SwLabPreview::Paint(const Rectangle &)
     else
         lDispH += ROUND(aItem.lVDist / 10);
 
-    // Skalierungsfaktor
+    // Scale factor
     float fx = (float) lOutWPix23 / Max(1L, lDispW),
           fy = (float) lOutHPix23 / Max(1L, lDispH),
           f  = fx < fy ? fx : fy;
 
-    // Nullpunkt
+    // zero point
     long lOutlineW = ROUND(f * lDispW);
     long lOutlineH = ROUND(f * lDispH);
 
@@ -160,19 +158,19 @@ void SwLabPreview::Paint(const Rectangle &)
     long lX3 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lHDist ));
     long lY3 = ROUND(lY0 + f * (aItem.lUpper + aItem.lVDist ));
 
-    // Umriss zeichnen (Flaeche)
+    // draw outline (area)
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
-    // Umriss zeichnen (Umrandung)
+    // draw outline (border)
     SetLineColor(rFieldTextColor);
-    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Oben
-    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Links
+    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
+    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
     if (aItem.nCols == 1)
-        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Rechts
+        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
     if (aItem.nRows == 1)
-        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Unten
+        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
-    // Etiketten
+    // Labels
     SetClipRegion (Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
     SetFillColor(rWinColor);
     for (sal_uInt16 nRow = 0; nRow < Min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
@@ -184,7 +182,7 @@ void SwLabPreview::Paint(const Rectangle &)
                     ROUND(f * aItem.lHeight))));
     SetClipRegion();
 
-    // Beschritung: Rand links
+    // annotation: left border
     if (aItem.lLeft)
     {
         long lX = (lX0 + lX1) / 2;
@@ -193,14 +191,14 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
     }
 
-    // Beschriftung: Rand oben
+    // annotation: upper border
     if (aItem.lUpper)
     {
         DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), sal_False);
         DrawText(Point(lX0 - 10 - lUpperWidth, ROUND(lY0 + f * aItem.lUpper / 2 - lXHeight / 2)), aUpperStr);
     }
 
-    // Beschriftung: Breite und Hoehe
+    // annotation: width and height
     {
         long lX = lX2 - lXWidth / 2 - lHeightWidth / 2;
         long lY = lY1 + lXHeight;
@@ -212,7 +210,7 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
     }
 
-    // Beschriftung: Horz. Abstand
+    // annotation: horizontal gap
     if (aItem.nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
@@ -221,21 +219,21 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
     }
 
-    // Beschriftung: Vertikaler Abstand
+    // annotation: vertical gap
     if (aItem.nRows > 1)
     {
         DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), sal_False);
         DrawText(Point(lX0 - 10 - lVDistWidth, ROUND(lY1 + f * aItem.lVDist / 2 - lXHeight / 2)), aVDistStr);
     }
 
-    // Beschriftung: Spalten
+    // annotation: columns
     {
         long lY = lY0 + lOutlineH + 4;
         DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), sal_True);
         DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
     }
 
-    // Beschriftung: Zeilen
+    // annotation: lines
     {
         long lX = lX0 + lOutlineW + 4;
         DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), sal_True);
@@ -243,9 +241,7 @@ void SwLabPreview::Paint(const Rectangle &)
     }
 }
 
-// Pfeil bzw. Intervall zeichnen --------------------------------------------
-
-
+// Arror or interval character --------------------------------------------
 
 void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, sal_Bool bArrow)
 {
@@ -255,10 +251,10 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, sal_Bool bArrow
     {
         Point aArr[3];
 
-        // Pfeil zeichnen
+        // Arrow character
         if (rP1.Y() == rP2.Y())
         {
-            // Waagerecht
+            // Horizontal
             aArr[0].X() = rP2.X() - 5;
             aArr[0].Y() = rP2.Y() - 2;
             aArr[1].X() = rP2.X();
@@ -268,7 +264,7 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, sal_Bool bArrow
         }
         else
         {
-            // Senkrecht
+            // Vertical
             aArr[0].X() = rP2.X() - 2;
             aArr[0].Y() = rP2.Y() - 5;
             aArr[1].X() = rP2.X() + 2;
@@ -283,33 +279,27 @@ void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, sal_Bool bArrow
     }
     else
     {
-        // Intervall zeichnen
+        // Interval symbol
         if (rP1.Y() == rP2.Y())
         {
-            // Waagerecht
+            // Horizontal
             DrawLine(Point(rP1.X(), rP1.Y() - 2), Point(rP1.X(), rP1.Y() + 2));
             DrawLine(Point(rP2.X(), rP2.Y() - 2), Point(rP2.X(), rP2.Y() + 2));
         }
         else
         {
-            // Senkrecht
+            // Vertical
             DrawLine(Point(rP1.X() - 2, rP1.Y()), Point(rP1.X() + 2, rP1.Y()));
             DrawLine(Point(rP2.X() - 2, rP2.Y()), Point(rP2.X() + 2, rP2.Y()));
         }
     }
 }
 
-// --------------------------------------------------------------------------
-
 void SwLabPreview::Update(const SwLabItem& rItem)
 {
     aItem = rItem;
     Invalidate();
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
@@ -340,7 +330,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     FreeResource();
     SetExchangeSupport();
 
-    // Metriken
+    // Metrics
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric(aHDistField , aMetric);
     SetMetric(aVDistField , aMetric);
@@ -349,7 +339,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     SetMetric(aLeftField  , aMetric);
     SetMetric(aUpperField , aMetric);
 
-    // Handler installieren
+    // Install handlers
     Link aLk = LINK(this, SwLabFmtPage, ModifyHdl);
     aHDistField .SetModifyHdl( aLk );
     aVDistField .SetModifyHdl( aLk );
@@ -371,23 +361,16 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aRowsField  .SetLoseFocusHdl( aLk );
 
     aSavePB.SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
-    // Timer einstellen
+    // Set timer
     aPreviewTimer.SetTimeout(1000);
     aPreviewTimer.SetTimeoutHdl(LINK(this, SwLabFmtPage, PreviewHdl));
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SwLabFmtPage::~SwLabFmtPage()
 {
 }
 
-// Modify-Handler der MetricFields. Preview-Timer starten -------------------
-
-
-
+// Modify-handler of MetricFields. start preview timer
 IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 {
     bModified = sal_True;
@@ -396,10 +379,7 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 
-// Preview invalidaten ------------------------------------------------------
-
-
-
+// Invalidate preview
 IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 {
     aPreviewTimer.Stop();
@@ -411,10 +391,7 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 
-// LoseFocus-Handler: Bei Aenderung sofort updaten --------------------------
-
-
-
+// LoseFocus-Handler: Update on change --------------------------
 IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 {
     if (((Edit*) pControl)->IsModified())
@@ -423,14 +400,11 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 }
 IMPL_LINK_INLINE_END( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 
-// Minima und Maxima fuer Fields festlegen ----------------------------------
-
-
 void SwLabFmtPage::ChangeMinMax()
 {
     long lMax = 31748; // 56 cm
 
-    // Min und Max
+    // Min and Max
 
     long lLeft  = static_cast< long >(GETFLDVAL(aLeftField )),
          lUpper = static_cast< long >(GETFLDVAL(aUpperField)),
@@ -457,7 +431,7 @@ void SwLabFmtPage::ChangeMinMax()
     aColsField  .SetMax((lMax - lLeft ) / Max(1L, lHDist));
     aRowsField  .SetMax((lMax - lUpper) / Max(1L, lVDist));
 
-    // First und Last
+    // First and Last
 
     aHDistField .SetFirst(aHDistField .GetMin());
     aVDistField .SetFirst(aVDistField .GetMin());
@@ -487,28 +461,16 @@ void SwLabFmtPage::ChangeMinMax()
     aRowsField  .Reformat();
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwLabFmtPage(pParent, rSet);
 }
-
-// ----------------------------------------------------------------------------
-
-
 
 void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     Reset(aSet);
 }
-
-// ----------------------------------------------------------------------------
-
-
 
 int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
@@ -517,10 +479,6 @@ int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
 
     return sal_True;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwLabFmtPage::FillItem(SwLabItem& rItem)
 {
@@ -540,10 +498,6 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
     }
 }
 
-// --------------------------------------------------------------------------
-
-
-
 sal_Bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(aItem);
@@ -552,10 +506,9 @@ sal_Bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
     return sal_True;
 }
 
-// --------------------------------------------------------------------------
 void SwLabFmtPage::Reset(const SfxItemSet& )
 {
-    // Fields initialisieren
+    // Initialise fields
     GetParent()->GetLabItem(aItem);
 
     aHDistField .SetMax(100 * aItem.lHDist , FUNIT_TWIP);
@@ -581,9 +534,6 @@ void SwLabFmtPage::Reset(const SfxItemSet& )
     aTypeFI.SetText(aItem.aType);
     PreviewHdl(0);
 }
-/* -----------------------------22.01.01 15:11--------------------------------
-
- ---------------------------------------------------------------------------*/
 
 IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
 {
@@ -620,9 +570,7 @@ IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
     delete pSaveDlg;
     return 0;
 }
-/* -----------------------------23.01.01 10:41--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     ModalDialog(pParent, SW_RES(DLG_SAVE_LABEL)),
     aOptionsFL(this,SW_RES(FL_OPTIONS  )),
@@ -654,9 +602,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     for(sal_Int32 i = 0; i < rMan.getLength(); i++)
         aMakeCB.InsertEntry(pMan[i]);
 }
-/* -----------------------------23.01.01 10:40--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, EMPTYARG)
 {
     SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
@@ -681,17 +627,13 @@ IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, EMPTYARG)
     EndDialog(RET_OK);
     return 0;
 }
-/* -----------------------------23.01.01 11:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SwSaveLabelDlg, ModifyHdl, Edit*, EMPTYARG)
 {
     aOKPB.Enable(aMakeCB.GetText().Len() && aTypeED.GetText().Len());
     return 0;
 }
-/* -----------------------------23.01.01 16:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
 {
     if(bSuccess)
@@ -710,3 +652,4 @@ sal_Bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
     return bSuccess;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

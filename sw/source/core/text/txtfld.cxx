@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,6 @@
 #include "flyfrm.hxx"   //IsInBody()
 #include "viewimp.hxx"
 #include "txtatr.hxx"   // SwTxtFld
-#include "txtcfg.hxx"
 #include "swfont.hxx"   // NewFldPortion, new SwFont
 #include "fntcache.hxx"   // NewFldPortion, SwFntAccess
 #include "porfld.hxx"
@@ -225,20 +225,6 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             {
                 SwDBField* pDBFld = (SwDBField*)pFld;
                 pDBFld->ChgBodyTxtFlag( ::lcl_IsInBody( pFrame ) );
-/* Solange das ChangeExpansion auskommentiert ist.
- * Aktualisieren in Kopf/Fuszeilen geht aktuell nicht.
-                if( !::lcl_IsInBody( pFrame ) )
-                {
-                    pDBFld->ChgBodyTxtFlag( sal_False );
-                    pDBFld->ChangeExpansion( pFrame, (SwTxtFld*)pHint );
-                }
-                else if( !pDBFld->IsInBodyTxt() )
-                {
-                    // war vorher anders, also erst expandieren, dann umsetzen!!
-                    pDBFld->ChangeExpansion( pFrame, (SwTxtFld*)pHint );
-                    pDBFld->ChgBodyTxtFlag( sal_True );
-                }
-*/
             }
             {
                 String const str( (bName)
@@ -373,9 +359,6 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     SwLinePortion *pRet = 0;
     if( !pHint )
     {
-#if OSL_DEBUG_LEVEL > 1
-//        aDbstream << "NewExtraPortion: hint not found?" << endl;
-#endif
         pRet = new SwTxtPortion;
         pRet->SetLen( 1 );
         rInf.SetLen( 1 );
@@ -418,9 +401,6 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     }
     if( !pRet )
     {
-#if OSL_DEBUG_LEVEL > 1
-//        aDbstream << "NewExtraPortion: unknown hint" << endl;
-#endif
         const XubString aNothing;
         pRet = new SwFldPortion( aNothing );
         rInf.SetLen( 1 );
@@ -449,16 +429,13 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
-        // --> OD 2008-01-23 #newlistlevelattrs#
         const bool bLabelAlignmentPosAndSpaceModeActive(
                 rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT );
         const KSHORT nMinDist = bLabelAlignmentPosAndSpaceModeActive
                                 ? 0 : rNumFmt.GetCharTextDistance();
-        // <--
 
         if( SVX_NUM_BITMAP == rNumFmt.GetNumberingType() )
         {
-            // --> OD 2008-01-23 #newlistlevelattrs#
             pRet = new SwGrfNumPortion( (SwFrm*)GetTxtFrm(),
                                         pTxtNd->GetLabelFollowedBy(),
                                         rNumFmt.GetBrush(),
@@ -466,7 +443,6 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                                         rNumFmt.GetGraphicSize(),
                                         bLeft, bCenter, nMinDist,
                                         bLabelAlignmentPosAndSpaceModeActive );
-            // <--
             long nTmpA = rInf.GetLast()->GetAscent();
             long nTmpD = rInf.GetLast()->Height() - nTmpA;
             if( !rInf.IsTest() )
@@ -492,7 +468,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 //
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
-                // --> FME 2005-08-11 #i53199#
+                // #i53199#
                 if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                 {
                     // i18463:
@@ -537,17 +513,14 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                                             pNumFnt,
                                             bLeft, bCenter, nMinDist,
                                             bLabelAlignmentPosAndSpaceModeActive );
-                // <--
             }
             else
             {
                 XubString aTxt( pTxtNd->GetNumString() );
-                // --> OD 2008-01-23 #newlistlevelattrs#
                 if ( aTxt.Len() > 0 )
                 {
                     aTxt.Insert( pTxtNd->GetLabelFollowedBy() );
                 }
-                // <--
 
                 // 7974: Nicht nur eine Optimierung...
                 // Eine Numberportion ohne Text wird die Breite von 0
@@ -561,7 +534,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     //
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
-                    // --> FME 2005-08-11 #i53199#
+                    // #i53199#
                     if ( !pIDSA->get(IDocumentSettingAccess::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT) )
                     {
                         // i18463:
@@ -582,11 +555,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
 
-                    // --> OD 2008-01-23 #newlistlevelattrs#
                     pRet = new SwNumberPortion( aTxt, pNumFnt,
                                                 bLeft, bCenter, nMinDist,
                                                 bLabelAlignmentPosAndSpaceModeActive );
-                    // <--
                 }
             }
         }
@@ -594,3 +565,4 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     return pRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

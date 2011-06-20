@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,11 +66,10 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
     public:
         virtual ~SwObjectFormatterLayFrm();
 
-        // --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+        // #i40147# - add parameter <_bCheckForMovedFwd>.
         // Not relevant for objects anchored at layout frame.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                   const bool _bCheckForMovedFwd = false );
-        // <--
         virtual bool DoFormatObjs();
 
         static SwObjectFormatterLayFrm* CreateObjFormatter(
@@ -79,3 +79,5 @@ class SwObjectFormatterLayFrm : public SwObjectFormatter
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

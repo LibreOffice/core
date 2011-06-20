@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <comphelper/MasterPropertySetInfo.hxx>
@@ -48,11 +49,7 @@
 #include <svx/zoomitem.hxx>
 #include <unomod.hxx>
 #include <vcl/svapp.hxx>
-
-#include "swmodule.hxx"
-#include "cfgitems.hxx"
-#include "prtopt.hxx"
-
+#include <comphelper/servicehelper.hxx>
 
 #include "swmodule.hxx"
 #include "cfgitems.hxx"
@@ -120,11 +117,13 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_USE_OLD_PRINTER_METRICS,
     HANDLE_PROTECT_FORM,
     HANDLE_TABS_RELATIVE_TO_INDENT,
-    // --> OD 2008-06-05 #i89181#
+    // #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
-    // <--
     HANDLE_MODIFYPASSWORDINFO,
-    HANDLE_MATH_BASELINE_ALIGNMENT
+    HANDLE_MATH_BASELINE_ALIGNMENT,
+    HANDLE_INVERT_BORDER_SPACING,
+    HANDLE_COLLAPSE_EMPTY_CELL_PARA,
+    HANDLE_SMALL_CAPS_PERCENTAGE_66
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -176,11 +175,13 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics"), HANDLE_USE_OLD_PRINTER_METRICS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("TabsRelativeToIndent"), HANDLE_TABS_RELATIVE_TO_INDENT, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ProtectForm"), HANDLE_PROTECT_FORM, CPPUTYPE_BOOLEAN, 0, 0},
-        // --> OD 2008-06-05 #i89181#
+        // #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, CPPUTYPE_PROPERTYVALUE, 0,   0},
         { RTL_CONSTASCII_STRINGPARAM("MathBaselineAlignment"), HANDLE_MATH_BASELINE_ALIGNMENT, CPPUTYPE_BOOLEAN, 0, 0},
-
+        { RTL_CONSTASCII_STRINGPARAM("InvertBorderSpacing"), HANDLE_INVERT_BORDER_SPACING, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("CollapseEmptyCellPara"), HANDLE_COLLAPSE_EMPTY_CELL_PARA, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("SmallCapsPercentage66"), HANDLE_SMALL_CAPS_PERCENTAGE_66, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -257,7 +258,7 @@ void SwXDocumentSettings::release ()
 uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Sequence< uno::Type > aBaseTypes( 5 );
     uno::Type* pBaseTypes = aBaseTypes.getArray();
@@ -273,18 +274,15 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     return aBaseTypes;
 }
 
+namespace
+{
+    class theSwXDocumentSettingsImplementationId : public rtl::Static< UnoTunnelIdInit, theSwXDocumentSettingsImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
     throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwXDocumentSettingsImplementationId::get().getSeq();
 }
 
 void SwXDocumentSettings::_preSetValues ()
@@ -302,7 +300,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
-        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + C2U(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
+        throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rtl::OUString::createFromAscii(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
 
     switch( rInfo.mnHandle )
     {
@@ -406,7 +404,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SvMemoryStream aStream (aSequence.getArray(), nSize,
                                             STREAM_READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    static sal_uInt16 __READONLY_DATA nRange[] =
+                    static sal_uInt16 const nRange[] =
                     {
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_HTML_MODE,  SID_HTML_MODE,
@@ -665,14 +663,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::PROTECT_FORM, bTmp);
         }
         break;
-        // --> OD 2008-06-05 #i89181#
+        // #i89181#
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, bTmp);
         }
         break;
-        // <--
         case HANDLE_MODIFYPASSWORDINFO:
         {
             uno::Sequence< beans::PropertyValue > aInfo;
@@ -692,6 +689,24 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT, bTmp );
+        }
+        break;
+        case HANDLE_INVERT_BORDER_SPACING:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::INVERT_BORDER_SPACING, bTmp);
+        }
+        break;
+        case HANDLE_COLLAPSE_EMPTY_CELL_PARA:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA, bTmp);
+        }
+        break;
+        case HANDLE_SMALL_CAPS_PERCENTAGE_66:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::SMALL_CAPS_PERCENTAGE_66, bTmp);
         }
         break;
         default:
@@ -807,7 +822,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
         {
-            //sal_Bool bParaSpace = mpDoc->IsKernAsianPunctuation();
             sal_Bool bParaSpace = mpDoc->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION);
             rValue.setValue(&bParaSpace, ::getBooleanCppuType());
         }
@@ -1009,14 +1023,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // --> OD 2008-06-05 #i89181#
+        // #i89181#
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // <--
         case HANDLE_MODIFYPASSWORDINFO:
         {
             rValue <<= mpDocSh->GetModifyPasswordInfo();
@@ -1028,7 +1041,24 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-
+    case HANDLE_INVERT_BORDER_SPACING:
+    {
+            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::INVERT_BORDER_SPACING);
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+    }
+    break;
+        case HANDLE_COLLAPSE_EMPTY_CELL_PARA:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::COLLAPSE_EMPTY_CELL_PARA );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_SMALL_CAPS_PERCENTAGE_66:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::SMALL_CAPS_PERCENTAGE_66 );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1074,3 +1104,4 @@ Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,48 +37,26 @@
 #include <ctype.h>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <doc.hxx>
 #include <docstdlg.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 
-// fuer Statistikfelder
+// for statistics fields
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 
-#ifndef _DOCSTDLG_HRC
 #include <docstdlg.hrc>
-#endif
-
-
-/*--------------------------------------------------------------------
-    Beschreibung: Create
- --------------------------------------------------------------------*/
 
 
 SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwDocStatPage(pParent, rSet);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Ctor
- --------------------------------------------------------------------*/
-
 
 SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 
@@ -95,7 +74,9 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     aWordLbl    (this, SW_RES( FT_WORD       )),
     aWordNo     (this, SW_RES( FT_WORD_COUNT )),
     aCharLbl    (this, SW_RES( FT_CHAR       )),
-       aCharNo      (this, SW_RES( FT_CHAR_COUNT )),
+    aCharNo     (this, SW_RES( FT_CHAR_COUNT )),
+    aCharExclSpacesLbl (this, SW_RES( FT_CHAR_EXCL_SPACES )),
+    aCharExclSpacesNo (this, SW_RES( FT_CHAR_COUNT_EXCL_SPACES )),
     aLineLbl    (this, SW_RES( FT_LINE       )),
     aLineNo     (this, SW_RES( FT_LINE_COUNT )),
     aUpdatePB   (this, SW_RES( PB_PDATE      ))
@@ -121,7 +102,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   ItemSet fuellen bei Aenderung
+    Description:    fill ItemSet when changed
  --------------------------------------------------------------------*/
 
 
@@ -130,16 +111,11 @@ sal_Bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
     return sal_False;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren / Setzen der Daten
+ Description:   update / set data
 ------------------------------------------------------------------------*/
 
 
@@ -152,10 +128,11 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
     aParaNo.SetText(String::CreateFromInt32( rStat.nPara ));
     aWordNo.SetText(String::CreateFromInt32( rStat.nWord ));
     aCharNo.SetText(String::CreateFromInt32( rStat.nChar ));
+    aCharExclSpacesNo.SetText(String::CreateFromInt32( rStat.nCharExcludingSpaces ));
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren der Statistik
+ Description:   update statistics
 ------------------------------------------------------------------------*/
 
 
@@ -168,7 +145,7 @@ void SwDocStatPage::Update()
     else if ( pVSh->ISA(SwPagePreView) )
         pSh = ((SwPagePreView*)pVSh)->GetViewShell();
 
-    ASSERT( pSh, "Shell not found" );
+    OSL_ENSURE( pSh, "Shell not found" );
 
     SwWait aWait( *pSh->GetDoc()->GetDocShell(), sal_True );
     pSh->StartAction();
@@ -179,9 +156,6 @@ void SwDocStatPage::Update()
     SetData(aDocStat);
 }
 
-/*-----------------19.06.97 16.37-------------------
-    Zeilennummer aktualisieren
---------------------------------------------------*/
 IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
 {
     Update();
@@ -193,3 +167,4 @@ IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

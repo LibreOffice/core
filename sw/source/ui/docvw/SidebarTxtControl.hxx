@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,10 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- *
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 class OutlinerView;
 class SwView;
 class SwPostItMgr;
-class SpellCallbackInfo;
+struct SpellCallbackInfo;
 
 namespace sw { namespace sidebarwindows {
 
@@ -85,3 +82,5 @@ class SidebarTxtControl : public Control
 } } // end of namespace sw::sidebarwindows
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

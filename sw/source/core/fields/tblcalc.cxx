@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -180,10 +181,9 @@ void SwTblField::SetPar2(const String& rStr)
     SetFormula( rStr );
 }
 
-
-sal_Bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR2:
@@ -208,14 +208,14 @@ sal_Bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= (sal_Int32)GetFormat();
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }
 
-sal_Bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     String sTmp;
     switch ( nWhichId )
     {
@@ -239,11 +239,9 @@ sal_Bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     default:
-        bRet = sal_False;
+        bRet = false;
     }
     return bRet;
 }
 
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

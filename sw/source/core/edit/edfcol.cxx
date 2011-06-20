@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,9 +39,7 @@
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
-// --> FME 2004-06-29 #114856# Formular view
-#include <viewopt.hxx>
-// <--
+#include <viewopt.hxx>  // Formular view
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>
@@ -68,7 +67,7 @@ SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
     return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
 }
 
-// --> OD 2007-11-06 #i62675#
+// #i62675#
 void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
                                  bool bResetListAttrs )
 {
@@ -82,16 +81,14 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     FOREACHPAM_START(this)
 
         if( !PCURCRSR->HasReadonlySel(
-                    // --> FME 2004-06-29 #114856# Formular view
+                    // Formular view
                     GetViewOptions()->IsFormView() ) )
-                    // <--
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
     FOREACHPAM_END()
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
     EndAllAction();
 }
-// <--
 
 
 SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
@@ -102,7 +99,7 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
         pParent = &GetTxtFmtColl(0);
     if (  (pColl=GetDoc()->MakeTxtFmtColl(rFmtCollName, pParent)) == 0 )
     {
-        ASSERT( sal_False, "MakeTxtFmtColl failed" )
+        OSL_FAIL( "MakeTxtFmtColl failed" );
     }
     return pColl;
 
@@ -113,9 +110,8 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
 {
     if( bReset )
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
+        // #i73790# - method renamed
         pColl->ResetAllFmtAttr();
-        // <--
     }
 
     SwPaM * pCrsr = GetCrsr();
@@ -160,3 +156,4 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

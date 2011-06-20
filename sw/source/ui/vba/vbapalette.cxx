@@ -1,8 +1,10 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include "vbapalette.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/word/WdColor.hpp>
 #include <ooo/vba/word/WdColorIndex.hpp>
+#include <sal/macros.h>
 
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
@@ -39,7 +41,7 @@ public:
     // Methods XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException)
     {
-        return sizeof(ColorTable) / sizeof(ColorTable[0]);
+        return SAL_N_ELEMENTS(ColorTable);
     }
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
@@ -73,3 +75,4 @@ VbaPalette::getPalette() const
     return mxPalette;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

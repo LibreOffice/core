@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,6 @@ protected:
 public:
     SvStrings & rSectionList;
 
-    // #110680#
     SwXMLSectionList(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvStrings & rNewSectionList );
@@ -87,3 +87,5 @@ public:
     ~SvXMLIgnoreSectionListContext ( void );
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

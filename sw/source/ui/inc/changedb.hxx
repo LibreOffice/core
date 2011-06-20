@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,20 +29,13 @@
 #define _CHANGEDB_HXX
 
 
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svx/stddlg.hxx>
 #include "dbtree.hxx"
-#include <vcl/fixed.hxx>
 
 class SwFldMgr;
 class SwView;
@@ -49,9 +43,8 @@ class SwWrtShell;
 struct SwDBData;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Datenbank an Feldern austauschen
+     Description: exchange database at fields
  --------------------------------------------------------------------*/
-
 class SwChangeDBDlg: public SvxStandardDialog
 {
     FixedLine       aDBListFL;
@@ -66,10 +59,8 @@ class SwChangeDBDlg: public SvxStandardDialog
     OKButton        aOKBT;
     CancelButton    aCancelBT;
     HelpButton      aHelpBT;
-//  PushButton      aChangeBT;
 
     ImageList       aImageList;
-    ImageList       aImageListHC;
 
     SwWrtShell      *pSh;
     SwFldMgr        *pMgr;
@@ -90,3 +81,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

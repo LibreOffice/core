@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -67,20 +68,19 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     sal_Bool        bIsInVertical;
     // --> OD 2009-09-01 #mongolianlayout#
     sal_Bool        bIsInVerticalL2R;
-    // <--
 
-    // interne Verrechnung fuer Umrandung
+    // internal calculation for borders
     SW_DLLPRIVATE SwTwips           CalcTopSpace();
     SW_DLLPRIVATE SwTwips           CalcBottomSpace();
     SW_DLLPRIVATE SwTwips           CalcLeftSpace();
     SW_DLLPRIVATE SwTwips           CalcRightSpace();
 
-    SW_DLLPRIVATE void _UpdateFlyFrm(); //Nacharbeit nach Einfuegen oder Update
+    SW_DLLPRIVATE void _UpdateFlyFrm(); // post-treatment after insert or update
 
 public:
     SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType );
 
-    //CopyCtor fuer die Dialoge, zum Pruefen der Metrics
+    //CopyCtor for dialogs to check the metrics
     SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
 
     inline SwWrtShell*  GetShell() { return pOwnSh; }
@@ -91,14 +91,14 @@ public:
     void                SetHorzOrientation(sal_Int16 eOrient);
     void                SetVertOrientation(sal_Int16 eOrient);
 
-    // Absolute Position
+    // absolute position
     void                SetAbsPos(const Point& rLPoint);
 
-    // Relative Position vom Anker
+    // anchor's relative position
     void                SetPos(const Point& rLPoint);
     inline Point        GetPos() const;
 
-    // Groesse
+    // size
     void                SetSize(const Size& rLSize);
     inline const Size&  GetSize() const;
 
@@ -106,7 +106,7 @@ public:
 
     void                SetHeightSizeType(SwFrmSize eType);
 
-    // Abstand zum Inhalt
+    // space to content
     void                SetLRSpace( long nLeft  = LONG_MAX,
                                     long nRight = LONG_MAX );
     void                SetULSpace( long nTop   = LONG_MAX,
@@ -114,25 +114,25 @@ public:
 
     void                SetCol( const SwFmtCol &rCol);
 
-    // Attribute aendern und erfragen
+    // change and query attributes
     void                UpdateAttrMgr();
     void                UpdateFlyFrm();
 
-    // neuen Rahmen erzeugen
+    // create new frame
     sal_Bool                InsertFlyFrm();
     void                InsertFlyFrm(RndStdIds      eAnchorType,
                                    const Point    &rPos,
                                    const Size     &rSize,
                                    sal_Bool           bAbsPos = sal_False);
 
-    // Metriken pruefen und  aendern
+    // check and change metrics
     void                ValidateMetrics(SvxSwFrameValidation& rVal,
                             const SwPosition* pToCharCntntPos,
                             sal_Bool bOnlyPercentRefValue = sal_False);
 
     void                DelAttr(sal_uInt16 nId);
 
-    // Set rausreichen
+    // reach out the set
     inline const SfxItemSet &GetAttrSet() const { return aSet; }
     inline       SfxItemSet &GetAttrSet()       { return aSet; }
     void                     SetAttrSet(const SfxItemSet& rSet);
@@ -194,3 +194,5 @@ inline sal_uInt16 SwFlyFrmAttrMgr::GetHeightPercent() const
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

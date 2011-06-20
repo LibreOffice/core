@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,8 +30,8 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <rtl/uuid.h>
-#include <vos/mutex.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -43,9 +44,7 @@
 #include <flyfrm.hxx>
 #include <accmap.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-// --> OD 2009-07-14 #i73249#
-#include <hints.hxx>
-// <--
+#include <hints.hxx> // #i73249#
 #include "acctextframe.hxx"
 
 using namespace ::com::sun::star;
@@ -87,9 +86,8 @@ SwAccessibleTextFrame::~SwAccessibleTextFrame()
 void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    // --> OD 2009-07-14 #i73249#
-    // suppress handling of RES_NAME_CHANGED in case that attribute Title is
-    // used as the accessible name.
+    // #i73249# - suppress handling of RES_NAME_CHANGED
+    // in case that attribute Title is used as the accessible name.
     if ( nWhich != RES_NAME_CHANGED ||
          msTitle.getLength() == 0 )
     {
@@ -99,7 +97,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
     const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
     switch( nWhich )
     {
-        // --> OD 2009-07-14 #i73249#
+        // #i73249#
         case RES_TITLE_CHANGED:
         {
             const String& sOldTitle(
@@ -152,15 +150,14 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             }
         }
         break;
-        // <--
     }
 }
 
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -171,11 +168,10 @@ OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
 
     return SwAccessibleFrameBase::getAccessibleName();
 }
-// <--
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleDescription (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
@@ -209,18 +205,15 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNam
     return aRet;
 }
 
+namespace
+{
+    class theSwAccessibleTextFrameImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleTextFrameImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleTextFrameImplementationId::get().getSeq();
 }
 
 
@@ -234,7 +227,7 @@ SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
     SwFlyFrm* pFlyFrm = NULL;
 
     const SwFrm* pFrm = GetFrm();
-    DBG_ASSERT( pFrm != NULL, "frame expected" );
+    OSL_ENSURE( pFrm != NULL, "frame expected" );
     if( pFrm->IsFlyFrm() )
     {
         pFlyFrm = static_cast<SwFlyFrm*>( const_cast<SwFrm*>( pFrm ) );
@@ -254,7 +247,7 @@ AccessibleRelation SwAccessibleTextFrame::makeRelation( sal_Int16 nType, const S
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccessibleRelationSet( )
     throw ( uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
     // get the frame, and insert prev/next relations into helper
@@ -262,7 +255,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
     AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
 
     SwFlyFrm* pFlyFrm = getFlyFrm();
-    DBG_ASSERT( pFlyFrm != NULL, "fly frame expected" );
+    OSL_ENSURE( pFlyFrm != NULL, "fly frame expected" );
 
     const SwFlyFrm* pPrevFrm = pFlyFrm->GetPrevLink();
     if( pPrevFrm != NULL )
@@ -276,3 +269,5 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
 
     return pHelper;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

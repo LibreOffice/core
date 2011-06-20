@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 
 #include <tools/solar.h>
-#ifndef _VOS_REF_HXX
-#include <vos/ref.hxx>
-#endif
+#include <rtl/ref.hxx>
 #include <chcmprse.hxx>
 #include <fldupde.hxx>
 
@@ -78,9 +77,11 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          USE_OLD_PRINTER_METRICS,
          TABS_RELATIVE_TO_INDENT,
          PROTECT_FORM,
-         // --> OD 2008-06-05 #i89181#
+         // #i89181#
          TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
-         // <--
+     INVERT_BORDER_SPACING,
+         COLLAPSE_EMPTY_CELL_PARA,
+         SMALL_CAPS_PERCENTAGE_66,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
@@ -147,14 +148,14 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
        @returns
        the forbidden characters table.
     */
-    virtual vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() = 0;
+    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() = 0;
 
     /** Get the forbidden character table.
 
        @returns
        the forbidden characters table.
     */
-    virtual const vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const = 0;
+    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const = 0;
 
     /** Get the current link update mode.
 
@@ -211,3 +212,5 @@ protected:
  };
 
 #endif // IDOCUMENTSETTINGACCESS_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

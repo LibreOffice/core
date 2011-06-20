@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,35 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
-
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
-
-
-
-
-
-
-
-
 #include <svl/stritem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xtable.hxx>
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <doc.hxx>
 
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Document laden
+    Description: Load Document
  --------------------------------------------------------------------*/
 
 
@@ -65,7 +52,7 @@ void  SwDocShell::InitDraw()
     SdrModel *pDrDoc = pDoc->GetDrawModel();
     if( pDrDoc )
     {
-        // Listen, bzw. Tables im ItemSet der DocShell anlegen
+        // create Lists and Tables DocShell's ItemSet
         PutItem( SvxGradientListItem( pDrDoc->GetGradientList(), SID_GRADIENT_LIST ) );
         PutItem( SvxHatchListItem( pDrDoc->GetHatchList(), SID_HATCH_LIST ) );
         PutItem( SvxBitmapListItem( pDrDoc->GetBitmapList(), SID_BITMAP_LIST ) );
@@ -77,8 +64,9 @@ void  SwDocShell::InitDraw()
         rOutliner.SetHyphenator( xHyphenator );
     }
     else
-        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable(), SID_COLOR_TABLE ));
+        PutItem( SvxColorTableItem( &XColorTable::GetStdColorTable(), SID_COLOR_TABLE ));
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

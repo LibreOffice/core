@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,10 +71,8 @@ const sal_uInt16& getMaxLookup()
     return nMaxLookup;
 }
 
-// --> OD 2008-01-16 #newlistlevelattrs#
 sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
-// <--
 {
     if( GetCrsrCnt() > getMaxLookup() )
     {
@@ -142,11 +141,10 @@ sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
                     xub_StrLen nStt = n == nSttNd ? nSttCnt : 0,
                                   nEnd = n == nEndNd ? nEndCnt
                                         : ((SwTxtNode*)pNd)->GetTxt().Len();
-                    // --> OD 2008-01-16 #newlistlevelattrs#
+
                     ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
                                                 sal_False, sal_True,
                                                 bMergeIndentValuesOfNumRule );
-                    // <--
                 }
                 break;
             case ND_GRFNODE:
@@ -255,21 +253,6 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
     EndAllAction();
     return bChgd;
 }
-
-
-
-/*sal_uInt16 SwEditShell::GetFtnCnt( sal_Bool bEndNotes = sal_False ) const
-{
-    const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
-    sal_uInt16 nCnt = 0;
-    for ( sal_uInt16 i = 0; i < rIdxs.Count(); ++i )
-    {
-        const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
-        if ( bEndNotes == rFtn.IsEndNote() )
-            nCnt++;
-    }
-    return nCnt;
-} */
 
 
 bool SwEditShell::HasFtns( bool bEndNotes ) const
@@ -427,10 +410,9 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     {
         bRet = sal_False;
 
-        // --> OD 2008-03-19 #refactorlists#
         if ( rTNd.IsInList() )
         {
-            ASSERT( rTNd.GetNumRule(),
+            OSL_ENSURE( rTNd.GetNumRule(),
                     "<lcl_IsNoEndTxtAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
             const SwNumRule* pNumRule = rTNd.GetNumRule();
             const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
@@ -490,7 +472,7 @@ sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 sal_uInt16 SwEditShell::GetScriptType() const
 {
     sal_uInt16 nRet = 0;
-    //if( pBreakIt->GetBreakIter().is() )
+
     {
         FOREACHPAM_START(this)
 
@@ -551,7 +533,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
                                                 ? pEnd->nContent.GetIndex()
                                                 : rTxt.Len();
 
-                        ASSERT( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
+                        OSL_ENSURE( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
                         if( nEndPos > rTxt.Len() )
                             nEndPos = rTxt.Len();
 
@@ -625,7 +607,7 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
     const SwPaM* pCrsr = GetCrsr();
     const SwPosition* pStt = pCrsr->Start();
     const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
-    ASSERT( pTNd, "no textnode available" );
+    OSL_ENSURE( pTNd, "no textnode available" );
 
     sal_uInt16 nScaleWidth;
     if( pTNd )
@@ -644,3 +626,5 @@ sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
         nScaleWidth = 100;              // default are no scaling -> 100%
     return nScaleWidth;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

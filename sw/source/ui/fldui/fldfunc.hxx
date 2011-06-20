@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,18 +31,13 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <vcl/edit.hxx>
 
 #include "condedit.hxx"
 #include "fldpage.hxx"
 #include <actctrl.hxx>
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwFldFuncPage : public SwFldPage
 {
@@ -86,7 +82,7 @@ class SwFldFuncPage : public SwFldPage
     DECL_LINK( ListModifyHdl, Control*);
     DECL_LINK( ListEnableHdl, void*);
 
-    // Macro ausw„hlen
+    // select Macro
     DECL_LINK( MacroHdl, Button * );
 
     void                UpdateSubType();
@@ -111,3 +107,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,7 +45,7 @@ struct BuiltinStyleTable
     sal_Int32 wdStyleType;
 };
 
-const BuiltinStyleTable aBuiltinStyleTable[] =
+static const BuiltinStyleTable aBuiltinStyleTable[] =
 {
     { word::WdBuiltinStyle::wdStyleBlockQuotation, "", word::WdStyleType::wdStyleTypeParagraph },
     { word::WdBuiltinStyle::wdStyleBodyText, "Text body", word::WdStyleType::wdStyleTypeParagraph },
@@ -152,51 +153,36 @@ const BuiltinStyleTable aBuiltinStyleTable[] =
     { 0, 0, 0 }
 };
 
-
-static uno::Sequence< rtl::OUString > getStyleTypes()
+struct MSOStyleNameTable
 {
-    uno::Sequence< rtl::OUString > aRet(3);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") );
-    pArray[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharacterStyles") );
-    pArray[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingStyles") );
-    return aRet;
-}
+    const sal_Char* pMSOStyleName;
+    const sal_Char* pOOoStyleName;
+    const sal_Char* pOOoStyleType;
+};
+
+static const MSOStyleNameTable aMSOStyleNameTable[] =
+{
+    { "Normal", "Default", "ParagraphStyles" },
+    { 0, 0, 0 }
+};
 
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > StyleEnumeration_BASE;
 typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > StyleCollectionHelper_BASE;
-/*
-class StylesEnumeration : public StyleEnumeration_BASE
-{
-public:
-    StylesEnumeration( const SheetMap& sMap ) : mSheetMap( sMap ), mIt( mSheetMap.begin() ) {}
-    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
-    {
-        return ( mIt != mSheetMap.end() );
-    }
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-    {
-        if ( !hasMoreElements() )
-            throw container::NoSuchElementException();
-        uno::Reference< sheet::XSpreadsheet > xSheet( *mIt++ );
-        return uno::makeAny( xSheet ) ;
-    }
-};
-*/
+
 class StyleCollectionHelper : public StyleCollectionHelper_BASE
 {
 private:
     uno::Reference< frame::XModel > mxModel;
-    uno::Reference< container::XNameAccess > mxStyleFamilies;
-    uno::Reference< container::XNameContainer > mxCurrentStyleFamily;
+    uno::Reference< container::XNameAccess > mxParaStyles;
     uno::Any cachePos;
 public:
     StyleCollectionHelper( const uno::Reference< frame::XModel >& _xModel ) : mxModel( _xModel )
     {
+        // we only concern about the Paragraph styles
         uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( _xModel, uno::UNO_QUERY_THROW);
-        mxStyleFamilies = xStyleSupplier->getStyleFamilies();
+        uno::Reference< container::XNameAccess > xStyleFamilies = xStyleSupplier->getStyleFamilies();
+        mxParaStyles.set( xStyleFamilies->getByName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") ) ), uno::UNO_QUERY_THROW  );
     }
-    uno::Reference< container::XNameContainer > getCurrentStyleFamily(){ return mxCurrentStyleFamily; }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  style::XStyle::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0; }
@@ -209,32 +195,42 @@ public:
     }
     virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > sNames( getCount() );
-        rtl::OUString* pString = sNames.getArray();
-        uno::Sequence< rtl::OUString > aStyleTypes = getStyleTypes();
-        sal_Int32 nCount = 0;
-        for( sal_Int32 i = 0; i < aStyleTypes.getLength(); i++ )
-        {
-            uno::Reference< container::XNameAccess > xNameAccess( mxStyleFamilies->getByName( aStyleTypes[i] ), uno::UNO_QUERY_THROW );
-            uno::Sequence< rtl::OUString > sElementNames = xNameAccess->getElementNames();
-            for( sal_Int32 j = 0; j < sElementNames.getLength(); j++ )
-            {
-                pString[nCount++] = sElementNames[j];
-            }
-        }
-        return sNames;
+        return mxParaStyles->getElementNames();
     }
     virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > aStyleTypes = getStyleTypes();
-        for( sal_Int32 i = 0; i < aStyleTypes.getLength(); i++ )
+        // search in the MSOStyleName table first
+        for( const MSOStyleNameTable* pTable = aMSOStyleNameTable; pTable->pMSOStyleName != NULL; pTable++ )
         {
-            uno::Reference< container::XNameAccess > xNameAccess( mxStyleFamilies->getByName( aStyleTypes[i] ), uno::UNO_QUERY_THROW );
-            if( xNameAccess->hasByName( aName ) )
+            if( aName.equalsIgnoreAsciiCaseAscii( pTable->pMSOStyleName ) )
             {
-                cachePos = xNameAccess->getByName( aName );
-                mxCurrentStyleFamily.set( xNameAccess, uno::UNO_QUERY_THROW );
-                return sal_True;
+                //Found it
+                rtl::OUString sStyleName = rtl::OUString::createFromAscii( pTable->pOOoStyleName );
+                if( mxParaStyles->hasByName( sStyleName ) )
+                {
+                    cachePos = mxParaStyles->getByName( sStyleName );
+                    return sal_True;
+                }
+                return sal_False;
+            }
+        }
+
+        if( mxParaStyles->hasByName( aName ) )
+        {
+            cachePos = mxParaStyles->getByName( aName );
+            return sal_True;
+        }
+        else
+        {
+            uno::Sequence< rtl::OUString > sElementNames = mxParaStyles->getElementNames();
+            for( sal_Int32 j = 0; j < sElementNames.getLength(); j++ )
+            {
+                rtl::OUString aStyleName = sElementNames[j];
+                if( aStyleName.equalsIgnoreAsciiCase( aName ) )
+                {
+                    cachePos = mxParaStyles->getByName( aStyleName );
+                    return sal_True;
+                }
             }
         }
         return sal_False;
@@ -243,41 +239,40 @@ public:
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > aStyleTypes = getStyleTypes();
-        sal_Int32 nCount = 0;
-        for( sal_Int32 i = 0; i < aStyleTypes.getLength(); i++ )
-        {
-            uno::Reference< container::XIndexAccess > xIndexAccess( mxStyleFamilies->getByName( aStyleTypes[i] ), uno::UNO_QUERY_THROW );
-            nCount += xIndexAccess->getCount();
-        }
-        return nCount;
+        uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
+        return xIndexAccess->getCount();
     }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        // FIXME: need to make a alphabetically sorted list of style names
-        uno::Sequence< rtl::OUString > aStyleTypes = getStyleTypes();
-        for( sal_Int32 i = 0; i < aStyleTypes.getLength(); i++ )
-        {
-            uno::Reference< container::XIndexAccess > xIndexAccess( mxStyleFamilies->getByName( aStyleTypes[i] ), uno::UNO_QUERY_THROW );
-            sal_Int32 nCount = xIndexAccess->getCount();
-            if( Index >= nCount )
-                Index -= nCount;
-            else
-            {
-                mxCurrentStyleFamily.set( xIndexAccess, uno::UNO_QUERY_THROW );
-                return xIndexAccess->getByIndex( Index );
-            }
-        }
-        throw lang::IndexOutOfBoundsException();
+        uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
+        return xIndexAccess->getByIndex( Index );
     }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
-        // FIXME:
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    }
+};
+
+class StylesEnumWrapper : public EnumerationHelper_BASE
+{
+    SwVbaStyles* pStyles;
+    sal_Int32 nIndex;
+public:
+    StylesEnumWrapper( SwVbaStyles* _pStyles ) : pStyles( _pStyles ), nIndex( 1 ) {}
+    virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+    {
+        return ( nIndex <= pStyles->getCount() );
+    }
+
+    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        if ( nIndex <= pStyles->getCount() )
+            return pStyles->Item( uno::makeAny( nIndex++ ), uno::Any() );
+        throw container::NoSuchElementException();
     }
 };
 
@@ -290,7 +285,7 @@ uno::Any
 SwVbaStyles::createCollectionObject(const uno::Any& aObject)
 {
     uno::Reference< beans::XPropertySet > xStyleProp( aObject, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, xStyleProp ) ) );
+    return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProp ) ) );
 }
 
 uno::Type SAL_CALL
@@ -302,7 +297,7 @@ SwVbaStyles::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration > SAL_CALL
 SwVbaStyles::createEnumeration() throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
+    return new StylesEnumWrapper( this );
 }
 
 uno::Any SAL_CALL
@@ -319,7 +314,7 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                 rtl::OUString aStyleName = rtl::OUString::createFromAscii( pTable->pOOoStyleName );
                 if( aStyleName.getLength() > 0 )
                 {
-                    rtl::OUString aStyleType = SwVbaStyle::getOOoStyleTypeFromMSWord( pTable->wdStyleType );
+                    rtl::OUString aStyleType;
                     switch( pTable->wdStyleType )
                     {
                         case word::WdStyleType::wdStyleTypeParagraph:
@@ -335,7 +330,8 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                         }
                         case word::WdStyleType::wdStyleTypeList:
                         {
-                            aStyleType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingStyles") );
+                            // should use Paragraph style and set the property "NumberingStyleName"
+                            aStyleType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") );
                             break;
                         }
                         default:
@@ -344,7 +340,12 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxModel, uno::UNO_QUERY_THROW);
                     uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );
                     uno::Reference< beans::XPropertySet > xStyleProps( xStylesAccess->getByName( aStyleName ), uno::UNO_QUERY_THROW );
-                    return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, xStyleProps ) ) );
+                    // set the property "NumberingStyleName" if it is a listbullet
+                    if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
+                    {
+                        xStyleProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName") ), uno::makeAny( aStyleName ) );
+                    }
+                    return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
                 }
                 else
                 {
@@ -375,3 +376,5 @@ SwVbaStyles::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

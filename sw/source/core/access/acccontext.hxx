@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,7 +71,7 @@ class SwAccessibleContext :
 protected:
 
     mutable ::osl::Mutex aListenerMutex;
-    mutable ::vos::OMutex aMutex;
+    mutable ::osl::Mutex aMutex;
 
 private:
 
@@ -95,11 +96,9 @@ private:
     // Are we currently disposing that object (protected by solar mutex)?
     sal_Bool bDisposing : 1;
 
-    // --> OD 2008-03-10 #i85634#
-    // boolean, indicating if the accessible context is in general registered at
-    // the accessible map.
+    // #i85634# - boolean, indicating if the accessible context is
+    // in general registered at the accessible map.
     bool bRegisteredAtAccessibleMap;
-    // <--
 
     void InitStates();
 
@@ -154,10 +153,9 @@ protected:
 
     // Invalidate the states of all children of the specified SwFrm. The
     // SwFrm might belong the the current object or to any child or grandchild!
-    // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+    // #i27301# - use new type definition for <_nStates>
     void InvalidateChildrenStates( const SwFrm* _pFrm,
                                    tAccessibleStates _nStates );
-    // <--
 
     // Dispose children of the specified SwFrm. The SwFrm might belong to
     // the current object or to any other child or grandchild.
@@ -197,13 +195,12 @@ protected:
         getBoundsImpl(sal_Bool bRelative)
         throw (::com::sun::star::uno::RuntimeException);
 
-    // --> OD 2008-03-10 #i85634#
+    // #i85634#
     inline void NotRegisteredAtAccessibleMap()
     {
         bRegisteredAtAccessibleMap = false;
     }
     void RemoveFrmFromAccessibleMap();
-    // <--
 
     virtual ~SwAccessibleContext();
 
@@ -364,47 +361,22 @@ public:
     void InvalidateFocus();
 
     // Check states
-    // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+    // #i27301# - use new type definition for <_nStates>
     void InvalidateStates( tAccessibleStates _nStates );
-    // <--
 
     // the XAccessibleRelationSet may have changed
     void InvalidateRelation( sal_uInt16 nType );
 
-    /** text selection has changed
-
-        OD 2005-12-14 #i27301#
-
-        @author OD
-    */
-    void InvalidateTextSelection();
-
-    /** attributes has changed
-
-        OD 2009-01-06 #i88069#
-
-        @author OD
-    */
-    void InvalidateAttr();
+    void InvalidateTextSelection(); // #i27301# - text selection has changed
+    void InvalidateAttr(); // #i88069# - attributes has changed
 
     bool HasAdditionalAccessibleChildren();
 
-    /** get additional child by index
-
-        OD 2010-01-27 #i88070#
-
-        @author OD
-    */
+    // #i88070# - get additional child by index
     Window* GetAdditionalAccessibleChild( const sal_Int32 nIndex );
 
-    /** get all additional accessible children
-
-        OD 2010-01-27 #i88070#
-
-        @author OD
-    */
+    // #i88070# - get all additional accessible children
     void GetAdditionalAccessibleChildren( std::vector< Window* >* pChildren );
-
 
     const ::rtl::OUString& GetName() const { return sName; }
 
@@ -457,3 +429,4 @@ const sal_Char sMissingWindow[] = "window is missing";
     }
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

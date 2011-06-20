@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,18 +28,10 @@
 #ifndef _SRTDLG_HXX
 #define _SRTDLG_HXX
 
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
 #include <svx/stddlg.hxx>
 #include <svx/langbox.hxx>
 
@@ -116,3 +109,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,7 @@ public:
     SwFmtEditInReadonly( sal_uInt16 nId = RES_EDIT_IN_READONLY,
                      sal_Bool bPrt = sal_False ) : SfxBoolItem( nId, bPrt ) {}
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methos" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -58,3 +59,4 @@ inline const SwFmtEditInReadonly &SwFmt::GetEditInReadonly(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

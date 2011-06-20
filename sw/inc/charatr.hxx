@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,13 +29,10 @@
 #define _CHARATR_HXX
 
 #include <format.hxx>
-#include <hintids.hxx>      // fuer die WhichIds
+#include <hintids.hxx>
 
 
-/******************************************************************************
- *  Implementierung der Charakter-Attribut Methoden vom SwAttrSet
- *  AMA 12.10.94: Umstellung auf SvxItems.
- ******************************************************************************/
+// implementation of the character attribute methods of SwAttrSet
 
 inline const SvxPostureItem      &SwAttrSet::GetPosture(sal_Bool bInP) const
     {   return (const SvxPostureItem&)Get( RES_CHRATR_POSTURE,bInP); }
@@ -111,10 +109,7 @@ inline const SvxCharReliefItem  &SwAttrSet::GetCharRelief( sal_Bool bInP ) const
 inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( sal_Bool bInP ) const
     {   return (const SvxCharHiddenItem&)Get( RES_CHRATR_HIDDEN, bInP ); }
 
-/******************************************************************************
- *  Implementierung der Charakter-Attribut Methoden vom SwFmt
- *  AMA: 12.10.94: Umstellung auf SvxItems.
- ******************************************************************************/
+// implementation of the character attribute methods of SwFmt
 
 inline const SvxPostureItem          &SwFmt::GetPosture(sal_Bool bInP) const
     {   return aSet.GetPosture(bInP); }
@@ -176,3 +171,5 @@ inline const SvxCharHiddenItem      &SwFmt::GetCharHidden( sal_Bool bInP ) const
     {   return aSet.GetCharHidden(bInP); }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

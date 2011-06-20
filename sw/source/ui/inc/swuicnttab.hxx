@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,26 +30,17 @@
 
 #include <svx/stddlg.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
 
 #include "tox.hxx"
-#include <tools/list.hxx>
 #include <toxmgr.hxx>
 #include <svx/checklbx.hxx>
 #include <tools/resary.hxx>
@@ -56,6 +48,8 @@
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 #include <cnttab.hxx>
+#include <vector>
+
 class SwWrtShell;
 class SwTOXMgr;
 namespace com{namespace sun{namespace star{
@@ -65,15 +59,14 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-//-----------------------------------------------------------------------------
 struct SwIndexSections_Impl
 {
     com::sun::star::uno::Reference< com::sun::star::text::XTextSection >    xContainerSection;
     com::sun::star::uno::Reference< com::sun::star::text::XDocumentIndex >    xDocumentIndex;
 };
 
-//-----------------------------------------------------------------------------
 class SwOneExampleFrame;
+
 struct SwIndexSections_Impl;
 
 class SwMultiTOXTabDialog : public SfxTabDialog
@@ -136,9 +129,7 @@ public:
 
     static sal_Bool IsNoNum(SwWrtShell& rSh, const String& rName);
 };
-/* -----------------14.07.99 12:17-------------------
 
- --------------------------------------------------*/
 class IndexEntryRessource;
 class IndexEntrySupplierWrapper;
 
@@ -160,7 +151,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     //content
     FixedLine       aCreateFromFL;  // content, user, illustration
     CheckBox        aFromHeadingsCB;
-//  PushButton      aChapterDlgPB;  //#outline level,removed by zhaojianwei
     CheckBox        aAddStylesCB;
     PushButton      aAddStylesPB;
     Point           aAddStylesPosDef;
@@ -233,7 +223,6 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     DECL_LINK(TOXTypeHdl,   ListBox* );
     DECL_LINK(TOXAreaHdl,   ListBox* );
-//  DECL_LINK(ChapterHdl,   PushButton* ); //#outline level,removed by zhaojianwei
     DECL_LINK(AddStylesHdl, PushButton* );
     DECL_LINK(MenuEnableHdl, Menu*);
     DECL_LINK(MenuExecuteHdl, Menu*);
@@ -265,11 +254,6 @@ public:
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
     void                SetWrtShell(SwWrtShell& rSh);
 };
-/* -----------------16.06.99 08:33-------------------
-
- --------------------------------------------------*/
-
-DECLARE_LIST(TOXControlList, Control*)
 
 class SwTOXEdit;
 class SwTOXButton;
@@ -277,10 +261,15 @@ class SwTOXEntryTabPage;
 
 class SwTokenWindow : public Window
 {
+    typedef std::vector<Control*>::iterator ctrl_iterator;
+    typedef std::vector<Control*>::const_iterator ctrl_const_iterator;
+    typedef std::vector<Control*>::reverse_iterator ctrl_reverse_iterator;
+    typedef std::vector<Control*>::const_reverse_iterator ctrl_const_reverse_iterator;
+
     ImageButton     aLeftScrollWin;
     Window          aCtrlParentWin;
     ImageButton     aRightScrollWin;
-    TOXControlList  aControlList;
+    std::vector<Control*>   aControlList;
     SwForm*         pForm;
     sal_uInt16          nLevel;
     sal_Bool            bValid;
@@ -342,10 +331,9 @@ public:
     virtual void        Resize();
     virtual void        GetFocus();
 };
-/* -----------------------------23.12.99 14:16--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwTOXEntryTabPage;
+
 class SwIdxTreeListBox : public SvTreeListBox
 {
     SwTOXEntryTabPage* pParent;
@@ -355,9 +343,6 @@ public:
     SwIdxTreeListBox(SwTOXEntryTabPage* pPar, const ResId& rResId);
 };
 
-/* -----------------16.06.99 12:49-------------------
-
- --------------------------------------------------*/
 class SwTOXEntryTabPage : public SfxTabPage
 {
     FixedText           aLevelFT;
@@ -487,9 +472,7 @@ public:
 
     void                PreTokenButtonRemoved(const SwFormToken& rToken);
 };
-/* -----------------05.07.99 13:00-------------------
 
- --------------------------------------------------*/
 class SwTOXStylesTabPage : public SfxTabPage
 {
     FixedLine       aFormatFL;
@@ -502,7 +485,6 @@ class SwTOXStylesTabPage : public SfxTabPage
     PushButton      aEditStyleBT;
 
     SwForm*         m_pCurrentForm;
-//  void            UpdatePattern();
 
     DECL_LINK( EditStyleHdl, Button *);
     DECL_LINK( StdHdl, Button * );
@@ -537,3 +519,4 @@ public:
 
 #endif // _SWUI_CNTTAB_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

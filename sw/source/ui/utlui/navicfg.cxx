@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <swtypes.hxx>  // fuer Pathfinder
 #include <navicfg.hxx>
 #include <swcont.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -42,9 +43,6 @@ using namespace ::utl;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-/* -----------------------------08.09.00 16:30--------------------------------
-
- ---------------------------------------------------------------------------*/
 Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -66,9 +64,6 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
     }
     return aNames;
 }
-/*-----------------13.11.96 11.03-------------------
-
---------------------------------------------------*/
 
 SwNavigationConfig::SwNavigationConfig() :
     utl::ConfigItem(C2U("Office.Writer/Navigator")),
@@ -82,9 +77,8 @@ SwNavigationConfig::SwNavigationConfig() :
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-//  EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
+    OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
@@ -105,14 +99,11 @@ SwNavigationConfig::SwNavigationConfig() :
         }
     }
 }
-/* -----------------------------08.09.00 16:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwNavigationConfig::~SwNavigationConfig()
-{}
-/* -----------------------------08.09.00 16:35--------------------------------
+{
+}
 
- ---------------------------------------------------------------------------*/
 void SwNavigationConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -139,3 +130,4 @@ void SwNavigationConfig::Commit()
 void SwNavigationConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

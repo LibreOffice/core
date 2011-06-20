@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -351,7 +352,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
                 nStartPos, nEndPos - 1,
                 aResult ))
         {
-            // if an error occured, bail out
+            // if an error occurred, bail out
             return CellRange();
         }
     }
@@ -410,3 +411,5 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
 
 } //  namespace XMLRangeHelper
 //} //  namespace chart
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -46,10 +47,6 @@
 
 SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwSyncChildWin::SwSyncChildWin( Window* _pParent,
                                 sal_uInt16 nId,
                                 SfxBindings* pBindings,
@@ -77,10 +74,6 @@ SwSyncChildWin::SwSyncChildWin( Window* _pParent,
     pWindow->Show();
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
                             SfxChildWindow* pChild,
                             Window *pParent) :
@@ -91,17 +84,9 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
     aSyncBtn.SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-__EXPORT SwSyncBtnDlg::~SwSyncBtnDlg()
+SwSyncBtnDlg::~SwSyncBtnDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwSyncBtnDlg, BtnHdl, PushButton *, EMPTYARG )
 {
@@ -110,3 +95,4 @@ IMPL_LINK( SwSyncBtnDlg, BtnHdl, PushButton *, EMPTYARG )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

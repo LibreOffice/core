@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,45 +39,31 @@
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
 #include <viewopt.hxx>
-#include <txtfrm.hxx>       // Zugriff auf TxtCache
+#include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <fntcache.hxx>
 #include <docufld.hxx>
 #include <ptqueue.hxx>
-#include <dview.hxx>        // SdrView
+#include <dview.hxx>
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
 #include <switerator.hxx>
-
-/*************************************************************************
-|*
-|*  ViewShell::Init()
-|*************************************************************************/
-
 void ViewShell::Init( const SwViewOption *pNewOpt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
 
     bDocSizeChgd = sal_False;
 
-    // Wir gehen auf Nummer sicher:
-    // Wir muessen die alten Fontinformationen wegschmeissen,
-    // wenn die Druckeraufloesung oder der Zoomfaktor sich aendert.
-    // Init() und Reformat() sind die sichersten Stellen.
     pFntCache->Flush( );
 
-    // ViewOptions werden dynamisch angelegt
     if( !pOpt )
     {
         pOpt = new SwViewOption;
 
-        // Ein ApplyViewOptions braucht nicht gerufen zu werden
         if( pNewOpt )
         {
             *pOpt = *pNewOpt;
-            // Der Zoomfaktor muss eingestellt werden, weil in der CTOR-
-            // phase aus Performancegruenden kein ApplyViewOptions gerufen wird.
             if( GetWin() && 100 != pOpt->GetZoom() )
             {
                 MapMode aMode( pWin->GetMapMode() );
@@ -91,34 +78,26 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     SwDocShell* pDShell = pDoc->GetDocShell();
     pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
 
-    // JP 02.02.99: Bug 61335 - Readonly-Flag an den ViewOptions setzen,
-    //              bevor das Layout angelegt wird. Ansonsten muesste man
-    //              nochmals durchformatieren!!
     if( pDShell && pDShell->IsReadOnly() )
         pOpt->SetReadonly( sal_True );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
 
-    // --> FME 2007-11-06 #i82967#
+    // #i82967#
     OutputDevice* pPDFOut = 0;
+
     if ( pOut && pOut->GetPDFWriter() )
         pPDFOut = pOut;
-    // <--
-
-    // --> FME 2005-01-21 #i41075#
-    // Only setup the printer if we need one:
+    // #i41075# Only setup the printer if we need one:
     const bool bBrowseMode = pOpt->getBrowseMode();
     if( pPDFOut )
         InitPrt( pPDFOut );
-    // <--
-
-    // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
-    // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
+    // #i44963# Good occasion to check if page sizes in page descriptions
+    // are still set to (LONG_MAX, LONG_MAX) (html import)
     if ( !bBrowseMode )
     {
         pDoc->CheckDefaultPageFmt();
     }
-    // <--
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - after InitPrt" );
 
@@ -149,7 +128,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     }
     SizeChgNotify();    //swmod 071108
 
-    // --> #i31958#
+    // #i31958#
     // XForms mode: initialize XForms mode, based on design mode (draw view)
     //   MakeDrawView() requires layout
     if( GetDoc()->isXForms() )
@@ -158,13 +137,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
             MakeDrawView();
         pOpt->SetFormView( ! GetDrawView()->IsDesignMode() );
     }
-    // <-- #i31958#
 }
-
-/*************************************************************************
-|*
-|*  ViewShell::ViewShell()  CTor fuer die erste Shell.
-|*************************************************************************/
 
 ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
@@ -180,18 +153,17 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mpTmpRef( 0 ),
     pOpt( 0 ),
     pAccOptions( new SwAccessibilityOptions ),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0), // #i74769#
+    mpTargetPaintWindow(0),
+    mpBufferedOut(0),
     pDoc( &rDocument ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
-    mnPrePostPaintCount(0L), // #i72754#
-    mpPrePostOutDev(0), // #i72754#
+    mpPrePostOutDev(0),
     maPrePostMapMode()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
-    // OD 2004-06-01 #i26791# - in order to suppress event handling in
+    // #i26791# in order to suppress event handling in
     // <SwDrawContact::Changed> during contruction of <ViewShell> instance
     mbInConstructor = true;
 
@@ -200,20 +172,16 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     bPaintWorks = bEnableSmooth = sal_True;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
-    // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
-    // if it's already been modified.
+    // #i38810# Do not reset modified state of document, if it's already been modified.
     const bool bIsDocModified( pDoc->IsModified() );
-    // <--
     pDoc->acquire();
     pOutput = pOut;
-    Init( pNewOpt );    //verstellt ggf. das Outdev (InitPrt())
+    Init( pNewOpt );
     pOut = pOutput;
 
-    // OD 28.03.2003 #108470# - initialize print preview layout after layout
-    // is created in <ViewShell::Init(..)> - called above.
+    // initialize print preview layout after layout is created in <ViewShell::Init(..)> - called above.
     if ( bPreView )
     {
-        // OD 12.12.2002 #103492# - init page preview layout
         pImp->InitPagePreviewLayout();
     }
 
@@ -222,29 +190,21 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
         SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
-    //In Init wird ein Standard-FrmFmt angelegt.
-    // --> OD 2005-02-11 #i38810#
+    // #i38810#
     if (   !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
         && !bIsDocModified )
-    // <--
     {
         pDoc->ResetModified();
     }
 
-    //Format-Cache erweitern.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( pOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
-    // OD 2004-06-01 #i26791#
+    // #i26791#
     mbInConstructor = false;
 }
-
-/*************************************************************************
-|*
-|*  ViewShell::ViewShell()  CTor fuer weitere Shells auf ein Dokument.
-|*************************************************************************/
 
 ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
                         OutputDevice *pOutput, long nFlags ) :
@@ -259,18 +219,17 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mpTmpRef( 0 ),
     pOpt( 0 ),
     pAccOptions( new SwAccessibilityOptions ),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0), // #i74769#
+    mpTargetPaintWindow(0),
+    mpBufferedOut(0),
     pDoc( rShell.GetDoc() ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
-    mnPrePostPaintCount(0L), // #i72754#
-    mpPrePostOutDev(0), // #i72754#
+    mpPrePostOutDev(0),
     maPrePostMapMode()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
-    // OD 2004-06-01 #i26791# - in order to suppress event handling in
+    // #i26791# in order to suppress event handling in
     // <SwDrawContact::Changed> during contruction of <ViewShell> instance
     mbInConstructor = true;
 
@@ -287,7 +246,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     sal_Bool bModified = pDoc->IsModified();
 
     pOutput = pOut;
-    Init( rShell.GetViewOptions() );    //verstellt ggf. das Outdev (InitPrt())
+    Init( rShell.GetViewOptions() );
     pOut = pOutput;
 
     // OD 12.12.2002 #103492#
@@ -297,28 +256,20 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
-    // in Init wird ein Standard-FrmFmt angelegt
     if( !bModified && !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
     {
         pDoc->ResetModified();
     }
 
-    //Format-Cache erweitern.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( pOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
         Imp()->MakeDrawView();
 
-    // OD 2004-06-01 #i26791#
+    // #i26791#
     mbInConstructor = false;
 
 }
-
-/******************************************************************************
-|*
-|*  ViewShell::~ViewShell()
-|*
-******************************************************************************/
 
 ViewShell::~ViewShell()
 {
@@ -326,7 +277,7 @@ ViewShell::~ViewShell()
         SET_CURR_SHELL( this );
         bPaintWorks = sal_False;
 
-        // FME 2004-06-21 #i9684# Stopping the animated graphics is not
+        // #i9684#Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
         // has not been started in this case.
         if( pDoc && GetWin() )
@@ -346,7 +297,7 @@ ViewShell::~ViewShell()
                         SwIterator<SwFrm,SwGrfNode> aIter( *pGNd );
                         for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
                         {
-                            ASSERT( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
+                            OSL_ENSURE( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
                             ((SwNoTxtFrm*)pFrm)->StopAnimation( pOut );
                         }
                     }
@@ -357,7 +308,7 @@ ViewShell::~ViewShell()
             GetDoc()->StopNumRuleAnimations( pOut );
         }
 
-        delete pImp; //Erst loeschen, damit die LayoutViews vernichtet werden.
+        delete pImp;
         pImp = 0;   // Set to zero, because ~SwFrm relies on it.
 
         if ( pDoc )
@@ -370,14 +321,12 @@ ViewShell::~ViewShell()
 
         delete pOpt;
 
-        //Format-Cache zurueckschrauben.
         if ( SwTxtFrm::GetTxtCache()->GetCurMax() > 250 )
             SwTxtFrm::GetTxtCache()->DecreaseMax( 100 );
 
-        //Ggf. aus der PaintQueue entfernen lassen
         SwPaintQueue::Remove( this );
 
-        ASSERT( !nStartAction, "EndAction() pending." );
+        OSL_ENSURE( !nStartAction, "EndAction() pending." );
     }
 
     if ( pDoc )
@@ -413,3 +362,5 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
     pDView->ValidateMarkList();
     return pDView;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

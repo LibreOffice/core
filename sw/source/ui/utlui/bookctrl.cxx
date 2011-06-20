@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -37,17 +38,10 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
-#ifndef _EVENT_HXX //autogen
 #include <vcl/event.hxx>
-#endif
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include "cmdid.h"
-#include "errhdl.hxx"
 #include "swmodule.hxx"
 #include "wrtsh.hxx"
 #include "IMark.hxx"
@@ -71,15 +65,11 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
-
 BookmarkPopup_Impl::BookmarkPopup_Impl() :
     PopupMenu(),
     nCurId(USHRT_MAX)
 {
 }
-
-// -----------------------------------------------------------------------
 
 void BookmarkPopup_Impl::Select()
 {
@@ -95,13 +85,9 @@ SwBookmarkControl::SwBookmarkControl( sal_uInt16 _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
-
 SwBookmarkControl::~SwBookmarkControl()
 {
 }
-
-// -----------------------------------------------------------------------
 
 void SwBookmarkControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
@@ -115,14 +101,10 @@ void SwBookmarkControl::StateChanged(
     }
 }
 
-// -----------------------------------------------------------------------
-
 void SwBookmarkControl::Paint( const UserDrawEvent&  )
 {
     GetStatusBar().SetItemText( GetId(), sPageNumber );
 }
-
-// -----------------------------------------------------------------------
 
 void SwBookmarkControl::Command( const CommandEvent& rCEvt )
 {
@@ -162,3 +144,5 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         ReleaseMouse();
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

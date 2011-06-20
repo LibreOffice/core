@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,23 +45,21 @@ namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    // comes from the I18N UNO interface
 }}}}
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <swtypes.hxx>
 #include <svl/svarray.hxx>
 
 typedef SwFieldType* SwFldTypePtr;
 #define GROW_FLDTYPES   16
 
-//PageDescriptor-Schnittstelle
-//typedef SwPageDesc * SwPageDescPtr;
-//SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1,1);
+// PageDescriptor-interface
+// typedef SwPageDesc * SwPageDescPtr;
+// SV_DECL_PTRARR_DEL(SwPageDescs, SwPageDescPtr,1,1);
 
 typedef SwFrmFmt* SwFrmFmtPtr;
 SV_DECL_PTRARR_DEL(SwFrmFmts,SwFrmFmtPtr,4,4)
 
-//Spezifische Frameformate (Rahmen, DrawObjecte)
+// Specific frame formats (frames, DrawObjects).
 SV_DECL_PTRARR_DEL(SwSpzFrmFmts,SwFrmFmtPtr,0,4)
 
 typedef SwCharFmt* SwCharFmtPtr;
@@ -71,6 +70,7 @@ SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES, GROW_FLDTYPES )
 typedef SwTOXType* SwTOXTypePtr;
 SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0, 1 )
 
+// Array of Undo-history.
 typedef SwSectionFmt* SwSectionFmtPtr;
 SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0,4)
 
@@ -97,9 +97,9 @@ public:
     void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );
     void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );
 
-    // suche den naechsten oder vorherigen Redline mit dergleichen Seq.No
-    // Mit dem Lookahead kann die Suche eingeschraenkt werden. 0 oder
-    // USHRT_MAX suchen im gesamten Array.
+    // Search next or previous Redline with the same Seq. No.
+    // Search can be restricted via Lookahaed.
+    // Using 0 or USHRT_MAX makes search the whole array.
     sal_uInt16 FindNextOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead = 20 ) const;
     sal_uInt16 FindPrevOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead = 20 ) const;
     sal_uInt16 FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
@@ -123,3 +123,4 @@ SV_DECL_PTRARR(SwOLENodes,SwOLENodePtr,16,16)
 
 #endif  //_DOCARY_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,11 @@
 #include <tools/string.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/string.hxx>
+
+#ifdef WNT
+#include <windows.h>
+#include <tchar.h>
+#endif
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -47,13 +52,79 @@ void PrivateProfileStringListener::Initialize( const rtl::OUString& rFileName, c
     maGroupName = rGroupName;
     maKey = rKey;
 }
+#ifdef WNT
+void lcl_getRegKeyInfo( const ByteString& sKeyInfo, HKEY& hBaseKey, ByteString& sSubKey )
+{
+    sal_Int32 nBaseKeyIndex = sKeyInfo.Search('\\');
+    if( nBaseKeyIndex > 0 )
+    {
+        ByteString sBaseKey = sKeyInfo.Copy( 0, nBaseKeyIndex );
+        sSubKey = sKeyInfo.Copy( nBaseKeyIndex + 1 );
+        if( sBaseKey.Equals("HKEY_CURRENT_USER") )
+        {
+            hBaseKey = HKEY_CURRENT_USER;
+        }
+        else if( sBaseKey.Equals("HKEY_LOCAL_MACHINE") )
+        {
+            hBaseKey = HKEY_LOCAL_MACHINE;
+        }
+        else if( sBaseKey.Equals("HKEY_CLASSES_ROOT") )
+        {
+            hBaseKey = HKEY_CLASSES_ROOT;
+        }
+        else if( sBaseKey.Equals("HKEY_USERS") )
+        {
+            hBaseKey = HKEY_USERS;
+        }
+        else if( sBaseKey.Equals("HKEY_CURRENT_CONFIG") )
+        {
+            hBaseKey = HKEY_CURRENT_CONFIG;
+        }
+    }
+}
+#endif
 
 uno::Any PrivateProfileStringListener::getValueEvent()
 {
     // get the private profile string
-    Config aCfg( maFileName );
-    aCfg.SetGroup( maGroupName );
-    rtl::OUString sValue = String( aCfg.ReadKey( maKey ), RTL_TEXTENCODING_DONTKNOW );
+    rtl::OUString sValue;
+    if(maFileName.getLength())
+    {
+        // get key/value from a file
+        Config aCfg( maFileName );
+        aCfg.SetGroup( maGroupName );
+        sValue = String( aCfg.ReadKey( maKey ), RTL_TEXTENCODING_DONTKNOW );
+    }
+    else
+    {
+        // get key/value from windows register
+#ifdef WNT
+        HKEY hBaseKey = NULL;
+        ByteString sSubKey;
+        sal_Int32 nBaseKeyIndex = maGroupName.Search('\\');
+        lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
+        if( hBaseKey != NULL )
+        {
+            HKEY hKey = NULL;
+            LONG lResult;
+            LPCTSTR lpSubKey = TEXT( sSubKey.GetBuffer());
+            TCHAR szBuffer[1024];
+            DWORD cbData = sizeof( szBuffer );
+            lResult = RegOpenKeyEx( hBaseKey, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
+            if( ERROR_SUCCESS == lResult )
+            {
+                LPCTSTR lpValueName = TEXT(maKey.GetBuffer());
+                lResult = RegQueryValueEx( hKey, lpValueName, NULL, NULL, (LPBYTE)szBuffer, &cbData );
+                RegCloseKey( hKey );
+                sValue = rtl::OUString::createFromAscii(szBuffer);
+            }
+        }
+
+        return uno::makeAny( sValue );
+#endif
+        throw uno::RuntimeException( rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("Only support on Windows")), uno::Reference< uno::XInterface >() );
+    }
 
     return uno::makeAny( sValue );
 }
@@ -61,12 +132,44 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
 {
     // set the private profile string
-    Config aCfg( maFileName );
-    aCfg.SetGroup( maGroupName );
-
     rtl::OUString aValue;
     value >>= aValue;
-    aCfg.WriteKey( maKey, ByteString( aValue.getStr(), RTL_TEXTENCODING_DONTKNOW ) );
+    if(maFileName.getLength())
+    {
+        // set value into a file
+        Config aCfg( maFileName );
+        aCfg.SetGroup( maGroupName );
+        aCfg.WriteKey( maKey, ByteString( aValue.getStr(), RTL_TEXTENCODING_DONTKNOW ) );
+    }
+    else
+    {
+        //set value into windows register
+#ifdef WNT
+        HKEY hBaseKey = NULL;
+        ByteString sSubKey;
+        sal_Int32 nBaseKeyIndex = maGroupName.Search('\\');
+        lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
+        if( hBaseKey != NULL )
+        {
+            HKEY hKey = NULL;
+            LONG lResult;
+            LPCTSTR lpSubKey = TEXT( sSubKey.GetBuffer());
+            lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL );
+            if( ERROR_SUCCESS == lResult )
+            {
+                LPCTSTR szValue = TEXT( rtl::OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                DWORD cbData = sizeof(TCHAR) * (_tcslen(szValue) + 1);
+                LPCTSTR lpValueName = TEXT(maKey.GetBuffer());
+                lResult = RegSetValueEx( hKey, lpValueName, NULL, REG_SZ, (LPBYTE)szValue, cbData );
+                RegCloseKey( hKey );
+            }
+        }
+        return;
+#endif
+        throw uno::RuntimeException( rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("Not implemented")), uno::Reference< uno::XInterface >() );
+    }
+
 }
 
 SwVbaSystem::SwVbaSystem( uno::Reference<uno::XComponentContext >& xContext ): SwVbaSystem_BASE( uno::Reference< XHelperInterface >(), xContext )
@@ -146,19 +249,19 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OUString& rSection, const rtl::OUString& rKey ) throw ( uno::RuntimeException )
 {
-    if( rFilename.getLength() == 0 )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to access document from shell" ) ), uno::Reference< uno::XInterface >() );
-
     // FIXME: need to detect whether it is a relative file path
     // we need to detect if this is a URL, if not then assume its a file path
     rtl::OUString sFileUrl;
-    INetURLObject aObj;
-    aObj.SetURL( rFilename );
-    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
-    if ( bIsURL )
-        sFileUrl = rFilename;
-    else
-        osl::FileBase::getFileURLFromSystemPath( rFilename, sFileUrl);
+    if( rFilename.getLength() )
+    {
+        INetURLObject aObj;
+        aObj.SetURL( rFilename );
+        bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+        if ( bIsURL )
+            sFileUrl = rFilename;
+        else
+            osl::FileBase::getFileURLFromSystemPath( rFilename, sFileUrl);
+    }
 
     ByteString aGroupName = ByteString( rSection.getStr(), RTL_TEXTENCODING_DONTKNOW);
     ByteString aKey = ByteString( rKey.getStr(), RTL_TEXTENCODING_DONTKNOW);
@@ -185,3 +288,5 @@ SwVbaSystem::getServiceNames()
     }
     return aServiceNames;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

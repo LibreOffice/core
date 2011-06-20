@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,15 +64,15 @@ SwSelGlossaryDlg::SwSelGlossaryDlg(Window * pParent, const String &rShortName)
     aGlosBox.SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
 }
 
-/*-----------------25.02.94 20:50-------------------
- dtor ueberladen
+/*--------------------------------------------------
+ overload dtor
 --------------------------------------------------*/
 SwSelGlossaryDlg::~SwSelGlossaryDlg() {}
-/* -----------------25.10.99 08:33-------------------
 
- --------------------------------------------------*/
 IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, /*pBox*/)
 {
     EndDialog(RET_OK);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

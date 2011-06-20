@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,13 +62,12 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <comcore.hrc>
-// --> OD 2005-12-01 #i27138#
+// #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
-// <--
 
 
-// OD 04.11.2003 #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
+// #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
 // for which previous/next is checked, if it's visible.
 bool lcl_IsInSameTblBox( SwNodes& _rNds,
@@ -94,7 +94,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
                  ? !_rNds.GoPrevSection( &aChkIdx, sal_False, sal_False )
                  : !_rNds.GoNextSection( &aChkIdx, sal_False, sal_False ) )
             {
-                ASSERT( false, "<lcl_IsInSameTblBox(..)> - no previous/next!" );
+                OSL_FAIL( "<lcl_IsInSameTblBox(..)> - no previous/next!" );
                 return false;
             }
             else
@@ -143,13 +143,13 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
     SwNodeIndex aIdx( rStt );
     if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
         !CheckNodesRange( rStt, aIdx, sal_True ) ||
-        // OD 04.11.2003 #i21457#
+        // #i21457#
         !lcl_IsInSameTblBox( rNds, rStt, true ))
     {
         aIdx = rEnd;
         if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
             !CheckNodesRange( rEnd, aIdx, sal_True ) ||
-            // OD 04.11.2003 #i21457#
+            // #i21457#
             !lcl_IsInSameTblBox( rNds, rEnd, false ))
         {
             rSectionData.SetHidden( false );
@@ -167,7 +167,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if( rRange.HasMark() &&
         0 == ( nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd ) ))
     {
-        ASSERT( !this, "Selection ueber verschiedene Sections" );
+        OSL_ENSURE( !this, "Selection ueber verschiedene Sections" );
         return 0;
     }
 
@@ -213,7 +213,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     *pEndPos = (SwPosition*)rRange.End();
         if( pPrvNd && 3 == nRegionRet )
         {
-            ASSERT( pPrvNd, "der SectionNode fehlt" );
+            OSL_ENSURE( pPrvNd, "der SectionNode fehlt" );
             SwNodeIndex aStt( pSttPos->nNode ), aEnd( pEndPos->nNode, +1 );
             while( pPrvNd != aStt.GetNode().StartOfSectionNode() )
                 aStt--;
@@ -465,7 +465,6 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                         aIdx++;
                     } while( aIdx.GetNode().IsEndNode() &&
                                 0 != aIdx.GetNode().FindSectionNode() );
-//                  if( !aIdx.GetNode().IsEndNode() )
                     {
                         nRet = 2;
                         if( ppSttNd )
@@ -621,7 +620,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 {
     SwSectionFmt* pFmt = (*pSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();
-    /// OD 04.10.2002 #102894#
+
     /// remember hidden condition flag of SwSection before changes
     bool bOldCondHidden = pSection->IsCondHidden() ? true : false;
 
@@ -692,7 +691,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
+    // Der LinkFileName koennte auch nur aus Separatoren bestehen
     String sCompareString = sfx2::cTokenSeperator;
     sCompareString += sfx2::cTokenSeperator;
     const bool bUpdate =
@@ -707,13 +706,12 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     else
         sSectName.Erase();
 
-    /// OD 04.10.2002 #102894# - NOTE
     /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to sal_True.
     /// IMHO this have to be changed, but I can't estimate the consequences:
     /// Either it is set to sal_True using corresponding method <SwSection.SetCondHidden(..)>,
     /// or it is set to the value of SwSection which is assigned to it.
     /// Discussion with AMA results that the adjustment to the assignment operator
-    /// could be very risky -> see notes in bug #102894#.
+    /// could be very risky.
     pSection->SetSectionData(rNewData);
 
     if( pAttr )
@@ -732,7 +730,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         if( !pIdx )
             pIdx = pFmt->GetCntnt().GetCntntIdx();
         FldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
-        /// OD 04.10.2002 #102894#
+
         /// Because on using SwSection::operator=() to set up <pSection>
         /// with <rNewData> and the above given note, the hidden condition flag
         /// has to be set to sal_False, if hidden condition flag of <pFmt->GetSection()>
@@ -760,7 +758,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     SetModified();
 }
 
-/* -----------------19.02.99 09:31-------------------
+/* --------------------------------------------------
  * LockFrms wurde im InsertSection genutzt, um zu verhindern, dass
  * SectionFrms durch das DelFrms zerstoert werden. Dies ist durch
  * den Destroy-Listen-Mechanismus ueberfluessig geworden.
@@ -818,7 +816,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     if( !pEnde )        // kein Bereich also neue Section davor/hinter anlegen
     {
         // #i26762#
-        ASSERT(!pEnde || rNdIdx <= *pEnde,
+        OSL_ENSURE(!pEnde || rNdIdx <= *pEnde,
                "Section start and end in wrong order!");
 
         if( bInsAtStart )
@@ -1041,7 +1039,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
     SwFrm* pTmp = pFrm;
     while( pTmp )
     {
-        ASSERT( !pTmp->GetUpper(), "SwClearDummies: No Upper allowed!" );
+        OSL_ENSURE( !pTmp->GetUpper(), "SwClearDummies: No Upper allowed!" );
         if( pTmp->IsSctFrm() )
         {
             SwSectionFrm* pSectFrm = (SwSectionFrm*)pFrm;
@@ -1067,7 +1065,8 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
 SwSectionNode::~SwSectionNode()
 {
     // mba: test if iteration works as clients will be removed in callback
-    m_pSection->GetFmt()->CallSwClientNotify( SfxSimpleHint( SFX_HINT_DYING ) );
+    // use hint which allows to specify, if the content shall be saved or not
+    m_pSection->GetFmt()->CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_True ) );
     SwSectionFmt* pFmt = m_pSection->GetFmt();
     if( pFmt )
     {
@@ -1114,11 +1113,11 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
             SwFrm *pFrm, *pNew;
             while( 0 != (pFrm = aNode2Layout.NextFrm()) )
             {
-                ASSERT( pFrm->IsSctFrm(), "Depend von Section keine Section." );
+                OSL_ENSURE( pFrm->IsSctFrm(), "Depend von Section keine Section." );
                 pNew = rIdx.GetNode().GetCntntNode()->MakeFrm( pFrm );
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
-                // --> OD 2008-06-23 #156927#
+
                 // Assure that node is not inside a table, which is inside the
                 // found section.
                 if ( pS )
@@ -1130,25 +1129,24 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                         pS = 0;
                     }
                 }
-                // <--
+
                 // if the node is in a section, the sectionframe now
                 // has to be created..
-                // OD 14.11.2002 #104684# - boolean to control <Init()> of a new
-                // section frame.
+                // boolean to control <Init()> of a new section frame.
                 bool bInitNewSect = false;
                 if( pS )
                 {
                     SwSectionFrm *pSct = new SwSectionFrm( pS->GetSection(), pFrm );
-                    // OD 14.11.2002 #104684# - prepare <Init()> of new section frame.
+                    // prepare <Init()> of new section frame.
                     bInitNewSect = true;
                     SwLayoutFrm* pUp = pSct;
                     while( pUp->Lower() )  // for columned sections
                     {
-                        ASSERT( pUp->Lower()->IsLayoutFrm(),"Who's in there?" );
+                        OSL_ENSURE( pUp->Lower()->IsLayoutFrm(),"Who's in there?" );
                         pUp = (SwLayoutFrm*)pUp->Lower();
                     }
                     pNew->Paste( pUp, NULL );
-                    // --> OD 2005-12-01 #i27138#
+                    // #i27138#
                     // notify accessibility paragraphs objects about changed
                     // CONTENT_FLOWS_FROM/_TO relation.
                     // Relation CONTENT_FLOWS_FROM for next paragraph will change
@@ -1164,7 +1162,6 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                                 dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
                         }
                     }
-                    // <--
                     pNew = pSct;
                 }
 
@@ -1175,7 +1172,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 else
                     // der neue liegt hinter mir
                     pNew->Paste( pFrm->GetUpper(), pFrm->GetNext() );
-                // --> OD 2005-12-01 #i27138#
+                // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.
                 // Relation CONTENT_FLOWS_FROM for next paragraph will change
@@ -1191,7 +1188,6 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                             dynamic_cast<SwTxtFrm*>(pNew->FindPrevCnt( true )) );
                     }
                 }
-                // <--
                 if ( bInitNewSect )
                     static_cast<SwSectionFrm*>(pNew)->Init();
             }
@@ -1204,7 +1200,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
 
 void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 {
-    ASSERT( pIdxBehind, "kein Index" );
+    OSL_ENSURE( pIdxBehind, "kein Index" );
     SwNodes& rNds = GetNodes();
     SwDoc* pDoc = rNds.GetDoc();
 
@@ -1228,8 +1224,6 @@ void SwSectionNode::DelFrms()
     sal_uLong nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )
     {
-        // unser Flag muessen wir noch aktualisieren
-        // pSection->bHiddenFlag = sal_True;
         return ;
     }
 
@@ -1247,13 +1241,13 @@ void SwSectionNode::DelFrms()
         SwNodeIndex aIdx( *this );
         if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
             !CheckNodesRange( *this, aIdx, sal_True ) ||
-            // OD 04.11.2003 #i21457#
+            // #i21457#
             !lcl_IsInSameTblBox( rNds, *this, true ))
         {
             aIdx = *EndOfSectionNode();
             if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
                 !CheckNodesRange( *EndOfSectionNode(), aIdx, sal_True ) ||
-                // OD 04.11.2003 #i21457#
+                // #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
             {
                 m_pSection->m_Data.SetHiddenFlag(false);
@@ -1274,7 +1268,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     ::std::auto_ptr<SwTOXBase> pTOXBase;
     if (TOX_CONTENT_SECTION == GetSection().GetType())
     {
-        ASSERT( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+        OSL_ENSURE( GetSection().ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
         SwTOXBaseSection const& rTBS(
             dynamic_cast<SwTOXBaseSection const&>(GetSection()));
         pTOXBase.reset( new SwTOXBase(rTBS, pDoc) );
@@ -1310,10 +1304,9 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         pNewSect->SetHidden( sal_True );
     if( !pNewSect->IsProtectFlag() && GetSection().IsProtect() )
         pNewSect->SetProtect( sal_True );
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     if( !pNewSect->IsEditInReadonlyFlag() && GetSection().IsEditInReadonly() )
         pNewSect->SetEditInReadonly( sal_True );
-    // <--
 
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() );  // (wo stehe in denn nun ??)
     rNds._Copy( aRg, aInsPos, sal_False );
@@ -1343,7 +1336,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
 sal_Bool SwSectionNode::IsCntntHidden() const
 {
-    ASSERT( !m_pSection->IsHidden(),
+    OSL_ENSURE( !m_pSection->IsHidden(),
             "That's simple: Hidden Section => Hidden Content" );
     SwNodeIndex aTmp( *this, 1 );
     sal_uLong nEnd = EndOfSectionIndex();
@@ -1360,7 +1353,7 @@ sal_Bool SwSectionNode::IsCntntHidden() const
         {
             if( aTmp.GetNode().IsCntntNode() || aTmp.GetNode().IsTableNode() )
                 return sal_False; // Nicht versteckter Inhalt wurde gefunden
-            ASSERT( aTmp.GetNode().IsEndNode(), "EndNode expected" );
+            OSL_ENSURE( aTmp.GetNode().IsEndNode(), "EndNode expected" );
         }
         aTmp++;
     }
@@ -1404,7 +1397,7 @@ void SwSectionNode::NodesArrChgd()
         // verschieben vom Nodes- ins UndoNodes-Array?
         if( rNds.IsDocNodes() )
         {
-            ASSERT( pDoc == GetDoc(),
+            OSL_ENSURE( pDoc == GetDoc(),
                     "verschieben in unterschiedliche Documente?" );
             if( m_pSection->IsLinkType() )      // den Link austragen
                 m_pSection->CreateLink( pDoc->GetCurrentViewShell() ? CREATE_CONNECT    //swmod 071108
@@ -1481,3 +1474,4 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

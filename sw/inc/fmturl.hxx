@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,12 +40,12 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 {
-    String    sTargetFrameName; // in diesen Frame soll die URL
-    String    sURL;             //Einfache URL
-    String    sName;            // Name des Anchors
-    ImageMap *pMap;             //ClientSide Images
+    String    sTargetFrameName; // Target frame for URL.
+    String    sURL;             // Simple URL.
+    String    sName;            // Name of the anchor.
+    ImageMap *pMap;             // ClientSide images.
 
-    sal_Bool      bIsServerMap;     //mit der URL eine ServerSideImageMap
+    sal_Bool      bIsServerMap;     // A ServerSideImageMap with the URL.
 
     SwFmtURL& operator=( const SwFmtURL& );
 
@@ -56,7 +57,7 @@ public:
 
     virtual ~SwFmtURL();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -64,12 +65,12 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
     void SetURL( const String &rURL, sal_Bool bServerMap );
-    void SetMap( const ImageMap *pM );  //Pointer wird kopiert!
+    void SetMap( const ImageMap *pM );  // Pointer will be copied.
 
     const String   &GetTargetFrameName()const { return sTargetFrameName; }
     const String   &GetURL()            const { return sURL; }
@@ -90,3 +91,4 @@ inline const SwFmtURL &SwFmt::GetURL(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

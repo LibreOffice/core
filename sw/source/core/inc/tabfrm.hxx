@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,7 +81,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                         // is necessary, in order to let the text
                                         // flow into the FollowFlowLine
     sal_Bool bRemoveFollowFlowLinePending :1;
-    // --> OD 2004-10-04 #i26945#
+    // #i26945#
     sal_Bool bConsiderObjsForMinCellHeight :1; // Usually, the floating screen objects
                                            // are considered on the calculation
                                            // for the minimal cell height.
@@ -89,11 +90,9 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
                                            // screen object for the preparation
                                            // of the re-calculation of the
                                            // last table row.
-    // <--
-    // --> OD 2004-10-15 #i26945#
+    // #i26945#
     sal_Bool bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
                           // indicates, if the floating screen objects fits
-    // <--
     sal_Bool bDummy4 :1;
 
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
@@ -172,7 +171,7 @@ public:
     sal_Bool IsRemoveFollowFlowLinePending() const { return bRemoveFollowFlowLinePending; }
     void SetRemoveFollowFlowLinePending( sal_Bool bNew ) { bRemoveFollowFlowLinePending = bNew; }
 
-    // --> OD 2004-10-04 #i26945#
+    // #i26945#
     sal_Bool IsConsiderObjsForMinCellHeight() const
     {
         return bConsiderObjsForMinCellHeight;
@@ -181,8 +180,7 @@ public:
     {
         bConsiderObjsForMinCellHeight = _bNewConsiderObjsForMinCellHeight;
     }
-    // <--
-    // --> OD 2004-10-04 #i26945#
+    // #i26945#
     sal_Bool DoesObjsFit() const
     {
         return bObjsDoesFit;
@@ -191,7 +189,6 @@ public:
     {
         bObjsDoesFit = _bNewObjsDoesFit;
     }
-    // <--
 
     bool RemoveFollowFlowLine();
     //
@@ -208,12 +205,14 @@ public:
 
     bool IsLayoutSplitAllowed() const;
 
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     bool IsCollapsingBorders() const;
 
     // used for collapsing border lines:
     sal_uInt16 GetBottomLineSize() const;
     // <-- collapsing
+
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTabFrm)
 };
@@ -233,3 +232,5 @@ inline SwTabFrm *SwTabFrm::GetFollow()
 }
 
 #endif  // SW_TABFRM_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

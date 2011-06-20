@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,27 +39,15 @@
 #include <colwd.hxx>
 #include <tablemgr.hxx>
 #include <wrtsh.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <usrpref.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _COLWD_HRC
 #include <colwd.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 
 
 IMPL_LINK_INLINE_START( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
@@ -121,3 +110,4 @@ void SwTableWidthDlg::Apply()
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

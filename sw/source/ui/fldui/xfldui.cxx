@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -40,13 +41,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 #include <fldmgr.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
-#include <wrtsh.hxx>        // Actives Fenster
-#ifndef _VIEW_HXX
+#include <wrtsh.hxx>        // active window
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 
 
@@ -66,8 +63,8 @@ using namespace ::com::sun::star::beans;
 // ---------------------------------------------------------------------------
 
 /*--------------------------------------------------------------------
-     Beschreibung: Ist das Datenbankfeld numerisch?
-     Anm: Im Fehlerfall wird sal_True returnt.
+     Description: Is the database field numeric?
+     remark: in case of error sal_True is returned
  --------------------------------------------------------------------*/
 
 sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
@@ -92,7 +89,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
         if(xTSupplier.is())
         {
             Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            DBG_ASSERT(xTbls->hasByName(rTblQryName), "table not available anymore?");
+            OSL_ENSURE(xTbls->hasByName(rTblQryName), "table not available anymore?");
             try
             {
                 Any aTable = xTbls->getByName(rTblQryName);
@@ -109,7 +106,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
         if(xQSupplier.is())
         {
             Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            DBG_ASSERT(xQueries->hasByName(rTblQryName), "table not available anymore?");
+            OSL_ENSURE(xQueries->hasByName(rTblQryName), "table not available anymore?");
             try
             {
                 Any aQuery = xQueries->getByName(rTblQryName);
@@ -130,7 +127,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception in getColumns()");
+            OSL_FAIL("Exception in getColumns()");
         }
         if(xCols.is() && xCols->hasByName(rFldName))
         {
@@ -182,3 +179,4 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

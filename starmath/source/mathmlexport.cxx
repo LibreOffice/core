@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/saveopt.hxx>
@@ -71,6 +72,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <memory>
 
@@ -104,7 +106,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     sal_Bool bRet=sal_True;
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(utl::getProcessServiceFactory());
-    DBG_ASSERT(xServiceFactory.is(),"got no service manager");
+    OSL_ENSURE(xServiceFactory.is(),"got no service manager");
 
     //Get model
     uno::Reference< lang::XComponent > xModelComp(xModel, uno::UNO_QUERY );
@@ -126,7 +128,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
     {
         if (pDocShell /*&& pDocShell->GetMedium()*/)
         {
-            DBG_ASSERT( pDocShell->GetMedium() == &rMedium,
+            OSL_ENSURE( pDocShell->GetMedium() == &rMedium,
                     "different SfxMedium found" );
 
             SfxItemSet* pSet = rMedium.GetItemSet();
@@ -269,16 +271,16 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pComponentName )
 {
-    DBG_ASSERT(xOutputStream.is(), "I really need an output stream!");
-    DBG_ASSERT(xComponent.is(), "Need component!");
-    DBG_ASSERT(NULL != pComponentName, "Need component name!");
+    OSL_ENSURE(xOutputStream.is(), "I really need an output stream!");
+    OSL_ENSURE(xComponent.is(), "Need component!");
+    OSL_ENSURE(NULL != pComponentName, "Need component name!");
 
     // get component
     Reference< io::XActiveDataSource > xSaxWriter(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") )),
         UNO_QUERY );
-    DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if (!xSaxWriter.is())
         return sal_False;
 
@@ -296,7 +298,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     Reference< document::XExporter > xExporter(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pComponentName), aArgs), UNO_QUERY);
-    DBG_ASSERT( xExporter.is(),
+    OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if ( !xExporter.is() )
         return sal_False;
@@ -331,8 +333,8 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     sal_Bool bCompress
     )
 {
-    DBG_ASSERT(xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Need stream name!");
+    OSL_ENSURE(xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Need stream name!");
 
     // open stream
     Reference < io::XStream > xStream;
@@ -344,7 +346,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "Can't create output stream in package!" );
+        OSL_FAIL( "Can't create output stream in package!" );
         return sal_False;
     }
 
@@ -381,16 +383,11 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     sal_Bool bRet = WriteThroughComponent( xStream->getOutputStream(), xComponent, rFactory,
         rPropSet, pComponentName );
 
-    // stream is closed by SAX parser
-    //if ( bRet )
-    //    xStream->getOutputStream()->closeOutput();
-
     return bRet;
 }
 
 ////////////////////////////////////////////////////////////
 
-// #110680#
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
@@ -412,20 +409,14 @@ throw(uno::RuntimeException)
     return SvXMLExport::getSomething( rId );
 }
 
+namespace
+{
+    class theSmXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSmXMLExportUnoTunnelId> {};
+}
+
 const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
 {
-    static uno::Sequence< sal_Int8 > * pSeq = 0;
-    if ( !pSeq )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pSeq )
-        {
-            static uno::Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theSmXMLExportUnoTunnelId::get().getSeq();
 }
 
 OUString SAL_CALL SmXMLExport_getImplementationName() throw()
@@ -445,8 +436,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_ALL );
     // EXPORT_OASIS is required here allthough there is no differrence between
     // OOo and OASIS, because without the flag, a transformation to OOo would
     // be chained in.
@@ -472,8 +461,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_META );
 }
 
@@ -496,8 +483,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_META );
 }
 
@@ -520,8 +505,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
@@ -544,8 +527,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_SETTINGS );
 }
 
@@ -568,8 +549,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_CONTENT );
     // The EXPORT_OASIS flag is only required to avoid that a transformer is
     // chanied in
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_CONTENT );
@@ -631,7 +610,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 
         // make use of a default namespace
         ResetNamespaceMap();    // Math doesn't need namespaces from xmloff, since it now uses default namespaces (because that is common with current MathML usage in the web)
-        _GetNamespaceMap().Add( OUString::createFromAscii(""), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
+        _GetNamespaceMap().Add( OUString(), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
 
         rList.AddAttribute(GetNamespaceMap().GetAttrNameByKey(XML_NAMESPACE_MATH_IDX),
                 GetNamespaceMap().GetNameByKey( XML_NAMESPACE_MATH_IDX));
@@ -668,12 +647,12 @@ void SmXMLExport::_ExportContent()
             (xTunnel->getSomething(SmModel::getUnoTunnelId()));
         SmDocShell *pDocShell = pModel ?
             static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
-        DBG_ASSERT( pDocShell, "doc shell missing" );
+        OSL_ENSURE( pDocShell, "doc shell missing" );
         if (pDocShell)
         {
             SmParser &rParser = pDocShell->GetParser();
-            sal_Bool bVal = rParser.IsExportSymbolNames();
-            rParser.SetExportSymbolNames( sal_True );
+            bool bVal = rParser.IsExportSymbolNames();
+            rParser.SetExportSymbolNames( true );
             SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
             delete pTmpTree;
@@ -799,30 +778,16 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
     if (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
 
-    //if (nSize)
-    //{
         for (sal_uInt16 i = 0; i < nSize; i++)
-            if (const SmNode *pTemp = pNode->GetSubNode(i))
-                ExportNodes(pTemp, nLevel+1);
-    //}
-#if 0
-    else
-    {
-        //This saves us from situations like "a newline" where the
-        //lack of a term following the newline would otherwise create
-        //a incorrect token like <mtr/>
-        SvXMLElementExport aDummy(*this, XML_NAMESPACE_MATH, XML_MI, sal_True, sal_False);
-        sal_Unicode nArse[2] = {'\n','\0'};
-        GetDocHandler()->characters(nArse);
-    }
-#endif
+        if (const SmNode *pTemp = pNode->GetSubNode(i))
+            ExportNodes(pTemp, nLevel+1);
 
     delete pRow;
 }
 
 void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
 {
-    DBG_ASSERT(pNode->GetNumSubNodes()==3,"Bad Fraction");
+    OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Fraction");
     SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC, sal_True, sal_True);
     ExportNodes(pNode->GetSubNode(0), nLevel);
     ExportNodes(pNode->GetSubNode(2), nLevel);
@@ -873,7 +838,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
     if (cTmp != 0)
         nArse[0] = cTmp;
-    DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+    OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
 }
@@ -915,7 +880,6 @@ void SmXMLExport::ExportBlank(const SmNode * /*pNode*/, int /*nLevel*/)
     //!! <msub> tag in MathML !!
 
     SvXMLElementExport *pText;
-    //const SmBlankNode *pTemp = static_cast<const SmBlankNode *>(pNode);
 
     pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, sal_True, sal_False);
 
@@ -1077,11 +1041,11 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         nArse[1] = 0;
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
-        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+        OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_OPEN,nArse);
         nArse[0] = static_cast<
             const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
-        DBG_ASSERT(nArse[0] != 0xffff,"Non existant symbol");
+        OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_CLOSE,nArse);
         pFences = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MFENCED,
             sal_True,sal_True);
@@ -1136,14 +1100,6 @@ void SmXMLExport::ExportOperator(const SmNode *pNode, int nLevel)
 {
     /*we need to either use content or font and size attributes
      *here*/
-#if 0
-    {
-    SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO,
-        sal_True,sal_False);
-    SmTextNode *pTemp = (SmTextNode *)pNode->GetSubNode(0);
-    GetDocHandler()->characters(pTemp->GetText());
-    }
-#endif
     SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MROW,
         sal_True, sal_True);
     ExportNodes(pNode->GetSubNode(0), nLevel+1);
@@ -1177,12 +1133,7 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO,
                 sal_True,sal_True);
-#if 0
-            GetDocHandler()->characters(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("&overbar;")));
-#else
             sal_Unicode nArse[2] = {0xAF,0x00};
-#endif
             GetDocHandler()->characters(nArse);
             }
             break;
@@ -1191,12 +1142,7 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
             //proper entity support required
             SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO,
                 sal_True,sal_True);
-#if 0
-            GetDocHandler()->characters(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("&underbar;")));
-#else
             sal_Unicode nArse[2] = {0x0332,0x00};
-#endif
             GetDocHandler()->characters(nArse);
             }
             break;
@@ -1240,7 +1186,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             case TSERIF     : nSansSerifFixed  = 1; break;
             case TFIXED     : nSansSerifFixed  = 2; break;
             default:
-                DBG_ASSERT( 0, "unexpected case" );
+                OSL_FAIL( "unexpected case" );
         }
         // According to the parser every node that is to be evaluated heres
         // has a single non-zero subnode at index 1!! Thus we only need to check
@@ -1374,7 +1320,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                     pText = "monospace";    // no modifiers allowed for monospace ...
                 else
                 {
-                    DBG_ASSERT( 0, "unexpected case" );
+                    OSL_FAIL( "unexpected case" );
                 }
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, A2OU(pText));
             }
@@ -1383,11 +1329,6 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             break;
 
     }
-#if 0
-    if (pNode->GetNumSubNodes() > 1) //or in the future is a node that
-                                     //cannot take the currently supported
-                                     //properties
-#endif
     //for now we will just always export with a style and not worry about
     //anyone else for the moment.
     {
@@ -1395,10 +1336,6 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
         SvXMLElementExport aStyle(*this, XML_NAMESPACE_MATH, XML_MSTYLE, sal_True,sal_True);
         ExportExpression(pNode, nLevel);
     }
-#if 0
-    else
-        ExportNodes(pNode->GetSubNode(0), nLevel+1);
-#endif
 
     delete pElement;
 }
@@ -1423,13 +1360,12 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
             break;
     }
 
-    DBG_ASSERT(pNode->GetNumSubNodes()==3,"Bad Vertical Brace");
+    OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Vertical Brace");
     SvXMLElementExport aOver1(*this, XML_NAMESPACE_MATH,which, sal_True, sal_True);
     {//Scoping
         // using accents will draw the over-/underbraces too close to the base
         // see http://www.w3.org/TR/MathML2/chapter3.html#id.3.4.5.2
         // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribut here!
-//        AddAttribute(XML_NAMESPACE_MATH, XML_ACCENT, XML_sal_True);
         SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, sal_True, sal_True);
         ExportNodes(pNode->GetSubNode(0), nLevel);
         ExportNodes(pNode->GetSubNode(1), nLevel);
@@ -1556,21 +1492,12 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportBlank(pNode, nLevel);
             break;
        default:
-            DBG_ASSERT( 0, "Warning: failed to export a node?" );
+            OSL_FAIL( "Warning: failed to export a node?" );
             break;
 
-#if 0
-        default:
-            {
-            sal_uLong  nSize = pNode->GetNumSubNodes();
-            for (sal_uLong i = 0; i < nSize; i++)
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    ExportNodes(pTemp, nLevel+1);
-            }
-            break;
-#endif
     }
 }
 
 ////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include <flyfrm.hxx>
 #include "accgraphic.hxx"
 
@@ -82,16 +83,15 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
     return aRet;
 }
 
+namespace
+{
+    class theSwAccessibleGraphicImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleGraphicImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
         throw(RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleGraphicImplementationId::get().getSeq();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

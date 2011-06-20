@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -103,7 +104,7 @@ struct CSS1PropertyEnum
 
 /*  */
 
-class SvxBorderLine;
+namespace editeng { class SvxBorderLine; }
 
 SV_DECL_PTRARR_DEL( CSS1Selectors, CSS1Selector*, 1, 1 )
 
@@ -205,7 +206,7 @@ typedef SvxCSS1MapEntry *SvxCSS1MapEntryPtr;
 SV_DECL_PTRARR_SORT_DEL( SvxCSS1Map, SvxCSS1MapEntryPtr, 5, 5 )
 
 
-#if !defined( ICC ) && !defined( BLC )
+#if !defined( ICC )
 inline sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;
@@ -312,10 +313,6 @@ public:
 
     // Pixel in Twips wandeln
     static void PixelToTwip( long &nWidth, long &nHeight );
-
-    // Die Breite einer Umrandung einstellen
-    static void SetBorderWidth( SvxBorderLine& aBorderLine, sal_uInt16 nWidth,
-                                sal_Bool bDouble, sal_Bool bTable=sal_False );
 
     // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const;
@@ -433,3 +430,4 @@ inline SvxCSS1MapEntry *SvxCSS1Parser::GetTag( const String& rTag ) const
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

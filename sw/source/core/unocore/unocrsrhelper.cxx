@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -71,7 +72,6 @@
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -86,9 +86,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-// --> OD 2008-11-26 #158694#
 #include <SwNodeNum.hxx>
-// <--
 #include <fmtmeta.hxx>
 
 
@@ -100,7 +98,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
-
 
 namespace SwUnoCursorHelper
 {
@@ -135,9 +132,8 @@ GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
     return xRet;
 }
 
-
-/* -----------------16.09.98 12:27-------------------
-*   Lesen spezieller Properties am Cursor
+/* --------------------------------------------------
+ *  Read the special properties of the cursor
  * --------------------------------------------------*/
 sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
@@ -151,7 +147,6 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
     sal_Bool bDone = sal_True;
     switch(rEntry.nWID)
     {
-        // --> OD 2008-11-26 #158694#
         case FN_UNO_PARA_CONT_PREV_SUBTREE:
             if (pAny)
             {
@@ -189,24 +184,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 *pAny <<= OUString(sRet);
             }
         break;
-        // <--
-        // --> OD 2008-05-20 #outlinelevel# - no longer needed
-//        case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
-//            if (pAny)
-//            {
-//                const SwTxtNode * pTmpNode = pNode;
-
-//                if (!pTmpNode)
-//                    pTmpNode = rPam.GetNode()->GetTxtNode();
-
-//                sal_Int8 nRet = -1;
-//                if (pTmpNode && pTmpNode->GetOutlineLevel() != NO_NUMBERING)
-//                nRet = sal::static_int_cast< sal_Int8 >(pTmpNode->GetOutlineLevel());
-//                *pAny <<= nRet;
-//            }
-//        break;
-        // <--
-        case RES_PARATR_OUTLINELEVEL: //#outlinelevel added by zhaojianwei
+        case RES_PARATR_OUTLINELEVEL:
             if (pAny)
             {
                 const SwTxtNode * pTmpNode = pNode;
@@ -220,7 +198,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 
                 *pAny <<= nRet;
             }
-        break; //<-end,zhaojianwei
+        break;
         case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         case FN_UNO_PARA_STYLE :
         {
@@ -265,16 +243,13 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_NUM_LEVEL  :
         case FN_UNO_IS_NUMBER  :
-        // --> OD 2008-07-14 #i91601#
+        // #i91601#
         case FN_UNO_LIST_ID:
-        // <--
         case FN_NUMBER_NEWSTART:
         {
             // a multi selection is not considered
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-            // --> OD 2010-01-13 #b6912256#
             if ( pTxtNd && pTxtNd->IsInList() )
-            // <--
             {
                 if( pAny )
                 {
@@ -285,13 +260,12 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         sal_Bool bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
-                    // --> OD 2008-07-14 #i91601#
+                    // #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         const String sListId = pTxtNd->GetListId();
                         *pAny <<= OUString(sListId);
                     }
-                    // <--
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
                         sal_Bool bIsRestart = pTxtNd->IsListRestart();
@@ -310,12 +284,11 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         *pAny <<= static_cast<sal_Int16>( 0 );
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                         *pAny <<= false;
-                    // --> OD 2008-07-14 #i91601#
+                    // #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         *pAny <<= OUString();
                     }
-                    // <--
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                         *pAny <<= false;
                 }
@@ -351,7 +324,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 }
             }
             else
-                //auch hier - nicht zu unterscheiden
+                //also here - indistinguishable
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
@@ -395,16 +368,6 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
-/*              laesst sich nicht feststellen
-*               case FN_UNO_BOOKMARK:
-        {
-            if()
-            {
-                uno::Reference< XBookmark >  xBkm = SwXBookmarks::GetObject(rBkm);
-                rAny.set(&xBkm, ::getCppuType((const XBookmark*)0)());
-            }
-        }
-        break;*/
         case FN_UNO_TEXT_TABLE:
         case FN_UNO_CELL:
         {
@@ -568,11 +531,11 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         {
                             //now the attribute should start before or at the selection
                             //and it should end at the end of the selection or behind
-                            DBG_ASSERT(nAttrStart <= nPaMStart && nAttrEnd >=nPaMEnd,
+                            OSL_ENSURE(nAttrStart <= nPaMStart && nAttrEnd >=nPaMEnd,
                                     "attribute overlaps or is outside");
                             //now the name of the style has to be added to the sequence
                             aCharStyles.realloc(aCharStyles.getLength() + 1);
-                            DBG_ASSERT(pAttr->GetCharFmt().GetCharFmt(), "no character format set");
+                            OSL_ENSURE(pAttr->GetCharFmt().GetCharFmt(), "no character format set");
                             aCharStyles.getArray()[aCharStyles.getLength() - 1] =
                                         SwStyleNameMapper::GetProgName(
                                             pAttr->GetCharFmt().GetCharFmt()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
@@ -591,20 +554,17 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         }
         break;
         case RES_TXTATR_CHARFMT:
-        // kein break hier!
+        // no break here!
         default: bDone = sal_False;
     }
     if( bDone )
         eState = eNewState;
     return bDone;
 };
-/* -----------------30.06.98 10:30-------------------
- *
- * --------------------------------------------------*/
+
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
     const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-    // --> OD 2008-02-28 #refactorlists#
     // correction: check, if restart value is set at the text node and use
     // new method <SwTxtNode::GetAttrListRestartValue()> to retrieve the value
     if ( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsListRestart() &&
@@ -614,14 +574,10 @@ sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
         sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTxtNd->GetAttrListRestartValue());
         return nTmp;
     }
-    // <--
     eState = PropertyState_DEFAULT_VALUE;
     return -1;
 }
 
-/* -----------------25.05.98 11:41-------------------
- *
- * --------------------------------------------------*/
 void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 {
     uno::Reference<XIndexReplace> xIndexReplace;
@@ -656,7 +612,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         else
                         {
 
-                            // CharStyle besorgen und an der Rule setzen
+                            // get CharStyle and set the rule
                             sal_uInt16 nChCount = pDoc->GetCharFmts()->Count();
                             SwCharFmt* pCharFmt = 0;
                             for(sal_uInt16 nCharFmt = 0; nCharFmt < nChCount; nCharFmt++)
@@ -674,7 +630,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                 SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
                                 SfxStyleSheetBase* pBase;
                                 pBase = pPool->Find(pNewCharStyles[i], SFX_STYLE_FAMILY_CHAR);
-                            // soll das wirklich erzeugt werden?
+                            // shall it really be created?
                                 if(!pBase)
                                     pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
                                 pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
@@ -683,7 +639,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                 aFmt.SetCharFmt(pCharFmt);
                         }
                     }
-                    //jetzt nochmal fuer Fonts
+                    //Now again for fonts
                     if(
                        pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
                        (
@@ -707,26 +663,22 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 }
                 UnoActionContext aAction(pDoc);
 
-                if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
+                if( rPam.GetNext() != &rPam )           // Multiple selection?
                 {
                     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     {
-                        // --> OD 2008-03-17 #refactorlists#
                         // no start of a new list
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
-                        // <--
                     }
                     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
                 else
                 {
-                    // --> OD 2008-03-17 #refactorlists#
                     // no start of a new list
                     pDoc->SetNumRule( rPam, aRule, false );
-                    // <--
                 }
 
 
@@ -737,12 +689,10 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if(!pRule)
                     throw RuntimeException();
-                // --> OD 2008-03-17 #refactorlists#
                 // no start of a new list
                 pDoc->SetNumRule( rPam, *pRule, false );
-                // <--
             }
-            // --> OD 2009-08-18 #i103817#
+            // #i103817#
             // outline numbering
             else
             {
@@ -752,7 +702,6 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     throw RuntimeException();
                 pDoc->SetNumRule( rPam, *pRule, false );
             }
-            // <--
         }
     }
     else if(rValue.getValueType() == ::getVoidCppuType())
@@ -761,10 +710,6 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
     }
 }
 
-
-/* -----------------25.05.98 11:40-------------------
- *
- * --------------------------------------------------*/
 void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 {
     const SwNumRule* pNumRule = rPam.GetDoc()->GetCurrNumRule( *rPam.GetPoint() );
@@ -778,17 +723,16 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
     else
         eState = PropertyState_DEFAULT_VALUE;
 }
-/* -----------------04.07.98 15:15-------------------
- *
- * --------------------------------------------------*/
+
 void GetCurPageStyle(SwPaM& rPaM, String &rString)
 {
     const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
     if(pPage)
         SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
 }
-/* -----------------30.03.99 10:52-------------------
- * spezielle Properties am Cursor zuruecksetzen
+
+/* --------------------------------------------------
+ * reset special properties of the cursor
  * --------------------------------------------------*/
 void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
 {
@@ -804,7 +748,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         {
             UnoActionContext aAction(pDoc);
 
-            if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
+            if( rPam.GetNext() != &rPam )           // Multiple selection?
             {
                 pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
@@ -825,16 +769,14 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
         {
-            SvUShortsSort aWhichIds;
-            aWhichIds.Insert(RES_TXTATR_CHARFMT);
-            pDoc->ResetAttrs(rPam, sal_True, &aWhichIds);
+            std::set<sal_uInt16> aWhichIds;
+            aWhichIds.insert( RES_TXTATR_CHARFMT);
+            pDoc->ResetAttrs(rPam, sal_True, aWhichIds);
         }
         break;
     }
 }
-/* -----------------21.07.98 11:36-------------------
- *
- * --------------------------------------------------*/
+
 void InsertFile(SwUnoCrsr* pUnoCrsr,
     const String& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions
@@ -940,8 +882,8 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     SfxObjectShellRef aRef( pDocSh );
 
     pDocSh->RegisterTransfer( *pMed );
-    pMed->DownLoad();   // ggfs. den DownLoad anstossen
-    if( aRef.Is() && 1 < aRef->GetRefCount() )  // noch gueltige Ref?
+    pMed->DownLoad();   // if necessary: start the download
+    if( aRef.Is() && 1 < aRef->GetRefCount() )  // Ref still valid?
     {
         SwReader* pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();
@@ -960,7 +902,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
             SwNodeIndex aSave(  pUnoCrsr->GetPoint()->nNode, -1 );
             xub_StrLen nCntnt = pUnoCrsr->GetPoint()->nContent.GetIndex();
 
-            sal_uInt32 nErrno = pRdr->Read( *pRead );   // und Dokument einfuegen
+            sal_uInt32 nErrno = pRdr->Read( *pRead );   // and paste the document
 
             if(!nErrno)
             {
@@ -976,22 +918,11 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
 
             delete pRdr;
 
-            // ggfs. alle Verzeichnisse updaten:
-/*          if( pWrtShell->IsUpdateTOX() )
-            {
-                SfxRequest aReq( *this, FN_UPDATE_TOX );
-                Execute( aReq );
-                pWrtShell->SetUpdateTOX( sal_False );       // wieder zurueck setzen
-            }*/
 
         }
     }
     delete pMed;
 }
-
-/* -----------------14.07.04 ------------------------
- *
- * --------------------------------------------------*/
 
 // insert text and scan for CR characters in order to insert
 // paragraph breaks at those positions by calling SplitNode
@@ -1026,17 +957,17 @@ sal_Bool DocInsertStringSplitCR(
     }
     while (nIdx != STRING_NOTFOUND )
     {
-        DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
+        OSL_ENSURE( nIdx - nStartIdx >= 0, "index negative!" );
         aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
         if (aTxt.getLength() &&
             !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
         {
-            DBG_ERROR( "Doc->Insert(Str) failed." );
+            OSL_FAIL( "Doc->Insert(Str) failed." );
             bOK = sal_False;
         }
         if (!rDoc.SplitNode( *rNewCursor.GetPoint(), false ) )
         {
-            DBG_ERROR( "SplitNode failed" );
+            OSL_FAIL( "SplitNode failed" );
             bOK = sal_False;
         }
         nStartIdx = nIdx + 1;
@@ -1046,15 +977,13 @@ sal_Bool DocInsertStringSplitCR(
     if (aTxt.getLength() &&
         !rDoc.InsertString( rNewCursor, aTxt, nInsertFlags ))
     {
-        DBG_ERROR( "Doc->Insert(Str) failed." );
+        OSL_FAIL( "Doc->Insert(Str) failed." );
         bOK = sal_False;
     }
 
     return bOK;
 }
-/*-- 10.03.2008 09:58:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void makeRedline( SwPaM& rPaM,
     const ::rtl::OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
@@ -1075,7 +1004,7 @@ void makeRedline( SwPaM& rPaM,
     //todo: what about REDLINE_FMTCOLL?
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     uno::Any aAuthorValue;
-    aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineAuthor"), aAuthorValue);
+    aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor")), aAuthorValue);
     sal_uInt16 nAuthor = 0;
     ::rtl::OUString sAuthor;
     if( aAuthorValue >>= sAuthor )
@@ -1083,7 +1012,7 @@ void makeRedline( SwPaM& rPaM,
 
     ::rtl::OUString sComment;
     uno::Any aCommentValue;
-    aCommentValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineComment"), aCommentValue);
+    aCommentValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineComment")), aCommentValue);
 
     SwRedlineData aRedlineData( eType, nAuthor );
     if( aCommentValue >>= sComment )
@@ -1091,7 +1020,7 @@ void makeRedline( SwPaM& rPaM,
 
     ::util::DateTime aStamp;
     uno::Any aDateTimeValue;
-    aDateTimeValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineDateTime"), aDateTimeValue);
+    aDateTimeValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineDateTime")), aDateTimeValue);
     if( aDateTimeValue >>= aStamp )
     {
        aRedlineData.SetTimeStamp(
@@ -1108,9 +1037,6 @@ void makeRedline( SwPaM& rPaM,
         throw lang::IllegalArgumentException();
 }
 
-/*-- 19.02.2009 09:27:26---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwAnyMapHelper::~SwAnyMapHelper()
 {
     AnyMapHelper_t::iterator aIt = begin();
@@ -1120,9 +1046,7 @@ SwAnyMapHelper::~SwAnyMapHelper()
         ++aIt;
     }
 }
-/*-- 19.02.2009 09:27:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
@@ -1134,9 +1058,7 @@ void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const 
     else
         insert( value_type(nKey, new uno::Any( rAny )) );
 }
-/*-- 19.02.2009 09:27:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )
 {
     bool bRet = false;
@@ -1152,3 +1074,4 @@ bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, co
 
 }//namespace SwUnoCursorHelper
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

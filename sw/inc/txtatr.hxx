@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,7 @@
 #include <calbck.hxx>
 
 
-class SwTxtNode;    // fuer SwTxtFld
+class SwTxtNode;    // For SwTxtFld.
 class SwCharFmt;
 
 namespace sw {
@@ -50,7 +51,7 @@ public:
     SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtCharFmt( );
 
-    // werden vom SwFmtCharFmt hierher weitergeleitet (no derivation from SwClient!)
+    // Passed from SwFmtCharFmt (no derivation from SwClient!).
     void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
     bool GetInfo( SfxPoolItem& rInfo ) const;
 
@@ -108,7 +109,7 @@ public:
 
     SW_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
 
-    /// get and set TxtNode pointer
+    /// Get and set TxtNode pointer.
            const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }
     inline const SwTxtNode& GetTxtNode() const;
     void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
@@ -118,12 +119,13 @@ public:
             { return (const_cast<SwTxtRuby*>(this))->GetCharFmt(); }
 };
 
-// --------------- Inline Implementierungen ------------------------
 
 inline const SwTxtNode& SwTxtRuby::GetTxtNode() const
 {
-    ASSERT( m_pTxtNode, "SwTxtRuby: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtRuby: where is my TxtNode?" );
     return *m_pTxtNode;
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

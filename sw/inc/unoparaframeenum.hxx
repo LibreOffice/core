@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -65,15 +66,10 @@ typedef ::std::deque< ::boost::shared_ptr<SwDepend> >
     FrameDependList_t;
 
 
-// OD 2004-05-07 #i28701# - adjust 4th parameter
+// #i28701# - adjust 4th parameter
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                          FrameDependSortList_t & rFrames,
                          const bool _bAtCharAnchoredObjs );
-
-
-/* -----------------23.03.99 12:57-------------------
- *
- * --------------------------------------------------*/
 
 enum ParaFrameMode
 {
@@ -125,3 +121,4 @@ public:
 
 #endif // SW_UNOPARAFRAMEENUM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

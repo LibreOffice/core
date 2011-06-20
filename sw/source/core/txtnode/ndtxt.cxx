@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,6 @@
 #include <docary.hxx>
 #include <pam.hxx>                  // fuer SwPosition
 #include <fldbas.hxx>
-#include <errhdl.hxx>
 #include <paratr.hxx>
 #include <txtfrm.hxx>
 #include <ftnfrm.hxx>
@@ -86,7 +86,6 @@
 #include <istyleaccess.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <numrule.hxx>
-#include <svl/intitem.hxx>
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
@@ -108,7 +107,7 @@ SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
 // Leider ist das SwpHints nicht ganz wasserdicht:
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
 // und Verkettung sicherstellen zu muessen.
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
                                   pNd->GetpSwpHints()->Check(); }
@@ -120,13 +119,13 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                                  SwTxtFmtColl *pColl,
                                  SwAttrSet* pAutoAttr )
 {
-    ASSERT( pColl, "Collectionpointer ist 0." );
+    OSL_ENSURE( pColl, "Collectionpointer ist 0." );
 
     SwTxtNode *pNode = new SwTxtNode( rWhere, pColl, pAutoAttr );
 
     SwNodeIndex aIdx( *pNode );
 
-    // --> OD 2005-11-03 #125329#
+    // #125329#
     // call method <UpdateOutlineNode(..)> only for the document nodes array
     if ( IsDocNodes() )
         UpdateOutlineNode(*pNode);
@@ -217,13 +216,10 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
       mpNodeNum( 0 ),
       m_bLastOutlineState( false ),
       m_bNotifiable( false ),
-      // --> OD 2008-11-19 #i70748#
+      // #i70748#
       mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
-      // <--
-      // --> OD 2008-05-06 #refactorlists#
       mbInSetOrResetAttr( false ),
       mpList( 0 )
-      // <--
 {
     InitSwParaStatistics( true );
 
@@ -231,11 +227,9 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
     if( pAutoAttr )
         SetAttr( *pAutoAttr );
 
-    // --> OD 2008-03-13 #refactorlists# - no longed needed
-//    SyncNumberAndNumRule();
     if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
     {
-        // --> OD 2009-08-27 #i101516#
+        // #i101516#
         // apply paragraph style's assigned outline style list level as
         // list level of the paragraph, if it has none set already.
         if ( !HasAttrListLevel() &&
@@ -243,10 +237,8 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
         {
             SetAttrListLevel( pTxtColl->GetAssignedOutlineStyleLevel() );
         }
-        // <--
         AddToList();
     }
-    // <--
     GetNodes().UpdateOutlineNode(*this);
 
     m_bNotifiable = true;
@@ -273,15 +265,7 @@ SwTxtNode::~SwTxtNode()
         delete pTmpHints;
     }
 
-    // --> OD 2008-03-13 #refactorlists#
-//    if ( mpNodeNum )
-//    {
-//        mpNodeNum->RemoveMe();
-//        delete mpNodeNum;
-//        mpNodeNum = 0L;
-//    }
     RemoveFromList();
-    // <--
 
     InitSwParaStatistics( false );
 }
@@ -326,7 +310,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                         return;
                 }
                 SwTxtFtn *pAttr = (SwTxtFtn*)pHt;
-                ASSERT( pAttr->GetStartNode(), "FtnAtr ohne StartNode." );
+                OSL_ENSURE( pAttr->GetStartNode(), "FtnAtr ohne StartNode." );
                 SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
                 SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
                 if ( !pNd )
@@ -339,14 +323,14 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                 SwCntntFrm* pCntnt = aIter.First();
                 if( pCntnt )
                 {
-                    ASSERT( pCntnt->getRootFrm() == pFrm->getRootFrm(),
+                    OSL_ENSURE( pCntnt->getRootFrm() == pFrm->getRootFrm(),
                             "lcl_ChangeFtnRef: Layout double?" );
                     SwFtnFrm *pFtn = pCntnt->FindFtnFrm();
                     if( pFtn && pFtn->GetAttr() == pAttr )
                     {
                         while( pFtn->GetMaster() )
                             pFtn = pFtn->GetMaster();
-                        // OD 07.11.2002 #104840# - remember footnote frame
+                        // #104840# - remember footnote frame
                         pFirstFtnOfNode = pFtn;
                         while ( pFtn )
                         {
@@ -355,18 +339,18 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                             ((SwTxtFrm*)pFrm)->SetFtn( sal_True );
                         }
                     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     while( 0 != (pCntnt = aIter.Next()) )
                     {
                         SwFtnFrm *pDbgFtn = pCntnt->FindFtnFrm();
-                        ASSERT( !pDbgFtn || pDbgFtn->GetRef() == pFrm,
+                        OSL_ENSURE( !pDbgFtn || pDbgFtn->GetRef() == pFrm,
                                 "lcl_ChangeFtnRef: Who's that guy?" );
                     }
 #endif
                 }
             }
         } // end of for-loop on <SwpHints>
-        // OD 08.11.2002 #104840# - invalidate
+        // #104840# - invalidate
         if ( pFirstFtnOfNode )
         {
             SwCntntFrm* pCntnt = pFirstFtnOfNode->ContainsCntnt();
@@ -380,6 +364,8 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
 
 SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 {
+    bool parentIsOutline = IsOutline();
+
     // lege den Node "vor" mir an
     const xub_StrLen nSplitPos = rPos.nContent.GetIndex();
     const xub_StrLen nTxtLen = m_Text.Len();
@@ -398,24 +384,14 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         }
     }
 
-    // --> OD 2008-03-27 #refactorlists#
-//    // --> OD 2007-07-09 #i77372#
-//    // reset numbering attribute at current node, only if it is numbered.
-//    if ( GetNumRule() != NULL )
-//    {
-//        SetRestart(false);
-//        SetStart(1);
-//        SetCounted(true);
-//    }
     ResetAttr( RES_PARATR_LIST_ISRESTART );
     ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
     ResetAttr( RES_PARATR_LIST_ISCOUNTED );
-    if ( GetNumRule() == 0 )
+    if ( GetNumRule() == 0 || (parentIsOutline && !IsOutline()) )
     {
         ResetAttr( RES_PARATR_LIST_ID );
         ResetAttr( RES_PARATR_LIST_LEVEL );
     }
-    // <--
 
     if ( GetDepends() && m_Text.Len() && (nTxtLen / 2) < nSplitPos )
     {
@@ -623,7 +599,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
 void SwTxtNode::MoveTxtAttr_To_AttrSet()
 {
-    ASSERT( m_pSwpHints, "MoveTxtAttr_To_AttrSet without SwpHints?" );
+    OSL_ENSURE( m_pSwpHints, "MoveTxtAttr_To_AttrSet without SwpHints?" );
     for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
@@ -739,7 +715,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         InvalidateNumRule();
     }
     else {
-        ASSERT( sal_False, "kein TxtNode." );
+        OSL_FAIL( "kein TxtNode." );
     }
 
     return this;
@@ -834,7 +810,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         InvalidateNumRule();
     }
     else {
-        ASSERT( sal_False, "kein TxtNode." );
+        OSL_FAIL( "kein TxtNode." );
     }
 
     return this;
@@ -843,7 +819,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
 // erzeugt einen AttrSet mit Bereichen fuer Frame-/Para/Char-Attributen
 void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
 {
-    ASSERT( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
+    OSL_ENSURE( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
     SwAttrSet aNewAttrSet( rPool, aTxtNodeSetRange );
 
     // put names of parent style and conditional style:
@@ -946,7 +922,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                         sal_uInt16 nWhPos;
                         const sal_uInt16 nWhich = pHint->Which();
 
-                        ASSERT(!isCHRATR(nWhich), "Update: char attr hint?");
+                        OSL_ENSURE(!isCHRATR(nWhich), "Update: char attr hint?");
                         if (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich))
                         {
                             nWhPos = static_cast<sal_uInt16>(nWhich -
@@ -1093,18 +1069,15 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
                                         const SwTxtFmtColl *pNewColl)
 {
     SwDoc* pDoc = GetDoc();
-    ASSERT( pDoc, "Kein Doc?" );
+    OSL_ENSURE( pDoc, "Kein Doc?" );
     // erfrage die OutlineLevel und update gegebenenfalls das Nodes-Array,
     // falls sich die Level geaendert haben !
-    //const sal_uInt8 nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;//#outline level,removed by zhaojianwei
-    //const sal_uInt8 nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;//<-end,zhaojianwei
     const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pOldColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
     const int nNewLevel = pNewColl && pNewColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pNewColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
 
-//  if ( NO_NUMBERING != nNewLevel )    //#outline level,zhaojianwei
-    if ( MAXLEVEL != nNewLevel )    //<-end,zhaojianwei
+    if ( MAXLEVEL != nNewLevel )
     {
         SetAttrListLevel(nNewLevel);
     }
@@ -1126,14 +1099,11 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
         pDoc->GetFtnIdxs().UpdateFtn( aTmpIndex);
     }
 
-//FEATURE::CONDCOLL
-    if( /*pOldColl != pNewColl && pNewColl && */
-        RES_CONDTXTFMTCOLL == pNewColl->Which() )
+    if( RES_CONDTXTFMTCOLL == pNewColl->Which() )
     {
         // Erfrage die akt. Condition des TextNodes:
         ChkCondColl();
     }
-//FEATURE::CONDCOLL
 }
 
 // Wenn man sich genau am Ende einer Text- bzw. INetvorlage befindet,
@@ -1222,7 +1192,7 @@ lcl_GetTxtAttrs(
         }
 
         xub_StrLen const*const pEndIdx = pHint->GetEnd();
-        ASSERT(pEndIdx || pHint->HasDummyChar(),
+        OSL_ENSURE(pEndIdx || pHint->HasDummyChar(),
                 "hint with no end and no dummy char?");
             // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
             // simuliert, d.h. der Start wuede verschoben, das Ende expandiert,
@@ -1265,7 +1235,7 @@ SwTxtAttr *
 SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
                         enum GetTxtAttrMode const eMode) const
 {
-    ASSERT(    (nWhich == RES_TXTATR_META)
+    OSL_ENSURE(    (nWhich == RES_TXTATR_META)
             || (nWhich == RES_TXTATR_METAFIELD)
             || (nWhich == RES_TXTATR_AUTOFMT)
             || (nWhich == RES_TXTATR_INETFMT)
@@ -1301,12 +1271,12 @@ SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName 
 void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
     SwTxtAttr *const pNewHt, SwDoc *const pOtherDoc, SwTxtNode *const pDest )
 {
-    ASSERT( nWhich == pHt->Which(), "Falsche Hint-Id" );
+    OSL_ENSURE( nWhich == pHt->Which(), "Falsche Hint-Id" );
     switch( nWhich )
     {
         // copy nodesarray section with footnote content
         case RES_TXTATR_FTN :
-            ASSERT(pDest, "lcl_CopyHint: no destination text node?");
+            OSL_ENSURE(pDest, "lcl_CopyHint: no destination text node?");
             static_cast<const SwTxtFtn*>(pHt)->CopyFtn(
                 *static_cast<SwTxtFtn*>(pNewHt), *pDest);
             break;
@@ -1485,7 +1455,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
 |*                      wird angehaengt
 *************************************************************************/
 
-// --> OD 2008-11-18 #i96213#
+// #i96213#
 // introduction of new optional parameter to control, if all attributes have to be copied.
 void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const SwIndex &rStart,
@@ -1495,16 +1465,14 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     SwIndex aIdx( pDest, pDest->m_Text.Len() );
     CopyText( pDest, aIdx, rStart, nLen, bForceCopyOfAllAttrs );
 }
-// <--
 
-// --> OD 2008-11-18 #i96213#
+// #i96213#
 // introduction of new optional parameter to control, if all attributes have to be copied.
 void SwTxtNode::CopyText( SwTxtNode *const pDest,
                       const SwIndex &rDestStart,
                       const SwIndex &rStart,
                       xub_StrLen nLen,
                       const bool bForceCopyOfAllAttrs )
-// <--
 {
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
     xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
@@ -1526,12 +1494,11 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         if( HasSwAttrSet() )
         {
             // alle, oder nur die CharAttribute ?
-            // --> OD 2008-11-18 #i96213#
+            // #i96213#
             if ( !bForceCopyOfAllAttrs &&
                  ( nDestStart ||
                    pDest->HasSwAttrSet() ||
                    nLen != pDest->GetTxt().Len() ) )
-            // <--
             {
                 SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1573,12 +1540,11 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     if( HasSwAttrSet() )
     {
         // alle, oder nur die CharAttribute ?
-        // --> OD 2008-11-18 #i96213#
+        // #i96213#
         if ( !bForceCopyOfAllAttrs &&
              ( nDestStart ||
                pDest->HasSwAttrSet() ||
                nLen != pDest->GetTxt().Len() ) )
-        // <--
         {
             SfxItemSet aCharSet( pDest->GetDoc()->GetAttrPool(),
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -1751,8 +1717,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    ASSERT( rIdx <= m_Text.Len(), "SwTxtNode::InsertText: invalid index." );
-    ASSERT( (sal_uLong)m_Text.Len() + (sal_uLong)rStr.Len() <= STRING_LEN,
+    OSL_ENSURE( rIdx <= m_Text.Len(), "SwTxtNode::InsertText: invalid index." );
+    OSL_ENSURE( (sal_uLong)m_Text.Len() + (sal_uLong)rStr.Len() <= STRING_LEN,
             "SwTxtNode::InsertText: node text with insertion > STRING_LEN." );
 
     xub_StrLen aPos = rIdx.GetIndex();
@@ -1852,8 +1818,6 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 |*  SwTxtNode::Cut()
 |*
 |*  Beschreibung        text.doc
-|*  Ersterstellung      VB 20.03.91
-|*  Letzte Aenderung    JP 11.08.94
 |*
 *************************************************************************/
 
@@ -1867,20 +1831,18 @@ void SwTxtNode::CutText( SwTxtNode * const pDest,
     }
     else
     {
-        ASSERT(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         EraseText( rStart, nLen );
     }
 }
 
 
 void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
-         const SwIndex & rStart, /*const*/ xub_StrLen nLen, const bool bUpdate )
+         const SwIndex & rStart, xub_StrLen nLen, const bool bUpdate )
 {
     if(!pDest)
     {
-        ASSERT(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         EraseText( rStart, nLen );
         return;
     }
@@ -1888,8 +1850,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     // nicht im Dokument verschieben ?
     if( GetDoc() != pDest->GetDoc() )
     {
-        ASSERT(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         CopyText( pDest, rDestStart, rStart, nLen);
         EraseText(rStart, nLen);
         return;
@@ -1910,8 +1871,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
     if( pDest == this )
     {
-        ASSERT(false,
-            "mst: entering dead and bitrotted code; fasten your seatbelts!");
+        OSL_FAIL("mst: entering dead and bitrotted code; fasten your seatbelts!");
         m_Text.Insert( m_Text, nTxtStartIdx, nLen, nDestStart );
         m_Text.Erase( nTxtStartIdx + (nDestStart<nTxtStartIdx ? nLen : 0), nLen );
 
@@ -1989,24 +1949,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             // Update aller Indizies
             Update( rDestStart, nLen, sal_False, sal_True );
         }
-#ifdef CUTNOEXPAND
-        else
-            // wird am Ende eingefuegt, nur die Attribut-Indizies verschieben
-            if ( 0 < nLen && 0 < nInitSize && m_pSwpHints )
-            {
-                // check if there was the end of an attribute at the insertion
-                // position: if it is not a field, it must be expanded
-                for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); n++ )
-                {
-                    SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(n);
-                    const xub_StrLen * const pEndIdx = pHt->GetEnd();
-                    if ( pEndIdx  && (*pEndIdx == nInitSize) )
-                    {
-                        *pEndIdx = *pEndIdx + nLen;
-                    }
-                }
-            }
-#endif
+
         CHECK_SWPHINTS(this);
 
         Update( rStart, nLen, sal_True, sal_True );
@@ -2048,24 +1991,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             // Update aller Indizies
             pDest->Update( rDestStart, nLen, sal_False, sal_True);
         }
-#ifdef CUTNOEXPAND
-        else
-            // wird am Ende eingefuegt, nur die Attribut-Indizies verschieben
-            if ( 0 < nLen && 0 < nInitSize && pDest->m_pSwpHints )
-            {
-                // check if there was the end of an attribute at the insertion
-                // position: if it is not a field, it must be expanded
-                for ( sal_uInt16 n = 0; n < pDest->m_pSwpHints->Count(); n++ )
-                {
-                    SwTxtAttr * const pHt = pDest->m_pSwpHints->GetTextHint(n);
-                    const xub_StrLen * const pEndIdx = pHt->GetEnd();
-                    if ( pEndIdx  && (*pEndIdx == nInitSize) )
-                    {
-                        *pEndIdx = *pEndIdx + nLen;
-                    }
-                }
-            }
-#endif
+
         CHECK_SWPHINTS(pDest);
 
         const xub_StrLen nEnd = rStart.GetIndex() + nLen;
@@ -2074,7 +2000,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         bool const bUndoNodes = !pOtherDoc
             && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
-        ASSERT(!pOtherDoc,
+        OSL_ENSURE(!pOtherDoc,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
 
         // harte Absatz umspannende Attribute kopieren
@@ -2241,7 +2167,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    ASSERT( rIdx <= m_Text.Len(), "SwTxtNode::EraseText: invalid index." );
+    OSL_ENSURE( rIdx <= m_Text.Len(), "SwTxtNode::EraseText: invalid index." );
 
     const xub_StrLen nStartIdx = rIdx.GetIndex();
     const xub_StrLen nCnt = (STRING_LEN == nCount)
@@ -2271,7 +2197,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 
         if( !pHtEndIdx )
         {
-            ASSERT(pHt->HasDummyChar(),
+            OSL_ENSURE(pHt->HasDummyChar(),
                     "attribute with neither end nor CH_TXTATR?");
             if (isTXTATR(nWhich) &&
                 (nHintStart >= nStartIdx) && (nHintStart < nEndIdx))
@@ -2283,7 +2209,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
             continue;
         }
 
-        ASSERT (!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
+       OSL_ENSURE(!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
                     && pHt->HasDummyChar() )
                 // next line: deleting exactly dummy char: DeleteAttributes
                 || ((nHintStart == nStartIdx) && (nHintStart + 1 == nEndIdx)),
@@ -2301,16 +2227,10 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
                  !(IDocumentContentOperations::INS_EMPTYEXPAND & nMode)  &&
                  (  (RES_TXTATR_TOXMARK == nWhich)  ||
                     (RES_TXTATR_REFMARK == nWhich)  ||
-                 // --> FME 2006-03-03 #i62668# Ruby text attribute must be
+                 // #i62668# Ruby text attribute must be
                  // treated just like toxmark and refmarks
                     (RES_TXTATR_CJK_RUBY == nWhich) ) )
-                 // <--
-#if 0
-            || ( (nHintStart == nStartIdx)  &&
-                 (nHintStart + 1 == nEndIdx)&&
-#else // generalize this to left-overlapped dummy char hints (see ASSERT)
             || ( (nHintStart < nEndIdx)     &&
-#endif
                  pHt->HasDummyChar()        )
            )
         {
@@ -2320,7 +2240,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         }
     }
 
-    ASSERT(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
+    OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
 
     TryDeleteSwpHints();
 
@@ -2337,7 +2257,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         NotifyClients( 0, &aHint );
     }
 
-    ASSERT(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
+    OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
 
     // By deleting a character, the hidden flags
     // at the TxtNode can become invalid:
@@ -2352,9 +2272,6 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 #*
 #*  Beschreibung
 #*                  text.doc
-#*
-#*  Datum       :   MS 28.11.90
-#*  Update      :   VB 24.07.91
 #***********************************************************************/
 
 void SwTxtNode::GCAttr()
@@ -2435,84 +2352,7 @@ SwNumRule* SwTxtNode::_GetNumRule(sal_Bool bInParent) const
                 }
             }
         }
-
-        // --> OD 2006-11-20 #i71764#
-        // Document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE has no influence
-        // any more.
-//        if ( !pRet &&
-//             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) &&
-//             GetOutlineLevel() != NO_NUMBERING )
-//        {
-//            pRet = GetDoc()->GetOutlineNumRule();
-//        }
-        // <--
     }
-    // old code before tuning
-//    // --> OD 2005-10-25 #126347#
-//    // determine of numbering/bullet rule, which is set as a hard attribute
-//    // at the text node
-//    const SfxPoolItem* pItem( 0L );
-//    if ( HasSwAttrSet() ) // does text node has hard attributes ?
-//    {
-//        if ( SFX_ITEM_SET !=
-//                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) )
-//        {
-//            pItem = 0L;
-//        }
-//        // else: <pItem> contains the numbering/bullet attribute, which is
-//        //       hard set at the paragraph.
-
-//    }
-//    // <--
-//    bool bNoNumRule = false;
-//    if (pItem)
-//    {
-//        String sNumRuleName = static_cast<const SwNumRuleItem *>(pItem)->GetValue();
-//        if (sNumRuleName.Len() > 0)
-//        {
-//            pRet = GetDoc()->FindNumRulePtr(sNumRuleName);
-//        }
-//        else // numbering is turned off by hard attribute
-//            bNoNumRule = true;
-//    }
-
-//    if (! bNoNumRule)
-//    {
-//        if (! pRet && bInParent)
-//        {
-//            SwTxtFmtColl * pColl = GetTxtColl();
-
-//            if (pColl)
-//            {
-//                const SwNumRuleItem & rItem = pColl->GetNumRule(sal_True);
-
-//                pRet = const_cast<SwDoc *>(GetDoc())->
-//                    FindNumRulePtrWithPool(rItem.GetValue());
-//                // --> OD 2005-10-13 #125993# - The outline numbering rule
-//                // isn't allowed to be derived from a parent paragraph style
-//                // to a derived one.
-//                // Thus check, if the found outline numbering rule is directly
-//                // set at the paragraph style <pColl>. If not, don't return
-//                // the outline numbering rule.
-//                if ( pRet && pRet == GetDoc()->GetOutlineNumRule() )
-//                {
-//                    const SwNumRuleItem& rDirectItem = pColl->GetNumRule(sal_False);
-//                    SwNumRule* pNumRuleAtParaStyle = const_cast<SwDoc*>(GetDoc())->
-//                        FindNumRulePtrWithPool(rDirectItem.GetValue());
-//                    if ( !pNumRuleAtParaStyle )
-//                    {
-//                        pRet = 0L;
-//                    }
-//                }
-//                // <--
-//            }
-//        }
-
-//        if (!pRet && GetDoc()->IsOutlineLevelYieldsOutlineRule() &&
-//            GetOutlineLevel() != NO_NUMBERING)
-//            pRet = GetDoc()->GetOutlineNumRule();
-//    }
-    // <--
 
     return pRet;
 }
@@ -2526,7 +2366,6 @@ SwNumRule* SwTxtNode::GetNumRule(sal_Bool bInParent) const
 
 void SwTxtNode::NumRuleChgd()
 {
-    // --> OD 2008-04-04 #refactorlists#
     if ( IsInList() )
     {
         SwNumRule* pNumRule = GetNumRule();
@@ -2535,7 +2374,6 @@ void SwTxtNode::NumRuleChgd()
             mpNodeNum->ChangeNumRule( *pNumRule );
         }
     }
-    // <--
 
     if( IsInCache() )
     {
@@ -2566,7 +2404,6 @@ sal_Bool SwTxtNode::IsNumbered() const
     return bResult;
 }
 
-// --> OD 2008-04-02 #refactorlists#
 bool SwTxtNode::HasMarkedLabel() const
 {
     bool bResult = false;
@@ -2579,7 +2416,6 @@ bool SwTxtNode::HasMarkedLabel() const
 
     return bResult;
 }
-// <--
 // <- #i27615#
 
 SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
@@ -2587,9 +2423,8 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
 {
     /* hartes PageBreak/PageDesc/ColumnBreak aus AUTO-Set ignorieren */
     SwAttrSet* pNewAttrSet = 0;
-    // --> OD 2007-07-10 #i75353#
+    // #i75353#
     bool bClearHardSetNumRuleWhenFmtCollChanges( false );
-    // <--
     if( HasSwAttrSet() )
     {
         pNewAttrSet = new SwAttrSet( *GetpSwAttrSet() );
@@ -2640,18 +2475,16 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                     pNewAttrSet->ClearItem(RES_PARATR_NUMRULE);
                 else
                 {
-                    // --> OD 2007-07-10 #i75353#
+                    // #i75353#
                     // No clear of hard set numbering rule at an outline paragraph at this point.
                     // Only if the paragraph style changes - see below.
-//                    aClearWhichIds.push_back( RES_PARATR_NUMRULE );
                     bClearHardSetNumRuleWhenFmtCollChanges = true;
-                    // <--
                 }
                 bRemoveFromCache = sal_True;
             }
         }
 
-        if ( 0 != aClearWhichIds.size() )
+        if ( !aClearWhichIds.empty() )
             bRemoveFromCache = 0 != ClearItemsFromAttrSet( aClearWhichIds );
 
         if( !bNext && bRemoveFromCache && IsInCache() )
@@ -2672,12 +2505,11 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
     const SwNumRule* pRule = GetNumRule();
     if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() ) // #115901#
     {
-        // --> OD 2005-10-18 #i55459#
+        // #i55459#
         // - correction: parameter <bNext> has to be checked, as it was in the
         //   previous implementation.
         if ( !bNext && !IsCountedInList() )
             SetCountedInList(true);
-        // <--
     }
 
     // jetzt kann es sein, das durch die Nummerierung dem neuen Node eine
@@ -2692,11 +2524,11 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
         return pNode;
 
     SwTxtFmtColl *pNextColl = &pColl->GetNextTxtFmtColl();
-    // --> OD 2009-08-12 #i101870#
+    // #i101870#
     // perform action on different paragraph styles before applying the new paragraph style
     if (pNextColl != pColl)
     {
-        // --> OD 2007-07-10 #i75353#
+        // #i75353#
         if ( bClearHardSetNumRuleWhenFmtCollChanges )
         {
             std::vector<sal_uInt16> aClearWhichIds;
@@ -2707,9 +2539,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
                 SetInCache( sal_False );
             }
         }
-        // <--
     }
-    // <--
     ChgFmtColl( pNextColl );
 
     return pNode;
@@ -2721,7 +2551,6 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
     SwNodeIndex aIdx( rPos.nNode, 1 );
     SwTxtNode* pNew = _MakeNewTxtNode( aIdx, sal_True );
 
-    // --> OD 2008-05-14 #refactorlists#
     // reset list attributes at appended text node
     pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );
     pNew->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
@@ -2731,14 +2560,11 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
         pNew->ResetAttr( RES_PARATR_LIST_ID );
         pNew->ResetAttr( RES_PARATR_LIST_LEVEL );
     }
-    // <--
-    // --> OD 2008-03-13 #refactorlists#
-//    SyncNumberAndNumRule();
+
     if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
     {
         AddToList();
     }
-    // <--
 
     if( GetDepends() )
         MakeFrms( *pNew );
@@ -2806,7 +2632,7 @@ sal_Bool SwTxtNode::HasBullet() const
 }
 // <- #i29560#
 
-// --> OD 2005-11-17 #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
+// #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
 //i53420 added max outline parameter
 XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, const unsigned int _nRestrictToThisLevel ) const
 {
@@ -2822,7 +2648,7 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
         SvxNumberType const& rNumberType(
                 pRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) ) );
         if (rNumberType.IsTxtFmt() ||
-        // #b6432095#
+        //
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
@@ -2842,7 +2668,7 @@ long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
     if( pRule )
     {
         const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
-        // --> OD 2008-01-16 #newlistlevelattrs#
+
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
             nRet = rFmt.GetAbsLSpace();
@@ -2864,17 +2690,15 @@ long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
             if ( AreListLevelIndentsApplicable() )
             {
                 nRet = rFmt.GetIndentAt();
-                // --> OD 2008-06-06 #i90401#
+                // #i90401#
                 // Only negative first line indents have consider for the left margin
                 if ( !bTxtLeft &&
                      rFmt.GetFirstLineIndent() < 0 )
                 {
                     nRet = nRet + rFmt.GetFirstLineIndent();
                 }
-                // <--
             }
         }
-        // <--
     }
 
     return nRet;
@@ -2883,17 +2707,15 @@ long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
 sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
     sal_Bool bRet( sal_False );
-    // --> OD 2009-09-08 #i95907#, #b6879723#
+    // #i95907#
     rFLOffset = 0;
-    // <--
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
+    // #i51089#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
         if ( IsCountedInList() )
         {
-            // --> OD 2008-01-16 #newlistlevelattrs#
             const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2917,7 +2739,6 @@ sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                     rFLOffset = aItem.GetTxtFirstLineOfst();
                 }
             }
-            // <--
         }
 
         bRet = sal_True;
@@ -2930,7 +2751,7 @@ sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     return bRet;
 }
 
-// --> OD 2010-01-05 #b6884103#
+//
 SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
 {
     SwTwips nAdditionalIndent = 0;
@@ -2973,9 +2794,8 @@ SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
 
     return nAdditionalIndent;
 }
-// <--
 
-// --> OD 2008-12-02 #i96772#
+// #i96772#
 void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const
 {
     if ( AreListLevelIndentsApplicable() )
@@ -2992,9 +2812,8 @@ void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpac
         }
     }
 }
-// <--
 
-// --> OD 2008-07-01 #i91133#
+// #i91133#
 long SwTxtNode::GetLeftMarginForTabCalculation() const
 {
     long nLeftMarginForTabCalc = 0;
@@ -3020,7 +2839,6 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
 
     return nLeftMarginForTabCalc;
 }
-// <--
 
 void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                             xub_StrLen nEndPos, sal_Bool bExpandFlds ) const
@@ -3092,7 +2910,7 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
  *                      SwTxtNode::GetExpandTxt
  * Expand fields
  *************************************************************************/
-// --> OD 2007-11-15 #i83479# - handling of new parameters
+// #i83479# - handling of new parameters
 XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
                                    const xub_StrLen nLen,
                                    const bool bWithNum,
@@ -3130,7 +2948,6 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
 
     return aTxt;
 }
-// <--
 
 sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                         xub_StrLen nIdx, xub_StrLen nLen, sal_Bool bWithNum,
@@ -3394,7 +3211,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
 void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
                              const XubString& rText )
 {
-    ASSERT( rStart.GetIndex() < m_Text.Len() &&
+    OSL_ENSURE( rStart.GetIndex() < m_Text.Len() &&
             rStart.GetIndex() + nDelLen <= m_Text.Len(),
             "SwTxtNode::ReplaceText: index out of bounds" );
     const xub_StrLen nStartPos = rStart.GetIndex();
@@ -3408,7 +3225,7 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
             SwTxtAttr *const pHint = GetTxtAttrForCharAt( nPos );
             if (pHint)
             {
-                ASSERT (!( pHint->GetEnd() && pHint->HasDummyChar()
+               OSL_ENSURE(!( pHint->GetEnd() && pHint->HasDummyChar()
                             && (*pHint->GetStart() < nEndPos)
                             && (*pHint->GetEnd()   > nEndPos) ),
                     "ReplaceText: ERROR: "
@@ -3454,8 +3271,21 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
     NotifyClients( 0, &aHint );
 }
 
-// --> OD 2008-03-27 #refactorlists#
 namespace {
+    static void lcl_ResetParAttrs( SwTxtNode &rTxtNode )
+    {
+        std::set<sal_uInt16> aAttrs;
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_ID );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_LEVEL );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_ISRESTART );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_RESTARTVALUE );
+        aAttrs.insert( aAttrs.end(), RES_PARATR_LIST_ISCOUNTED );
+        SwPaM aPam( rTxtNode );
+        // #i96644#
+        // suppress side effect "send data changed events"
+        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False, aAttrs, false );
+    }
+
     // Helper method for special handling of modified attributes at text node.
     // The following is handled:
     // (1) on changing the paragraph style - RES_FMT_CHG:
@@ -3482,19 +3312,14 @@ namespace {
                 bParagraphStyleChanged = true;
                 if( rTxtNode.GetNodes().IsDocNodes() )
                 {
-                    // --> OD 2008-12-17 #i70748#
-                    // The former list style set at the paragraph can not be
-                    // retrieved from the change set.
-//                    sOldNumRule =
-//                        dynamic_cast<const SwFmtChg*>(pOldValue)->pChangedFmt->GetNumRule().GetValue();
+                    // #i70748#
                     const SwNumRule* pFormerNumRuleAtTxtNode =
                         rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
                     if ( pFormerNumRuleAtTxtNode )
                     {
                         sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
                     }
-                    // <--
-                    // --> OD 2008-11-19 #i70748#
+                    // #i70748#
                     if ( rTxtNode.IsEmptyListStyleDueToSetOutlineLevelAttr() )
                     {
                         const SwNumRuleItem& rNumRuleItem = rTxtNode.GetTxtColl()->GetNumRule();
@@ -3503,7 +3328,7 @@ namespace {
                             rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                         }
                     }
-                    // <--
+
                     const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
                     if ( pNumRuleAtTxtNode )
                     {
@@ -3516,80 +3341,54 @@ namespace {
             case RES_ATTRSET_CHG:
             {
                 const SfxPoolItem* pItem = 0;
-                // --> OD 2008-12-19 #i70748#
-                // The former list style set at the paragraph can not be
-                // retrieved from the change set.
-//                if ( dynamic_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) ==
-//                        SFX_ITEM_SET )
-//                {
-//                    sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
-//                }
+                // #i70748#
                 const SwNumRule* pFormerNumRuleAtTxtNode =
                     rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
                 if ( pFormerNumRuleAtTxtNode )
                 {
                     sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
                 }
-                // <--
+
                 if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) ==
                         SFX_ITEM_SET )
                 {
-                    // --> OD 2008-11-19 #i70748#
+                    // #i70748#
                     rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                    // <--
                     bNumRuleSet = true;
-                    // The new list style set at the paragraph can not be
-                    // retrieved from the change set.
-//                    sNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
-                    // <--
                 }
-                // --> OD 2008-12-17 #i70748#
+                // #i70748#
                 // The new list style set at the paragraph.
                 const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
                 if ( pNumRuleAtTxtNode )
                 {
                     sNumRule = pNumRuleAtTxtNode->GetName();
                 }
-                // <--
                 break;
             }
             case RES_PARATR_NUMRULE:
             {
                 if ( rTxtNode.GetNodes().IsDocNodes() )
                 {
-                    // The former list style set at the paragraph can not be
-                    // retrieved from the change set.
-//                    if ( pOldValue )
-//                    {
-//                        sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pOldValue)->GetValue();
-//                    }
                     const SwNumRule* pFormerNumRuleAtTxtNode =
                         rTxtNode.GetNum() ? rTxtNode.GetNum()->GetNumRule() : 0;
                     if ( pFormerNumRuleAtTxtNode )
                     {
                         sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
                     }
-                    // <--
+
                     if ( pNewValue )
                     {
-                        // --> OD 2008-11-19 #i70748#
+                        // #i70748#
                         rTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                        // <--
                         bNumRuleSet = true;
-                        // --> OD 2008-12-17 #i70748#
-                        // The new list style set at the paragraph can not be
-                        // retrieved from the change set.
-//                        sNumRule = dynamic_cast<const SwNumRuleItem*>(pNewValue)->GetValue();
-                        // <--
                     }
-                    // --> OD 2008-12-17 #i70748#
+                    // #i70748#
                     // The new list style set at the paragraph.
                     const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
                     if ( pNumRuleAtTxtNode )
                     {
                         sNumRule = pNumRuleAtTxtNode->GetName();
                     }
-                    // <--
                 }
                 break;
             }
@@ -3603,19 +3402,7 @@ namespace {
                     rTxtNode.RemoveFromList();
                     if ( bParagraphStyleChanged )
                     {
-                        SvUShortsSort aResetAttrsArray;
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
-                        aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-                        SwPaM aPam( rTxtNode );
-                        // --> OD 2008-11-28 #i96644#
-                        // suppress side effect "send data changed events"
-                        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
-                                                       &aResetAttrsArray,
-                                                       false );
-                        // <--
+                        ::lcl_ResetParAttrs(rTxtNode);
                     }
                 }
                 else
@@ -3626,12 +3413,11 @@ namespace {
                     if ( sNumRule ==
                             String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ) )
                     {
-                        // --> OD 2008-09-10 #i70748#
-                        ASSERT( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
+                        // #i70748#
+                        OSL_ENSURE( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
                                 "<HandleModifyAtTxtNode()> - text node with outline style, but its paragraph style is not assigned to outline style." );
                         int nNewListLevel =
                             rTxtNode.GetTxtColl()->GetAssignedOutlineStyleLevel();
-                        // <--
                         if ( 0 <= nNewListLevel && nNewListLevel < MAXLEVEL )
                         {
                             rTxtNode.SetAttrListLevel( nNewListLevel );
@@ -3645,25 +3431,12 @@ namespace {
                 rTxtNode.RemoveFromList();
                 if ( bParagraphStyleChanged )
                 {
-                    SvUShortsSort aResetAttrsArray;
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
-                    aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
-                    SwPaM aPam( rTxtNode );
-                    // --> OD 2008-11-28 #i96644#
-                    // suppress side effect "send data changed events"
-                    rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False,
-                                                   &aResetAttrsArray,
-                                                   false );
-                    // <--
-                    // --> OD 2008-11-19 #i70748#
+                    ::lcl_ResetParAttrs(rTxtNode);
+                    // #i70748#
                     if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
                     {
                         rTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
                     }
-                    // <--
                 }
             }
         }
@@ -3671,11 +3444,9 @@ namespace {
         {
             rTxtNode.AddToList();
         }
-        // <--
     }
     // End of method <HandleModifyAtTxtNode>
 }
-// <--
 
 void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
@@ -3696,19 +3467,16 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
                         (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
     }
 
-    // --> OD 2008-03-27 #refactorlists#
     if ( !mbInSetOrResetAttr )
     {
         HandleModifyAtTxtNode( *this, pOldValue, pNewValue );
     }
-    // <--
 
     SwCntntNode::Modify( pOldValue, pNewValue );
 
     SwDoc * pDoc = GetDoc();
-    // --> OD 2005-11-02 #125329# - assure that text node is in document nodes array
+    // #125329# - assure that text node is in document nodes array
     if ( pDoc && !pDoc->IsInDtor() && &pDoc->GetNodes() == &GetNodes() )
-    // <--
     {
         pDoc->GetNodes().UpdateOutlineNode(*this);
     }
@@ -3724,8 +3492,8 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
 
 SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
-    ASSERT( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
-    ASSERT( HAS_BASE( SwTxtFmtColl, pNewColl ),
+    OSL_ENSURE( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
+    OSL_ENSURE( HAS_BASE( SwTxtFmtColl, pNewColl ),
                 "ChgFmtColl: ist kein Text-Collectionpointer." );
 
     SwTxtFmtColl *pOldColl = GetTxtColl();
@@ -3733,11 +3501,9 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     {
         SetCalcHiddenCharFlags();
         SwCntntNode::ChgFmtColl( pNewColl );
-        // --> OD 2008-03-27 #refactorlists#
-//        NumRuleChgd();
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( !mbInSetOrResetAttr,
-                "DEBUG ASSERTION - <SwTxtNode::ChgFmtColl(..)> called during <Set/ResetAttr(..)>" )
+        OSL_ENSURE( !mbInSetOrResetAttr,
+                "DEBUG OSL_ENSURE(ON - <SwTxtNode::ChgFmtColl(..)> called during <Set/ResetAttr(..)>" );
 #endif
         if ( !mbInSetOrResetAttr )
         {
@@ -3745,7 +3511,6 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
             SwFmtChg aTmp2( pNewColl );
             HandleModifyAtTxtNode( *this, &aTmp1, &aTmp2  );
         }
-        // <--
     }
 
     // nur wenn im normalen Nodes-Array
@@ -3763,9 +3528,7 @@ SwNodeNum* SwTxtNode::CreateNum() const
 {
     if ( !mpNodeNum )
     {
-        // --> OD 2008-02-19 #refactorlists#
         mpNodeNum = new SwNodeNum( const_cast<SwTxtNode*>(this) );
-        // <--
     }
     return mpNodeNum;
 }
@@ -3787,8 +3550,7 @@ bool SwTxtNode::IsOutline() const
 {
     bool bResult = false;
 
-    //if ( GetOutlineLevel() != NO_NUMBERING )//#outline level,removed by zhaojianwei
-    if ( GetAttrOutlineLevel() > 0 )            //<-end,zhaojianwei
+    if ( GetAttrOutlineLevel() > 0 )
     {
         bResult = !IsInRedlines();
     }
@@ -3821,7 +3583,7 @@ int SwTxtNode::GetAttrOutlineLevel() const
 }
 void SwTxtNode::SetAttrOutlineLevel(int nLevel)
 {
-    ASSERT( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtNode: Level Out Of Range" );//#outline level,zhaojianwei
+    OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtNode: Level Out Of Range" );//#outline level,zhaojianwei
     if ( 0 <= nLevel && nLevel <= MAXLEVEL )
     {
         SetAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
@@ -3830,7 +3592,7 @@ void SwTxtNode::SetAttrOutlineLevel(int nLevel)
 }
 //<-end
 
-// --> OD 2008-11-19 #i70748#
+// #i70748#
 bool SwTxtNode::IsEmptyListStyleDueToSetOutlineLevelAttr()
 {
     return mbEmptyListStyleSetDueToSetOutlineLevelAttr;
@@ -3853,16 +3615,13 @@ void SwTxtNode::ResetEmptyListStyleDueToResetOutlineLevelAttr()
         mbEmptyListStyleSetDueToSetOutlineLevelAttr = false;
     }
 }
-// <--
 
 
-// --> OD 2008-02-27 #refactorlists#
 void SwTxtNode::SetAttrListLevel( int nLevel )
 {
     if ( nLevel < 0 || nLevel >= MAXLEVEL )
     {
-        ASSERT( false,
-                "<SwTxtNode::SetAttrListLevel()> - value of parameter <nLevel> is out of valid range" );
+        OSL_FAIL( "<SwTxtNode::SetAttrListLevel()> - value of parameter <nLevel> is out of valid range" );
         return;
     }
 
@@ -3870,15 +3629,13 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
                                     static_cast<sal_Int16>(nLevel) );
     SetAttr( aNewListLevelItem );
 }
-// <--
-// --> OD 2008-02-27 #refactorlists#
+
 bool SwTxtNode::HasAttrListLevel() const
 {
     return GetpSwAttrSet() &&
            GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_LEVEL, sal_False ) == SFX_ITEM_SET;
 }
-// <--
-// --> OD 2008-02-27 #refactorlists#
+
 int SwTxtNode::GetAttrListLevel() const
 {
     int nAttrListLevel = 0;
@@ -3889,14 +3646,12 @@ int SwTxtNode::GetAttrListLevel() const
 
     return nAttrListLevel;
 }
-// <--
 
 int SwTxtNode::GetActualListLevel() const
 {
     return GetNum() ? GetNum()->GetLevelInListTree() : -1;
 }
 
-// --> OD 2008-02-25 #refactorlists#
 void SwTxtNode::SetListRestart( bool bRestart )
 {
 //    CreateNum()->SetRestart(bRestart);
@@ -3914,7 +3669,6 @@ void SwTxtNode::SetListRestart( bool bRestart )
     }
 }
 
-// --> OD 2008-02-25 #refactorlists#
 bool SwTxtNode::IsListRestart() const
 {
 //    return GetNum() ? GetNum()->IsRestart() : false;
@@ -3923,11 +3677,9 @@ bool SwTxtNode::IsListRestart() const
 
     return aIsRestartItem.GetValue() ? true : false;
 }
-// <--
 
 /** Returns if the paragraph has a visible numbering or bullet.
     This includes all kinds of numbering/bullet/outlines.
-    OD 2008-02-28 #newlistlevelattrs#
     The concrete list label string has to be checked, too.
  */
 bool SwTxtNode::HasVisibleNumberingOrBullet() const
@@ -3937,7 +3689,7 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule && IsCountedInList())
     {
-        // --> OD 2008-03-19 #i87154#
+        // #i87154#
         // Correction of #newlistlevelattrs#:
         // The numbering type has to be checked for bullet lists.
         const SwNumFmt& rFmt = pRule->Get( static_cast<sal_uInt16>(GetActualListLevel() ));
@@ -3946,13 +3698,11 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
         {
             bRet = true;
         }
-        // <--
     }
 
     return bRet;
 }
 
-// --> OD 2008-02-25 #refactorlists#
 void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber )
 {
 //    CreateNum()->SetStart(nNumber);
@@ -3974,18 +3724,15 @@ void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber 
         }
     }
 }
-// <--
 
-// --> OD 2008-02-27 #refactorlists#
 bool SwTxtNode::HasAttrListRestartValue() const
 {
     return GetpSwAttrSet() &&
            GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, sal_False ) == SFX_ITEM_SET;
 }
-// <--
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
 {
-    ASSERT( HasAttrListRestartValue(),
+    OSL_ENSURE( HasAttrListRestartValue(),
             "<SwTxtNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node." );
 
     const SfxInt16Item& aListRestartValueItem =
@@ -3993,7 +3740,6 @@ SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
     return static_cast<SwNumberTree::tSwNumTreeNumber>(aListRestartValueItem.GetValue());
 }
 
-// --> OD 2008-02-25 #refactorlists#
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetActualListStartValue() const
 {
 //    return GetNum() ? GetNum()->GetStart() : 1;
@@ -4019,7 +3765,6 @@ SwNumberTree::tSwNumTreeNumber SwTxtNode::GetActualListStartValue() const
 
     return nListRestartValue;
 }
-// <--
 
 bool SwTxtNode::IsNotifiable() const
 {
@@ -4037,7 +3782,6 @@ bool SwTxtNode::IsNotificationEnabled() const
     return bResult;
 }
 
-// --> OD 2008-02-27 #refactorlists#
 void SwTxtNode::SetCountedInList( bool bCounted )
 {
     if ( bCounted )
@@ -4052,7 +3796,6 @@ void SwTxtNode::SetCountedInList( bool bCounted )
         SetAttr( aIsCountedInListItem );
     }
 }
-// <--
 
 bool SwTxtNode::IsCountedInList() const
 {
@@ -4062,13 +3805,11 @@ bool SwTxtNode::IsCountedInList() const
     return aIsCountedInListItem.GetValue() ? true : false;
 }
 
-// --> OD 2008-03-13 #refactorlists#
 void SwTxtNode::AddToList()
 {
     if ( IsInList() )
     {
-        ASSERT( false,
-                "<SwTxtNode::AddToList()> - the text node is already added to a list. Serious defect -> please inform OD" );
+        OSL_FAIL( "<SwTxtNode::AddToList()> - the text node is already added to a list. Serious defect -> please inform OD" );
         return;
     }
 
@@ -4085,7 +3826,7 @@ void SwTxtNode::AddToList()
                 pList = GetDoc()->createList( sListId, GetNumRule()->GetName() );
             }
         }
-        ASSERT( pList != 0,
+        OSL_ENSURE( pList != 0,
                 "<SwTxtNode::AddToList()> - no list for given list id. Serious defect -> please inform OD" );
         if ( pList )
         {
@@ -4110,7 +3851,6 @@ bool SwTxtNode::IsInList() const
 {
     return GetNum() != 0 && GetNum()->GetParent() != 0;
 }
-// <--
 
 bool SwTxtNode::IsFirstOfNumRule() const
 {
@@ -4122,7 +3862,6 @@ bool SwTxtNode::IsFirstOfNumRule() const
     return bResult;
 }
 
-// --> OD 2008-02-20 #refactorlists#
 void SwTxtNode::SetListId( const String sListId )
 {
     const SfxStringItem& rListIdItem =
@@ -4157,26 +3896,15 @@ String SwTxtNode::GetListId() const
         if ( pRule )
         {
             sListId = pRule->GetDefaultListId();
-//#if OSL_DEBUG_LEVEL > 1
-//            ASSERT( false,
-//                    "DEBUG ASSERTION: default list id of list style is applied." );
-//#endif
-//            // setting list id directly using <SwCntntNode::SetAttr(..)>,
-//            // because no handling of this attribute set is needed and to avoid
-//            // recursive calls of <SwTxtNode::SetAttr(..)>
-//            SfxStringItem aNewListIdItem( RES_PARATR_LIST_ID, sListId );
-//            const_cast<SwTxtNode*>(this)->SwCntntNode::SetAttr( aNewListIdItem );
         }
     }
 
     return sListId;
 }
-// <--
 
 /** Determines, if the list level indent attributes can be applied to the
     paragraph.
 
-    OD 2008-01-17 #newlistlevelattrs#
     The list level indents can be applied to the paragraph under the one
     of following conditions:
     - the list style is directly applied to the paragraph and the paragraph
@@ -4237,7 +3965,7 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
             }
 
             pColl = dynamic_cast<const SwTxtFmtColl*>(pColl->DerivedFrom());
-            ASSERT( pColl,
+            OSL_ENSURE( pColl,
                     "<SwTxtNode::AreListLevelIndentsApplicable()> - something wrong in paragraph's style hierarchy. The applied list style is not found." );
         }
     }
@@ -4247,8 +3975,6 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
 
 /** Retrieves the list tab stop position, if the paragraph's list level defines
     one and this list tab stop has to merged into the tap stops of the paragraph
-
-    OD 2008-01-17 #newlistlevelattrs#
 
     @author OD
 
@@ -4294,8 +4020,6 @@ bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
 /** Retrieves the character following the list label, if the paragraph's
     list level defines one.
 
-    OD 2008-01-17 #newlistlevelattrs#
-
     @author OD
 
     @return XubString - the list tab stop position
@@ -4331,8 +4055,7 @@ XubString SwTxtNode::GetLabelFollowedBy() const
                 break;
                 default:
                 {
-                    ASSERT( false,
-                            "<SwTxtNode::GetLabelFollowedBy()> - unknown SvxNumberFormat::GetLabelFollowedBy() return value" );
+                    OSL_FAIL( "<SwTxtNode::GetLabelFollowedBy()> - unknown SvxNumberFormat::GetLabelFollowedBy() return value" );
                 }
             }
         }
@@ -4349,7 +4072,7 @@ void SwTxtNode::CalcHiddenCharFlags() const
     SwScriptInfo::GetBoundsOfHiddenRange( *this, 0, nStartPos, nEndPos );
 }
 
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 bool SwTxtNode::IsHidden() const
 {
     if ( HasHiddenParaField() || HasHiddenCharAttribute( true ) )
@@ -4361,9 +4084,7 @@ bool SwTxtNode::IsHidden() const
 
     return false;
 }
-// <--
 
-// --> OD 2008-03-13 #refactorlists#
 namespace {
     // Helper class for special handling of setting attributes at text node:
     // In constructor an instance of the helper class recognize whose attributes
@@ -4407,9 +4128,8 @@ namespace {
             bool mbUpdateListLevel;
             bool mbUpdateListRestart;
             bool mbUpdateListCount;
-            // --> OD 2008-11-19 #i70748#
+            // #i70748#
             bool mbOutlineLevelSet;
-            // <--
     };
 
     HandleSetAttrAtTxtNode::HandleSetAttrAtTxtNode( SwTxtNode& rTxtNode,
@@ -4419,9 +4139,8 @@ namespace {
           mbUpdateListLevel( false ),
           mbUpdateListRestart( false ),
           mbUpdateListCount( false ),
-          // --> OD 2008-11-19 #i70748#
+          // #i70748#
           mbOutlineLevelSet( false )
-          // <--
     {
         switch ( pItem.Which() )
         {
@@ -4435,10 +4154,9 @@ namespace {
                 if ( pNumRuleItem.GetValue().Len() > 0 )
                 {
                     mbAddTxtNodeToList = true;
-                    // --> OD 2010-05-12 #i105562#
+                    // #i105562#
                     //
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                    // <--
                 }
             }
             break;
@@ -4448,7 +4166,7 @@ namespace {
             {
                 const SfxStringItem& pListIdItem =
                                         dynamic_cast<const SfxStringItem&>(pItem);
-                ASSERT( pListIdItem.GetValue().Len() > 0,
+                OSL_ENSURE( pListIdItem.GetValue().Len() > 0,
                         "<HandleSetAttrAtTxtNode(..)> - empty list id attribute not excepted. Serious defect -> please inform OD." );
                 const String sListIdOfTxtNode = rTxtNode.GetListId();
                 if ( pListIdItem.GetValue() != sListIdOfTxtNode )
@@ -4513,7 +4231,7 @@ namespace {
             }
             break;
 
-            // --> OD 2008-11-19 #i70748#
+            // #i70748#
             // handle RES_PARATR_OUTLINELEVEL
             case RES_PARATR_OUTLINELEVEL:
             {
@@ -4525,7 +4243,6 @@ namespace {
                 }
             }
             break;
-            // <--
         }
 
     }
@@ -4537,9 +4254,8 @@ namespace {
           mbUpdateListLevel( false ),
           mbUpdateListRestart( false ),
           mbUpdateListCount( false ),
-          // --> OD 2008-11-19 #i70748#
+          // #i70748#
           mbOutlineLevelSet( false )
-          // <--
     {
         const SfxPoolItem* pItem = 0;
         // handle RES_PARATR_NUMRULE
@@ -4552,9 +4268,8 @@ namespace {
             if ( pNumRuleItem->GetValue().Len() > 0 )
             {
                 mbAddTxtNodeToList = true;
-                // --> OD 2008-11-19 #i70748#
+                // #i70748#
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                // <--
             }
         }
 
@@ -4622,7 +4337,7 @@ namespace {
             }
         }
 
-        // --> OD 2008-11-19 #i70748#
+        // #i70748#
         // handle RES_PARATR_OUTLINELEVEL
         if ( rItemSet.GetItemState( RES_PARATR_OUTLINELEVEL, sal_False, &pItem ) == SFX_ITEM_SET )
         {
@@ -4633,7 +4348,6 @@ namespace {
                 mbOutlineLevelSet = true;
             }
         }
-        // <--
     }
 
     HandleSetAttrAtTxtNode::~HandleSetAttrAtTxtNode()
@@ -4667,7 +4381,7 @@ namespace {
             }
         }
 
-        // --> OD 2008-11-19 #i70748#
+        // #i70748#
         if ( mbOutlineLevelSet )
         {
             if ( mrTxtNode.GetAttrOutlineLevel() == 0 )
@@ -4685,7 +4399,6 @@ namespace {
                 }
             }
         }
-        // <--
     }
     // End of class <HandleSetAttrAtTxtNode>
 }
@@ -4777,9 +4490,8 @@ namespace {
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
                     mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
-                // --> OD 2008-10-20 #i92898#
+                // #i92898#
                 mbListStyleOrIdReset = true;
-                // <--
             }
 
             if ( !bRemoveFromList )
@@ -4802,13 +4514,12 @@ namespace {
                       !mrTxtNode.IsCountedInList() );
             }
 
-            // --> OD 2008-11-19 #i70748#
+            // #i70748#
             // RES_PARATR_OUTLINELEVEL
             if ( nWhich1 <= RES_PARATR_OUTLINELEVEL && RES_PARATR_OUTLINELEVEL <= nWhich2 )
             {
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
             }
-            // <--
         }
         else
         {
@@ -4822,17 +4533,15 @@ namespace {
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
                     mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
-                // --> OD 2008-10-20 #i92898#
+                // #i92898#
                 mbListStyleOrIdReset = true;
-                // <--
             }
-            // --> OD 2008-11-19 #i70748#
+            // #i70748#
             // RES_PARATR_OUTLINELEVEL
             else if ( nWhich1 == RES_PARATR_OUTLINELEVEL )
             {
                 mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
             }
-            // <--
 
             if ( !bRemoveFromList )
             {
@@ -4883,17 +4592,15 @@ namespace {
                     bRemoveFromList = bRemoveFromList ||
                         ( mrTxtNode.GetpSwAttrSet() &&
                           mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET );
-                    // --> OD 2008-10-20 #i92898#
+                    // #i92898#
                     mbListStyleOrIdReset = true;
-                    // <--
                 }
-                // --> OD 2008-11-19 #i70748#
+                // #i70748#
                 // RES_PARATR_OUTLINELEVEL
                 else if ( rWhichArr[ n ] == RES_PARATR_OUTLINELEVEL )
                 {
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                 }
-                // <--
 
                 if ( !bRemoveFromList )
                 {
@@ -4935,9 +4642,8 @@ namespace {
         {
             rTxtNode.RemoveFromList();
         }
-        // --> OD 2008-11-19 #i70748#
+        // #i70748#
         mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-        // <--
     }
 
     HandleResetAttrAtTxtNode::~HandleResetAttrAtTxtNode()
@@ -4949,7 +4655,7 @@ namespace {
             if ( mrTxtNode.GetNumRule() &&
                  mrTxtNode.GetListId().Len() > 0 )
             {
-                // --> OD 2009-01-14 #i96062#
+                // #i96062#
                 // If paragraph has no list level attribute set and list style
                 // is the outline style, apply outline level as the list level.
                 if ( !mrTxtNode.HasAttrListLevel() &&
@@ -4963,17 +4669,15 @@ namespace {
                         mrTxtNode.SetAttrListLevel( nNewListLevel );
                     }
                 }
-                // <--
                 mrTxtNode.AddToList();
             }
-            // --> OD 2008-11-19 #i70748#
-            // --> OD 2010-05-12 #i105562#
+            // #i70748#
+            // #i105562#
             else if ( mrTxtNode.GetpSwAttrSet() &&
                       dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
             {
                 mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
             }
-            // <--
         }
 
         if ( mrTxtNode.IsInList() )
@@ -5042,7 +4746,6 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
 
     return nRet;
 }
-// <--
 
 // sw::Metadatable
 ::sfx2::IXmlIdRegistry& SwTxtNode::GetRegistry()
@@ -5082,3 +4785,4 @@ SwTxtNode::MakeUnoObject()
     return xMeta;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

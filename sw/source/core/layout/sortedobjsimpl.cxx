@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,7 +67,7 @@ SwAnchoredObject* SwSortedObjsImpl::operator[]( sal_uInt32 _nIndex )
 
     if ( _nIndex >= Count() )
     {
-        ASSERT( false, "<SwSortedObjsImpl::operator[]> - index out of range" );
+        OSL_FAIL( "<SwSortedObjsImpl::operator[]> - index out of range" );
     }
     else
     {
@@ -157,7 +158,6 @@ struct ObjAnchorOrder
                 return false;
             }
         }
-        // <--
 
         // objects anchored at the same content and at the same content anchor
         // node position with the same anchor type
@@ -191,15 +191,13 @@ struct ObjAnchorOrder
                                         &(rFmtListed.GetWrapInfluenceOnObjPos());
         const SwFmtWrapInfluenceOnObjPos* pWrapInfluenceOnObjPosNew =
                                         &(rFmtNew.GetWrapInfluenceOnObjPos());
-        // --> OD 2004-10-18 #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
+        // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
         if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true ) !=
                 pWrapInfluenceOnObjPosNew->GetWrapInfluenceOnObjPos( true ) )
-        // <--
         {
-            // --> OD 2004-10-18 #i35017# - constant name has changed
+            // #i35017# - constant name has changed
             if ( pWrapInfluenceOnObjPosListed->GetWrapInfluenceOnObjPos( true )
                             == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE )
-            // <--
                 return true;
             else
                 return false;
@@ -214,13 +212,12 @@ struct ObjAnchorOrder
 
 bool SwSortedObjsImpl::Insert( SwAnchoredObject& _rAnchoredObj )
 {
-    // --> OD 2005-08-18 #i51941#
+    // #i51941#
     if ( Contains( _rAnchoredObj ) )
     {
         // list already contains object
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( false,
-                "<SwSortedObjsImpl::Insert()> - already contains object" );
+        OSL_FAIL( "<SwSortedObjsImpl::Insert()> - already contains object" );
 #endif
         return true;
     }
@@ -249,8 +246,7 @@ bool SwSortedObjsImpl::Remove( SwAnchoredObject& _rAnchoredObj )
         // object not found.
         bRet = false;
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( false,
-                "<SwSortedObjsImpl::Remove()> - object not found" );
+        OSL_FAIL( "<SwSortedObjsImpl::Remove()> - object not found" );
 #endif
     }
     else
@@ -274,8 +270,7 @@ bool SwSortedObjsImpl::Update( SwAnchoredObject& _rAnchoredObj )
     if ( !Contains( _rAnchoredObj ) )
     {
         // given anchored object not found in list
-        ASSERT( false,
-                "<SwSortedObjsImpl::Update(..) - sorted list doesn't contain given anchored object" );
+        OSL_FAIL( "<SwSortedObjsImpl::Update(..) - sorted list doesn't contain given anchored object" );
         return false;
     }
 
@@ -300,14 +295,14 @@ sal_uInt32 SwSortedObjsImpl::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) 
 
     if ( aIter != maSortedObjLst.end() )
     {
-        // --> OD 2005-08-18 #i51941#
+        // #i51941#
 //        nRetLstPos = aIter - maSortedObjLst.begin();
         std::vector< SwAnchoredObject* >::difference_type nPos =
                                                 aIter - maSortedObjLst.begin();
         nRetLstPos = sal_uInt32( nPos );
-        // <--
     }
 
     return nRetLstPos;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

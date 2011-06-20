@@ -45,7 +45,7 @@
 #define DLG_FLD_DROPDOWN    (RC_FLDDLG_BEGIN + 12)
 
 /*--------------------------------------------------------------------
-    Beschreibung: TypeId
+    TypeId
  --------------------------------------------------------------------*/
 
 #define STR_TYPE_BEGIN      RC_FLDDLG_BEGIN
@@ -95,7 +95,7 @@
 #define STR_TYPE_END        (STR_TYPE_BEGIN + 44)
 
 /*--------------------------------------------------------------------
-    Beschreibung: SubTypes
+    SubTypes
  --------------------------------------------------------------------*/
 
 #define FLD_DATE_BEGIN      STR_TYPE_END
@@ -151,7 +151,7 @@
 // Text
 #define FMT_TEXT            FLD_PAGEREF_END
 
-// Nummern
+// Numbers
 #define FMT_NUM_BEGIN       (FMT_TEXT       + 1)
 #define FMT_NUM_ABC         FMT_NUM_BEGIN
 #define FMT_NUM_SABC        (FMT_NUM_BEGIN  + 1)
@@ -170,32 +170,32 @@
 #define FMT_AUTHOR_SCUT     (FMT_AUTHOR_BEGIN + 1)
 #define FMT_AUTHOR_END      (FMT_AUTHOR_BEGIN + 2)
 
-// Variable setzen
+// Set variable
 #define FMT_SETVAR_BEGIN    FMT_AUTHOR_END
 #define FMT_SETVAR_SYS      (FMT_SETVAR_BEGIN + 0)
 #define FMT_SETVAR_TEXT     (FMT_SETVAR_BEGIN + 1)
 #define FMT_SETVAR_END      (FMT_SETVAR_BEGIN + 2)
 
-// Variable einfuegen
+// Get variable
 #define FMT_GETVAR_BEGIN    FMT_SETVAR_END
 #define FMT_GETVAR_TEXT     (FMT_GETVAR_BEGIN + 0)
 #define FMT_GETVAR_NAME     (FMT_GETVAR_BEGIN + 1)
 #define FMT_GETVAR_END      (FMT_GETVAR_BEGIN + 2)
 
-// Userfeld einfuegen
+// Userfield
 #define FMT_USERVAR_BEGIN   FMT_GETVAR_END
 #define FMT_USERVAR_TEXT    (FMT_USERVAR_BEGIN + 0)
 #define FMT_USERVAR_CMD     (FMT_USERVAR_BEGIN + 1)
 #define FMT_USERVAR_END     (FMT_USERVAR_BEGIN + 2)
 
-// Datenbankfeld einfuegen
+// Database field
 #define FMT_DBFLD_BEGIN     FMT_USERVAR_END
 #define FMT_DBFLD_DB        (FMT_DBFLD_BEGIN + 0)
 #define FMT_DBFLD_SYS       (FMT_DBFLD_BEGIN + 1)
 #define FMT_DBFLD_END       (FMT_DBFLD_BEGIN + 2)
 
 //FileNameFormat
-// Achtung die letzten 4 Formate gibt es in RTF nicht (Verlust!)
+// Attention, the last 4 formats do not exist in RTF (loss!)
 #define FMT_FF_BEGIN        FMT_DBFLD_END
 #define FMT_FF_NAME         FMT_FF_BEGIN
 #define FMT_FF_PATHNAME     (FMT_FF_BEGIN   + 1)
@@ -212,7 +212,7 @@
 #define FMT_REG_DATE        (FMT_REG_BEGIN  + 2)
 #define FMT_REG_END         (FMT_REG_BEGIN  + 3)
 
-// Kapitel
+// Chapter
 #define FMT_CHAPTER_BEGIN   FMT_REG_END
 #define FMT_CHAPTER_NO      FMT_CHAPTER_BEGIN
 #define FMT_CHAPTER_NAME    (FMT_CHAPTER_BEGIN  + 1)
@@ -220,7 +220,7 @@
 #define FMT_CHAPTER_NO_NOSEPARATOR  (FMT_CHAPTER_BEGIN  + 3)
 #define FMT_CHAPTER_END     (FMT_CHAPTER_BEGIN  + 4)
 
-// DDE-Formate
+// DDE-Formats
 #define FMT_DDE_BEGIN       FMT_CHAPTER_END
 #define FMT_DDE_NORMAL      FMT_DDE_BEGIN
 #define FMT_DDE_HOT         (FMT_DDE_BEGIN  + 1)
@@ -240,7 +240,7 @@
 #define FMT_REF_NUMBER_FULL_CONTEXT (FMT_REF_BEGIN  + 10)
 #define FMT_REF_END             (FMT_REF_BEGIN  + 11)
 
-// Platzhalter
+// Placeholder
 #define FMT_MARK_BEGIN      FMT_REF_END
 #define FMT_MARK_TEXT       FMT_MARK_BEGIN
 #define FMT_MARK_TABLE      (FMT_MARK_BEGIN + 1)
@@ -250,7 +250,7 @@
 #define FMT_MARK_END        (FMT_MARK_BEGIN + 5)
 
 /*--------------------------------------------------------------------
-    Beschreibung: globale String-Ressourcen
+   Global String-Resources
  --------------------------------------------------------------------*/
 
 #define STR_FLDUI               FMT_MARK_END
@@ -259,7 +259,7 @@
 #define STR_EXTRA               (STR_FLDUI + 2)
 
 /*--------------------------------------------------------------------
-    Beschreibung: Buttons fuer Field-Edit-Dlg
+    Buttons for Field-Edit-Dlg
  --------------------------------------------------------------------*/
 
 #define BTN_FLDEDT_PREV         STR_EXTRA
@@ -267,7 +267,7 @@
 #define PB_FLDEDT_ADDRESS       (STR_EXTRA  + 2)
 
 /*--------------------------------------------------------------------
-    Beschreibung: Zusaetzliche Strings
+    Additional Strings
  --------------------------------------------------------------------*/
 
 #define STR_COND                STR_EXTRA

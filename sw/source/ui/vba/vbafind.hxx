@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,9 +59,6 @@ private:
     void SetReplace( sal_Int32 type );
     void SetReplaceWith( const rtl::OUString& rText ) throw ( css::uno::RuntimeException );
     rtl::OUString GetReplaceWith() throw ( css::uno::RuntimeException );
-#ifdef TOMORROW
-    rtl::OUString ReplaceWildcards( const rtl::OUString& rText ) throw ( css::uno::RuntimeException );
-#endif
     css::uno::Reference< css::text::XTextRange > FindOneElement() throw ( css::uno::RuntimeException );
     sal_Bool SearchReplace() throw ( css::uno::RuntimeException );
 
@@ -101,3 +99,5 @@ public:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_FIND_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

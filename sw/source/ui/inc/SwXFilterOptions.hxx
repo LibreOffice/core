@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,10 +39,6 @@ namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
 } } } }
 
-
-/* -----------------------------2002/06/21 12:07------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwXFilterOptions : public ::cppu::WeakImplHelper5<
                             ::com::sun::star::beans::XPropertyAccess,
                             ::com::sun::star::ui::dialogs::XExecutableDialog,
@@ -111,3 +108,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

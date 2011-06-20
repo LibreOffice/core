@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,7 +37,7 @@ class SwTxtFld;
 class SwFrm;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld
+    Database field.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
@@ -60,14 +61,13 @@ public:
     const String&   GetColumnName() const {return sColumn;}
     const SwDBData& GetDBData() const {return aDBData;}
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung:
-    von SwFields abgeleitete Klassen. Sie ueberlagern die Expand-Funktion.
-    Der Inhalt wird entsprechend dem Format, soweit vorhanden, formatiert.
+    Classes derived from SwFields. They overlay the expand-function.
+    Content is formated according to the format (if available).
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBField : public SwValueField
@@ -88,7 +88,7 @@ public:
 
     virtual SwFieldType*    ChgTyp( SwFieldType* );
 
-    // Der aktuelle Text
+    // Current text.
     inline  void        SetExpansion(const String& rStr);
 
     virtual sal_uInt16      GetSubType() const;
@@ -96,13 +96,13 @@ public:
 
     virtual String      GetFieldName() const;
 
-    // fuer Berechnungen in Ausdruecken
+    // For calculations in expressions.
     void                ChgValue( double d, sal_Bool bVal );
 
-    // Evaluierung ueber den DBMgr String rauspulen
+    // Get the evaluation via DBMgr string.
     void                Evaluate();
 
-    // Evaluierung fuer Kopf und Fusszeilen
+    // Evaluation for header and footer.
     void                ChangeExpansion( const SwFrm*, const SwTxtFld* );
     void                InitContent();
     void                InitContent(const String& rExpansion);
@@ -113,7 +113,7 @@ public:
     inline void         ClearInitialized()      { bInitialized = sal_False; }
     inline void         SetInitialized()        { bInitialized = sal_True; }
 
-    // Name erfragen
+    // Get name.
     virtual const String& GetPar1() const;
 
     // access to the command string
@@ -124,19 +124,19 @@ public:
 
     // DBName
     inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 inline  void SwDBField::SetExpansion(const String& rStr)
     { aContent = rStr; }
 
-// wird von UpdateExpFlds gesetzt (dort ist die Node-Position bekannt)
+// set from UpdateExpFlds (the Node-Position is known there)
 inline void SwDBField::ChgBodyTxtFlag( sal_Bool bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Basisklasse fuer alle weiteren Datenbankfelder
+    Base class for all other database fields.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNameInfField : public SwField
@@ -155,19 +155,18 @@ public:
     inline const SwDBData&  GetRealDBData() { return aDBData; }
 
     SwDBData                GetDBData(SwDoc* pDoc);
-    void                    SetDBData(const SwDBData& rDBData); // #111840#
+    void                    SetDBData(const SwDBData& rDBData);
 
     virtual String          GetFieldName() const;
 
-    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
     virtual sal_uInt16          GetSubType() const;
     virtual void            SetSubType(sal_uInt16 nType);
 };
 
-
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld Naechster Satz
+    Database field next record.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNextSetFieldType : public SwFieldType
@@ -178,9 +177,8 @@ public:
     virtual SwFieldType*    Copy() const;
 };
 
-
 /*--------------------------------------------------------------------
-    Beschreibung: Naechsten Datensatz mit Bedingung
+    Next data record with condition.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
@@ -202,8 +200,8 @@ public:
     // Condition
     virtual const String&   GetPar1() const;
     virtual void            SetPar1(const String& rStr);
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 inline sal_Bool SwDBNextSetField::IsCondValid() const
@@ -213,7 +211,7 @@ inline void SwDBNextSetField::SetCondValid(sal_Bool bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld Naechster Satz
+    Database field next record.
  --------------------------------------------------------------------*/
 
 class SwDBNumSetFieldType : public SwFieldType
@@ -224,11 +222,9 @@ public:
     virtual SwFieldType*    Copy() const;
 };
 
-
 /*--------------------------------------------------------------------
-    Beschreibung: Datensatz mit Nummer xxx
-                  Die Nummer steht in nFormat
-                  ! kleiner Missbrauch
+    Data record with number xxx.
+    Number is in nFormat (bit of a misuse!)
  --------------------------------------------------------------------*/
 
 class SwDBNumSetField : public SwDBNameInfField
@@ -251,13 +247,13 @@ public:
     virtual const String&   GetPar1() const;
     virtual void            SetPar1(const String& rStr);
 
-    // Datensatznummer
+    // Number of data record.
     virtual String          GetPar2()   const;
     virtual void            SetPar2(const String& rStr);
 
-    // Die Datensatznummer steht in nFormat !!
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    // Number of data record is in nFormat!!
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 inline sal_Bool SwDBNumSetField::IsCondValid() const
@@ -267,7 +263,7 @@ inline void SwDBNumSetField::SetCondValid(sal_Bool bCond)
     { bCondValid = bCond; }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankname
+    Database name.
  --------------------------------------------------------------------*/
 
 class SwDBNameFieldType : public SwFieldType
@@ -281,7 +277,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld
+    Database field.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBNameField : public SwDBNameInfField
@@ -291,12 +287,12 @@ public:
 
     virtual String   Expand() const;
     virtual SwField* Copy() const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datensatznummer
+    Number of data record.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBSetNumberFieldType : public SwFieldType
@@ -308,7 +304,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankfeld
+    Database field.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
@@ -324,8 +320,8 @@ public:
 
     inline long     GetSetNumber() const;
     inline void     SetSetNumber(long nNum);
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 inline long SwDBSetNumberField::GetSetNumber() const
@@ -334,5 +330,6 @@ inline long SwDBSetNumberField::GetSetNumber() const
 inline void SwDBSetNumberField::SetSetNumber(long nNum)
     { nNumber = nNum; }
 
-
 #endif // SW_DBFLD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

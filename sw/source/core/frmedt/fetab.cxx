@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <tools/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/protitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -118,7 +117,7 @@ void SwFEShell::ParkCursorInTab()
 {
     SwCursor * pSwCrsr = GetSwCrsr();
 
-    ASSERT(pSwCrsr, "no SwCursor");
+    OSL_ENSURE(pSwCrsr, "no SwCursor");
 
     SwPosition aStartPos = *pSwCrsr->GetPoint(), aEndPos = aStartPos;
 
@@ -202,8 +201,6 @@ void SwFEShell::ParkCursorInTab()
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  InsertRow(), InsertCol
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 sal_Bool SwFEShell::InsertRow( sal_uInt16 nCnt, sal_Bool bBehind )
 {
@@ -277,8 +274,6 @@ sal_Bool SwFEShell::InsertCol( sal_uInt16 nCnt, sal_Bool bBehind )
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  DeleteRow(), DeleteCol()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 
 /**
@@ -470,8 +465,6 @@ sal_Bool SwFEShell::DeleteRow()
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  MergeTab(), SplitTab()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 
 sal_uInt16 SwFEShell::MergeTab()
@@ -552,8 +545,6 @@ sal_Bool SwFEShell::SplitTab( sal_Bool bVert, sal_uInt16 nCnt, sal_Bool bSameHei
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  _GetTabCols
-#*  Datum      :  MA 30. Nov. 95
-#*  Update     :  MA 08. Jan. 97
 #***********************************************************************/
 void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 {
@@ -582,10 +573,6 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                     (pTab->Frm().*fnRect->fnGetWidth)() )
                 {
                     pLastCols->SetLeftMin( nLeftMin );
-
-                    //ASSERT( bVert ||
-                    //        pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
-                    //        "GetTabCols: wrong result" )
 
                     pColumnCacheLastTabFrm = pTab;
                 }
@@ -636,8 +623,6 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  _GetTabRows
-#*  Datum      :  FME 2004-01-14
-#*  Update     :
 #***********************************************************************/
 void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
 {
@@ -690,8 +675,6 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetTabCols(), GetTabCols()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 18. May. 93
 #***********************************************************************/
 void SwFEShell::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly )
 {
@@ -722,9 +705,6 @@ void SwFEShell::GetTabCols( SwTabCols &rToFill ) const
     _GetTabCols( rToFill, pFrm );
 }
 
-/*-- 19.01.2004 08:56:42---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
 {
     const SwFrm *pFrm = GetCurrFrm();
@@ -736,9 +716,7 @@ void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
 
     _GetTabRows( rToFill, pFrm );
 }
-/*-- 19.01.2004 08:56:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFEShell::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly )
 {
     SwFrm *pBox = GetCurrFrm();
@@ -755,18 +733,14 @@ void SwFEShell::SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly )
     GetDoc()->SetTabRows( rNew, bCurColOnly, 0, (SwCellFrm*)pBox );
     EndAllActionAndCall();
 }
-/*-- 19.01.2004 08:59:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFEShell::GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const
 {
     const SwFrm *pBox = GetBox( rPt );
     if ( pBox )
         _GetTabRows( rToFill, pBox );
 }
-/*-- 19.01.2004 08:59:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const Point &rPt )
 {
     const SwFrm *pBox = GetBox( rPt );
@@ -782,7 +756,6 @@ void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, co
 /***********************************************************************
  *  Class      :  SwFEShell
  *  Methoden   :  SetRowSplit(), GetRowSplit()
- *  Datum      :  FME 13.11.2003
  ***********************************************************************/
 
 void SwFEShell::SetRowSplit( const SwFmtRowSplit& rNew )
@@ -802,8 +775,6 @@ void SwFEShell::GetRowSplit( SwFmtRowSplit*& rpSz ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetRowHeight(), GetRowHeight()
-#*  Datum      :  MA 17. May. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 
 void SwFEShell::SetRowHeight( const SwFmtFrmSize &rNew )
@@ -855,8 +826,6 @@ sal_Bool SwFEShell::GetRowBackground( SvxBrushItem &rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetTabBorders(), GetTabBorders()
-#*  Datum      :  MA 18. May. 93
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 
 void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
@@ -868,7 +837,7 @@ void SwFEShell::SetTabBorders( const SfxItemSet& rSet )
 }
 
 void SwFEShell::SetTabLineStyle( const Color* pColor, sal_Bool bSetLine,
-                                 const SvxBorderLine* pBorderLine )
+                                 const editeng::SvxBorderLine* pBorderLine )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -886,8 +855,6 @@ void SwFEShell::GetTabBorders( SfxItemSet& rSet ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetBoxBackground(), GetBoxBackground()
-#*  Datum      :  MA 01. Jun. 93
-#*  Update     :  MA 03. Jul. 96
 #***********************************************************************/
 void SwFEShell::SetBoxBackground( const SvxBrushItem &rNew )
 {
@@ -905,8 +872,6 @@ sal_Bool SwFEShell::GetBoxBackground( SvxBrushItem &rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetBoxDirection(), GetBoxDirection()
-#*  Datum      :  FME 2004-02-03
-#*  Update     :  FME 2004-02-03
 #***********************************************************************/
 void SwFEShell::SetBoxDirection( const SvxFrameDirectionItem& rNew )
 {
@@ -924,8 +889,6 @@ sal_Bool SwFEShell::GetBoxDirection( SvxFrameDirectionItem&  rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetBoxAlign, SetBoxAlign
-#*  Datum      :  MA 18. Dec. 96
-#*  Update     :  JP 29.04.98
 #***********************************************************************/
 void SwFEShell::SetBoxAlign( sal_uInt16 nAlign )
 {
@@ -943,8 +906,6 @@ sal_uInt16 SwFEShell::GetBoxAlign() const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  SetTabBackground(), GetTabBackground()
-#*  Datum      :  MA 08. Jul. 96
-#*  Update     :  MA 08. Jul. 96
 #***********************************************************************/
 void SwFEShell::SetTabBackground( const SvxBrushItem &rNew )
 {
@@ -970,8 +931,6 @@ void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  HasWholeTabSelection()
-#*  Datum      :  MA 18. May. 93
-#*  Update     :  MA 20. Jul. 93
 #***********************************************************************/
 sal_Bool SwFEShell::HasWholeTabSelection() const
 {
@@ -1000,9 +959,7 @@ sal_Bool SwFEShell::HasBoxSelection() const
     if( IsTableMode() )
         return sal_True;
     SwPaM* pPam = GetCrsr();
-        // leere Boxen gelten auch ohne Selektion als selektiert
-//  if( !pPam->HasMark() )
-//      return sal_False;
+        // empty boxes are also selected as the absence of selection
     sal_Bool bChg = sal_False;
     if( pPam->GetPoint() == pPam->End())
     {
@@ -1021,7 +978,7 @@ sal_Bool SwFEShell::HasBoxSelection() const
             if( !pCNd )
             {
                 pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
-                ASSERT( pCNd, "kein ContentNode in der Box ??" );
+                OSL_ENSURE( pCNd, "kein ContentNode in der Box ??" );
             }
             if( pPam->GetMark()->nContent == pCNd->Len() )
             {
@@ -1038,8 +995,6 @@ sal_Bool SwFEShell::HasBoxSelection() const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  ProtectCells(), UnProtectCells()
-#*  Datum      :  MA 20. Jul. 93
-#*  Update     :  JP 25. Sep. 93
 #***********************************************************************/
 void SwFEShell::ProtectCells()
 {
@@ -1156,7 +1111,7 @@ void SwFEShell::SetRowsToRepeat( sal_uInt16 nSet )
         EndAllActionAndCall();
     }
 }
-/*-- 30.06.2004 08:46:35---------------------------------------------------
+/*-------------------------------------------------------------------------
     returns the number of rows consecutively selected from top
   -----------------------------------------------------------------------*/
 sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
@@ -1253,8 +1208,6 @@ sal_Bool SwFEShell::CheckHeadline( bool bRepeat ) const
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  AdjustCellWidth()
-#*  Datum      :  MA 20. Feb. 95
-#*  Update     :  MA 27. Jul. 95
 #***********************************************************************/
 
 void SwFEShell::AdjustCellWidth( sal_Bool bBalance )
@@ -1386,8 +1339,6 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methoden   :  DeleteTblSel()
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
 sal_Bool SwFEShell::DeleteTblSel()
 {
@@ -1436,9 +1387,6 @@ sal_Bool SwFEShell::DeleteTblSel()
 |*
 |*  SwFEShell::GetCurTabColNum()
 |*
-|*  Ersterstellung      MA 03. Feb. 95
-|*  Letzte Aenderung    MA 21. May. 95
-|
 |*************************************************************************/
 sal_uInt16 SwFEShell::GetCurTabColNum() const
 {
@@ -1446,7 +1394,7 @@ sal_uInt16 SwFEShell::GetCurTabColNum() const
     sal_uInt16 nRet = 0;
 
     SwFrm *pFrm = GetCurrFrm();
-    ASSERT( pFrm, "Crsr geparkt?" );
+    OSL_ENSURE( pFrm, "Crsr geparkt?" );
 
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     if( pFrm && pFrm->IsInTab() )
@@ -1504,9 +1452,6 @@ sal_uInt16 SwFEShell::GetCurTabColNum() const
 /*************************************************************************
 |*
 |*  SwFEShell::GetBox()
-|*
-|*  Ersterstellung      MA 22. Jun. 95
-|*  Letzte Aenderung    MA 21. Nov. 96
 |*
 |*************************************************************************/
 
@@ -1570,7 +1515,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 
                     // We first check if the given point is 'close' to the left or top
                     // border of the table frame:
-                    ASSERT( pFrm, "Nested table frame without outer table" )
+                    OSL_ENSURE( pFrm, "Nested table frame without outer table" );
                     SWRECTFN( pFrm )
                     const bool bRTL = pFrm->IsRightToLeft();
 
@@ -1663,12 +1608,12 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 
             if ( pFrm ) // Note: this condition should be the same like the while condition!!!
             {
-                // --> FME 2004-07-30 #i32329# Enhanced table selection
+                // #i32329# Enhanced table selection
                 // used for hotspot selection of tab/cols/rows
                 if ( !bMouseMoveRowCols )
                 {
 
-                    ASSERT( pbCol && pbRow, "pbCol or pbRow missing" )
+                    OSL_ENSURE( pbCol && pbRow, "pbCol or pbRow missing" );
 
                     if ( bCloseToRow || bCloseToCol )
                     {
@@ -1678,7 +1623,6 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                         break;
                     }
                 }
-                // <--
                 else
                 {
                     // used for mouse move of columns/rows
@@ -1717,7 +1661,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
     }
 
     // robust:
-    ASSERT( !pRet || pRet->IsCellFrm(), "lcl_FindFrm() is supposed to find a cell frame!" )
+    OSL_ENSURE( !pRet || pRet->IsCellFrm(), "lcl_FindFrm() is supposed to find a cell frame!" );
     return pRet && pRet->IsCellFrm() ? static_cast<const SwCellFrm*>(pRet) : 0;
 }
 
@@ -1734,9 +1678,8 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
     SwTwips nFuzzy = COLFUZZY;
     if( pOutWin )
     {
-        // --> FME 2004-07-30 #i32329# Enhanced table selection
+        // #i32329# Enhanced table selection
         SwTwips nSize = pbCol ? ENHANCED_TABLE_SELECTION_FUZZY : RULER_MOUSE_MARGINWIDTH;
-        // <--
         Size aTmp( nSize, nSize );
         aTmp = pOutWin->PixelToLogic( aTmp );
         nFuzzy = aTmp.Width();
@@ -1889,7 +1832,7 @@ Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint,
         else if ( aRet.Y() < aMin1.Y() )
             aRet.Y() = aMin1.Y();
     }
-    else //if ( bTop )
+    else
     {
         aRet.Y() = aMin1.Y();
         if ( aRet.X() > aMin2.X() )
@@ -1901,7 +1844,7 @@ Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint,
     return aRet;
 }
 
-// --> FME 2004-07-30 #i32329# Enhanced table selection
+// #i32329# Enhanced table selection
 bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag )
 {
     bool bRet = false;
@@ -1996,11 +1939,10 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 
             if ( bNewSelection )
             {
-                // --> FME 2004-10-20 #i35543# SelTblRowCol should remove any existing
+                // #i35543# SelTblRowCol should remove any existing
                 // table cursor:
                 if ( IsTableMode() )
                     TblCrsrToCursor();
-                // <--
 
                 if ( pbRow[0] && pbCol[0] )
                     bRet = SwCrsrShell::SelTbl();
@@ -2019,16 +1961,12 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
 
     return bRet;
 }
-// <--
 
 
 /*************************************************************************
 |*
 |*  SwFEShell::WhichMouseTabCol()
 |*
-|*  Ersterstellung      MA 22. Jun. 95
-|*  Last change         AMA 12. Jun. 02
-|
 |*************************************************************************/
 sal_uInt8 SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 {
@@ -2140,7 +2078,7 @@ sal_Bool SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
 }
 // <- #i23726#
 
-// --> OD 2005-02-21 #i42921#
+// #i42921#
 bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
                                           const Point& _rDocPos ) const
 {
@@ -2167,15 +2105,11 @@ bool SwFEShell::IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
 
     return bRet;
 }
-// <--
 
 /*************************************************************************
 |*
 |*  SwFEShell::GetMouseTabCols()
 |*
-|*  Ersterstellung      MA 22. Jun. 95
-|*  Letzte Aenderung    MA 27. Aug. 96
-|
 |*************************************************************************/
 void SwFEShell::GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const
 {
@@ -2201,9 +2135,6 @@ void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
 |*
 |*  SwFEShell::GetMouseColNum(), GetMouseTabColNum()
 |*
-|*  Ersterstellung      MA 04. Jul. 95
-|*  Letzte Aenderung    MA 04. Jul. 95
-|
 |*************************************************************************/
 sal_uInt16 SwFEShell::GetCurMouseColNum( const Point &rPt,
                                     SwGetCurColNumPara* pPara ) const
@@ -2217,7 +2148,7 @@ sal_uInt16 SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
     sal_uInt16 nRet = 0;
 
     const SwFrm *pFrm = GetBox( rPt );
-    ASSERT( pFrm, "Table not found" );
+    OSL_ENSURE( pFrm, "Table not found" );
     if( pFrm )
     {
         const long nX = pFrm->Frm().Left();
@@ -2251,9 +2182,6 @@ void ClearFEShellTabCols()
 |*
 |*  SwFEShell::GetTblAttr(), SetTblAttr()
 |*
-|*  Ersterstellung      MA 09. Dec. 96
-|*  Letzte Aenderung    MA 09. Dec. 96
-|
 |*************************************************************************/
 void SwFEShell::GetTblAttr( SfxItemSet &rSet ) const
 {
@@ -2284,13 +2212,13 @@ void SwFEShell::SetTblAttr( const SfxItemSet &rNew )
  */
 bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
 {
-    ASSERT( pShell != NULL, "need shell" );
+    OSL_ENSURE( pShell != NULL, "need shell" );
 
     bool bRet = false;
 
     SwPaM* pPam = pShell->GetCrsr();
     const SwStartNode* pTableBox = pPam->GetNode()->FindTableBoxStartNode();
-    ASSERT( pTableBox != NULL, "I'm living in a box... NOT!" );
+    OSL_ENSURE( pTableBox != NULL, "I'm living in a box... NOT!" );
 
     // move cursor to start node of table box
     pPam->GetPoint()->nNode = pTableBox->GetIndex();
@@ -2539,24 +2467,12 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
         if( nW )
         {
             rFml += ')';
-
-/*
-            // TabellenSelektion erzeugen??
-            SwTblBoxFormula aTmp( rFml );
-            SwSelBoxes aBoxes;
-            for( sal_uInt16 nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes );
-                    nSelBoxes; )
-            {
-            }
-*/
         }
     }
 
     return sal_True;
 }
-/* -----------------------------22.08.2002 12:50------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwFEShell::IsTableRightToLeft() const
 {
     SwFrm *pFrm = GetCurrFrm();
@@ -2566,20 +2482,14 @@ sal_Bool SwFEShell::IsTableRightToLeft() const
     return pFrm->ImplFindTabFrm()->IsRightToLeft();
 }
 
-/* -----------------------------22.08.2002 12:50------------------------------
-
- ---------------------------------------------------------------------------*/
 sal_Bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
 {
     SwFrm *pFrm = (SwFrm *)GetBox( rPt );
     const SwTabFrm*  pTabFrm = pFrm ? pFrm->ImplFindTabFrm() : 0;
-    ASSERT( pTabFrm, "Table not found" );
+    OSL_ENSURE( pTabFrm, "Table not found" );
     return pTabFrm ? pTabFrm->IsRightToLeft() : sal_False;
 }
 
-/* -----------------------------11.02.2004 12:50------------------------------
-
- ---------------------------------------------------------------------------*/
 sal_Bool SwFEShell::IsTableVertical() const
 {
     SwFrm *pFrm = GetCurrFrm();
@@ -2591,3 +2501,4 @@ sal_Bool SwFEShell::IsTableVertical() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

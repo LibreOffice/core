@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -88,7 +89,7 @@ const SwSection* SwEditShell::GetCurrSection() const
     return GetDoc()->GetCurrSection( *GetCrsr()->GetPoint() );
 }
 
-/*-----------------17.03.99 11:53-------------------
+/*--------------------------------------------------
  * SwEditShell::GetAnySection liefert den fuer Spalten
  * zustaendigen Bereich, bei Fussnoten kann es nicht der
  * Bereich innerhalb der Fussnote sein.
@@ -113,11 +114,11 @@ const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pP
     if( pFrm && pFrm->IsInSct() )
     {
         SwSectionFrm* pSect = pFrm->FindSctFrm();
-        ASSERT( pSect, "GetAnySection: Where's my Sect?" );
+        OSL_ENSURE( pSect, "GetAnySection: Where's my Sect?" );
         if( pSect->IsInFtn() && pSect->GetUpper()->IsInSct() )
         {
             pSect = pSect->GetUpper()->FindSctFrm();
-            ASSERT( pSect, "GetAnySection: Where's my SectFrm?" );
+            OSL_ENSURE( pSect, "GetAnySection: Where's my SectFrm?" );
         }
         return pSect->GetSection();
     }
@@ -327,7 +328,7 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
 
     // the current position
     //    const SwPosition* pCurrentPos = GetCrsr()->GetPoint();
-    DBG_ASSERT( pCurrentPos != NULL, "Strange, we have no position!" );
+    OSL_ENSURE( pCurrentPos != NULL, "Strange, we have no position!" );
     const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
 
 
@@ -360,9 +361,9 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     // Now, pInnermostNode is NULL or the innermost section or table node.
     if( (pInnermostNode != NULL) && !pInnermostNode->IsProtect() )
     {
-        DBG_ASSERT( pInnermostNode->IsTableNode() ||
+        OSL_ENSURE( pInnermostNode->IsTableNode() ||
                     pInnermostNode->IsSectionNode(), "wrong node found" );
-        DBG_ASSERT( ( pInnermostNode->GetIndex() <= rCurrentNode.GetIndex() )&&
+        OSL_ENSURE( ( pInnermostNode->GetIndex() <= rCurrentNode.GetIndex() )&&
                     ( pInnermostNode->EndOfSectionNode()->GetIndex() >=
                       rCurrentNode.GetIndex() ), "wrong node found" );
 
@@ -399,12 +400,10 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
             pReturn = pInnermostNode->EndOfSectionNode();
         else if ( bStart )
             pReturn = pInnermostNode;
-        // else pReturn = NULL;
     }
-    // else: pReturn = NULL
 
 
-    DBG_ASSERT( ( pReturn == NULL ) || pReturn->IsStartNode() ||
+    OSL_ENSURE( ( pReturn == NULL ) || pReturn->IsStartNode() ||
                                        pReturn->IsEndNode(),
                 "SpecialInsertNode failed" );
     return pReturn;
@@ -453,3 +452,4 @@ bool SwEditShell::DoSpecialInsert()
     return bRet;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

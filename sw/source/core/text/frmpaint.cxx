@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@
 #include <viewimp.hxx>  // SwViewImp
 #include <viewopt.hxx>  // SwViewOption
 #include <frmtool.hxx>  // DrawGraphic
-#include <txtcfg.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <itrpaint.hxx>     // SwTxtPainter
 #include <txtpaint.hxx>     // SwSaveClip
@@ -58,22 +58,20 @@
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
 #include <SwGrammarMarkUp.hxx>
 
-// --> FME 2004-06-08 #i12836# enhanced pdf export
+// #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
 
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLineNumberAccess.hxx>
 
-// --> OD 2006-06-27 #b6440955#
+//
 // variable moved to class <numfunc:GetDefBulletConfig>
-//extern const sal_Char __FAR_DATA sBulletFntName[];
+//extern const sal_Char sBulletFntName[];
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();
     extern bool IsDefBulletFontUserDefined();
 }
-// <--
 
 
 #define REDLINE_DISTANCE 567/4
@@ -142,7 +140,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         nDivider = rLineInf.GetDivider().Len() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
         SwCharFmt* pFmt = rLineInf.GetCharFmt( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
-        ASSERT( pFmt, "PaintExtraData without CharFmt" );
+        OSL_ENSURE( pFmt, "PaintExtraData without CharFmt" );
         pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
@@ -332,9 +330,8 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
         aLayoutModeModifier.Modify( sal_False );
 
-        // --> FME 2004-06-24 #i16816# tagged pdf support
+        // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
-        // <--
 
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
 
@@ -438,7 +435,7 @@ SwRect SwTxtFrm::Paint()
 #endif
 
     // finger layout
-    ASSERT( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
+    OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
 
     SwRect aRet( Prt() );
     if ( IsEmpty() || !HasPara() )
@@ -567,21 +564,25 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     }
                 }
 
-                const XubString aTmp( CH_PAR );
-                SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
-                aDrawInf.SetLeft( rRect.Left() );
-                aDrawInf.SetRight( rRect.Right() );
-                aDrawInf.SetPos( aPos );
-                aDrawInf.SetSpace( 0 );
-                aDrawInf.SetKanaComp( 0 );
-                aDrawInf.SetWrong( NULL );
-                aDrawInf.SetGrammarCheck( NULL );
-                aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
-                aDrawInf.SetFrm( this );
-                aDrawInf.SetFont( pFnt );
-                aDrawInf.SetSnapToGrid( sal_False );
+                // Don't show the paragraph mark for collapsed paragraphs, when they are hidden
+                if ( EmptyHeight( ) > 1 )
+                {
+                    const XubString aTmp( CH_PAR );
+                    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
+                    aDrawInf.SetLeft( rRect.Left() );
+                    aDrawInf.SetRight( rRect.Right() );
+                    aDrawInf.SetPos( aPos );
+                    aDrawInf.SetSpace( 0 );
+                    aDrawInf.SetKanaComp( 0 );
+                    aDrawInf.SetWrong( NULL );
+                    aDrawInf.SetGrammarCheck( NULL );
+                    aDrawInf.SetSmartTags( NULL ); // SMARTTAGS
+                    aDrawInf.SetFrm( this );
+                    aDrawInf.SetFont( pFnt );
+                    aDrawInf.SetSnapToGrid( sal_False );
 
-                pFnt->_DrawText( aDrawInf );
+                    pFnt->_DrawText( aDrawInf );
+                }
                 delete pClip;
             }
             delete pFnt;
@@ -601,7 +602,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
-    // --> FME 2004-06-24 #i16816# tagged pdf support
+    // #i16816# tagged pdf support
     ViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
@@ -609,9 +610,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     Frm_Info aFrmInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, *pSh->GetOut() );
-    // <--
 
-    DBG_LOOP_RESET;
     if( !IsEmpty() || !PaintEmpty( rRect, sal_True ) )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -619,10 +618,6 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         (void)nDbgY;
 #endif
 
-#ifdef DBGTXT
-        if( IsDbg( this ) )
-            DBTXTFRM << "Paint()" << endl;
-#endif
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 
@@ -630,12 +625,11 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         //Informationen entzogen hat.
         if( !HasPara() )
         {
-            ASSERT( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
+            OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
 
-            // --> FME 2004-10-29 #i29062# pass info that we are currently
+            // #i29062# pass info that we are currently
             // painting.
             ((SwTxtFrm*)this)->GetFormatted( true );
-            // <--
             if( IsEmpty() )
             {
                 PaintEmpty( rRect, sal_False );
@@ -643,7 +637,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
             if( !HasPara() )
             {
-                ASSERT( !this, "+SwTxtFrm::Paint: missing format information" );
+                OSL_ENSURE( !this, "+SwTxtFrm::Paint: missing format information" );
                 return;
             }
         }
@@ -678,7 +672,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // die Laenge ist immer wieder interessant.
 
         // Rectangle
-        ASSERT( ! IsSwapped(), "A frame is swapped before Paint" );
+        OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
         SwRect aOldRect( rRect );
 
         SWAP_IF_NOT_SWAPPED( this )
@@ -722,13 +716,6 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         {
             do
             {
-                //DBG_LOOP; shadows declaration above.
-                //resolved into:
-#if  OSL_DEBUG_LEVEL > 1
-#ifdef DBG_UTIL
-                DbgLoop aDbgLoop2( (const void*) this );
-#endif
-#endif
                 aLine.DrawTextLine( rRect, aClip, IsUndersized() );
 
             } while( aLine.Next() && aLine.Y() <= nBottom );
@@ -744,7 +731,8 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         UNDO_SWAP( this )
         (SwRect&)rRect = aOldRect;
 
-        ASSERT( ! IsSwapped(), "A frame is swapped after Paint" );
+        OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
     }
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

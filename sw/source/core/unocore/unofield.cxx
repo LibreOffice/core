@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,6 +48,7 @@
 #include <viewsh.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTimeRange.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -87,7 +89,7 @@
 #include <svx/dataaccessdescriptor.hxx>
 #define _SVSTDARR_STRINGS
 #include <svl/svstdarr.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
 #include <editeng/outliner.hxx>
@@ -125,11 +127,13 @@ static const sal_uInt16 aDocInfoSubTypeFromService[] =
     DI_TITEL,                   //PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
     DI_DOCNO                    //PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
 };
+
 struct ServiceIdResId
 {
     sal_uInt16 nResId;
     sal_uInt16 nServiceId;
 };
+
 static const ServiceIdResId aServiceToRes[] =
 {
     {RES_DATETIMEFLD,   SW_SERVICE_FIELDTYPE_DATETIME               },
@@ -186,19 +190,19 @@ static const ServiceIdResId aServiceToRes[] =
     {RES_TABLEFLD,      SW_SERVICE_FIELDTYPE_TABLE_FORMULA              },
     {USHRT_MAX,         USHRT_MAX                                        }
 };
-//-----------------------------------------------------------------
+
 sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
 {
     const ServiceIdResId* pMap = aServiceToRes;
     while( USHRT_MAX != pMap->nServiceId && nServiceId != pMap->nServiceId )
             ++pMap;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( USHRT_MAX == pMap->nServiceId )
-        DBG_ERROR("service id not found");
+        OSL_FAIL("service id not found");
 #endif
     return pMap->nResId;
 }
-//-----------------------------------------------------------------
+
 sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
 {
     sal_uInt16 nWhich = rFld.Which(), nSrvId = USHRT_MAX;
@@ -272,9 +276,9 @@ sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
                 break;
             }
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( USHRT_MAX == nSrvId )
-        DBG_ERROR("resid not found");
+        OSL_FAIL("resid not found");
 #endif
     return nSrvId;
 }
@@ -293,7 +297,6 @@ sal_uInt16 lcl_GetPropMapIdForFieldType( sal_uInt16 nWhich )
     }
     return nId;
 }
-
 
 sal_uInt16 GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
 {
@@ -383,7 +386,7 @@ sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
     case SW_SERVICE_FIELDMASTER_DUMMY5: nRet = PROPERTY_MAP_FLDMSTR_DUMMY0; break;
     case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT: nRet = PROPERTY_MAP_FLDTYP_HIDDEN_TEXT; break;
     default:
-        DBG_ERROR( "wrong service id" );
+        OSL_FAIL( "wrong service id" );
         nRet = USHRT_MAX;
     }
     return nRet;
@@ -394,10 +397,14 @@ sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
  ******************************************************************/
 TYPEINIT1(SwXFieldMaster, SwClient);
 
+namespace
+{
+    class theSwXFieldMasterUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXFieldMasterUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXFieldMasterUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXFieldMaster::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -505,7 +512,7 @@ SwXFieldMaster::~SwXFieldMaster()
 uno::Reference< beans::XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(void)
                                             throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< beans::XPropertySetInfo >  aRef =
                         aSwMapProvider.GetPropertySet(
                                 lcl_GetPropMapIdForFieldType( nResTypeId ) )->getPropertySetInfo();
@@ -517,7 +524,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
             lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFieldType* pType = GetFldType(sal_True);
     if(pType)
     {
@@ -623,7 +630,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 throw uno::RuntimeException();
         }
 
-        DBG_ASSERT(pType2, "kein FieldType gefunden!" );
+        OSL_ENSURE(pType2, "kein FieldType gefunden!" );
     }
     else
     {
@@ -722,7 +729,6 @@ SwFieldType* SwXFieldMaster::GetFldType(sal_Bool bDontCreate) const
         return (SwFieldType*)GetRegisteredIn();
 }
 
-
 typedef SwFmtFld* SwFmtFldPtr;
 SV_DECL_PTRARR(SwDependentFields, SwFmtFldPtr, 5, 5)
 SV_IMPL_PTRARR(SwDependentFields, SwFmtFldPtr)
@@ -730,7 +736,7 @@ SV_IMPL_PTRARR(SwDependentFields, SwFmtFldPtr)
 uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFieldType* pType = GetFldType(sal_True);
     if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
@@ -881,28 +887,27 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
 
 void SwXFieldMaster::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXFieldMaster::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXFieldMaster::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXFieldMaster::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
-
 
 void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFieldType* pFldType = GetFldType(sal_True);
     if(pFldType)
     {
@@ -953,7 +958,6 @@ void SwXFieldMaster::removeEventListener(const uno::Reference< lang::XEventListe
         throw uno::RuntimeException();
 }
 
-
 void SwXFieldMaster::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
@@ -963,7 +967,6 @@ void SwXFieldMaster::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
         m_pDoc = 0;
     }
 }
-
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
 {
     OUString sRet(rType.GetName());
@@ -1003,7 +1006,6 @@ OUString SwXFieldMaster::LocalizeFormula(
     return rFormula;
 }
 
-
 SwXTextField* SwXTextField::CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
 {
     SwIterator<SwXTextField,SwFieldType> aIter(*rFmt.GetFld()->GetTyp());
@@ -1021,9 +1023,6 @@ SwXTextField* SwXTextField::CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFm
     return pField ? pField : new SwXTextField( rFmt, &rDoc );
 }
 
-/******************************************************************
- *
- ******************************************************************/
 struct SwFieldProperties_Impl
 {
     String      sPar1;
@@ -1072,10 +1071,14 @@ struct SwFieldProperties_Impl
 
 TYPEINIT1(SwXTextField, SwClient);
 
+namespace
+{
+    class theSwXTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXTextFieldUnoTunnelId > {};
+}
+
 const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 {
-    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
-    return aSeq;
+    return theSwXTextFieldUnoTunnelId::get().getSeq();
 }
 
 sal_Int64 SAL_CALL SwXTextField::getSomething( const uno::Sequence< sal_Int8 >& rId )
@@ -1140,7 +1143,7 @@ SwXTextField::~SwXTextField()
 void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertySet > & xFieldMaster)
                     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!m_bIsDescriptor)
         throw uno::RuntimeException();
     uno::Reference< lang::XUnoTunnel > xMasterTunnel(xFieldMaster, uno::UNO_QUERY);
@@ -1162,7 +1165,7 @@ void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertyS
 
 uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwFieldType* pType = 0;
     if( m_bIsDescriptor && m_aFieldTypeClient.GetRegisteredIn() )
     {
@@ -1184,7 +1187,7 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
 
 OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwField const*const pField = GetField();
     if (!pField)
@@ -1201,7 +1204,7 @@ void SwXTextField::attachToRange(
         const uno::Reference< text::XTextRange > & xTextRange)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!m_bIsDescriptor)
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
@@ -1551,7 +1554,7 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetFldType(RES_SETEXPFLD, m_sTypeName, sal_True);
                 if(!pFldType)
                     throw uno::RuntimeException();
-                //#93192# detect the field type's sub type and set an appropriate number format
+                // detect the field type's sub type and set an appropriate number format
                 if(m_pProps->bFormatIsDefault &&
                     nsSwGetSetExpType::GSE_STRING == ((SwSetExpFieldType*)pFldType)->GetType())
                         m_pProps->nFormat = -1;
@@ -1588,7 +1591,7 @@ void SwXTextField::attachToRange(
                     //case text::SetVariableType::SEQUENCE:   nSubType = nsSwGetSetExpType::GSE_SEQ;  break;
                     case text::SetVariableType::FORMULA:    nSubType = nsSwGetSetExpType::GSE_FORMULA; break;
                     default:
-                        DBG_ERROR("wrong value");
+                        OSL_FAIL("wrong value");
                         nSubType = nsSwGetSetExpType::GSE_EXPR;
                 }
                 //make sure the SubType matches the field type
@@ -1724,7 +1727,7 @@ void SwXTextField::attachToRange(
                ((SwTblField*)pFld)->ChgExpStr(m_pProps->sPar1);
             }
             break;
-            default: DBG_ERROR("was ist das fuer ein Typ?");
+            default: OSL_FAIL("was ist das fuer ein Typ?");
         }
         if(pFld)
         {
@@ -1774,13 +1777,13 @@ void SwXTextField::attachToRange(
 void SwXTextField::attach(const uno::Reference< text::XTextRange > & xTextRange)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     attachToRange( xTextRange );
 }
 
 uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >   aRef;
     SwField* pField = (SwField*)GetField();
     if(pField)
@@ -1801,7 +1804,7 @@ uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::Ru
 
 void SwXTextField::dispose(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwField* pField = (SwField*)GetField();
     if(pField)
     {
@@ -1838,7 +1841,7 @@ void SwXTextField::removeEventListener(const uno::Reference< lang::XEventListene
 uno::Reference< beans::XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
         throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     //kein static
     uno::Reference< beans::XPropertySetInfo >  aRef;
     if(m_nServiceId != USHRT_MAX)
@@ -1861,7 +1864,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
     throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     SwField* pField = (SwField*)GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
                                 lcl_GetPropertyMapOfService( m_nServiceId));
@@ -1884,11 +1887,10 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         {
             // hier muss ein neuer Feldtyp angelegt werden und
             // das Feld an den neuen Typ umgehaengt werden
-            DBG_WARNING("not implemented");
+            OSL_FAIL("not implemented");
         }
         else
         {
-            // -> #111840#
             SwDoc * pDoc = GetDoc();
 
             if (NULL != pDoc)
@@ -1900,7 +1902,6 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                 aPosition.nContent = *pTxtFld->GetStart();
                 pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
             }
-            // <- #111840#
         }
         pField->PutValue( rValue, pEntry->nWID );
 
@@ -1910,7 +1911,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
     }
 
-        //#114571# changes of the expanded string have to be notified
+        // changes of the expanded string have to be notified
         //#to the SwTxtFld
         if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
         {
@@ -2021,7 +2022,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     uno::Any aRet;
     const SwField* pField = GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
@@ -2206,27 +2207,27 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
 
 void SwXTextField::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextField::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextField::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextField::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextField::update(  ) throw (uno::RuntimeException)
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     const SwField* pFld = GetField();
     if(pFld)
     {
@@ -2272,10 +2273,8 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
             }
             break;
         }
-        // --> FME 2004-10-06 #116480#
         // Text formatting has to be triggered.
         const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
-        // <--
     }
     else
         m_bCallUpdate = sal_True;
@@ -2288,10 +2287,10 @@ OUString SwXTextField::getImplementationName(void) throw( uno::RuntimeException 
 
 static OUString OldNameToNewName_Impl( const OUString &rOld )
 {
-    static OUString aOldNamePart1( OUString::createFromAscii(".TextField.DocInfo.") );
-    static OUString aOldNamePart2( OUString::createFromAscii(".TextField.") );
-    static OUString aNewNamePart1( OUString::createFromAscii(".textfield.docinfo.") );
-    static OUString aNewNamePart2( OUString::createFromAscii(".textfield.") );
+    static OUString aOldNamePart1(RTL_CONSTASCII_USTRINGPARAM(".TextField.DocInfo."));
+    static OUString aOldNamePart2(RTL_CONSTASCII_USTRINGPARAM(".TextField."));
+    static OUString aNewNamePart1(RTL_CONSTASCII_USTRINGPARAM(".textfield.docinfo."));
+    static OUString aNewNamePart2(RTL_CONSTASCII_USTRINGPARAM(".textfield."));
     OUString sServiceNameCC( rOld );
     sal_Int32 nIdx = sServiceNameCC.indexOf( aOldNamePart1 );
     if (nIdx >= 0)
@@ -2406,6 +2405,7 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
 {
 
 }
+
 /*-----------------------------------------------------------------------
     Iteration ueber nicht-Standard Feldtypen
     USER/SETEXP/DDE/DATABASE
@@ -2418,7 +2418,6 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
     Falls wir grosszuegig werden wollen, dann koennte man com.sun.star.text
     auch optional weglassen
   -----------------------------------------------------------------------*/
-
 sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
 {
     if( rName.EqualsAscii( COM_TEXT_FLDMASTER, 0, RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER ))
@@ -2461,11 +2460,10 @@ sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
     return nResId;
 }
 
-//-----------------------------------------------------------------------------
 uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!GetDoc())
         throw uno::RuntimeException();
 
@@ -2531,11 +2529,10 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
     return bRet;
 }
 
-
 uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!GetDoc())
         throw uno::RuntimeException();
 
@@ -2572,7 +2569,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
 
 sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!GetDoc())
         throw uno::RuntimeException();
 
@@ -2595,15 +2592,11 @@ uno::Type  SwXTextFieldMasters::getElementType(void) throw( uno::RuntimeExceptio
 
 sal_Bool SwXTextFieldMasters::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return sal_True;
 }
-
-/******************************************************************
- *
- ******************************************************************/
 
 OUString SwXTextFieldTypes::getImplementationName(void) throw( uno::RuntimeException )
 {
@@ -2643,12 +2636,11 @@ void SwXTextFieldTypes::Invalidate()
 uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     return new SwXFieldEnumeration(GetDoc());
 }
-
 
 uno::Type  SwXTextFieldTypes::getElementType(void) throw( uno::RuntimeException )
 {
@@ -2657,7 +2649,7 @@ uno::Type  SwXTextFieldTypes::getElementType(void) throw( uno::RuntimeException 
 
 sal_Bool SwXTextFieldTypes::hasElements(void) throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     //es gibt sie immer
@@ -2666,7 +2658,7 @@ sal_Bool SwXTextFieldTypes::hasElements(void) throw( uno::RuntimeException )
 
 void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
     UnoActionContext aContext(GetDoc());
@@ -2681,7 +2673,7 @@ void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
 void SwXTextFieldTypes::addRefreshListener(const uno::Reference< util::XRefreshListener > & l)
     throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if ( !IsValid() )
         throw uno::RuntimeException();
     aRefreshCont.AddListener ( reinterpret_cast < const uno::Reference < lang::XEventListener > &> ( l ));
@@ -2690,14 +2682,14 @@ void SwXTextFieldTypes::addRefreshListener(const uno::Reference< util::XRefreshL
 void SwXTextFieldTypes::removeRefreshListener(const uno::Reference< util::XRefreshListener > & l)
      throw( uno::RuntimeException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     if ( !IsValid() || !aRefreshCont.RemoveListener ( reinterpret_cast < const uno::Reference < lang::XEventListener > &> ( l ) ) )
         throw uno::RuntimeException();
 }
+
 /******************************************************************
  * SwXFieldEnumeration
  ******************************************************************/
-
 OUString SwXFieldEnumeration::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXFieldEnumeration");
@@ -2783,14 +2775,14 @@ SwXFieldEnumeration::~SwXFieldEnumeration()
 sal_Bool SwXFieldEnumeration::hasMoreElements(void)
     throw( uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
     return nNextIndex < aItems.getLength();
 }
 
 uno::Any SwXFieldEnumeration::nextElement(void)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if (!(nNextIndex < aItems.getLength()))
         throw container::NoSuchElementException();
@@ -2812,7 +2804,6 @@ void SwXFieldEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
         pDoc = 0;
 }
 
-
 String& GetString( const uno::Any& rAny, String& rStr )
 {
     OUString aStr;
@@ -2820,3 +2811,5 @@ String& GetString( const uno::Any& rAny, String& rStr )
     rStr = String( aStr );
     return rStr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

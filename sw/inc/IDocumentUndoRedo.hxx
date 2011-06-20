@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -139,7 +140,7 @@ public:
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
                 SwRewriter const*const  pRewriter) = 0;
 
-    /** <- #111827#
+    /**
         Delete all Undo actions.
         Of course Undo will be disabled during deletion.
     */
@@ -281,3 +282,4 @@ private:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

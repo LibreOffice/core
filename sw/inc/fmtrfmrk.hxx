@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,14 +34,14 @@
 
 class SwTxtRefMark;
 
-// ATT_REFMARK *******************************************************
+// ATT_REFMARK
 
 class SwFmtRefMark : public SfxPoolItem
 {
     friend class SwTxtRefMark;
-    SwTxtRefMark* pTxtAttr;     // mein TextAttribut
+    SwTxtRefMark* pTxtAttr;
 
-    // geschuetzter CopyCtor
+    // Protected CopyCtor.
     SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark);
     String aRefName;
 
@@ -49,7 +50,7 @@ public:
     SwFmtRefMark( const SwFmtRefMark& rRefMark );
     ~SwFmtRefMark( );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -62,3 +63,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

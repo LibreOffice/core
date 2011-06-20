@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <tools/debug.hxx>
 #include <svl/itemprop.hxx>
 #include <unoprnms.hxx>
 
@@ -778,8 +778,14 @@ const SwPropNameTab aPropNameTab = {
 /* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")},//#outline level,add<-zhaojianwei Outlinelevel
 /* 0737 UNO_NAME_DESCRIPTION */         {MAP_CHAR_LEN("Description")},
 /* 0738 UNO_NAME_META */        {MAP_CHAR_LEN("InContentMetadata")},
-/* 0739 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
+// FIXME: these numbers are not correct post merge ...
+/* 0739 UNO_NAME_IS_TEMPLATE */       {MAP_CHAR_LEN("IsTemplate")},
 /* 0740 UNO_NAME_EMBEDDED_OBJECT */ {MAP_CHAR_LEN("EmbeddedObject")},
+/* 0740 UNO_NAME_VBA_DOCOBJ */       {MAP_CHAR_LEN("ThisVBADocObj")},
+
+/* 0741 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
+/* 0742 UNO_NAME_SEPARATOR_LINE_STYLE */ {MAP_CHAR_LEN("SeparatorLineStyle")},
+/* 0743 UNO_NAME_FOOTNOTE_LINE_STYLE */ {MAP_CHAR_LEN("FootnoteLineStyle")},
 };
 
 const SwPropNameLen& SwGetPropName( sal_uInt16 nId )
@@ -788,7 +794,9 @@ const SwPropNameLen& SwGetPropName( sal_uInt16 nId )
 }
 const SwPropNameLen& GetPropName( sal_uInt16 nId )
 {
-    DBG_ASSERT( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
+    OSL_ENSURE( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
                 "GetPropName(): Wrong index" );
     return aPropNameTab[ nId - SW_PROPNAME_BEGIN];
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

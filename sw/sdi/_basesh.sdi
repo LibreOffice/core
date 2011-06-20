@@ -247,6 +247,12 @@ interface BaseTextSelection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    FN_FORMAT_TITLEPAGE_DLG  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     FN_FORMAT_PAGE_COLUMN_DLG  // status(final|play)
     [
         ExecMethod = ExecDlg ;
@@ -424,9 +430,7 @@ interface BaseTextSelection
         StateMethod = GetState ;
     ]
 
-/*-----------------22.01.97 09.41-------------------
-// ab hier immer Export = FALSE
---------------------------------------------------*/
+// from here on Export = FALSE
 
     FN_FRAME_WRAP   // status()
     [

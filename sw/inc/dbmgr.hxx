@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -85,19 +86,19 @@ class SwMailMergeConfigItem;
 
 enum DBMgrOptions
 {
-    DBMGR_MERGE,            // Datensaetze in Felder
-    DBMGR_INSERT,           // Datensaetze in Text
-    DBMGR_MERGE_MAILMERGE,  // Serienbriefe drucken
-    DBMGR_MERGE_MAILING,    // Serienbriefe als email versenden
-    DBMGR_MERGE_MAILFILES,  // Serienbriefe als Datei(en) speichern
-    DBMGR_MERGE_DOCUMENTS,   // Print merged documents
-    DBMGR_MERGE_SINGLE_FILE  // save merge as single file
+    DBMGR_MERGE,             // Data records in fields.
+    DBMGR_INSERT,            // Data records in text.
+    DBMGR_MERGE_MAILMERGE,   // Print mail merge.
+    DBMGR_MERGE_MAILING,     // Send mail merge as email.
+    DBMGR_MERGE_MAILFILES,   // Save mail merg as files.
+    DBMGR_MERGE_DOCUMENTS,   // Print merged documents.
+    DBMGR_MERGE_SINGLE_FILE  // Save merge as single file.
 };
 
 // -----------------------------------------------------------------------
 
 /*--------------------------------------------------------------------
-     Beschreibung: (neue) Logische Datenbanken verwalten
+     Administration of (new) logical databases.
  --------------------------------------------------------------------*/
 #define SW_DB_SELECT_UNKNOWN    0
 #define SW_DB_SELECT_TABLE      1
@@ -152,7 +153,7 @@ struct SwMergeDescriptor
     SwWrtShell&                                         rSh;
     const ::svx::ODataAccessDescriptor&                 rDescriptor;
     String                                              sSaveToFilter; //export filter to save resulting files
-    String                                              sSaveToFilterOptions; //
+    String                                              sSaveToFilterOptions;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveToFilterData;
 
     String                                              sSubject;
@@ -197,13 +198,13 @@ friend class SwConnectionDisposedListener_Impl;
 
     static SwDbtoolsClient* pDbtoolsClient;
 
-    String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
-    String              sSubject;       // Mailing: Subject
-    String              sAttached;      // Mailing: Attachte Files
+    String              sEMailAddrFld;      // Mailing: Column name of email address.
+    String              sSubject;           // Mailing: Subject
+    String              sAttached;          // Mailing: Attached Files.
     sal_uInt16              nMergeType;
-    sal_Bool                bInitDBFields : 1;  // sal_True: Datenbank an Feldern beim Mergen
-    sal_Bool                bSingleJobs : 1;    // Einzelne Druckjobs bei Aufruf aus Basic
-    sal_Bool                bCancel : 1;        // Serienbrief-Save abgebrochen
+    sal_Bool                bInitDBFields : 1;
+    sal_Bool                bSingleJobs : 1;    // Printing job when called from Basic.
+    sal_Bool                bCancel : 1;        // Mail merge save canceled.
 
     sal_Bool                bInMerge    : 1;    //merge process active
     sal_Bool                bMergeSilent : 1;   // suppress display of dialogs/boxes (used when called over API)
@@ -219,10 +220,10 @@ friend class SwConnectionDisposedListener_Impl;
 
     SW_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
 
-    // Datensaetze als Text ins Dokument einfuegen
+    // Insert data record as text into document.
     SW_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);
 
-    // Einzelnen Datensatz als Text ins Dokument einfuegen
+    // Insert a single data record as text into document.
     SW_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
     // merge to file _and_ merge to e-Mail
@@ -234,7 +235,7 @@ public:
     SwNewDBMgr();
     ~SwNewDBMgr();
 
-    // Art des aktellen Mergens. Siehe DBMgrOptions-enum
+    // Current merge type. Cf. DBMgrOptions-enum.
     inline sal_uInt16   GetMergeType() const            { return nMergeType; }
     inline void     SetMergeType( sal_uInt16 nTyp )     { nMergeType = nTyp; }
 
@@ -245,29 +246,28 @@ public:
     inline sal_Bool     IsMergeSilent() const           { return bMergeSilent != 0; }
     inline void     SetMergeSilent( sal_Bool bVal )     { bMergeSilent = bVal; }
 
-    // Mischen von Datensaetzen in Felder
+    // Merging of data records into fields.
     sal_Bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
     sal_Bool            Merge(SwWrtShell* pSh);
 
-    // Datenbankfelder mit fehlendem Datenbankname initialisieren
+    // Initialize data fields that lack name of database.
     inline sal_Bool     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(sal_Bool b) { bInitDBFields = b;    }
 
-    // Serienbriefe einzelnd oder alle zusammen drucken/speichern
+    // Print / Save mail merge one by one or all together.
     inline sal_Bool     IsSingleJobs() const    { return bSingleJobs;   }
     inline void     SetSingleJobs(sal_Bool b)   { bSingleJobs = b;  }
 
-    // Mailing
-    // email-Daten setzen
+    // Mailing: Set email data.
     inline void     SetEMailColumn(const String& sColName) { sEMailAddrFld = sColName; }
     inline void     SetSubject(const String& sSbj) { sSubject = sSbj; }
     inline void     SetAttachment(const String& sAtt) { sAttached = sAtt; }
 
 
-    // Listbox mit allen Tabellennamen einer Datenbank fuellen
+    // Fill listbox with all table names of a database.
     sal_Bool            GetTableNames(ListBox* pListBox, const String& rDBName );
 
-    // Listbox mit allen Spaltennamen einer Datenbanktabelle fuellen
+    // Fill listbox with all column names of a database table.
     sal_Bool            GetColumnNames(ListBox* pListBox,
                         const String& rDBName, const String& rTableName, sal_Bool bAppend = sal_False);
     sal_Bool            GetColumnNames(ListBox* pListBox,
@@ -396,3 +396,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

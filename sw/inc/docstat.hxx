@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,6 +44,7 @@ struct SW_DLLPUBLIC SwDocStat
     sal_uLong           nAllPara;
     sal_uLong           nWord;
     sal_uLong           nChar;
+    sal_uLong           nCharExcludingSpaces;
     sal_Bool            bModified;
 
     SwDocStat();
@@ -50,3 +52,5 @@ struct SW_DLLPUBLIC SwDocStat
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

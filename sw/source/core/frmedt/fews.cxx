@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <tools/list.hxx>
 #include <svx/svdobj.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
@@ -55,14 +55,10 @@
 #include <edimp.hxx>
 #include <pagedesc.hxx>
 #include <fmtanchr.hxx>
-// OD 29.10.2003 #113049#
 #include <environmentofanchoredobject.hxx>
-// OD 12.11.2003 #i22341#
-#include <ndtxt.hxx>
-// OD 27.11.2003 #112045#
+#include <ndtxt.hxx> // #i22341#
 #include <dflyobj.hxx>
-// OD 2004-03-29 #i26791#
-#include <dcontact.hxx>
+#include <dcontact.hxx> // #i26791#
 
 
 using namespace com::sun::star;
@@ -73,9 +69,6 @@ TYPEINIT1(SwFEShell,SwEditShell)
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methode    :  EndAllActionAndCall()
-#*
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 31. Oct. 95
 #***********************************************************************/
 
 void SwFEShell::EndAllActionAndCall()
@@ -97,8 +90,6 @@ void SwFEShell::EndAllActionAndCall()
 #*  Class       :  SwFEShell
 #*  Methode     :  GetCntntPos
 #*  Beschreibung:  Ermitteln des Cntnt's der dem Punkt am naechsten liegt
-#*  Datum       :  MA 02. Jun. 92
-#*  Update      :  MA 02. May. 95
 #***********************************************************************/
 
 Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
@@ -163,14 +154,14 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case RECT_OUTTABSECTION :   if( pFrm->IsInTab() )
                                         pFrm = pFrm->FindTabFrm();
                                     else {
-                                        ASSERT( sal_False, "Missing Table" );
+                                        OSL_FAIL( "Missing Table" );
                                     }
                                     /* KEIN BREAK */
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
                                     else {
-                                        ASSERT( sal_False, "Missing section" );
+                                        OSL_FAIL( "Missing section" );
                                     }
 
                                     if( RECT_OUTTABSECTION_PRT == eType ||
@@ -256,9 +247,6 @@ bool SwFEShell::IsDirectlyInSection() const
 |*
 |*  SwFEShell::GetFrmType()
 |*
-|*  Ersterstellung      MA 12. Jan. 93
-|*  Letzte Aenderung    AMA 25. Nov. 98
-|*
 *************************************************************************/
 
 sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
@@ -307,7 +295,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
                                     nReturn |= FRMTYPE_FLY_ATCNT;
                                 else
                                 {
-                                    ASSERT( ((SwFlyFrm*)pFrm)->IsFlyInCntFrm(),
+                                    OSL_ENSURE( ((SwFlyFrm*)pFrm)->IsFlyInCntFrm(),
                                             "Neuer Rahmentyp?" );
                                     nReturn |= FRMTYPE_FLY_INCNT;
                                 }
@@ -331,9 +319,6 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
 /*************************************************************************
 |*
 |*  SwFEShell::ShLooseFcs(), ShGetFcs()
-|*
-|*  Ersterstellung      MA 10. May. 93
-|*  Letzte Aenderung    MA 09. Sep. 98
 |*
 *************************************************************************/
 
@@ -359,16 +344,12 @@ void SwFEShell::ShLooseFcs()
         Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }
-//  ::ResetShell();
 }
 
 /*************************************************************************
 |*
 |*  SwFEShell::GetPhyPageNum()
 |*  SwFEShell::GetVirtPageNum()
-|*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 03. Jan. 94
 |*
 *************************************************************************/
 
@@ -395,15 +376,12 @@ sal_uInt16 SwFEShell::GetVirtPageNum( const sal_Bool bCalcFrm )
 |*  void SwFEShell::SetPageOffset()
 |*  sal_uInt16 SwFEShell::GetPageOffset() const
 |*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 30. Mar. 95
-|*
 *************************************************************************/
 
 void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis )
 {
     pThis->StartAllAction();
-    ASSERT( pPage->FindFirstBodyCntnt(),
+    OSL_ENSURE( pPage->FindFirstBodyCntnt(),
             "SwFEShell _SetAPageOffset() ohne CntntFrm" );
 
     SwFmtPageDesc aDesc( pPage->GetPageDesc() );
@@ -473,9 +451,6 @@ sal_uInt16 SwFEShell::GetPageOffset() const
 |*
 |*  SwFEShell::InsertLabel()
 |*
-|*  Ersterstellung      MA 10. Feb. 94
-|*  Letzte Aenderung    MA 10. Feb. 94
-|*
 *************************************************************************/
 
 void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
@@ -502,7 +477,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 //Bei Flys den Index auf den StartNode herunterreichen.
                 nIdx = pCnt->FindFlyFrm()->
                             GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
-//warum?? Bug 61913     ParkCrsr( GetCrsr()->GetPoint()->nNode );
             }
             break;
         case LTYPE_TABLE:
@@ -521,7 +495,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
                 StartUndo();
 
-                // OD 27.11.2003 #112045# - copy marked drawing objects to
+                // copy marked drawing objects to
                 // local list to perform the corresponding action for each object
                 std::vector<SdrObject*> aDrawObjs;
                 {
@@ -552,7 +526,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
             }
             break;
         default:
-            ASSERT( !this, "Crsr weder in Tabelle noch in Fly." );
+            OSL_ENSURE( !this, "Crsr weder in Tabelle noch in Fly." );
         }
 
         if( nIdx )
@@ -572,8 +546,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methoden    :  Sort
-#*  Datum       :  ??
-#*  Update      :  ??
 #***********************************************************************/
 
 sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
@@ -589,7 +561,7 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
         // Tabelle sortieren
         // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
         SwFrm *pFrm = GetCurrFrm( sal_False );
-        ASSERT( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
+        OSL_ENSURE( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
 
         // lasse ueber das Layout die Boxen suchen
         SwSelBoxes  aBoxes;
@@ -601,7 +573,7 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         {
-            /* #107993# ParkCursor->ParkCursorTab */
+            /* ParkCursor->ParkCursorTab */
             ParkCursorInTab();
         }
 
@@ -650,9 +622,6 @@ sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
 |*
 |*  SwFEShell::GetCurColNum(), _GetColNum()
 |*
-|*  Ersterstellung      MA 03. Feb. 95
-|*  Letzte Aenderung    MA 20. Apr. 95
-|
 |*************************************************************************/
 
 sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
@@ -700,7 +669,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
 
 sal_uInt16 SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
 {
-    ASSERT( GetCurrFrm(), "Crsr geparkt?" );
+    OSL_ENSURE( GetCurrFrm(), "Crsr geparkt?" );
     return _GetCurColNum( GetCurrFrm(), pPara );
 }
 
@@ -708,12 +677,12 @@ sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 {
     sal_uInt16 nRet = 0;
     SwFrm* pFrm = GetCurrFrm();
-    ASSERT( pFrm, "Crsr geparkt?" );
+    OSL_ENSURE( pFrm, "Crsr geparkt?" );
     if( pFrm )
     {
         pFrm = pFrm->IsInTab() ? (SwFrm*)pFrm->FindTabFrm()
                                : (SwFrm*)pFrm->FindSctFrm();
-        ASSERT( pFrm, "No Tab, no Sect" );
+        OSL_ENSURE( pFrm, "No Tab, no Sect" );
         if( pFrm )
             nRet = _GetCurColNum( pFrm, pPara );
     }
@@ -738,11 +707,11 @@ SwFEShell::~SwFEShell()
     delete pChainTo;
 }
 
-// OD 18.09.2003 #i17567#, #108749#, #110354# - adjustments for allowing
+// #i17567# - adjustments for allowing
 //          negative vertical positions for fly frames anchored to paragraph/to character.
-// OD 06.11.2003 #i22305# - adjustments for option 'Follow text flow'
+// #i22305# - adjustments for option 'Follow text flow'
 //          for to frame anchored objects.
-// OD 12.11.2003 #i22341# - adjustments for vertical alignment at top of line
+// #i22341# - adjustments for vertical alignment at top of line
 //          for to character anchored objects.
 void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const RndStdIds _nAnchorId,
@@ -782,14 +751,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     Point aPos;
     bool bVertic = false;
     sal_Bool bRTL = sal_False;
-    // --> OD 2009-09-01 #mongolianlayout#
     bool bVerticalL2R = false;
-    // <--
 
     if ((FLY_AT_PAGE == _nAnchorId) || (FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
     {
         const SwFrm* pTmp = pFrm;
-        // OD 06.11.2003 #i22305#
+        // #i22305#
         if ((FLY_AT_PAGE == _nAnchorId) ||
             ((FLY_AT_FLY == _nAnchorId) && !_bFollowTextFlow))
         {
@@ -809,14 +776,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
 
-        // --> OD 2009-09-01 #mongolianlayout#
         if( bVert || bVertL2R )
-        // <--
         {
-            // --> OD 2009-09-01 #mongolianlayout#
             bVertic = bVert ? true : false;
             bVerticalL2R = bVertL2R ? true : false;
-            // <--
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
@@ -865,9 +828,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 default:break;
             }
         }
-        // --> OD 2009-09-01 #mongolianlayout#
+
         if ( bVert && !bVertL2R )
-        // <--
         {
             switch ( _eVertRelOrient )
             {
@@ -879,7 +841,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
-        // --> OD 2009-09-01 #mongolianlayout#
         else if ( bVertL2R )
         {
             switch ( _eVertRelOrient )
@@ -892,7 +853,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
-        // <--
         else
         {
             switch ( _eVertRelOrient )
@@ -913,7 +873,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
-        // <--
         if ( _opPercent )
             *_opPercent = pFrm->Prt().SSize();
     }
@@ -930,7 +889,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             aPos = pFrm->Frm().TopRight();
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-        // OD 08.09.2003 #i17567#, #108749#, #110354# - allow negative positions
+        // #i17567# - allow negative positions
         // for fly frames anchor to paragraph/to character.
         if ((_nAnchorId == FLY_AT_PARA) || (_nAnchorId == FLY_AT_CHAR))
         {
@@ -939,7 +898,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // and vertically by the printing area of the vertical environment,
             // if the object follows the text flow, or by the frame area of the
             // vertical environment, if the object doesn't follow the text flow.
-            // OD 29.10.2003 #113049# - new class <SwEnvironmentOfAnchoredObject>
+            // new class <SwEnvironmentOfAnchoredObject>
             objectpositioning::SwEnvironmentOfAnchoredObject aEnvOfObj(
                                                             _bFollowTextFlow );
             const SwLayoutFrm& rHoriEnvironLayFrm =
@@ -952,18 +911,15 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 aVertEnvironRect = rVertEnvironLayFrm.Prt();
                 aVertEnvironRect.Pos() += rVertEnvironLayFrm.Frm().Pos();
-                // OD 19.09.2003 #i18732# - adjust vertical 'virtual' anchor position
+                // #i18732# - adjust vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    // --> OD 2009-09-01 #mongolianlayout#
                     if ( bVert && !bVertL2R )
-                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
                     }
-                    // --> OD 2009-09-01 #mongolianlayout#
                     else if ( bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Left();
@@ -976,17 +932,15 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             else
             {
-                ASSERT( rVertEnvironLayFrm.IsPageFrm(),
+                OSL_ENSURE( rVertEnvironLayFrm.IsPageFrm(),
                         "<SwFEShell::CalcBoundRect(..)> - not following text flow, but vertical environment *not* page!" );
                 aVertEnvironRect = rVertEnvironLayFrm.Frm();
-                // OD 19.09.2003 #i18732# - adjustment vertical 'virtual' anchor position
+                // #i18732# - adjustment vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    // --> OD 2009-09-01 #mongolianlayout#
                     if ( bVert && !bVertL2R )
-                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
                         if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
@@ -994,7 +948,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             aPos.X() -= rVertEnvironLayFrm.GetRightMargin();
                         }
                     }
-                    // --> OD 2009-09-01 #mongolianlayout#
                     else if ( bVertL2R )
                     {
                         aPos.X() = aVertEnvironRect.Left();
@@ -1003,7 +956,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             aPos.X() += rVertEnvironLayFrm.GetLeftMargin();
                         }
                     }
-                    // <--
                     else
                     {
                         aPos.Y() = aVertEnvironRect.Top();
@@ -1021,10 +973,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 }
             }
 
-            // OD 12.11.2003 #i22341# - adjust vertical 'virtual' anchor position
+            // #i22341# - adjust vertical 'virtual' anchor position
             // (<aPos.Y()> respectively <aPos.X()>), if object is anchored to
             // character and vertical aligned at character or top of line
-            // --> OD 2005-12-29 #125800#
             // <pFrm>, which is the anchor frame or the proposed anchor frame,
             // doesn't have to be a text frame (e.g. edit a to-page anchored
             // fly frame). Thus, assure this.
@@ -1063,19 +1014,17 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                         pTxtFrm->GetTopOfLine( nTop, aDefaultCntntPos );
                     }
                 }
-                // --> OD 2009-09-01 #mongolianlayout#
                 if ( bVert || bVertL2R )
                 {
                     aPos.X() = nTop;
                 }
-                // <--
                 else
                 {
                     aPos.Y() = nTop;
                 }
             }
 
-            // --> OD 2004-10-05 #i26945# - adjust horizontal 'virtual' anchor
+            // #i26945# - adjust horizontal 'virtual' anchor
             // position (<aPos.X()> respectively <aPos.Y()>), if object is
             // anchored to character and horizontal aligned at character.
             if ( pTxtFrm &&
@@ -1095,22 +1044,16 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
                 }
                 nLeft = (aChRect.*fnRect->fnGetLeft)();
-                // --> OD 2009-09-01 #mongolianlayout#
                 if ( bVert || bVertL2R )
                 {
                     aPos.Y() = nLeft;
                 }
-                // <--
                 else
                 {
                     aPos.X() = nLeft;
                 }
             }
-            // <--
-
-            // --> OD 2009-09-01 #mongolianlayout#
             if ( bVert || bVertL2R )
-            // <--
             {
                 _orRect = SwRect( aVertEnvironRect.Left(),
                                   aHoriEnvironRect.Top(),
@@ -1144,9 +1087,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
             {
-                // --> OD 2009-09-01 #mongolianlayout#
                 if( bVert || bVertL2R )
-                // <--
                     _orRect.Width( (_orRect.Width()*9)/10 );
                 else
                     _orRect.Height( (_orRect.Height()*9)/10 );
@@ -1156,14 +1097,10 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
                                         ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
-        // --> OD 2009-09-01 #mongolianlayout#
         if( bVert || bVertL2R )
-        // <--
         {
-            // --> OD 2009-09-01 #mongolianlayout#
             bVertic = bVert ? true : false;
             bVerticalL2R = bVertL2R ? true : false;
-            // <--
             _bMirror = false;
 
             switch ( _eHoriRelOrient )
@@ -1288,10 +1225,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     {
         if( bVertic && !bVerticalL2R )
             _orRect.Pos( aPos.X() - _orRect.Width() - _orRect.Left(), _orRect.Top() - aPos.Y() );
-        // --> OD 2009-09-01 #mongolianlayout#
         else if( bVerticalL2R )
             _orRect.Pos( _orRect.Left() - aPos.X(), _orRect.Top() - aPos.Y() );
-        // <--
         else if ( bRTL )
             _orRect.Pos( - ( _orRect.Right() - aPos.X() ), _orRect.Top() - aPos.Y() );
         else
@@ -1307,7 +1242,7 @@ Size SwFEShell::GetGraphicDefaultSize() const
     SwFlyFrm *pFly = FindFlyFrm();
     if ( pFly )
     {
-        // --> OD 2004-09-24 #i32951# - due to issue #i28701# no format of a
+        // #i32951# - due to issue #i28701# no format of a
         // newly inserted Writer fly frame or its anchor frame is performed
         // any more. Thus, it could be possible (e.g. on insert of a horizontal
         // line) that the anchor frame isn't formatted and its printing area
@@ -1320,7 +1255,6 @@ Size SwFEShell::GetGraphicDefaultSize() const
         {
             aRet = pAnchorFrm->GetUpper()->Prt().SSize();
         }
-        // <--
 
         SwRect aBound;
         CalcBoundRect( aBound, pFly->GetFmt()->GetAnchor().GetAnchorId());
@@ -1331,11 +1265,7 @@ Size SwFEShell::GetGraphicDefaultSize() const
     }
     return aRet;
 }
-/* -----------------------------12.08.2002 12:51------------------------------
 
- ---------------------------------------------------------------------------*/
-// --> OD 2009-08-31 #mongolianlayou#
-// add output parameter <bVertL2R>
 sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, sal_Bool& bVertL2R) const
 {
     sal_Bool bVert = sal_False;
@@ -1349,33 +1279,24 @@ sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, s
             return bVert;
 
         SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pObj )
         {
-            ASSERT( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
-        // OD 2004-03-29 #i26791#
+        // #i26791#
         SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pContact )
         {
-            ASSERT( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
         const SwFrm* pRef = pContact->GetAnchoredObj( pObj )->GetAnchorFrm();
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pRef )
         {
-            ASSERT( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
 
         if ( pObj->ISA(SwVirtFlyDrawObj) && !bEnvironment )
             pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
@@ -1387,10 +1308,10 @@ sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, s
 
     return bVert;
 }
-// <--
 
 void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
 {
     // does not do anything, only avoids crash if the method is used for wrong shell
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

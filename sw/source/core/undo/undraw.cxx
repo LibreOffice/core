@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -149,7 +150,7 @@ void lcl_SaveAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
 
             // destroy TextAttribute
             SwTxtNode *pTxtNd = pFmt->GetDoc()->GetNodes()[ rNodePos ]->GetTxtNode();
-            ASSERT( pTxtNd, "No text node found!" );
+            OSL_ENSURE( pTxtNd, "No text node found!" );
             SwTxtFlyCnt* pAttr = static_cast<SwTxtFlyCnt*>(
                 pTxtNd->GetTxtAttrForCharAt( nCntntPos, RES_TXTATR_FLYCNT ));
             // attribute still in text node, delete
@@ -196,7 +197,7 @@ void lcl_RestoreAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
         if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         {
             SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-            ASSERT( pTxtNd, "no Text Node" );
+            OSL_ENSURE( pTxtNd, "no Text Node" );
             SwFmtFlyCnt aFmt( pFmt );
             pTxtNd->InsertItem( aFmt, nCntntPos, nCntntPos );
         }
@@ -261,7 +262,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
         // #i45952# - notify that position attributes are already set
-        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+        OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
@@ -309,7 +310,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
     // #i45952# - notify that position attributes are already set
-    ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
+    OSL_ENSURE( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
     {
@@ -410,7 +411,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
     // #i45952# - notify that position attributes are already set
-    ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
+    OSL_ENSURE( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
     {
@@ -449,7 +450,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
 
         // #i45952# - notify that position attributes are already set
-        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+        OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
@@ -482,7 +483,7 @@ SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
     {
         SdrObject* pObj( aDrawFmtsAndObjs[i].second );
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(pObj->GetUserCall()) );
-        ASSERT( pDrawContact,
+        OSL_ENSURE( pDrawContact,
                 "<SwUndoDrawUnGroupConnectToLayout::Undo(..)> -- missing SwDrawContact instance" );
         if ( pDrawContact )
         {
@@ -551,13 +552,12 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
         // #i45952# - notify that position attributes are already set
-        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+        OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
             static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
         }
-        // <--
     }
     rContext.SetSelections(0, pMarkLst);
 }
@@ -604,3 +604,4 @@ void SwUndoDrawDelete::AddObj( sal_uInt16 , SwDrawFrmFmt* pFmt,
     pMarkLst->InsertEntry( rMark );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

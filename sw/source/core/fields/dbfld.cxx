@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -109,7 +110,7 @@ const String& SwDBFieldType::GetName() const
 
 void SwDBFieldType::ReleaseRef()
 {
-    ASSERT(nRefCnt > 0, "RefCount kleiner 0!");
+    OSL_ENSURE(nRefCnt > 0, "RefCount kleiner 0!");
 
     if (--nRefCnt <= 0)
     {
@@ -123,7 +124,7 @@ void SwDBFieldType::ReleaseRef()
     }
 }
 
-sal_Bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -140,12 +141,12 @@ sal_Bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -183,9 +184,9 @@ sal_Bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aDBData.nCommandType;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwDBField
@@ -274,10 +275,7 @@ SwField* SwDBField::Copy() const
 String SwDBField::GetFieldName() const
 {
     const String& rDBName = static_cast<SwDBFieldType*>(GetTyp())->GetName();
-        //TODO/CLEANUP
-        //Funktion tut nichts!
-        //String sContent( SFX_APP()->LocalizeDBName(INI2NATIONAL,
-        //                                    rDBName.GetToken(0, DB_DELIM)));
+
     String sContent( rDBName.GetToken(0, DB_DELIM) );
 
     if (sContent.Len() > 1)
@@ -300,10 +298,6 @@ void SwDBField::ChgValue( double d, sal_Bool bVal )
     if( bValidValue )
         aContent = ((SwValueFieldType*)GetTyp())->ExpandValue(d, GetFormat(), GetLanguage());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
 {
@@ -388,26 +382,17 @@ const String& SwDBField::GetPar1() const
     return ((SwDBFieldType*)GetTyp())->GetName();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwDBField::GetSubType() const
 {
     return nSubType;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDBField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
 }
 
-
-sal_Bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -433,13 +418,13 @@ sal_Bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= OUString(sFieldCode);
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 
 }
 
-sal_Bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -493,9 +478,9 @@ sal_Bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         ::GetString( rAny, sFieldCode );
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -521,7 +506,6 @@ SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
     return aRet;
 }
 
-// #111840#
 void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
 {
     aDBData = rDBData;
@@ -542,7 +526,7 @@ String SwDBNameInfField::GetFieldName() const
     return lcl_DBTrennConv(sStr);
 }
 
-sal_Bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -562,12 +546,12 @@ sal_Bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -585,7 +569,7 @@ sal_Bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         sal_uInt16 nSubTyp = GetSubType();
         sal_Bool bVisible = sal_False;
         if(!(rAny >>= bVisible))
-            return sal_False;
+            return false;
         if(bVisible)
             nSubTyp &= ~nsSwExtendedSubType::SUB_INVISIBLE;
         else
@@ -594,9 +578,9 @@ sal_Bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
-    return sal_True;
+    return true;
 }
 
 sal_uInt16 SwDBNameInfField::GetSubType() const
@@ -679,9 +663,9 @@ void SwDBNextSetField::SetPar1(const String& rStr)
     aCond = rStr;
 }
 
-sal_Bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -693,9 +677,9 @@ sal_Bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     return bRet;
 }
 
-sal_Bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -796,9 +780,9 @@ void SwDBNumSetField::SetPar2(const String& rStr)
     aPar2 = rStr;
 }
 
-sal_Bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -813,9 +797,9 @@ sal_Bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
     return bRet;
 }
 
-sal_Bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR3:
@@ -892,13 +876,12 @@ SwField* SwDBNameField::Copy() const
     return pTmp;
 }
 
-
-sal_Bool SwDBNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     return SwDBNameInfField::QueryValue(rAny, nWhichId );
 }
 
-sal_Bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
@@ -967,9 +950,9 @@ SwField* SwDBSetNumberField::Copy() const
     return pTmp;
 }
 
-sal_Bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
@@ -984,9 +967,9 @@ sal_Bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) c
     return bRet;
 }
 
-sal_Bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
@@ -996,8 +979,6 @@ sal_Bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId
             if(nSet < (sal_Int16) SVX_NUMBER_NONE )
                 SetFormat(nSet);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;
@@ -1011,3 +992,4 @@ sal_Bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

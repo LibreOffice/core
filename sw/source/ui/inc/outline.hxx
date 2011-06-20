@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,28 +33,18 @@
 
 #include <vcl/menu.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
 
-#include "swtypes.hxx"      //fuer MAXLEVEL
+#include "swtypes.hxx"      //for MAXLEVEL
 #include <numprevw.hxx>
 #include <numberingtypelistbox.hxx>
 
@@ -61,9 +52,6 @@ class SwWrtShell;
 class SwNumRule;
 class SwChapterNumRules;
 
-/* -----------------07.07.98 13:38-------------------
- *
- * --------------------------------------------------*/
 class SwOutlineTabDialog : public SfxTabDialog
 {
     static     sal_uInt16    nNumLevel;
@@ -99,9 +87,7 @@ class SwOutlineTabDialog : public SfxTabDialog
     static sal_uInt16       GetActNumLevel() {return nNumLevel;}
     static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
 };
-/* -----------------07.07.98 13:47-------------------
- *
- * --------------------------------------------------*/
+
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
     FixedLine       aLevelFL;
@@ -163,4 +149,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };
+
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

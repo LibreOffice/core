@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,18 +29,14 @@
 #ifndef _SMMOD_HXX
 #define _SMMOD_HXX
 
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <tools/shl.hxx>
 #include <sfx2/module.hxx>
 
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
 
 #include <unotools/options.hxx>
 
@@ -168,7 +165,7 @@ public:
         return *pVirtualDev;
     }
 
-    //virtuelle Methoden fuer den Optionendialog
+    //virtual methods for options dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
@@ -178,3 +175,4 @@ public:
 
 #endif                                 // _SDMOD_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

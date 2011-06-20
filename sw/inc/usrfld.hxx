@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,6 @@ class SfxPoolItem;
 class SwCalc;
 class SwDoc;
 
-/*--------------------------------------------------------------------
-    Beschreibung: Benutzerfelder
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
@@ -61,7 +59,7 @@ public:
     inline sal_Bool             IsValid() const;
     inline void             ChgValid( sal_Bool bNew );
 
-           double           GetValue(SwCalc& rCalc);    // Member nValue neu berrechnen
+           double           GetValue(SwCalc& rCalc);    // Recalculate member nValue.
     inline double           GetValue() const;
     inline void             SetValue(const double nVal);
 
@@ -71,8 +69,8 @@ public:
     sal_Bool                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
 
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
 
 protected:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
@@ -99,9 +97,6 @@ inline void SwUserFieldType::SetType(sal_uInt16 nSub)
     EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Benutzerfelder
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwUserField : public SwValueField
 {
@@ -121,14 +116,16 @@ public:
 
     virtual String          GetFieldName() const;
 
-    // Name kann nicht geaendert werden
+    // Name cannot be changed.
     virtual const String&   GetPar1() const;
 
-    // Inhalt
+    // Content.
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 };
 
 #endif // SW_USRFLD_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

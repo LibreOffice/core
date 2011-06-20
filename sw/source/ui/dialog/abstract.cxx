@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,10 +42,6 @@
 #include "abstract.hrc"
 
 
-/*-----------------22.02.97 15.32-------------------
-
---------------------------------------------------*/
-
 SwInsertAbstractDlg::SwInsertAbstractDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_ABSTRACT)),
     aFL     (this, SW_RES(FL_1       )),
@@ -60,25 +57,14 @@ SwInsertAbstractDlg::SwInsertAbstractDlg( Window* pParent ) :
     FreeResource();
 }
 
-/*-----------------22.02.97 15.32-------------------
-
---------------------------------------------------*/
-
 SwInsertAbstractDlg::~SwInsertAbstractDlg()
 {
 }
-
-/*-----------------22.02.97 15.34-------------------
-
---------------------------------------------------*/
 
 sal_uInt8 SwInsertAbstractDlg::GetLevel() const
 {
     return static_cast< sal_uInt8 >(aLevelNF.GetValue() - 1);
 }
-/*-----------------22.02.97 15.34-------------------
-
---------------------------------------------------*/
 
 sal_uInt8 SwInsertAbstractDlg::GetPara() const
 {
@@ -90,3 +76,4 @@ sal_uInt8 SwInsertAbstractDlg::GetPara() const
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

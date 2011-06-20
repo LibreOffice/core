@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,14 +62,13 @@
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"
 
-#ifndef _FMTLSPLT_HXX
 #include "fmtlsplt.hxx"
-#endif
 #include "xmlithlp.hxx"
 
 #include "fmtrowsplt.hxx"
 
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
@@ -152,7 +152,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
             {
                 OUStringBuffer aOut;
                 const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-                DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
+                OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
                 sal_uInt16 eEnum = pSplit->GetValue() ? 1 : 0;
                 rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
                 aValue = aOut.makeStringAndClear();
@@ -249,7 +249,7 @@ void SvXMLExportItemMapper::exportElementItems(
     {
         const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
         SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nElement );
-        DBG_ASSERT( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
+        OSL_ENSURE( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
                     "wrong mid flag!" );
 
         const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId, nFlags );
@@ -343,7 +343,7 @@ void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& /*rAttrList*/
                                     const SvXMLNamespaceMap& /*rNamespaceMap*/,
                                     const SfxItemSet* /*pSet*/ /* = NULL */ ) const
 {
-    DBG_ERROR( "special item not handled in xml export" );
+    OSL_FAIL( "special item not handled in xml export" );
 }
 
 /** this method is called for every item that has the
@@ -354,7 +354,7 @@ void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& /*rAttrList*/,
                                const SvXMLNamespaceMap& /*rNamespaceMap*/,
                                const SfxItemSet& /*rSet*/ ) const
 {
-    DBG_ERROR( "no item not handled in xml export" );
+    OSL_FAIL( "no item not handled in xml export" );
 }
 
 /** this method is called for every item that has the
@@ -367,9 +367,28 @@ void SvXMLExportItemMapper::handleElementItem(
                         const SfxItemSet& /*rSet*/,
                         sal_uInt16 /*nFlags*/ ) const
 {
-    DBG_ERROR( "element item not handled in xml export" );
+    OSL_FAIL( "element item not handled in xml export" );
 }
 
+bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
+{
+    bool bIsOdfDouble = false;
+    switch ( pLine->GetStyle() )
+    {
+        case ::editeng::DOUBLE:
+        case ::editeng::THINTHICK_SMALLGAP:
+        case ::editeng::THINTHICK_MEDIUMGAP:
+        case ::editeng::THINTHICK_LARGEGAP:
+        case ::editeng::THICKTHIN_SMALLGAP:
+        case ::editeng::THICKTHIN_MEDIUMGAP:
+        case ::editeng::THICKTHIN_LARGEGAP:
+            bIsOdfDouble = true;
+            break;
+        default:
+            break;
+    }
+    return bIsOdfDouble;
+}
 
 sal_Bool SvXMLExportItemMapper::QueryXMLValue(
     const SfxPoolItem& rItem,
@@ -386,7 +405,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_LR_SPACE:
         {
             const SvxLRSpaceItem* pLRSpace = PTR_CAST(SvxLRSpaceItem, &rItem);
-            DBG_ASSERT( pLRSpace != NULL, "Wrong Which-ID!" );
+            OSL_ENSURE( pLRSpace != NULL, "Wrong Which-ID!" );
 
             bOk = sal_True;
             switch( nMemberId )
@@ -426,7 +445,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
 
                 default:
-                    DBG_ERROR( "unknown member id!");
+                    OSL_FAIL( "unknown member id!");
                     bOk = sal_False;
                     break;
             }
@@ -436,7 +455,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_UL_SPACE:
         {
             const SvxULSpaceItem* pULSpace = PTR_CAST(SvxULSpaceItem, &rItem);
-            DBG_ASSERT( pULSpace != NULL, "Wrong Which-ID!" );
+            OSL_ENSURE( pULSpace != NULL, "Wrong Which-ID!" );
 
             switch( nMemberId )
             {
@@ -455,7 +474,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
 
                 default:
-                    DBG_ERROR("unknown MemberId");
+                    OSL_FAIL("unknown MemberId");
             };
 
             bOk = sal_True;
@@ -465,7 +484,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_SHADOW:
         {
             const SvxShadowItem* pShadow = PTR_CAST(SvxShadowItem, &rItem);
-            DBG_ASSERT( pShadow != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pShadow != NULL, "Wrong Which-ID" );
 
             sal_Int32 nX = 1, nY = 1;
             switch( pShadow->GetLocation() )
@@ -504,7 +523,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BOX:
         {
             SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
-            DBG_ASSERT( pBox != NULL, "Wrong WHich-ID" );
+            OSL_ENSURE( pBox != NULL, "Wrong WHich-ID" );
 
             /**
                xml -> MemberId
@@ -596,42 +615,51 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         const sal_uInt16 nDistance = pTop->GetDistance();
                         const sal_uInt16 nInWidth  = pTop->GetInWidth();
                         const sal_uInt16 nOutWidth = pTop->GetOutWidth();
+                        const sal_uInt16 nWidth = pTop->GetWidth();
 
                         bEqual = nDistance == pLeft->GetDistance() &&
                                  nInWidth  == pLeft->GetInWidth()  &&
                                  nOutWidth == pLeft->GetOutWidth() &&
+                                 nWidth == pLeft->GetWidth() &&
                                  nDistance == pRight->GetDistance()  &&
                                  nInWidth  == pRight->GetInWidth()   &&
                                  nOutWidth == pRight->GetOutWidth()  &&
+                                 nWidth == pRight->GetWidth()  &&
                                  nDistance == pBottom->GetDistance()  &&
                                  nInWidth  == pBottom->GetInWidth()   &&
-                                 nOutWidth == pBottom->GetOutWidth();
+                                 nOutWidth == pBottom->GetOutWidth() &&
+                                 nWidth == pBottom->GetWidth();
                     }
 
                     switch( nMemberId )
                     {
                         case ALL_BORDER_LINE_WIDTH:
-                            if( !bEqual || pTop->GetDistance() == 0 )
+                            if( !bEqual || pTop->GetDistance() == 0 ||
+                                !lcl_isOdfDoubleLine( pTop ) )
                                 return sal_False;
                             break;
                         case LEFT_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pLeft ||
-                                0 == pLeft->GetDistance() )
+                                0 == pLeft->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pLeft ) )
                                 return sal_False;
                             break;
                         case RIGHT_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pRight ||
-                                0 == pRight->GetDistance() )
+                                0 == pRight->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pRight ) )
                                 return sal_False;
                             break;
                         case TOP_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pTop ||
-                                0 == pTop->GetDistance() )
+                                0 == pTop->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pTop ) )
                                 return sal_False;
                             break;
                         case BOTTOM_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pBottom ||
-                                0 == pBottom->GetDistance() )
+                                0 == pBottom->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pBottom ) )
                                 return sal_False;
                             break;
                     }
@@ -687,23 +715,55 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
                     if( NULL != pLine )
                     {
-                        sal_Int32 nWidth = pLine->GetOutWidth();
-                        const sal_uInt16 nDistance = pLine->GetDistance();
-                        if( 0 != nDistance )
+                        sal_Int32 nWidth = pLine->GetWidth();
+
+                        enum XMLTokenEnum eStyle = XML_SOLID;
+                        bool bNoBorder = false;
+                        switch ( pLine->GetStyle( ) )
                         {
-                            nWidth += nDistance;
-                            nWidth += pLine->GetInWidth();
+                            case ::editeng::SOLID:
+                                eStyle = XML_SOLID;
+                                break;
+                            case ::editeng::DOTTED:
+                                eStyle = XML_DOTTED;
+                                break;
+                            case ::editeng::DASHED:
+                                eStyle = XML_DASHED;
+                                break;
+                            case ::editeng::DOUBLE:
+                            case ::editeng::THINTHICK_SMALLGAP:
+                            case ::editeng::THINTHICK_MEDIUMGAP:
+                            case ::editeng::THINTHICK_LARGEGAP:
+                            case ::editeng::THICKTHIN_SMALLGAP:
+                            case ::editeng::THICKTHIN_MEDIUMGAP:
+                            case ::editeng::THICKTHIN_LARGEGAP:
+                                eStyle = XML_DOUBLE;
+                                break;
+                            case ::editeng::EMBOSSED:
+                                eStyle = XML_RIDGE;
+                                break;
+                            case ::editeng::ENGRAVED:
+                                eStyle = XML_GROOVE;
+                                break;
+                            case ::editeng::INSET:
+                                eStyle = XML_INSET;
+                                break;
+                            case ::editeng::OUTSET:
+                                eStyle = XML_OUTSET;
+                                break;
+                            default:
+                                bNoBorder = true;
                         }
 
-                        enum XMLTokenEnum eStyle =
-                            (0 == nDistance) ? XML_SOLID : XML_DOUBLE;
-
-                        rUnitConverter.convertMeasure( aOut, nWidth );
-                        aOut.append( sal_Unicode( ' ' ) );
-                        aOut.append( GetXMLToken( eStyle ) );
-                        aOut.append( sal_Unicode( ' ' ) );
-                        rUnitConverter.convertColor( aOut, pLine->GetColor() );
-
+                        if ( !bNoBorder )
+                        {
+                            rUnitConverter.convertMeasure( aOut, nWidth,
+                                   MAP_TWIP, MAP_POINT );
+                            aOut.append( sal_Unicode( ' ' ) );
+                            aOut.append( GetXMLToken( eStyle ) );
+                            aOut.append( sal_Unicode( ' ' ) );
+                            rUnitConverter.convertColor( aOut, pLine->GetColor() );
+                        }
                     }
                     else
                     {
@@ -752,7 +812,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BREAK:
         {
             const SvxFmtBreakItem* pFmtBreak = PTR_CAST(SvxFmtBreakItem, &rItem);
-            DBG_ASSERT( pFmtBreak != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFmtBreak != NULL, "Wrong Which-ID" );
 
             sal_uInt16 eEnum = 0;
 
@@ -799,7 +859,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_KEEP:
         {
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
-            DBG_ASSERT( pFmtKeep != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFmtKeep != NULL, "Wrong Which-ID" );
 
             aOut.append( pFmtKeep->GetValue()
                          ? GetXMLToken( XML_ALWAYS )
@@ -811,7 +871,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_BACKGROUND:
         {
             SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
-            DBG_ASSERT( pBrush != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
             // note: the graphic is only exported if nMemberId equals
             //       MID_GRAPHIC..
@@ -922,7 +982,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_PAGEDESC:
         {
             const SwFmtPageDesc* pPageDesc = PTR_CAST(SwFmtPageDesc, &rItem);
-            DBG_ASSERT( pPageDesc != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pPageDesc != NULL, "Wrong Which-ID" );
 
             if( MID_PAGEDESC_PAGENUMOFFSET==nMemberId )
             {
@@ -944,7 +1004,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_ROW_SPLIT:
         {
             const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-            DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pSplit != NULL, "Wrong Which-ID" );
 
             rUnitConverter.convertBool( aOut, pSplit->GetValue() );
             bOk = sal_True;
@@ -954,7 +1014,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_HORI_ORIENT:
         {
             SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
-            DBG_ASSERT( pHoriOrient != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
 
             rUnitConverter.convertEnum( aOut, pHoriOrient->GetHoriOrient(),
                                         aXMLTableAlignMap );
@@ -965,7 +1025,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_VERT_ORIENT:
         {
             SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
-            DBG_ASSERT( pVertOrient != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
 
             rUnitConverter.convertEnum( aOut, pVertOrient->GetVertOrient(),
                                         aXMLTableVAlignMap );
@@ -976,7 +1036,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_FRM_SIZE:
         {
             SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
-            DBG_ASSERT( pFrmSize != NULL, "Wrong Which-ID" );
+            OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             sal_Bool bOutHeight = sal_False;
             switch( nMemberId )
@@ -1027,7 +1087,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         case RES_COLLAPSING_BORDERS:
         {
             const SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
-            DBG_ASSERT( pBorders != NULL, "Wrong RES-ID" );
+            OSL_ENSURE( pBorders != NULL, "Wrong RES-ID" );
 
             aOut.append( pBorders->GetValue()
                          ? GetXMLToken( XML_COLLAPSING )
@@ -1037,7 +1097,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         break;
 
         default:
-            DBG_ERROR("GetXMLValue not implemented for this item.");
+            OSL_FAIL("GetXMLValue not implemented for this item.");
             break;
     }
 
@@ -1046,3 +1106,5 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
     return bOk;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

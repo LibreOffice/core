@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -415,7 +416,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     const SwDoc *pDoc = pStyle->GetDoc();
 
     SwTxtFmtColl *pColl = pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
-    ASSERT( pColl, "Text collection not found" );
+    OSL_ENSURE( pColl, "Text collection not found" );
     if( !pColl || RES_CONDTXTFMTCOLL != pColl->Which() )
         return;
 
@@ -434,7 +435,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
                                       sal_True);
         sName = aString;
         SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
-        ASSERT( pCondColl,
+        OSL_ENSURE( pCondColl,
             "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
         if( pCondColl )
         {
@@ -541,7 +542,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         sal_uInt16 nPrefix, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    ASSERT( !pItemSet,
+    OSL_ENSURE( !pItemSet,
             "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: item set exists" );
 
     SvXMLImportContext *pContext = 0;
@@ -564,7 +565,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
         break;
     default:
-        ASSERT( !this,
+        OSL_ENSURE( !this,
         "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: unknown family" );
         break;
     }
@@ -659,15 +660,14 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     String sName;
-    // --> OD 2005-02-01 #i40788# - first determine the display name of the
-    // page style, then map this name to the corresponding user interface name.
+    // #i40788# - first determine the display name of the page style,
+    // then map this name to the corresponding user interface name.
     sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
                                              GetMasterPageName() );
     SwStyleNameMapper::FillUIName( sName,
                                    sName,
                                    nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
                                    sal_True);
-    // <--
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {
@@ -948,12 +948,6 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 void SwXMLStylesContext_Impl::EndElement()
 {
     GetSwImport().InsertStyles( IsAutomaticStyle() );
-    // --> OD 2006-10-11 #i69629#
-    // assign paragraph styles to list levels of outline style after all styles
-    // are imported and finished.
-//    if( !bAutoStyles )
-//        GetImport().GetTextImport()->SetOutlineStyles( sal_True );
-    // <--
 }
 
 // ---------------------------------------------------------------------
@@ -1132,3 +1126,5 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
 
     return pStyle != 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

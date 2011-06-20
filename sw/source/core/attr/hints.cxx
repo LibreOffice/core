@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,14 +30,11 @@
 #include "precompiled_sw.hxx"
 #include <hints.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <editeng/scripttypeitem.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
-#include <errhdl.hxx>
 
 SwFmtChg::SwFmtChg( SwFmt *pFmt )
     : SwMsgPoolItem( RES_FMT_CHG ),
@@ -85,7 +83,7 @@ SwRefMarkFldUpdate::SwRefMarkFldUpdate( const OutputDevice* pOutput )
     : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
     pOut( pOutput )
 {
-    ASSERT( pOut, "es muss ein OutputDevice-Pointer gesetzt werden!" );
+    OSL_ENSURE( pOut, "es muss ein OutputDevice-Pointer gesetzt werden!" );
 }
 
 
@@ -104,7 +102,7 @@ SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
 {
     DATA.pDelTbl = 0;
     bModified = bBehindSplitLine = sal_False;
-    ASSERT( pTbl, "es muss ein Table-Pointer gesetzt werden!" );
+    OSL_ENSURE( pTbl, "es muss ein Table-Pointer gesetzt werden!" );
 }
 
 
@@ -138,11 +136,11 @@ SwAttrSetChg::~SwAttrSetChg()
 }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwAttrSetChg::ClearItem( sal_uInt16 nWhch )
 {
-    ASSERT( bDelSet, "der Set darf nicht veraendert werden!" );
+    OSL_ENSURE( bDelSet, "der Set darf nicht veraendert werden!" );
     pChgSet->ClearItem( nWhch );
 }
 
@@ -157,14 +155,14 @@ SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
 // "Overhead" vom SfxPoolItem
 int SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
-    ASSERT( sal_False, "SwMsgPoolItem kennt kein ==" );
+    OSL_FAIL( "SwMsgPoolItem kennt kein ==" );
     return 0;
 }
 
 
 SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
-    ASSERT( sal_False, "SwMsgPoolItem kennt kein Clone" );
+    OSL_FAIL( "SwMsgPoolItem kennt kein Clone" );
     return 0;
 }
 
@@ -174,20 +172,19 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * Ist keines vorhanden, returnt ein 0-Pointer !!!
  * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
-#ifndef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
-    return aAttrTab[ nWhich - POOLATTR_BEGIN ];
+    OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
+
+    SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
+    OSL_ENSURE( pHt, "GetDfltFmtAttr(): Dflt == 0" );
+    return pHt;
 }
 #else
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
-    ASSERT_ID( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN,
-               ERR_OUTOFSCOPE );
-
-    SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
-    ASSERT( pHt, "GetDfltFmtAttr(): Dflt == 0" );
-    return pHt;
+    return aAttrTab[ nWhich - POOLATTR_BEGIN ];
 }
 #endif
 
@@ -206,17 +203,6 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
     pFrm( 0 )
 {
 }
-
-// --> OD 2008-02-19 #refactorlists#
-//SwNumRuleInfo::SwNumRuleInfo( const String& rRuleName )
-//    : SwMsgPoolItem( RES_GETNUMNODES ), rName( rRuleName )
-//{
-//}
-
-//void SwNumRuleInfo::AddNode( SwTxtNode& rNd )
-//{
-//    aList.Insert(rNd.GetIndex(), &rNd);
-//}
 
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
@@ -306,3 +292,5 @@ sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
         nRet = nWhich;
     return nRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

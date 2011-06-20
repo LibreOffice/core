@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,14 +28,9 @@
 #ifndef _ROMENU_HXX
 #define _ROMENU_HXX
 
-
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#include <tools/list.hxx>
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
+#include <svl/stritem.hxx>
 
 class SwView;
 class SfxDispatcher;
@@ -52,7 +48,7 @@ class SwReadOnlyPopup : public PopupMenu
                 sTargetFrameName,
                 sDescription,
                 sGrfName;
-    List        aThemeList;
+    std::vector<String> aThemeList;
     sal_Bool        bGrfToGalleryAsLnk;
     ImageMap*   pImageMap;
     INetImage*  pTargetURL;
@@ -70,6 +66,8 @@ public:
     void Execute( Window* pWin, sal_uInt16 nId );
 };
 
+void GetPreferedExtension( String &rExt, const Graphic &rGrf );
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

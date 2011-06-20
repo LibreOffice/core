@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,10 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <tools/pstm.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brshitem.hxx>
@@ -85,16 +84,12 @@ using namespace ::com::sun::star;
 |*
 |*  SwFrm::SwFrm()
 |*
-|*  Ersterstellung      AK 12-Feb-1991
-|*  Letzte Aenderung    MA 05. Apr. 94
-|*
 |*************************************************************************/
 
 SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     SwClient( pMod ),
-    // --> OD 2006-05-10 #i65250#
+    // #i65250#
     mnFrmId( SwFrm::mnLastFrmId++ ),
-    // <--
     mpRoot( pSib ? pSib->getRootFrm() : 0 ),
     pUpper( 0 ),
     pNext( 0 ),
@@ -106,11 +101,11 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     , bInfFtn ( sal_False )
     , bInfSct ( sal_False )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
 #endif
 
-    ASSERT( pMod, "Kein Frameformat uebergeben." );
+    OSL_ENSURE( pMod, "Kein Frameformat uebergeben." );
     bInvalidR2L = bInvalidVert = 1;
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     bDerivedR2L = bDerivedVert = bRightToLeft = bVertical = bReverse = bVertLR = 0;
@@ -118,6 +113,11 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     bValidPos = bValidPrtArea = bValidSize = bValidLineNum = bRetouche =
     bFixSize = bColLocked = sal_False;
     bCompletePaint = bInfInvalid = sal_True;
+}
+
+const IDocumentDrawModelAccess* SwFrm::getIDocumentDrawModelAccess()
+{
+    return GetUpper()->GetFmt()->getIDocumentDrawModelAccess();
 }
 
 bool SwFrm::KnowsFormat( const SwFmt& rFmt ) const
@@ -231,10 +231,9 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     const SfxPoolItem* pItem;
-    // --> FME 2006-03-30 #b6402837# Check if the item is set, before actually
+    // Check if the item is set, before actually
     // using it. Otherwise the dynamic pool default is used, which may be set
     // to LTR in case of OOo 1.0 documents.
-    // <--
     if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, sal_True, &pItem ) )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
@@ -356,7 +355,7 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
         }
         case RES_COL:
-            ASSERT( sal_False, "Spalten fuer neuen FrmTyp?" );
+            OSL_FAIL( "Spalten fuer neuen FrmTyp?" );
             break;
 
         default:
@@ -367,8 +366,6 @@ void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 /*************************************************************************
 |*
 |*    SwFrm::Prepare()
-|*    Ersterstellung    MA 13. Apr. 93
-|*    Letzte Aenderung  MA 26. Jun. 96
 |*
 |*************************************************************************/
 void SwFrm::Prepare( const PrepareHint, const void *, sal_Bool )
@@ -382,8 +379,6 @@ void SwFrm::Prepare( const PrepareHint, const void *, sal_Bool )
 |*    Beschreibung:     Invalidiert die Seite, in der der Frm gerade steht.
 |*      Je nachdem ob es ein Layout, Cntnt oder FlyFrm ist wird die Seite
 |*      entsprechend Invalidiert.
-|*    Ersterstellung    MA 22. Jul. 92
-|*    Letzte Aenderung  MA 14. Oct. 94
 |*
 |*************************************************************************/
 void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
@@ -391,7 +386,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
     if ( !pPage )
     {
         pPage = FindPageFrm();
-        // --> OD 2004-07-02 #i28701# - for at-character and as-character
+        // #i28701# - for at-character and as-character
         // anchored Writer fly frames additionally invalidate also page frame
         // its 'anchor character' is on.
         if ( pPage && pPage->GetUpper() && IsFlyFrm() )
@@ -399,19 +394,17 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
             const SwFlyFrm* pFlyFrm = static_cast<const SwFlyFrm*>(this);
             if ( pFlyFrm->IsAutoPos() || pFlyFrm->IsFlyInCntFrm() )
             {
-                // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+                // #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
                 // is replaced by method <FindPageFrmOfAnchor()>. It's return value
                 // have to be checked.
                 SwPageFrm* pPageFrmOfAnchor =
                         const_cast<SwFlyFrm*>(pFlyFrm)->FindPageFrmOfAnchor();
                 if ( pPageFrmOfAnchor && pPageFrmOfAnchor != pPage )
-                // <--
                 {
                     InvalidatePage( pPageFrmOfAnchor );
                 }
             }
         }
-        // <--
     }
 
     if ( pPage && pPage->GetUpper() )
@@ -500,9 +493,6 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 |*
 |*  SwFrm::ChgSize()
 |*
-|*  Ersterstellung      AK 15-Feb-1991
-|*  Letzte Aenderung    MA 18. Nov. 98
-|*
 |*************************************************************************/
 Size SwFrm::ChgSize( const Size& aNewSize )
 {
@@ -585,13 +575,12 @@ Size SwFrm::ChgSize( const Size& aNewSize )
 |*                      Eingefuegt wird unterhalb des Parent und entweder
 |*                      vor pBehind oder am Ende der Kette wenn pBehind
 |*                      leer ist.
-|*  Letzte Aenderung    MA 06. Aug. 99
 |*
 |*************************************************************************/
 void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 {
-    ASSERT( pParent, "Kein Parent fuer Insert." );
-    ASSERT( (!pBehind || (pBehind && pParent == pBehind->GetUpper())),
+    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( (!pBehind || (pBehind && pParent == pBehind->GetUpper())),
             "Framebaum inkonsistent." );
 
     pUpper = pParent;
@@ -626,13 +615,12 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 |*                      Eingefuegt wird unterhalb des Parent und entweder
 |*                      hinter pBefore oder am Anfang der Kette wenn pBefore
 |*                      leer ist.
-|*  Letzte Aenderung    MA 06. Aug. 99
 |*
 |*************************************************************************/
 void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 {
-    ASSERT( pParent, "Kein Parent fuer Insert." );
-    ASSERT( (!pBefore || (pBefore && pParent == pBefore->GetUpper())),
+    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( (!pBefore || (pBefore && pParent == pBefore->GetUpper())),
             "Framebaum inkonsistent." );
 
     pUpper = pParent;
@@ -660,7 +648,6 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*
 |*  Beschreibung        Eine Kette von SwFrms wird in eine bestehende Struktur
 |*                      eingefuegt
-|*  Letzte Aenderung    AMA 9. Dec. 97
 |*
 |*  Bisher wird dies genutzt, um einen SectionFrame, der ggf. schon Geschwister
 |*  mit sich bringt, in eine bestehende Struktur einzufuegen.
@@ -680,9 +667,9 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*************************************************************************/
 void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 {
-    ASSERT( pParent, "Kein Parent fuer Insert." );
-    ASSERT( (!pBehind || (pBehind && ( pParent == pBehind->GetUpper())
-            || ( pParent->IsSctFrm() && pBehind->GetUpper()->IsColBodyFrm() ) ) ),
+    OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
+    OSL_ENSURE( (!pBehind || ( (pBehind && (pParent == pBehind->GetUpper()))
+            || ((pParent->IsSctFrm() && pBehind->GetUpper()->IsColBodyFrm())) ) ),
             "Framebaum inkonsistent." );
     if( pSct )
     {
@@ -724,9 +711,9 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             SwLayoutFrm* pTmp = (SwLayoutFrm*)pSct;
             if( pTmp->Lower() )
             {
-                ASSERT( pTmp->Lower()->IsColumnFrm(), "InsertGrp: Used SectionFrm" );
+                OSL_ENSURE( pTmp->Lower()->IsColumnFrm(), "InsertGrp: Used SectionFrm" );
                 pTmp = (SwLayoutFrm*)((SwLayoutFrm*)pTmp->Lower())->Lower();
-                ASSERT( pTmp, "InsertGrp: Missing ColBody" );
+                OSL_ENSURE( pTmp, "InsertGrp: Missing ColBody" );
             }
             pBehind->pUpper = pTmp;
             pBehind->GetUpper()->pLower = pBehind;
@@ -739,7 +726,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         }
         else
         {
-            ASSERT( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
+            OSL_ENSURE( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
             delete ((SwSectionFrm*)pSct);
         }
     }
@@ -780,20 +767,17 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 |*
 |*  SwFrm::Remove()
 |*
-|*  Ersterstellung      AK 01-Mar-1991
-|*  Letzte Aenderung    MA 07. Dec. 95
-|*
 |*************************************************************************/
 void SwFrm::Remove()
 {
-    ASSERT( pUpper, "Removen ohne Upper?" );
+    OSL_ENSURE( pUpper, "Removen ohne Upper?" );
 
     if( pPrev )
         // einer aus der Mitte wird removed
         pPrev->pNext = pNext;
     else
     {   // der erste in einer Folge wird removed
-        ASSERT( pUpper->pLower == this, "Layout inkonsistent." );
+        OSL_ENSURE( pUpper->pLower == this, "Layout inkonsistent." );
         pUpper->pLower = pNext;
     }
     if( pNext )
@@ -807,20 +791,17 @@ void SwFrm::Remove()
 |*
 |*  SwCntntFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 |*************************************************************************/
 void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
-    ASSERT( !pSibling || pSibling->IsFlowFrm(),
-            "<SwCntntFrm::Paste(..)> - sibling not of expected type." )
+    OSL_ENSURE( !pSibling || pSibling->IsFlowFrm(),
+            "<SwCntntFrm::Paste(..)> - sibling not of expected type." );
 
     //In den Baum einhaengen.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
@@ -915,13 +896,10 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 |*
 |*  SwCntntFrm::Cut()
 |*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 |*************************************************************************/
 void SwCntntFrm::Cut()
 {
-    ASSERT( GetUpper(), "Cut ohne Upper()." );
+    OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
     SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
@@ -936,13 +914,12 @@ void SwCntntFrm::Cut()
             if( IsInFtn() )
                 pFrm->Prepare( PREP_QUOVADIS, 0, sal_False );
         }
-        // --> OD 2004-07-15 #i26250# - invalidate printing area of previous
+        // #i26250# - invalidate printing area of previous
         // table frame.
         else if ( pFrm && pFrm->IsTabFrm() )
         {
             pFrm->InvalidatePrt();
         }
-        // <--
     }
 
     SwFrm *pNxt = FindNextCnt();
@@ -1019,7 +996,7 @@ void SwCntntFrm::Cut()
                     pSct->InvalidatePage( pPage );
                 }
             }
-            // --> FME 2005-08-03 #i52253# The master table should take care
+            // #i52253# The master table should take care
             // of removing the follow flow line.
             if ( IsInTab() )
             {
@@ -1031,7 +1008,6 @@ void SwCntntFrm::Cut()
                     pMasterTab->SetRemoveFollowFlowLinePending( sal_True );
                 }
             }
-            // <--
         }
     }
     //Erst removen, dann Upper Shrinken.
@@ -1043,25 +1019,21 @@ void SwCntntFrm::Cut()
         if ( !pUp->Lower() &&
              ( ( pUp->IsFtnFrm() && !pUp->IsColLocked() ) ||
                ( pUp->IsInSct() &&
-                 // -->  FME 2004-06-03 #i29438#
+                 // #i29438#
                  // We have to consider the case that the section may be "empty"
                  // except from a temporary empty table frame.
                  // This can happen due to the new cell split feature.
                  !pUp->IsCellFrm() &&
-                 // <--
-                 // --> OD 2006-01-04 #126020# - adjust check for empty section
-                 // --> OD 2006-02-01 #130797# - correct fix #126020#
+                 // #126020# - adjust check for empty section
+                 // #130797# - correct fix #126020#
                  !(pSct = pUp->FindSctFrm())->ContainsCntnt() &&
                  !pSct->ContainsAny( true ) ) ) )
-                 // <--
         {
             if ( pUp->GetUpper() )
             {
-                // --> OD 2006-09-25 #b6448963#
+                //
                 // prevent delete of <ColLocked> footnote frame
-//                if( pUp->IsFtnFrm() )
                 if ( pUp->IsFtnFrm() && !pUp->IsColLocked())
-                // <--
                 {
                     if( pUp->GetNext() && !pUp->GetPrev() )
                     {
@@ -1074,11 +1046,9 @@ void SwCntntFrm::Cut()
                 }
                 else
                 {
-                    // --> OD 2006-09-25 #b6448963#
-//                    if ( pSct->IsColLocked() || !pSct->IsInFtn() )
+                    //
                     if ( pSct->IsColLocked() || !pSct->IsInFtn() ||
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
-                    // <--
                     {
                         pSct->DelEmpty( sal_False );
                         // Wenn ein gelockter Bereich nicht geloescht werden darf,
@@ -1108,17 +1078,14 @@ void SwCntntFrm::Cut()
 |*
 |*  SwLayoutFrm::Paste()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
-|*
 |*************************************************************************/
 void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 {
-    ASSERT( pParent, "Kein Parent fuer Paste." );
-    ASSERT( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
-    ASSERT( pParent != this, "Bin selbst der Parent." );
-    ASSERT( pSibling != this, "Bin mein eigener Nachbar." );
-    ASSERT( !GetPrev() && !GetNext() && !GetUpper(),
+    OSL_ENSURE( pParent, "Kein Parent fuer Paste." );
+    OSL_ENSURE( pParent->IsLayoutFrm(), "Parent ist CntntFrm." );
+    OSL_ENSURE( pParent != this, "Bin selbst der Parent." );
+    OSL_ENSURE( pSibling != this, "Bin mein eigener Nachbar." );
+    OSL_ENSURE( !GetPrev() && !GetNext() && !GetUpper(),
             "Bin noch irgendwo angemeldet." );
 
     //In den Baum einhaengen.
@@ -1216,9 +1183,6 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
 |*
 |*  SwLayoutFrm::Cut()
 |*
-|*  Ersterstellung      MA 23. Feb. 94
-|*  Letzte Aenderung    MA 23. Feb. 94
-|*
 |*************************************************************************/
 void SwLayoutFrm::Cut()
 {
@@ -1281,13 +1245,10 @@ void SwLayoutFrm::Cut()
 |*
 |*  SwFrm::Grow()
 |*
-|*  Ersterstellung      AK 19-Feb-1991
-|*  Letzte Aenderung    MA 05. May. 94
-|*
 |*************************************************************************/
 SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-    ASSERT( nDist >= 0, "Negatives Wachstum?" );
+    OSL_ENSURE( nDist >= 0, "Negatives Wachstum?" );
 
     PROTOCOL_ENTER( this, bTst ? PROT_GROW_TST : PROT_GROW, 0, &nDist )
 
@@ -1333,13 +1294,10 @@ SwTwips SwFrm::Grow( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwFrm::Shrink()
 |*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 05. May. 94
-|*
 |*************************************************************************/
 SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-    ASSERT( nDist >= 0, "Negative Verkleinerung?" );
+    OSL_ENSURE( nDist >= 0, "Negative Verkleinerung?" );
 
     PROTOCOL_ENTER( this, bTst ? PROT_SHRINK_TST : PROT_SHRINK, 0, &nDist )
 
@@ -1403,9 +1361,6 @@ SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*      Minimalwert fuer die Hoehe des Bodys nicht unterschritten wird.
 |*
 |*  Parameter: nDiff ist der Betrag, um den Platz geschaffen werden muss
-|*
-|*  Ersterstellung      MA 07. May. 92
-|*  Letzte Aenderung    AMA 02. Nov. 98
 |*
 |*************************************************************************/
 SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
@@ -1676,14 +1631,14 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
         if( ( IsHeaderFrm() || IsFooterFrm() ) && pBoss->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pBoss->GetDrawObjs();
-            ASSERT( pBoss->IsPageFrm(), "Header/Footer out of page?" );
+            OSL_ENSURE( pBoss->IsPageFrm(), "Header/Footer out of page?" );
             for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
                 {
                     SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                    ASSERT( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
+                    OSL_ENSURE( !pFly->IsFlyInCntFrm(), "FlyInCnt at Page?" );
                     const SwFmtVertOrient &rVert =
                                         pFly->GetFmt()->GetVertOrient();
                    // Wann muss invalidiert werden?
@@ -1711,9 +1666,6 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
 |*
 |*  SwFrm::ImplInvalidateSize(), ImplInvalidatePrt(), ImplInvalidatePos(),
 |*         ImplInvalidateLineNum()
-|*
-|*  Ersterstellung      MA 15. Oct. 92
-|*  Letzte Aenderung    MA 24. Mar. 94
 |*
 |*************************************************************************/
 /** method to perform additional actions on an invalidation
@@ -1793,7 +1745,7 @@ void SwFrm::ImplInvalidateLineNum()
     if ( _InvalidationAllowed( INVALID_LINENUM ) )
     {
         bValidLineNum = sal_False;
-        ASSERT( IsTxtFrm(), "line numbers are implemented for text only" );
+        OSL_ENSURE( IsTxtFrm(), "line numbers are implemented for text only" );
         InvalidatePage();
 
         // OD 2004-05-19 #i28701#
@@ -1804,9 +1756,6 @@ void SwFrm::ImplInvalidateLineNum()
 /*************************************************************************
 |*
 |*  SwFrm::ReinitializeFrmSizeAttrFlags
-|*
-|*  Ersterstellung      MA 15. Oct. 96
-|*  Letzte Aenderung    MA 15. Oct. 96
 |*
 |*************************************************************************/
 void SwFrm::ReinitializeFrmSizeAttrFlags()
@@ -1825,7 +1774,7 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
                 pFrm = pFrm->GetNext();
             }
             SwCntntFrm *pCnt = ((SwLayoutFrm*)this)->ContainsCntnt();
-            // --> OD 2004-12-20 #i36991# - be save.
+            // #i36991# - be save.
             // E.g., a row can contain *no* content.
             if ( pCnt )
             {
@@ -1837,7 +1786,6 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
                     pCnt = pCnt->GetNextCntntFrm();
                 } while ( ((SwLayoutFrm*)this)->IsAnLower( pCnt ) );
             }
-            // <--
         }
     }
     else if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
@@ -1902,9 +1850,6 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
 |*
 |*  SwCntntFrm::GrowFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 25. Mar. 99
-|*
 |*************************************************************************/
 SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
@@ -1930,7 +1875,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 GetNext()->InvalidatePos();
             }
-            // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+            // #i28701# - Due to the new object positioning the
             // frame on the next page/column can flow backward (e.g. it was moved forward
             // due to the positioning of its objects ). Thus, invalivate this next frame,
             // if document compatibility option 'Consider wrapping style influence on
@@ -1939,7 +1884,6 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 InvalidateNextPos();
             }
-            // <--
         }
         return 0;
     }
@@ -1992,7 +1936,7 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     else
         nReal = nDist;
 
-    // --> OD 2004-07-05 #i28701# - Due to the new object positioning the
+    // #i28701# - Due to the new object positioning the
     // frame on the next page/column can flow backward (e.g. it was moved forward
     // due to the positioning of its objects ). Thus, invalivate this next frame,
     // if document compatibility option 'Consider wrapping style influence on
@@ -2008,7 +1952,6 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             InvalidateNextPos();
         }
     }
-    // <--
 
     return nReal;
 }
@@ -2017,15 +1960,12 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwCntntFrm::ShrinkFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 05. May. 94
-|*
 |*************************************************************************/
 SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     SWRECTFN( this )
-    ASSERT( nDist >= 0, "nDist < 0" );
-    ASSERT( nDist <= (Frm().*fnRect->fnGetHeight)(),
+    OSL_ENSURE( nDist >= 0, "nDist < 0" );
+    OSL_ENSURE( nDist <= (Frm().*fnRect->fnGetHeight)(),
             "nDist > als aktuelle Grosse." );
 
     if ( !bTst )
@@ -2139,10 +2079,6 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 /*************************************************************************
 |*
 |*    SwCntntFrm::Modify()
-|*
-|*    Beschreibung
-|*    Ersterstellung    AK 05-Mar-1991
-|*    Letzte Aenderung  MA 13. Oct. 95
 |*
 |*************************************************************************/
 void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
@@ -2373,9 +2309,6 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
 |*
 |*  SwLayoutFrm::SwLayoutFrm()
 |*
-|*  Ersterstellung      AK 14-Feb-1991
-|*  Letzte Aenderung    MA 12. May. 95
-|*
 |*************************************************************************/
 SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
     SwFrm( pFmt, pSib ),
@@ -2386,10 +2319,9 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt, SwFrm* pSib ):
         bFixSize = sal_True;
 }
 
-// --> OD 2004-06-29 #i28701#
+// #i28701#
 TYPEINIT1(SwLayoutFrm,SwFrm);
-// <--
-/*-----------------10.06.99 09:42-------------------
+/*--------------------------------------------------
  * SwLayoutFrm::InnerHeight()
  * --------------------------------------------------*/
 
@@ -2434,9 +2366,6 @@ SwTwips SwLayoutFrm::InnerHeight() const
 /*************************************************************************
 |*
 |*  SwLayoutFrm::GrowFrm()
-|*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 23. Sep. 96
 |*
 |*************************************************************************/
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
@@ -2604,9 +2533,6 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*
 |*  SwLayoutFrm::ShrinkFrm()
 |*
-|*  Ersterstellung      MA 30. Jul. 92
-|*  Letzte Aenderung    MA 25. Mar. 99
-|*
 |*************************************************************************/
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
@@ -2616,7 +2542,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
-    ASSERT( nDist >= 0, "nDist < 0" );
+    OSL_ENSURE( nDist >= 0, "nDist < 0" );
     SWRECTFN( this )
     SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
     if ( nDist > nFrmHeight )
@@ -2674,7 +2600,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 if( bChgPos && !IsVertLR() )
                     Frm().Pos().X() += nRealDist - nReal;
-                ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
+                OSL_ENSURE( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
             }
         }
     }
@@ -2688,7 +2614,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             if( bChgPos && !IsVertLR() )
                 Frm().Pos().X() += nTmp - nReal;
-            ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
+            OSL_ENSURE( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
             nReal = nTmp;
         }
     }
@@ -2786,8 +2712,6 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*      PrtArea des Frm's.
 |*      Die Variablen Frm's werden auch proportional angepasst; sie werden
 |*      sich schon wieder zurechtwachsen/-schrumpfen.
-|*  Ersterstellung      MA 11.03.92
-|*  Letzte Aenderung    AMA 2. Nov. 98
 |*
 |*************************************************************************/
 void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
@@ -2812,10 +2736,9 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     if ( !( bVert ? bHeightChgd : bWidthChgd ) &&
          ! Lower()->IsColumnFrm() &&
            ( ( IsBodyFrm() && IsInDocBody() && ( !IsInSct() || !FindSctFrm()->IsColLocked() ) ) ||
-                // --> FME 2004-07-21 #i10826# Section frames without columns should not
+                // #i10826# Section frames without columns should not
                 // invalidate all lowers!
                IsSctFrm() ) )
-               // <--
     {
         // Determine page frame the body frame resp. the section frame belongs to.
         SwPageFrm *pPage = FindPageFrm();
@@ -2915,12 +2838,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                         ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
                 }
             }
-            // --> OD 2005-01-31 #i41694# - improvement by removing duplicates
+            // #i41694# - improvement by removing duplicates
             if ( pLowerFrm )
             {
                 if ( pLowerFrm->IsInSct() )
                 {
-                    // --> OD 2005-01-31 #i41694# - follow-up of issue #i10826#:
+                    // #i41694# - follow-up of issue #i10826#
                     // No invalidation of section frame, if it's the this.
                     SwFrm* pSectFrm = pLowerFrm->FindSctFrm();
                     if( pSectFrm != this && IsAnLower( pSectFrm ) )
@@ -2928,10 +2851,8 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                         pSectFrm->_InvalidateSize();
                         pSectFrm->InvalidatePage( pPage );
                     }
-                    // <--
                 }
             }
-            // <--
         }
         return;
     } // end of { special case }
@@ -3077,7 +2998,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                              ( IsColumnFrm() && IsInSct() )
                            )
                         {
-                            ASSERT( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm(),
+                            OSL_ENSURE( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm(),
                                     "ChgLowersProp - only for body or foot note container" );
                             if ( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm() )
                             {
@@ -3089,7 +3010,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                                     if ( nNewHeight < 0)
                                     {
                                         // OD 01.04.2003 #108446# - adjust assertion condition and text
-                                        ASSERT( !( IsPageFrm() &&
+                                        OSL_ENSURE( !( IsPageFrm() &&
                                                    (pLowerFrm->Frm().Height()>0) &&
                                                    (pLowerFrm->IsValid()) ),
                                                     "ChgLowersProg - negative height for lower.");
@@ -3169,12 +3090,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         const SwFmtCol* pColAttr = NULL;
         if ( IsPageBodyFrm() )
         {
-            ASSERT( GetUpper()->IsPageFrm(), "Upper is not page frame" )
+            OSL_ENSURE( GetUpper()->IsPageFrm(), "Upper is not page frame" );
             pColAttr = &GetUpper()->GetFmt()->GetCol();
         }
         else
         {
-            ASSERT( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" )
+            OSL_ENSURE( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" );
             pColAttr = &GetFmt()->GetCol();
         }
 
@@ -3189,13 +3110,11 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 |*
 |*  Beschreibung:       "Formatiert" den Frame; Frm und PrtArea.
 |*                      Die Fixsize wird hier nicht eingestellt.
-|*  Ersterstellung      MA 28. Jul. 92
-|*  Letzte Aenderung    MA 21. Mar. 95
 |*
 |*************************************************************************/
 void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    ASSERT( pAttrs, "LayoutFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "LayoutFrm::Format, pAttrs ist 0." );
 
     if ( bValidPrtArea && bValidSize )
         return;
@@ -3282,13 +3201,10 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 |*
 |*  SwLayoutFrm::InvalidatePercentLowers()
 |*
-|*  Ersterstellung      MA 13. Jun. 96
-|*  Letzte Aenderung    MA 13. Jun. 96
-|*
 |*************************************************************************/
 static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
 {
-    ASSERT( pFrm->GetDrawObjs(), "Can't find any Objects" );
+    OSL_ENSURE( pFrm->GetDrawObjs(), "Can't find any Objects" );
     for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
@@ -3334,7 +3250,7 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
             if ( pFrm->IsInTab() && !IsTabFrm() )
             {
                 SwFrm *pTmp = pFrm->FindTabFrm();
-                ASSERT( pTmp, "Where's my TabFrm?" );
+                OSL_ENSURE( pTmp, "Where's my TabFrm?" );
                 if( IsAnLower( pTmp ) )
                     pFrm = pTmp;
             }
@@ -3354,9 +3270,6 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
 /*************************************************************************
 |*
 |*  SwLayoutFrm::CalcRel()
-|*
-|*  Ersterstellung      MA 13. Jun. 96
-|*  Letzte Aenderung    MA 10. Oct. 96
 |*
 |*************************************************************************/
 long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
@@ -3390,7 +3303,7 @@ long MA_FASTCALL lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
 {
     long nDiff = 0, nFirstDiff = 0;
     SwLayoutFrm *pCol = (SwLayoutFrm*)pLayFrm->Lower();
-    ASSERT( pCol, "Where's the columnframe?" );
+    OSL_ENSURE( pCol, "Where's the columnframe?" );
     SwFrm *pFrm = pCol->Lower();
     do
     {
@@ -3530,11 +3443,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 ( !(Frm().*fnRect->fnGetHeight)() && pAny ) )
             {
                 long nTop = (this->*fnRect->fnGetTopMargin)();
-                // --> OD 2004-11-01 #i23129# - correction: enlarge section
+                // #i23129# - correction
                 // to the calculated maximum height.
                 (Frm().*fnRect->fnAddBottom)( nMaximum -
                                               (Frm().*fnRect->fnGetHeight)() );
-                // <--
                 if( nTop > nMaximum )
                     nTop = nMaximum;
                 (this->*fnRect->fnSetYMargins)( nTop, 0 );
@@ -3556,7 +3468,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         else
             nMaximum = LONG_MAX;
 
-        // --> OD 2004-08-25 #i3317# - reset temporarly consideration
+        // #i3317# - reset temporarly consideration
         // of wrapping style influence
         SwPageFrm* pPageFrm = FindPageFrm();
         SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
@@ -3573,7 +3485,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 }
             }
         }
-        // <--
         do
         {
             //Kann eine Weile dauern, deshalb hier auf Waitcrsr pruefen.
@@ -3587,11 +3498,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             //Breiten und Hoehen der Spalten ein (so sie denn falsch sind).
             SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
 
-            // --> FME 2004-07-19 #i27399#
+            // #i27399#
             // Simply setting the column width based on the values returned by
             // CalcColWidth does not work for automatic column width.
             AdjustColumns( &rCol, sal_False );
-            // <--
 
             for ( sal_uInt16 i = 0; i < nNumCols; ++i )
             {
@@ -3606,7 +3516,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             ::CalcCntnt( this );
 
             pCol = (SwLayoutFrm*)Lower();
-            ASSERT( pCol && pCol->GetNext(), ":-( Spalten auf Urlaub?");
+            OSL_ENSURE( pCol && pCol->GetNext(), ":-( Spalten auf Urlaub?");
             // bMinDiff wird gesetzt, wenn es keine leere Spalte gibt
             sal_Bool bMinDiff = sal_True;
             // OD 28.03.2003 #108446# - check for all column content and all columns
@@ -3640,7 +3550,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 {
                     bFoundLower = sal_True;
                     pLay = (SwLayoutFrm*)pLay->GetNext();
-                    ASSERT( pLay->IsFtnContFrm(),"FtnContainer exspected" );
+                    OSL_ENSURE( pLay->IsFtnContFrm(),"FtnContainer exspected" );
                     nInnerHeight += pLay->InnerHeight();
                     nInnerHeight += (pLay->Frm().*fnRect->fnGetHeight)() -
                                     (pLay->Prt().*fnRect->fnGetHeight)();
@@ -3718,12 +3628,11 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // nicht dadurch wieder unter das Minimum rutschen, wollen wir ein wenig
                         // Luft herauslassen.
                         if ( !bNoBalance &&
-                             // --> OD 2004-11-04 #i23129# - <nMinDiff> can be
+                             // #i23129# - <nMinDiff> can be
                              // big, because of an object at the beginning of
                              // a column. Thus, decrease optimization here.
                              //nMaxFree >= nMinDiff &&
                              nMaxFree > 0 &&
-                             // <--
                              ( !nAllFree ||
                                nMinimum < nPrtHeight - nMinDiff ) )
                         {
@@ -3747,17 +3656,16 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     nDiff = (Prt().*fnRect->fnGetHeight)() + nDiff + nBorder -
                             (Frm().*fnRect->fnGetHeight)();
                     (Frm().*fnRect->fnAddBottom)( nDiff );
-                    // --> OD 2006-08-16 #i68520#
+                    // #i68520#
                     if ( dynamic_cast<SwFlyFrm*>(this) )
                     {
                         dynamic_cast<SwFlyFrm*>(this)->InvalidateObjRectWithSpaces();
                     }
-                    // <--
                     (this->*fnRect->fnSetYMargins)( nTop, nBorder - nTop );
                     ChgLowersProp( aOldSz );
                     NotifyLowerObjs();
 
-                    // --> OD 2004-08-25 #i3317# - reset temporarly consideration
+                    // #i3317# - reset temporarly consideration
                     // of wrapping style influence
                     SwPageFrm* pTmpPageFrm = FindPageFrm();
                     SwSortedObjs* pTmpObjs = pTmpPageFrm ? pTmpPageFrm->GetSortedObjs() : 0L;
@@ -3774,7 +3682,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                             }
                         }
                     }
-                    // <--
                     //Es muss geeignet invalidiert werden, damit
                     //sich die Frms huebsch ausbalancieren
                     //- Der jeweils erste ab der zweiten Spalte bekommt
@@ -3822,9 +3729,6 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 /*************************************************************************
 |*
 |*  SwRootFrm::InvalidateAllCntnt()
-|*
-|*  Ersterstellung      MA 13. Feb. 98
-|*  Letzte Aenderung    MA 12. Aug. 00
 |*
 |*************************************************************************/
 
@@ -3882,9 +3786,9 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
                 if( pLastSctCnt == pCnt )
                     pLastSctCnt = NULL;
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
-                ASSERT( !pLastSctCnt, "Where's the last SctCntnt?" );
+                OSL_ENSURE( !pLastSctCnt, "Where's the last SctCntnt?" );
 #endif
         }
         if( nInv & INV_TABLE )
@@ -3910,9 +3814,9 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
                     pLastSctCnt = NULL;
                 }
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
-                ASSERT( !pLastTabCnt, "Where's the last TabCntnt?" );
+                OSL_ENSURE( !pLastTabCnt, "Where's the last TabCntnt?" );
 #endif
         }
 
@@ -4021,13 +3925,12 @@ void SwRootFrm::InvalidateAllObjPos()
                     // only to paragraph and to character anchored objects are considered.
                     continue;
                 }
-                // --> OD 2004-07-07 #i28701# - special invalidation for anchored
+                // #i28701# - special invalidation for anchored
                 // objects, whose wrapping style influence has to be considered.
                 if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
                     pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
                 else
                     pAnchoredObj->InvalidateObjPos();
-                // <--
             }
         }
 
@@ -4036,3 +3939,4 @@ void SwRootFrm::InvalidateAllObjPos()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 #define _RTFEXPORT_HXX_
 
 #include <set>
-#include "rtfattributeoutput.hxx"
 #include "wrtww8.hxx"
 
 #include <rtl/ustring.hxx>
@@ -38,6 +38,7 @@
 #include <cstdio>
 #include <map>
 
+class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
 typedef std::map<sal_uInt16,Color> RtfColorTbl;
@@ -70,6 +71,7 @@ class RtfExport : public MSWordExportBase
     MSWordSections *m_pSections;
 
     RtfSdrExport *m_pSdrExport;
+    bool m_bOutOutlineOnly;
 
 public:
     /// Access to the attribute output class.
@@ -81,8 +83,8 @@ public:
     /// Access to the Rtf Sdr exporter.
     virtual RtfSdrExport& SdrExporter() const;
 
-    /// Hack, unfortunately necessary at some places for now.
-    virtual bool HackIsWW8OrHigher() const;
+    /// Determines if the format is expected to support unicode.
+    virtual bool SupportsUnicode() const { return true; }
 
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
@@ -137,18 +139,24 @@ protected:
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
 
+    /// Output SwTxtNode is depending on outline export mode
+    virtual void OutputTextNode( const SwTxtNode& );
+
     /// Output SwGrfNode
     virtual void OutputGrfNode( const SwGrfNode& );
 
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
 
+    virtual void OutputLinkedOLE(const rtl::OUString&);
+
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
     RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument,
-            SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter );
+            SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter,
+            bool bOutOutlineOnly = false );
 
     /// Destructor.
     virtual ~RtfExport();
@@ -156,7 +164,7 @@ public:
 #if defined(UNX)
     static const sal_Char sNewLine; // \012 or \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[]; // \015\012
+    static const sal_Char sNewLine[]; // \015\012
 #endif
 
     rtl_TextEncoding eDefaultEncoding;
@@ -209,4 +217,5 @@ private:
 };
 
 #endif // _RTFEXPORT_HXX_
-/* vi:set shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

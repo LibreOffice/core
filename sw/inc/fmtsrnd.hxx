@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,15 +33,10 @@
 #include <format.hxx>
 #include <svl/eitem.hxx>
 
-// --> OD 2006-08-15 #i68520# - refactoring
-// separate enumeration <SwSurround> in own header file
 #include <fmtsrndenum.hxx>
-// <--
 class IntlWrapper;
 
-//SwFmtSurround, wie soll sich der ---------------
-//  Dokumentinhalt unter dem Rahmen verhalten ---
-
+// SwFmtSurround: How document content under the frame shall behave.
 class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
 {
     sal_Bool    bAnchorOnly :1;
@@ -51,7 +47,7 @@ public:
     SwFmtSurround( const SwFmtSurround & );
     inline SwFmtSurround &operator=( const SwFmtSurround &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual Methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual sal_uInt16          GetValueCount() const;
@@ -60,8 +56,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
 
     SwSurround GetSurround()const { return SwSurround( GetValue() ); }
@@ -91,3 +87,4 @@ inline const SwFmtSurround &SwFmt::GetSurround(sal_Bool bInP) const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

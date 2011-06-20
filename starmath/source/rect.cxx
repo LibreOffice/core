@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,7 @@
 
 
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
@@ -45,10 +46,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// '\0' terminiertes Array mit Zeichen, die im StarMath Font als Buchstaben
-// betrachtet werden sollen, (um im Gegensatz zu den anderen Operatoren
-// und Symbolen ein "normales"(ungecliptes) SmRect zu erhalten).
-static xub_Unicode __READONLY_DATA aMathAlpha[] =
+// '\0' terminated Array with symbol, which should be treat as letters in
+// StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the
+// other operators and symbols).
+static xub_Unicode const aMathAlpha[] =
 {
     MS_ALEPH,               MS_IM,                  MS_RE,
     MS_WP,                  xub_Unicode(0xE070),    MS_EMPTYSET,
@@ -61,22 +62,21 @@ static xub_Unicode __READONLY_DATA aMathAlpha[] =
     xub_Unicode('\0')
 };
 
-sal_Bool SmIsMathAlpha(const XubString &rText)
-    // ergibt genau dann sal_True, wenn das Zeichen (aus dem StarMath Font) wie ein
-    // Buchstabe behandelt werden soll.
+bool SmIsMathAlpha(const XubString &rText)
+    // true iff symbol (from StarMath Font) should be treated as letter
 {
     if (rText.Len() == 0)
-        return sal_False;
+        return false;
 
-    DBG_ASSERT(rText.Len() == 1, "Sm : String enthaelt nicht genau ein Zeichen");
+    OSL_ENSURE(rText.Len() == 1, "Sm : string must be exactly one character long");
     xub_Unicode cChar = rText.GetChar(0);
 
-    // ist es ein griechisches Zeichen ?
+    // is it a greek symbol?
     if (xub_Unicode(0xE0AC) <= cChar  &&  cChar <= xub_Unicode(0xE0D4))
-        return sal_True;
+        return true;
     else
     {
-        // kommt es in 'aMathAlpha' vor ?
+        // appears it in 'aMathAlpha'?
         const xub_Unicode *pChar = aMathAlpha;
         while (*pChar  &&  *pChar != cChar)
             pChar++;
@@ -94,10 +94,10 @@ sal_Bool SmIsMathAlpha(const XubString &rText)
 SmRect::SmRect()
     // constructs empty rectangle at (0, 0) with width and height 0.
 {
-    DBG_ASSERT(aTopLeft == Point(0, 0), "Sm: ooops...");
-    DBG_ASSERT(aSize == Size(0, 0), "Sm: ooops...");
+    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
+    OSL_ENSURE(aSize == Size(0, 0), "Sm: ooops...");
 
-    bHasBaseline = bHasAlignInfo = sal_False;
+    bHasBaseline = bHasAlignInfo = false;
     nBaseline = nAlignT = nAlignM = nAlignB =
     nGlyphTop = nGlyphBottom =
     nItalicLeftSpace = nItalicRightSpace =
@@ -142,18 +142,18 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
                        const XubString &rText, sal_uInt16 nBorder)
 {
-    DBG_ASSERT(aTopLeft == Point(0, 0), "Sm: Ooops...");
+    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: Ooops...");
 
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
 
     const FontMetric  aFM (rDev.GetFontMetric());
-    sal_Bool              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH );
-    sal_Bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
+    bool              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH );
+    bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetSize().Height();
 
     nBorderWidth  = nBorder;
-    bHasAlignInfo = sal_True;
-    bHasBaseline  = sal_True;
+    bHasAlignInfo = true;
+    bHasBaseline  = true;
     nBaseline     = aFM.GetAscent();
     nAlignT       = nBaseline - nFontHeight * 750L / 1000L;
     nAlignM       = nBaseline - nFontHeight * 121L / 422L;
@@ -175,8 +175,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
         long  nDelta = pWindow->GetFontMetric().GetIntLeading();
         if (nDelta == 0)
-        {   // dieser Wert entspricht etwa einem Leading von 80 bei einer
-            // Fonthoehe von 422 (12pt)
+        {   // this value approx. fits a Leading of 80 at a
+            // Fontheight of 422 (12pt)
             nDelta = nFontHeight * 8L / 43;
         }
         SetTop(GetTop() - nDelta);
@@ -187,13 +187,13 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     // get GlyphBoundRect
     Rectangle  aGlyphRect;
 #if OSL_DEBUG_LEVEL > 1
-    sal_Bool bSuccess =
+    bool bSuccess =
 #endif
                 SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
 #if OSL_DEBUG_LEVEL > 1
     if (!bSuccess)
     {
-        DBG_ERROR( "Sm : Ooops... (fehlt evtl. der Font?)");
+        OSL_FAIL( "Sm : Ooops... (fehlt evtl. der Font?)");
     }
 #endif
 
@@ -217,8 +217,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     if (bAllowSmaller)
     {
-        // fuer Symbole und Operatoren aus dem StarMath Font passen wir den
-        // oberen und unteren Rand dem Zeichen an.
+        // for symbols and operators from the StarMath Font
+        // we adjust upper and lower margin of the symbol
         SetTop(nGlyphTop);
         SetBottom(nGlyphBottom);
     }
@@ -229,8 +229,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     if (nLoAttrFence > GetBottom())
         nLoAttrFence = GetBottom();
 
-    DBG_ASSERT(rText.Len() == 0  ||  !IsEmpty(),
-               "Sm: leeres Rechteck erzeugt");
+    OSL_ENSURE(rText.Len() == 0  ||  !IsEmpty(),
+               "Sm: empty rectangle created");
 }
 
 
@@ -245,7 +245,7 @@ void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
 SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
                const XubString &rText, long nEBorderWidth)
 {
-    DBG_ASSERT( nEBorderWidth >= 0, "BorderWidth negativ" );
+    OSL_ENSURE( nEBorderWidth >= 0, "BorderWidth is negative" );
     if (nEBorderWidth < 0)
         nEBorderWidth = 0;
     Init(rDev, pFormat, rText, (sal_uInt16) nEBorderWidth);
@@ -259,10 +259,10 @@ SmRect::SmRect(long nWidth, long nHeight)
     // as used in 'SmBinVerNode'.
 :   aSize(nWidth, nHeight)
 {
-    DBG_ASSERT(aTopLeft == Point(0, 0), "Sm: ooops...");
+    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
 
-    bHasBaseline  = sal_False;
-    bHasAlignInfo = sal_True;
+    bHasBaseline  = false;
+    bHasAlignInfo = true;
     nBaseline     = 0;
     nAlignT       = GetTop();
     nAlignB       = GetBottom();
@@ -349,7 +349,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                        + GetItalicLeftSpace();
             break;
         default :
-            DBG_ASSERT(sal_False, "Sm: unbekannter Fall");
+            OSL_FAIL("Sm: unknown case");
     }
 
     // check if horizontal position is already set
@@ -386,7 +386,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.Y() += rRect.GetLoAttrFence() - GetTop();
                 break;
         default :
-                DBG_ASSERT(sal_False, "Sm: unbekannter Fall");
+                OSL_FAIL("Sm: unknown case");
         }
 
     // check if vertical position is already set
@@ -403,7 +403,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.X() += rRect.GetItalicRight() - GetItalicRight();
                 break;
             default :
-                DBG_ASSERT(sal_False, "Sm: unbekannter Fall");
+                OSL_FAIL("Sm: unknown case");
         }
 
     return aPos;
@@ -476,7 +476,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
         nAlignB = Max(GetAlignB(), rRect.GetAlignB());
         nHiAttrFence = Min(GetHiAttrFence(), rRect.GetHiAttrFence());
         nLoAttrFence = Max(GetLoAttrFence(), rRect.GetLoAttrFence());
-        DBG_ASSERT(HasAlignInfo(), "Sm: ooops...");
+        OSL_ENSURE(HasAlignInfo(), "Sm: ooops...");
 
         switch (eCopyMode)
         {   case RCP_THIS:
@@ -494,7 +494,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
                     CopyMBL(rRect);
                 break;
             default :
-                DBG_ASSERT(sal_False, "Sm: unbekannter Fall");
+                OSL_FAIL("Sm: unknown case");
         }
     }
 
@@ -509,7 +509,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
     // align eg "{a over b} over c" correctly where AlignM should not
     // be (AlignT + AlignB) / 2)
 {
-    DBG_ASSERT(HasAlignInfo(), "Sm: keine Align Info");
+    OSL_ENSURE(HasAlignInfo(), "Sm: no align info");
 
     ExtendBy(rRect, eCopyMode);
     nAlignM = nNewAlignM;
@@ -519,7 +519,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
 
 
 SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                          sal_Bool bKeepVerAlignParams)
+                          bool bKeepVerAlignParams)
     // as 'ExtendBy' but keeps original values for AlignT, -M and -B and
     // baseline.
     // (this is used in 'SmSupSubNode' where the sub-/supscripts shouldn't
@@ -529,7 +529,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
           nOldAlignM   = GetAlignM(),
           nOldAlignB   = GetAlignB(),
           nOldBaseline = nBaseline;     //! depends not on 'HasBaseline'
-    sal_Bool  bOldHasAlignInfo = HasAlignInfo();
+    bool  bOldHasAlignInfo = HasAlignInfo();
 
     ExtendBy(rRect, eCopyMode);
 
@@ -551,7 +551,7 @@ long SmRect::OrientedDist(const Point &rPoint) const
     // rectangle.
     // For simplicity the maximum-norm is used.
 {
-    sal_Bool  bIsInside = IsInsideItalicRect(rPoint);
+    bool  bIsInside = IsInsideItalicRect(rPoint);
 
     // build reference point to define the distance
     Point  aRef;
@@ -589,7 +589,7 @@ long SmRect::OrientedDist(const Point &rPoint) const
 }
 
 
-sal_Bool SmRect::IsInsideRect(const Point &rPoint) const
+bool SmRect::IsInsideRect(const Point &rPoint) const
 {
     return     rPoint.Y() >= GetTop()
            &&  rPoint.Y() <= GetBottom()
@@ -598,7 +598,7 @@ sal_Bool SmRect::IsInsideRect(const Point &rPoint) const
 }
 
 
-sal_Bool SmRect::IsInsideItalicRect(const Point &rPoint) const
+bool SmRect::IsInsideItalicRect(const Point &rPoint) const
 {
     return     rPoint.Y() >= GetTop()
            &&  rPoint.Y() <= GetBottom()
@@ -614,88 +614,7 @@ SmRect SmRect::AsGlyphRect() const
     return aRect;
 }
 
-#ifdef SM_RECT_DEBUG
-
-// forward declaration
-void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
-                 const Color aCol = COL_BLACK);
-
-void SmRect::Draw(OutputDevice &rDev, const Point &rPosition, int nFlags) const
-{
-    if (IsEmpty())
-        return;
-
-    rDev.Push(PUSH_LINECOLOR);
-
-    if (nFlags & SM_RECT_LINES)
-    {   long   nLeftSpace  = 0,
-               nRightSpace = 0;
-
-        if (nFlags & SM_RECT_ITALIC)
-        {   nLeftSpace  = GetItalicLeftSpace();
-            nRightSpace = GetItalicRightSpace();
-        }
-
-        long  nLeft  = GetLeft()  - nLeftSpace,
-              nRight = GetRight() + nRightSpace;
-
-        Point aOffset (rPosition - GetTopLeft());
-
-        rDev.SetLineColor(COL_LIGHTBLUE);
-        rDev.DrawLine(Point(nLeft,  GetAlignB()) += aOffset,
-                      Point(nRight, GetAlignB()) += aOffset);
-        rDev.DrawLine(Point(nLeft,  GetAlignT()) += aOffset,
-                      Point(nRight, GetAlignT()) += aOffset);
-        if (HasBaseline())
-            rDev.DrawLine(Point(nLeft,  GetBaseline()) += aOffset,
-                          Point(nRight, GetBaseline()) += aOffset);
-
-        rDev.SetLineColor(COL_GRAY);
-        rDev.DrawLine(Point(nLeft,  GetHiAttrFence()) += aOffset,
-                      Point(nRight, GetHiAttrFence()) += aOffset);
-    }
-
-    if (nFlags & SM_RECT_MID)
-    {   Point   aCenter = rPosition
-                          + (Point(GetItalicCenterX(), GetAlignM()) -= GetTopLeft()),
-                aLenX     (GetWidth() / 5, 0),
-                aLenY     (0, GetHeight() / 16);
-
-        rDev.SetLineColor(COL_LIGHTGREEN);
-        rDev.DrawLine(aCenter - aLenX, aCenter + aLenX);
-        rDev.DrawLine(aCenter - aLenY, aCenter + aLenY);
-    }
-
-    if (nFlags & SM_RECT_ITALIC)
-        SmDrawFrame(rDev, Rectangle(rPosition - Point(GetItalicLeftSpace(), 0),
-                GetItalicSize()));
-
-    if (nFlags & SM_RECT_CORE)
-        SmDrawFrame(rDev, Rectangle(rPosition, GetSize()), COL_LIGHTRED);
-
-    rDev.Pop();
-}
-
-
-void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
-                 const Color aCol)
-{
-    rDev.Push(PUSH_LINECOLOR);
-
-    rDev.SetLineColor(aCol);
-
-    rDev.DrawLine(rRec.TopLeft(),     rRec.BottomLeft());
-    rDev.DrawLine(rRec.BottomLeft(),  rRec.BottomRight());
-    rDev.DrawLine(rRec.BottomRight(), rRec.TopRight());
-    rDev.DrawLine(rRec.TopRight(),    rRec.TopLeft());
-
-    rDev.Pop();
-}
-
-#endif //SM_RECT_DEBUG
-
-
-sal_Bool SmGetGlyphBoundRect(const OutputDevice &rDev,
+bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
@@ -704,7 +623,7 @@ sal_Bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     xub_StrLen nLen = rText.Len();
     if (nLen == 0)
     {   rRect.SetEmpty();
-        return sal_True;
+        return true;
     }
 
     // get a device where 'OutputDevice::GetTextBoundRect' will be successful
@@ -729,7 +648,7 @@ sal_Bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     // in significant incorrect bounding rectangles for some charcters.
     Size aFntSize = aFnt.GetSize();
 
-    // HDU: workaround to avoid HUGE font sizes and resulting problems (#112783#)
+    // Workaround to avoid HUGE font sizes and resulting problems
     long nScaleFactor = 1;
     while( aFntSize.Height() > 2000 * nScaleFactor )
         nScaleFactor *= 2;
@@ -742,8 +661,8 @@ sal_Bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
                 aTmp;
 
-    sal_Bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
-    DBG_ASSERT( bSuccess, "GetTextBoundRect failed" );
+    bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
+    OSL_ENSURE( bSuccess, "GetTextBoundRect failed" );
 
 
     if (!aTmp.IsEmpty())
@@ -774,3 +693,4 @@ sal_Bool SmGetGlyphBoundRect(const OutputDevice &rDev,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

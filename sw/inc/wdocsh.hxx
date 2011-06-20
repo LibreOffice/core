@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,13 +33,13 @@
 
 class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
 {
-    sal_uInt16      nSourcePara;    // aktive Zeile in der SourceView
+    sal_uInt16      nSourcePara;    // Active line in source view.
 
 public:
 
     using SotObject::GetInterface;
 
-    // aber selbst implementieren
+    // But implement yourself.
     SFX_DECL_INTERFACE(SW_WEBDOCSHELL)
     SFX_DECL_OBJECTFACTORY();
     TYPEINFO();
@@ -61,3 +62,4 @@ public:
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

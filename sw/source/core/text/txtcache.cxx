@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 
 
-#include "errhdl.hxx"
 
 #include "txtcache.hxx"
 #include "txtfrm.hxx"
@@ -39,9 +39,6 @@
 /*************************************************************************
 |*
 |*  SwTxtLine::SwTxtLine(), ~SwTxtLine()
-|*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
 |*
 |*************************************************************************/
 
@@ -60,9 +57,6 @@ SwTxtLine::~SwTxtLine()
 |*
 |*  SwTxtLineAccess::NewObj()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
-|*
 |*************************************************************************/
 
 SwCacheObj *SwTxtLineAccess::NewObj()
@@ -73,9 +67,6 @@ SwCacheObj *SwTxtLineAccess::NewObj()
 /*************************************************************************
 |*
 |*  SwTxtLineAccess::GetPara()
-|*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
 |*
 |*************************************************************************/
 
@@ -99,9 +90,6 @@ SwParaPortion *SwTxtLineAccess::GetPara()
 |*
 |*  SwTxtLineAccess::SwTxtLineAccess()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 16. Mar. 94
-|*
 |*************************************************************************/
 
 SwTxtLineAccess::SwTxtLineAccess( const SwTxtFrm *pOwn ) :
@@ -112,9 +100,6 @@ SwTxtLineAccess::SwTxtLineAccess( const SwTxtFrm *pOwn ) :
 /*************************************************************************
 |*
 |*  SwTxtLineAccess::IsAvailable
-|*
-|*  Ersterstellung      MA 23. Mar. 94
-|*  Letzte Aenderung    MA 23. Mar. 94
 |*
 |*************************************************************************/
 
@@ -128,9 +113,6 @@ sal_Bool SwTxtLineAccess::IsAvailable() const
 /*************************************************************************
 |*
 |*  SwTxtFrm::HasPara()
-|*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
 |*
 |*************************************************************************/
 
@@ -153,9 +135,6 @@ sal_Bool SwTxtFrm::_HasPara() const
 |*
 |*  SwTxtFrm::GetPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
-|*
 |*************************************************************************/
 
 SwParaPortion *SwTxtFrm::GetPara()
@@ -176,14 +155,11 @@ SwParaPortion *SwTxtFrm::GetPara()
 |*
 |*  SwTxtFrm::ClearPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
-|*
 |*************************************************************************/
 
 void SwTxtFrm::ClearPara()
 {
-    ASSERT( !IsLocked(), "+SwTxtFrm::ClearPara: this is locked." );
+    OSL_ENSURE( !IsLocked(), "+SwTxtFrm::ClearPara: this is locked." );
     if ( !IsLocked() && GetCacheIdx() != MSHRT_MAX )
     {
         SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
@@ -202,9 +178,6 @@ void SwTxtFrm::ClearPara()
 |*
 |*  SwTxtFrm::SetPara()
 |*
-|*  Ersterstellung      MA 16. Mar. 94
-|*  Letzte Aenderung    MA 22. Aug. 94
-|*
 |*************************************************************************/
 
 void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
@@ -222,7 +195,7 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
         }
         else
         {
-            ASSERT( !pNew, "+SetPara: Losing SwParaPortion" );
+            OSL_ENSURE( !pNew, "+SetPara: Losing SwParaPortion" );
             nCacheIdx = MSHRT_MAX;
         }
     }
@@ -233,9 +206,10 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, sal_Bool bDelete )
             nCacheIdx = pTxtLine->GetCachePos();
         else
         {
-            ASSERT( sal_False, "+SetPara: InsertCache failed." );
+            OSL_FAIL( "+SetPara: InsertCache failed." );
         }
     }
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

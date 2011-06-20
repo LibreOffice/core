@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/keepitem.hxx>
@@ -113,7 +113,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
             return;
         }
 
-    ASSERT( i<nPageDescs, "Seitenvorlage nicht gefunden" );
+    OSL_ENSURE( i<nPageDescs, "Seitenvorlage nicht gefunden" );
 }
 
 SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const String& rBaseURL, sal_Bool bNewDoc ) :
@@ -174,9 +174,6 @@ sal_Bool SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
     case SVX_CSS1_PBREAK_AUTO:
         bSetBreak = bSetPageDesc = sal_True;
         break;
-//  case SVX_CSS1_PBREAK_AVOID:
-        // Hier koennte man SvxKeepItem am Absatz davor einfuegen
-//      break;
     default:
         ;
     }
@@ -241,7 +238,7 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
 
 void SwCSS1Parser::SetLinkCharFmts()
 {
-    ASSERT( !bLinkCharFmtsSet, "Aufruf von SetLinkCharFmts unnoetig" );
+    OSL_ENSURE( !bLinkCharFmtsSet, "Aufruf von SetLinkCharFmts unnoetig" );
 
     SvxCSS1MapEntry *pStyleEntry =
         GetTag( String::CreateFromAscii(OOO_STRING_SVTOOLS_HTML_anchor) );
@@ -361,7 +358,7 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
 
 void SwCSS1Parser::SetTableTxtColl( sal_Bool bHeader )
 {
-    ASSERT( !(bHeader ? bTableHeaderTxtCollSet : bTableTxtCollSet),
+    OSL_ENSURE( !(bHeader ? bTableHeaderTxtCollSet : bTableTxtCollSet),
             "Aufruf von SetTableTxtColl unnoetig" );
 
     sal_uInt16 nPoolId;
@@ -658,7 +655,7 @@ static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
     if( CSS1_SELTYPE_ELEM_CLASS==eType  )
     {
         xub_StrLen nPos = rToken.Search( '.' );
-        ASSERT( nPos != STRING_NOTFOUND, "kein Punkt in Class-Selektor???" );
+        OSL_ENSURE( nPos != STRING_NOTFOUND, "kein Punkt in Class-Selektor???" );
         if( nPos != STRING_NOTFOUND )
         {
             rClass = rToken.Copy( nPos+1 );
@@ -704,7 +701,7 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
     case CSS1_SCRIPT_ALL:
         break;
     default:
-        ASSERT( aClearItems[0], "unknown script type" );
+        OSL_ENSURE( aClearItems[0], "unknown script type" );
         break;
        }
 
@@ -762,13 +759,12 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             (pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_left) ||
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_right) ||
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first)) ) )
-            // || CSS1_SELTYPE_ELEMENT == pNext->GetType() )
         {
             String aName;
             if( pNext )
                 aName = pNext->GetString();
             InsertPage( aName,
-                        pNext != 0 /*CSS1_SELTYPE_PSEUDO == pNext->GetType()*/,
+                        pNext != 0,
                         rItemSet, rPropInfo );
         }
     }
@@ -852,7 +848,6 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     const SvxBrushItem *pBrushItem =
                         (const SvxBrushItem *)pItem;
 
-                    /// OD 02.09.2002 #99657#
                     /// Body has a background color, if it is not "no fill"/"auto fill"
                     if( pBrushItem->GetColor() != COL_TRANSPARENT )
                         bBodyBGColorSet = sal_True;
@@ -1020,12 +1015,8 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
-#ifdef FULL_FIRST_LETTER
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter)) )
-#else
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter) &&
              SVX_ADJUST_LEFT == rPropInfo.eFloat) )
-#endif
         {
             // Entweder kein zusammengesetzter Selektor oder
             // ein X:first-line { float: left; ... }
@@ -1230,7 +1221,7 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
         }
     }
 
-    ASSERT( pCFmt, "Keine Zeichen-Vorlage???" );
+    OSL_ENSURE( pCFmt, "Keine Zeichen-Vorlage???" );
 
     // Wenn es eine Klasse gibt, die Klassen-Vorlage suchen aber nicht
     // neu anlegen.
@@ -1324,7 +1315,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
     String sName;
     if( USER_FMT & nTxtColl )       // eine vom Reader angelegte
     {
-        ASSERT( !this, "Wo kommt die Benutzer-Vorlage her?" );
+        OSL_ENSURE( !this, "Wo kommt die Benutzer-Vorlage her?" );
         pColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
     }
     else
@@ -1332,7 +1323,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( sal_uInt16 nTxtColl,
         pColl = GetTxtCollFromPool( nTxtColl );
     }
 
-    ASSERT( pColl, "Keine Absatz-Vorlage???" );
+    OSL_ENSURE( pColl, "Keine Absatz-Vorlage???" );
     if( aClass.Len() )
     {
         String aTmp( pColl->GetName() );
@@ -1421,7 +1412,7 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreat
 
         // dazu brauchen wir auch die Nummer der neuen Vorlage
         pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
-        ASSERT( pPageDesc==pNewPageDesc, "Seitenvorlage nicht gefunden" );
+        OSL_ENSURE( pPageDesc==pNewPageDesc, "Seitenvorlage nicht gefunden" );
 
         pDoc->CopyPageDesc( *pMasterPageDesc, *pNewPageDesc, sal_False );
 
@@ -1515,11 +1506,7 @@ sal_Bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
 
 void SwCSS1Parser::AddClassName( String& rFmtName, const String& rClass )
 {
-    ASSERT( rClass.Len(), "Style-Klasse ohne Laenge?" );
-
-// ??????????
-//  String aTmp( rClass );
-//  GetpApp()->GetAppInternational().ToLower( aTmp );
+    OSL_ENSURE( rClass.Len(), "Style-Klasse ohne Laenge?" );
 
     (rFmtName += '.') += rClass;
 }
@@ -1555,11 +1542,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
 
     // Bei harter Attributierung (pName==0) koennen wir aufhoehren, wenn
     // das Initial nur ueber eine Zeile geht.
-#ifdef FULL_FIRST_LETTER
-    if( nLines<=1 && !pName )
-#else
     if( nLines<=1 )
-#endif
         return;
 
     rDrop.GetLines() = nLines;
@@ -1783,7 +1766,7 @@ sal_Bool SwHTMLParser::FileDownload( const String& rURL,
         aStream << *pStream;
 
         aStream.Seek( STREAM_SEEK_TO_END );
-        DBG_ASSERT( aStream.Tell() < STRING_MAXLEN,
+        OSL_ENSURE( aStream.Tell() < STRING_MAXLEN,
                     "File zu lang fuer einen String, Ende abgeschnitten" );
         xub_StrLen nLen = aStream.Tell() < STRING_MAXLEN
                         ? (xub_StrLen)aStream.Tell()
@@ -1809,7 +1792,7 @@ sal_Bool SwHTMLParser::FileDownload( const String& rURL,
 #endif
         CallStartAction( pOldVSh );
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( pOldVSh == pVSh, "FileDownload: ViewShell wurde ausgetauscht" );
+    OSL_ENSURE( pOldVSh == pVSh, "FileDownload: ViewShell wurde ausgetauscht" );
     (void) pVSh;
 #endif
 
@@ -1821,13 +1804,13 @@ void SwHTMLParser::InsertLink()
     sal_Bool bFinishDownload = sal_False;
     if( pPendStack )
     {
-        ASSERT( ShouldFinishFileDownload(),
+        OSL_ENSURE( ShouldFinishFileDownload(),
                 "Pending-Stack ohne File-Download?" );
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
         pPendStack = pTmp;
-        ASSERT( !pPendStack, "Wo kommt der Pending-Stack her?" );
+        OSL_ENSURE( !pPendStack, "Wo kommt der Pending-Stack her?" );
 
         bFinishDownload = sal_True;
     }
@@ -1918,13 +1901,6 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const String& rIn )
                           pPageEntry->GetPropertyInfo() );
         SetPageDescAttrs( GetRightPageDesc(), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );
-//      if( pNamedPageDescs )
-//      {
-//          for( sal_uInt16 i=0; i<pNamedPageDescs->Count(); i++ )
-//              SetPageDescAttrs( (*pNamedPageDescs)[i],
-//                                pPageEntry->GetItemSet(),
-//                                pPageEntry->GetPropertyInfo() );
-//      }
 
     }
 
@@ -1948,29 +1924,6 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const String& rIn )
     if( pPageEntry )
         SetPageDescAttrs( GetLeftPageDesc(sal_True), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );
-
-    // und jetzt noch die benannten Vorlagen
-//  for( sal_uInt16 i=0; i < GetPageCount(); i++ )
-//  {
-//      pPageEntry = GetPage( i );
-//      const String& rKey = pPageEntry->GetKey();
-//      if( !rKey.Len() || rKey.GetChar(0) == ':' )
-//          continue;
-//
-//      String aName( rKey );
-//      GetpApp()->GetAppInternational().ToLower( aName );
-//      sal_uInt16 nPage = pDoc->MakePageDesc( aName );
-//      SwPageDesc *pPageDesc = &pDoc->_GetPageDesc( nPage );
-//
-//      // Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
-//      pDoc->CopyPageDesc( *pMasterPageDesc, *pPageDesc );
-//      SetPageDescAttrs( pPageDesc, pPageEntry->GetItemSet(),
-//                        pPageEntry->GetPropertyInfo() );
-//
-//      if( !pNamedPageDescs )
-//          pNamedPageDescs = new SwHTMLPageDescs;
-//      pNamedPageDescs->Insert( pPageDesc, pNamedPageDescs->Count() );
-//  }
 
     return sal_True;
 }
@@ -2475,3 +2428,5 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
         SvxCSS1Parser::SetDfltEncoding( eEnc );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

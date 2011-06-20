@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,18 +45,17 @@ namespace com{namespace sun{namespace star{
         class XColumnsSupplier;
     }
 }}}
+
 class SwMailMergeConfigItem_Impl;
 class SwView;
 
-/*-- 06.04.2004 10:43:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 struct SwDocMergeInfo
 {
     long    nStartPageInTarget;
     long    nEndPageInTarget;
     long    nDBRow;
 };
+
 class SW_DLLPUBLIC SwMailMergeConfigItem
 {
 //    com::sun::star::uno::Sequence< ::rtl::OUString>     m_aSavedDocuments;
@@ -275,5 +275,7 @@ public:
     //helper methods
     ::rtl::OUString     GetAssignedColumn(sal_uInt32 nColumn)const;
 };
+
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

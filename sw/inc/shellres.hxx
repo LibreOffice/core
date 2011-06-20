@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,9 +31,7 @@
 
 #include <tools/string.hxx>
 
-#ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
@@ -45,7 +44,7 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aPostItPage;
     String          aPostItLine;
 
-    // Calc Fehlerstrings
+    // Calc error-strings.
     String          aCalc_Syntax;
     String          aCalc_ZeroDiv;
     String          aCalc_Brack;
@@ -56,23 +55,21 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aCalc_Default;
     String          aCalc_Error;
 
-    // fuers GetRefFeld - oben/unten
+    // For GetRefField - up/down.
     String          aGetRefFld_Up;
     String          aGetRefFld_Down;
-    // --> OD 2007-09-13 #i81002#
-    // for GetRefField - referenced item not found
+    // For GetRefField - referenced item not found.
     String          aGetRefFld_RefItemNotFound;
-    // <--
-    // fuer dynamisches Menu - String "alle"
+    // For dynamic menu - string "all".
     String          aStrAllPageHeadFoot;
-    // fuer einige Listboxen - String "keine"
+    // For some list boxes - string "none"
     String          aStrNone;
-    // fuer Felder, die Fixiert sind
+    // For fixed fields.
     String          aFixedStr;
-    // custom fields of type css::util::Duration
+    // Custom fields of type css::util::Duration.
     String          sDurationFormat;
 
-    //names of TOXs
+    //Names of TOXs.
     String          aTOXIndexName;
     String          aTOXUserName;
     String          aTOXContentName;
@@ -85,18 +82,19 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
     SvStringsDtor   aDocInfoLst;
 
-    // Fly-Anker Bmps
-//  Bitmap          aAnchorBmp;
-//  Bitmap          aDragAnchorBmp;
-
-    // die AutoFormat-Redline-Kommentare
+    // The autoFormat-Redline comments.
     inline const SvStringsDtor& GetAutoFmtNameLst() const;
 
-    // returns for the specific filter the new names of pagedescs
+    enum PageNameMode
+    {
+        NORMAL_PAGE,
+        FIRST_PAGE,
+        FOLLOW_PAGE
+    };
+    // Returns for the specific filter the new names of pagedescs
     // This method is for the old code of the specific filters with
-    // now localized names
-    String GetPageDescName( sal_uInt16 nNo, sal_Bool bFirst = sal_False,
-                                        sal_Bool bFollow = sal_False );
+    // now localized names.
+    String GetPageDescName( sal_uInt16 nNo, PageNameMode eMode );
 
     ShellResource();
     ~ShellResource();
@@ -118,3 +116,5 @@ inline const SvStringsDtor& ShellResource::GetAutoFmtNameLst() const
 
 
 #endif //_SHELLRES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

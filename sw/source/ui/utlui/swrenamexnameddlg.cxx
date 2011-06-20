@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include <utlui.hrc>
 #include <unotools.hrc>
 #include <unoprnms.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XScreenCursor.hpp>
@@ -94,9 +95,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
     aNewNameED.SetModifyHdl(LINK(this, SwRenameXNamedDlg, ModifyHdl));
     aOk.Enable(sal_False);
 }
-/* -----------------09.06.99 15:34-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
 {
     try
@@ -105,14 +104,12 @@ IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
     }
     catch(uno::RuntimeException&)
     {
-        DBG_ERROR("Name wurde nicht geaendert");
+        OSL_FAIL("name wasn't changed");
     }
     EndDialog(RET_OK);
     return 0;
 }
-/* -----------------09.06.99 15:48-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
 {
     String sTmp(pEdit->GetText());
@@ -141,3 +138,5 @@ IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
     );
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

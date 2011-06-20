@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,12 +37,12 @@
 
 class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
-    sal_Bool bAuto;     // automatisch vergebenes Flag
+    sal_Bool bAuto;     // automatically given flag
 public:
     SwTblBoxNumFormat( sal_uInt32 nFormat = NUMBERFORMAT_TEXT,
                         sal_Bool bAuto = sal_False );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -58,21 +59,19 @@ public:
 
 class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
 {
-    SwModify* pDefinedIn;   // Modify-Object, in dem die Formel steht
-                            // kann nur TablenBoxFormat sein
+    SwModify* pDefinedIn;   // Modify object where the formula is located
+                            // can only be TableBoxFormat
 
 public:
     SwTblBoxFormula( const String& rFormula );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
-    // erfrage und setze den Modify-Pointer
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
                                             { pDefinedIn = (SwModify*)pNew; }
-    // suche den Node, in dem die Formel steht:
     //  BoxAttribut -> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const;
 
@@ -80,9 +79,7 @@ public:
     const SwTableBox* GetTableBox() const
         { return ((SwTblBoxFormula*)this)->GetTableBox(); }
 
-    // Status aendern
     void ChangeState( const SfxPoolItem* pItem );
-    // berechne die Formel
     void Calc( SwTblCalcPara& rCalcPara, double& rValue );
 };
 
@@ -93,7 +90,7 @@ public:
     SwTblBoxValue();
     SwTblBoxValue( const double aVal );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -127,3 +124,5 @@ inline const SwTblBoxValue          &SwFmt::GetTblBoxValue(sal_Bool bInP) const
     {   return aSet.GetTblBoxValue(bInP); }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

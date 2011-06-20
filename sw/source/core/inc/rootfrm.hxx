@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -82,7 +83,6 @@ class SwRootFrm: public SwLayoutFrm
     sal_uInt16  mnColumns;              // the current page layout bases on this number of columns
     bool    mbBookMode;             // the current page layout is in book view
     bool    mbSidebarChanged;       // the notes sidebar state has changed
-    // <--
 
     bool    mbNeedGrammarCheck;     // true when sth needs to be checked (not necessarily started yet!)
 
@@ -208,7 +208,7 @@ public:
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
@@ -306,10 +306,6 @@ public:
     void SetBrowseWidth( long n ) { bBrowseWidthValid = sal_True; nBrowseWidth = n;}
     inline void InvalidateBrowseWidth();
 
-#ifdef LONG_TABLE_HACK
-    void HackPrepareLongTblPaint( int nMode );
-#endif
-
     sal_Bool IsNewLayout() const { return bIsNewLayout; }
     void ResetNewLayout()    { bIsNewLayout = sal_False;}
 
@@ -318,8 +314,8 @@ public:
     void InsertEmptySct( SwSectionFrm* pDel );
     void DeleteEmptySct() { if( pDestroy ) _DeleteEmptySct(); }
     void RemoveFromList( SwSectionFrm* pSct ) { if( pDestroy ) _RemoveFromList( pSct ); }
-#ifdef DBG_UTIL
-    // Wird zur Zeit nur fuer ASSERTs benutzt:
+#if OSL_DEBUG_LEVEL > 1
+    // Wird zur Zeit nur fuer OSL_ENSURE( benutzt:
     sal_Bool IsInDelList( SwSectionFrm* pSct ) const; // Ist der SectionFrm in der Liste enthalten?
 #endif
 
@@ -352,7 +348,6 @@ public:
     bool IsLeftToRightViewLayout() const;
     const SwRect& GetPagesArea() const { return maPagesArea; }
     void SetSidebarChanged() { mbSidebarChanged = true; }
-    // <--
 };
 
 inline long SwRootFrm::GetBrowseWidth() const
@@ -375,3 +370,4 @@ inline  void SwRootFrm::SetVirtPageNum( const sal_Bool bOf) const
 
 #endif  // SW_ROOTFRM_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

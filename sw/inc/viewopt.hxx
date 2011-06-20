@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,7 +42,6 @@ class ViewShell;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
-//#define VIEWOPT_1_IDLE             0x00000001L  no longer used, see new member 'bIdle'
 #define VIEWOPT_1_TAB           0x00000002L
 #define VIEWOPT_1_BLANK         0x00000004L
 #define VIEWOPT_1_HARDBLANK     0x00000008L
@@ -53,8 +53,6 @@ namespace svtools{ class ColorConfig;}
 
 #define VIEWOPT_1_REF           0x00000400L
 #define VIEWOPT_1_FLDNAME       0x00000800L
-//#define           0x00001000L
-//#define      0x00002000L
 #define VIEWOPT_1_POSTITS       0x00004000L
 #define VIEWOPT_1_FLD_HIDDEN    0x00008000L
 #define VIEWOPT_1_CHAR_HIDDEN   0x00010000L
@@ -62,13 +60,11 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_1_TABLE         0x00040000L
 #define VIEWOPT_1_DRAW          0x00080000L
 #define VIEWOPT_1_CONTROL       0x00100000L
-//#define  0x00200000L
 #define VIEWOPT_1_CROSSHAIR     0x00400000L
 #define VIEWOPT_1_SNAP          0x00800000L
 #define VIEWOPT_1_SYNCHRONIZE   0x01000000L
 #define VIEWOPT_1_GRIDVISIBLE   0x02000000L
 #define VIEWOPT_1_ONLINESPELL   0x04000000L
-//#define VIEWOPT_1_HIDESPELL     0x08000000L   /* removed #i91949 */
 #define VIEWOPT_1_RESERVED1     0x10000000L
 #define VIEWOPT_1_VIEWMETACHARS 0x20000000L
 #define VIEWOPT_1_PAGEBACK      0x40000000L
@@ -100,12 +96,13 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_2_SHADOWCRSR        0x01000000L
 #define VIEWOPT_2_V_RULER_RIGHT     0x02000000L
 
-//Tabellenhintergrund
+
+// Table background.
 #define TBL_DEST_CELL   0
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
 
-//Appearance flags
+// Appearance flags.
 #define VIEWOPT_DOC_BOUNDARIES      0x0001
 #define VIEWOPT_OBJECT_BOUNDARIES   0x0002
 #define VIEWOPT_TABLE_BOUNDARIES    0x0004
@@ -114,8 +111,9 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_VISITED_LINKS       0x0020
 #define VIEWOPT_FIELD_SHADINGS      0x0040
 #define VIEWOPT_SECTION_BOUNDARIES  0x0080
+#define VIEWOPT_SHADOW              0x0100
 
-// Implementierung in core/text/txtpaint.cxx
+// Implementation in core/text/txtpaint.cxx.
 extern void SyncVout( const OutputDevice *pOut );
 
 class SwViewOption
@@ -137,60 +135,61 @@ class SwViewOption
     static Color    aSectionBoundColor;
     static Color    aPageBreakColor;
     static Color    aScriptIndicatorColor;
+    static Color    aShadowColor;
 
-    static sal_Int32 nAppearanceFlags;  //
+    static sal_Int32 nAppearanceFlags;
 protected:
     static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
 
-    String          sSymbolFont;        // Symbolzeichensatz
-    sal_uInt32          nCoreOptions;       // Bits fuer die ViewShell
-    sal_uInt32          nCore2Options;      // Bits fuer die ViewShell
+    String          sSymbolFont;        // Symbolfont.
+    sal_uInt32          nCoreOptions;       // Bits for ViewShell.
+    sal_uInt32          nCore2Options;      // Bits for ViewShell.
     sal_uInt32          nUIOptions;         // UI-Bits
-    Color           aRetoucheColor;     // DefaultBackground fuer BrowseView
-    Size            aSnapSize;          // Beschreibt hori. wie vert. Snap
+    Color           aRetoucheColor;     // DefaultBackground for BrowseView
+    Size            aSnapSize;          // Describes horizontal and vertical snap.
     sal_uInt16          mnViewLayoutColumns;// # columns for edit view
-    short           nDivisionX;         // Rasterunterteilung
+    short           nDivisionX;         // Grid division.
     short           nDivisionY;
-    sal_uInt8           nPagePrevRow;       // Page Preview Row/Columns
-    sal_uInt8           nPagePrevCol;       // Page Preview Row/Columns
-    sal_uInt8           nShdwCrsrFillMode;  // FillMode fuer den ShadowCrsr
-    sal_Bool            bReadonly : 1;      // Readonly-Doc
-    sal_Bool            bStarOneSetting : 1;// prevent from UI automatics (no scrollbars in readonly documents)
-    sal_Bool            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
-    sal_Bool            bSelectionInReadonly : 1; //determines whether selection is switched on in readonly documents
+    sal_uInt8           nPagePrevRow;       // Page Preview Row/Columns.
+    sal_uInt8           nPagePrevCol;       // Page Preview Row/Columns.
+    sal_uInt8           nShdwCrsrFillMode;  // FillMode for ShadowCrsr.
+    sal_Bool            bReadonly : 1;      // Readonly-Doc.
+    sal_Bool            bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
+    sal_Bool            bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
+    sal_Bool            bSelectionInReadonly : 1; // Determines whether selection is switched on in readonly documents.
     sal_Bool            mbFormView : 1;
-    sal_Bool            mbBrowseMode : 1;    //swmod 080130
-    sal_Bool            mbBookView : 1;      // view mode for page preview
-    sal_Bool            mbViewLayoutBookMode : 1; // book view mode for edit view
-    sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
+    sal_Bool            mbBrowseMode : 1;    // swmod 080130.
+    sal_Bool            mbBookView : 1;      // View mode for page preview.
+    sal_Bool            mbViewLayoutBookMode : 1; // Book view mode for edit view.
+    sal_Bool        bShowPlaceHolderFields : 1; // Only used in printing!
     mutable bool    bIdle;
 
-    // Maszstab
-    sal_uInt16          nZoom;              // Angaben in Prozent
-    SvxZoomType     eZoom;              // 'enum' fuer Zoom
+    // Scale
+    sal_uInt16          nZoom;          // In percent.
+    SvxZoomType     eZoom;              // 'enum' for zoom.
 
-    sal_uInt8            nTblDest;           // Ziel fuer Tabellenhintergrund
+    sal_uInt8            nTblDest;      // Destination for table background.
 
-#ifdef DBG_UTIL
-    // korrespondieren zu den Angaben in ui/config/cfgvw.src
-    sal_Bool  bTest1        :1;     // Test-Flag  "Layout not loading"
-    sal_Bool  bTest2        :1;     // Test-Flag  "WYSIWYG++"
-    sal_Bool  bTest3        :1;     // Test-Flag  ""
-    sal_Bool  bTest4        :1;     // Test-Flag  "WYSIWYG debug"
-    sal_Bool  bTest5        :1;     // Test-Flag  "No idle format"
-    sal_Bool  bTest6        :1;     // Test-Flag  "No screen adj"
-    sal_Bool  bTest7        :1;     // Test-Flag  "win format"
-    sal_Bool  bTest8        :1;     // Test-Flag  ""
+#if OSL_DEBUG_LEVEL > 1
+    // Corresponds to statements in ui/config/cfgvw.src.
+    sal_Bool  bTest1        :1;     // Test-flag  "Layout not loading"
+    sal_Bool  bTest2        :1;     // Test-flag  "WYSIWYG++"
+    sal_Bool  bTest3        :1;     // Test-flag  ""
+    sal_Bool  bTest4        :1;     // Test-flag  "WYSIWYG debug"
+    sal_Bool  bTest5        :1;     // Test-flag  "No idle format"
+    sal_Bool  bTest6        :1;     // Test-flag  "No screen adj"
+    sal_Bool  bTest7        :1;     // Test-flag  "win format"
+    sal_Bool  bTest8        :1;     // Test-flag  ""
     static sal_Bool  bTest9;    // Test-Flag  "DrawingLayerNotLoading"
     sal_Bool  bTest10       :1;     // Test-Flag  "Format by Input"
 #endif
 
 public:
             SwViewOption();                     // CTOR
-            SwViewOption(const SwViewOption&);  //
-            ~SwViewOption();                    //
+            SwViewOption(const SwViewOption&);
+            ~SwViewOption();
 
-    void   Init( Window *pWin );        // Initialisierung der statischen Daten
+    void   Init( Window *pWin );        // Initializing of static data.
 
     sal_uInt16 GetPixelTwips() const { return nPixelTwips; }
 
@@ -198,13 +197,13 @@ public:
     inline void     SetUIOptions( const SwViewOption& );
 
 /*---------------------------------------------------------------------------
-    Optionen aus nCoreOptions
+    Options from nCoreOptions
 ----------------------------------------------------------------------------*/
 
     inline sal_Bool IsIdle() const
         { return bIdle; }
 
-    // logically this is a const function since it does not modify the viewoptions
+    // Logically this is a const function since it does not modify the viewoptions
     // but only effects idle formatting. Of course that member is already implement
     // in the wrong place here... Also currently there are many const modifying casts in the code
     // just to call this function on otherwise const objects. Thus declaring it as const now.
@@ -350,7 +349,7 @@ public:
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CROSSHAIR ) : ( nCoreOptions &= ~VIEWOPT_1_CROSSHAIR); }
 
 /*---------------------------------------------------------------------------
-    Optionen aus nCore2Options
+    Options from nCore2Options
 ----------------------------------------------------------------------------*/
     inline sal_Bool IsBlackFont() const
         {return nCore2Options & VIEWOPT_CORE2_BLACKFONT ? sal_True : sal_False;}
@@ -388,11 +387,6 @@ public:
     inline void SetPrinting(sal_Bool b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PRINTING) : (nCore2Options &= ~VIEWOPT_CORE2_PRINTING);}
 
-/*---------------------------------------------------------------------------
-
-----------------------------------------------------------------------------*/
-
-
     inline short GetDivisionX() const   { return nDivisionX; }
     inline void  SetDivisionX( short n ){ nDivisionX = n; }
     inline short GetDivisionY() const   { return nDivisionY; }
@@ -410,7 +404,6 @@ public:
 
     sal_Bool         IsFormView() const { return mbFormView; }
     void         SetFormView( sal_Bool bSet ) { mbFormView = bSet; }
-    // <--
 
     inline sal_Bool  getBrowseMode() const { return mbBrowseMode; }
     inline void  setBrowseMode(sal_Bool bSet) { mbBrowseMode = bSet; }
@@ -419,14 +412,13 @@ public:
 
     sal_Bool IsAutoCompleteWords() const;
 
-    // PAGES01
     bool   IsViewLayoutBookMode() const { return mbViewLayoutBookMode; }
     void   SetViewLayoutBookMode( bool bNew ) { mbViewLayoutBookMode = bNew; }
     sal_uInt16 GetViewLayoutColumns() const { return mnViewLayoutColumns; }
     void   SetViewLayoutColumns( sal_uInt16 nNew ) { mnViewLayoutColumns = nNew; }
 
-#ifdef DBG_UTIL
-    // korrespondieren zu den Angaben in ui/config/cfgvw.src
+#if OSL_DEBUG_LEVEL > 1
+    // Correspond to statements in ui/config/cfgvw.src.
     inline sal_Bool IsTest1() const     { return bTest1; }
     inline void SetTest1( sal_Bool b )  { bTest1 = b; }
     inline sal_Bool IsTest2() const     { return bTest2; }
@@ -456,14 +448,15 @@ public:
     void DrawRectPrinter( OutputDevice* pOut, const SwRect& rRect ) const;
 
     SwViewOption& operator=( const SwViewOption &rOpt );
-    // Vergleichsmethoden
+
+    // Compare methods.
     sal_Bool IsEqualFlags ( const SwViewOption &rOpt ) const;
     inline sal_Bool operator == ( const SwViewOption &rOpt ) const;
     inline sal_Bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
 
 /*---------------------------------------------------------------------------
-    Optionen aus nUIOptions
+    Options from nUIOptions
 ----------------------------------------------------------------------------*/
 
     sal_Bool    IsViewVScrollBar() const
@@ -535,7 +528,7 @@ public:
     void            SetViewVRuler     (sal_Bool b)
                         { b ? (nUIOptions |= VIEWOPT_2_V_RULER ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER);}
 
-    // ShadowCursor ein schalten/abfragen/Farbe setzen/Modus setzen
+    // ShadowCursor, switch on/off, get/set color/mode.
     sal_Bool    IsShadowCursor()    const
         { return nUIOptions & VIEWOPT_2_SHADOWCRSR ? sal_True : sal_False;   }
     void   SetShadowCursor(sal_Bool b)
@@ -571,6 +564,7 @@ public:
     static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
     static Color&   GetSmarttagColor();
+    static Color&   GetShadowColor();
     SW_DLLPUBLIC static Color&   GetFontColor();
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
@@ -586,6 +580,7 @@ public:
     static sal_Bool     IsVisitedLinks()    {return IsAppearanceFlag(VIEWOPT_VISITED_LINKS    );}
     static sal_Bool     IsFieldShadings()   {return IsAppearanceFlag(VIEWOPT_FIELD_SHADINGS);}
     static sal_Bool     IsSectionBoundaries() {return IsAppearanceFlag(VIEWOPT_SECTION_BOUNDARIES);}
+    static sal_Bool     IsShadow()          {return IsAppearanceFlag(VIEWOPT_SHADOW           );}
 
     static void     SetAppearanceFlag(sal_Int32 nFlag, sal_Bool bSet, sal_Bool bSaveInConfig = sal_False);
 
@@ -608,8 +603,10 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
 }
 
 
-// Hilfsfunktion zur Ermittlung der HTML-Faehigkeiten
+// Helper function for checking HTML-capabilities.
 SW_DLLPUBLIC sal_uInt16     GetHtmlMode(const SwDocShell*);
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

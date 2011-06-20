@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,6 +39,7 @@
 class RtfExport;
 class RtfAttributeOutput;
 
+/// Handles export of drawings using RTF markup
 class RtfSdrExport : public EscherEx
 {
     RtfExport &m_rExport;
@@ -112,4 +114,5 @@ private:
 };
 
 #endif // _RTFSdrEXPORT_HXX_
-/* vi:set shiftwidth=4 expandtab: */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

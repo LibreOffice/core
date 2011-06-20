@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 #include <unotools/options.hxx>
 #include <vcl/timer.hxx>
 
-#ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
-#endif
 #include <svtools/xtextedt.hxx>
 
 class ScrollBar;
@@ -162,3 +161,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

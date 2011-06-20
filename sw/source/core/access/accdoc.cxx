@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,15 +39,14 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/link.hxx>
 #include <sfx2/viewsh.hxx>
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <accmap.hxx>
 #include <accdoc.hxx>
-#ifndef _ACCESS_HRC
 #include "access.hrc"
-#endif
 #include <pagefrm.hxx>
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
@@ -80,27 +80,25 @@ SwAccessibleDocumentBase::~SwAccessibleDocumentBase()
 
 void SwAccessibleDocumentBase::SetVisArea()
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     SwRect aOldVisArea( GetVisArea() );
     const SwRect& rNewVisArea = GetMap()->GetVisArea();
     if( aOldVisArea != rNewVisArea )
     {
         SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
-        // --> OD 2007-12-07 #i58139#
-        // showing state of document view needs also be updated.
+        // #i58139# - showing state of document view needs also be updated.
         // Thus, call method <Scrolled(..)> instead of <ChildrenScrolled(..)>
 //        ChildrenScrolled( GetFrm(), aOldVisArea );
         Scrolled( aOldVisArea );
-        // <--
     }
 }
 
 void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
-    ASSERT( !mpChildWin, "only one child window is supported" );
+    OSL_ENSURE( !mpChildWin, "only one child window is supported" );
     if( !mpChildWin )
     {
         mpChildWin = pWin;
@@ -117,9 +115,9 @@ void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
 
 void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
-    ASSERT( !mpChildWin || pWin == mpChildWin, "invalid child window to remove" );
+    OSL_ENSURE( !mpChildWin || pWin == mpChildWin, "invalid child window to remove" );
     if( mpChildWin && pWin == mpChildWin )
     {
         AccessibleEventObject aEvent;
@@ -134,7 +132,7 @@ void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // CHECK_FOR_DEFUNC is called by parent
 
@@ -150,7 +148,7 @@ uno::Reference< XAccessible> SAL_CALL
         throw (uno::RuntimeException,
                 lang::IndexOutOfBoundsException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( mpChildWin  )
     {
@@ -174,7 +172,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessiblePar
 sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     uno::Reference < XAccessibleContext > xAcc( mxParent->getAccessibleContext() );
     uno::Reference < XAccessible > xThis( this );
@@ -197,7 +195,7 @@ OUString SAL_CALL SwAccessibleDocumentBase::getAccessibleDescription (void)
 awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -214,7 +212,7 @@ awt::Rectangle SAL_CALL SwAccessibleDocumentBase::getBounds()
 awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -230,7 +228,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 ::com::sun::star::awt::Point SAL_CALL SwAccessibleDocumentBase::getLocationOnScreen()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -246,7 +244,7 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
 ::com::sun::star::awt::Size SAL_CALL SwAccessibleDocumentBase::getSize()
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -262,7 +260,7 @@ sal_Bool SAL_CALL SwAccessibleDocumentBase::containsPoint(
             const awt::Point& aPoint )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     Window *pWin = GetWindow();
 
@@ -279,7 +277,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
                 const awt::Point& aPoint )
         throw (uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     if( mpChildWin  )
     {
@@ -339,7 +337,7 @@ SwAccessibleDocument::~SwAccessibleDocument()
 
 void SwAccessibleDocument::Dispose( sal_Bool bRecursive )
 {
-    ASSERT( GetFrm() && GetMap(), "already disposed" );
+    OSL_ENSURE( GetFrm() && GetMap(), "already disposed" );
 
     Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
     if( pWin )
@@ -349,11 +347,11 @@ void SwAccessibleDocument::Dispose( sal_Bool bRecursive )
 
 IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
         VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
-        DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
+        OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
         switch ( pVclEvent->GetId() )
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
@@ -447,18 +445,15 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     return aTypes;
 }
 
+namespace
+{
+    class theSwAccessibleDocumentImplementationId : public rtl::Static< UnoTunnelIdInit, theSwAccessibleDocumentImplementationId > {};
+}
+
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
         throw(uno::RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = sal_False;
-    if(!bInit)
-    {
-        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
-        bInit = sal_True;
-    }
-    return aId;
+    return theSwAccessibleDocumentImplementationId::get().getSeq();
 }
 
 //=====  XAccessibleSelection  ============================================
@@ -505,7 +500,7 @@ uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     return maSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+// index has to be treated as global child index.
 void SwAccessibleDocument::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
@@ -513,3 +508,5 @@ void SwAccessibleDocument::deselectAccessibleChild(
 {
     maSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

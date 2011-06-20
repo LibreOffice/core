@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,7 +52,7 @@
 #include "colmgr.hxx"
 
 /*-----------------------------------------------------------------------
-    Beschreibung: Uebernahme der aktualisierten Werte aus dem Set
+    Description: Taking the updated values from the set
  -----------------------------------------------------------------------*/
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
@@ -61,7 +62,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // Ausrichtung
+        // alignment
         pPage = (const SvxPageItem*)&rSet.Get( nWhich );
 
         if ( pPage )
@@ -72,14 +73,14 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // Orientation und Size aus dem PageItem
+        // orientation and size from PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
         SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // linken und rechten Rand einstellen
+        // set left and right border
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get( nWhich );
 
         SetLeft( rLRSpace.GetLeft() );
@@ -95,7 +96,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
-        // oberen und unteren Rand einstellen
+        // set upper and lower border
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get( nWhich );
 
         SetTop( rULSpace.GetUpper() );
@@ -108,7 +109,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     }
 
 
-    // Kopfzeilen-Attribute auswerten
+    // evaluate header-attributes
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
             sal_False, &pItem ) )
@@ -204,10 +205,6 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     Invalidate();
 }
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 
 void SwColExample::DrawPage( const Point& rOrg,
                             const sal_Bool bSecond,
@@ -222,7 +219,7 @@ void SwColExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // fuer gespiegelt drehen
+            // rotate for mirrored
             nL = GetRight();
             nR = GetLeft();
         }
@@ -307,11 +304,6 @@ void SwColExample::DrawPage( const Point& rOrg,
     }
 }
 
-/*-----------------25.10.96 09.15-------------------
-
---------------------------------------------------*/
-
-
 SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) :
     Window(pParent, rResId),
     m_aFrmSize(1,1)
@@ -335,11 +327,6 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
     aMapMode.SetScaleY( aScale );
     SetMapMode( aMapMode );
 }
-
-/*-----------------25.10.96 09.16-------------------
-
---------------------------------------------------*/
-
 
 void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 {
@@ -373,7 +360,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     SetFillColor( aGrayColor );
 
-    //Spaltentrenner?
+    //column seperator?
     long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );
@@ -429,11 +416,6 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
     }
 }
 
-/*-----------------25.10.96 12.05-------------------
-
---------------------------------------------------*/
-
-
 void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
 {
     m_aCols = rCol;
@@ -477,16 +459,12 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         }
     }
 }
-/* -----------------------------08.02.2002 11:44------------------------------
 
- ---------------------------------------------------------------------------*/
 SwPageGridExample::~SwPageGridExample()
 {
     delete pGridItem;
 }
-/* -----------------------------08.02.2002 11:48------------------------------
 
- ---------------------------------------------------------------------------*/
 #define MAX_ROWS    10
 #define MAX_LINES   15
 void SwPageGridExample::DrawPage( const Point& rOrg,
@@ -509,7 +487,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
 
         if ( GetUsage() == SVX_PAGE_MIRROR && !bSecond )
         {
-            // fuer gespiegelt drehen
+            // rotate for mirrored
             nL = GetRight();
             nR = GetLeft();
         }
@@ -589,9 +567,7 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         }
     }
 }
-/* -----------------------------08.02.2002 11:48------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
     DELETEZ(pGridItem);
@@ -608,3 +584,4 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     SwPageExample::UpdateExample(rSet);
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

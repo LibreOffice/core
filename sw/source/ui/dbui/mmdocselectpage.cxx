@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,9 +41,7 @@
 #include <sfx2/docfac.hxx>
 #include <vcl/msgbox.hxx>
 #include <view.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <mmdocselectpage.hxx>
 #include <mailmergewizard.hxx>
 #include <shellio.hxx>
@@ -61,9 +60,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace svt;
 
-/*-- 02.04.2004 09:40:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent ) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_DOCSELECT_PAGE)),
 #ifdef MSC
@@ -114,16 +110,10 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent 
     }
 }
 
-/*-- 02.04.2004 09:40:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwMailMergeDocSelectPage::~SwMailMergeDocSelectPage()
 {
 }
 
-/*-- 05.04.2004 14:21:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
 {
     m_aRecentDocLB.Enable(&m_aRecentDocRB == pButton);
@@ -133,9 +123,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, DocSelectHdl, RadioButton*, pButton)
 
     return 0;
 }
-/*-- 05.04.2004 14:25:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
 {
     bool bTemplate = &m_aBrowseTemplatePB == pButton;
@@ -144,7 +132,6 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
     {
         m_aLoadTemplateRB.Check();
         SfxNewFileDialog* pNewFileDlg = new SfxNewFileDialog(this, 0);
-        //pNewFileDlg->SetTemplateFlags(nFlags);
         sal_uInt16 nRet = pNewFileDlg->Execute();
         if(RET_TEMPLATE_LOAD == nRet)
             bTemplate = false;
@@ -164,7 +151,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
 
         SfxObjectFactory &rFact = m_pWizard->GetSwView()->GetDocShell()->GetFactory();
         SfxFilterMatcher aMatcher( String::CreateFromAscii(rFact.GetShortName()) );
-        SfxFilterMatcherIter aIter( &aMatcher );
+        SfxFilterMatcherIter aIter( aMatcher );
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         const SfxFilter* pFlt = aIter.First();
         while( pFlt )
@@ -194,9 +181,6 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
     return 0;
 }
 
-/*-- 06.04.2004 12:52:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     sal_Bool bReturn = sal_False;
@@ -222,3 +206,5 @@ sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageRea
     }
     return bReturn;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

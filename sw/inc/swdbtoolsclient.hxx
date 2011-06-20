@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,9 @@
 #include <osl/module.h>
 #include "swdllapi.h"
 
-/* -----------------------------30.08.2001 11:01------------------------------
+/*
     Client to use the dbtools library as load-on-call
- ---------------------------------------------------------------------------*/
+*/
 class SW_DLLPUBLIC SwDbtoolsClient
 {
 private:
@@ -74,3 +75,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

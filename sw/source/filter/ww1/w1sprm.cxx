@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,6 @@
 #include <charatr.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 #include <fltini.hxx>
 #include <docufld.hxx>
 #include <pagedesc.hxx>
@@ -59,13 +59,13 @@
 #include <swerror.h>
 #include <statstr.hrc>
 
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 /////////////////////////////////////////////////////////////// Ww1Sprm
 void Ww1Sprm::Stop( Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if(IsUsed())
-//      for(sal_uInt16 i=0;i<Count();i++)
         for(short i=Count()-1;i>=0;i--){    // rueckwaerts
             sal_uInt8 nId;
             sal_uInt16 nSize;
@@ -102,7 +102,7 @@ void Ww1SingleSprm::Start(
 void Ww1SingleSprm::Stop(
     Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&)
 {
-//  ASSERT(sal_False, "Unknown Sprm");
+// OSL_ENSURE(FALSE, "Unknown Sprm");
 }
 
 ////////////////////////////////////////////////////////////////// STOP
@@ -168,7 +168,7 @@ STOP1(Ww1SingleSprmPDxa, RES_LR_SPACE)
 void Ww1SingleSprmPJc::Start(
     Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
-    static SvxAdjust __READONLY_DATA aAdj[] = {
+    static SvxAdjust const aAdj[] = {
         SVX_ADJUST_LEFT,
         SVX_ADJUST_CENTER,
         SVX_ADJUST_RIGHT,
@@ -208,45 +208,40 @@ STOP1(Ww1SingleSprmPPageBreakBefore, RES_BREAK)
 SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc)
 {
     sal_uInt16 nCode;
+    ::editeng::SvxBorderStyle eStyle = ::editeng::SOLID;
     if(pBrc->dxpLine2WidthGet() == 0)
     {
         switch(pBrc->dxpLine1WidthGet())
         {
-        default: ASSERT(sal_False, "unknown linewidth");
+        default: OSL_FAIL("unknown linewidth");
         case 0: return 0;                           // keine Linie
         case 1: nCode = DEF_LINE_WIDTH_0; break;
         case 2: nCode = DEF_LINE_WIDTH_1; break;
         case 3: nCode = DEF_LINE_WIDTH_2; break;
         case 4: nCode = DEF_LINE_WIDTH_3; break;
         case 5: nCode = DEF_LINE_WIDTH_4; break;
+        case 6:
+                nCode = DEF_LINE_WIDTH_5;
+                eStyle = ::editeng::DOTTED;
+                break;
+        case 7:
+                nCode = DEF_LINE_WIDTH_5;
+                eStyle = ::editeng::DASHED;
+                break;
         }
-        pLine->SetOutWidth(nCode);
-        pLine->SetInWidth(0);
+        pLine->SetWidth( nCode );
+        pLine->SetStyle( eStyle );
     }
     else
     {
-        switch(pBrc->dxpLine1WidthGet())
+        if ( pBrc->dxpLine1WidthGet() == 1 && pBrc->dxpLine2WidthGet() == 1 )
         {
-        default: ASSERT(sal_False, "unknown linewidth");
-        case 1: nCode = DEF_DOUBLE_LINE0_IN; break;
+            pLine->SetStyle( ::editeng::DOUBLE );
+            pLine->SetWidth( DEF_LINE_WIDTH_0 );
         }
-        pLine->SetOutWidth(nCode);
-        switch(pBrc->dxpLine2WidthGet())
-        {
-        default: ASSERT(sal_False, "unknown linewidth");
-        case 1: nCode = DEF_DOUBLE_LINE0_OUT; break;
-        }
-        pLine->SetInWidth(nCode);
+        else
+            OSL_ENSURE(sal_False, "unknown linewidth");
     }
-    switch(pBrc->dxpLine1WidthGet())
-    {
-    default: ASSERT(sal_False, "unknown space");
-    case 0: nCode = DEF_DOUBLE_LINE0_DIST; break;
-    case 1: nCode = DEF_DOUBLE_LINE1_DIST; break;
-    case 2: nCode = DEF_DOUBLE_LINE2_DIST; break;
-    case 3: nCode = DEF_DOUBLE_LINE3_DIST; break;
-    }
-    pLine->SetDistance(nCode);
     return pLine;
 }
 
@@ -254,14 +249,16 @@ void Ww1SingleSprmPBrc::Start(
     Ww1Shell& rOut, sal_uInt8,
     W1_BRC10* pBrc,
     sal_uInt16
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nSize
 #endif
     ,
     Ww1Manager& /*rMan*/,
     SvxBoxItem& aBox)
 {
-    ASSERT(sizeof(W1_BRC10) == nSize, "sizemissmatch");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(sizeof(W1_BRC10) == nSize, "sizemissmatch");
+#endif
     if(pBrc->dxpSpaceGet())
         aBox.SetDistance(10 + 20 * pBrc->dxpSpaceGet());
             //??? Warum 10+... ????
@@ -285,7 +282,7 @@ void Ww1SingleSprmPBrc::Start(
 
 STOP2(Ww1SingleSprmPBrc, RES_BOX, RES_SHADOW)
 
-static sal_uInt16 __READONLY_DATA nBrcTrans[BRC_ANZ] =
+static sal_uInt16 nBrcTrans[BRC_ANZ] =
      { BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
 
 void Ww1SingleSprmPBrc10::Start(
@@ -297,7 +294,6 @@ void Ww1SingleSprmPBrc10::Start(
                      rOut.GetFlyFrmAttr(RES_BOX) :rOut.GetAttr(RES_BOX));
     const SvxBoxItem &rBoxItem = (const SvxBoxItem&)rItem;
     SvxBoxItem aBox( rBoxItem );
-//  rOut >> aBox;
     SvxBorderLine aLine;
     aBox.SetLine(SetBorder(&aLine, pBrc), nBrcTrans[nLine] );
     Ww1SingleSprmPBrc::Start(rOut, nId, pBrc, nSize, rMan, aBox);
@@ -355,12 +351,8 @@ void Ww1SingleSprmPDyaLine::Start(
 void Ww1SingleSprmPChgTabsPapx::Start(
     Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
-#if OSL_DEBUG_LEVEL > 1
-//  rOut << 'T';
-#endif
+
     short nLeftPMgn = 0;    // Koordinaten etwa gleich ??
-//  ( pAktColl ) ? pCollA[nAktColl].nLeftParaMgn
-//                                 : nLeftParaMgn;      // Absatz L-Space
 
     short i;
     sal_uInt8 nDel = pSprm[1];
@@ -454,15 +446,16 @@ void Ww1SingleSprmPFInTable::Start(
 
 void Ww1SingleSprmPFInTable::Stop(
     Ww1Shell&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     rOut
 #endif
     ,
     sal_uInt8, sal_uInt8*, sal_uInt16,
-    Ww1Manager& rMan)
+    Ww1Manager& /*rMan*/)
 {
-    ASSERT(rOut.IsInTable(), "");
-    rMan.SetInTtp( sal_False );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(rOut.IsInTable(), "");
+#endif
 }
 
 void Ww1SingleSprmTDxaGapHalf::Start(
@@ -490,8 +483,6 @@ void Ww1SingleSprmTDefTable10::Start(
 // Erstmal die Zellenpositionen einlesen
     short nPos = SVBT16ToShort( p );    // signed, kann auch neg. sein !!!
 
-//  if( !rOut.IsTableWidthSet() ){      // Muss Tabellenbreite und -Ausrichtung
-                                        // noch gesetzt werden ?
     {
         short nWholeWidth = SVBT16ToShort( p + 2 * nCount ) - nPos;
         rOut.SetTableWidth( (sal_uInt16)nWholeWidth );  // Tabellenbreite setzen
@@ -537,7 +528,6 @@ void Ww1SingleSprmTDefTable10::Start(
         if( pTc0 ){                     // gibts TCs ueberhaupt ?
             W1_TC* pTc2 = (W1_TC*)pTc0;
             sal_Bool bMerged2 = pTc2->fMergedGet();
-//          ASSERT( !bMerged2, "Gemergte Tabellenzellen noch nicht vollstaendig implementiert" );
             if( !bMerged2 ){
 // und nun die Umrandungen
                 SvxBoxItem aBox( (SvxBoxItem&)rOut.GetCellAttr( RES_BOX ));
@@ -578,31 +568,15 @@ void Ww1SingleSprmPpc::Start(
         return;                                 // nicht
 
     RndStdIds eAnchor;          // Bindung
-    sal_Int16 eHRel;        // Seite oder Seitenrand
-    sal_Int16 eVRel;        // Seite oder Seitenrand
 
-    switch ( ( nPpc & 0x30 ) >> 4 ){        // Y - Bindung bestimmt Sw-Bindung
-    case 0: eAnchor = FLY_AT_PARA;          // Vert Margin
-            eVRel = text::RelOrientation::PRINT_AREA;
-//          if( nYPos < 0 )
-//              nYPos = 0;                  // koennen wir nicht
+    switch ( ( nPpc & 0x30 ) >> 4 )     // Y - Bindung bestimmt Sw-Bindung
+    {
+        case 0:
+            eAnchor = FLY_AT_PARA;      // Vert Margin
             break;
-/*  case 1:*/                               // Vert. Seite
-    default:eAnchor = FLY_AT_PAGE;          // Vert Page oder unknown
-            eVRel = text::RelOrientation::FRAME;
+        default:
+            eAnchor = FLY_AT_PAGE;      // Vert Page oder unknown
             break;                          // 2=Vert. Paragraph, 3=Use Default
-    }
-
-    switch ( ( nPpc & 0xc0 ) >> 6 ){        // X - Bindung -> Koordinatentransformation
-    case 0:                                 // Hor. Spalte
-    case 1:                                 // Hor. Absatz
-            eHRel = text::RelOrientation::PRINT_AREA;
-//          nXPos += nPgLeft;               // in Seiten-Koordinaten umrechnen
-            break;
-/*  case 2:*/                               // Hor. Seite
-    default:
-            eHRel = text::RelOrientation::FRAME;
-            break;
     }
 
     if( !rOut.IsInFly() && rMan.IsInStyle() ){
@@ -632,7 +606,7 @@ void Ww1SingleSprmPDxaAbs::Start(
     case -4:  eHAlign = text::HoriOrientation::CENTER; nXPos = 0; break; // zentriert
     case -8:                                           // rechts
     case -16: eHAlign = text::HoriOrientation::RIGHT; nXPos = 0; break;  // Mogel: aussen -> rechts
-//  default:  nXPos += (short)nIniFlyDx; break; // Korrekturen per Ini-Datei
+
     }
     rOut.SetFlyXPos( nXPos, eHRel, eHAlign );
 }
@@ -648,7 +622,7 @@ void Ww1SingleSprmPDyaAbs::Start(
     case -4:  eVAlign = text::VertOrientation::TOP; nYPos = 0; break; // oben
     case -8:  eVAlign = text::VertOrientation::CENTER; nYPos = 0; break;  // zentriert
     case -12: eVAlign = text::VertOrientation::BOTTOM; nYPos = 0; break;  // unten
-//  default:  nYPos += (short)nIniFlyDy; break; // Korrekturen per Ini-Datei
+
     }
     rOut.SetFlyYPos( nYPos, eVRel, eVAlign );
 }
@@ -682,3 +656,4 @@ void Ww1SingleSprmPFromText::Start(
 #undef STOP2
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,32 +32,22 @@
 
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <num.hxx>
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <globals.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 #include <svx/svdouno.hxx>
 #include <svx/fmshell.hxx>
@@ -106,7 +97,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, sal_False, sal_True ); break;
         case FN_LINE_UP:    rSh.Up   ( bSelect, 1 ); break;
         case FN_LINE_DOWN:  rSh.Down ( bSelect, 1 ); break;
-        default:            ASSERT(sal_False, falscher Dispatcher); return;
+        default: OSL_FAIL("wrong Dispatcher"); return;
         }
     }
 
@@ -143,7 +134,7 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
         case FN_SELECT_WORD:            bRet = rSh.SelNearestWrd(); break;
 
         case SID_SELECTALL:             bRet = 0 != rSh.SelAll();   break;
-        default:                    ASSERT(sal_False, falscher Dispatcher); return;
+        default: OSL_FAIL("wrong dispatcher"); return;
     }
 
     if ( bRet )
@@ -180,7 +171,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
 
         case FN_END_OF_PAGE_SEL:
         case FN_END_OF_PAGE:        rSh.EndPg   ( FN_END_OF_PAGE_SEL == nSlot ); break;
-        default:                    ASSERT(sal_False, falscher Dispatcher); return;
+        default: OSL_FAIL("wrong dispatcher"); return;
     }
     rReq.Done();
 }
@@ -197,7 +188,7 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
         case FN_END_OF_NEXT_COLUMN:   rSh.EndOfNextColumn  ( sal_False ); break;
         case FN_START_OF_PREV_COLUMN: rSh.StartOfPrevColumn( sal_False ); break;
         case FN_END_OF_PREV_COLUMN:   rSh.EndOfPrevColumn  ( sal_False ); break;
-        default:                      ASSERT(sal_False, falscher Dispatcher); return;
+        default: OSL_FAIL("wrong dispatcher"); return;
     }
     rReq.Done();
 }
@@ -208,39 +199,38 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
     GetView().GetEditWin().FlushInBuffer();
 
     sal_uInt16 nSlot = rReq.GetSlot();
-    sal_Bool bRet = sal_False;
     switch ( nSlot )
     {
         case FN_NEXT_WORD_SEL:
-        case FN_NEXT_WORD:      bRet = rSh.NxtWrd( FN_NEXT_WORD_SEL == nSlot );
+        case FN_NEXT_WORD:      rSh.NxtWrd( FN_NEXT_WORD_SEL == nSlot );
         break;
 
         case FN_START_OF_PARA_SEL:
-        case FN_START_OF_PARA:  bRet = rSh.SttPara( FN_START_OF_PARA_SEL == nSlot );
+        case FN_START_OF_PARA:  rSh.SttPara( FN_START_OF_PARA_SEL == nSlot );
         break;
 
         case FN_END_OF_PARA_SEL:
-        case FN_END_OF_PARA:    bRet = rSh.EndPara( FN_END_OF_PARA_SEL == nSlot );
+        case FN_END_OF_PARA:    rSh.EndPara( FN_END_OF_PARA_SEL == nSlot );
         break;
 
         case FN_PREV_WORD_SEL:
-        case FN_PREV_WORD:      bRet = rSh.PrvWrd( FN_PREV_WORD_SEL == nSlot );
+        case FN_PREV_WORD:      rSh.PrvWrd( FN_PREV_WORD_SEL == nSlot );
         break;
 
         case FN_NEXT_SENT_SEL:
-        case FN_NEXT_SENT:      bRet = rSh.FwdSentence( FN_NEXT_SENT_SEL == nSlot );
+        case FN_NEXT_SENT:      rSh.FwdSentence( FN_NEXT_SENT_SEL == nSlot );
         break;
 
         case FN_PREV_SENT_SEL:
-        case FN_PREV_SENT:      bRet = rSh.BwdSentence( FN_PREV_SENT_SEL == nSlot );
+        case FN_PREV_SENT:      rSh.BwdSentence( FN_PREV_SENT_SEL == nSlot );
         break;
 
-        case FN_NEXT_PARA:      bRet = rSh.FwdPara    ( sal_False );
+        case FN_NEXT_PARA:      rSh.FwdPara    ( sal_False );
         break;
 
-        case FN_PREV_PARA:      bRet = rSh.BwdPara    ( sal_False );
+        case FN_PREV_PARA:      rSh.BwdPara    ( sal_False );
         break;
-        default:                ASSERT(sal_False, falscher Dispatcher); return;
+        default: OSL_FAIL("wrong dispatcher"); return;
     }
     rReq.Done();
 }
@@ -358,7 +348,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             break;
 
         default:
-            ASSERT(sal_False, falscher Dispatcher);
+            OSL_FAIL("wrong dispatcher");
             return;
     }
 
@@ -368,3 +358,4 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
 
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

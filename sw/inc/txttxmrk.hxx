@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@ class SwTxtNode;
 class SwDoc;
 
 // SWTXT_TOXMARK *******************************
-// Attribut fuer die Verzeichnisse
+// Attribute for indices/tables of contents.
 
 class SwTxtTOXMark : public SwTxtAttrEnd
 {
@@ -58,9 +59,10 @@ public:
 
 inline const SwTxtNode& SwTxtTOXMark::GetTxtNode() const
 {
-    ASSERT( m_pTxtNode, "SwTxtTOXMark: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtTOXMark: where is my TxtNode?" );
     return *m_pTxtNode;
 }
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,7 +33,6 @@
 #include <SwPortionHandler.hxx>
 #include "viewopt.hxx"  // SwViewOptions
 
-#include "txtcfg.hxx"
 #include "portox.hxx"
 #include "inftxt.hxx"       // GetTxtSize()
 
@@ -113,3 +113,4 @@ void SwIsoToxPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

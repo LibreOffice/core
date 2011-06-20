@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -32,9 +33,7 @@
 
 #include <sfx2/msg.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/srchitem.hxx>
 #include <sfx2/objface.hxx>
 #include <tools/globname.hxx>
@@ -64,8 +63,9 @@ SwWebDrawFormShell::SwWebDrawFormShell(SwView& rVw) :
 {
 }
 
-__EXPORT SwWebDrawFormShell::~SwWebDrawFormShell()
+SwWebDrawFormShell::~SwWebDrawFormShell()
 {
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

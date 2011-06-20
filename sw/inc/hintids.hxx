@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,12 +28,12 @@
 #ifndef _HINTIDS_HXX
 #define _HINTIDS_HXX
 
-#include <tools/solar.h>        // fuer __FAR_DATA
+#include <tools/solar.h>
 #include <sal/types.h>          // for sal_Unicode
 #include "swdllapi.h"
 
-// fuer SwTxtHints ohne Endindex wird folgendes Zeichen eingefuegt:
-//JP 24.05.00: for the new UniCode Version:
+// For SwTxtHints without end index the following char is added:
+
 #define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
 #define CH_TXTATR_INWORD        ((sal_Unicode)0x02)
 #define CH_TXTATR_TAB           ((sal_Unicode)'\t')
@@ -44,7 +45,7 @@
 #define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)0x06)
 
 /*
- * Hier kommen erst mal die enums fuer die Hints
+ * Enums for the hints
  */
 
 #define HINT_BEGIN  1
@@ -52,8 +53,8 @@
 #define POOLATTR_BEGIN      HINT_BEGIN
 #define POOLATTR_END        RES_UNKNOWNATR_END
 
-// Bereiche fuer die Id's der einzelnen Format-Attribute
-// die Which-Werte fuer die Charakter-Format Attribute
+// Ranges for the IDs of the format-attributes.
+// Which-values for character-format attributes.
 enum RES_CHRATR
 {
 RES_CHRATR_BEGIN = HINT_BEGIN,
@@ -100,7 +101,7 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
 RES_CHRATR_END
 };
 
-// diese Attribute stehen nur im SwpAttr-Array vom TextNode
+// this Attribute used only in a TextNodes SwpAttr-Array
 enum RES_TXTATR
 {
 RES_TXTATR_BEGIN = RES_CHRATR_END,
@@ -134,7 +135,7 @@ RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
     RES_TXTATR_DUMMY5,                              // 50
 RES_TXTATR_WITHEND_END,
 
-// alle TextAttribute ohne ein Ende
+// all TextAttributes without an end
 RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
     RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 51
     RES_TXTATR_FLYCNT,                              // 52
@@ -170,7 +171,6 @@ RES_PARATR_BEGIN = RES_TXTATR_END,
 RES_PARATR_END
 };
 
-// --> OD 2008-02-25 #refactorlists#
 // list attributes for paragraphs.
 // intentionally these list attributes are not contained in paragraph styles
 enum RES_PARATR_LIST
@@ -183,7 +183,6 @@ RES_PARATR_LIST_BEGIN = RES_PARATR_END,
     RES_PARATR_LIST_ISCOUNTED,                      // 79
 RES_PARATR_LIST_END
 };
-// <--
 
 enum RES_FRMATR
 {
@@ -223,12 +222,8 @@ RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
     RES_FRAMEDIR,                                   // 112
     RES_HEADER_FOOTER_EAT_SPACING,                  // 113
     RES_ROW_SPLIT,                                  // 114
-    // OD 18.09.2003 #i18732# - insert new item and 5 dummies
     RES_FOLLOW_TEXT_FLOW,                           // 115
-// --> collapsing borders FME 2005-05-27 #i29550#
     RES_COLLAPSING_BORDERS,                         // 116
-// <-- collapsing
-    // OD 2004-05-04 #i28701# - use dummy1 for new item
     RES_WRAP_INFLUENCE_ON_OBJPOS,                   // 117
     RES_AUTO_STYLE,                                 // 118
     RES_FRMATR_STYLE_NAME,                          // 119
@@ -279,7 +274,7 @@ RES_UNKNOWNATR_END
 
 
 
-// ID-s fuer die Formate
+// Format IDs
 enum RES_FMT
 {
 RES_FMT_BEGIN = RES_UNKNOWNATR_END,
@@ -293,7 +288,7 @@ RES_FMT_BEGIN = RES_UNKNOWNATR_END,
 RES_FMT_END
 };
 
-// die ID's fuer Messages in den Formaten
+// ID's for Messages in the Formats
 enum RES_MSG
 {
 RES_MSG_BEGIN = RES_FMT_END,
@@ -324,9 +319,6 @@ RES_MSG_BEGIN = RES_FMT_END,
     RES_HIDDENPARA_PRINT,
     RES_CONDCOLL_CONDCHG,
     RES_VIRTPAGENUM_INFO,
-    // --> OD 2008-02-25 #refactorlists#
-//    RES_GETNUMNODES,
-    // <--
     RES_GETLOWERNUMLEVEL,
     RES_RESET_FMTWRITTEN,
     RES_REMOVE_UNO_OBJECT,
@@ -347,12 +339,10 @@ RES_MSG_BEGIN = RES_FMT_END,
 RES_MSG_END
 };
 
-
-// eine ID fuer den RTF-Reader. Die Stylesheets werden wie
-// Attribute behandelt, d.H. es gibt ein StyleSheet Attribut. Um
-// nicht mit anderen Which()-Werten zu kollidieren, ist der Wert
-// hier mit aufgefuehrt. (Auch das Hilfesystem definiert neue
-// Attribute !!)
+// An ID for the RTF-reader. The stylesheets are treated like attributes,
+// i.e. there is a StyleSheet-attribute. To avoid collision with other
+// Which()-values, the value is listed here. (The help system too defines
+// new attributes!)
 enum RES_FLTRATTR
 {
 RES_FLTRATTR_BEGIN = RES_MSG_END,
@@ -374,7 +364,7 @@ RES_FLTRATTR_END
 
 #define HINT_END RES_TBX_DUMMY
 
-// Fehler-Erkennung !!
+// Error recognition!!
 #define INVALID_HINT HINT_END
 #define RES_WHICHHINT_END HINT_END
 
@@ -426,61 +416,60 @@ inline bool isUNKNOWNATR(const sal_uInt16 nWhich)
 }
 
 
-/*
- * hole aus der statischen Default-Attribut Tabelle ueber den Which-Wert
- * das entsprechende default Attribut.
- * Ist keines vorhanden, returnt ein 0-Pointer !!!
- *
- * Diese Funktion ist im Init.CXX implementiert. Damit die Formate darauf
- * zugreifen koennen, ist sie hier als extern deklariert.
- * Im PRODUCT ist das Teil inline.
- */
+// Take the respective default attribute from the statistical default
+// attributes table over the Which-value.
+// If none exists, return a 0 pointer!!!
+// This function is implemented in Init.cxx. It is declared here as external
+// in order to allow the formats to access it.
+// Inline in PRODUCT.
 class SfxPoolItem;
 struct SfxItemInfo;
 typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
 
-extern SwDfltAttrTab __FAR_DATA aAttrTab;
-extern SfxItemInfo   __FAR_DATA aSlotTab[];
+extern SwDfltAttrTab aAttrTab;
+extern SfxItemInfo   aSlotTab[];
 
 SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich );
 
 SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript );
 
-// return for the given TextAttribut without an end the correct character.
+// return for the given TextAttribute without an end the correct character.
 // This function returns
-//      CH_TXTATR_BREAKWORD for Textattribut which breaks a word (default)
-//      CH_TXTATR_INWORD    for Textattribut which dont breaks a word
+//      CH_TXTATR_BREAKWORD for Textattribute which breaks a word (default)
+//      CH_TXTATR_INWORD    for Textattribute which dont breaks a word
 class SwTxtAttr;
 sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr );
 
-// alle Sets stehen im init.cxx
+// all Sets defined in init.cxx
 
-// AttrSet-Range fuer die 3 Break-Attribute
-extern sal_uInt16 __FAR_DATA aBreakSetRange[];
-// AttrSet-Range fuer die TxtFmtColl
-extern sal_uInt16 __FAR_DATA aTxtFmtCollSetRange[];
-// AttrSet-Range fuer die GrfFmtColl
-extern sal_uInt16 __FAR_DATA aGrfFmtCollSetRange[];
-// AttrSet-Range fuer die TextNode
-SW_DLLPUBLIC extern sal_uInt16 __FAR_DATA aTxtNodeSetRange[];
-// AttrSet-Range fuer die NoTxtNode
-extern sal_uInt16 __FAR_DATA aNoTxtNodeSetRange[];
-// AttrSet-Range fuer die SwTable
-extern sal_uInt16 __FAR_DATA aTableSetRange[];
-// AttrSet-Range fuer die SwTableLine
-extern sal_uInt16 __FAR_DATA aTableLineSetRange[];
-// AttrSet-Range fuer die SwTableBox
-extern sal_uInt16 __FAR_DATA aTableBoxSetRange[];
-// AttrSet-Range fuer die SwFrmFmt
-SW_DLLPUBLIC extern sal_uInt16 __FAR_DATA aFrmFmtSetRange[];
-// AttrSet-Range fuer die SwCharFmt
-extern sal_uInt16 __FAR_DATA aCharFmtSetRange[];
-// AttrSet-Range fuer die character autostyles
-extern sal_uInt16 __FAR_DATA aCharAutoFmtSetRange[];
-// AttrSet-Range fuer die SwPageDescFmt
-extern sal_uInt16 __FAR_DATA aPgFrmFmtSetRange[];
+// AttrSet-Range for the 3 Break-Attribute
+extern sal_uInt16 aBreakSetRange[];
+// AttrSet-Range for TxtFmtColl
+extern sal_uInt16 aTxtFmtCollSetRange[];
+// AttrSet-Range for GrfFmtColl
+extern sal_uInt16 aGrfFmtCollSetRange[];
+// AttrSet-Range for TextNode
+SW_DLLPUBLIC extern sal_uInt16 aTxtNodeSetRange[];
+// AttrSet-Range for NoTxtNode
+extern sal_uInt16 aNoTxtNodeSetRange[];
+// AttrSet-Range for SwTable
+extern sal_uInt16 aTableSetRange[];
+// AttrSet-Range for SwTableLine
+extern sal_uInt16 aTableLineSetRange[];
+// AttrSet-Range for SwTableBox
+extern sal_uInt16 aTableBoxSetRange[];
+// AttrSet-Range for SwFrmFmt
+SW_DLLPUBLIC extern sal_uInt16 aFrmFmtSetRange[];
+// AttrSet-Range for SwCharFmt
+extern sal_uInt16 aCharFmtSetRange[];
+// AttrSet-Range for the autostyles
+extern sal_uInt16 aCharAutoFmtSetRange[];
+// AttrSet-Range for SwPageDescFmt
+extern sal_uInt16 aPgFrmFmtSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
 sal_Bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,8 +65,8 @@ public:
     {}
     virtual ~SwBaseLink();
 
-    virtual void DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
+        const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
     virtual void Closed();
 
@@ -73,12 +74,12 @@ public:
 
     SwCntntNode *GetCntntNode() { return pCntntNode; }
 
-    // nur fuer Grafiken
+    // For graphics only.
     sal_Bool SwapIn( sal_Bool bWaitForData = sal_False, sal_Bool bNativFormat = sal_False );
 
     sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 
-    // nur fuer Grafik-Links ( zum Umschalten zwischen DDE / Grf-Link)
+    // Only for graphics-links (for switching between DDE / Grf-link).
     void SetObjType( sal_uInt16 nType ) { SvBaseLink::SetObjType( nType ); }
 
     sal_Bool IsRecursion( const SwBaseLink* pChkLnk ) const;
@@ -93,3 +94,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

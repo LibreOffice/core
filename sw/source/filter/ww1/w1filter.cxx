@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,18 +34,14 @@
 #include <comphelper/string.hxx>
 #include <editeng/paperinf.hxx>
 #include <svtools/filter.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <editeng/fontitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/crsditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <editeng/cntritem.hxx>
-#endif
 #include <editeng/cmapitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -52,9 +49,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/escpitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <svl/urihelper.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
@@ -73,9 +68,7 @@
 #include <docsh.hxx>
 #include <swerror.h>
 #include <mdiexp.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -260,7 +253,6 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
         break;
         case 0x0b: // linebreak
             if (rOut.IsInTable())
-//              rOut.NextBand();    // war Stuss
                 ;
             else
                 rOut.NextLine();
@@ -288,7 +280,7 @@ SvxFontItem Ww1Manager::GetFont(sal_uInt16 nFCode)
 
 void Ww1Manager::Push0(Ww1PlainText* _pDoc, sal_uLong ulSeek, Ww1Fields* _pFld)
 {
-    DBG_ASSERT(!Pushed(), "Ww1Manager");
+    OSL_ENSURE(!Pushed(), "Ww1Manager");
     this->pDoc = _pDoc;
     pSeek = new sal_uLong;
     *pSeek = pDoc->Where();
@@ -303,7 +295,7 @@ void Ww1Manager::Push0(Ww1PlainText* _pDoc, sal_uLong ulSeek, Ww1Fields* _pFld)
 void Ww1Manager::Push1(Ww1PlainText* _pDoc, sal_uLong ulSeek, sal_uLong ulSeek2,
                        Ww1Fields* _pFld)
 {
-    DBG_ASSERT(!Pushed(), "Ww1Manager");
+    OSL_ENSURE(!Pushed(), "Ww1Manager");
     this->pDoc = _pDoc;
     pSeek = new sal_uLong;
     *pSeek = pDoc->Where();
@@ -316,7 +308,7 @@ void Ww1Manager::Push1(Ww1PlainText* _pDoc, sal_uLong ulSeek, sal_uLong ulSeek2,
 
 void Ww1Manager::Pop()
 {
-    DBG_ASSERT(Pushed(), "Ww1Manager");
+    OSL_ENSURE(Pushed(), "Ww1Manager");
     delete pDoc;
     pDoc = &aDoc;
     delete pSeek;
@@ -373,10 +365,10 @@ void Ww1Footnotes::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where())
     {
-        DBG_ASSERT(nPlcIndex < Count(), "WwFootnotes");
+        OSL_ENSURE(nPlcIndex < Count(), "WwFootnotes");
         sal_Unicode c;
         rMan.Fill(c);
-        DBG_ASSERT(c==0x02, "Ww1Footnotes");
+        OSL_ENSURE(c==0x02, "Ww1Footnotes");
         if (c==0x02)
         {
             Ww1FtnText* pText = new Ww1FtnText(rMan.GetFib());
@@ -388,7 +380,7 @@ void Ww1Footnotes::Start(Ww1Shell& rOut, Ww1Manager& rMan)
             pText->SetCount(count);
         // fusznotenkennung sollte das erste byte sein
             pText->Out(c);
-            DBG_ASSERT(c==0x02, "Ww1Footnotes");
+            OSL_ENSURE(c==0x02, "Ww1Footnotes");
             count--; // fuer das eben gelesene kenn-byte
         // fusznoten mode beginnen:
             rOut.BeginFootnote();
@@ -408,8 +400,7 @@ void Ww1Footnotes::Stop(Ww1Shell& /*rOut*/, Ww1Manager& rMan, sal_Unicode& c)
 {
     if (bStarted && rMan.Where() > Where())
     {
-        DBG_ASSERT(nPlcIndex < Count(), "Ww1Footnotes");
-//      DBG_ASSERT(c==0x02, "Ww1Footnotes");    // scheint Stuss zu sein
+        OSL_ENSURE(nPlcIndex < Count(), "Ww1Footnotes");
         c = ' ';
         (*this)++;
     }
@@ -419,7 +410,7 @@ void Ww1Footnotes::Stop(Ww1Shell& /*rOut*/, Ww1Manager& rMan, sal_Unicode& c)
 void Ww1Fields::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where()){
-        DBG_ASSERT(nPlcIndex < Count(), "Ww1Fields");
+        OSL_ENSURE(nPlcIndex < Count(), "Ww1Fields");
         if (GetData()->chGet() == 19)
             Out(rOut, rMan);
         else
@@ -431,11 +422,11 @@ void Ww1Fields::Stop( Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)
 {
     if (rMan.Where() >= Where())
     {
-        DBG_ASSERT(nPlcIndex < Count(), "Ww1Fields");
+        OSL_ENSURE(nPlcIndex < Count(), "Ww1Fields");
         if (GetData()->chGet() != 19)
         {
             rMan.Fill( c );
-            DBG_ASSERT(c==21, "Ww1Fields");
+            OSL_ENSURE(c==21, "Ww1Fields");
             (*this)++;
             c = ' ';
             if (pField)
@@ -492,7 +483,7 @@ static WWDateTime GetTimeDatePara( const String& rForm,
 
     if( STRING_NOTFOUND != nDPos )                  // Monat -> Datum ?
     {
-        static SwDateFormat __READONLY_DATA aDateA[32] =
+        static SwDateFormat const aDateA[32] =
         {
             DFF_DMY, DFF_DMMY, DFF_DMYY, DFF_DMMYY,
             DFF_DMMMY, DFF_DMMMY, DFF_DMMMYY, DFF_DMMMYY,
@@ -563,16 +554,16 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
     String sFormat;
     String sDTFormat;   // Datum / Zeit-Format
     W1_FLD* pData = GetData(); // die an den plc gebunden daten
-    DBG_ASSERT(pData->chGet()==19, "Ww1Fields"); // sollte beginn sein
+    OSL_ENSURE(pData->chGet()==19, "Ww1Fields"); // sollte beginn sein
 
     sal_Unicode c;
     rMan.Fill( c );
-    DBG_ASSERT(c==19, "Ww1Fields"); // sollte auch beginn sein
+    OSL_ENSURE(c==19, "Ww1Fields"); // sollte auch beginn sein
     if (pData->chGet()==19 && c == 19)
     {
         String aStr;
         c = rMan.Fill( aStr, GetLength() );
-        DBG_ASSERT(Ww1PlainText::IsChar(c), "Ww1Fields");
+        OSL_ENSURE(Ww1PlainText::IsChar(c), "Ww1Fields");
         xub_StrLen pos = aStr.Search(' ');
         // get type out of text
         sType = aStr.Copy( 0, pos );
@@ -592,11 +583,11 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             {
                 Out(rOut, rMan, nDepth+1);
                 rMan.Fill(c);
-                DBG_ASSERT(c==21, "Ww1PlainText");
+                OSL_ENSURE(c==21, "Ww1PlainText");
                 sFormel.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "Ww" ));
                 sFormel += String::CreateFromInt32( nPlcIndex );
                 c = rMan.Fill(aStr, GetLength());
-                DBG_ASSERT(Ww1PlainText::IsChar(c), "Ww1PlainText");
+                OSL_ENSURE(Ww1PlainText::IsChar(c), "Ww1PlainText");
                 sFormel += aStr;
             }
         }
@@ -615,16 +606,16 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
         if( pData->chGet() == 20 )
         {
             rMan.Fill( c );
-            DBG_ASSERT(c==20, "Ww1PlainText");
+            OSL_ENSURE(c==20, "Ww1PlainText");
             c = rMan.Fill(sErgebnis, GetLength());
             if (!Ww1PlainText::IsChar(c))
                 sErgebnis += c; //~ mdt: sonderzeichenbenhandlung
             (*this)++;
             pData = GetData();
         }
-        DBG_ASSERT(pData->chGet()==21, "Ww1PlainText");
+        OSL_ENSURE(pData->chGet()==21, "Ww1PlainText");
         sal_Bool bKnown = sal_True;
-        DBG_ASSERT(pField==0, "Ww1PlainText");
+        OSL_ENSURE(pField==0, "Ww1PlainText");
         if (pField != 0)
         {
             rOut << *pField;
@@ -643,10 +634,7 @@ oncemore:
                 REF_BOOKMARK,
                 0,
                 REF_CONTENT );
-//          pField = new SwGetExpField((SwGetExpFieldType*)
-//           rOut.GetSysFldType(RES_GETEXPFLD), sFormel, nsSwGetSetExpType::GSE_STRING);
-//           ,
-//           nsSwGetSetExpType::GSE_STRING, VVF_SYS);
+
         break;
         case 6: // set command
         {
@@ -829,7 +817,7 @@ oncemore:
             {
                 SwGetExpFieldType* pFieldType =
                  (SwGetExpFieldType*)rOut.GetSysFldType(RES_GETEXPFLD);
-                DBG_ASSERT(pFieldType!=0, "Ww1Fields");
+                OSL_ENSURE(pFieldType!=0, "Ww1Fields");
                 if (pFieldType != 0)
                     pField = new SwGetExpField(pFieldType, sFormel,
                      nsSwGetSetExpType::GSE_STRING, VVF_SYS);
@@ -861,10 +849,6 @@ oncemore:
                 break;
             aFName.SearchAndReplaceAscii( "\\\\", String( '\\' ));
 
-//          char* pBook = FindNextPara( pNext, 0 );     //!! Bookmark/Feld-Name
-//                                                      //!! erstmal nicht
-
-//          ConvertFFileName( aPara, pFName );          //!! WW1 ????
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );
 
@@ -897,9 +881,6 @@ oncemore:
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr );
             ((SwSetExpField*)pField)->SetInputFlag( sal_True );
             ((SwSetExpField*)pField)->SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
-//          pField.SetPromptText( aQ ); //!! fehlt noch
-//          aFld.SetPar2( aDef );       //!! dito
-            // das Ignorieren des Bookmarks ist nicht implementiert
         }
         case 39: // fillin command
             pField = new SwInputField(
@@ -963,16 +944,13 @@ oncemore:
         }
         break;
         default: // unknown
-            DBG_ASSERT(sal_False, "Ww1PlainText");
+            OSL_ENSURE(sal_False, "Ww1PlainText");
         // unsupported:
         case 1: // unknown
         case 2: // possible bookmark
         case 4: // index entry
         // wwpar5: 1351/1454
         case 5: // footnote ref
-//          pField = new SwGetRefField(
-//           (SwGetRefFieldType*)rDoc.GetSysFldType(RES_GETREFFLD),
-//           sFormel, REF_FOOTNOTE, 0, REF_BEGIN);
         case 7: // if command
         case 8: // create index
         // wwpar5: 1351/1454
@@ -1019,7 +997,7 @@ sal_uLong Ww1Fields::GetLength()
 // und ende bedeuten.
     sal_uLong ulBeg = Where();
     sal_uLong ulEnd = Where(nPlcIndex+1);
-    DBG_ASSERT(ulBeg<ulEnd, "Ww1Fields");
+    OSL_ENSURE(ulBeg<ulEnd, "Ww1Fields");
     return (ulEnd - ulBeg) - 1;
 }
 
@@ -1082,8 +1060,7 @@ void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
             Ww1SprmPapx aSprm(pByte, cb);
             aSprm.Stop(rOut, rMan);
         }else{
-            DBG_ASSERT( !nPlcIndex || rMan.IsStopAll(), "Pap-Attribut-Stop verloren" );
-//          rMan.IsStopAll() ist nicht schoen.
+            OSL_ENSURE( !nPlcIndex || rMan.IsStopAll(), "Pap-Attribut-Stop verloren" );
         }
     }
 }
@@ -1120,7 +1097,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
                     rOut << SvxUnderlineItem(UNDERLINE_NONE, RES_CHRATR_UNDERLINE) <<
                         SvxWordLineModeItem(sal_False, RES_CHRATR_WORDLINEMODE);
                 } break;
-        default: DBG_ASSERT(sal_False, "Chpx");
+        default: OSL_ENSURE(sal_False, "Chpx");
         case 1: {
                     rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
                 } break;
@@ -1138,7 +1115,7 @@ void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 
     if (fsIcoGet())
         switch(icoGet()) {
-        default: DBG_ASSERT(sal_False, "Chpx");
+        default: OSL_ENSURE(sal_False, "Chpx");
         case 0: { rOut.EndItem(RES_CHRATR_COLOR); } break;
         case 1: { rOut << SvxColorItem(Color(COL_BLACK), RES_CHRATR_COLOR); } break;
         case 2: { rOut << SvxColorItem(Color(COL_LIGHTBLUE), RES_CHRATR_COLOR); } break;
@@ -1228,7 +1205,7 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
             if (aChpx.fsFtcGet())
                 rOut.EndItem(RES_CHRATR_FONT);
         }else{
-            DBG_ASSERT( !nPlcIndex, "Chp-Attribut-Stop verloren" );
+            OSL_ENSURE( !nPlcIndex, "Chp-Attribut-Stop verloren" );
         }
     }
 }
@@ -1410,7 +1387,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         }
         else
         {
-            DBG_ASSERT(sal_False, "WW1Fonts::GetFont: Nicht existenter Font !");
+            OSL_ENSURE(sal_False, "WW1Fonts::GetFont: Nicht existenter Font !");
             eFamily = FAMILY_SWISS;
              aName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Helv" ));
             ePitch = PITCH_VARIABLE;
@@ -1462,7 +1439,6 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
 void Ww1Dop::Out(Ww1Shell& rOut)
 {
     //~ mdt: fehlt
-    // aDop.fWidowControlGet(); // keine Absatztrennung fuer einzelne Zeilen
     long nDefTabSiz = aDop.dxaTabGet();
     if (nDefTabSiz < 56)
         nDefTabSiz = 709;
@@ -1494,7 +1470,6 @@ void Ww1Dop::Out(Ww1Shell& rOut)
     case 2: aInfo.ePos = FTNPOS_PAGE; break;
     default: aInfo.ePos = FTNPOS_CHAPTER; break;
     }
-//  aInfo.eNum = ( rDOP.fFtnRestartGet() ) ? FTNNUM_CHAPTER : FTNNUM_DOC;
     // Da Sw unter Chapter anscheinend was anderes versteht als PMW
     // hier also immer Doc !
     aInfo.eNum = FTNNUM_DOC;
@@ -1512,13 +1487,13 @@ void Ww1Assoc::Out(Ww1Shell& rOut)
 //~ mdt: fehlen: FileNext, Dot, DataDoc, HeaderDoc, Criteria1,
 // Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7
     SwDocShell *pDocShell(rOut.GetDoc().GetDocShell());
-    DBG_ASSERT(pDocShell, "no SwDocShell");
+    OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps(
             xDPS->getDocumentProperties());
-        DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
+        OSL_ENSURE(xDocProps.is(), "DocumentProperties is null");
         if (xDocProps.is()) {
             xDocProps->setTitle( GetStr(Title) );
             xDocProps->setSubject( GetStr(Subject) );
@@ -1647,12 +1622,7 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc)
 {
     const RES_POOL_COLLFMT_TYPE RES_NONE = RES_POOLCOLL_DOC_END;
     RES_POOL_COLLFMT_TYPE aType = RES_NONE;
-//              aType = RES_POOLCOLL_JAKETADRESS; break;
-//              aType = RES_POOLCOLL_LISTS_BEGIN; break;
-//              aType = RES_POOLCOLL_SENDADRESS; break;
-//              aType = RES_POOLCOLL_SIGNATURE; break;
-//              aType = RES_POOLCOLL_TEXT_NEGIDENT; break;
-//              aType = RES_POOLCOLL_TOX_IDXH; break;
+
     switch (stc)
     {
     case 222: // Null
@@ -1725,7 +1695,6 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc)
         aType = RES_POOLCOLL_TEXT_IDENT; break;
     case 0: // Normal
         aType = RES_POOLCOLL_STANDARD; break;
-//      aType = RES_POOLCOLL_TEXT; break;       // Das ist "textkoerper"
     }
     if (aType == RES_NONE)
         rOut.BeginStyle(stc, GetStyle(stc).GetName() );
@@ -1734,7 +1703,6 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc)
     OutDefaults(rOut, rMan, stc);
     GetStyle(stc).Out(rOut, rMan);
     rOut.EndStyle();
-//  rMan.SetInApo(sal_False);
 }
 // OutOneWithBase() liest einen Style mit OutOne() einen Style ein
 // Jedoch liest er, wenn noch nicht geschehen, den Basisstyle rekursiv ein
@@ -1801,8 +1769,8 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     sal_uInt16 padx = ((maxx + 7) / 8) * 8;
     sal_uInt16 maxy = pPic->mfp.yExtGet();
 
-    /*sal_uInt16 unknown1 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-    /*sal_uInt16 unknown2 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
 #if OSL_DEBUG_LEVEL > 1
     sal_uInt16 x = SVBT16ToShort(p);
     (void) x;
@@ -1825,13 +1793,13 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
 
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT(x==maxx, "Ww1Picture");
-    DBG_ASSERT(y==maxy, "Ww1Picture");
-    DBG_ASSERT(planes==1, "Ww1Picture");
-    DBG_ASSERT(bitcount==4, "Ww1Picture");
+    OSL_ENSURE(x==maxx, "Ww1Picture");
+    OSL_ENSURE(y==maxy, "Ww1Picture");
+    OSL_ENSURE(planes==1, "Ww1Picture");
+    OSL_ENSURE(bitcount==4, "Ww1Picture");
 #endif
 
-    DBG_ASSERT(16*3+padx*maxy/2==nSize, "Ww1Picture");
+    OSL_ENSURE(16*3+padx*maxy/2==nSize, "Ww1Picture");
 
     SVBT32 tmpLong;
     SVBT16 tmpShort;
@@ -1874,7 +1842,7 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
         nSize -= sizeof(sal_uInt8);
         wByte(0);
     }
-    DBG_ASSERT(padx*maxy/2==nSize, "Ww1Picture");
+    OSL_ENSURE(padx*maxy/2==nSize, "Ww1Picture");
     sal_uInt16 j;
 #if 1
     {
@@ -1920,7 +1888,7 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
         }
     }
 #endif
-    DBG_ASSERT(nSize==0, "Ww1Picture");
+    OSL_ENSURE(nSize==0, "Ww1Picture");
 #undef wLong
 #undef wShort
 #undef wByte
@@ -1943,7 +1911,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
          (sizeof(*pPic)-sizeof(pPic->rgb)));
         aOut.Seek(0);
         GDIMetaFile aWMF;
-        if (ReadWindowMetafile( aOut, aWMF, NULL ) && aWMF.GetActionCount() > 0)
+        if (ReadWindowMetafile( aOut, aWMF, NULL ) && aWMF.GetActionSize() > 0)
         {
             aWMF.SetPrefMapMode(MapMode(MAP_100TH_MM));
             Size aOldSiz(aWMF.GetPrefSize());
@@ -1962,13 +1930,11 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         String aDir( (sal_Char*)pPic->rgbGet(),
                 (sal_uInt16)(pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb))),
                 RTL_TEXTENCODING_MS_1252 );
-        //SvFileStream aOut(aDir, STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
+
         rOut.AddGraphic( aDir );
     }
     break;
     case 97: // embedded bitmap
-//  case 99: // SH: bei meinem BspDoc 41738.doc auch embedded Bitmap,
-             // aber leider anderes Format
     {
         sal_uLong nSiz = GuessPicSize(pPic);
         SvMemoryStream aOut(nSiz, 8192);
@@ -1978,7 +1944,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         pGraphic = new Graphic(aBmp);
     }
     default:
-        DBG_ASSERT(pPic->mfp.mmGet() == 97, "Ww1Picture");
+        OSL_ENSURE(pPic->mfp.mmGet() == 97, "Ww1Picture");
     }
     if (pGraphic)
         rOut << *pGraphic;
@@ -2052,12 +2018,11 @@ void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 
 void Ww1HeaderFooter::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 {
-    if (!rMan.Pushed() && eHeaderFooterMode != None
-//   && rMan.GetText().Where() >= rMan.GetText().Count()
-    )
+    if (!rMan.Pushed() && eHeaderFooterMode != None)
     {
         Start(rOut, rMan);
     }
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

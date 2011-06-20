@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,11 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#ifdef WTC
-#define private public
-#endif
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -50,6 +47,7 @@
 #include <tblenum.hxx>
 #include <frmatr.hxx>
 #include <fmtrowsplt.hxx>
+#include <vector>
 
 using namespace ::com::sun::star;
 
@@ -115,7 +113,7 @@ static void SetRowBorder(SfxItemSet& rSet, const Row &rRow)
 void rtfSections::PrependedInlineNode(const SwPosition &rPos,
     const SwNode &rNode)
 {
-    ASSERT(!mrReader.IsNewDoc() || !maSegments.empty(),
+    OSL_ENSURE(!mrReader.IsNewDoc() || !maSegments.empty(),
         "should not be possible, must be at least one segment in a new document");
     if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
         maSegments.back().maStart = SwNodeIndex(rNode);
@@ -165,7 +163,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     enum Limits {eMAXCELLS=64000};
 
-    SvBools aMergeBackup(aMergeBoxes);
+    std::vector<bool> aMergeBackup(aMergeBoxes);
 
     // kein TROWD aber ein TabellenToken -> zwischen TROWD und Tab.Token
     // waren andere Zeichen (siehe Bug 27445.rtf)
@@ -176,7 +174,7 @@ void SwRTFParser::ReadTable( int nToken )
 
         // Flag for delete merged boxes
         aMergeBoxes.clear();
-        aMergeBoxes.push_back( (sal_Bool)sal_False );
+        aMergeBoxes.push_back(false);
         m_nCurrentBox = 0;
 
         // wenn schon in einer Tabellen, dann splitte oder benutze
@@ -220,7 +218,6 @@ void SwRTFParser::ReadTable( int nToken )
 
     sal_Int16 eVerOrient = text::VertOrientation::NONE;
     long nLineHeight = 0;
-    size_t nBoxCnt = aMergeBoxes.size()-1;
     SwBoxFrmFmts aBoxFmts;
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
     SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
@@ -287,7 +284,7 @@ void SwRTFParser::ReadTable( int nToken )
         case RTF_CLMRG:
             // would crash later on reading \cellx (#i112657#):
             // the first cell cannot be merged with earlier ones.
-            if (nBoxCnt != 0)
+            if (aMergeBoxes.size() > 1)
             {
                 aMergeBoxes.back() = sal_True;
             }
@@ -316,9 +313,9 @@ void SwRTFParser::ReadTable( int nToken )
                     else
                         pFmt = aBoxFmts[ aBoxFmts.Count()-1 ];
 
-                    // --> OD 2007-01-25 #i73790# - method renamed
+                    // #i73790# - method renamed
                     pBoxFmt->ResetAllFmtAttr();
-                    // <--
+
                     nSize += pFmt->GetFrmSize().GetWidth();
                 }
                 else
@@ -337,8 +334,7 @@ void SwRTFParser::ReadTable( int nToken )
                     nSize = COL_DFLT_WIDTH;
                 pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
                 nTblSz = nTokenValue;
-                aMergeBoxes.push_back( (sal_Bool)sal_False );
-                ++nBoxCnt;
+                aMergeBoxes.push_back(sal_False);
 
                 SvxBoxItem aBox(pFmt->GetBox());
 
@@ -355,73 +351,6 @@ void SwRTFParser::ReadTable( int nToken )
                     aBox.SetDistance( static_cast< sal_uInt16 >(nTopCellPad), BOX_LINE_LEFT);
 
 
-                /*#106415# The Cell Borders are now balanced on import to
-                improve the layout of tables.
-                */
-/*
-                if ( aBoxFmts.Count()>1)
-                {
-
-                    SwTableBoxFmt* prevpFmt = aBoxFmts[ aBoxFmts.Count()-2 ];
-                    SvxBoxItem prevaBox(prevpFmt->GetBox());
-                    sal_uInt16 prevWidthRight=0;
-                    sal_uInt16 currWidthLeft=0;
-                    bool bDoubleLine=false;
-                    const SvxBorderLine*   brdrline ;
-                    const Color* pPrevRightColor;
-                    if(prevaBox.GetRight())
-                    {
-                        brdrline=prevaBox.GetRight();
-                        prevWidthRight = brdrline->GetOutWidth();
-                        pPrevRightColor = &brdrline->GetColor();
-                        if(brdrline->GetInWidth())
-                            bDoubleLine=true;
-                    }
-                    if(aBox.GetLeft())
-                    {
-                        brdrline=aBox.GetLeft();
-                        currWidthLeft = brdrline->GetOutWidth();
-                        if(brdrline->GetInWidth())
-                            bDoubleLine=true;
-                    }
-
-                    if((currWidthLeft >0 || prevWidthRight >0) &&
-                        !bDoubleLine)
-                    {
-                        sal_uInt16 newBorderWidth=(currWidthLeft+prevWidthRight)/2 ;
-                        if(newBorderWidth /2 ==DEF_LINE_WIDTH_0 )
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_0;
-                        }
-                        else if(newBorderWidth /2 >=(DEF_LINE_WIDTH_4-DEF_LINE_WIDTH_3))
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_4;
-                        }
-                        else if(newBorderWidth /2 >=(DEF_LINE_WIDTH_3-DEF_LINE_WIDTH_2))
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_3;
-                        }
-                        else if(newBorderWidth /2>=(DEF_LINE_WIDTH_2-DEF_LINE_WIDTH_1))
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_2;
-                        }
-                        else if(newBorderWidth /2>=(DEF_LINE_WIDTH_1 - DEF_LINE_WIDTH_0)  )
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_1;
-                        }
-                        else
-                        {
-                            newBorderWidth =DEF_LINE_WIDTH_0;
-                        }
-                        const SvxBorderLine  newbrdrline(pPrevRightColor, newBorderWidth,0,0);
-                        aBox.SetLine(&newbrdrline,BOX_LINE_LEFT);
-                        prevaBox.SetLine(&newbrdrline,BOX_LINE_RIGHT);
-                        prevpFmt->SetAttr(prevaBox);
-                    }
-
-                }
-*/
-
                 pFmt->SetFmtAttr(aBox);
 
                 bUseLeftCellPad = false;
@@ -432,7 +361,7 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_TRGAPH:
-                //$flr bug #117887#: RTF: wrong internal table cell margin imported (A13)
+                //bug: RTF: wrong internal table cell margin imported (A13)
                 aRow.mnBrdDist = (nTokenValue>0?(sal_uInt16)nTokenValue:0); // filter out negative values of \trgaph
             break;
 
@@ -441,7 +370,6 @@ void SwRTFParser::ReadTable( int nToken )
         case RTF_TRQC:          eAdjust = text::HoriOrientation::CENTER;  break;
 
                                 // mit text::VertOrientation::TOP kommt der Dialog nicht klar!
-                                // Bug #65126#
         case RTF_CLVERTALT:     eVerOrient = text::VertOrientation::NONE;     break;
 
         case RTF_CLVERTALC:     eVerOrient = text::VertOrientation::CENTER;   break;
@@ -526,10 +454,9 @@ void SwRTFParser::ReadTable( int nToken )
     delete pBoxFmt;
 
     // It has been recognized as not single box
-    if ((m_nCurrentBox == nBoxCnt) || ( bReadNewCell && !pTableNode ))
+    if( m_nCurrentBox == aMergeBoxes.size()-1 || ( bReadNewCell && !pTableNode ))
     {
-        aMergeBoxes = aMergeBackup;
-        SkipToken( -1 );            // go back to the last valid
+        aMergeBoxes.insert(aMergeBoxes.begin(), aMergeBackup.begin(), aMergeBackup.end());
         return;
     }
 
@@ -652,7 +579,7 @@ void SwRTFParser::ReadTable( int nToken )
         bNewTbl = sal_False;
 
         {
-            // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
+            //TabellenUmrandungen optimieren
             void* p = pFmt;
             aTblFmts.Insert( p, aTblFmts.Count() );
         }
@@ -719,7 +646,7 @@ void SwRTFParser::ReadTable( int nToken )
                 pDoc->InsertTable(
                     SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
                     *pPam->GetPoint(), 1, 1, eAdjust, 0, 0, sal_False, sal_False );
-            bContainsTablePara=true; //#117881#
+            bContainsTablePara=true;
             pTableNode = pTable ? pTable->GetTableNode() : 0;
 
             if (pTableNode)
@@ -752,7 +679,7 @@ void SwRTFParser::ReadTable( int nToken )
             pOldTblNd = pTableNode;
 
             {
-                // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
+                // TabellenUmrandungen optimieren
                 void* p = pFmt;
                 aTblFmts.Insert( p, aTblFmts.Count() );
             }
@@ -774,9 +701,13 @@ void SwRTFParser::ReadTable( int nToken )
     if( aBoxFmts.Count() )
     {
         // setze das default Style
-        SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-        if( !pColl )
+        SwTxtFmtColl* pColl = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find(0);
+
+        if( iter == aTxtCollTbl.end() )
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+        else
+            pColl = iter->second;
 
         sal_uInt16 nStt = 0;
         if( bNewTbl )
@@ -788,7 +719,7 @@ void SwRTFParser::ReadTable( int nToken )
             pBox->RegisterToFormat( *aBoxFmts[0] );
             SwTxtNode* pTNd = pDoc->GetNodes()[ pBox->GetSttIdx()+1 ]
                                             ->GetTxtNode();
-            ASSERT( pTNd, "wo ist der Textnode dieser Box?" );
+            OSL_ENSURE( pTNd, "wo ist der Textnode dieser Box?" );
             pTNd->ChgFmtColl( pColl );
             ++nStt;
             nRowsToRepeat=0;
@@ -834,7 +765,7 @@ void SwRTFParser::ReadTable( int nToken )
         }
     }
 
-    ASSERT(!bFailure, "RTF Table failure");
+    OSL_ENSURE(!bFailure, "RTF Table failure");
     if (bFailure)
     {
         SkipToken( -1 );            // zum Letzen gueltigen zurueck
@@ -843,7 +774,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     //It might be that there was content at this point which is not already in
     //a table, but which is being followed by properties to place it into the
-    //table. e.g. #109199#. If this is the case then move the para/char
+    //table. If this is the case then move the para/char
     //properties inside the table, and move any content of that paragraph into
     //the table
     bool bInTable = aRg.GetPoint()->nNode.GetNode().FindTableNode();
@@ -880,7 +811,7 @@ void SwRTFParser::GotoNextBox()
 {
     nInsTblRow = USHRT_MAX;
 
-    ASSERT( pTableNode, "Kein Tabellennode, dann auch keine Box" );
+    OSL_ENSURE( pTableNode, "Kein Tabellennode, dann auch keine Box" );
 
     if (!pTableNode)
         return;
@@ -890,11 +821,8 @@ void SwRTFParser::GotoNextBox()
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
 
-    if (++m_nCurrentBox >= aMergeBoxes.size())
-    {
-        OSL_ENSURE(aMergeBoxes.size() < SAL_MAX_UINT16, "too many boxes?");
-        m_nCurrentBox = static_cast<sal_uInt16>(aMergeBoxes.size()-1);
-    }
+    if( ++m_nCurrentBox >= aMergeBoxes.size() )
+        m_nCurrentBox = aMergeBoxes.size()-1;
 
     if (!aMergeBoxes[ m_nCurrentBox ])
     {
@@ -914,8 +842,7 @@ void SwRTFParser::GotoNextBox()
             }
         }
 
-        if (bMove &&
-                (static_cast<size_t>(m_nCurrentBox + 1) == aMergeBoxes.size()))
+        if( bMove && m_nCurrentBox + 1U == aMergeBoxes.size() )
             // dann hinter die Tabelle
             pPam->Move( fnMoveForward, fnGoNode );
     }
@@ -973,7 +900,6 @@ void SwRTFParser::NewTblLine()
         pLns = &pTableNode->GetTable().GetTabLines();
     }
     else
-//      pDoc->InsertRow( aBoxes );
         pTableNode->GetTable().AppendRow( pDoc );
 
     pBox = (*pLns)[ pLns->Count()-1 ]->GetTabBoxes()[0];
@@ -985,9 +911,14 @@ void SwRTFParser::NewTblLine()
 
     // alle Nodes in den Boxen auf die "default" Vorlage setzten
     {
-        SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-        if( !pColl )
+        SwTxtFmtColl* pColl = NULL;
+        std::map<sal_Int32,SwTxtFmtColl*>::iterator iter = aTxtCollTbl.find( 0 );
+
+        if( iter == aTxtCollTbl.end() )
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
+        else
+            pColl = iter->second;
+
         pPam->SetMark();
 
         pLine = (*pLns)[ pLns->Count()-1 ];
@@ -1031,4 +962,4 @@ void SwRTFParser::CheckInsNewTblLine()
     }
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

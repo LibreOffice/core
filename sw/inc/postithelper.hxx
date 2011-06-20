@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -111,27 +112,6 @@ public:
                                                                 SwPostItMgr& aMgr,
                                                                 SwPostItBits aBits) = 0;
 };
-/*
-class SwRedCommentItem: public SwSidebarItem
-{
-private:
-    SwRedline* pRedline;
-public:
-
-    SwRedCommentItem( SwRedline* pRed, bool aShow, bool aFocus)
-        : SwSidebarItem(aShow,aFocus),
-        pRedline(pRed) {}
-    virtual ~SwRedCommentItem() {}
-    virtual SwPosition GetAnchorPosition() const;
-    virtual bool UseElement();
-    virtual SwFmtFld* GetFmtFld() const {return 0; }
-    virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pRedline); }
-    virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
-                                                                WinBits nBits,
-                                                                SwPostItMgr& aMgr,
-                                                                SwPostItBits aBits);
-};
-*/
 
 class SwAnnotationItem: public SwSidebarItem
 {
@@ -157,3 +137,5 @@ class SwAnnotationItem: public SwSidebarItem
 };
 
 #endif // _POSTITHELPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

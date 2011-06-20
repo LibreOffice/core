@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,6 +30,7 @@
 
 #include <sfx2/shell.hxx>
 #include "shellid.hxx"
+#include <unotools/caserotate.hxx>
 
 class SdrView;
 class SwView;
@@ -38,6 +40,7 @@ class SfxModule;
 class SwDrawTextShell: public SfxShell
 {
     SwView      &rView;
+    RotateTransliteration m_aRotateCase;
 
     SdrView     *pSdrView;
 
@@ -78,9 +81,12 @@ public:
     void        StateClpbrd(SfxItemSet &rSet);
     void        StateInsert(SfxItemSet &rSet);
     void        ExecTransliteration(SfxRequest &);
+    void                ExecRotateTransliteration(SfxRequest &);
 
     void        Init();
     void        StateStatusline(SfxItemSet &rSet);
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

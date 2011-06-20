@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,7 +79,7 @@ const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
+static HTMLOptionEnum aHTMLMarqBehaviorTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,     SDRTEXTANI_SCROLL       },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,  SDRTEXTANI_ALTERNATE    },
@@ -86,7 +87,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
     { 0,                        0                       }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLMarqDirectionTable[] =
+static HTMLOptionEnum aHTMLMarqDirectionTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,          SDRTEXTANI_LEFT         },
     { OOO_STRING_SVTOOLS_HTML_AL_right,         SDRTEXTANI_RIGHT        },
@@ -103,8 +104,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      sal_Bool bHidden )
 {
     // always on top of text.
-    // OD 02.07.2003 #108784# but in invisible layer. <ConnectToLayout> will
-    // move the object to the visible layer.
+    // but in invisible layer. <ConnectToLayout> will move the object
+    // to the visible layer.
     pNewDrawObj->SetLayer( pDoc->GetInvisibleHeavenId() );
 
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
@@ -195,7 +196,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         {
             aAnchor.SetType( FLY_AT_PAGE );
         }
-        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
                                            rCSS1PropInfo.nTop + nUpperSpace) );
         aFrmSet.Put( SwFmtSurround(SURROUND_THROUGHT) );
@@ -206,7 +207,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aAnchor.SetType( FLY_AT_PARA );
         aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
-        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
     else if( text::VertOrientation::NONE != eVertOri )
@@ -277,7 +278,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
 void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 {
 
-    ASSERT( !pMarquee, "Marquee in Marquee???" );
+    OSL_ENSURE( !pMarquee, "Marquee in Marquee???" );
     aContents.Erase();
 
     String aId, aStyle, aClass;
@@ -386,9 +387,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // Ein DrawTxtobj anlegen
-    // --> OD 2005-08-08 #i52858# - method name changed
+    // #i52858# - method name changed
     SdrModel* pModel = pDoc->GetOrCreateDrawModel();
-    // <--
+
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
                                              OBJ_TEXT, pPg, pModel );
@@ -568,7 +569,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
 void SwHTMLParser::EndMarquee()
 {
-    ASSERT( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
     if( bFixMarqueeWidth )
@@ -596,7 +597,7 @@ void SwHTMLParser::EndMarquee()
 
 void SwHTMLParser::InsertMarqueeText()
 {
-    ASSERT( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
+    OSL_ENSURE( pMarquee && OBJ_TEXT==pMarquee->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
     // das akteulle Textstueck an den Text anhaengen
@@ -605,7 +606,7 @@ void SwHTMLParser::InsertMarqueeText()
 
 void SwHTMLParser::ResizeDrawObject( SdrObject* pObj, SwTwips nWidth )
 {
-    ASSERT( OBJ_TEXT==pObj->GetObjIdentifier(),
+    OSL_ENSURE( OBJ_TEXT==pObj->GetObjIdentifier(),
             "kein Marquee oder falscher Typ" );
 
     if( OBJ_TEXT!=pObj->GetObjIdentifier() )
@@ -692,7 +693,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    ASSERT( rWrt.pDoc->GetDrawModel(), "Da gibt's ein Draw-Obj ohne ein Draw-Model zu haben?" );
+    OSL_ENSURE( rWrt.pDoc->GetDrawModel(), "Da gibt's ein Draw-Obj ohne ein Draw-Model zu haben?" );
     const SdrTextObj *pTextObj = (const SdrTextObj *)&rSdrObject;
 
     // Gibt es ueberhaupt auszugebenden Text
@@ -709,10 +710,10 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // BEHAVIOUR
     SdrTextAniKind eAniKind = pTextObj->GetTextAniKind();
-    ASSERT( SDRTEXTANI_SCROLL==eAniKind ||
+    OSL_ENSURE( SDRTEXTANI_SCROLL==eAniKind ||
             SDRTEXTANI_ALTERNATE==eAniKind ||
             SDRTEXTANI_SLIDE==eAniKind,
-            "Text-Draw-Objekt nicht fuer Marquee geeignet" )
+            "Text-Draw-Objekt nicht fuer Marquee geeignet" );
 
     const sal_Char *pStr = 0;
     switch( eAniKind )
@@ -857,3 +858,4 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

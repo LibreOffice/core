@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,7 +55,6 @@
 #include <docsh.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
-#include <errhdl.hxx>
 #include <swerror.h>
 #include <wrtxml.hxx>
 #include <statstr.hrc>
@@ -80,18 +80,18 @@ SwXMLWriter::SwXMLWriter( const String& rBaseURL )
 }
 
 
-__EXPORT SwXMLWriter::~SwXMLWriter()
+SwXMLWriter::~SwXMLWriter()
 {
 }
 
 
 sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
 {
-    DBG_ASSERT( pTargetMedium, "No medium is provided!" );
+    OSL_ENSURE( pTargetMedium, "No medium is provided!" );
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "SwXMLWriter::Write: got no service manager" );
     if( !xServiceFactory.is() )
         return ERR_SWG_WRITE_ERROR;
@@ -104,7 +104,7 @@ sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
-    ASSERT( xStg.is(), "Where is my storage?" );
+    OSL_ENSURE( xStg.is(), "Where is my storage?" );
 pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                                  GRAPHICHELPER_MODE_WRITE,
                                                  sal_False );
@@ -170,11 +170,10 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { "StyleFamilies", sizeof("StyleFamilies")-1, 0,
               &::getCppuType( (Sequence<sal_Int32>*)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2006-09-26 #i69627#
+        // #i69627#
         { "OutlineStyleAsNormalListStyle", sizeof("OutlineStyleAsNormalListStyle")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // <--
         { "TargetStorage", sizeof("TargetStorage")-1,0, &embed::XStorage::static_type(),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
 
@@ -202,35 +201,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             if ( pStatusBarItem )
                 pStatusBarItem->GetValue() >>= xStatusIndicator;
         }
-
-//      try
-//      {
-//          uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
-//          if (xModel.is())
-//          {
-//              uno::Sequence< beans::PropertyValue > xMediaDescr
-//              uno::Reference<frame::XController> xController(
-//                  xModel->getCurrentController());
-//              if( xController.is())
-//              {
-//                  uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-//                  if( xFrame.is())
-//                  {
-//                      uno::Reference<task::XStatusIndicatorFactory> xFactory(
-//                          xFrame, uno::UNO_QUERY );
-//                      if( xFactory.is())
-//                      {
-//                          xStatusIndicator =
-//                              xFactory->createStatusIndicator();
-//                      }
-//                  }
-//              }
-//          }
-//      }
-//      catch( const RuntimeException& )
-//      {
-//          xStatusIndicator = 0;
-//      }
 
         // set progress range and start status indicator
         sal_Int32 nProgressRange(1000000);
@@ -298,7 +268,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         xInfoSet->setPropertyValue( sAutoTextMode, aAny2 );
     }
 
-    // --> OD 2006-09-26 #i69627#
+    // #i69627#
     const sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
@@ -307,7 +277,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
         xInfoSet->setPropertyValue( sOutlineStyleAsNormalListStyle, makeAny( sal_True ) );
     }
-    // <--
 
     // filter arguments
     // - graphics + object resolver for styles + content
@@ -342,7 +311,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     //Get model
     uno::Reference< lang::XComponent > xModelComp(
         pDoc->GetDocShell()->GetModel(), UNO_QUERY );
-    ASSERT( xModelComp.is(), "XMLWriter::Write: got no model" );
+    OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
 
@@ -368,8 +337,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     {
         const uno::Reference<beans::XPropertySet> xPropSet(xStg,
             uno::UNO_QUERY_THROW);
-        const ::rtl::OUString VersionProp(
-            ::rtl::OUString::createFromAscii("Version"));
+        const ::rtl::OUString VersionProp(RTL_CONSTASCII_USTRINGPARAM("Version"));
         try
         {
             ::rtl::OUString Version;
@@ -472,8 +440,6 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     if( pDoc->GetCurrentViewShell() && pDoc->GetDocStat().nPage > 1 &&  //swmod 071108//swmod 071225
         !(bOrganizerMode || bBlock || bErr) )
     {
-//          DBG_ASSERT( !pDoc->GetDocStat().bModified,
-//                      "doc stat is modified!" );
         OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("layout-cache") );
         try
         {
@@ -566,9 +532,9 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     const Sequence<beans::PropertyValue> & rMediaDesc,
     sal_Bool bPlainStream )
 {
-    DBG_ASSERT( xStg.is(), "Need storage!" );
-    DBG_ASSERT( NULL != pStreamName, "Need stream name!" );
-    DBG_ASSERT( NULL != pServiceName, "Need service name!" );
+    OSL_ENSURE( xStg.is(), "Need storage!" );
+    OSL_ENSURE( NULL != pStreamName, "Need stream name!" );
+    OSL_ENSURE( NULL != pServiceName, "Need service name!" );
 
     RTL_LOGFILE_TRACE_AUTHOR1( "sw", LOGFILE_AUTHOR,
                                "SwXMLWriter::WriteThroughComponent : stream %s",
@@ -614,7 +580,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
         uno::Reference< beans::XPropertySet > xInfoSet;
         if( rArguments.getLength() > 0 )
             rArguments.getConstArray()[0] >>= xInfoSet;
-        DBG_ASSERT( xInfoSet.is(), "missing property set" );
+        OSL_ENSURE( xInfoSet.is(), "missing property set" );
         if( xInfoSet.is() )
         {
             OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
@@ -642,9 +608,9 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     const Sequence<Any> & rArguments,
     const Sequence<PropertyValue> & rMediaDesc )
 {
-    ASSERT( xOutputStream.is(), "I really need an output stream!" );
-    ASSERT( xComponent.is(), "Need component!" );
-    ASSERT( NULL != pServiceName, "Need component name!" );
+    OSL_ENSURE( xOutputStream.is(), "I really need an output stream!" );
+    OSL_ENSURE( xComponent.is(), "Need component!" );
+    OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aFilterLog, "sw", LOGFILE_AUTHOR,
                                 "SwXMLWriter::WriteThroughComponent" );
@@ -655,7 +621,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
                 "com.sun.star.xml.sax.Writer")) ),
         UNO_QUERY );
-    ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if(!xSaxWriter.is())
         return sal_False;
 
@@ -675,7 +641,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     uno::Reference< document::XExporter > xExporter(
         rFactory->createInstanceWithArguments(
             OUString::createFromAscii(pServiceName), aArgs), UNO_QUERY);
-    ASSERT( xExporter.is(),
+    OSL_ENSURE( xExporter.is(),
             "can't instantiate export filter component" );
     if( !xExporter.is() )
         return sal_False;
@@ -699,3 +665,5 @@ void GetXMLWriter( const String& /*rName*/, const String& rBaseURL, WriterRef& x
 }
 
 // -----------------------------------------------------------------------
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -40,6 +41,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 
 using namespace ::comphelper;
@@ -47,8 +49,8 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 using rtl::OUStringToOString;
 
-RtfImportFilter::RtfImportFilter( const uno::Reference< lang::XMultiServiceFactory >& xMSF)  :
-    m_xMSF( xMSF )
+RtfImportFilter::RtfImportFilter( const uno::Reference< uno::XComponentContext > &xCtx ) :
+    m_xCtx( xCtx )
 {
 }
 
@@ -129,9 +131,9 @@ uno::Sequence< OUString > SAL_CALL RtfImport_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL RtfImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL RtfImport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*) new RtfImportFilter( rSMgr );
+    return (cppu::OWeakObject*) new RtfImportFilter( xCtx );
 }
 
-/* vi:set shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

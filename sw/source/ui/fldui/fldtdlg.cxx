@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 
 
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <swtypes.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
@@ -68,7 +67,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Description:    carrier of the dialog
  --------------------------------------------------------------------*/
 
 
@@ -85,11 +84,11 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
 
     GetOKButton().SetText(String(SW_RES(STR_FLD_INSERT)));
     GetOKButton().SetHelpId(HID_FIELD_INSERT);
-    GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetOKButton().SetHelpText(aEmptyStr);   // so that generated help text is used
 
     GetCancelButton().SetText(String(SW_RES(STR_FLD_CLOSE)));
     GetCancelButton().SetHelpId(HID_FIELD_CLOSE);
-    GetCancelButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
+    GetCancelButton().SetHelpText(aEmptyStr);   // so that generated help text is used
 
     FreeResource();
 
@@ -130,17 +129,9 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFldDlg::~SwFldDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 sal_Bool SwFldDlg::Close()
 {
@@ -149,10 +140,6 @@ sal_Bool SwFldDlg::Close()
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
     return sal_True;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
 {
@@ -165,16 +152,16 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
         if ( GetStyle() & WB_SIZEABLE )
             SetSizePixel( pInfo->aSize );
 
-        // Initiale Gr"o\se aus pInfo merken
+        // remember initial size from pInfo
         aSize = GetSizePixel();
 
-        // Soll das FloatingWindow eingezoomt werden ?
+        // should the FloatingWindow get zoomed?
         if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
             RollUp();
     }
     else
     {
-        // Initiale Gr"o\se aus Resource oder ctor merken
+        // remember initial size from resource or ctor
         aSize = GetSizePixel();
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
@@ -200,10 +187,6 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
     SetPosPixel( aPos );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
 {
     if ( nID == TP_FLD_DOKINF )
@@ -226,7 +209,7 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: Einfuegen von neuen Feldern anstossen
+     Description: kick off inserting of new fields
  --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
@@ -236,14 +219,14 @@ IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
         SfxTabPage* pPage = GetTabPage(GetCurPageId());
         pPage->FillItemSet(*(SfxItemSet*)0);
 
-        GetOKButton().GrabFocus();  // Wegen InputField-Dlg
+        GetOKButton().GrabFocus();  // because of InputField-Dlg
     }
 
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
+    Description: newly initialise dialog after Doc-Switch
  --------------------------------------------------------------------*/
 
 void SwFldDlg::ReInitDlg()
@@ -280,7 +263,7 @@ void SwFldDlg::ReInitDlg()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Dok-Wechsel TabPage neu initialisieren
+    Description: newly initialise TabPage after Doc-Switch
  --------------------------------------------------------------------*/
 
 void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, sal_Bool bOnlyActivate )
@@ -288,11 +271,11 @@ void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, sal_Bool bOnlyActivate )
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
     if ( pPage )
-        pPage->EditNewField( bOnlyActivate );   // TabPage neu initialisieren
+        pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Nach Aktivierung einige TabPages neu initialisieren
+    Description: newly initialise after activation of a few TabPages
  --------------------------------------------------------------------*/
 
 void SwFldDlg::Activate()
@@ -315,16 +298,12 @@ void SwFldDlg::Activate()
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDlg::EnableInsert(sal_Bool bEnable)
 {
     if( bEnable )
     {
         SwView* pView = ::GetActiveView();
-        DBG_ASSERT(pView, "no view found");
+        OSL_ENSURE(pView, "no view found");
         if( !pView ||
                 (pView->GetWrtShell().IsReadOnlyAvailable() &&
                     pView->GetWrtShell().HasReadonlySel()) )
@@ -333,17 +312,11 @@ void SwFldDlg::EnableInsert(sal_Bool bEnable)
     GetOKButton().Enable(bEnable);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwFldDlg::InsertHdl()
 {
     GetOKButton().Click();
 }
-/* -----------------27.11.2002 15:24-----------------
- *
- * --------------------------------------------------*/
+
 void SwFldDlg::ActivateDatabasePage()
 {
     m_bDataBaseMode = sal_True;
@@ -360,9 +333,7 @@ void SwFldDlg::ActivateDatabasePage()
     RemoveTabPage(TP_FLD_REF);
     RemoveTabPage(TP_FLD_FUNC);
 }
-/*-- 07.10.2003 14:01:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 {
     if( TP_FLD_DB == nId)
@@ -384,3 +355,4 @@ void SwFldDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

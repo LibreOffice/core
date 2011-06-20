@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -112,7 +113,7 @@ sal_uInt16 SwInputFieldList::Count() const
 SwField* SwInputFieldList::GetField(sal_uInt16 nId)
 {
     const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetFld();
-    ASSERT( pTxtFld, "kein TextFld" );
+    OSL_ENSURE( pTxtFld, "kein TextFld" );
     return (SwField*)pTxtFld->GetFld().GetFld();
 }
 
@@ -228,3 +229,4 @@ void SwInputFieldList::RemoveUnselectedFlds()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

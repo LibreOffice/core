@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,11 +56,6 @@ public:
       virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-/*
-namespace SwSmartTagMgr
-{
-    SmartTagMgr& Get();
-}
-*/
-
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

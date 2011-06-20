@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -52,9 +53,6 @@ namespace com{ namespace sun{ namespace star {
     }
 }}}
 
-/* -----------------------------29.05.00 08:22--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwScannerEventListener : public ::cppu::WeakImplHelper1<
     STAR_NMSPC::lang::XEventListener >
 {
@@ -73,7 +71,6 @@ public:
 };
 
 // --------------------------- Clipboard EventListener ------------------
-
 class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
     CLIP_NMSPC::XClipboardListener >
 {
@@ -96,11 +93,8 @@ public:
     void AddRemoveListener( sal_Bool bAdd );
 };
 
-
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 class SwMailMergeConfigItem;
+
 class SwView_Impl
 {
     STAR_REFERENCE( lang::XEventListener )  xScanEvtLstnr;
@@ -186,3 +180,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

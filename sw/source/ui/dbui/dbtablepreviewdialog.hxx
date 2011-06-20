@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <svtools/stdctrl.hxx>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <com/sun/star/uno/Sequence.h>
 
 namespace com{ namespace sun{ namespace star{
@@ -39,10 +38,6 @@ namespace com{ namespace sun{ namespace star{
     namespace frame{ class XFrame;     }
     }}}
 
-
-/*-- 08.04.2004 14:04:29---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwDBTablePreviewDialog : public SfxModalDialog
 {
     FixedInfo       m_aDescriptionFI;
@@ -58,3 +53,4 @@ public:
 };
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -54,9 +55,6 @@ class OTextCursorHelper;
 class SwXTextRange;
 
 
-/* -----------------03.12.98 12:22-------------------
- *
- * --------------------------------------------------*/
 
 class SwXText
     : public ::com::sun::star::lang::XTypeProvider
@@ -344,3 +342,4 @@ public:
 
 #endif // SW_UNOTEXT_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

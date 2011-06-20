@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,10 +34,6 @@
 #include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 
-//#ifndef _ACCESSIBILITY_HXX_
-//#include "accessibility.hxx"
-//#endif
-
 class SmDocShell;
 class SmViewShell;
 class EditView;
@@ -52,7 +49,7 @@ class CommandEvent;
 
 /**************************************************************************/
 
-    void SmGetLeftSelectionPart(const ESelection aSelection,
+    void SmGetLeftSelectionPart(const ESelection &rSelection,
                                 sal_uInt16 &nPara, sal_uInt16 &nPos);
 
 /**************************************************************************/
@@ -117,9 +114,9 @@ public:
     ESelection          GetSelection() const;
     void                SetSelection(const ESelection &rSel);
 
-    sal_Bool                IsEmpty() const;
-    sal_Bool                IsSelected() const;
-    sal_Bool                IsAllSelected() const;
+    bool                IsEmpty() const;
+    bool                IsSelected() const;
+    bool                IsAllSelected() const;
     void                Cut();
     void                Copy();
     void                Paste();
@@ -130,14 +127,16 @@ public:
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();
-    sal_Bool                HasMark(const String &rText) const;
+    bool                HasMark(const String &rText) const;
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
-    sal_Bool                HandleWheelCommands( const CommandEvent &rCEvt );
+    bool                HandleWheelCommands( const CommandEvent &rCEvt );
+    bool                IsInlineEditEnabled();
+    void                StartCursorMove();
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -149,3 +148,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

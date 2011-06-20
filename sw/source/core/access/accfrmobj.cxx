@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -97,7 +98,7 @@ SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm,
     {
         Init( pWindow );
     }
-    ASSERT( (!pFrm || pFrm == mpFrm) &&
+    OSL_ENSURE( (!pFrm || pFrm == mpFrm) &&
             (!pDrawObj || pDrawObj == mpDrawObj) &&
             (!pWindow || pWindow == mpWindow),
             "invalid frame/object/window combination" );
@@ -346,7 +347,7 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
             {
                 // For FLY_AS_CHAR the parent is the anchor
                 pParent = pFly->GetAnchorFrm();
-                ASSERT( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
+                OSL_ENSURE( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
             }
             else
@@ -373,16 +374,16 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
     {
         const SwDrawContact *pContact =
             static_cast< const SwDrawContact* >( GetUserCall( mpDrawObj ) );
-        ASSERT( pContact, "sdr contact is missing" );
+        OSL_ENSURE( pContact, "sdr contact is missing" );
         if( pContact )
         {
             const SwFrmFmt *pFrmFmt = pContact->GetFmt();
-            ASSERT( pFrmFmt, "frame format is missing" );
+            OSL_ENSURE( pFrmFmt, "frame format is missing" );
             if( pFrmFmt && FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
             {
                 // For FLY_AS_CHAR the parent is the anchor
                 pParent = pContact->GetAnchorFrm();
-                ASSERT( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
+                OSL_ENSURE( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
 
             }
@@ -426,3 +427,4 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
 
 } } // eof of namespace sw::access
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

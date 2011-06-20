@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,16 +28,13 @@
 #ifndef _SW_ABSTDLG_HXX
 #define _SW_ABSTDLG_HXX
 
-// include ---------------------------------------------------------------
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/syswin.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/frame/XModel.hpp>
@@ -262,14 +260,14 @@ public:
      virtual void            SetWindowState( const ByteString& rStr ) =0;//this method inherit from SystemWindow
 };
 
-class AbstarctSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg
+class AbstractSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg
 {
 public:
      virtual const String& GetBusinessCardStr() const = 0;
      virtual Printer *GetPrt() =0;
 };
 
-class AbstarctSwSelGlossaryDlg : public VclAbstractDialog //add for SwSelGlossaryDlg
+class AbstractSwSelGlossaryDlg : public VclAbstractDialog //add for SwSelGlossaryDlg
 {
 public:
     virtual void InsertGlos(const String &rRegion, const String &rGlosName) = 0;    // inline
@@ -329,6 +327,7 @@ public:
 #define RET_EDIT_RESULT_DOC     102
 #define RET_TARGET_CREATED      103
 #define RET_REMOVE_TARGET       104
+#define RET_APPLY_TEMPLATE      105
 
 class SwView;
 class SwMailMergeConfigItem;
@@ -343,7 +342,7 @@ public:
 };
 
 
-//-------Swabstract fractory
+// Swabstract fractory
 class SwAbstractDialogFactory
 {
 public:
@@ -378,7 +377,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert,int nResId ) = 0; //add for SwEnvDlg
 
 
-    virtual AbstarctSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+    virtual AbstractSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
                                                      SwNewDBMgr* pNewDBMgr, sal_Bool bLabel,int nResId  ) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;//add for SwLabDlg
@@ -392,7 +391,7 @@ public:
                                                     sal_Bool bDraw = sal_False,
                                                     sal_uInt16 nDefPage = 0) = 0;
 
-    virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
+    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
 
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) = 0; //add for  SwTableHeightDlg SwSortDlg
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ) = 0; //add for  SwSplitTblDlg
@@ -440,6 +439,7 @@ public:
                                                 SwField* pField, sal_Bool bNextButton = sal_False ) = 0; //add for SwFldInputDlg
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( int nResId,
                                                 Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False) = 0; //add for SwInsFootNoteDlg
+    virtual VclAbstractDialog*          CreateTitlePageDlg ( Window * pParent ) = 0;
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, sal_Bool bCol = sal_False ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
@@ -501,3 +501,4 @@ public:
 };
 
 #endif
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

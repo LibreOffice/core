@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +30,6 @@
 
 #include <parachangetrackinginfo.hxx>
 
-#include <errhdl.hxx>
 #include <wrong.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 
@@ -56,8 +53,7 @@ namespace {
 
         if ( !rTxtFrm.GetTxtNode() )
         {
-            ASSERT( false,
-                    "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
+            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
             return;
         }
         const SwTxtNode& rTxtNode( *(rTxtFrm.GetTxtNode()) );
@@ -65,8 +61,7 @@ namespace {
         const IDocumentRedlineAccess* pIDocChangeTrack( rTxtNode.getIDocumentRedlineAccess() );
         if ( !pIDocChangeTrack )
         {
-            ASSERT( false,
-                    "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
+            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
             return;
         }
 
@@ -193,9 +188,9 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
 
     if ( mpChangeTrackInsertionTextMarkupList == 0 )
     {
-        ASSERT( mpChangeTrackDeletionTextMarkupList == 0,
+        OSL_ENSURE( mpChangeTrackDeletionTextMarkupList == 0,
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackDeletionTextMarkupList> expected to be NULL." );
-        ASSERT( mpChangeTrackFormatChangeTextMarkupList == 0,
+        OSL_ENSURE( mpChangeTrackFormatChangeTextMarkupList == 0,
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackFormatChangeTextMarkupList> expected to be NULL." );
         initChangeTrackTextMarkupLists( mrTxtFrm,
                                         mpChangeTrackInsertionTextMarkupList,
@@ -222,10 +217,11 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
         break;
         default:
         {
-            ASSERT( false,
-                    "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..)> - misusage - unexpected text markup type for change tracking." );
+            OSL_FAIL( "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..)> - misusage - unexpected text markup type for change tracking." );
         }
     }
 
     return pChangeTrackingTextMarkupList;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

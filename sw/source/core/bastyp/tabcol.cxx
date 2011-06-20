@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
+#include <osl/diagnose.h>
 #include "tabcol.hxx"
-#include <errhdl.hxx>       // fuer Create-Methoden
 
+#include <limits.h> //for LONG_MAX
 
 SwTabCols::SwTabCols( sal_uInt16 nSize ) :
     nLeftMin( 0 ),
@@ -60,11 +60,11 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
         SwTabColsEntry aEntry2 = rCpy.GetData()[i];
         (void) aEntry1;
         (void) aEntry2;
-        ASSERT( aEntry1.nPos == aEntry2.nPos &&
+        OSL_ENSURE( aEntry1.nPos == aEntry2.nPos &&
                 aEntry1.nMin == aEntry2.nMin &&
                 aEntry1.nMax == aEntry2.nMax &&
                 aEntry1.bHidden == aEntry2.bHidden,
-                "CopyContructor of SwTabColsEntries did not succeed!" )
+                "CopyContructor of SwTabColsEntries did not succeed!" );
     }
 #endif
 }
@@ -140,3 +140,4 @@ void SwTabCols::Remove( sal_uInt16 nPos, sal_uInt16 nAnz )
     aData.erase( aStart, aStart + nAnz );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

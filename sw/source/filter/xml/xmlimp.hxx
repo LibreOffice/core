@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -116,14 +117,11 @@ protected:
     virtual XMLShapeImportHelper* CreateShapeImport();
 
 public:
-
-    // #110680#
     SwXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nImportFlags = IMPORT_ALL);
 
 #ifdef XML_CORE_API
-    // #110680#
     SwXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwDoc& rDoc,
@@ -244,3 +242,5 @@ inline void SwXMLImport::SetProgressValue( sal_Int32 nValue )
 }
 
 #endif  //  _XMLIMP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

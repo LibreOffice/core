@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brshitem.hxx>
@@ -64,15 +63,12 @@
 #include <htmlnum.hxx>
 #include <wrthtml.hxx>
 #include <wrtswtbl.hxx>
-#ifdef DBG_UTIL
-#ifndef _VIEWSH_HXX
+#if OSL_DEBUG_LEVEL > 1
 #include <viewsh.hxx>
-#endif
 #include <viewopt.hxx>
 #endif
 #include <sal/types.h>
 
-//#define MAX_DEPTH (USHRT_MAX)
 #define MAX_DEPTH (3)
 
 using namespace ::com::sun::star;
@@ -150,7 +146,7 @@ void SwHTMLWrtTable::PixelizeBorders()
 sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
                         sal_Bool bTop, sal_Bool bBottom, sal_Bool bLeft, sal_Bool bRight )
 {
-    ASSERT( bTop || bBottom || bLeft || bRight,
+    OSL_ENSURE( bTop || bBottom || bLeft || bRight,
             "HasTabBackground: darf nicht aufgerufen werden" );
 
     sal_Bool bRet = sal_False;
@@ -159,7 +155,6 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
         const SvxBrushItem& rBrushItem =
             rBox.GetFrmFmt()->GetBackground();
 
-        /// OD 02.09.2002 #99657#
         /// The table box has a background, if its background color is not "no fill"/
         /// "auto fill" or it has a background graphic.
         bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -185,12 +180,11 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
 sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
                         sal_Bool bTop, sal_Bool bBottom, sal_Bool bLeft, sal_Bool bRight )
 {
-    ASSERT( bTop || bBottom || bLeft || bRight,
+    OSL_ENSURE( bTop || bBottom || bLeft || bRight,
             "HasTabBackground: darf nicht aufgerufen werden" );
 
     sal_Bool bRet = sal_False;
     const SvxBrushItem& rBrushItem = rLine.GetFrmFmt()->GetBackground();
-    /// OD 02.09.2002 #99657#
     /// The table line has a background, if its background color is not "no fill"/
     /// "auto fill" or it has a background graphic.
     bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -284,10 +278,11 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if ( !nRowSpan )
         return;
 
+#ifndef PURE_HTML
     SwWriteTableCol *pCol = aCols[nCol];
+#endif
 
-//  sal_Bool bOutWidth = nColSpan>1 || pCol->GetOutWidth();
-    sal_Bool bOutWidth = sal_True; //nColSpan==1 && pCol->GetOutWidth();
+    sal_Bool bOutWidth = sal_True;
 
     const SwStartNode* pSttNd = pBox->GetSttNd();
     sal_Bool bHead = sal_False;
@@ -437,6 +432,11 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         if( rWrt.bCfgOutStyles )
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
+
+    ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_style ) += "=\"";
+    rWrt.Strm() << sOut.GetBuffer( );
+    OutCSS1_SvxBox( rWrt, pBox->GetFrmFmt()->GetBox() );
+    sOut = '"';
 
     sal_uInt32 nNumFmt = 0;
     double nValue = 0.0;
@@ -675,7 +675,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         }
         else
         {
-            ASSERT( Application::GetDefaultDevice(), "kein Application-Window!?" );
+            OSL_ENSURE( Application::GetDefaultDevice(), "kein Application-Window!?" );
             sOut += "100%";
         }
     }
@@ -708,19 +708,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // Anderenfalls enthaelt nBorder naemlich nur die Breite der Umrandung,
     // die genutzt wird, wenn gar kein sheet::Border angegeben ist.
     sal_Bool bHasAnyBorders = nFrameMask || bColsHaveBorder || bRowsHaveBorder;
-    if( bCollectBorderWidth || nBorder==0 || bHasAnyBorders )
-        (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_border ) += '=')
-            += ByteString::CreateFromInt32( rWrt.ToPixel( nBorder ) );
-
-    // BORDERCOLOR ausgeben
-
-    if( (sal_uInt32)-1 != nBorderColor && rWrt.bCfgOutStyles && bHasAnyBorders )
-    {
-        ((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_bordercolor ) += '=';
-        rWrt.Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), nBorderColor, rWrt.eDestEnc );
-        sOut.Erase();
-    }
 
     // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
     (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_cellpadding ) += '=')
@@ -743,9 +730,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             case 4:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_lhs        ;break;
             case 8:  pFrame = OOO_STRING_SVTOOLS_HTML_TF_rhs        ;break;
             case 12: pFrame = OOO_STRING_SVTOOLS_HTML_TF_vsides ;break;
-            //FRAME=BOX ist der default wenn BORDER>0
-            //case 15:
-            //default: pFrame = OOO_STRING_SVTOOLS_HTML_TF_box      ;break; // geht nicht
         };
         if( pFrame )
             (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_frame ) += '=') += pFrame;
@@ -1095,7 +1079,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
     if( bCheckDefList )
     {
-        ASSERT( !rHTMLWrt.GetNumInfo().GetNumRule() ||
+        OSL_ENSURE( !rHTMLWrt.GetNumInfo().GetNumRule() ||
                 rHTMLWrt.GetNextNumInfo(),
                 "NumInfo fuer naechsten Absatz fehlt!" );
         const SvxLRSpaceItem& aLRItem = pFmt->GetLRSpace();
@@ -1200,7 +1184,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
     const SwHTMLTableLayout *pLayout = rTbl.GetHTMLTableLayout();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ViewShell *pSh;
     rWrt.pDoc->GetEditShell( &pSh );
     if ( pSh && pSh->GetViewOptions()->IsTest1() )
@@ -1266,3 +1250,4 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

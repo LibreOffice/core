@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,7 +56,7 @@ struct HTMLNumFmtTblEntry
     NfIndexTableOffset eFmt;
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLFldTypeTable[] =
+static HTMLOptionEnum aHTMLFldTypeTable[] =
 {
     { OOO_STRING_SW_HTML_FT_author, RES_AUTHORFLD       },
     { OOO_STRING_SW_HTML_FT_sender, RES_EXTUSERFLD      },
@@ -69,7 +70,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLFldTypeTable[] =
     { 0,                0                   }
 };
 
-static HTMLNumFmtTblEntry __FAR_DATA aHTMLDateFldFmtTable[] =
+static HTMLNumFmtTblEntry aHTMLDateFldFmtTable[] =
 {
     { "SSYS",       NF_DATE_SYSTEM_SHORT    },
     { "LSYS",       NF_DATE_SYSTEM_LONG     },
@@ -91,7 +92,7 @@ static HTMLNumFmtTblEntry __FAR_DATA aHTMLDateFldFmtTable[] =
     { 0,                    NF_NUMERIC_START }
 };
 
-static HTMLNumFmtTblEntry __FAR_DATA aHTMLTimeFldFmtTable[] =
+static HTMLNumFmtTblEntry aHTMLTimeFldFmtTable[] =
 {
     { "SYS",     NF_TIME_HHMMSS },
     { "SSMM24",      NF_TIME_HHMM },
@@ -99,7 +100,7 @@ static HTMLNumFmtTblEntry __FAR_DATA aHTMLTimeFldFmtTable[] =
     { 0,                 NF_NUMERIC_START }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldFmtTable[] =
+static HTMLOptionEnum aHTMLPageNumFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_uletter,     SVX_NUM_CHARS_UPPER_LETTER },
     { OOO_STRING_SW_HTML_FF_lletter,     SVX_NUM_CHARS_LOWER_LETTER },
@@ -115,7 +116,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldFmtTable[] =
 };
 
 
-static HTMLOptionEnum __FAR_DATA aHTMLExtUsrFldSubTable[] =
+static HTMLOptionEnum aHTMLExtUsrFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_company,         EU_COMPANY },
     { OOO_STRING_SW_HTML_FS_firstname,   EU_FIRSTNAME },
@@ -135,14 +136,14 @@ static HTMLOptionEnum __FAR_DATA aHTMLExtUsrFldSubTable[] =
     { 0,                     0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLAuthorFldFmtTable[] =
+static HTMLOptionEnum aHTMLAuthorFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,        AF_NAME },
     { OOO_STRING_SW_HTML_FF_shortcut,    AF_SHORTCUT },
     { 0,                     0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldSubTable[] =
+static HTMLOptionEnum aHTMLPageNumFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_random,      PG_RANDOM },
     { OOO_STRING_SW_HTML_FS_next,        PG_NEXT },
@@ -158,7 +159,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldSubTable[] =
     const SwDocInfoSubType DI_INFO3         =  DI_SUBTYPE_END + 3;
     const SwDocInfoSubType DI_INFO4         =  DI_SUBTYPE_END + 4;
 
-static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldSubTable[] =
+static HTMLOptionEnum aHTMLDocInfoFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_title,   DI_TITEL },
     { OOO_STRING_SW_HTML_FS_theme,   DI_THEMA },
@@ -174,7 +175,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldSubTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldFmtTable[] =
+static HTMLOptionEnum aHTMLDocInfoFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_author,      DI_SUB_AUTHOR },
     { OOO_STRING_SW_HTML_FF_time,    DI_SUB_TIME },
@@ -182,7 +183,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldFmtTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLDocStatFldSubTable[] =
+static HTMLOptionEnum aHTMLDocStatFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_page,    DS_PAGE },
     { OOO_STRING_SW_HTML_FS_para,    DS_PARA },
@@ -194,7 +195,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLDocStatFldSubTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLFileNameFldFmtTable[] =
+static HTMLOptionEnum aHTMLFileNameFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,       FF_NAME },
     { OOO_STRING_SW_HTML_FF_pathname,   FF_PATHNAME },
@@ -281,13 +282,13 @@ void SwHTMLParser::NewField()
         SvtUserOptions aOpt;
         const String& rUser = aOpt.GetFullName();
         SwDocShell *pDocShell(pDoc->GetDocShell());
-        DBG_ASSERT(pDocShell, "no SwDocShell");
+        OSL_ENSURE(pDocShell, "no SwDocShell");
         if (pDocShell) {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 pDocShell->GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
-            DBG_ASSERT(xDocProps.is(), "Doc has no DocumentProperties");
+            OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
             const String& rChanged = xDocProps->getModifiedBy();
             const String& rCreated = xDocProps->getAuthor();
             if( !rUser.Len() ||
@@ -558,25 +559,25 @@ void SwHTMLParser::EndField()
         switch( pField->Which() )
         {
         case RES_DOCINFOFLD:
-            ASSERT( ((SwDocInfoField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwDocInfoField*)pField)->IsFixed(),
                     "DokInfo-Feld haette nicht gemerkt werden muessen" );
             ((SwDocInfoField*)pField)->SetExpansion( aContents );
             break;
 
         case RES_EXTUSERFLD:
-            ASSERT( ((SwExtUserField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwExtUserField*)pField)->IsFixed(),
                     "ExtUser-Feld haette nicht gemerkt werden muessen" );
             ((SwExtUserField*)pField)->SetExpansion( aContents );
             break;
 
         case RES_AUTHORFLD:
-            ASSERT( ((SwAuthorField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwAuthorField*)pField)->IsFixed(),
                     "Author-Feld haette nicht gemerkt werden muessen" );
             ((SwAuthorField*)pField)->SetExpansion( aContents );
             break;
 
         case RES_FILENAMEFLD:
-            ASSERT( ((SwFileNameField*)pField)->IsFixed(),
+            OSL_ENSURE( ((SwFileNameField*)pField)->IsFixed(),
                     "FileName-Feld haette nicht gemerkt werden muessen" );
             ((SwFileNameField*)pField)->SetExpansion( aContents );
             break;
@@ -668,3 +669,4 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
         pPam->Move( fnMoveForward );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

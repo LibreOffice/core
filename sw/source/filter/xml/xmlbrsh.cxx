@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,7 +32,6 @@
 
 
 #include "hintids.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <editeng/memberids.hrc>
 
@@ -68,7 +68,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_NGIMG_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
+static SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
     { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
@@ -227,7 +227,6 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
         {
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sValue );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-    //      AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, ACP2WS(sXML_embed) );
             GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
         }
 
@@ -256,3 +255,4 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

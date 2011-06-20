@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,10 +45,6 @@
 
 #include "envprt.hrc"
 
-
-
-
-
 SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_ENV_PRT), rSet),
@@ -68,12 +65,12 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
     FreeResource();
     SetExchangeSupport();
 
-    // Metriken
+    // Metrics
     FieldUnit eUnit = ::GetDfltMetric(sal_False);
     SetMetric(aRightField, eUnit);
     SetMetric(aDownField , eUnit);
 
-    // Handler installieren
+    // Install handlers
     aTopButton   .SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
     aBottomButton.SetClickHdl(LINK(this, SwEnvPrtPage, ClickHdl));
 
@@ -85,58 +82,43 @@ SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet) :
     // ToolBox
     Size aSz = aAlignBox.CalcWindowSizePixel();
     aAlignBox.SetSizePixel(aSz);
-//    aAlignBox.SetPosPixel(Point(aNoNameFL.GetPosPixel().X() + (aNoNameFL.GetSizePixel().Width() - aSz.Width()) / 2, aAlignBox.GetPosPixel().Y()));
     aAlignBox.SetClickHdl(LINK(this, SwEnvPrtPage, AlignHdl));
-
 }
-
-// --------------------------------------------------------------------------
-
-
 
 SwEnvPrtPage::~SwEnvPrtPage()
 {
 }
 
-// --------------------------------------------------------------------------
-
-
-
 IMPL_LINK( SwEnvPrtPage, ClickHdl, Button *, EMPTYARG )
 {
-    sal_Bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     if (aBottomButton.IsChecked())
     {
-        // Briefumschlaege von unten
-        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(bHC ? BMP_HOR_LEFT_LOWER_H : BMP_HOR_LEFT_LOWER)));
-        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(bHC ? BMP_HOR_CNTR_LOWER_H : BMP_HOR_CNTR_LOWER)));
-        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(bHC ? BMP_HOR_RGHT_LOWER_H : BMP_HOR_RGHT_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(bHC ? BMP_VER_LEFT_LOWER_H : BMP_VER_LEFT_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(bHC ? BMP_VER_CNTR_LOWER_H : BMP_VER_CNTR_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(bHC ? BMP_VER_RGHT_LOWER_H : BMP_VER_RGHT_LOWER)));
+        // Envelope from botton
+        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(BMP_HOR_LEFT_LOWER)));
+        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(BMP_HOR_CNTR_LOWER)));
+        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(BMP_HOR_RGHT_LOWER)));
+        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(BMP_VER_LEFT_LOWER)));
+        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(BMP_VER_CNTR_LOWER)));
+        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(BMP_VER_RGHT_LOWER)));
     }
     else
     {
-        // Briefumschlaege von oben
-        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(bHC ? BMP_HOR_LEFT_UPPER_H : BMP_HOR_LEFT_UPPER)));
-        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(bHC ? BMP_HOR_CNTR_UPPER_H : BMP_HOR_CNTR_UPPER)));
-        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(bHC ? BMP_HOR_RGHT_UPPER_H : BMP_HOR_RGHT_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(bHC ? BMP_VER_LEFT_UPPER_H : BMP_VER_LEFT_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(bHC ? BMP_VER_CNTR_UPPER_H : BMP_VER_CNTR_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(bHC ? BMP_VER_RGHT_UPPER_H : BMP_VER_RGHT_UPPER)));
+        // Envelope from top
+        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(BMP_HOR_LEFT_UPPER)));
+        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(BMP_HOR_CNTR_UPPER)));
+        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(BMP_HOR_RGHT_UPPER)));
+        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(BMP_VER_LEFT_UPPER)));
+        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(BMP_VER_CNTR_UPPER)));
+        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(BMP_VER_RGHT_UPPER)));
     }
     return 0;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
 {
     if (pBtn == &aPrtSetup)
     {
-        // Druck-Setup aufrufen
+        // Call printer setup
         if (pPrt)
         {
             PrinterSetupDialog* pDlg = new PrinterSetupDialog(this );
@@ -150,10 +132,6 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 IMPL_LINK( SwEnvPrtPage, AlignHdl, ToolBox *, EMPTYARG )
 {
     if (aAlignBox.GetCurItemId())
@@ -164,25 +142,17 @@ IMPL_LINK( SwEnvPrtPage, AlignHdl, ToolBox *, EMPTYARG )
     }
     else
     {
-        // GetCurItemId() == 0 ist moeglich!
+        // GetCurItemId() == 0 is possible!
         const SwEnvItem& rItem = (const SwEnvItem&) GetItemSet().Get(FN_ENVELOP);
         aAlignBox.CheckItem((sal_uInt16) rItem.eAlign + ITM_HOR_LEFT, sal_True);
     }
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-
 SfxTabPage* SwEnvPrtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwEnvPrtPage(pParent, rSet);
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
 {
@@ -190,20 +160,12 @@ void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
         aPrinterInfo.SetText(pPrt->GetName());
 }
 
-// --------------------------------------------------------------------------
-
-
-
 int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
-
-// --------------------------------------------------------------------------
-
-
 
 void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 {
@@ -218,10 +180,6 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
     rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(aDownField ));
 }
 
-// --------------------------------------------------------------------------
-
-
-
 sal_Bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
@@ -229,16 +187,9 @@ sal_Bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
     return sal_True;
 }
 
-// ----------------------------------------------------------------------------
-
-
-
 void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 {
-//    SfxItemSet aSet(rSet);
-//    aSet.Put(GetParent()->aEnvItem);
-
-    // Item auslesen
+    // Read item
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
     aAlignBox.CheckItem((sal_uInt16) rItem.eAlign + ITM_HOR_LEFT);
 
@@ -257,3 +208,4 @@ void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

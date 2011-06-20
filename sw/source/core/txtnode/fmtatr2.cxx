@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -70,9 +71,6 @@ TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
 /*************************************************************************
 |*
 |*    class SwFmtCharFmt
-|*    Beschreibung
-|*    Ersterstellung    JP 23.11.90
-|*    Letzte Aenderung  JP 09.08.94
 |*
 *************************************************************************/
 
@@ -100,7 +98,7 @@ SwFmtCharFmt::~SwFmtCharFmt() {}
 
 int SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return GetCharFmt() == ((SwFmtCharFmt&)rAttr).GetCharFmt();
 }
 
@@ -127,26 +125,23 @@ sal_Bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : sal_False;
 }
-sal_Bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     String sCharFmtName;
     if(GetCharFmt())
         SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
     rVal <<= OUString( sCharFmtName );
-    return sal_True;
+    return true;
 }
-sal_Bool SwFmtCharFmt::PutValue( const uno::Any& , sal_uInt8   )
+bool SwFmtCharFmt::PutValue( const uno::Any& , sal_uInt8   )
 {
-    DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
-    return sal_False;
+    OSL_FAIL("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
+    return false;
 }
 
 /*************************************************************************
 |*
 |*    class SwFmtAutoFmt
-|*    Beschreibung
-|*    Ersterstellung    AMA 12.05.06
-|*    Letzte Aenderung  AMA 12.05.06
 |*
 *************************************************************************/
 
@@ -166,7 +161,7 @@ SwFmtAutoFmt::~SwFmtAutoFmt()
 
 int SwFmtAutoFmt::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "different attributes" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "different attributes" );
     return mpHandle == ((SwFmtAutoFmt&)rAttr).mpHandle;
 }
 
@@ -175,25 +170,22 @@ SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
     return new SwFmtAutoFmt( *this );
 }
 
-sal_Bool SwFmtAutoFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
+bool SwFmtAutoFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     String sCharFmtName = StylePool::nameOf( mpHandle );
     rVal <<= OUString( sCharFmtName );
-    return sal_True;
+    return true;
 }
 
-sal_Bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
+bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
 {
     //the format is not renameable via API
-    return sal_False;
+    return false;
 }
 
 /*************************************************************************
 |*
 |*    class SwFmtINetFmt
-|*    Beschreibung
-|*    Ersterstellung    AMA 02.08.96
-|*    Letzte Aenderung  AMA 02.08.96
 |*
 *************************************************************************/
 
@@ -241,7 +233,7 @@ SwFmtINetFmt::~SwFmtINetFmt()
 
 int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     sal_Bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
                 && aURL == ((SwFmtINetFmt&)rAttr).aURL
                 && aName == ((SwFmtINetFmt&)rAttr).aName
@@ -331,9 +323,9 @@ const SvxMacro* SwFmtINetFmt::GetMacro( sal_uInt16 nEvent ) const
 
 
 
-sal_Bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     XubString sVal;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -379,9 +371,9 @@ sal_Bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     rVal <<= OUString(sVal);
     return bRet;
 }
-sal_Bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
+bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
 
     // all properties except HyperlinkEvents are of type string, hence
@@ -403,14 +395,14 @@ sal_Bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
         else
         {
             // wrong type!
-            bRet = sal_False;
+            bRet = false;
         }
     }
     else
     {
         // all string properties:
         if(rVal.getValueType() != ::getCppuType((rtl::OUString*)0))
-            return sal_False;
+            return false;
         XubString sVal = *(rtl::OUString*)rVal.getValue();
         switch(nMemberId)
         {
@@ -441,7 +433,7 @@ sal_Bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
             }
             break;
             default:
-                bRet = sal_False;
+                bRet = false;
         }
     }
     return bRet;
@@ -490,7 +482,7 @@ SwFmtRuby& SwFmtRuby::operator=( const SwFmtRuby& rAttr )
 
 int SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return sRubyTxt == ((SwFmtRuby&)rAttr).sRubyTxt &&
            sCharFmtName == ((SwFmtRuby&)rAttr).sCharFmtName &&
            nCharFmtId == ((SwFmtRuby&)rAttr).nCharFmtId &&
@@ -503,10 +495,10 @@ SfxPoolItem* SwFmtRuby::Clone( SfxItemPool* ) const
     return new SwFmtRuby( *this );
 }
 
-sal_Bool SwFmtRuby::QueryValue( uno::Any& rVal,
+bool SwFmtRuby::QueryValue( uno::Any& rVal,
                             sal_uInt8 nMemberId ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -526,14 +518,14 @@ sal_Bool SwFmtRuby::QueryValue( uno::Any& rVal,
         }
         break;
         default:
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
-sal_Bool SwFmtRuby::PutValue( const uno::Any& rVal,
+bool SwFmtRuby::PutValue( const uno::Any& rVal,
                             sal_uInt8 nMemberId  )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -551,7 +543,7 @@ sal_Bool SwFmtRuby::PutValue( const uno::Any& rVal,
             if(nSet >= 0 && nSet <= text::RubyAdjust_INDENT_BLOCK)
                 nAdjustment = nSet;
             else
-                bRet = sal_False;
+                bRet = false;
         }
         break;
         case MID_RUBY_ABOVE:
@@ -573,7 +565,7 @@ sal_Bool SwFmtRuby::PutValue( const uno::Any& rVal,
         }
         break;
         default:
-            bRet = sal_False;
+            bRet = false;
     }
     return bRet;
 }
@@ -593,7 +585,7 @@ SwFmtMeta::SwFmtMeta(const sal_uInt16 i_nWhich)
     , m_pMeta()
     , m_pTxtAttr( 0 )
 {
-    ASSERT((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+   OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFmtMeta: invalid which id!");
 }
 
@@ -603,9 +595,9 @@ SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
     , m_pMeta( i_pMeta )
     , m_pTxtAttr( 0 )
 {
-    ASSERT((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
+   OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFmtMeta: invalid which id!");
-    ASSERT(m_pMeta, "SwFmtMeta: no Meta ?");
+    OSL_ENSURE(m_pMeta, "SwFmtMeta: no Meta ?");
     // DO NOT call m_pMeta->SetFmtMeta(this) here; only from SetTxtAttr!
 }
 
@@ -620,7 +612,7 @@ SwFmtMeta::~SwFmtMeta()
 
 int SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
 {
-    ASSERT( SfxPoolItem::operator==( i_rOther ), "i just copied this assert" );
+    OSL_ENSURE( SfxPoolItem::operator==( i_rOther ), "i just copied this assert" );
     return SfxPoolItem::operator==( i_rOther )
         && (m_pMeta == static_cast<SwFmtMeta const &>( i_rOther ).m_pMeta);
 }
@@ -823,7 +815,7 @@ void MetaField::GetPrefixAndSuffix(
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
         }
     } catch (uno::Exception) {
-        OSL_ENSURE(false, "exception?");
+        OSL_FAIL("exception?");
     }
 }
 
@@ -910,3 +902,4 @@ MetaFieldManager::getMetaFields()
 } // namespace sw
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,13 +81,6 @@ void SwVbaFind::SetReplace( sal_Int32 type )
     mnReplaceType = type;
     mbReplace = sal_True;
 }
-#ifdef TOMORROW
-rtl::OUString SwVbaFind::ReplaceWildcards( const rtl::OUString& /*rText*/ ) throw ( uno::RuntimeException )
-{
-    // TODO:
-    return rtl::OUString();
-}
-#endif
 uno::Reference< text::XTextRange > SwVbaFind::FindOneElement() throw ( uno::RuntimeException )
 {
     uno::Reference< text::XTextRange > xFoundOne;
@@ -426,3 +420,4 @@ SwVbaFind::getServiceNames()
     return aServiceNames;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

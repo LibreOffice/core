@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,16 +35,13 @@
 
 
 #define _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_USHORTS
 
 
 #include <redline.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -51,28 +49,16 @@
 #include <svx/postattr.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <uitool.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _REDLNDLG_HRC
 #include <redlndlg.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 
 #include <vector>
 #ifndef _REDLNDLG_HXX
@@ -83,51 +69,34 @@
 
 #include <unomid.h>
 
-
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
 {
     pImplDlg = new SwRedlineAcceptDlg(this, sal_True);
 
     pImplDlg->Initialize(GetExtraData());
-    pImplDlg->Activate();   // Zur Initialisierung der Daten
+    pImplDlg->Activate();   // for data's initialisation
 
     FreeResource();
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
-    AcceptAll(sal_False);   // Alles uebriggebliebene ablehnen
+    AcceptAll(sal_False);   // refuse everything remaining
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwModalRedlineAcceptDlg::Activate()
 {
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwModalRedlineAcceptDlg::Resize()
 {
     pImplDlg->Resize();
     SfxModalDialog::Resize();
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
 {
@@ -136,7 +105,7 @@ void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())
     {
-        pFilterTP->CheckDate(sal_False);    // Alle Filter abschalten
+        pFilterTP->CheckDate(sal_False);    // turn off all filters
         pFilterTP->CheckAuthor(sal_False);
         pFilterTP->CheckRange(sal_False);
         pFilterTP->CheckAction(sal_False);
@@ -145,3 +114,5 @@ void SwModalRedlineAcceptDlg::AcceptAll( sal_Bool bAccept )
 
     pImplDlg->CallAcceptReject( sal_False, bAccept );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,11 +32,11 @@
 #include <xmloff/XMLTextTableContext.hxx>
 
 // STL include
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <vector>
 
-#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
+#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_BOOLS
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #endif
@@ -67,8 +68,13 @@ class SwXMLTableContext : public XMLTextTableContext
     /// NB: this contains the xml:id only if this table is a subtable!
     ::rtl::OUString     mXmlId;
 
-    SvUShorts           aColumnWidths;
-    SvBools             aColumnRelWidths;
+    //! Holds basic information about a column's width.
+    struct ColumnWidthInfo {
+        sal_uInt16 width;      //!< Column width (absolute or relative).
+        bool   isRelative; //!< True for a relative width, false for absolute.
+        inline ColumnWidthInfo(sal_uInt16 wdth, bool isRel) : width(wdth), isRelative(isRel) {};
+    };
+    std::vector<ColumnWidthInfo> aColumnWidths;
     SvStringsDtor       *pColumnDefaultCellStyleNames;
 
     ::com::sun::star::uno::Reference <
@@ -87,7 +93,7 @@ class SwXMLTableContext : public XMLTextTableContext
 
     // hash map of shared format, indexed by the (XML) style name,
     // the column width, and protection flag
-    typedef std::hash_map<TableBoxIndex,SwTableBoxFmt*,
+    typedef boost::unordered_map<TableBoxIndex,SwTableBoxFmt*,
                           TableBoxIndexHasher> map_BoxFmt;
     map_BoxFmt* pSharedBoxFormats;
 
@@ -209,7 +215,7 @@ inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
 
 inline sal_uInt32 SwXMLTableContext::GetColumnCount() const
 {
-    return aColumnWidths.Count();
+    return aColumnWidths.size();
 }
 
 inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
@@ -223,3 +229,5 @@ inline sal_Bool SwXMLTableContext::HasColumnDefaultCellStyleNames() const
 }
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

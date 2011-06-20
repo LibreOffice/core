@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,14 +35,9 @@
 
 
 #include <svl/style.hxx>
-#include <errhdl.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <docfnote.hxx>
 #include <impfnote.hxx>
 #include <ftninfo.hxx>
@@ -53,18 +49,10 @@
 #include <uitool.hxx>
 #include <poolfmt.hxx>
 #include <swstyle.h>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _DOCFNOTE_HRC
 #include <docfnote.hrc>
-#endif
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg( Window *pParent, SwWrtShell &rS ) :
@@ -196,30 +184,30 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     else
     {
         const SwFtnInfo &rInf = pSh->GetFtnInfo();
-        // Position (Seite, Kapitel) setzen
+        // set position (page, chapter)
         if ( rInf.ePos == FTNPOS_PAGE )
         {
             aPosPageBox.Check();
             aPageTemplLbl.Enable(sal_False);
             aPageTemplBox.Enable(sal_False);
         }
-        else // if ( rInf.ePos == FTNPOS_CHAPTER )
+        else
         {
             aPosChapterBox.Check();
             aNumCountBox.RemoveEntry(aNumPage);
             aNumCountBox.RemoveEntry(aNumChapter);
             bPosDoc = sal_True;
         }
-            // Verweistexte
+            // reference tests
         aContEdit.SetText(rInf.aQuoVadis);
         aContFromEdit.SetText(rInf.aErgoSum);
 
-            // gesammelt wo
+            // collected
         SelectNumbering(rInf.eNum);
     }
 
-        // Numerierung
-        // Art
+        // numbering
+        // art
     aNumViewBox.SelectNumberingType( pInf->aFmt.GetNumberingType());
     aOffsetFld.SetValue(pInf->nFtnOffset + 1);
     aPrefixED.SetText(pInf->GetPrefix());
@@ -234,8 +222,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     aFtnCharAnchorTemplBox.SelectEntry( pCharFmt->GetName() );
     aFtnCharAnchorTemplBox.SaveValue();
 
-        // Vorlagen - Sonderbereiche
-        // Absatz
+        // styles   special regions
+        // paragraph
     SfxStyleSheetBasePool* pStyleSheetPool = pSh->GetView().GetDocShell()->GetStyleSheetPool();
     pStyleSheetPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SWSTYLEBIT_EXTRA);
     SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
@@ -256,7 +244,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         aParaTemplBox.SelectEntry( sStr );      // Default
     else
     {
-        ASSERT(!pColl->IsDefault(), "Defaultvorlage fuer Fussnoten ist falsch.");
+        OSL_ENSURE(!pColl->IsDefault(), "default style for footnotes is wrong");
         const sal_uInt16 nPos = aParaTemplBox.GetEntryPos(pColl->GetName());
         if( LISTBOX_ENTRY_NOTFOUND != nPos )
             aParaTemplBox.SelectEntryPos( nPos );
@@ -267,7 +255,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         }
     }
 
-        // Seite
+        // page
     for( i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i )
         aPageTemplBox.InsertEntry(SwStyleNameMapper::GetUIName( i, aEmptyStr ));
 
@@ -293,10 +281,9 @@ SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Unterschiedliche Arten der Numerierung; da die Listbox
-                unterschiedlich viele Eintraege hat, hier Funktionen
-                fuer das Setzen und Erfragen der gemeinten Art
-                der Numerierung.
+ Description:  Different kinds of numbering; because the Listbox has
+               varying numbers of entries, here are functions to
+               set and query the intended kind of numbering.
 ------------------------------------------------------------------------*/
 void SwEndNoteOptionPage::SelectNumbering(int eNum)
 {
@@ -312,9 +299,9 @@ void SwEndNoteOptionPage::SelectNumbering(int eNum)
         case FTNNUM_CHAPTER:
             sSelect = aNumChapter;
         break;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         default:
-            DBG_ERROR("Which numbering type?");
+            OSL_FAIL("Which numbering type?");
 #endif
     }
     aNumCountBox.SelectEntry(sSelect);
@@ -329,13 +316,10 @@ int SwEndNoteOptionPage::GetNumbering() const
     return (int) bPosDoc? nPos + 1: nPos;
 }
 
-/*-----------------09.02.98 11:17-------------------
-
---------------------------------------------------*/
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
     pSh = &rShell;
-    // Zeichenvorlagen sammeln
+    // collect character templates
     aFtnCharTextTemplBox.Clear();
     aFtnCharAnchorTemplBox.Clear();
     ::FillCharStyleListBox(aFtnCharTextTemplBox,
@@ -346,10 +330,8 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
-                auf der Seite.
-                In diesem Fall koennen alle Numerierungsarten verwendet
-                werden.
+ Description:  Handler behind the button to collect the footnote at the
+               page. In this case all kinds of numbering can be used.
 ------------------------------------------------------------------------*/
 
 
@@ -369,11 +351,6 @@ IMPL_LINK( SwEndNoteOptionPage, PosPageHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-
 IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 {
     sal_Bool bEnable = sal_True;
@@ -388,10 +365,9 @@ IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Handler hinter dem Button fuer Sammeln der Fussnote
-                am Kapitel oder Dokumentende.
-                In diesem Fall kann keine seitenweise Numerierung verwendet
-                werden.
+ Description:  Handler behind the button to collect the footnote at the
+               chapter or end of the document. In this case no pagewise
+               numbering can be used.
 ------------------------------------------------------------------------*/
 
 
@@ -448,17 +424,17 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     pInf->SetAnchorCharFmt( lcl_GetCharFormat( pSh,
                         aFtnCharAnchorTemplBox.GetSelectEntry() ) );
 
-    // Absatzvorlage
+    // paragraph template
     sal_uInt16 nPos = aParaTemplBox.GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         const String aFmtName( aParaTemplBox.GetSelectEntry() );
         SwTxtFmtColl *pColl = pSh->GetParaStyle(aFmtName, SwWrtShell::GETSTYLE_CREATEANY);
-        ASSERT(pColl, "Absatzvorlage nicht gefunden.");
+        OSL_ENSURE(pColl, "paragraph style not found");
         pInf->SetFtnTxtColl(*pColl);
     }
 
-    // Seitenvorlage
+    // page template
     pInf->ChgPageDesc( pSh->FindPageDescByName(
                                 aPageTemplBox.GetSelectEntry(), sal_True ) );
 
@@ -501,3 +477,4 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

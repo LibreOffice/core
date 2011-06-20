@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,18 +35,18 @@
 class SwFrmFmt;
 class SwNodeIndex;
 
-// Struktur zum Erfragen der akt. freifliegenden Rahmen am Dokument.
+
+// For querying current flys in document.
 class SW_DLLPUBLIC SwPosFlyFrm
 {
-    const SwFrmFmt* pFrmFmt;    // das FlyFrmFmt
-//  SwPosition* pPos;           // Position in den ContentNode
-    SwNodeIndex* pNdIdx;        // es reicht ein Index auf den Node
+    const SwFrmFmt* pFrmFmt;    // FlyFrmFmt
+    SwNodeIndex* pNdIdx;        // Index for node is sufficient.
     sal_uInt32 nOrdNum;
 public:
     SwPosFlyFrm( const SwNodeIndex& , const SwFrmFmt*, sal_uInt16 nArrPos );
-    virtual ~SwPosFlyFrm(); // virtual fuer die Writer (DLL !!)
+    virtual ~SwPosFlyFrm(); // Virtual for Writer (DLL !!)
 
-    // operatoren fuer das Sort-Array
+    // Operators for sort array.
     sal_Bool operator==( const SwPosFlyFrm& );
     sal_Bool operator<( const SwPosFlyFrm& );
 
@@ -58,3 +59,5 @@ typedef SwPosFlyFrm* SwPosFlyFrmPtr;
 SV_DECL_PTRARR_SORT_VISIBILITY( SwPosFlyFrms, SwPosFlyFrmPtr, 0, 40, SW_DLLPUBLIC )
 
 #endif // _FLYPOS_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

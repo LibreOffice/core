@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,67 +35,64 @@ class SwPaM;
 class SwCntntFrm;
 class SwLayoutFrm;
 
-// eine Struktur fuer den SwPaM. In dieser stehen die Methoden-Pointer
-// fuer das richtungsabhaengige Bewegen des Cursors.
+// Structure for SwPaM. Contains the method-pointers for cursor movement.
 struct SwMoveFnCollection;
 typedef SwMoveFnCollection* SwMoveFn;
 
 
-// Type-Definition fuer die CrsrShell
-// Richtungsparameter fuer MovePage ( wird in SwCntntFrm initialisiert )
+// Type definition for CrsrShell.
+// Direction-parameter for MovePage (initialized in SwCntntFrm).
 typedef SwLayoutFrm * (*SwWhichPage)( const SwLayoutFrm * );
 typedef SwCntntFrm  * (*SwPosPage)( const SwLayoutFrm * );
 extern SwWhichPage fnPagePrev, fnPageCurr, fnPageNext;
 extern SwPosPage fnPageStart, fnPageEnd;
 
-// Richtungsparameter fuer MovePara ( wird in SwPaM initialisiert )
+// Direction-parameter for MovePara (initialized in SwCntntFrm).
 typedef SwMoveFnCollection* SwPosPara;
 typedef sal_Bool (*SwWhichPara)( SwPaM&, SwPosPara );
 extern SwWhichPara fnParaPrev, fnParaCurr, fnParaNext;
 extern SwPosPara fnParaStart, fnParaEnd;
 
-// Richtungsparameter fuer MoveSection
+// Direction-parameter for MoveSection.
 typedef SwMoveFnCollection* SwPosSection;
 typedef sal_Bool (*SwWhichSection)( SwPaM&, SwPosSection );
 extern SwWhichSection fnSectionPrev, fnSectionCurr, fnSectionNext;
 extern SwPosSection fnSectionStart, fnSectionEnd;
 
-// Richtungsparameter fuer MoveTable
+// Direction-parameter for MoveTable
 typedef SwMoveFnCollection* SwPosTable;
 typedef sal_Bool (*SwWhichTable)( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 extern SwWhichTable fnTablePrev, fnTableCurr, fnTableNext;
 extern SwPosTable fnTableStart, fnTableEnd;
 
-// Richtungsparameter fuer MoveColumn
+// Direction-parameter for MoveColumn
 typedef SwLayoutFrm * (*SwWhichColumn)( const SwLayoutFrm * );
 typedef SwCntntFrm  * (*SwPosColumn)( const SwLayoutFrm * );
 extern SwWhichColumn fnColumnPrev, fnColumnCurr, fnColumnNext;
 extern SwPosColumn fnColumnStart, fnColumnEnd;
 
-// Richtungsparameter fuer MoveRegion   (Bereiche!)
+// Direction-parameter for MoveRegion (ranges!)
 typedef SwMoveFnCollection* SwPosRegion;
 typedef sal_Bool (*SwWhichRegion)( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 extern SwWhichRegion fnRegionPrev, fnRegionCurr, fnRegionNext, fnRegionCurrAndSkip;
 extern SwPosRegion fnRegionStart, fnRegionEnd;
 
 
-
 /*
- * folgende Kombinationen sind erlaubt:
- *  - suche einen im Body:                  -> FND_IN_BODY
- *  - suche alle im Body:                   -> FND_IN_BODYONLY | FND_IN_SELALL
- *  - suche in Selectionen: einen / alle    -> FND_IN_SEL  [ | FND_IN_SELALL ]
- *  - suche im nicht Body: einen / alle     -> FND_IN_OTHER [ | FND_IN_SELALL ]
- *  - suche ueberall alle:                  -> FND_IN_SELALL
+ * The following combinations are allowed:
+ *  - find one in body                      -> FND_IN_BODY
+ *  - find all in body:                     -> FND_IN_BODYONLY | FND_IN_SELALL
+ *  - find in selections: one/all           -> FND_IN_SEL  [ | FND_IN_SELALL ]
+ *  - find not in body: one/all             -> FND_IN_OTHER [ | FND_IN_SELALL ]
+ *  - find all everywhere                   -> FND_IN_SELALL
  */
 enum FindRanges
 {
-    FND_IN_BODY     = 0x00,     // suche "eins" mur im Body-Text
-    FND_IN_OTHER    = 0x02,     // suche "alles" in Footer/Header/Fly...
-    FND_IN_SEL      = 0x04,     // suche in Selectionen
-    FND_IN_BODYONLY = 0x08,     // suche nur im Body - nur in Verbindung mit
-                                // FND_IN_SELALL !!!
-    FND_IN_SELALL   = 0x01      // - alle ( nur im nicht Body und Selectionen)
+    FND_IN_BODY     = 0x00,     // Find "one" only in body text.
+    FND_IN_OTHER    = 0x02,     // Find "all" in Footer/Header/Fly...
+    FND_IN_SEL      = 0x04,     // Find in selections.
+    FND_IN_BODYONLY = 0x08,     // Find only in body - only in combination with FND_IN_SELALL !!!
+    FND_IN_SELALL   = 0x01      // All (only in non-body and selections).
 };
 
 
@@ -117,3 +115,5 @@ SW_DLLPUBLIC SwPosTable GetfnTableStart();
 SW_DLLPUBLIC SwPosTable GetfnTableEnd();
 
 #endif  // _CSHTYP_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

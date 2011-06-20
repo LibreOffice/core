@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,8 +32,7 @@
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace sw { namespace mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
@@ -79,7 +79,7 @@ namespace sw { namespace mark
         : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
     { }
 
-    const ::rtl::OUString CrossRefHeadingBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__RefHeading__");
+    const ::rtl::OUString CrossRefHeadingBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__RefHeading__"));
 
     bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
@@ -93,10 +93,12 @@ namespace sw { namespace mark
         : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
     { }
 
-    const ::rtl::OUString CrossRefNumItemBookmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__RefNumPara__");
+    const ::rtl::OUString CrossRefNumItemBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__RefNumPara__"));
 
     bool CrossRefNumItemBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
         return rName.match(our_sNamePrefix);
     }
 }}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

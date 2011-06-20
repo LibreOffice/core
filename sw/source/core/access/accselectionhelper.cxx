@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
  /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,7 +39,6 @@
 #include <viewsh.hxx>
 #include <fesh.hxx>
 #include <vcl/svapp.hxx>        // for SolarMutex
-#include <tools/debug.hxx>
 #include <flyfrm.hxx>
 
 
@@ -63,9 +63,9 @@ SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper()
 
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {
-    DBG_ASSERT( rContext.GetMap() != NULL, "no map?" );
+    OSL_ENSURE( rContext.GetMap() != NULL, "no map?" );
     ViewShell* pViewShell = rContext.GetMap()->GetShell();
-    DBG_ASSERT( pViewShell != NULL,
+    OSL_ENSURE( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
 
     SwFEShell* pFEShell = NULL;
@@ -96,7 +96,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
@@ -106,19 +106,14 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 
     // we can only select fly frames, so we ignore (should: return
     // false) all other attempts at child selection
-    sal_Bool bRet = sal_False;
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell != NULL )
     {
         const SdrObject *pObj = aChild.GetDrawObject();
         if( pObj )
-        {
-            bRet = rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
-        }
+            rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
     }
     // no frame shell, or no frame, or no fly frame -> can't select
-
-    // return bRet;
 }
 
 sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
@@ -126,7 +121,7 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Get the respective child as SwFrm (also do index checking), ...
     const SwAccessibleChild aChild = rContext.GetChild( *(rContext.GetMap()),
@@ -161,7 +156,7 @@ void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
 void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // We can select only one. So iterate over the children to find
     // the first we can select, and select it.
@@ -193,7 +188,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
 sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     throw ( RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     sal_Int32 nCount = 0;
     // Only one frame can be selected at a time, and we only frames
@@ -245,7 +240,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    SolarMutexGuard aGuard;
 
     // Since the index is relative to the selected children, and since
     // there can be at most one selected frame child, the index must
@@ -297,31 +292,31 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     if( !aChild.IsValid() )
         throwIndexOutOfBoundsException();
 
-    DBG_ASSERT( rContext.GetMap() != NULL, "We need the map." );
+    OSL_ENSURE( rContext.GetMap() != NULL, "We need the map." );
     Reference< XAccessible > xChild;
     if( aChild.GetSwFrm() )
     {
-        ::vos::ORef < SwAccessibleContext > xChildImpl(
+        ::rtl::Reference < SwAccessibleContext > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetSwFrm(),
                 sal_True ) );
-        if( xChildImpl.isValid() )
+        if( xChildImpl.is() )
         {
             xChildImpl->SetParent( &rContext );
-            xChild = xChildImpl.getBodyPtr();
+            xChild = xChildImpl.get();
         }
     }
     else if ( aChild.GetDrawObject() )
     {
-        ::vos::ORef < ::accessibility::AccessibleShape > xChildImpl(
+        ::rtl::Reference < ::accessibility::AccessibleShape > xChildImpl(
                 rContext.GetMap()->GetContextImpl( aChild.GetDrawObject(),
                                           &rContext, sal_True )  );
-        if( xChildImpl.isValid() )
-            xChild = xChildImpl.getBodyPtr();
+        if( xChildImpl.is() )
+            xChild = xChildImpl.get();
     }
     return xChild;
 }
 
-// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+// index has to be treated as global child index.
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
@@ -332,3 +327,5 @@ void SwAccessibleSelectionHelper::deselectAccessibleChild(
         nChildIndex >= rContext.GetChildCount( *(rContext.GetMap()) ) )
         throwIndexOutOfBoundsException();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

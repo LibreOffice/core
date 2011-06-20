@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,9 +28,7 @@
 #ifndef _AUTOEDIT_HXX
 #define _AUTOEDIT_HXX
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 
 
 class AutoEdit : public Edit
@@ -41,10 +40,11 @@ protected:
     virtual void KeyInput( const KeyEvent& rEvent );
 };
 
-// Implementieriung im autocorr.cxx
+// Implementation in autocorr.cxx
 
 
 
 #endif
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

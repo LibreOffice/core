@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,30 +32,22 @@
 // include ---------------------------------------------------------------
 #include <viewlayoutctrl.hxx>
 
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include <swtypes.hxx>  // fuer Pathfinder
 
 // STATIC DATA -----------------------------------------------------------
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
-// -----------------------------------------------------------------------
-
 const long nImageWidthSingle = 15;
 const long nImageWidthAuto = 25;
 const long nImageWidthBook = 23;
 const long nImageWidthSum = 63;
 const long nImageHeight = 11;
-
-// -----------------------------------------------------------------------
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
@@ -75,23 +68,18 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
 {
     mpImpl->mnState = 0;
 
-    const sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
-    mpImpl->maImageSingleColumn         = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_HC)          : SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN) );
-    mpImpl->maImageSingleColumn_Active  = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE_HC) : SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE) );
-    mpImpl->maImageAutomatic            = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_HC)             : SW_RES(IMG_VIEWLAYOUT_AUTOMATIC) );
-    mpImpl->maImageAutomatic_Active     = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE_HC)    : SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE) );
-    mpImpl->maImageBookMode             = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_BOOKMODE_HC)              : SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
-    mpImpl->maImageBookMode_Active      = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE_HC)     : SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
+    mpImpl->maImageSingleColumn         = Image( SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN) );
+    mpImpl->maImageSingleColumn_Active  = Image( SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE) );
+    mpImpl->maImageAutomatic            = Image( SW_RES(IMG_VIEWLAYOUT_AUTOMATIC) );
+    mpImpl->maImageAutomatic_Active     = Image( SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE) );
+    mpImpl->maImageBookMode             = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
+    mpImpl->maImageBookMode_Active      = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
 }
-
-// -----------------------------------------------------------------------
 
 SwViewLayoutControl::~SwViewLayoutControl()
 {
     delete mpImpl;
 }
-
-// -----------------------------------------------------------------------
 
 void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -99,7 +87,7 @@ void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
         GetStatusBar().SetItemText( GetId(), String() );
     else
     {
-        DBG_ASSERT( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
+        OSL_ENSURE( pState->ISA( SvxViewLayoutItem ), "invalid item type" );
         const sal_uInt16 nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
         const bool   bBookMode = static_cast<const SvxViewLayoutItem*>( pState )->IsBookMode();
 
@@ -120,17 +108,10 @@ void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
         GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
 }
 
-// -----------------------------------------------------------------------
-
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 {
     OutputDevice*       pDev =  rUsrEvt.GetDevice();
     Rectangle           aRect = rUsrEvt.GetRect();
-    Color               aOldLineColor = pDev->GetLineColor();
-    Color               aOldFillColor = pDev->GetFillColor();
-
-    //pDev->SetLineColor();
-    //pDev->SetFillColor( pDev->GetBackground().GetColor() );
 
     const bool bSingleColumn    = 0 == mpImpl->mnState;
     const bool bAutomatic       = 1 == mpImpl->mnState;
@@ -152,17 +133,6 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     // draw bookmode image:
     aRect.Left() += nImageWidthAuto;
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
-
-    // draw separators
-    //aRect = rUsrEvt.GetRect();
-    //aRect.Left() += nImageWidth;
-    //aRect.setWidth( 1 );
-    //pDev->DrawRect( aRect );
-    //aRect.Left() += nImageWidth;
-    //pDev->DrawRect( aRect );
-
-    //pDev->SetLineColor( aOldLineColor );
-    //pDev->SetFillColor( aOldFillColor );
 }
 
 sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
@@ -207,3 +177,5 @@ sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 
     return sal_True;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

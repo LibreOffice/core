@@ -38,7 +38,7 @@
 
 /**************************************************************************/
 /*                                                                        */
-/*  TabPage Ansicht/Inhalt                                                */
+/*  TabPage View/Content                                              */
 /*                                                                        */
 /**************************************************************************/
 TabPage TP_CONTENT_OPT
@@ -59,7 +59,7 @@ TabPage TP_CONTENT_OPT
         HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_CROSS";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ en-US ] = "Guides ~while moving";
+        Text [ en-US ] = "Helplines ~While Moving";
     };
     CheckBox CB_HANDLE
     {
@@ -471,7 +471,7 @@ TabPage TP_STD_FONT
     FixedText FT_SIZE
     {
         Pos = MAP_APPFONT ( 204 , 14 ) ;
-        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text [ en-US ] = "Size";
     };
     MetricBox LB_STANDARD_SIZE

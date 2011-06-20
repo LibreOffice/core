@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,13 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <com/sun/star/embed/Aspects.hpp>
 
 
 #include <hintids.hxx>
 
-#define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -66,7 +65,6 @@
 
 #include <comphelper/seqstream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <svtools/filter.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unoapi.hxx>
@@ -78,9 +76,7 @@
 #include <fmtsrnd.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-// --> OD 2005-01-06 #i30669#
-#include <fmtfollowtextflow.hxx>
-// <--
+#include <fmtfollowtextflow.hxx> // #i30669#
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <fmtcntnt.hxx>
@@ -102,20 +98,66 @@
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"
 #include "escher.hxx"
-// --> OD 2007-07-24 #148096#
 #include <ndtxt.hxx>
-// <--
 #include "WW8FFData.hxx"
 
+using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
 using namespace nsFieldFlags;
 
-//#110185# get a part fix for this type of element
+namespace
+{
+    /// Get the Z ordering number for a DrawObj in a WW8Export.
+    /// @param rWrt The containing WW8Export.
+    /// @param pObj pointer to the drawing object.
+    /// @returns The ordering number.
+    static sal_uLong lcl_getSdrOrderNumber(const WW8Export& rWrt, DrawObj *pObj)
+    {
+        return rWrt.GetSdrOrdNum(pObj->maCntnt.GetFrmFmt());
+    };
+
+    /// A function object to act as a predicate comparing the ordering numbers
+    /// of two drawing obejcts in a WW8Export.
+    class CompareDrawObjs
+    {
+    private:
+        const WW8Export& wrt;
+
+    public:
+        CompareDrawObjs(const WW8Export& rWrt) : wrt(rWrt) {};
+        bool operator()(DrawObj *a, DrawObj *b) const
+        {
+            sal_uLong aSort = ::lcl_getSdrOrderNumber(wrt, a);
+            sal_uLong bSort = ::lcl_getSdrOrderNumber(wrt, b);
+            return aSort < bSort;
+        }
+    };
+
+    /// Make a z-order sorted copy of a collection of DrawObj objects.
+    /// @param rWrt    The containing WW8Export.
+    /// @param rSrcArr The source array.
+    /// @param rDstArr The destination array.
+    static void lcl_makeZOrderArray(const WW8Export& rWrt,
+                                    std::vector<DrawObj> &rSrcArr,
+                                    std::vector<DrawObj*> &rDstArr)
+    {
+        rDstArr.clear();
+        rDstArr.reserve(rSrcArr.size());
+        for(size_t i = 0; i < rSrcArr.size(); ++i)
+        {
+            rDstArr.push_back( &rSrcArr[i] );
+        }
+        std::sort(rDstArr.begin(), rDstArr.end(), ::CompareDrawObjs(rWrt));
+    }
+
+}
+
+// get a part fix for this type of element
 bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
 {
-    ASSERT(bWrtWW8, "Not allowed");
+    OSL_ENSURE(bWrtWW8, "Not allowed");
     if (!bWrtWW8)
         return false;
     bool bHack = false;
@@ -170,20 +212,16 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     rtl::OUString sHelp;
     {
-        // --> OD 2010-05-14 #160026#
         // property "Help" does not exist and due to the no-existence an exception is thrown.
-//        uno::Any aTmp = xPropSet->getPropertyValue(C2U("Help"));
         try
         {
             uno::Any aTmp = xPropSet->getPropertyValue(C2U("HelpText"));
-            // <--
             const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
             if (pStr)
                 sHelp = *pStr;
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {}
-        // <--
     }
 
     rtl::OUString sToolTip;
@@ -203,7 +241,7 @@ void WW8Export::DoComboBox(const rtl::OUString &rName,
                              const rtl::OUString &rSelected,
                              uno::Sequence<rtl::OUString> &rListItems)
 {
-    ASSERT(bWrtWW8, "Not allowed");
+    OSL_ENSURE(bWrtWW8, "Not allowed");
     if (!bWrtWW8)
         return;
     OutputField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
@@ -488,11 +526,10 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             Rectangle aRect;
             SwFmtVertOrient rVOr = rFmt.GetVertOrient();
             SwFmtHoriOrient rHOr = rFmt.GetHoriOrient();
-            // --> OD 2005-01-06 #i30669# - convert the positioning attributes.
+            // #i30669# - convert the positioning attributes.
             // Most positions are converted, if layout information exists.
             const bool bPosConverted =
                 WinwordAnchoring::ConvertPosition( rHOr, rVOr, rFmt );
-            // <--
 
             Point aObjPos;
             if (RES_FLYFRMFMT == rFmt.Which())
@@ -504,28 +541,27 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     aRect.SetSize( rFmt.GetFrmSize().GetSize() );
                 else
                 {
-                    // --> FME 2007-06-20 #i56090# Do not only consider the first client
+                    // #i56090# Do not only consider the first client
                     // Note that we actually would have to find the maximum size of the
                     // frame format clients. However, this already should work in most cases.
                     const SwRect aSizeRect(rFmt.FindLayoutRect());
                     if ( aSizeRect.Width() > aLayRect.Width() )
                         aLayRect.Width( aSizeRect.Width() );
-                    // <--
 
                     aRect = aLayRect.SVRect();
                 }
             }
             else
             {
-                ASSERT(pObj, "wo ist das SDR-Object?");
+                OSL_ENSURE(pObj, "wo ist das SDR-Object?");
                 if (pObj)
                 {
                     aRect = pObj->GetSnapRect();
                 }
             }
 
-            // --> OD 2005-01-06 #i30669# - use converted position, if conversion
-            // is performed. Unify position determination of Writer fly frames
+            // #i30669# - use converted position, if conversion is performed.
+            // Unify position determination of Writer fly frames
             // and drawing objects.
             if ( bPosConverted )
             {
@@ -537,7 +573,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 aObjPos = aRect.TopLeft();
                 if (text::VertOrientation::NONE == rVOr.GetVertOrient())
                 {
-                    // CMC, OD 24.11.2003 #i22673#
+                    // #i22673#
                     sal_Int16 eOri = rVOr.GetRelationOrient();
                     if (eOri == text::RelOrientation::CHAR || eOri == text::RelOrientation::TEXT_LINE)
                         aObjPos.Y() = -rVOr.GetPos();
@@ -548,7 +584,6 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     aObjPos.X() = rHOr.GetPos();
                 aRect.SetPos( aObjPos );
             }
-            // <--
 
             sal_Int32 nThick = aIter->mnThick;
 
@@ -619,7 +654,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     nFlags |= 0x0400 | nContour;
                     break;
                 default:
-                    ASSERT(!this, "Unsupported surround type for export");
+                    OSL_ENSURE(!this, "Unsupported surround type for export");
                     break;
             }
             if (pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
@@ -769,8 +804,8 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
 void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
     const Point& rNdTopLeft)
 {
-    ASSERT(bWrtWW8, "this has gone horribly wrong");
-    ASSERT(!pEscher, "der EscherStream wurde schon geschrieben!");
+    OSL_ENSURE(bWrtWW8, "this has gone horribly wrong");
+    OSL_ENSURE(!pEscher, "der EscherStream wurde schon geschrieben!");
     if (pEscher)
         return ;
     PlcDrawObj *pDrwO;
@@ -787,7 +822,7 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
 
     WW8_CP nCP = Fc2Cp(Strm().Tell());
     bool bSuccess = pDrwO->Append(*this, nCP, rFrmFmt, rNdTopLeft);
-    ASSERT(bSuccess, "Couldn't export a graphical element!");
+    OSL_ENSURE(bSuccess, "Couldn't export a graphical element!");
 
     if (bSuccess)
     {
@@ -868,7 +903,6 @@ xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
             SetCharSet(rHt, true);
         }
 
-//??        if( pHt->GetEnd() )         // Attr mit Ende
         {
             nPos = rHt.nEnd;        // gibt letztes Attr-Zeichen + 1
             if( nPos >= nStartPos && nPos < nMinPos )
@@ -877,16 +911,7 @@ xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
                 SetCharSet(rHt, false);
             }
         }
-/*      else
-        {                                   // Attr ohne Ende
-            nPos = rHt.nStart + 1;  // Laenge 1 wegen CH_TXTATR im Text
-            if( nPos >= nStartPos && nPos < nMinPos )
-            {
-                nMinPos = nPos;
-                SetCharSet(rHt, false);
-            }
-        }
-*/
+
     }
     return nMinPos;
 }
@@ -1055,7 +1080,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
     {
         SfxItemSet aSet(pEditObj->GetParaAttribs(nPara));
         nWhich = GetSetWhichFromSwDocWhich(aSet, *m_rExport.pDoc, nWhich);
-        ASSERT(nWhich, "Impossible, catastrophic failure imminent");
+        OSL_ENSURE(nWhich, "Impossible, catastrophic failure imminent");
         pRet = &aSet.Get(nWhich);
     }
     return *pRet;
@@ -1100,7 +1125,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr)
 void WW8Export::WriteSdrTextObj(const SdrObject& rObj, sal_uInt8 nTyp)
 {
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, &rObj);
-    ASSERT(pTxtObj, "That is no SdrTextObj!");
+    OSL_ENSURE(pTxtObj, "That is no SdrTextObj!");
     if (!pTxtObj)
         return;
 
@@ -1145,7 +1170,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
 
         rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
 
-        ASSERT( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
+        OSL_ENSURE( !pO->Count(), " pO ist am Zeilenanfang nicht leer" );
 
         String aStr( rEditObj.GetText( n ));
         xub_StrLen nAktPos = 0;
@@ -1182,7 +1207,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         }
         while( nAktPos < nEnd );
 
-        ASSERT( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
+        OSL_ENSURE( !pO->Count(), " pO ist am ZeilenEnde nicht leer" );
 
         pO->Insert( bNul, pO->Count() );        // Style # as short
         pO->Insert( bNul, pO->Count() );
@@ -1238,7 +1263,7 @@ void WW8Export::CreateEscher()
         GetItemState(RES_BACKGROUND);
     if (pHFSdrObjs->size() || pSdrObjs->size() || SFX_ITEM_SET == eBackSet)
     {
-        ASSERT( !pEscher, "wer hat den Pointer nicht geloescht?" );
+        OSL_ENSURE( !pEscher, "wer hat den Pointer nicht geloescht?" );
         SvMemoryStream* pEscherStrm = new SvMemoryStream;
         pEscherStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
         pEscher = new SwEscherEx(pEscherStrm, *this);
@@ -1350,7 +1375,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
     sal_Int32 nBorderThick=0;
     SwNoTxtNode *pNd = GetNoTxtNodeFromSwFrmFmt(rFmt);
     SwGrfNode *pGrfNd = pNd ? pNd->GetGrfNode() : 0;
-    ASSERT(pGrfNd, "No SwGrfNode ?, suspicious");
+    OSL_ENSURE(pGrfNd, "No SwGrfNode ?, suspicious");
     if (!pGrfNd)
         return nBorderThick;
 
@@ -1558,7 +1583,7 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
                 aRect.Height = aSize.Height;
                 bRectIsSet = sal_True;
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {}
         }
 
@@ -1568,7 +1593,6 @@ sal_Int32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
         instead ==> allows unicode text to be preserved
         */
 #ifdef OLE_PREVIEW_AS_EMF
-        //Graphic aGraphic = wwUtility::MakeSafeGDIMetaFile(xObj);
         Graphic* pGraphic = rOLENd.GetGraphic();
 #endif
         OpenContainer(ESCHER_SpContainer);
@@ -1675,11 +1699,10 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                         nLineColor ^ 0xffffff );
 
                     MSO_LineStyle eStyle;
-                    if( pLine->GetInWidth() )
+                    if( pLine->isDouble() )
                     {
                         // double line
-                        nLineWidth = pLine->GetInWidth() + pLine->GetOutWidth()
-                            + pLine->GetDistance();
+                        nLineWidth = pLine->GetWidth();
                         if( pLine->GetInWidth() == pLine->GetOutWidth() )
                             eStyle = mso_lineDouble;
                         else if( pLine->GetInWidth() < pLine->GetOutWidth() )
@@ -1691,12 +1714,27 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                     {
                         // simple line
                         eStyle = mso_lineSimple;
-                        nLineWidth = pLine->GetOutWidth();
+                        nLineWidth = pLine->GetWidth();
                     }
 
                     rPropOpt.AddOpt( ESCHER_Prop_lineStyle, eStyle );
                     rPropOpt.AddOpt( ESCHER_Prop_lineWidth,
                         DrawModelToEmu( nLineWidth ));
+
+                    MSO_LineDashing eDashing = mso_lineSolid;
+                    switch ( pLine->GetStyle( ) )
+                    {
+                        case  ::editeng::DASHED:
+                            eDashing = mso_lineDashGEL;
+                            break;
+                        case ::editeng::DOTTED:
+                            eDashing = mso_lineDotGEL;
+                            break;
+                        case ::editeng::SOLID:
+                        default:
+                            break;
+                    }
+                    rPropOpt.AddOpt( ESCHER_Prop_lineDashing, eDashing );
                     rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x8000E );
 
                     //Use import logic to determine how much of border will go
@@ -1929,7 +1967,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
         {
             sal_Int32 nBorderThick=0;
             DrawObj *pObj = (*aIter);
-            ASSERT(pObj, "impossible");
+            OSL_ENSURE(pObj, "impossible");
             if (!pObj)
                 continue;
             const sw::Frame &rFrame = pObj->maCntnt;
@@ -1968,9 +2006,9 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         if (bSwapInPage)
                             (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     else
-                        ASSERT( !this, "Where is the SDR-Object?" );
+                        OSL_ENSURE( !this, "Where is the SDR-Object?" );
 #endif
                 }
 
@@ -2005,13 +2043,6 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
             aPropOpt.AddOpt( ESCHER_Prop_lineWidth, 0 );
 
-// winword defaults!
-//          aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-//          aPropOpt.AddOpt( ESCHER_Prop_lineWidth, 0 );
-//          aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-//          aPropOpt.AddOpt( ESCHER_Prop_bWMode, 0x9 );
-//          aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );
-
             aPropOpt.Commit( *pStrm );
 
             AddAtom( 4, ESCHER_ClientData );
@@ -2037,7 +2068,7 @@ void SwEscherEx::FinishEscher()
 /** method to perform conversion of positioning attributes with the help
     of corresponding layout information
 
-    OD 2005-01-06 #i30669#
+    #i30669#
     Because most of the Writer object positions doesn't correspond to the
     object positions in WW8, this method converts the positioning
     attributes. For this conversion the corresponding layout information
@@ -2045,8 +2076,6 @@ void SwEscherEx::FinishEscher()
     conversion is performed.
     No conversion is performed for as-character anchored objects. Whose
     object positions are already treated special in method <WriteData(..)>.
-
-    @author OD
 
     @param _iorHoriOri
     input/output parameter - containing the current horizontal position
@@ -2093,7 +2122,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         // be determined. --> no conversion
         return false;
     }
-    // --> OD 2006-09-26 #141404#
     // no conversion for anchored drawing object, which aren't attached to an
     // anchor frame.
     // This is the case for drawing objects, which are anchored inside a page
@@ -2103,7 +2131,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
     {
         return false;
     }
-    // <--
 
     bool bConverted( false );
 
@@ -2111,7 +2138,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
     // at page areas have to be converted, if it's set.
     const bool bFollowTextFlow = _rFrmFmt.GetFollowTextFlow().GetValue();
 
-    // --> OD 2007-07-24 #148096#
     // check, if horizontal and vertical position have to be converted due to
     // the fact, that the object is anchored at a paragraph, which has a "column
     // break before" attribute
@@ -2129,7 +2155,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
             bConvDueToAnchoredAtColBreakPara = true;
         }
     }
-    // <--
 
     // convert horizontal position, if needed
     {
@@ -2146,7 +2171,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         }
 
         // determine conversion type due to the position relation
-        // --> OD 2007-07-24 #148096#
         if ( bConvDueToAnchoredAtColBreakPara )
         {
             eHoriConv = CONV2PG;
@@ -2190,11 +2214,9 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 }
                 break;
                 default:
-                    ASSERT( false,
-                            "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
+                    OSL_FAIL( "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
             }
         }
-        // <--
         if ( eHoriConv != NO_CONV )
         {
             _iorHoriOri.SetHoriOrient( text::HoriOrientation::NONE );
@@ -2204,7 +2226,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 if ( eHoriConv == CONV2PG )
                 {
                     _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
-                    // --> OD 2005-01-27 #i33818#
+                    // #i33818#
                     bool bRelToTableCell( false );
                     aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
                                                              bRelToTableCell );
@@ -2212,7 +2234,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                     {
                         _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
-                    // <--
                 }
                 else if ( eHoriConv == CONV2COL )
                 {
@@ -2253,7 +2274,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         }
 
         // determine conversion type due to the position relation
-        // --> OD 2007-07-24 #148096#
         if ( bConvDueToAnchoredAtColBreakPara )
         {
             eVertConv = CONV2PG;
@@ -2304,11 +2324,10 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 case text::RelOrientation::FRAME_LEFT:
                 case text::RelOrientation::FRAME_RIGHT:
                 default:
-                    ASSERT( false,
-                            "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
+                    OSL_FAIL( "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
             }
         }
-        // <--
+
         if ( eVertConv != NO_CONV )
         {
             _iorVertOri.SetVertOrient( text::VertOrientation::NONE );
@@ -2318,7 +2337,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                 if ( eVertConv == CONV2PG )
                 {
                     _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
-                    // --> OD 2005-01-27 #i33818#
+                    // #i33818#
                     bool bRelToTableCell( false );
                     aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
                                                              bRelToTableCell );
@@ -2326,7 +2345,6 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
                     {
                         _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
-                    // <--
                 }
                 else if ( eVertConv == CONV2PARA )
                 {
@@ -2358,14 +2376,12 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     SwFmtHoriOrient rHoriOri = rFmt.GetHoriOrient();
     SwFmtVertOrient rVertOri = rFmt.GetVertOrient();
 
-    // --> OD 2005-01-06 #i30669# - convert the positioning attributes.
+    // #i30669# - convert the positioning attributes.
     // Most positions are converted, if layout information exists.
     const bool bPosConverted = ConvertPosition( rHoriOri, rVertOri, rFmt );
-    // <--
 
     const sal_Int16 eHOri = rHoriOri.GetHoriOrient();
-    // CMC, OD 24.11.2003 #i22673#
-    const sal_Int16 eVOri = rVertOri.GetVertOrient();
+    const sal_Int16 eVOri = rVertOri.GetVertOrient(); // #i22673#
 
     const sal_Int16 eHRel = rHoriOri.GetRelationOrient();
     const sal_Int16 eVRel = rVertOri.GetRelationOrient();
@@ -2395,7 +2411,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     }
 
     // vertical Adjustment
-    // CMC, OD 24.11.2003 #i22673#
+    // #i22673#
     // When adjustment is vertically relative to line or to char
     // bottom becomes top and vice versa
     const bool bVertSwap = !bPosConverted &&
@@ -2477,7 +2493,7 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
                 mnYRelTo = 2;
             break;
         case text::RelOrientation::CHAR:
-        case text::RelOrientation::TEXT_LINE: // CMC, OD 24.11.2003 #i22673# - vertical alignment at top of line
+        case text::RelOrientation::TEXT_LINE: // #i22673# - vertical alignment at top of line
         case text::RelOrientation::PAGE_LEFT:   //nonsense
         case text::RelOrientation::PAGE_RIGHT:  //nonsense
         case text::RelOrientation::FRAME_LEFT:  //nonsense
@@ -2576,7 +2592,7 @@ sal_uInt16 FindPos(const SwFrmFmt &rFmt, unsigned int nHdFtIndex,
     for (DrawObjPointerIter aIter = rPVec.begin(); aIter != aEnd; ++aIter)
     {
         const DrawObj *pObj = (*aIter);
-        ASSERT(pObj, "Impossible");
+        OSL_ENSURE(pObj, "Impossible");
         if (!pObj)
             continue;
         if (
@@ -2615,7 +2631,7 @@ sal_Int32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
     switch (nDirection)
     {
         default:
-            ASSERT(!this, "unknown direction type");
+            OSL_ENSURE(!this, "unknown direction type");
         case FRMDIR_HORI_LEFT_TOP:
             nFlow=mso_txflHorzN;
         break;
@@ -2673,7 +2689,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
 
         SdrModel *pModel = rWrt.pDoc->GetDrawModel();
         OutputDevice *pDevice = Application::GetDefaultDevice();
-        ASSERT(pModel && pDevice, "no model or device");
+        OSL_ENSURE(pModel && pDevice, "no model or device");
 
         // #i71538# use complete SdrViews
         // SdrExchangeView aExchange(pModel, pDevice);
@@ -2698,25 +2714,13 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
 void SwEscherEx::MakeZOrderArrAndFollowIds(
     std::vector<DrawObj>& rSrcArr, std::vector<DrawObj*>&rDstArr)
 {
-    sal_uInt16 n, nCnt = static_cast< sal_uInt16 >(rSrcArr.size());
-    SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
-    rDstArr.clear();
-    rDstArr.reserve(nCnt);
-    for (n = 0; n < nCnt; ++n)
-    {
-        const SwFrmFmt &rFmt = rSrcArr[n].maCntnt.GetFrmFmt();
-        sal_uLong nOrdNum = rWrt.GetSdrOrdNum(rFmt);
-        sal_uInt16 nPos;
-        //returns what will be the index in rDstArr of p as nPos
-        aSort.Insert(nOrdNum, nPos);
-        DrawObj &rObj = rSrcArr[n];
-        rDstArr.insert(rDstArr.begin() + nPos, &rObj);
-    }
+    ::lcl_makeZOrderArray(rWrt, rSrcArr, rDstArr);
 
+    //Now set up the follow IDs
     if (aFollowShpIds.Count())
         aFollowShpIds.Remove(0, aFollowShpIds.Count());
 
-    for (n = 0; n < nCnt; ++n)
+    for (size_t n = 0; n < rDstArr.size(); ++n)
     {
         const SwFrmFmt &rFmt = rDstArr[n]->maCntnt.GetFrmFmt();
         bool bNeedsShapeId = false;
@@ -2828,4 +2832,4 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     return true;
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

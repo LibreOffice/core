@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 #ifndef _SCRIPTINFO_HXX
 #define _SCRIPTINFO_HXX
 #ifndef _SVSTDARR_HXX
-#define _SVSTDARR_SHORTS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
@@ -37,7 +36,6 @@
 #include <list>
 #include <modeltoviewhelper.hxx>
 
-#include <errhdl.hxx>
 
 class SwTxtNode;
 class Point;
@@ -98,18 +96,38 @@ public:
 class SwScriptInfo
 {
 private:
-    SvXub_StrLens aScriptChg;
-    SvBytes aScriptType;
-    SvXub_StrLens aDirChg;
-    SvBytes aDirType;
+    //! Records a single change in script type.
+    struct ScriptChangeInfo
+    {
+        xub_StrLen position; //!< Character position at which we change script
+        sal_uInt8       type;     //!< Script type (Latin/Asian/Complex) that we change to.
+        inline ScriptChangeInfo(xub_StrLen pos, sal_uInt8 typ) : position(pos), type(typ) {};
+    };
+    //TODO - This is sorted, so should probably be a std::set rather than vector.
+    //       But we also use random access (probably unnecessarily).
+    std::vector<ScriptChangeInfo> aScriptChanges;
+    //! Records a single change in direction.
+    struct DirectionChangeInfo
+    {
+        xub_StrLen position; //!< Character position at which we change direction.
+        sal_uInt8       type;     //!< Direction that we change to.
+        inline DirectionChangeInfo(xub_StrLen pos, sal_uInt8 typ) : position(pos), type(typ) {};
+    };
+    std::vector<DirectionChangeInfo> aDirectionChanges;
     SvXub_StrLens aKashida;
     SvXub_StrLens aKashidaInvalid;
     SvXub_StrLens aNoKashidaLine;
     SvXub_StrLens aNoKashidaLineEnd;
-    SvXub_StrLens aCompChg;
-    SvXub_StrLens aCompLen;
     SvXub_StrLens aHiddenChg;
-    SvBytes aCompType;
+    //! Records a single change in compression.
+    struct CompressionChangeInfo
+    {
+        xub_StrLen position; //!< Character position where the change occurs.
+        xub_StrLen length;   //!< Length of the segment.
+        sal_uInt8       type;     //!< Type of compression that we change to.
+        inline CompressionChangeInfo(xub_StrLen pos, xub_StrLen len, sal_uInt8 typ) : position(pos), length(len), type(typ) {};
+    };
+    std::vector<CompressionChangeInfo> aCompressionChanges;
     xub_StrLen nInvalidityPos;
     sal_uInt8 nDefaultDir;
 
@@ -356,61 +374,63 @@ inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
     if ( nPos < nInvalidityPos )
         nInvalidityPos = nPos;
 };
-inline size_t SwScriptInfo::CountScriptChg() const { return aScriptChg.size(); }
+inline size_t SwScriptInfo::CountScriptChg() const { return aScriptChanges.size(); }
 inline xub_StrLen SwScriptInfo::GetScriptChg( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aScriptChg.size(),"No ScriptChange today!");
-    return aScriptChg[ nCnt ];
+    OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptChange today!");
+    return aScriptChanges[nCnt].position;
 }
 inline sal_uInt8 SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
-    ASSERT( nCnt < aScriptType.size(),"No ScriptType today!");
-    return aScriptType[ nCnt ];
+    OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptType today!");
+    return aScriptChanges[nCnt].type;
 }
 
-inline size_t SwScriptInfo::CountDirChg() const { return aDirChg.size(); }
+inline size_t SwScriptInfo::CountDirChg() const { return aDirectionChanges.size(); }
 inline xub_StrLen SwScriptInfo::GetDirChg( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aDirChg.size(),"No DirChange today!");
-    return aDirChg[ nCnt ];
+    OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirChange today!");
+    return aDirectionChanges[ nCnt ].position;
 }
 inline sal_uInt8 SwScriptInfo::GetDirType( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aDirType.size(),"No DirType today!");
-    return aDirType[ nCnt ];
+    OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirType today!");
+    return aDirectionChanges[ nCnt ].type;
 }
 
 inline size_t SwScriptInfo::CountKashida() const { return aKashida.size(); }
 inline xub_StrLen SwScriptInfo::GetKashida( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aKashida.size(),"No Kashidas today!");
+    OSL_ENSURE( nCnt < aKashida.size(),"No Kashidas today!");
     return aKashida[ nCnt ];
 }
 
-inline size_t SwScriptInfo::CountCompChg() const { return aCompChg.size(); };
+inline size_t SwScriptInfo::CountCompChg() const { return aCompressionChanges.size(); };
 inline xub_StrLen SwScriptInfo::GetCompStart( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aCompChg.size(),"No CompressionStart today!");
-    return aCompChg[ nCnt ];
+    OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionStart today!");
+    return aCompressionChanges[ nCnt ].position;
 }
 inline xub_StrLen SwScriptInfo::GetCompLen( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aCompLen.size(),"No CompressionLen today!");
-    return aCompLen[ nCnt ];
+    OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionLen today!");
+    return aCompressionChanges[ nCnt ].length;
 }
 
 inline sal_uInt8 SwScriptInfo::GetCompType( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aCompType.size(),"No CompressionType today!");
-    return aCompType[ nCnt ];
+    OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionType today!");
+    return aCompressionChanges[ nCnt ].type;
 }
 
 inline size_t SwScriptInfo::CountHiddenChg() const { return aHiddenChg.size(); };
 inline xub_StrLen SwScriptInfo::GetHiddenChg( const size_t nCnt ) const
 {
-    ASSERT( nCnt < aHiddenChg.size(),"No HiddenChg today!");
+    OSL_ENSURE( nCnt < aHiddenChg.size(),"No HiddenChg today!");
     return aHiddenChg[ nCnt ];
 }
 
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

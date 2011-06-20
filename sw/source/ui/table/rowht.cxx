@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,24 +45,14 @@
 #include <rowht.hxx>
 #include <wrtsh.hxx>
 #include <frmatr.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 #include <usrpref.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _ROWHT_HRC
 #include <rowht.hrc>
-#endif
-#ifndef _TABLE_HRC
 #include <table.hrc>
-#endif
 
 
 
@@ -118,3 +109,4 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

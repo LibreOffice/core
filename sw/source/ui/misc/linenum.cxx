@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -41,11 +42,6 @@
 #include <docsh.hxx>
 #include <charfmt.hxx>
 
-//#ifndef _FLDMGR_HXX //autogen
-//#include <fldmgr.hxx>
-//#endif
-
-
 #include <docstyle.hxx>
 
 #include "fldbas.hxx"
@@ -57,31 +53,19 @@
 
 #include <IDocumentStylePoolAccess.hxx>
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
     SfxSingleTabDialog(&pVw->GetViewFrame()->GetWindow(), 0, 0),
     pSh(pVw->GetWrtShellPtr())
 {
-    // TabPage erzeugen
+    // create TabPage
     SetTabPage(SwLineNumberingPage::Create(this, *(SfxItemSet*)0));
 
     GetOKButton()->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-__EXPORT SwLineNumberingDlg::~SwLineNumberingDlg()
+SwLineNumberingDlg::~SwLineNumberingDlg()
 {
 }
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
 {
@@ -96,10 +80,6 @@ IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
 
     return 0;
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
                                                     const SfxItemSet& rSet )
@@ -143,32 +123,20 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     FreeResource();
     SwLineNumberingDlg *pDlg = (SwLineNumberingDlg *)GetParent();
     pSh = pDlg->GetWrtShell();
-    // Zeichenvorlagen
+    // char styles
     ::FillCharStyleListBox(aCharStyleLB, pSh->GetView().GetDocShell());
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-__EXPORT SwLineNumberingPage::~SwLineNumberingPage()
+SwLineNumberingPage::~SwLineNumberingPage()
 {
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-SfxTabPage* __EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwLineNumberingPage( pParent, rSet );
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
+void SwLineNumberingPage::Reset( const SfxItemSet&  )
 {
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
@@ -187,44 +155,31 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
         }
     }
 
-    // Format
-//  SwFldMgr aMgr( pSh );
+    // format
     sal_uInt16 nSelFmt = rInf.GetNumType().GetNumberingType();
-//  sal_uInt16 nCnt = aMgr.GetFormatCount( TYP_SEQFLD, sal_False );
 
-//  for( sal_uInt16 i = 0; i < nCnt; i++)
-//  {
-//      aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
-//      sal_uInt16 nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
-//      aFormatLB.SetEntryData( i, (void*)nFmtId );
-//      if( nFmtId == nSelFmt )
-//          aFormatLB.SelectEntryPos( i );
-//  }
     aFormatLB.SelectNumberingType(nSelFmt);
 
-//  if ( !aFormatLB.GetSelectEntryCount() )
-//      aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
-
-    // Position
+    // position
     aPosLB.SelectEntryPos((sal_uInt16)rInf.GetPos());
 
-    // Offset
+    // offset
     sal_uInt16 nOffset = rInf.GetPosFromLeft();
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
     aOffsetMF.SetValue(aOffsetMF.Normalize(nOffset), FUNIT_TWIP);
 
-    // Numerierungsoffset
+    // numbering offset
     aNumIntervalNF.SetValue(rInf.GetCountBy());
 
-    // Teiler
+    // divider
     aDivisorED.SetText(rInf.GetDivider());
 
-    // Teileroffset
+    // divider offset
     aDivIntervalNF.SetValue(rInf.GetDividerCountBy());
 
-    // Zaehlen
+    // count
     aCountEmptyLinesCB.Check(rInf.IsCountBlankLines());
     aCountFrameLinesCB.Check(rInf.IsCountInFlys());
     aRestartEachPageCB.Check(rInf.IsRestartEachPage());
@@ -238,9 +193,8 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Modify
+    Description: modify
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 {
     sal_Bool bHasValue = aDivisorED.GetText().Len() != 0;
@@ -253,9 +207,8 @@ IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: On/Off
+    Description: On/Off
  --------------------------------------------------------------------*/
-
 IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
 {
     sal_Bool bEnable = aNumberingOnCB.IsChecked();
@@ -286,15 +239,11 @@ IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
-sal_Bool __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
+sal_Bool SwLineNumberingPage::FillItemSet( SfxItemSet& )
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
-    // Zeichenvorlagen
+    // char styles
     String sCharFmtName(aCharStyleLB.GetSelectEntry());
     SwCharFmt *pCharFmt = pSh->FindCharFmtByName(sCharFmtName);
 
@@ -311,27 +260,27 @@ sal_Bool __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
     if (pCharFmt)
         aInf.SetCharFmt(pCharFmt);
 
-    // Format
+    // format
     SvxNumberType aType;
     aType.SetNumberingType(aFormatLB.GetSelectedNumberingType());
     aInf.SetNumType(aType);
 
-    // Position
+    // position
     aInf.SetPos((LineNumberPosition)aPosLB.GetSelectEntryPos());
 
-    // Offset
+    // offset
     aInf.SetPosFromLeft((sal_uInt16)aOffsetMF.Denormalize(aOffsetMF.GetValue(FUNIT_TWIP)));
 
-    // Numerierungsoffset
+    // numbering offset
     aInf.SetCountBy((sal_uInt16)aNumIntervalNF.GetValue());
 
-    // Teiler
+    // divider
     aInf.SetDivider(aDivisorED.GetText());
 
-    // Teileroffset
+    // divider offset
     aInf.SetDividerCountBy((sal_uInt16)aDivIntervalNF.GetValue());
 
-    // Zaehlen
+    // count
     aInf.SetCountBlankLines(aCountEmptyLinesCB.IsChecked());
     aInf.SetCountInFlys(aCountFrameLinesCB.IsChecked());
     aInf.SetRestartEachPage(aRestartEachPageCB.IsChecked());
@@ -343,4 +292,4 @@ sal_Bool __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
     return sal_False;
 }
 
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

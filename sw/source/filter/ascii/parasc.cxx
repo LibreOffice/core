@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 
 #include <tools/stream.hxx>
 #include <hintids.hxx>
@@ -48,9 +47,7 @@
 #include <pagedesc.hxx>
 #include <breakit.hxx>
 #include <swerror.h>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <mdiexp.hxx>           // ...Percent()
 #include <poolfmt.hxx>
 
@@ -87,13 +84,12 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const Stri
 {
     if( !pStrm )
     {
-        ASSERT( !this, "ASCII-Read ohne Stream" );
+        OSL_ENSURE( !this, "ASCII-Read ohne Stream" );
         return ERR_SWG_READ_ERROR;
     }
 
-    //JP 18.01.96: Alle Ueberschriften sind normalerweise ohne
-    //              Kapitelnummer. Darum hier explizit abschalten
-    //              weil das Default jetzt wieder auf AN ist.
+    // Alle Ueberschriften sind normalerweise ohne Kapitelnummer.
+    // Darum hier explizit abschalten weil das Default jetzt wieder auf AN ist.
     if( !bInsertMode )
         Reader::SetNoOutlineNum( rDoc );
 
@@ -109,7 +105,8 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const Stri
 
 SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     int bReadNewDoc, const SwAsciiOptions& rOpts)
-    : pDoc(pD), rInput(rIn), rOpt(rOpts), nScript(0), bNewDoc(bReadNewDoc)
+    : pDoc(pD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(0)
+    , bNewDoc(bReadNewDoc)
 {
     pPam = new SwPaM( *rCrsr.GetPoint() );
     pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
@@ -249,7 +246,7 @@ sal_uLong SwASCIIParser::CallParser()
                                     pInsPam->GetCntntNode(), nSttCntnt );
 
                 // !!!!!
-                ASSERT( !this, "Have to change - hard attr. to para. style" );
+                OSL_ENSURE( !this, "Have to change - hard attr. to para. style" );
                 pDoc->InsertItemSet( *pInsPam, *pItemSet, 0 );
             }
         }
@@ -282,7 +279,7 @@ sal_uLong SwASCIIParser::ReadChars()
         nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
         CharSet eCharSet;
         bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
-        ASSERT(bRet, "Autodetect of text import without nag dialog must "
+        OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must "
             "have failed");
         if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
         {
@@ -302,7 +299,7 @@ sal_uLong SwASCIIParser::ReadChars()
         if( currentCharSet == RTL_TEXTENCODING_DONTKNOW )
                 currentCharSet = RTL_TEXTENCODING_ASCII_US;
         hConverter = rtl_createTextToUnicodeConverter( currentCharSet );
-        ASSERT( hConverter, "no string convert avaiable" );
+        OSL_ENSURE( hConverter, "no string convert avaiable" );
         if (!hConverter)
             return ERROR_SW_READ_BASE;
         bSwapUnicode = false;
@@ -331,7 +328,6 @@ sal_uLong SwASCIIParser::ReadChars()
                 break;      // aus der WHILE-Schleife heraus
 
             /*
-            #98380#
             If there was some unconverted bytes on the last cycle then they
             were put at the beginning of the array, so total bytes available
             to convert this cycle includes them. If we found 0 following bytes
@@ -390,7 +386,7 @@ sal_uLong SwASCIIParser::ReadChars()
                     pLastStt = ++pStt;
                 cLastCR = 0;
                 nLineLen = 0;
-                // JP 03.04.96: das letze am Ende nehmen wir nicht
+                // das letze am Ende nehmen wir nicht
                 if( !rInput.IsEof() || !(pEnd == pStt ||
                     ( !*pEnd && pEnd == pStt+1 ) ) )
                     pDoc->SplitNode( *pPam->GetPoint(), false );
@@ -400,12 +396,6 @@ sal_uLong SwASCIIParser::ReadChars()
         bool bIns = true, bSplitNode = false;
         switch( *pStt )
         {
-//JP 12.11.2001: task 94636 - don't ignore all behind the zero character,
-//                            change it to the default "control character"
-//      case 0:
-//                  pEnd = pStt;
-//                  bIns = false ;
-//                  break;
 
         case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
                     {
@@ -413,7 +403,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         *pStt = 0;
                         ++pStt;
 
-                        // JP 03.04.96: das letze am Ende nehmen wir nicht
+                        // das letze am Ende nehmen wir nicht
                         if( !rInput.IsEof() || pEnd != pStt )
                             bSplitNode = true;
                     }
@@ -439,7 +429,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         else
                             bChkSplit = true;
 
-                            // JP 03.04.96: das letze am Ende nehmen wir nicht
+                            // das letze am Ende nehmen wir nicht
                         if( bChkSplit && ( !rInput.IsEof() || pEnd != pStt ))
                             bSplitNode = true;
                     }
@@ -451,8 +441,6 @@ sal_uLong SwASCIIParser::ReadChars()
                         *pStt++ = 0;
                         if( nLineLen )
                         {
-                            // Change to charset system!!!!
-                            //rOpt.GetCharSet();
                             InsertText( String( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );
@@ -524,4 +512,4 @@ void SwASCIIParser::InsertText( const String& rStr )
         nScript |= pBreakIt->GetAllScriptsOfText( rStr );
 }
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

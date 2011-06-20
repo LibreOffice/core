@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,7 +73,7 @@ bool SwMovedFwdFrmsByObjPos::FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
     return false;
 }
 
-// --> OD 2004-10-05 #i26945#
+// #i26945#
 bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const
 {
     bool bDoesRowContainMovedFwdFrm( false );
@@ -88,10 +89,9 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
             SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *rEntry.first );
             for( SwTxtFrm* pTxtFrm = aFrmIter.First(); pTxtFrm; pTxtFrm = (SwTxtFrm*)aFrmIter.Next() )
             {
-                // --> OD 2004-12-03 #115759# - assure that found text frame
+                // #115759# - assure that found text frame
                 // is the first one.
                 if ( _rRowFrm.IsAnLower( pTxtFrm ) && !pTxtFrm->GetIndPrev() )
-                // <--
                 {
                     bDoesRowContainMovedFwdFrm = true;
                     break;
@@ -102,5 +102,5 @@ bool SwMovedFwdFrmsByObjPos::DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm
 
     return bDoesRowContainMovedFwdFrm;
 }
-// <--
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

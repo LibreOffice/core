@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,17 +81,13 @@
 #include <swtable.hxx>
 #include <fldbas.hxx>
 #include <fmtclds.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wrthtml.hxx>
 #include <htmlnum.hxx>
 #include <htmlfly.hxx>
 #include <swmodule.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>      // ResId fuer Statusleiste
-#endif
 #include <swerror.h>
 
 #define MAX_INDENT_LEVEL 20
@@ -98,10 +95,10 @@
 #if defined(UNX)
 const sal_Char SwHTMLWriter::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA SwHTMLWriter::sNewLine[] = "\015\012";
+const sal_Char SwHTMLWriter::sNewLine[] = "\015\012";
 #endif
 
-static sal_Char __FAR_DATA sIndentTabs[MAX_INDENT_LEVEL+2] =
+static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
@@ -122,7 +119,7 @@ SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
 }
 
 
-__EXPORT SwHTMLWriter::~SwHTMLWriter()
+SwHTMLWriter::~SwHTMLWriter()
 {
     delete pNumRuleInfo;
 }
@@ -130,20 +127,20 @@ __EXPORT SwHTMLWriter::~SwHTMLWriter()
 sal_uLong SwHTMLWriter::WriteStream()
 {
     // neue Konfiguration setzen
-    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
+    SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
 
     // die Fontgroessen 1-7
-    aFontHeights[0] = pHtmlOptions->GetFontSize( 0 ) * 20;
-    aFontHeights[1] = pHtmlOptions->GetFontSize( 1 ) * 20;
-    aFontHeights[2] = pHtmlOptions->GetFontSize( 2 ) * 20;
-    aFontHeights[3] = pHtmlOptions->GetFontSize( 3 ) * 20;
-    aFontHeights[4] = pHtmlOptions->GetFontSize( 4 ) * 20;
-    aFontHeights[5] = pHtmlOptions->GetFontSize( 5 ) * 20;
-    aFontHeights[6] = pHtmlOptions->GetFontSize( 6 ) * 20;
+    aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
+    aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
+    aFontHeights[2] = rHtmlOptions.GetFontSize( 2 ) * 20;
+    aFontHeights[3] = rHtmlOptions.GetFontSize( 3 ) * 20;
+    aFontHeights[4] = rHtmlOptions.GetFontSize( 4 ) * 20;
+    aFontHeights[5] = rHtmlOptions.GetFontSize( 5 ) * 20;
+    aFontHeights[6] = rHtmlOptions.GetFontSize( 6 ) * 20;
 
     // ueberhaupt Styles ausgeben
     // (dann auch obere und untere Absatz-Abstaende)
-    nExportMode = pHtmlOptions->GetExportMode();
+    nExportMode = rHtmlOptions.GetExportMode();
     nHTMLMode = GetHtmlMode(0);
     if( HTML_CFG_WRITER==nExportMode ||
         HTML_CFG_NS40==nExportMode )
@@ -160,7 +157,6 @@ sal_uLong SwHTMLWriter::WriteStream()
         nHTMLMode |= HTMLMODE_ABS_POS_FLY|HTMLMODE_ABS_POS_DRAW;
 
     if( HTML_CFG_WRITER==nExportMode )
-//      nHTMLMode |= HTMLMODE_FLY_MARGINS | HTMLMODE_FRSTLINE_IN_NUMBUL;
         nHTMLMode |= HTMLMODE_FLY_MARGINS;
 
     if( HTML_CFG_NS40==nExportMode )
@@ -191,32 +187,24 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     sal_Bool bWriteUTF8 = bWriteClipboardDoc;
     eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8
-                          : pHtmlOptions->GetTextEncoding();
+                          : rHtmlOptions.GetTextEncoding();
     const sal_Char *pCharSet =
         rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
-    // fuer Netscape optimieren heisst Spacer- und Multicol ausgeben
-//  bCfgMultiCol = pHtmlOptions->IsNetscape3();
-//  bCfgSpacer = pHtmlOptions->IsNetscape3();
-
-    // wenn Styles exportiert werden, wird ein Style einem HTML-Tag manchmal
-    // vorgezogen, wenn nicht fuer Netscape exportiert wird
-    // bCfgPreferStyles = bCfgOutStyles; // && !pHtmlOptions->IsNetscape3();
-
     // Nur noch fuer den MS-IE ziehen wir den Export von Styles vor.
     bCfgPreferStyles = HTML_CFG_MSIE==nExportMode;
 
-    bCfgStarBasic = pHtmlOptions->IsStarBasic();
+    bCfgStarBasic = rHtmlOptions.IsStarBasic();
 
     bCfgFormFeed = !IsHTMLMode(HTMLMODE_PRINT_EXT);
-    bCfgCpyLinkedGrfs = pHtmlOptions->IsSaveGraphicsLocal();
+    bCfgCpyLinkedGrfs = rHtmlOptions.IsSaveGraphicsLocal();
 
     // die HTML-Vorlage holen
     sal_Bool bOldHTMLMode = sal_False;
     sal_uInt16 nOldTxtFmtCollCnt = 0, nOldCharFmtCnt = 0;
 
-    ASSERT( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
+    OSL_ENSURE( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
     pTemplate = ((HTMLReader*)ReadHTML)->GetTemplateDoc();
     if( pTemplate )
     {
@@ -308,7 +296,7 @@ sal_uLong SwHTMLWriter::WriteStream()
             }
             else
             {
-                ASSERT( FILE_LINK_SECTION != pSNd->GetSection().GetType(),
+                OSL_ENSURE( FILE_LINK_SECTION != pSNd->GetSection().GetType(),
                         "Export gelinkter Bereiche am Dok-Anfang ist nicht implemntiert" );
 
                 // nur das Tag fuer die Section merken
@@ -391,7 +379,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     // loesche die Tabelle mit den freifliegenden Rahmen
     sal_uInt16 i;
-    ASSERT( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
+    OSL_ENSURE( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
     if( pHTMLPosFlyFrms )
     {
         pHTMLPosFlyFrms->DeleteAndDestroy( 0, pHTMLPosFlyFrms->Count() );
@@ -437,7 +425,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     delete pxFormComps;
     pxFormComps = 0;
 
-    ASSERT( !pFootEndNotes,
+    OSL_ENSURE( !pFootEndNotes,
             "SwHTMLWriter::Write: Ftns nicht durch OutFootEndNotes geloescht" );
 
     pCurrPageDesc = 0;
@@ -459,13 +447,13 @@ sal_uLong SwHTMLWriter::WriteStream()
         sal_uInt16 nTxtFmtCollCnt = pTemplate->GetTxtFmtColls()->Count();
         while( nTxtFmtCollCnt > nOldTxtFmtCollCnt )
             pTemplate->DelTxtFmtColl( --nTxtFmtCollCnt );
-        ASSERT( pTemplate->GetTxtFmtColls()->Count() == nOldTxtFmtCollCnt,
+        OSL_ENSURE( pTemplate->GetTxtFmtColls()->Count() == nOldTxtFmtCollCnt,
                 "falsche Anzahl TxtFmtColls geloescht" );
 
         sal_uInt16 nCharFmtCnt = pTemplate->GetCharFmts()->Count();
         while( nCharFmtCnt > nOldCharFmtCnt )
             pTemplate->DelCharFmt( --nCharFmtCnt );
-        ASSERT( pTemplate->GetCharFmts()->Count() == nOldCharFmtCnt,
+        OSL_ENSURE( pTemplate->GetCharFmts()->Count() == nOldCharFmtCnt,
                 "falsche Anzahl CharFmts geloescht" );
 
         // HTML-Modus wieder restaurieren
@@ -532,7 +520,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                   const SwFmtCol *pCol,
                                   sal_Bool bContinued=sal_False )
 {
-    ASSERT( pCol || !bContinued, "Continuation of DIV" );
+    OSL_ENSURE( pCol || !bContinued, "Continuation of DIV" );
 
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
@@ -659,7 +647,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 
     const SwSection& rSection = rSectNd.GetSection();
     const SwSectionFmt *pFmt = rSection.GetFmt();
-    ASSERT( pFmt, "Section without a format?" );
+    OSL_ENSURE( pFmt, "Section without a format?" );
 
     sal_Bool bStartTag = sal_True;
     sal_Bool bEndTag = sal_True;
@@ -758,7 +746,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
         {
             SwNode * pNd = pCurPam->GetNode();
 
-            ASSERT( !(pNd->IsGrfNode() || pNd->IsOLENode()),
+            OSL_ENSURE( !(pNd->IsGrfNode() || pNd->IsOLENode()),
                     "Grf- oder OLE-Node hier unerwartet" );
             if( pNd->IsTxtNode() )
             {
@@ -885,7 +873,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
             0==(pTxtNd=pDoc->GetNodes()[nIdx]->GetTxtNode()) )
         nIdx++;
 
-    ASSERT( pTxtNd, "Kein Text-Node gefunden" );
+    OSL_ENSURE( pTxtNd, "Kein Text-Node gefunden" );
     if( !pTxtNd || !pTxtNd->HasHints() )
         return 0;
 
@@ -937,7 +925,6 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     // DokumentInfo
     ByteString sIndent;
     GetIndentString( sIndent );
-//  OutNewLine();
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentProperties> xDocProps;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -958,8 +945,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     OutFootEndNoteInfo();
 
     const SwPageDesc *pPageDesc = 0;
-    //if( !pDoc->IsHTMLMode() )
-    //{
+
         // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
         // exportiert und wenn keine gesetzt ist die Standard-Vorlage
         sal_uLong nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
@@ -985,12 +971,6 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         if( !pPageDesc )
             pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-    //}
-    //else
-    //{
-        // In HTML-Dokumenten nehmen wir immer die HTML-Vorlage
-    //  pPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
-    //}
 
     // und nun ... das Style-Sheet!!!
     if( bCfgOutStyles )
@@ -1151,7 +1131,6 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                                   String& rEmbGrfNm, sal_Bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
-    /// OD 02.09.2002 #99657#
     /// check, if background color is not "no fill"/"auto fill", instead of
     /// only checking, if transparency is not set.
     if( rBackColor.GetColor() != COL_TRANSPARENT )
@@ -1437,3 +1416,4 @@ void GetHTMLWriter( const String&, const String& rBaseURL, WriterRef& xRet )
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 #ifndef _SWRECT_HXX
 #define _SWRECT_HXX
-#include "errhdl.hxx"
+#include <osl/diagnose.h>
 #include <tools/gen.hxx>
 class SvStream;
 
@@ -43,10 +44,10 @@ public:
     inline SwRect( const Point& rLT, const Point& rRB );
     inline SwRect( long X, long Y, long Width, long Height );
 
-        //SV-SS z.B. SwRect( pWin->GetClipRect() );
+    //SV-SS e.g. SwRect( pWin->GetClipRect() );
     SwRect( const Rectangle &rRect );
 
-    //Set-Methoden
+    //Set-Methods
     inline void Chg( const Point& rNP, const Size &rNS );
     inline void Pos(  const Point& rNew );
     inline void Pos( const long nNewX, const long nNewY );
@@ -59,7 +60,7 @@ public:
     inline void Top( const long nTop );
     inline void Bottom( const long nBottom );
 
-    //Get-Methoden
+    //Get-Methods
     inline const Point &Pos()  const;
     inline const Size  &SSize() const;
     inline long Width()  const;
@@ -69,8 +70,7 @@ public:
     inline long Top()    const;
     inline long Bottom() const;
 
-    //Damit Layoutseitig per Memberpointer auf die Member von Pos und SSize
-    //zugegriffen werden kann.
+    // In order to be able to access the members of Pos and SSize from the layout side.
     inline Point &Pos();
     inline Size  &SSize();
 
@@ -80,7 +80,8 @@ public:
 
            SwRect &Union( const SwRect& rRect );
            SwRect &Intersection( const SwRect& rRect );
-   //Wie Intersection nur wird davon ausgegangen, dass die Rects ueberlappen!
+
+   // Same as Intersection, only assume that Rects are overlapping!
            SwRect &_Intersection( const SwRect &rRect );
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
@@ -103,14 +104,10 @@ public:
     inline SwRect &operator+=( const Size &rSz );
     inline SwRect &operator-=( const Size &rSz );
 
-    //SV-SS z.B. pWin->DrawRect( aSwRect.SVRect() );
+    //SV-SS e.g. pWin->DrawRect( aSwRect.SVRect() );
     inline Rectangle  SVRect() const;
 
-    //Zortech wuerde hier fehlerhaften Code erzeugen.
-//  inline operator SRectangle()  const;
-//  inline operator Rectangle() const { return Rectangle( aPos, aSize ); }
-
-    // Ausgabeoperator fuer die Debugging-Gemeinde
+    // Output operator for debugging.
     friend SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 
 
@@ -157,7 +154,7 @@ public:
     sal_Bool OverStepRight( long ) const;
 };
 
-// Implementation in in swrect.cxx
+// Implementation in swrect.cxx
 extern SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 
 typedef void (SwRect:: *SwRectSet)( const long nNew );
@@ -169,7 +166,7 @@ typedef long (SwRect:: *SwRectDist)( long ) const;
 typedef void (SwRect:: *SwRectSetTwice)( long, long );
 typedef void (SwRect:: *SwRectSetPos)( const Point& );
 
-//---------------------------------- Set-Methoden
+//  Set-Methods
 inline void SwRect::Chg( const Point& rNP, const Size &rNS )
 {
     m_Point = rNP;
@@ -220,7 +217,7 @@ inline void SwRect::Bottom( const long nBottom )
     m_Size.setHeight(nBottom - m_Point.getY() + 1);
 }
 
-//----------------------------------- Get-Methoden
+// Get-Methods
 inline const Point &SwRect::Pos()  const
 {
     return m_Point;
@@ -262,7 +259,7 @@ inline long SwRect::Bottom() const
     return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
 }
 
-//----------------------------------- operatoren
+// operators
 inline SwRect &SwRect::operator = ( const SwRect &rRect )
 {
     m_Point = rRect.m_Point;
@@ -303,10 +300,10 @@ inline SwRect &SwRect::operator-=( const Size &rSz )
 }
 
 
-//--------------------------- Sonstiges
+// other
 inline Rectangle SwRect::SVRect() const
 {
-    ASSERT( !IsEmpty(), "SVRect() without Width or Height" );
+    OSL_ENSURE( !IsEmpty(), "SVRect() without Width or Height" );
     return Rectangle( m_Point.getX(), m_Point.getY(),
         m_Point.getX() + m_Size.getWidth() - 1,         //Right()
         m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
@@ -333,7 +330,7 @@ inline void SwRect::Clear()
     m_Size.setHeight(0);
 }
 
-//-------------------------- CToren
+// constructors
 inline SwRect::SwRect() :
     m_Point( 0, 0 ),
     m_Size( 0, 0 )
@@ -362,3 +359,5 @@ inline SwRect::SwRect( long X, long Y, long W, long H ) :
 
 
 #endif  //_SWRECT_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

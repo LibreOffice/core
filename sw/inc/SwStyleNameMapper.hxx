@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,12 +34,12 @@
 #include "swdllapi.h"
 
 #ifndef INCLUDED_HASH_MAP
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #define INCLUDED_HASH_MAP
 #endif
 #include <stringhash.hxx>
 
-/* This class holds all data about the names of styles used in the user
+/** This class holds all data about the names of styles used in the user
  * interface (UI names...these are localised into different languages).
  * These UI names are loaded from the resource files on demand.
  *
@@ -66,7 +67,7 @@
  * 5. Numbering Rule contains the NumRule name array.
  */
 
-/*
+/**
  * There is a further complication that came to light later. If someone enters
  * a user-defined style name which is the same as a programmatic name, this
  * name clash must be handled.
@@ -87,7 +88,7 @@ class String;
 struct SwTableEntry;
 
 
-typedef ::std::hash_map < const String*, sal_uInt16, StringHash, StringEq > NameToIdHash;
+typedef ::boost::unordered_map < const String*, sal_uInt16, StringHash, StringEq > NameToIdHash;
 
 class SwStyleNameMapper
 {
@@ -202,3 +203,5 @@ public:
     static const SvStringsDtor& GetNumRuleProgNameArray();
 };
 #endif // _NAME_MAPPER_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #define SW_SPELL_DIALOG_CHILD_WINDOW_HXX
 
 #include <svx/SpellDialogChildWindow.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 
 class SwWrtShell;
 struct SpellState;
@@ -74,3 +73,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

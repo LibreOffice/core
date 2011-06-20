@@ -35,16 +35,13 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
-#define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
 #include <svl/itemset.hxx>
 
 #include <swtypes.hxx>
 #include <calbck.hxx>
-
+#include <set>
 
 class SvxTabStopItem;
 class SwFmt;
@@ -82,7 +79,7 @@ public:
 class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
     const ::std::auto_ptr<SwHistory> m_pHistory;
-    SvUShortsSort m_Ids;
+    std::set<sal_uInt16> m_Ids;
     const sal_uInt16 m_nFormatId;             // Format-Id for Redo
 
 public:
@@ -95,7 +92,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void SetAttrs( const SvUShortsSort& rArr );
+    void SetAttrs( const std::set<sal_uInt16> &rAttrs );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
@@ -112,7 +109,7 @@ class SwUndoFmtAttr : public SwUndo
 
     bool IsFmtInDoc( SwDoc* );   //is the attribute format still in the Doc?
     void SaveFlyAnchor( bool bSaveDrawPt = false );
-    // --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
+    // #i35443# - Add return value, type <bool>.
     // Return value indicates, if anchor attribute is restored.
     // Notes: - If anchor attribute is restored, all other existing attributes
     //          are also restored.
@@ -121,10 +118,8 @@ class SwUndoFmtAttr : public SwUndo
     //          aren't restored.
     //          This situation occurs for undo of styles.
     bool RestoreFlyAnchor(::sw::UndoRedoContext & rContext);
-    // <--
     // --> OD 2008-02-27 #refactorlists# - removed <rAffectedItemSet>
     void Init();
-    // <--
 
 public:
     // register at the Format and save old attributes
@@ -132,7 +127,6 @@ public:
     SwUndoFmtAttr( const SfxItemSet& rOldSet,
                    SwFmt& rFmt,
                    bool bSaveDrawPt = true );
-    // <--
     SwUndoFmtAttr( const SfxPoolItem& rItem,
                    SwFmt& rFmt,
                    bool bSaveDrawPt = true );
@@ -168,7 +162,6 @@ class SwUndoFmtResetAttr : public SwUndo
         // old attribute which has been reset - needed for undo.
         ::std::auto_ptr<SfxPoolItem> m_pOldItem;
 };
-// <--
 
 class SwUndoDontExpandFmt : public SwUndo
 {

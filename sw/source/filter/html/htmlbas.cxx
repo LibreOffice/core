@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -62,7 +63,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 
-static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
+static HTMLOutEvent aBodyEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonload,       OOO_STRING_SVTOOLS_HTML_O_onload,       SFX_EVENT_OPENDOC   },
     { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },
@@ -102,10 +103,6 @@ void SwHTMLParser::EndScript()
     bIgnoreRawData = sal_False;
     aScriptSource.ConvertLineEnd();
 
-//  MIB 23.5.97: SGML-Kommentare brauchen nicht mehr entfernt zu werden,
-//  weil JS das jetzt selber kann.
-//  RemoveSGMLComment( aScriptSource, sal_True );
-
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
     if( bInsSrcIntoFld && !bIgnoreHTMLComments )
@@ -132,7 +129,7 @@ void SwHTMLParser::EndScript()
         if( aBasicLib.Len() )
             aLibName = aBasicLib;
         else
-            aLibName = ::rtl::OUString::createFromAscii( "Standard" );
+            aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
 
         // get module library container
         Reference< script::XLibraryContainer > xModLibContainer( pDocSh->GetBasicContainer(), UNO_QUERY );
@@ -254,12 +251,12 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
                                         ScriptType eScrType,
                                         const String& rScrType )
 {
-    ASSERT( rName.Len(), "InsertBasicDocEvent() ohne Macro gerufen" );
+    OSL_ENSURE( rName.Len(), "InsertBasicDocEvent() ohne Macro gerufen" );
     if( !rName.Len() )
         return;
 
     SwDocShell *pDocSh = pDoc->GetDocShell();
-    ASSERT( pDocSh, "Wo ist die DocShell?" );
+    OSL_ENSURE( pDocSh, "Wo ist die DocShell?" );
     if( !pDocSh )
         return;
 
@@ -281,8 +278,8 @@ void SwHTMLWriter::OutBasic()
         return;
 
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
-    ASSERT( pBasicMan, "Wo ist der Basic-Manager?" );
-    //JP 17.07.96: Bug 29538 - nur das DocumentBasic schreiben
+    OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
+    // nur das DocumentBasic schreiben
     if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
     {
         return;
@@ -299,7 +296,7 @@ void SwHTMLWriter::OutBasic()
         for( sal_uInt16 j=0; j<pModules->Count(); j++ )
         {
             const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
-            ASSERT( pModule, "Wo ist das Modul?" );
+            OSL_ENSURE( pModule, "Wo ist das Modul?" );
 
             String sLang(
                     String::CreateFromAscii( SVX_MACRO_LANGUAGE_STARBASIC ) );
@@ -361,3 +358,4 @@ void SwHTMLWriter::OutBasicBodyEvents()
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

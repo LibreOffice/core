@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,10 +35,11 @@
 #include <svl/svstdarr.hxx>
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
-#ifndef _RDIC_HRC
 #include <rcid.hrc>
+#ifdef _NEED_TO_DEBUG_MAPPING
+#include <stdlib.h>
 #endif
-#include <tools/debug.hxx>
+
 extern ResMgr* pSwResMgr;
 // Initialise UI names to 0
 SvStringsDtor   *SwStyleNameMapper::pTextUINameArray = 0,
@@ -485,7 +487,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_LISTS_BEGIN ; nId < RES_POOLCOLL_LISTS_END ; nId++,nIndex++ )
             {
@@ -497,7 +499,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_EXTRA_BEGIN ; nId < RES_POOLCOLL_EXTRA_END ; nId++,nIndex++ )
             {
@@ -509,7 +511,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_REGISTER_BEGIN ; nId < RES_POOLCOLL_REGISTER_END ; nId++,nIndex++ )
             {
@@ -521,7 +523,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_DOC_BEGIN ; nId < RES_POOLCOLL_DOC_END ; nId++,nIndex++ )
             {
@@ -533,7 +535,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCOLL_HTML_BEGIN ; nId < RES_POOLCOLL_HTML_END ; nId++,nIndex++ )
             {
@@ -545,7 +547,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -559,7 +561,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
             for ( nIndex = 0, nId = RES_POOLCHR_HTML_BEGIN ; nId < RES_POOLCHR_HTML_END ; nId++,nIndex++ )
             {
@@ -571,7 +573,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -585,7 +587,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -599,7 +601,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
         {
@@ -613,7 +615,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
                 bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
-                    *((sal_Int32*)0) = 42;
+                    abort();
             }
         }
     }
@@ -1140,3 +1142,4 @@ const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgN
     return aRes;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

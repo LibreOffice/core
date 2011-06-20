@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -47,7 +48,7 @@
 using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-// -----------------------------------------------------------------------
+
 void lcl_FillGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
@@ -57,7 +58,7 @@ void lcl_FillGreetingsBox(ListBox& rBox,
         rBox.InsertEntry(rEntries[nEntry]);
     rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
 }
-// -----------------------------------------------------------------------
+
 void lcl_FillGreetingsBox(ComboBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
@@ -67,7 +68,7 @@ void lcl_FillGreetingsBox(ComboBox& rBox,
         rBox.InsertEntry(rEntries[nEntry]);
     rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
 }
-// -----------------------------------------------------------------------
+
 void lcl_StoreGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
@@ -79,7 +80,7 @@ void lcl_StoreGreetingsBox(ListBox& rBox,
     rConfig.SetGreetings(eType, aEntries);
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
 }
-// -----------------------------------------------------------------------
+
 void lcl_StoreGreetingsBox(ComboBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
@@ -91,9 +92,7 @@ void lcl_StoreGreetingsBox(ComboBox& rBox,
     rConfig.SetGreetings(eType, aEntries);
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
 }
-/*-- 30.04.2004 10:42:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwGreetingsHandler, IndividualHdl_Impl, CheckBox*, EMPTYARG)
 {
     sal_Bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
@@ -118,9 +117,7 @@ IMPL_LINK(SwGreetingsHandler, IndividualHdl_Impl, CheckBox*, EMPTYARG)
     UpdatePreview();
     return 0;
 }
-/*-- 30.04.2004 10:42:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
 {
     SwCustomizeAddressBlockDialog* pDlg =
@@ -142,16 +139,12 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, PushButton*, pButton)
     delete pDlg;
     return 0;
 }
-/*-- 16.06.2004 10:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwGreetingsHandler::UpdatePreview()
 {
     //the base class does nothing
 }
-/*-- 30.04.2004 10:42:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
 {
     String sPreview = m_aFemaleLB.GetSelectEntry();
@@ -168,17 +161,13 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, PushButton*, pButton)
     delete pDlg;
     return 0;
 }
-/*-- 05.05.2004 15:25:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl, ListBox*, EMPTYARG)
 {
     UpdatePreview();
     return 0;
 }
-/*-- 05.05.2004 15:23:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeGreetingsPage::UpdatePreview()
 {
     //find out which type of greeting should be selected:
@@ -221,7 +210,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                 }
                 catch( sdbc::SQLException& )
                 {
-                    DBG_ERROR("SQLException caught");
+                    OSL_FAIL("SQLException caught");
                 }
             }
         }
@@ -233,9 +222,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     sPreview = SwAddressPreview::FillData(sPreview, m_pWizard->GetConfigItem());
     m_aPreviewWIN.SetAddress(sPreview);
 }
-/*-- 17.05.2004 15:44:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void    SwGreetingsHandler::Contains(sal_Bool bContainsGreeting)
 {
     m_pPersonalizedCB->Enable(bContainsGreeting);
@@ -255,9 +242,7 @@ void    SwGreetingsHandler::Contains(sal_Bool bContainsGreeting)
     m_pNeutralFT->Enable(bContainsGreeting);
     m_pNeutralCB->Enable(bContainsGreeting);
 }
-/*-- 02.04.2004 14:17:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_GREETINGS_PAGE)),
 #ifdef MSC
@@ -353,15 +338,11 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     sTemp.SearchAndReplaceAscii("%1", String::CreateFromInt32(1));
     m_aDocumentIndexFI.SetText(sTemp);
 }
-/*-- 02.04.2004 14:17:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
 {
 }
-/*-- 18.06.2004 12:13:53---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwMailMergeGreetingsPage::ActivatePage()
 {
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
@@ -387,9 +368,7 @@ void SwMailMergeGreetingsPage::ActivatePage()
     UpdatePreview();
     m_pWizard->enableButtons(WZB_NEXT, m_pWizard->isStateEnabled(MM_PREPAREMERGEPAGE));
 }
-/*-- 11.05.2004 14:47:10---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason )
 {
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
@@ -421,9 +400,7 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPage
     rConfig.SetIndividualGreeting(m_aPersonalizedCB.IsChecked(), sal_False);
     return sal_True;
 }
-/*-- 30.04.2004 10:42:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)
 {
     sal_Bool bContainsGreeting = pBox->IsChecked();
@@ -439,9 +416,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, CheckBox*, pBox)
     m_pWizard->UpdateRoadmap();
     return 0;
 }
-/*-- 07.05.2004 12:56:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
 {
     //if no pButton is given, the first set has to be pre-set
@@ -473,9 +448,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
     m_aDocumentIndexFI.SetText(sTemp);
     return 0;
 }
-/*-- 17.05.2004 15:11:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_MAILBODY)),
 #ifdef MSC
@@ -570,25 +543,18 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     m_aFemaleFieldCB.SetText(rConfig.GetFemaleGenderValue());
     m_aFemaleFieldCB.SaveValue();
 }
-/*-- 17.05.2004 15:13:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwMailBodyDialog::~SwMailBodyDialog()
 {
 }
 
-/*-- 30.04.2004 10:42:57---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, CheckBox*, pBox)
 {
     SwGreetingsHandler::Contains(pBox->IsChecked());
     m_pWizard->GetConfigItem().SetGreetingLine(pBox->IsChecked(), sal_True);
     return 0;
 }
-/*-- 28.06.2004 11:22:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailBodyDialog, OKHdl, PushButton*, EMPTYARG)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -617,3 +583,4 @@ IMPL_LINK(SwMailBodyDialog, OKHdl, PushButton*, EMPTYARG)
     return 0;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

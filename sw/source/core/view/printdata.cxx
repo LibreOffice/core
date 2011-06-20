@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /**************************************************************************
  *
  *
@@ -6,9 +7,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vprint.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +42,6 @@
 #include <svl/languageoptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/outdev.hxx>
@@ -74,15 +71,15 @@ SwRenderData::~SwRenderData()
 {
     delete m_pViewOptionAdjust;     m_pViewOptionAdjust = 0;
     delete m_pPrtOptions;           m_pPrtOptions = 0;
-    DBG_ASSERT( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
-    DBG_ASSERT( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
-    DBG_ASSERT( !m_pPostItFields, " should already have been deleted" );
+    OSL_ENSURE( !m_pPostItShell, "m_pPostItShell should already have been deleted" );
+    OSL_ENSURE( !m_pPostItDoc, "m_pPostItDoc should already have been deleted" );
+    OSL_ENSURE( !m_pPostItFields, " should already have been deleted" );
 }
 
 
 void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
 {
-    DBG_ASSERT( !m_pPostItFields && !m_pPostItDoc && !m_pPostItShell, "some post-it data already exists" );
+    OSL_ENSURE( !m_pPostItFields && !m_pPostItDoc && !m_pPostItShell, "some post-it data already exists" );
     m_pPostItFields = new _SetGetExpFlds;
     lcl_GetPostIts( pDoc, m_pPostItFields );
     m_pPostItDoc    = new SwDoc;
@@ -101,8 +98,8 @@ void SwRenderData::DeletePostItData()
 {
     if (HasPostItData())
     {
-        m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
-        delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
+        m_pPostItDoc->setPrinter( 0, false, false ); // So that the printer remains at the real DOC
+        delete m_pPostItShell;
         delete m_pPostItFields;
         m_pPostItDoc    = 0;
         m_pPostItShell  = 0;
@@ -120,7 +117,7 @@ void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rV
 {
     if (m_pViewOptionAdjust)
     {
-        DBG_ASSERT( 0, "error: there should be no ViewOptionAdjust active when calling this function" );
+        OSL_FAIL("error: there should be no ViewOptionAdjust active when calling this function" );
     }
     m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions );
 }
@@ -198,7 +195,7 @@ SwPrintUIOptions::SwPrintUIOptions(
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
-    DBG_ASSERT( aLocalizedStrings.Count() >= 30, "resource incomplete" );
+    OSL_ENSURE( aLocalizedStrings.Count() >= 30, "resource incomplete" );
     if( aLocalizedStrings.Count() < 30 ) // bad resource ?
         return;
 
@@ -390,7 +387,7 @@ SwPrintUIOptions::SwPrintUIOptions(
         // 0 : all pages (left & right)
         // 1 : left pages
         // 2 : right pages
-        DBG_ASSERT( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRightPage(),
+        OSL_ENSURE( rDefaultPrintData.IsPrintLeftPage() || rDefaultPrintData.IsPrintRightPage(),
                 "unexpected value combination" );
         sal_Int16 nPagesChoice = 0;
         if (rDefaultPrintData.IsPrintLeftPage() && !rDefaultPrintData.IsPrintRightPage())
@@ -442,7 +439,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     }
 
 
-    DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
+    OSL_ENSURE( nIdx == nNumProps, "number of added properties is not as expected" );
 }
 
 
@@ -540,3 +537,4 @@ bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< bea
 
 //////////////////////////////////////////////////////////////////////
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,6 +34,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -151,7 +153,7 @@ SwUndoInserts::~SwUndoInserts()
         if( pPos->nContent.GetIndex() )         // nicht den gesamten Node loeschen
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
+            OSL_ENSURE( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
             if( pTxtNd ) // Robust
             {
                 pTxtNd->EraseText( pPos->nContent );
@@ -269,7 +271,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     // setze noch den Cursor auf den Redo-Bereich
-    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
+    SwPaM *const pPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
     SwDoc* pDoc = pPam->GetDoc();
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = nSttNode - nNdDiff;
@@ -353,3 +355,4 @@ SwUndoCpyDoc::SwUndoCpyDoc( const SwPaM& rPam )
 {
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

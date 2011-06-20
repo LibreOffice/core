@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,7 +40,7 @@
 #include <sfx2/app.hxx>
 
 //copy from core\bastyp\swtypes.cxx
-String aEmptyStr;               // Konstante Strings
+String aEmptyStr; // constant strings
 
 ResMgr* pSwResMgr=0;
 
@@ -52,3 +53,5 @@ ResMgr* SwDialogsResMgr::GetResMgr()
 
     return pSwResMgr;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,9 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/bindings.hxx>
@@ -59,8 +58,7 @@ extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
 sal_Bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
-//JP 08.03.96: die Wizards brauchen die Selektion !!
-//  EndSelect();
+    addCurrentPosition();
     (this->*fnKillSel)( 0, sal_False );
 
     sal_Bool bRet = sal_True;
@@ -129,7 +127,7 @@ bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 
 void SwWrtShell::DrawSelChanged( )
 {
-    static sal_uInt16 __READONLY_DATA aInval[] =
+    static sal_uInt16 const aInval[] =
     {
         SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, SID_ATTR_LINE_STYLE,
         SID_ATTR_LINE_WIDTH, SID_ATTR_LINE_COLOR, 0
@@ -205,7 +203,7 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
             {
                 uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
-                ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
+                OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
                 if( !xControlModel.is() )
                     return bRet;
 
@@ -245,3 +243,5 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
 
     return bRet;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

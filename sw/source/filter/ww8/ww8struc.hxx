@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,6 @@
  *
  ************************************************************************/
 
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
 #ifndef _WW8STRUC_HXX
 #define _WW8STRUC_HXX
 
@@ -34,14 +33,14 @@
 #include <tools/string.hxx>
 #include <sal/config.h>
 
+#include <editeng/borderline.hxx>
+
 #if defined  OSL_BIGENDIAN || SAL_TYPES_ALIGNMENT4 > 2 || defined UNX
 #   define __WW8_NEEDS_COPY
 #endif
 
 #ifdef SAL_W32
 #   pragma pack(push, 2)
-#elif defined(SAL_OS2)
-#   pragma pack(2)
 #endif
 
 inline void Set_UInt8( sal_uInt8 *& p, sal_uInt8 n )
@@ -281,23 +280,6 @@ typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
 enum BRC_Sides
 {
     WW8_TOP = 0, WW8_LEFT = 1, WW8_BOT = 2, WW8_RIGHT = 3, WW8_BETW = 4
-};
-
-class WW8_BordersSO         // for StarOffice-Border Code
-{
-public:
-    sal_uInt16 mnOut;
-    sal_uInt16 mnIn;
-    sal_uInt16 mnDist;
-public:
-    enum eBorderCode
-    {
-        single0, single1, single2, single3, single4, single5,
-        double0, double1, double2, double3, double4, double5, double6,
-        double7, double8, double9, double10,
-        none
-    };
-    static const WW8_BordersSO &Get0x01LineMatch(eBorderCode nIdx);
 };
 
 /*
@@ -607,55 +589,6 @@ struct WW8_OLST
     sal_uInt8 rgch[64];      // 0x94 array of 64 chars       text before/after number
 };
 // cbOLST is 212(decimal), D4(hex).
-
-#if 0
-struct ANLV
-{
-    ALNV();
-    void ReadFromMem(const sal_uInt8 *&pData);
-    sal_uInt8 nfc;
-    sal_uInt8 cbTextBefore;
-    sal_uInt8 cbTextAfter;
-    sal_uInt8 jc : 2;
-    sal_uInt8 fPrev : 1;
-    sal_uInt8 fHang : 1;
-    sal_uInt8 fSetBold : 1;
-    sal_uInt8 fSetItalic : 1;
-    sal_uInt8 fSetSmallCaps : 1;
-    sal_uInt8 fSetCaps : 1;
-    sal_uInt8 fSetStrike : 1;
-    sal_uInt8 fSetKul : 1;
-    sal_uInt8 fPrevSpace : 1;
-    sal_uInt8 fBold : 1;
-    sal_uInt8 fItalic : 1;
-    sal_uInt8 fSmallCaps : 1;
-    sal_uInt8 fCaps : 1;
-    sal_uInt8 fStrike : 1;
-    sal_uInt8 kul : 3;
-    sal_uInt8 ico : 5;
-    sal_uInt16 ftc;
-    sal_uInt16 hps;
-    sal_uInt16 iStartAt;
-    sal_uInt16 dxaIndent;
-    sal_uInt16 dxaSpace;
-};
-
-struct OLST
-{
-    OLST();
-    void ReadFromMem(const sal_uInt8 *&pData, bool bVer67)
-    ANLV rganlv[9];         // 0 an array of 9 ANLV structures (heading levels)
-    sal_uInt8 fRestartHdr;  // when ==1, restart heading on section break
-    sal_uInt8 fSpareOlst2;  // reserved
-    sal_uInt8 fSpareOlst3;  // reserved
-    sal_uInt8 fSpareOlst4;  // reserved
-    sal_uInt16 rgxch[64];   // array of 64 chars text before/after number
-#if 0
-    sal_uInt16 rgxch[32];   // array of 32 chars text before/after number
-    sal_uInt8 rgch[64];     // array of 64 chars text before/after number
-#endif
-};
-#endif
 
 struct WW8_FDOA
 {
@@ -967,8 +900,6 @@ struct WW8_WKB
 
 #ifdef SAL_W32
 #   pragma pack(pop)
-#elif defined(SAL_OS2)
-#   pragma pack()
 #endif
 
 struct SEPr
@@ -993,7 +924,7 @@ struct SEPr
     sal_uInt16 dmBinFirst;
     sal_uInt16 dmBinOther;
     sal_uInt16 dmPaperReq;
-#if 0
+/*
     28  1C  brcTop                    BRC                   top page border
 
     32  20  brcLeft                   BRC                   left page border
@@ -1001,7 +932,7 @@ struct SEPr
     36  24  brcBottom                 BRC                   bottom page border
 
     40  28  brcRight                  BRC                   right page border
-#endif
+*/
     sal_Int16 fPropRMark;
     sal_Int16 ibstPropRMark;
     sal_Int32 dttmPropRMark;        //DTTM
@@ -1043,9 +974,6 @@ struct SEPr
     sal_uInt8 dmOrientFirst;
     sal_uInt8 fLayout;
     sal_Int16 reserved4;
-#if 0
-    OLST olstAnm;       //currently unused
-#endif
 };
 
 namespace wwUtility
@@ -1056,4 +984,4 @@ namespace wwUtility
 
 #endif
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

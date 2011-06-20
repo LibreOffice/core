@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -44,9 +45,7 @@
 #include "config.hxx"
 #include "format.hxx"
 #include "smmod.hxx"
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
 
 /////////////////////////////////////////////////////////////////
 
@@ -65,7 +64,7 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
     const SfxPoolItem *pItem     = NULL;
 
     sal_uInt16 nU16;
-    sal_Bool bVal;
+    bool bVal;
     if (rSet.GetItemState(SID_PRINTSIZE, sal_True, &pItem) == SFX_ITEM_SET)
     {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
         SetPrintSize( (SmPrintSize) nU16 );
@@ -131,3 +130,4 @@ void SmConfig::ConfigToItemSet(SfxItemSet &rSet) const
 /////////////////////////////////////////////////////////////////
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

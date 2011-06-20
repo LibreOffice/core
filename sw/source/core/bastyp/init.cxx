@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -66,9 +67,7 @@
 #include <editeng/charrotateitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <editeng/swafopt.hxx>
 #include <editeng/svxacorr.hxx>
 #include <unotools/charclass.hxx>
@@ -103,7 +102,6 @@
 #include <fmtfordr.hxx>
 #include <fmtflcnt.hxx>
 #include <fchrfmt.hxx>
-#include <fmtautofmt.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtcnct.hxx>
 #include <fmtline.hxx>
@@ -131,13 +129,13 @@
 #include <swcalwrp.hxx>
 #include <SwStyleNameMapper.hxx>
 
-// OD 09.10.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
-// OD 2004-05-05 #i28701#
 #include <fmtwrapinfluenceonobjpos.hxx>
 
 #include <fmtmeta.hxx>
 
+#include <rtl/instance.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -148,15 +146,14 @@ extern void ClearFEShellTabCols();
 |*  einige Bereiche fuer die Set in Collections / Nodes
 |*************************************************************************/
     // AttrSet-Range fuer die 2 Break-Attribute
-sal_uInt16 __FAR_DATA aBreakSetRange[] = {
+sal_uInt16 aBreakSetRange[] = {
     RES_PAGEDESC, RES_BREAK,
     0 };
 
     // AttrSet-Range fuer die TxtFmtColl
-    // OD 2008-02-27 #refactorlists# :
     // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
     // included in the paragraph style's itemset.
-sal_uInt16 __FAR_DATA aTxtFmtCollSetRange[] = {
+sal_uInt16 aTxtFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -165,7 +162,7 @@ sal_uInt16 __FAR_DATA aTxtFmtCollSetRange[] = {
 };
 
     // AttrSet-Range fuer die GrfFmtColl
-sal_uInt16 __FAR_DATA aGrfFmtCollSetRange[] = {
+sal_uInt16 aGrfFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -173,26 +170,24 @@ sal_uInt16 __FAR_DATA aGrfFmtCollSetRange[] = {
 };
 
     // AttrSet-Range fuer die TextNode
-sal_uInt16 __FAR_DATA aTxtNodeSetRange[] = {
+sal_uInt16 aTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
-    // --> OD 2008-02-25 #refactorlists#
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-    // <--
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
     // AttrSet-Range fuer die NoTxtNode
-sal_uInt16 __FAR_DATA aNoTxtNodeSetRange[] = {
+sal_uInt16 aNoTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-sal_uInt16 __FAR_DATA aTableSetRange[] = {
+sal_uInt16 aTableSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_BREAK,
     RES_BACKGROUND,     RES_SHADOW,
@@ -200,14 +195,14 @@ sal_uInt16 __FAR_DATA aTableSetRange[] = {
     RES_KEEP,           RES_KEEP,
     RES_LAYOUT_SPLIT,   RES_LAYOUT_SPLIT,
     RES_FRAMEDIR,       RES_FRAMEDIR,
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // #i29550#
     RES_COLLAPSING_BORDERS, RES_COLLAPSING_BORDERS,
     // <-- collapsing
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-sal_uInt16 __FAR_DATA aTableLineSetRange[] = {
+sal_uInt16 aTableLineSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
@@ -218,7 +213,7 @@ sal_uInt16 __FAR_DATA aTableLineSetRange[] = {
     0
 };
 
-sal_uInt16 __FAR_DATA aTableBoxSetRange[] = {
+sal_uInt16 aTableBoxSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
@@ -231,21 +226,21 @@ sal_uInt16 __FAR_DATA aTableBoxSetRange[] = {
 };
 
 // AttrSet-Range fuer die SwFrmFmt
-sal_uInt16 __FAR_DATA aFrmFmtSetRange[] = {
+sal_uInt16 aFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // AttrSet-Range fuer die SwCharFmt
-sal_uInt16 __FAR_DATA aCharFmtSetRange[] = {
+sal_uInt16 aCharFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // AttrSet-Range fuer die character autostyles
-sal_uInt16 __FAR_DATA aCharAutoFmtSetRange[] = {
+sal_uInt16 aCharAutoFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -253,7 +248,7 @@ sal_uInt16 __FAR_DATA aCharAutoFmtSetRange[] = {
 };
 
 // AttrSet-Range fuer die SwPageDescFmt
-sal_uInt16 __FAR_DATA aPgFrmFmtSetRange[] = {
+sal_uInt16 aPgFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
@@ -263,9 +258,9 @@ sal_uInt16 __FAR_DATA aPgFrmFmtSetRange[] = {
  * lege eine Tabelle fuer einen Zugriff auf die
  * Default-Format-Attribute an
  ******************************************************************************/
-SwDfltAttrTab __FAR_DATA aAttrTab;
+SwDfltAttrTab aAttrTab;
 
-SfxItemInfo __FAR_DATA aSlotTab[] =
+SfxItemInfo aSlotTab[] =
 {
     { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // RES_CHRATR_CASEMAP
     { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // RES_CHRATR_CHARSETCOLOR
@@ -336,10 +331,8 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_HYPHENZONE, SFX_ITEM_POOLABLE },    // RES_PARATR_HYPHENZONE
     { FN_FORMAT_DROPCAPS, 0 },                          // RES_PARATR_DROP
     { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },      // RES_PARATR_REGISTER
-    // --> OD 2008-03-04 #refactorlists#
     // RES_PARATR_NUMRULE is now poolable
     { SID_ATTR_PARA_NUMRULE, SFX_ITEM_POOLABLE },       // RES_PARATR_NUMRULE
-    // <--
     { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
@@ -350,13 +343,11 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, SFX_ITEM_POOLABLE }, // RES_PARATR_OUTLINELEVEL //#outline level,zhaojianwei
 
-    // --> OD 2008-02-19 #refactorlists#
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_RESTARTVALUE
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISCOUNTED
-    // <--
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_FILL_ORDER
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRM_SIZE
@@ -396,12 +387,11 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
 
     { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE }, // RES_HEADER_FOOTER_EAT_SPACING
     { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },            // RES_ROW_SPLIT
-    // DVO, OD 18.09.2003 #i18732# - use slot-id define in svx
+    // #i18732# - use slot-id define in svx
     { SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEM_POOLABLE },         // RES_FOLLOW_TEXT_FLOW
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // collapsing borders #i29550#
     { SID_SW_COLLAPSING_BORDERS, SFX_ITEM_POOLABLE },       // RES_COLLAPSING_BORDERS
-    // <-- collapsing
-    // OD 2004-05-04 #i28701#
+    // #i28701#
     { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEM_POOLABLE }, // RES_WRAP_INFLUENCE_ON_OBJPOS
     { 0, 0 },                                           // RES_AUTO_STYLE
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
@@ -437,18 +427,18 @@ sal_uInt16* SwAttrPool::pVersionMap1 = 0;
 sal_uInt16* SwAttrPool::pVersionMap2 = 0;
 sal_uInt16* SwAttrPool::pVersionMap3 = 0;
 sal_uInt16* SwAttrPool::pVersionMap4 = 0;
-// OD 2004-01-21 #i18732#
+// #i18732#
 sal_uInt16* SwAttrPool::pVersionMap5 = 0;
 sal_uInt16* SwAttrPool::pVersionMap6 = 0;
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
-const sal_Char* __FAR_DATA pMarkToTable     = "table";
-const sal_Char* __FAR_DATA pMarkToFrame     = "frame";
-const sal_Char* __FAR_DATA pMarkToRegion    = "region";
-const sal_Char* __FAR_DATA pMarkToText      = "text";
-const sal_Char* __FAR_DATA pMarkToOutline   = "outline";
-const sal_Char* __FAR_DATA pMarkToGraphic   = "graphic";
-const sal_Char* __FAR_DATA pMarkToOLE       = "ole";
+const sal_Char* pMarkToTable        = "table";
+const sal_Char* pMarkToFrame        = "frame";
+const sal_Char* pMarkToRegion   = "region";
+const sal_Char* pMarkToText     = "text";
+const sal_Char* pMarkToOutline  = "outline";
+const sal_Char* pMarkToGraphic  = "graphic";
+const sal_Char* pMarkToOLE      = "ole";
 
 SvPtrarr *pGlobalOLEExcludeList = 0;
 
@@ -458,7 +448,6 @@ SwCheckIt* pCheckIt = 0;
 CharClass* pAppCharClass = 0;
 
 CollatorWrapper* pCollator = 0, *pCaseCollator = 0;
-::utl::TransliterationWrapper* pTransWrp = 0;
 
 /******************************************************************************
  *  void _InitCore()
@@ -572,13 +561,11 @@ void _InitCore()
 
     aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] = new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );//#outline level,zhaojianwei
 
-    // --> OD 2008-02-19 #refactorlists#
     aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] = new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
     aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
     aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, sal_False );
     aAttrTab[ RES_PARATR_LIST_RESTARTVALUE - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 );
     aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, sal_True );
-    // <--
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] = new SwFmtFillOrder;
     aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] = new SwFmtFrmSize;
@@ -616,16 +603,14 @@ void _InitCore()
     aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] = new SwFmtRowSplit;
 
-    // OD 18.09.2003 #i18732#
+    // #i18732#
     aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] = new SwFmtFollowTextFlow( sal_True );
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // collapsing borders #i29550#
     aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, sal_False );
-    // <-- collapsing
-    // OD 2004-05-04 #i28701#
-    // --> OD 2004-10-18 #i35017# - constant name has changed
+    // #i28701#
+    // #i35017# - constant name has changed
     aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] =
             new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
-    // <--
 // FrmAttr-Dummies
     aAttrTab[ RES_AUTO_STYLE - POOLATTR_BEGIN ] = new SwFmtAutoFmt( RES_AUTO_STYLE );
     aAttrTab[ RES_FRMATR_STYLE_NAME - POOLATTR_BEGIN ] = new SfxStringItem( RES_FRMATR_STYLE_NAME, aEmptyStr );
@@ -712,7 +697,7 @@ void _InitCore()
     for ( i = 66; i <= 121; ++i )
         SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
 
-    // OD 2004-01-21 #i18732# - setup new version map due to extension of
+    // #i18732# - setup new version map due to extension of
     // the frame attributes (RES_FRMATR_*) for binary filters.
     SwAttrPool::pVersionMap5 = new sal_uInt16[ 130 ];
     for( i = 1; i <= 109; i++ )
@@ -733,9 +718,6 @@ void _InitCore()
 
     SwBreakIt::_Create( xMSF );
     pCheckIt = NULL;
-    /*pAppCharClass = new CharClass(
-        xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));*/
-    //pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();
     _TextInit();
@@ -747,7 +729,7 @@ void _InitCore()
 
     pGlobalOLEExcludeList = new SvPtrarr;
 
-    const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
+    const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
     SwDoc::pACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
                                             rAFlags.nAutoCmpltWordLen );
 }
@@ -777,7 +759,7 @@ void _FinitCore()
 
     delete SwEditShell::pAutoFmtFlags;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
     if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, sal_False);
@@ -836,7 +818,7 @@ void _FinitCore()
     delete[] SwAttrPool::pVersionMap2;
     delete[] SwAttrPool::pVersionMap3;
     delete[] SwAttrPool::pVersionMap4;
-    // OD 2004-01-21 #i18732#
+    // #i18732#
     delete[] SwAttrPool::pVersionMap5;
     delete[] SwAttrPool::pVersionMap6;
 
@@ -900,19 +882,37 @@ CollatorWrapper& GetAppCaseCollator()
     return *pCaseCollator;
 }
 
+namespace
+{
+    class TransWrp
+    {
+    private:
+        boost::scoped_ptr< ::utl::TransliterationWrapper > xTransWrp;
+    public:
+        TransWrp()
+        {
+            uno::Reference< lang::XMultiServiceFactory > xMSF =
+                ::comphelper::getProcessServiceFactory();
+
+            xTransWrp.reset(new ::utl::TransliterationWrapper( xMSF,
+                    i18n::TransliterationModules_IGNORE_CASE |
+                    i18n::TransliterationModules_IGNORE_KANA |
+                    i18n::TransliterationModules_IGNORE_WIDTH ));
+
+            xTransWrp->loadModuleIfNeeded( static_cast<sal_uInt16>(GetAppLanguage()) );
+        }
+        const ::utl::TransliterationWrapper& getTransliterationWrapper() const
+        {
+            return *xTransWrp;
+        }
+    };
+
+    class theTransWrp : public rtl::Static<TransWrp, theTransWrp> {};
+}
+
 const ::utl::TransliterationWrapper& GetAppCmpStrIgnore()
 {
-    if( !pTransWrp )
-    {
-        uno::Reference<
-            lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-
-        pTransWrp = new ::utl::TransliterationWrapper( xMSF,
-                i18n::TransliterationModules_IGNORE_CASE |
-                i18n::TransliterationModules_IGNORE_KANA |
-                i18n::TransliterationModules_IGNORE_WIDTH );
-        pTransWrp->loadModuleIfNeeded( static_cast<sal_uInt16>(GetAppLanguage()) );
-    }
-    return *pTransWrp;
+    return theTransWrp::get().getTransliterationWrapper();
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

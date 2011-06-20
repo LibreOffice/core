@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,25 +29,15 @@
 #define _MAILCONFIGPAGE_HXX
 
 #include <sfx2/tabdlg.hxx>
-#ifndef _BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 #include <sfx2/basedlgs.hxx>
 
 class SwTestAccountSettingsDialog;
 class SwMailMergeConfigItem;
-/*-- 05.05.2004 16:45:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 class SwMailConfigPage : public SfxTabPage
 {
     friend class SwTestAccountSettingsDialog;
@@ -95,9 +86,6 @@ public:
 
 };
 
-/*-- 18.08.2004 12:02:02---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 class SwMailConfigDlg : public SfxSingleTabDialog
 {
 public:
@@ -108,3 +96,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

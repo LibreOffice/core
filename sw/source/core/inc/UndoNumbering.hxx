@@ -28,17 +28,9 @@
 #ifndef SW_UNDO_NUMBERING_HXX
 #define SW_UNDO_NUMBERING_HXX
 
+#include <vector>
 #include <undobj.hxx>
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_ULONGS
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
-#define _SVSTDARR_USHORTSSORT
-#include <svl/svstdarr.hxx>
-#endif
-
+#include <boost/shared_ptr.hpp>
 #include <numrule.hxx>
 
 
@@ -78,9 +70,13 @@ public:
 
 class SwUndoDelNum : public SwUndo, private SwUndRng
 {
-    SvULongs aNodeIdx;
-    SvBytes aLevels;
-    SvBools aRstLRSpaces;
+    struct NodeLevel
+    {
+        sal_uLong index;
+        int level;
+        inline NodeLevel(sal_uLong idx, int lvl) : index(idx), level(lvl) {};
+    };
+    std::vector<NodeLevel> aNodes;
     SwHistory* pHistory;
 public:
     SwUndoDelNum( const SwPaM& rPam );

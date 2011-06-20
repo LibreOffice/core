@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -24,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WRTWW8_HXX
 #define _WRTWW8_HXX
@@ -53,12 +53,14 @@
 #include <expfld.hxx>
 
 // einige Forward Deklarationen
+class SwWW8AttrIter;
 namespace msfilter
 {
     class MSCodec_Std97;
 }
 
-class WW8SwAttrIter;
+namespace editeng { class SvxBorderLine; }
+
 class AttributeOutputBase;
 class DocxAttributeOutput;
 class RtfAttributeOutput;
@@ -70,7 +72,6 @@ class MSWordExportBase;
 class SdrObject;
 class SfxItemSet;
 class SvStream;
-class SvxBorderLine;
 class SvxFontItem;
 class SvxBoxItem;
 class SwAttrSet;
@@ -233,6 +234,7 @@ class WW8_WrPlcSepx : public MSWordSections
     SvULongs aCps;              // PTRARR von CPs
     WW8_PdAttrDesc* pAttrs;
     WW8_WrPlc0* pTxtPos;        // Pos der einzelnen Header / Footer
+    bool bNoMoreSections;
 
     // No copy, no assign
     WW8_WrPlcSepx( const WW8_WrPlcSepx& );
@@ -300,9 +302,7 @@ public:
     wwFont( const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet, bool bWrtWW8 );
     bool Write( SvStream *pTableStram ) const;
-#ifdef DOCX
     void WriteDocx( const DocxAttributeOutput* rAttrOutput ) const;
-#endif
     void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;
     rtl::OUString GetFamilyName() const { return rtl::OUString( msFamilyNm ); }
     friend bool operator < (const wwFont &r1, const wwFont &r2);
@@ -326,9 +326,7 @@ public:
     sal_uInt16 GetId(const SvxFontItem& rFont);
     sal_uInt16 GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );
-#ifdef DOCX
     void WriteFontTable( const DocxAttributeOutput& rAttrOutput );
-#endif
     void WriteFontTable( const RtfAttributeOutput& rAttrOutput );
 
     /// If true, all fonts are loaded before processing the document.
@@ -412,9 +410,9 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&);
 };
 
-typedef ::std::pair<String, sal_uLong> aPair;
-typedef std::vector<aPair> SwImplBookmarks;
-typedef std::vector<aPair>::iterator SwImplBookmarksIter;
+typedef ::std::pair<String, sal_uLong> aBookmarkPair;
+typedef std::vector<aBookmarkPair> SwImplBookmarks;
+typedef std::vector<aBookmarkPair>::iterator SwImplBookmarksIter;
 
 class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 {
@@ -527,9 +525,8 @@ public:
     HdFtPlcDrawObj *pHFSdrObjs;     // Draw-/Fly-Objects in header or footer
 
     SwEscherEx* pEscher;            // escher export class
-    // --> OD 2007-04-19 #i43447# - removed
+    // #i43447# - removed
 //    SwTwips nFlyWidth, nFlyHeight;  // Fuer Anpassung Graphic
-    // <--
 
     sal_uInt8 nTxtTyp;
 
@@ -541,8 +538,6 @@ public:
     sal_uInt8 bOutFirstPage : 1;     // write Attrset of FirstPageDesc
     sal_uInt8 bOutTable : 1;         // Tabelle wird ausgegeben
                                 //    ( wird zB bei Flys in Tabelle zurueckgesetzt )
-    sal_uInt8 bIsInTable : 1;        // wird sind innerhalb der Ausgabe einer Tabelle
-                                //    ( wird erst nach der Tabelle zurueckgesetzt )
     sal_uInt8 bOutGrf : 1;           // Grafik wird ausgegeben
     sal_uInt8 bInWriteEscher : 1;    // in write textboxes
     sal_uInt8 bStartTOX : 1;         // true: a TOX is startet
@@ -574,6 +569,9 @@ public:
     /// Iterate through the nodes and call the appropriate OutputNode() on them.
     void WriteText();
 
+    /// Return whether cuurently exported node is in table.
+    bool IsInTable() const;
+
     /// Set the pCurPam appropriately and call WriteText().
     ///
     /// Used to export paragraphs in footnotes/endnotes/etc.
@@ -592,6 +590,17 @@ public:
     sal_uInt16 GetId( const SwCharFmt& rFmt ) const;
 
     sal_uInt16 GetId( const SwTOXType& rTOXType );
+
+    /// Return the numeric id of the font (and add it to the font list if needed)
+    sal_uInt16 GetId( const SvxFontItem& rFont)
+    {
+        return maFontHelper.GetId(rFont);
+    }
+    /// @overload
+    sal_uInt16 GetId( const wwFont& rFont)
+    {
+        return maFontHelper.GetId(rFont);
+    }
 
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
 
@@ -628,9 +637,11 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const = 0;
 
-    /// Hack, unfortunately necessary at some places for now.
-    /// FIXME remove it when possible.
-    virtual bool HackIsWW8OrHigher() const = 0;
+    /// Determines if the format is expected to support unicode.
+    virtual bool SupportsUnicode() const = 0;
+
+    /// Used to filter out attributes that can be e.g. written to .doc but not to .docx
+    virtual bool ignoreAttributeForStyles( sal_uInt16 /*nWhich*/ ) const { return false; }
 
     /// Guess the script (asian/western).
     ///
@@ -752,13 +763,13 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    virtual xub_StrLen GetNextPos( WW8SwAttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
+    virtual xub_StrLen GetNextPos( SwWW8AttrIter* pAttrIter, const SwTxtNode& rNode, xub_StrLen nAktPos );
 
     /// Update the information for GetNextPos().
-    virtual void UpdatePosition( WW8SwAttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
+    virtual void UpdatePosition( SwWW8AttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
 
     /// Output SwTxtNode
-    void OutputTextNode( const SwTxtNode& );
+    virtual void OutputTextNode( const SwTxtNode& );
 
     /// Output SwTableNode
     void OutputTableNode( const SwTableNode& );
@@ -795,6 +806,9 @@ protected:
 
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& ) = 0;
+
+    virtual void OutputLinkedOLE( const rtl::OUString& ) = 0;
+
 
     /// Output SwSectionNode
     virtual void OutputSectionNode( const SwSectionNode& );
@@ -931,7 +945,7 @@ public:
     virtual MSWordSections& Sections() const;
 
     /// False for WW6, true for WW8.
-    virtual bool HackIsWW8OrHigher() const { return bWrtWW8; }
+    virtual bool SupportsUnicode() const { return bWrtWW8; }
 
 private:
     /// Format-dependant part of the actual export.
@@ -947,7 +961,7 @@ private:
     static void BuildAnlvBase( WW8_ANLV& rAnlv, sal_uInt8*& rpCh, sal_uInt16& rCharLen,
                    const SwNumRule& rRul, const SwNumFmt& rFmt, sal_uInt8 nSwLevel );
 
-    void Out_BorderLine(WW8Bytes& rO, const SvxBorderLine* pLine,
+    void Out_BorderLine(WW8Bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, bool bShadow);
 
     /// Output the numbering table.
@@ -979,12 +993,6 @@ public:
     SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
     WW8OleMaps& GetOLEMap()                 { return *pOleMap; }
     void ExportDopTypography(WW8DopTypography &rTypo);
-
-    using MSWordExportBase::GetId;
-    sal_uInt16 GetId( const SvxFontItem& rFont)
-    {
-        return maFontHelper.GetId(rFont);
-    }
 
     sal_uInt16 AddRedlineAuthor( sal_uInt16 nId );
 
@@ -1027,10 +1035,6 @@ public:
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t() );
     void WriteChar( sal_Unicode c );
-#if 0
-    sal_uInt16 StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
-        SwTwips &rPageSize);
-#endif
 
     void OutSwString(const String&, xub_StrLen nStt, xub_StrLen nLen,
         bool bUnicode, rtl_TextEncoding eChrSet);
@@ -1047,7 +1051,7 @@ public:
     virtual void SectionBreaksAndFrames( const SwTxtNode& rNode );
 
     /// Helper method for OutputSectionBreaks() and OutputFollowPageDesc().
-    // OD 2007-05-29 #i76300#
+    // #i76300#
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
@@ -1057,13 +1061,11 @@ public:
     void Out_SwFmtTableBox( WW8Bytes& rO, const SvxBoxItem * rBox );
     sal_uInt8 TransCol( const Color& rCol );
     bool TransBrush(const Color& rCol, WW8_SHD& rShd);
-    WW8_BRC TranslateBorderLine(const SvxBorderLine& pLine,
+    WW8_BRC TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,
         sal_uInt16 nDist, bool bShadow);
 
-    // --> OD 2007-06-04 #i77805#
-    // new return value indicates, if an inherited outline numbering is suppressed
+    // #i77805# - new return value indicates, if an inherited outline numbering is suppressed
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
-    // <--
 
     unsigned int GetHdFtIndex() const { return mnHdFtIndex; }
     void SetHdFtIndex(unsigned int nHdFtIndex) { mnHdFtIndex = nHdFtIndex; }
@@ -1136,6 +1138,8 @@ protected:
 
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
+
+    virtual void OutputLinkedOLE( const rtl::OUString& );
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 
@@ -1384,6 +1388,7 @@ public:
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const = 0;
 };
 
+/// Used to export formatted text associated to drawings.
 class MSWord_SdrAttrIter : public MSWordAttrIter
 {
 private:
@@ -1414,7 +1419,7 @@ public:
 
     bool IsTxtAttr(xub_StrLen nSwPos);
 
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     void OutAttr( xub_StrLen nSwPos );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const;
@@ -1423,6 +1428,75 @@ public:
     xub_StrLen WhereNext() const                { return nAktSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
+};
+
+// Die Klasse SwWW8AttrIter ist eine Hilfe zum Aufbauen der Fkp.chpx.
+// Dabei werden nur Zeichen-Attribute beachtet; Absatz-Attribute brauchen
+// diese Behandlung nicht.
+// Die Absatz- und Textattribute des Writers kommen rein, und es wird
+// mit Where() die naechste Position geliefert, an der sich die Attribute
+// aendern. IsTxtAtr() sagt, ob sich an der mit Where() gelieferten Position
+// ein Attribut ohne Ende und mit \xff im Text befindet.
+// Mit OutAttr() werden die Attribute an der angegebenen SwPos
+// ausgegeben.
+class SwWW8AttrIter : public MSWordAttrIter
+{
+private:
+    const SwTxtNode& rNd;
+
+    sw::util::CharRuns maCharRuns;
+    sw::util::cCharRunIter maCharRunIter;
+
+    rtl_TextEncoding meChrSet;
+    sal_uInt16 mnScript;
+    bool mbCharIsRTL;
+
+    const SwRedline* pCurRedline;
+    xub_StrLen nAktSwPos;
+    sal_uInt16 nCurRedlinePos;
+
+    bool mbParaIsRTL;
+
+    const SwFmtDrop &mrSwFmtDrop;
+
+    sw::Frames maFlyFrms;     // #i2916#
+    sw::FrameIter maFlyIter;
+
+    xub_StrLen SearchNext( xub_StrLen nStartPos );
+    void FieldVanish( const String& rTxt );
+
+    void OutSwFmtRefMark(const SwFmtRefMark& rAttr, bool bStart);
+
+    void IterToCurrent();
+
+    //No copying
+    SwWW8AttrIter(const SwWW8AttrIter&);
+    SwWW8AttrIter& operator=(const SwWW8AttrIter&);
+public:
+    SwWW8AttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
+
+    bool IsTxtAttr( xub_StrLen nSwPos );
+    bool IsRedlineAtEnd( xub_StrLen nPos ) const;
+    bool IsDropCap( int nSwPos );
+    bool RequiresImplicitBookmark();
+
+    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+
+    void OutAttr( xub_StrLen nSwPos, bool bRuby = false );
+    virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const;
+    virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
+    int OutAttrWithRange(xub_StrLen nPos);
+    const SwRedlineData* GetRedline( xub_StrLen nPos );
+    void OutFlys(xub_StrLen nSwPos);
+
+    xub_StrLen WhereNext() const    { return nAktSwPos; }
+    sal_uInt16 GetScript() const { return mnScript; }
+    bool IsCharRTL() const { return mbCharIsRTL; }
+    bool IsParaRTL() const { return mbParaIsRTL; }
+    rtl_TextEncoding GetCharSet() const { return meChrSet; }
+    String GetSnippet(const String &rStr, xub_StrLen nAktPos,
+        xub_StrLen nLen) const;
+    const SwFmtDrop& GetSwFmtDrop() const { return mrSwFmtDrop; }
 };
 
 /// Class to collect and output the styles table.
@@ -1499,4 +1573,4 @@ struct WW8_PdAttrDesc
 
 #endif  //  _WRTWW8_HXX
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

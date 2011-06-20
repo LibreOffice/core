@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -57,7 +58,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         bTblFlag( sal_False ), bChkTblStt( bChkTable )
 {
     SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    OSL_ENSURE(pTxtNd, "SwUndoSplitNode: TextNode expected!");
+    OSL_ENSURE( pTxtNd, "nur beim TextNode rufen!" );
     if( pTxtNd->GetpSwpHints() )
     {
         pHistory = new SwHistory;
@@ -202,3 +203,4 @@ void SwUndoSplitNode::RepeatImpl(::sw::RepeatContext & rContext)
         *rContext.GetRepeatPaM().GetPoint(), bChkTblStt );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

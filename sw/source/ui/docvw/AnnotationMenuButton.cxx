@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /************************************************************************* *
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +169,7 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
         aFont.SetWeight(WEIGHT_MEDIUM);
         SetFont( aFont );
         DrawText(  aRect ,
-                   rtl::OUString::createFromAscii("Edit Note"),
+                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit Note")),
                    TEXT_DRAW_CENTER );
         SetFont( aOldFont );
     }
@@ -213,3 +211,4 @@ void AnnotationMenuButton::KeyInput( const KeyEvent& rKeyEvt )
 
 } } // end of namespace sw::annotation
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

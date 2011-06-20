@@ -36,7 +36,6 @@ ModalDialog DLG_BREAK
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 114 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Umbruch einfügen : Umbruch einf³gen */
     Text [ en-US ] = "Insert Break" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -119,7 +118,6 @@ ModalDialog DLG_BREAK
         HelpID = "sw:CheckBox:DLG_BREAK:CB_PAGENUM";
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Seitennummer ~ändern : Seitennummer ~õndern */
         Text [ en-US ] = "Change page ~number" ;
         TabStop = TRUE ;
     };

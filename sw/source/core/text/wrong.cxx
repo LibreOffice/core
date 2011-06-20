@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,8 +31,6 @@
 
 
 #include <tools/string.hxx>
-#include <tools/debug.hxx>
-#include "errhdl.hxx"
 #include "swtypes.hxx"
 #include "txttypes.hxx"
 
@@ -186,7 +185,7 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
 
 MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
 {
-    MSHORT nOben = Count(), nMitte = 0, nUnten = 0;
+    MSHORT nOben = Count(), nUnten = 0;
 
     if( nOben > 0 )
     {
@@ -211,6 +210,7 @@ MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
         }
 
         --nOben;
+        MSHORT nMitte = 0;
         while( nUnten <= nOben )
         {
             nMitte = nUnten + ( nOben - nUnten ) / 2;
@@ -466,7 +466,7 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
 {
     if (pNext)
     {
-        DBG_ASSERT( GetWrongListType() == pNext->GetWrongListType(), "type mismatch with next list" );
+        OSL_ENSURE( GetWrongListType() == pNext->GetWrongListType(), "type mismatch with next list" );
     }
     if( pNext )
     {
@@ -502,7 +502,7 @@ void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uIn
 {
     if (pSubList)
     {
-        DBG_ASSERT( GetWrongListType() == pSubList->GetWrongListType(), "type mismatch with sub list" );
+        OSL_ENSURE( GetWrongListType() == pSubList->GetWrongListType(), "type mismatch with sub list" );
     }
     std::vector<SwWrongArea>::iterator i = maList.begin();
     if ( nWhere >= maList.size() )
@@ -560,7 +560,7 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
     maList.erase(i1, i2);
 
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" )
+    OSL_ENSURE( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" );
 #endif
 }
 
@@ -642,3 +642,4 @@ void SwWrongList::Insert( const rtl::OUString& rType,
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -272,7 +272,7 @@ String STR_MERGE_TABLE
 
 String STR_TRANSLITERATE
 {
-    Text [ en-US ] = "Case/Characters";
+    Text [ en-US ] = "~Change Case";
 };
 
 String STR_DELNUM

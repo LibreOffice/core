@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -51,8 +52,7 @@ class SwAccessibleFrame
     const sal_Bool mbIsInPagePreview;
 
 protected:
-    // --> OD 2007-06-29 #i77106#
-    // method needs to be called by new class <SwAccessibleTableColHeaders>
+    // #i77106# - method needs to be called by new class <SwAccessibleTableColHeaders>
     static sal_Int32 GetChildCount( SwAccessibleMap& rAccMap,
                                     const SwRect& rVisArea,
                                     const SwFrm *pFrm,
@@ -173,3 +173,4 @@ inline const SwFrm *SwAccessibleFrame::GetParent() const
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

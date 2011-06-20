@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,7 +27,7 @@
  ************************************************************************/
 #include <vbahelper/helperdecl.hxx>
 #include "vbaglobals.hxx"
-
+#include <sal/macros.h>
 #include <comphelper/unwrapargs.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -49,7 +50,7 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
 {
     OSL_TRACE("SwVbaGlobals::SwVbaGlobals()");
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = rtl::OUString::createFromAscii("Application");
+        aInitArgs[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Application"));
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
@@ -129,6 +130,12 @@ SwVbaGlobals::Dialogs( const uno::Any& index ) throw (uno::RuntimeException)
     return getApplication()->Dialogs( index );
 }
 
+uno::Any SAL_CALL
+SwVbaGlobals::ListGalleries( const uno::Any& index ) throw (uno::RuntimeException)
+{
+    return getApplication()->ListGalleries( index );
+}
+
 uno::Reference<word::XSelection > SAL_CALL
 SwVbaGlobals::getSelection() throw (uno::RuntimeException)
 {
@@ -171,7 +178,7 @@ SwVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 //            #FIXME #TODO make Application a proper service
 //            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.word.Application" ) ),
         };
-        sal_Int32 nWordServices = ( sizeof( names )/ sizeof( names[0] ) );
+        sal_Int32 nWordServices = SAL_N_ELEMENTS( names );
         sal_Int32 startIndex = serviceNames.getLength();
         serviceNames.realloc( serviceNames.getLength() + nWordServices );
         for ( sal_Int32 index = 0; index < nWordServices; ++index )
@@ -191,3 +198,4 @@ extern sdecl::ServiceDecl const serviceDecl(
     "ooo.vba.word.Globals" );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

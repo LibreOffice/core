@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,10 +32,6 @@
 #include <fldmgr.hxx>
 
 class ListBox;
-
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
 
 const int coLBCount = 3;
 
@@ -76,7 +73,7 @@ protected:
     void                EnableInsert(sal_Bool bEnable = sal_True);
     inline sal_Bool         IsFldEdit() const   { return m_bFldEdit; }
 
-    // Feld einfuegen
+    // insert field
     sal_Bool                InsertFld(  sal_uInt16 nTypeId,
                                     sal_uInt16 nSubType,
                                     const String& rPar1,
@@ -105,3 +102,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

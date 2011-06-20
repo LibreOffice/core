@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,7 +31,6 @@
 
 #include <iodetect.hxx>
 
-#include <errhdl.hxx>
 #include <osl/endian.h>
 #include <sot/storage.hxx>
 #include <svtools/parhtml.hxx>
@@ -126,7 +126,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
         if( pFltCnt )
         {
             SfxFilterMatcher aMatcher( pFltCnt->GetName() );
-            SfxFilterMatcherIter aIter( &aMatcher );
+            SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
             while ( pFilter )
             {
@@ -148,7 +148,7 @@ sal_Bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < co
     try
     {
         sal_uLong nStgFmtId = SotStorage::GetFormatID( rStg );
-        bRet = rStg->isStreamElement( ::rtl::OUString::createFromAscii("content.xml") );
+        bRet = rStg->isStreamElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")) );
         if ( bRet )
             bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
     }
@@ -193,8 +193,6 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
                 bRet = !(nByte & 1);
             }
         }
-        //      else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
-        //          bRet = rFilter.GetFormat() == nStgFmtId;
     }
     return bRet;
 }
@@ -203,7 +201,7 @@ void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferL
 {
     OSL_ENSURE(nBytesRead <= nBufferLen - 2,
             "what you read must be less than the max + null termination");
-    OSL_ENSURE(!(nBufferLen & 0x00000001),"nMaxReadBuf must be an even number");
+    OSL_ENSURE(!(nBufferLen & 0x00000001), "nMaxReadBuf must be an even number");
     if (nBytesRead <= nBufferLen - 2)
     {
         pBuffer[nBytesRead] = '\0';
@@ -236,7 +234,7 @@ sal_Bool SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
     }
 
     SfxFilterMatcher aMatcher( rFltContainer.GetName() );
-    SfxFilterMatcherIter aIter( &aMatcher );
+    SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter* pFltr = aIter.First();
     while ( pFltr )
     {
@@ -300,7 +298,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         return 0;
 
     SfxFilterMatcher aMatcher( pFCntnr->GetName() );
-    SfxFilterMatcherIter aIter( &aMatcher );
+    SfxFilterMatcherIter aIter( aMatcher );
     const SfxFilter* pFilter = aIter.First();
     if ( !pFilter )
         return 0;
@@ -309,14 +307,12 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     {
         // package storage or OLEStorage based format
         SotStorageRef xStg;
-        sal_Bool bDeleteMedium = sal_False;
         if (!pMedium )
         {
             INetURLObject aObj;
             aObj.SetSmartProtocol( INET_PROT_FILE );
             aObj.SetSmartURL( rFileName );
             pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ, sal_False );
-            bDeleteMedium = sal_True;
         }
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
@@ -391,18 +387,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         nBytesRead = pIStrm->Read(aBuffer, nMaxRead);
         pIStrm->Seek( nCurrPos );
     }
-    /*
-       else
-       {
-       SvFileStream aStrm( rFileName, STREAM_READ );
-
-    // ohne FileName oder ohne Stream gibts nur den ANSI-Filter
-    if( !rFileName.Len() || SVSTREAM_OK != aStrm.GetError() )
-    return 0;
-
-    nBytesRead = aStrm.Read(aBuffer, nMaxRead);
-    aStrm.Close();
-    }*/
 
     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
 
@@ -445,10 +429,10 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
     bool bSwap = false;
     CharSet eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bool bLE = true;
-    sal_uLong nHead=0;
     /*See if its a known unicode type*/
     if (rLen >= 2)
     {
+        sal_uLong nHead=0;
         if (rLen > 2 && sal_uInt8(pBuf[0]) == 0xEF && sal_uInt8(pBuf[1]) == 0xBB &&
             sal_uInt8(pBuf[2]) == 0xBF)
         {
@@ -470,8 +454,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
         rLen-=nHead;
     }
 
-    bool bCR = false, bLF = false, bNoNormalChar = false,
-        bIsBareUnicode = false;
+    bool bCR = false, bLF = false, bIsBareUnicode = false;
 
     if (eCharSet != RTL_TEXTENCODING_DONTKNOW)
     {
@@ -560,8 +543,6 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
                 case 0x9:
                     break;
                 default:
-                    if (0x20 > (sal_uInt8)*pBuf)
-                        bNoNormalChar = true;
                     break;
             }
         }
@@ -590,3 +571,5 @@ const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, sal_uLong nLen
     const sal_Char* pNm = bAuto ? FILTER_TEXT : FILTER_TEXT_DLG;
     return SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(pNm), 0 );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -105,7 +106,7 @@
 #define HID_PAGEPREVIEW                                         "SW_HID_PAGEPREVIEW"
 #define HID_SOURCE_EDITWIN                                      "SW_HID_SOURCE_EDITWIN"
 
-// Dialog Help-IDs **********************************************************
+// Dialog Help-IDs
 
 #define HID_CONVERT_FROM                                        "SW_HID_CONVERT_FROM"
 #define HID_CONVERT_TO                                          "SW_HID_CONVERT_TO"
@@ -217,11 +218,11 @@
 #define HID_MULTI_TOX_DLG                                       "SW_HID_MULTI_TOX_DLG"
 #define HID_ASCII_FILTER                                        "SW_HID_ASCII_FILTER"
 #define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
-#define HID_FORMAT_NAME_OBJECT_NAME                             "SW_HID_FORMAT_NAME_OBJECT_NAME"// #100286#
+#define HID_FORMAT_NAME_OBJECT_NAME                             "SW_HID_FORMAT_NAME_OBJECT_NAME"
 #define HID_REFSELECTION_TOOLTIP                                "SW_HID_REFSELECTION_TOOLTIP"    // #i83479#
 
 
-// TabPage Help-IDs *********************************************************
+// TabPage Help-IDs
 
 #define HID_DROPCAPS                                            "SW_HID_DROPCAPS"
 #define HID_FRM_EXT                                             "SW_HID_FRM_EXT"
@@ -309,7 +310,7 @@
 #define HID_OPTCOMPATIBILITY_PAGE                               "SW_HID_OPTCOMPATIBILITY_PAGE"
 #define HID_COMPATIBILITY_OPTIONS_BOX                           "SW_HID_COMPATIBILITY_OPTIONS_BOX"
 
-// AutoPilot Help-IDs *********************************************************
+// AutoPilot Help-IDs
 
 #define HID_LETTER_PAGE1                                        "SW_HID_LETTER_PAGE1"
 #define HID_LETTER_PAGE2                                        "SW_HID_LETTER_PAGE2"
@@ -347,7 +348,7 @@
 #define HID_AUTOPILOT_PREV                                      "SW_HID_AUTOPILOT_PREV"
 #define HID_AUTOPILOT_OK                                        "SW_HID_AUTOPILOT_OK"
 
-// HelpIds fuers Menue *****************************************************
+// HelpIds for Menu
 
 #define HID_MN_SUB_TBLROW                                       "SW_HID_MN_SUB_TBLROW"
 #define HID_MN_SUB_TBLCOL                                       "SW_HID_MN_SUB_TBLCOL"
@@ -428,7 +429,7 @@
 #define HID_SMARTTAG_MAIN                                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS
 #define HID_LINGU_IGNORE_SELECTION                              "SW_HID_LINGU_IGNORE_SELECTION"    // grammar check context menu
 
-// Weiter Help-IDs **********************************************************
+// More Help-IDs
 
 #define HID_CLOSE_FILE                                          "SW_HID_CLOSE_FILE"
 #define HID_LAUNCH_REGISTRY                                     "SW_HID_LAUNCH_REGISTRY"
@@ -496,7 +497,6 @@
 #define HID_REFRESH_VIEW                                        "SW_HID_REFRESH_VIEW"
 #define HID_RIBBON                                              "SW_HID_RIBBON"
 #define HID_RULER                                               "SW_HID_RULER"
-#define HID_STATUSBAR                                           "SW_HID_STATUSBAR"
 #define HID_TOOLBOX                                             "SW_HID_TOOLBOX"
 #define HID_VIEW_BOUNDS                                         "SW_HID_VIEW_BOUNDS"
 #define HID_VIEW_FIELDS                                         "SW_HID_VIEW_FIELDS"
@@ -990,3 +990,8 @@
 #define HID_TBX_FORMULA_CANCEL                                  "SW_HID_TBX_FORMULA_CANCEL"
 #define HID_TBX_FORMULA_APPLY                                   "SW_HID_TBX_FORMULA_APPLY"
 
+#define HID_TITLEPAGE                                           "SW_HID_TITLEPAGE"
+
+#define HID_NAVIGATION_TOOLBOX                                  "SW_HID_NAVIGATION_TOOLBOX"
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

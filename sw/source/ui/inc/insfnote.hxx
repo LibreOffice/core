@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,13 +30,9 @@
 
 #include <svx/stddlg.hxx>
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
 #include <vcl/fixed.hxx>
 
 class SwWrtShell;
@@ -44,7 +41,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
 {
     SwWrtShell     &rSh;
 
-    //Alles fuer das/die Zeichen
+    // everything for the character(s)
     String          aFontName;
     CharSet         eCharSet;
     char            cExtChar;
@@ -56,7 +53,7 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     Edit            aNumberCharEdit;
     PushButton      aNumberExtChar;
 
-    //Alles fuer die Auswahl Fussnote/Endnote
+    // everything for the selection footnote/endnote
     FixedLine        aTypeFL;
     RadioButton     aFtnBtn;
     RadioButton     aEndNoteBtn;
@@ -95,3 +92,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

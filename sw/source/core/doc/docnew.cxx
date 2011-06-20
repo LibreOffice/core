@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -102,37 +103,29 @@
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 
 
-// --> OD 2006-04-19 #b6375613#
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-// <--
-
-// --> OD 2007-03-16 #i73788#
 #include <pausethreadstarting.hxx>
-// <--
 #include <numrule.hxx>
-// --> OD 2008-03-13 #refactorlists#
 #include <list.hxx>
 #include <listfunc.hxx>
-// <--
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sfx2/Metadatable.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
-const sal_Char __FAR_DATA sFrmFmtStr[] = "Frameformat";
-const sal_Char __FAR_DATA sEmptyPageStr[] = "Empty Page";
-const sal_Char __FAR_DATA sColumnCntStr[] = "Columncontainer";
-const sal_Char __FAR_DATA sCharFmtStr[] = "Zeichenformat";
-const sal_Char __FAR_DATA sTxtCollStr[] = "Textformatvorlage";
-const sal_Char __FAR_DATA sGrfCollStr[] = "Graphikformatvorlage";
+const sal_Char sFrmFmtStr[] = "Frameformat";
+const sal_Char sEmptyPageStr[] = "Empty Page";
+const sal_Char sColumnCntStr[] = "Columncontainer";
+const sal_Char sCharFmtStr[] = "Zeichenformat";
+const sal_Char sTxtCollStr[] = "Textformatvorlage";
+const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
 SV_IMPL_PTRARR( SwNumRuleTbl, SwNumRulePtr)
 SV_IMPL_PTRARR( SwTxtFmtColls, SwTxtFmtCollPtr)
@@ -141,7 +134,6 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 /*
  * global functions...
  */
-
  uno::Reference< linguistic2::XProofreadingIterator > SwDoc::GetGCIterator() const
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
@@ -151,13 +143,13 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
         {
             try
             {
-                rtl::OUString aServiceName( rtl::OUString::createFromAscii("com.sun.star.linguistic2.ProofreadingIterator") );
+                rtl::OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ProofreadingIterator"));
                 m_xGCIterator = uno::Reference< linguistic2::XProofreadingIterator >
                     ( xMgr->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
             }
             catch (uno::Exception &)
             {
-                DBG_ERROR( "No GCIterator" );
+                OSL_FAIL( "No GCIterator" );
             }
         }
     }
@@ -200,9 +192,6 @@ void StartGrammarChecking( SwDoc &rDoc )
 /*
  * interne Funktionen
  */
-
-
-
 sal_Bool lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 {
     SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)rpFmt->GetCntnt();
@@ -217,7 +206,6 @@ sal_Bool lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 /*
  * exportierte Methoden
  */
-
 SwDoc::SwDoc()
     : m_pNodes( new SwNodes(this) )
     ,
@@ -261,27 +249,21 @@ SwDoc::SwDoc()
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
     pNumRuleTbl( new SwNumRuleTbl ),
-    // --> OD 2008-03-26 #refactorlists#
     maLists(),
     maListStyleLists(),
-    // <--
     pRedlineTbl( new SwRedlineTbl ),
     pAutoFmtRedlnComment( 0 ),
     pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
     pPgPViewPrtData( 0 ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),
-    // --> OD 2008-03-07 #refactorlists#
     pStyleAccess( 0 ),
-    // <--
     pLayoutCache( 0 ),
     pUnoCallBack(new SwModify(0)),
     mpGrammarContact( 0 ),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
-    // --> OD 2007-10-31 #i83479#
-    mpListItemsList( new tImplSortedNodeNumList() ),
-    // <--
+    mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
     m_pXmlIdRegistry(),
     nAutoFmtRedlnCommentNo( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
@@ -292,12 +274,10 @@ SwDoc::SwDoc()
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
     mbReadlineChecked(false),
-    // --> OD 2005-02-11 #i38810#
-    mbLinksUpdated( sal_False ),
+    mbLinksUpdated( sal_False ), //#i38810#
     mbClipBoard( false ),
     mbColumnSelection( false ),
-    // i#78591#
-    mbProtectForm(false),
+    mbProtectForm(false), // i#78591#
     mbLastBrowseMode( false ),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
@@ -329,12 +309,10 @@ SwDoc::SwDoc()
     mbInsOnlyTxtGlssry =
     mbContains_MSVBasic =
     mbKernAsianPunctuation =
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     mbXMLExport =
 #endif
-    // --> OD 2006-03-21 #b6375613#
     mbApplyWorkaroundForB6375613 =
-    // <--
                             false;
 
     mbNewFldLst =
@@ -375,9 +353,10 @@ SwDoc::SwDoc()
     mbUnixForceZeroExtLeading               = false;        // hidden
     mbOldPrinterMetrics                     = false;        // hidden
     mbTabRelativeToIndent                   = true;         // hidden
-    // --> OD 2008-06-05 #i89181#
-    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden
-    // <--
+    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden #i89181#
+    mbInvertBorderSpacing                   = false;        // hidden
+    mbCollapseEmptyCellPara                 = true;        // hidden
+    mbSmallCapsPercentage66                 = false;        // hidden
 
     //
     // COMPATIBILITY FLAGS END
@@ -415,18 +394,13 @@ SwDoc::SwDoc()
     _InitFieldTypes();
 
     // lege (fuer die Filter) eine Default-OutlineNumRule an
-    // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  // --> OD 2008-06-06 #i89178#
+                                  // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
-                                  // <--
                                   OUTLINE_RULE );
-    // <--
-    // #115901#
     AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    // Counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
-    // <--
 
     new SwTxtNode(
             SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
@@ -447,7 +421,6 @@ SwDoc::SwDoc()
     // create TOXTypes
     InitTOXTypes();
 
-    // --> OD 2008-03-07 #refactorlists#
     // pass empty item set containing the paragraph's list attributes
     // as ignorable items to the stype manager.
     {
@@ -456,7 +429,6 @@ SwDoc::SwDoc()
                                              0 );
         pStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
-    // <--
 
     ResetModified();
 }
@@ -467,8 +439,6 @@ SwDoc::SwDoc()
  * Dieser darf also keinesfalls durch delete geloescht
  * werden!!!!!!!!!!
  */
-
-
 SwDoc::~SwDoc()
 {
     // nothing here should create Undo actions!
@@ -479,14 +449,10 @@ SwDoc::~SwDoc()
         pDocShell->SetUndoManager(0);
     }
 
-    // --> OD 2007-03-16 #i73788#
-    SwPauseThreadStarting aPauseThreadStarting;
-    // <--
 
-    // --> OD 2007-11-01 #i83479#
+    // #i83479#
     delete mpListItemsList;
     mpListItemsList = 0;
-    // <--
 
     // clean up chart related structures...
     // Note: the chart data provider gets already diposed in ~SwDocShell
@@ -514,9 +480,7 @@ SwDoc::~SwDoc()
     delete pURLStateChgd;
 
     delete pLayouter;
-    // --> OD 2005-09-05 #125370#
     pLayouter = 0L;
-    // <--
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -610,7 +574,7 @@ SwDoc::~SwDoc()
     pFtnInfo->ReleaseCollection();
     pEndNoteInfo->ReleaseCollection();
 
-    ASSERT( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
+    OSL_ENSURE( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
             "Default-Text-Collection muss immer am Anfang stehen" );
 
     // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
@@ -621,7 +585,7 @@ SwDoc::~SwDoc()
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
     delete pTxtFmtCollTbl;
 
-    ASSERT( pDfltGrfFmtColl == (*pGrfFmtCollTbl)[0],
+    OSL_ENSURE( pDfltGrfFmtColl == (*pGrfFmtCollTbl)[0],
             "Default-Grf-Collection muss immer am Anfang stehen" );
 
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
@@ -669,9 +633,8 @@ SwDoc::~SwDoc()
     delete pDfltGrfFmtColl;
     delete pNumRuleTbl;
 
-    // --> OD 2008-03-26 #refactorlists#
     {
-        for ( std::hash_map< String, SwList*, StringHash >::iterator
+        for ( boost::unordered_map< String, SwList*, StringHash >::iterator
                                                     aListIter = maLists.begin();
               aListIter != maLists.end();
               ++aListIter )
@@ -681,7 +644,6 @@ SwDoc::~SwDoc()
         maLists.clear();
     }
     maListStyleLists.clear();
-    // <--
 
     delete pPrtData;
     delete pNumberFormatter;
@@ -702,19 +664,15 @@ SwDoc::~SwDoc()
     SfxItemPool::Free(mpAttrPool);
 }
 
-//---------------------------------------------------
-
 VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
 
-    // <--
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 
-    // --> FME 2006-10-09 #i60945# External leading compatibility for unix systems.
+    // #i60945# External leading compatibility for unix systems.
     if ( get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
         pNewVir->Compat_ZeroExtleadBug();
-    // <--
 
     MapMode aMapMode( pNewVir->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
@@ -724,14 +682,12 @@ VirtualDevice& SwDoc::CreateVirtualDevice_() const
     return *pVirDev;
 }
 
-//---------------------------------------------------
-
 SfxPrinter& SwDoc::CreatePrinter_() const
 {
-    ASSERT( ! pPrt, "Do not call CreatePrinter_(), call getPrinter() instead" )
+    OSL_ENSURE( ! pPrt, "Do not call CreatePrinter_(), call getPrinter() instead" );
 
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( false, "Printer will be created!" )
+    OSL_FAIL( "Printer will be created!" );
 #endif
 
     // wir erzeugen einen default SfxPrinter.
@@ -747,7 +703,6 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     const_cast<SwDoc*>(this)->setPrinter( pNewPrt, true, true );
     return *pPrt;
 }
-//---------------------------------------------------
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
@@ -769,18 +724,14 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         {
             ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
             pDrawModel->SetPersist( pDocShell );
-            ASSERT( pDrawModel->GetPersist() == GetPersist(),
+            OSL_ENSURE( pDrawModel->GetPersist() == GetPersist(),
                     "draw model's persist is out of sync" );
         }
     }
 }
 
-
 // Convenience-Methode, um uebermaessige Includes von docsh.hxx
 // zu vermeiden
-
-
-
 uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 {
     if( pDocShell )
@@ -790,13 +741,10 @@ uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
     return NULL;
 }
 
-
-
 SfxObjectShell* SwDoc::GetPersist() const
 {
     return pDocShell ? pDocShell : pLinkMgr->GetPersist();
 }
-
 
 void SwDoc::ClearDoc()
 {
@@ -814,7 +762,7 @@ void SwDoc::ClearDoc()
     sal_uInt16 n;
     while ( 0 != (n = GetSpzFrmFmts()->Count()) )
         DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
-    ASSERT( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
+    OSL_ENSURE( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
     pRedlineTbl->DeleteAndDestroy( 0, pRedlineTbl->Count() );
@@ -848,24 +796,19 @@ void SwDoc::ClearDoc()
     GetNodes().Delete( aSttIdx,
             GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
 
-    // --> OD 2006-02-28 #i62440#
+    // #i62440#
     // destruction of numbering rules and creation of new outline rule
     // *after* the document nodes are deleted.
     pOutlineRule = NULL;
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
     // creation of new outline numbering rule
-    // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  // --> OD 2008-06-06 #i89178#
+                                  // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
-                                  // <--
                                   OUTLINE_RULE );
-    // <--
     AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    // Counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
-    // <--
-    // <--
 
     //remove the dummy pagedec from the array and delete all the old ones
     aPageDescs.Remove( nDummyPgDsc );
@@ -876,9 +819,9 @@ void SwDoc::ClearDoc()
     pFtnInfo->ReleaseCollection();
     pEndNoteInfo->ReleaseCollection();
 
-    // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
-    //              steht, sollte das als letztes geloescht werden, damit
-    //              die ganze Umhaengerei der Formate vermieden wird!
+    // opt.: ausgehend davon, das Standard als 2. im Array
+    // steht, sollte das als letztes geloescht werden, damit
+    // die ganze Umhaengerei der Formate vermieden wird!
     if( 2 < pTxtFmtCollTbl->Count() )
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
@@ -895,7 +838,7 @@ void SwDoc::ClearDoc()
     else    //swmod 071029//swmod 071225
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
 
-    xForbiddenCharsTable.unbind();
+    xForbiddenCharsTable.clear();
 
     pFldTypes->DeleteAndDestroy( INIT_FLDTYPES,
                                 pFldTypes->Count() - INIT_FLDTYPES );
@@ -925,19 +868,16 @@ void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
         DELETEZ( pPgPViewPrtData );
     SetModified();
 }
-/* -----------------------------06.01.00 14:03--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwModify*   SwDoc::GetUnoCallBack() const
 {
     return pUnoCallBack;
 }
 
-/*-----------------28.5.2001 10:06------------------
- * SwDoc:
+
+/** SwDoc:
  *  Reading and writing of the layout cache.
  *--------------------------------------------------*/
-
 void SwDoc::ReadLayoutCache( SvStream& rStream )
 {
     if( !pLayoutCache )
@@ -963,8 +903,8 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
     return pDoc->getGrammarContact();
 }
 
-// --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
-// SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
+// #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
+// to new SwDoc::UpdateLinks():
 void SwDoc::UpdateLinks( sal_Bool bUI )
 {
     SfxObjectCreateMode eMode;
@@ -1006,8 +946,7 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
     }
 
 }
-// <--
-// --> OD 2006-04-19 #b6375613#
+
 void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
 {
     if ( mbApplyWorkaroundForB6375613 != p_bApplyWorkaroundForB6375613 )
@@ -1029,13 +968,13 @@ void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
                     if ( mbApplyWorkaroundForB6375613 )
                     {
                         xDocInfo->addProperty(
-                            rtl::OUString::createFromAscii("WorkaroundForB6375613Applied"),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")),
                             beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::REMOVABLE,
                             uno::makeAny( false ) );
                     }
                     else
                     {
-                        xDocInfo->removeProperty( rtl::OUString::createFromAscii("WorkaroundForB6375613Applied") );
+                        xDocInfo->removeProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WorkaroundForB6375613Applied")) );
                     }
                 }
                 catch( uno::Exception& )
@@ -1045,7 +984,6 @@ void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
         }
     }
 }
-// <--
 
 ::sfx2::IXmlIdRegistry&
 SwDoc::GetXmlIdRegistry()
@@ -1107,40 +1045,38 @@ void SwDoc::InitTOXTypes()
    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
 }
 
-/*-- 08.05.2009 10:07:57---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
+
     //copy settings
-    sal_uInt16 __FAR_DATA aRangeOfDefaults[] = {
+    sal_uInt16 aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
-        // --> OD 2008-02-25 #refactorlists##
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        // <--
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         0
     };
 
-    SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
-
-    sal_uInt16 nWhich;
-    sal_uInt16 nRange = 0;
-    while( aRangeOfDefaults[nRange] != 0)
     {
-        for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
+        SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
+
+        sal_uInt16 nWhich;
+        sal_uInt16 nRange = 0;
+        while( aRangeOfDefaults[nRange] != 0)
         {
-            const SfxPoolItem& rSourceAttr = mpAttrPool->GetDefaultItem( nWhich );
-            if( rSourceAttr != pRet->mpAttrPool->GetDefaultItem( nWhich ) )
-                aNewDefaults.Put( rSourceAttr );
+            for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
+            {
+                const SfxPoolItem& rSourceAttr = mpAttrPool->GetDefaultItem( nWhich );
+                if( rSourceAttr != pRet->mpAttrPool->GetDefaultItem( nWhich ) )
+                    aNewDefaults.Put( rSourceAttr );
+            }
+            nRange += 2;
         }
-        nRange += 2;
+        if( aNewDefaults.Count() )
+            pRet->SetDefault( aNewDefaults );
     }
-    if( aNewDefaults.Count() )
-        pRet->SetDefault( aNewDefaults );
 
     pRet->n32DummyCompatabilityOptions1 = n32DummyCompatabilityOptions1;
     pRet->n32DummyCompatabilityOptions2 = n32DummyCompatabilityOptions2;
@@ -1184,15 +1120,20 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
         pRetShell->DoInitNew();
     }
 
+    pRet->acquire();
+
     //copy content
     pRet->Paste( *this );
 
     // remove the temporary shell if it is there as it was done before
     pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
 
+    pRet->release();
+
     return pRetShell;
 }
-/*-- 08.05.2009 10:52:40---------------------------------------------------
+
+/*-------------------------------------------------------------------------
     copy document content - code from SwFEShell::Paste( SwDoc* , sal_Bool  )
   -----------------------------------------------------------------------*/
 void SwDoc::Paste( const SwDoc& rSource )
@@ -1267,3 +1208,5 @@ void SwDoc::Paste( const SwDoc& rSource )
     UnlockExpFlds();
     UpdateFlds(NULL, false);
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

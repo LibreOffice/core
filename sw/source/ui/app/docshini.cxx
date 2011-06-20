@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <hintids.hxx>
 
@@ -105,13 +105,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-/*-----------------21.09.96 15.29-------------------
-
---------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Document laden
+    Description: Load Document
  --------------------------------------------------------------------*/
 
 
@@ -120,26 +117,19 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::InitNew" );
 
     sal_Bool bRet = SfxObjectShell::InitNew( xStor );
-    ASSERT( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
+    OSL_ENSURE( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
-        AddLink();      // pDoc / pIo ggf. anlegen
+        AddLink();      // create pDoc / pIo if applicable
 
         sal_Bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
-            bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );//Styles aus HTML.vor
+            bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
 
-/*
-        //JP 12.07.95: so einfach waere es fuer die neu Mimik
-        pDoc->SetDefault( SvxTabStopItem( 1,
-                    GetStar Writer App()->GetUsrPref()->GetDefTabDist(),
-                    SVX_TAB_ADJUST_DEFAULT,
-                    RES_PARATR_TABSTOP));
-*/
         if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
             SwTransferable::InitOle( this, *pDoc );
 
@@ -164,7 +154,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         SubInitNew();
 
-        // fuer alle
+        // for all
 
         SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
         SfxPrinter* pPrt = pDoc->getPrinter( false );
@@ -344,24 +334,23 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     // the static pool default.
     pDoc->SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
-// --> collapsing borders FME 2005-05-27 #i29550#
+// #i29550#
     pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, sal_True ) );
 // <-- collapsing
 
     //#i16874# AutoKerning as default for new documents
     pDoc->SetDefault( SvxAutoKernItem( sal_True, RES_CHRATR_AUTOKERN ) );
 
-    // --> OD 2005-02-10 #i42080# - Due to the several calls of method <SetDefault(..)>
+    // #i42080# - Due to the several calls of method <SetDefault(..)>
     // at the document instance, the document is modified. Thus, reset this
     // status here. Note: In method <SubInitNew()> this is also done.
     pDoc->ResetModified();
-    // <--
 
     return bRet;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Ctor mit SfxCreateMode ?????
+    Description:    Ctor with SfxCreateMode ?????
  --------------------------------------------------------------------*/
 
 
@@ -380,7 +369,7 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Ctor / Dtor
+    Description: Ctor / Dtor
  --------------------------------------------------------------------*/
 
 
@@ -399,7 +388,7 @@ SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Ctor / Dtor
+    Description: Ctor / Dtor
  --------------------------------------------------------------------*/
 
 
@@ -418,7 +407,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Dtor
+    Description:    Dtor
  --------------------------------------------------------------------*/
 
 
@@ -436,30 +425,28 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     RemoveLink();
     delete pFontList;
 
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
+    // we, as BroadCaster also become our own Listener
+    // (for DocInfo/FileNames/....)
     EndListening( *this );
     SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-    // wird nur die DocInfo fuer den Explorer gelesen, ist das Item nicht da
+    // when only DocInfo is read for the Explorer, the Item is not there
     if(pColItem)
     {
         XColorTable* pTable = pColItem->GetColorTable();
-        // wurde eine neue Table angelegt, muss sie auch geloescht werden.
-        if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
+        // when a new Table was created, it has to be deleted as well.
+        if(pTable  != &XColorTable::GetStdColorTable())
             delete pTable;
     }
 
     delete pOLEChildList;
 }
-/* -----------------------------10.09.2001 15:59------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SwDocShell::Init_Impl()
 {
     SetPool(&SW_MOD()->GetPool());
     SetBaseModel(new SwXTextDocument(this));
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
+    // we, as BroadCaster also become our own Listener
+    // (for DocInfo/FileNames/....)
     StartListening( *this );
     //position of the "Automatic" style filter for the stylist (app.src)
     SetAutoStyleFilterIndex(3);
@@ -468,7 +455,7 @@ void  SwDocShell::Init_Impl()
     SetMapUnit( MAP_TWIP );
 }
 /*--------------------------------------------------------------------
-    Beschreibung: AddLink
+    Description: AddLink
  --------------------------------------------------------------------*/
 
 
@@ -483,18 +470,18 @@ void SwDocShell::AddLink()
     }
     else
         pDoc->acquire();
-    pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
+    pDoc->SetDocShell( this );      // set the DocShell-Pointer for Doc
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 
     SetPool(&pDoc->GetAttrPool());
 
-    // am besten erst wenn eine sdbcx::View erzeugt wird !!!
+    // most suitably not until a sdbcx::View is created!!!
     pDoc->SetOle2Link(LINK(this, SwDocShell, Ole2ModifiedHdl));
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   neue FontList erzeugen Aenderung Drucker
+    Description:    create new FontList Change Printer
  --------------------------------------------------------------------*/
 
 
@@ -503,7 +490,7 @@ void SwDocShell::UpdateFontList()
     if(!bInUpdateFontList)
     {
         bInUpdateFontList = true;
-        ASSERT(pDoc, "Kein Doc keine FontList");
+        OSL_ENSURE(pDoc, "No Doc no FontList");
         if( pDoc )
         {
             delete pFontList;
@@ -515,13 +502,13 @@ void SwDocShell::UpdateFontList()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: RemoveLink
+    Description: RemoveLink
  --------------------------------------------------------------------*/
 
 
 void SwDocShell::RemoveLink()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Invalidate();
     aFinishedTimer.Stop();
@@ -537,24 +524,24 @@ void SwDocShell::RemoveLink()
         pDoc->SetDocShell( 0 );
         if( !nRefCt )
             delete pDoc;
-        pDoc = 0;       // wir haben das Doc nicht mehr !!
+        pDoc = 0;       // we don't have the Doc anymore!!
     }
 }
 void SwDocShell::InvalidateModel()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Invalidate();
 }
 void SwDocShell::ReactivateModel()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Laden, Default-Format
+    Description: Load, Default-Format
  --------------------------------------------------------------------*/
 
 
@@ -565,14 +552,14 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
     if( SfxObjectShell::Load( rMedium ))
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "after SfxInPlaceObject::Load" );
-        if( pDoc )              // fuer Letzte Version !!
-            RemoveLink();       // das existierende Loslassen
+        if( pDoc )              // for last version!!
+            RemoveLink();       // release the existing
 
-        AddLink();      // Link setzen und Daten updaten !!
+        AddLink();      // set Link and update Data!!
 
-        // Das Laden
-        // fuer MD
-            ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+        // Loading
+        // for MD
+            OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
             mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
             {
@@ -584,9 +571,6 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
-//      case SFX_CREATE_MODE_INTERNAL:
-//          nErr = 0;
-//          break;
 
         case SFX_CREATE_MODE_ORGANIZER:
             {
@@ -603,12 +587,12 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         case SFX_CREATE_MODE_INTERNAL:
         case SFX_CREATE_MODE_EMBEDDED:
             {
-                // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
+                // for MWERKS (Mac-Compiler): can't cast autonomously
                 SwTransferable::InitOle( this, *pDoc );
             }
-            // SfxProgress unterdruecken, wenn man Embedded ist
+            // suppress SfxProgress, when we are Embedded
             SW_MOD()->SetEmbeddedLoadSave( sal_True );
-            // kein break;
+            // no break;
 
         case SFX_CREATE_MODE_STANDARD:
         case SFX_CREATE_MODE_PREVIEW:
@@ -616,7 +600,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                 Reader *pReader = ReadXML;
                 if( pReader )
                 {
-                    // die DocInfo vom Doc am DocShell-Medium setzen
+                    // set Doc's DocInfo at DocShell-Medium
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
                     SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
@@ -637,15 +621,15 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                             pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
                     }
                 }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 else
-                    ASSERT( !this, "ohne Sw3Reader geht nichts" );
+                    OSL_ENSURE( !this, "it won't do without Sw3Reader" );
 #endif
             }
             break;
 
         default:
-            ASSERT( !this, "Load: new CreateMode?" );
+            OSL_ENSURE( !this, "Load: new CreateMode?" );
 
         }
 
@@ -655,29 +639,18 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
 
-        // --> OD 2006-11-07 #i59688#
-//        // StartFinishedLoading rufen.
-//        if( bRet && !pDoc->IsInLoadAsynchron() &&
-//            GetCreateMode() == SFX_CREATE_MODE_STANDARD )
-//            StartLoadFinishedTimer();
         if ( bRet && !pDoc->IsInLoadAsynchron() &&
              GetCreateMode() == SFX_CREATE_MODE_STANDARD )
         {
             LoadingFinished();
         }
-        // <--
 
-        // SfxProgress unterdruecken, wenn man Embedded ist
+        // suppress SfxProgress, when we are Embedded
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
     }
 
     return bRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 {
@@ -686,20 +659,19 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     if( pDoc )
         RemoveLink();
 
-    AddLink();      // Link setzen und Daten updaten !!
+    AddLink();      // set Link and update Data!!
 
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
-        //const String& rNm = pStor->GetName();
         String aStreamName;
         aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("styles.xml"));
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {
-            // Das Laden
+            // Loading
             SwWait aWait( *this, sal_True );
             {
-                ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+                OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
                 mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
                 if( ReadXML )
                 {
@@ -712,25 +684,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         }
         else
         {
-            DBG_ERROR("Code removed!");
-        /*
-        //TODO/LATER: looks like some binary stuff?!
-            // sollte es sich um eine 2. Vrolage handeln ??
-            if( SvStorage::IsStorageFile( rNm ) )
-                break;
-
-            const SfxFilter* pFltr = SwIoSystem::GetFileFilter( rNm, aEmptyStr );
-            if( !pFltr || !pFltr->GetUserData().EqualsAscii( FILTER_SWG ))
-                break;
-
-            SfxMedium aMed( rNm, STREAM_STD_READ, sal_False );
-            if( 0 == ( nErr = aMed.GetInStream()->GetError() ) )
-            {
-                SwWait aWait( *this, sal_True );
-                SwReader aRead( aMed, rNm, pDoc );
-                nErr = aRead.Read( *ReadSwg );
-            }
-         */
+            OSL_FAIL("Code removed!");
         }
 
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -746,7 +700,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 
 void SwDocShell::SubInitNew()
 {
-    ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
+    OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
     mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     UpdateFontList();
     InitDraw();
@@ -765,8 +719,8 @@ void SwDocShell::SubInitNew()
         0, 0, 0  };
     if(!bWeb)
     {
-        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 3 ] = RES_PARATR_TABSTOP;
-        nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 2 ] = RES_PARATR_HYPHENZONE;
+        nRange[ (SAL_N_ELEMENTS(nRange)) - 3 ] = RES_PARATR_TABSTOP;
+        nRange[ (SAL_N_ELEMENTS(nRange)) - 2 ] = RES_PARATR_HYPHENZONE;
     }
     SfxItemSet aDfltSet( pDoc->GetAttrPool(), nRange );
 
@@ -816,3 +770,5 @@ void SwDocShell::SubInitNew()
 IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return pDoc; }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

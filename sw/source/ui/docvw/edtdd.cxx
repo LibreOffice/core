@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -34,9 +35,6 @@
 
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdobj.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -47,15 +45,11 @@
 #include <frmfmt.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <viewopt.hxx>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <swundo.hxx>
 
@@ -106,14 +100,13 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         SdrObject *pObj = NULL;
         Point aDocPos( PixelToLogic( rPosPixel ) );
         if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, sal_True, sal_True))
-            //Wir sind nicht beim Selektieren und stehen auf einer
-            //Selektion
+            //We are not selecting and aren't at a selection
             bStart = sal_True;
         else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
                     rSh.IsInsideSelectedObj( aDocPos ) )
         {
-            //Wir sind nicht am internen Draggen und stehen auf
-            //einem Objekt (Rahmen, Zeichenobjekt)
+            //We are not dragging internally and are not at an
+            //object (frame, draw object)
 
             bStart = sal_True;
         }
@@ -179,7 +172,7 @@ void SwEditWin::DropCleanup()
 {
     SwWrtShell &rSh =  rView.GetWrtShell();
 
-    // Stati zuruecksetzen
+    // reset statuses
     bNoInterrupt = sal_False;
     if ( bOldIdleSet )
     {
@@ -204,7 +197,7 @@ void SwEditWin::CleanupDropUserMarker()
 }
 
 
-//Messehack (MA,MBA)
+//exhibition hack (MA,MBA)
 void lcl_SelectShellForDrop( SwView &rView )
 {
     if ( !rView.GetCurShell() )
@@ -217,7 +210,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     DropCleanup();
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    //Ein Drop auf eine offene OutlinerView geht uns nichts an (siehe auch QueryDrop)
+    //A Drop to an open OutlinerView doesn't concern us (also see QueryDrop)
     SwWrtShell &rSh = rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rEvt.maPosPixel ));
     SdrObject *pObj = 0;
@@ -232,14 +225,13 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if ( aRect.IsInside(aPos) )
         {
             rSh.StartAllAction();
-//!!            sal_Int8 nRet = DND_ACTION_NONE/*pOLV->ExecuteDrop( rEvt )*/;
             rSh.EndAllAction();
             return nRet;
         }
     }
 
 
-    // dvo 2002-05-27, #99027#: There's a special treatment for file lists with a single
+    //                          There's a special treatment for file lists with a single
     //                          element, that depends on the actual content of the
     //                          Transferable to be accessible. Since the transferable
     //                          may only be accessed after the drop has been accepted
@@ -253,7 +245,6 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
-//!!                                rEvt.GetSourceOptions(),
                                 nUserOpt, m_nDropFormat, nEventAction, 0,
                                 &rEvt.maDropEvent.Transferable );
 
@@ -262,10 +253,9 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     nRet = rEvt.mnAction;
     if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, m_nDropFormat,
                                 m_nDropDestination, sal_False, rEvt.mbDefault, &aDocPt, nRet))
-//!!    nRet = SFX_APP()->ExecuteDrop( rEvt );
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->pDragDrop )
-        //Bei internem D&D nicht mehr aufraeumen!
+        //Don't clean up anymore at internal D&D!
         SW_MOD()->pDragDrop->SetCleanUp( sal_False );
 
     return nRet;
@@ -282,7 +272,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
     SdrObject *pObj = NULL;
     const ObjCntType eType = rSh.GetObjCntType( aDocPt, pObj );
 
-    //Drop auf OutlinerView (TextEdit im Drawing) soll diese selbst entscheiden!
+    //Drop to OutlinerView (TextEdit in Drawing) should decide it on its own!
     if( pObj )
     {
         OutlinerView* pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
@@ -296,10 +286,10 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
         }
     }
 
-    //Auf was wollen wir denn gerade droppen?
+    //What do we want to drop on now?
     sal_uInt16 nDropDestination = 0;
 
-    //Sonst etwas aus der DrawingEngine getroffen?
+    //Did anything else arrive from the DrawingEngine?
     if( OBJCNT_NONE != eType )
     {
         switch ( eType )
@@ -332,7 +322,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
         case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
         case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
-        default: ASSERT( !this, "new ObjectType?" );
+        default: OSL_ENSURE( !this, "new ObjectType?" );
         }
     }
     if ( !nDropDestination )
@@ -410,19 +400,18 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
-//!!                                rEvt.GetSourceOptions(),
                                 nUserOpt, m_nDropFormat, nEventAction );
 
     if( EXCHG_INOUT_ACTION_NONE != m_nDropAction )
     {
         const Point aDocPt( PixelToLogic( aPixPt ) );
 
-        //Bei den default Aktionen wollen wir noch ein bischen mitreden.
+        //With the default action we still want to have a say.
         SwModule *pMod = SW_MOD();
         if( pMod->pDragDrop )
         {
             sal_Bool bCleanup = sal_False;
-            //Zeichenobjekte in Kopf-/Fusszeilen sind nicht erlaubt
+            //Drawing objects in Headers/Footers are not allowed
 
             SwWrtShell *pSrcSh = pMod->pDragDrop->GetShell();
             if( (pSrcSh->GetSelFrmType() == FRMTYPE_DRAWOBJ) &&
@@ -431,7 +420,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             {
                 bCleanup = sal_True;
             }
-            // keine positionsgeschuetzten Objecte verschieben!
+            // don't more position protected objects!
             else if( DND_ACTION_MOVE == rEvt.mnAction &&
                      pSrcSh->IsSelObjProtected( FLYPROTECT_POS ) )
             {
@@ -439,8 +428,8 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             }
             else if( rEvt.mbDefault )
             {
-                // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
-                //              ansonten ein Copy - Task 54974
+                //              internal Drag&Drop: within same Doc a Move
+                //              otherwise a Copy - Task 54974
                 nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
                                     ? DND_ACTION_MOVE
                                     : DND_ACTION_COPY;
@@ -454,7 +443,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         }
         else
         {
-            //D&D von ausserhalb des SW soll per default ein Copy sein.
+            //D&D from outside of SW should be a Copy per default.
             if( EXCHG_IN_ACTION_DEFAULT == nEventAction &&
                 DND_ACTION_MOVE == rEvt.mnAction )
                 nEventAction = DND_ACTION_COPY;
@@ -501,7 +490,6 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     CleanupDropUserMarker();
     rSh.UnSetVisCrsr();
-//!!    return SFX_APP()->AcceptDrop( rEvt );
     return DND_ACTION_NONE;
 }
 
@@ -525,3 +513,4 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

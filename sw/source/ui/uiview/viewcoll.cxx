@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,23 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "cmdid.h"
 #include "uiitems.hxx"
-#include <tools/list.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <rsc/rscsfx.hxx>
 
-
-#include "errhdl.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "basesh.hxx"
-
 
 void SwView::ExecColl(SfxRequest &rReq)
 {
@@ -55,7 +50,7 @@ void SwView::ExecColl(SfxRequest &rReq)
     {
         case FN_SET_PAGE:
         {
-            DBG_ASSERT(!this, "Not implemented");
+            OSL_ENSURE(!this, "Not implemented");
         }
         break;
         case FN_SET_PAGE_STYLE:
@@ -89,10 +84,11 @@ void SwView::ExecColl(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(sal_False, falscher CommandProcessor fuer Dispatch);
+            OSL_FAIL("wrong CommandProcessor for Dispatch");
             return;
     }
 }
 
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

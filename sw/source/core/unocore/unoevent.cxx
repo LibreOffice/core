@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -36,15 +37,11 @@
 #include "unostyle.hxx"
 #include "swevent.hxx"
 #include "docstyle.hxx"
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "fmtinfmt.hxx"
 #include <svl/macitem.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -331,3 +328,4 @@ sal_uInt16 SwFrameStyleEventDescriptor::getMacroItemWhich() const
     return RES_FRMMACRO;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

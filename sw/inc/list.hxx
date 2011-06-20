@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -60,10 +61,6 @@ class SwList
 
         bool IsListLevelMarked( const int nListLevel ) const;
 
-//        void ContinueList( SwList& rList );
-//        const SwList* GetContinuedList() const;
-//        void ClearContinuation();
-
     private:
         // no copy constructor and no assignment operator
         SwList( const SwList& );
@@ -72,3 +69,5 @@ class SwList
         SwListImpl* mpListImpl;
 };
 #endif // LIST_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

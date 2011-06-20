@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -42,7 +43,6 @@
 //--------------------------------------------------
 
 
-// --> OD 2008-04-15 #refactorlists#
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
                               SwFmtColl* pColl,
                               const bool bReset,
@@ -53,12 +53,10 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
       pFmtColl( pColl ),
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
-// <--
 {
-    // --> FME 2004-08-06 #i31191#
+    // #i31191#
     if ( pColl )
         aFmtName = pColl->GetName();
-    // <--
 }
 
 
@@ -100,12 +98,10 @@ void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
     // does the format still exist?
     if( USHRT_MAX != nPos )
     {
-        // --> OD 2008-04-15 #refactorlists#
         rDoc.SetTxtFmtColl(rPaM,
                                           (SwTxtFmtColl*)pFmtColl,
                                           mbReset,
                                           mbResetListAttrs );
-        // <--
     }
 }
 
@@ -113,12 +109,12 @@ SwRewriter SwUndoFmtColl::GetRewriter() const
 {
     SwRewriter aResult;
 
-    // --> FME 2004-08-06 #i31191# Use stored format name instead of
+    // #i31191# Use stored format name instead of
     // pFmtColl->GetName(), because pFmtColl does not have to be available
     // anymore.
     aResult.AddRule(UNDO_ARG1, aFmtName );
-    // <--
 
     return aResult;
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

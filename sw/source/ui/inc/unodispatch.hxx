@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -35,13 +36,10 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <list>
-//#ifndef _OSL_MUTEX_HXX_
-//#include <osl/mutex.hxx>
-//#endif
-#include <vos/mutex.hxx>
+#include <osl/mutex.hxx>
 
 class SwView;
-//---------------------------------------------------------------------------------------------------------------------
+
 class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
 <
     ::com::sun::star::frame::XDispatchProviderInterceptor,
@@ -52,7 +50,7 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
     class DispatchMutexLock_Impl
     {
         //::osl::MutexGuard   aGuard; #102295# solar mutex has to be used currently
-        vos::OGuard         aGuard;
+        osl::SolarGuard         aGuard;
         DispatchMutexLock_Impl();
     public:
         DispatchMutexLock_Impl(SwXDispatchProviderInterceptor&);
@@ -132,3 +130,5 @@ public:
 };
 
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,8 +28,6 @@
 
 #ifndef _SWEVENT_HXX
 #define _SWEVENT_HXX
-
-// #include *****************************************************************
 
 #include <tools/solar.h>
 #include <sfx2/sfx.hrc>
@@ -65,17 +64,17 @@ class SwFrmFmt;
 class SwFmtINetFmt;
 class IMapObject;
 
-// enum fuer Objecte die Events ins Basic oder in JavaScript Callen
+// Enum for objects that call events into Basic or JavaScript.
 enum SwCallEventObjectType
 {
-    EVENT_OBJECT_NONE = 0,          // Null ist garnichts
+    EVENT_OBJECT_NONE = 0,          // Null is nothing at all.
     EVENT_OBJECT_IMAGE,
     EVENT_OBJECT_INETATTR,
     EVENT_OBJECT_URLITEM,
     EVENT_OBJECT_IMAGEMAP
 };
 
-// structur fuer den Austausch zwischen UI/CORE
+// Structure for the exchange between UI/CORE.
 
 struct SwCallMouseEvent
 {
@@ -127,3 +126,4 @@ struct SwCallMouseEvent
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

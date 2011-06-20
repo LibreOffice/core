@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -58,7 +59,6 @@
 using namespace ::com::sun::star;
 
 
-// OD 12.12.2002 #103492#
 SwPagePreviewLayout* ViewShell::PagePreviewLayout()
 {
     return Imp()->PagePreviewLayout();
@@ -69,15 +69,12 @@ void ViewShell::ShowPreViewSelection( sal_uInt16 nSelPage )
     Imp()->InvalidateAccessiblePreViewSelection( nSelPage );
 }
 
-/** adjust view options for page preview
-
-    OD 09.01.2003 #i6467#
-*/
+//#i6467# adjust view options for page preview
 void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
 {
     if ( !IsPreView() )
     {
-        ASSERT( false, "view shell doesn't belongs to a page preview - no adjustment of its view options");
+        OSL_FAIL( "view shell doesn't belongs to a page preview - no adjustment of its view options");
         return;
     }
 
@@ -86,9 +83,7 @@ void ViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
     return;
 }
 
-// print brochure
-// OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
-// for a page to be printed.
+//#i14016# - consider empty pages on calculation of the scaling for a page to be printed.
 void ViewShell::PrintProspect(
     OutputDevice *pOutDev,
     const SwPrintData &rPrintData,
@@ -97,7 +92,7 @@ void ViewShell::PrintProspect(
 {
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagePairsForProspectPrinting().size() - 1;
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
+    OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
 #endif
     Printer *pPrinter = dynamic_cast< Printer * >(pOutDev);
     if (!pPrinter || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
@@ -109,14 +104,12 @@ void ViewShell::PrintProspect(
 
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
-// const sal_uInt16 nPageMax = static_cast< sal_uInt16 >(rPagesToPrint.first > rPagesToPrint.second ?
-//            rPagesToPrint.first : rPagesToPrint.second);
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
-    DBG_ASSERT( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
+    OSL_ENSURE( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
+    OSL_ENSURE( rPagesToPrint.second == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.second ) == 1, "second Page not valid" );
 #endif
 
-    // eine neue Shell fuer den Printer erzeugen
+    // create a new shell for the Printer
     ViewShell aShell( *this, 0, pPrinter );
 
     SET_CURR_SHELL( &aShell );
@@ -136,18 +129,17 @@ void ViewShell::PrintProspect(
     if (rPagesToPrint.first > 0)
     {
         SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.first ) );
-        DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+        OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
         pStPage = aIt->second;
     }
     if (rPagesToPrint.second > 0)
     {
         SwRenderData::ValidStartFramesMap_t::const_iterator aIt( rFrms.find( rPagesToPrint.second ) );
-        DBG_ASSERT( aIt != rFrms.end(), "failed to find start frame" );
+        OSL_ENSURE( aIt != rFrms.end(), "failed to find start frame" );
         pNxtPage = aIt->second;
     }
 
-    // OD 05.05.2003 #i14016# - consider empty pages on calculation
-    // of page size, used for calculation of scaling.
+    //#i14016# - consider empty pages on calculation of page size, used for calculation of scaling.
     Size aSttPageSize;
     if ( pStPage )
     {
@@ -195,7 +187,6 @@ void ViewShell::PrintProspect(
         nMaxRowSz = Max( aNxtPageSize.Height(), aSttPageSize.Height() );
     }
 
-    // den MapMode einstellen
     aMapMode.SetOrigin( Point() );
     {
         Fraction aScX( aPrtSize.Width(), nMaxColSz );
@@ -204,8 +195,6 @@ void ViewShell::PrintProspect(
             aScY = aScX;
 
         {
-            // fuer Drawing, damit diese ihre Objecte vernuenftig Painten
-            // koennen, auf "glatte" Prozentwerte setzen
             aScY *= Fraction( 1000, 1 );
             long nTmp = (long)aScY;
             if( 1 < nTmp )
@@ -255,3 +244,4 @@ void ViewShell::PrintProspect(
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

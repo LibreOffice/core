@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -68,7 +69,7 @@
 #define SwDrawShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 #include "misc.hrc"
 
 using namespace ::com::sun::star;
@@ -82,11 +83,6 @@ SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
 }
 
 TYPEINIT1(SwDrawShell,SwDrawBaseShell)
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 void SwDrawShell::Execute(SfxRequest &rReq)
 {
@@ -197,10 +193,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), GetView().GetWrtShell(), DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -209,10 +205,10 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -222,7 +218,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         {
             try
             {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
+                uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ui.XSLTFilterDialog"))), uno::UNO_QUERY);
                 if( xDialog.is() )
                 {
                     xDialog->execute();
@@ -247,7 +243,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            OSL_ENSURE(pFact, "Dialogdiet fail!");
             AbstractSwWordCountDialog* pDialog = pFact->CreateSwWordCountDialog( GetView().GetWindow() );
             pDialog->SetValues(aCurr, aDocStat );
             pDialog->Execute();
@@ -289,7 +285,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         default:
-            DBG_ASSERT(!this, "falscher Dispatcher");
+            OSL_ENSURE(!this, "wrong dispatcher");
             return;
     }
     if (pSdrView->GetModel()->IsChanged())
@@ -297,12 +293,6 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     else if (bChanged)
         pSdrView->GetModel()->SetChanged(sal_True);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 void SwDrawShell::GetState(SfxItemSet& rSet)
 {
@@ -377,12 +367,6 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     svx::FontworkBar::getState( pSdrView, rSet );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SwDrawShell::SwDrawShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
@@ -395,9 +379,6 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
 |* SfxRequests fuer FontWork bearbeiten
 |*
 \************************************************************************/
-
-
-
 void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
@@ -449,9 +430,6 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
 |* Statuswerte fuer FontWork zurueckgeben
 |*
 \************************************************************************/
-
-
-
 void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     SwWrtShell &rSh = GetShell();
@@ -486,12 +464,10 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
     else
     {
         if ( pDlg )
-            pDlg->SetColorTable(XColorTable::GetStdColorTable());
+            pDlg->SetColorTable(&XColorTable::GetStdColorTable());
 
         pDrView->GetAttributes( rSet );
     }
 }
 
-
-
-
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

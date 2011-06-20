@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,49 +40,35 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
  class IDocumentLinksAdministration
  {
  public:
-    /** Links un-/sichtbar in LinkManager einfuegen (gelinkte Bereiche)
+    /** Insert links in-/visibly into LinkManager (linked ranges).
     */
     virtual bool IsVisibleLinks() const = 0;
 
-    /**
-    */
     virtual void SetVisibleLinks(bool bFlag) = 0;
 
-    /**
-    */
     virtual sfx2::LinkManager& GetLinkManager() = 0;
 
-    /**
-    */
     virtual const sfx2::LinkManager& GetLinkManager() const = 0;
 
-    /** FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
+    /** #i42634# Moved common code of SwReader::Read() and
         SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     */
     virtual void UpdateLinks(sal_Bool bUI) = 0;
 
-    /** SS fuers Linken von Dokumentteilen
+    /** SS fuers Linken von Dokumentteilen  / ?? for linking of parts of documents.
     */
     virtual bool GetData(const String& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const = 0;
 
-    /**
-    */
     virtual bool SetData(const String& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue) = 0;
 
-    /**
-    */
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const String& rItem) = 0;
 
-    /** embedded alle lokalen Links (Bereiche/Grafiken)
+    /** Embed all local links (ranges/graphics).
     */
     virtual bool EmbedAllLinks() = 0;
 
-    /**
-    */
     virtual void SetLinksUpdated(const bool bNewLinksUpdated) = 0;
 
-    /**
-    */
     virtual bool LinksUpdated() const = 0;
 
 protected:
@@ -89,3 +76,5 @@ protected:
  };
 
  #endif // IDOCUMENTLINKSADMINISTRATION_HXX_INCLUDED
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

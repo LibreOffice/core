@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,7 +34,7 @@
 /** class to provide creation of a thread to retrieve an input stream given by
     an URL and to consume the retrieved input stream.
 
-    OD 2007-01-29 #i73788#
+    #i73788#
 
     @author OD
 */
@@ -70,3 +71,4 @@ void SwAsyncRetrieveInputStreamThreadConsumer::ApplyInputStream(
     mrGrfNode.ApplyInputStream( xInputStream, bIsStreamReadOnly );
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

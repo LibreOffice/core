@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -55,25 +56,22 @@ enum REFERENCEMARK
     REF_ONLYNUMBER,
     REF_ONLYCAPTION,
     REF_ONLYSEQNO,
-    // --> OD 2007-08-24 #i81002#
+    // --> #i81002#
     // new reference format types for referencing bookmarks and set references
     REF_NUMBER,
     REF_NUMBER_NO_CONTEXT,
     REF_NUMBER_FULL_CONTEXT,
-    // <--
     REF_END
 };
 
 
-/*--------------------------------------------------------------------
-    Beschreibung: Referenz holen
- --------------------------------------------------------------------*/
+// Get reference.
 
 class SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
 protected:
-    // ueberlagert, um alle Ref-Felder zu updaten
+    // Overlay in order to update all ref-fields.
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
@@ -88,9 +86,6 @@ public:
                                         sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Referenzfeld
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwGetRefField : public SwField
 {
@@ -103,11 +98,11 @@ private:
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    // --> OD 2007-08-24 #i81002#
+    // #i81002#
     String MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                           const SwTxtNode& rTxtNodeOfReferencedItem,
                           const sal_uInt32 nRefNumFormat ) const;
-    // <--
+
 public:
     SwGetRefField( SwGetRefFieldType*, const String& rSetRef,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFmt );
@@ -118,7 +113,7 @@ public:
 
     const String&       GetSetRefName() const { return sSetRefName; }
 
-    // --> OD 2007-09-06 #i81002#
+    // #i81002#
     // The <SwTxtFld> instance, which represents the text attribute for the
     // <SwGetRefField> instance, has to be passed to the method.
     // This <SwTxtFld> instance is needed for the reference format type REF_UPDOWN
@@ -126,33 +121,32 @@ public:
     // Note: This instance may be NULL (field in Undo/Redo). This will cause
     // no update for these reference format types.
     void                UpdateField( const SwTxtFld* pFldTxtAttr );
-    // <--
+
     void                SetExpand( const String& rStr ) { sTxt = rStr; }
 
-    // SubType erfragen/setzen
+    // Get/set sub type.
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType( sal_uInt16 n );
 
-    // --> OD 2007-11-09 #i81002#
+    // --> #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
     const SwTxtNode* GetReferencedTxtNode() const;
-    // <--
-    // --> OD 2008-01-09 #i85090#
+    // #i85090#
     String GetExpandedTxtOfReferencedTxtNode() const;
-    // <--
 
-    // SequenceNo erfragen/setzen (nur fuer REF_SEQUENCEFLD interressant)
+
+    // Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return nSeqNo; }
     void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
-    // Name der Referenz
+    // Name of reference.
     virtual const String& GetPar1() const;
     virtual void        SetPar1(const String& rStr);
 
     virtual String      GetPar2() const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
     void                ConvertProgrammaticToUIName();
 
@@ -162,3 +156,4 @@ public:
 
 #endif // SW_REFFLD_HXX
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

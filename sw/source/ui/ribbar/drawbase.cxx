@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
 #include <svl/ptitem.hxx>
@@ -81,7 +81,7 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
 |*
 \************************************************************************/
 
-__EXPORT SwDrawBase::~SwDrawBase()
+SwDrawBase::~SwDrawBase()
 {
     if (m_pView->GetWrtShellPtr()) // Im view-Dtor koennte die wrtsh bereits geloescht worden sein...
         m_pSh->GetDrawView()->SetEditMode(sal_True);
@@ -101,7 +101,6 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     SdrView *pSdrView = m_pSh->GetDrawView();
 
     // #i33136#
-    // pSdrView->SetOrtho(rMEvt.IsShift());
     pSdrView->SetOrtho(doConstructOrthogonal() ? !rMEvt.IsShift() : rMEvt.IsShift());
     pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
 
@@ -212,8 +211,6 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         bNoInterrupt = sal_True;
                         pSdrView->MarkPoint(*pHdl);
-//                      bReturn = pSdrView->BegDragObj(m_aStartPos, (OutputDevice*) NULL, pHdl);
-//                      m_pWin->SetDrawAction(sal_True);
                     }
                 }
             }
@@ -240,11 +237,9 @@ sal_Bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if (!pSdrView->HasMarkablePoints())
                         {
-                            //JP 10.10.2001: Bug 89619 - don't scroll the
-                            //              cursor into the visible area
                             sal_Bool bUnlockView = !m_pSh->IsViewLocked();
                             m_pSh->LockView( sal_True ); //lock visible section
-                            m_pSh->SelectObj(Point(LONG_MAX, LONG_MAX)); // Alles deselektieren
+                            m_pSh->SelectObj(Point(LONG_MAX, LONG_MAX)); // deselect all
                             if( bUnlockView )
                                 m_pSh->LockView( sal_False );
                         }
@@ -281,7 +276,6 @@ sal_Bool SwDrawBase::MouseMove(const MouseEvent& rMEvt)
     if (IsCreateObj() && !m_pWin->IsDrawSelMode() && pSdrView->IsCreateObj())
     {
         // #i33136#
-        // pSdrView->SetOrtho(rMEvt.IsShift());
         pSdrView->SetOrtho(doConstructOrthogonal() ? !rMEvt.IsShift() : rMEvt.IsShift());
         pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
 
@@ -519,7 +513,7 @@ void SwDrawBase::Activate(const sal_uInt16 nSlot)
 \************************************************************************/
 
 
-void __EXPORT SwDrawBase::Deactivate()
+void SwDrawBase::Deactivate()
 {
     SdrView *pSdrView = m_pSh->GetDrawView();
     pSdrView->SetOrtho(sal_False);
@@ -532,9 +526,6 @@ void __EXPORT SwDrawBase::Deactivate()
 
     m_pWin->ReleaseMouse();
     bNoInterrupt = sal_False;
-
-//  if(!m_pSh->IsObjSelected())
-//      m_pSh->Edit();
 
     if(m_pWin->GetApplyTemplate())
         m_pWin->SetApplyTemplate(SwApplyTemplate());
@@ -649,7 +640,6 @@ void SwDrawBase::BreakCreate()
     m_pWin->ReleaseMouse();
 
     Deactivate();
-//  m_pView->LeaveDrawCreate();
 }
 
 /*************************************************************************
@@ -702,9 +692,7 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
         m_pView->NoRotate();
     }
 }
-/* -----------------------------03.04.2002 10:52------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDrawBase::CreateDefaultObject()
 {
     Point aStartPos = GetDefaultCenterPos();
@@ -716,9 +704,7 @@ void SwDrawBase::CreateDefaultObject()
     Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape( static_cast< sal_uInt16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
 }
-/* -----------------25.10.2002 14:14-----------------
- *
- * --------------------------------------------------*/
+
 Point  SwDrawBase::GetDefaultCenterPos()
 {
     Size aDocSz(m_pSh->GetDocSize());
@@ -738,3 +724,5 @@ bool SwDrawBase::doConstructOrthogonal() const
 }
 
 // eof
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

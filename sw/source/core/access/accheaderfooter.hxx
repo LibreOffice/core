@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,9 +27,7 @@
  ************************************************************************/
 #ifndef _ACCHEADERFOOTER_HXX
 #define _ACCHEADERFOOTER_HXX
-#ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
-#endif
 
 class SwHeaderFrm;
 class SwFooterFrm;
@@ -83,3 +82,4 @@ public:
 
 #endif
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

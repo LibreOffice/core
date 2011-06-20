@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -78,10 +79,9 @@ SwExtTextInput::~SwExtTextInput()
             // muss ueber die Doc-Schnittstellen gegangen werden !!!
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
-                // --> FME 2005-02-11 #i41974# Only set language attribute
+                // #i41974# Only set language attribute
                 // for CJK/CTL scripts.
                 bool bLang = true;
-                // <--
                 sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
                 switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {
@@ -292,9 +292,10 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
 
 SwExtTextInput* SwDoc::GetExtTextInput() const
 {
-    ASSERT( !pExtInputRing || pExtInputRing == pExtInputRing->GetNext(),
+    OSL_ENSURE( !pExtInputRing || pExtInputRing == pExtInputRing->GetNext(),
             "more then one InputEngine available" );
     return (SwExtTextInput*)pExtInputRing;
 }
 
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
