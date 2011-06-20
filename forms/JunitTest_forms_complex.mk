@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_JunitTest_JunitTest,forms_complex))
+$(eval $(call gb_JunitTest_JunitTest,forms_complex, SRCDIR))
 
 $(eval $(call gb_JunitTest_add_jars,forms_complex,\
     $(OUTDIR)/bin/OOoRunner.jar \
